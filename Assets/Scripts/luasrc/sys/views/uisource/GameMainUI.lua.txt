@@ -1,0 +1,49 @@
+-- Tencent is pleased to support the open source community by making xLua available.
+-- Copyright (C) 2016 THL A29 Limited, a Tencent company. All rights reserved.
+-- Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+-- http://opensource.org/licenses/MIT
+-- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+
+GameMainUI = class("GameMainUI",UIBase)
+function  GameMainUI:start()
+	print("lua start...")
+	
+end
+
+function GameMainUI:OnAwake()
+    print("lua OnAwake...",self);
+	print(3333333333333333)
+	--UITools:setUIViewPos(self.testButton,300,-200)
+	self:setData("---")
+	self.testButton:GetComponent("Button").onClick:AddListener(function(a)
+		print("clicked, test Button",a)
+	end)
+
+	local sp = DisplayUtils:createSpine( "spine/spine_role");
+	UITools:bindUIFunc(self);
+	print("____",sp)
+	self:addChild(sp)
+	UITools:setUIViewPos(sp,100,200)
+
+end
+
+function GameMainUI:Init()
+    --Init Start--Init End
+	print("lua Init...")
+end
+
+function GameMainUI:setData( data )
+	GameMainUI.super.setData(self,data);
+end
+
+
+function GameMainUI:Clear()
+    --Clear Start--Clear End
+end
+
+function GameMainUI:OnDestroy()
+end
+
+return GameMainUI.new()
+
+

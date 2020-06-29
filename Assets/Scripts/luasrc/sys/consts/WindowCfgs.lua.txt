@@ -1,0 +1,11 @@
+WindowCfgs = {
+	
+	
+	GameMainUI = {}
+	
+}
+
+
+
+
+return WindowCfgs

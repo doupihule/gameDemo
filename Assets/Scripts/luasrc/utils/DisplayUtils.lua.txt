@@ -1,0 +1,8 @@
+DisplayUtils = {}
+
+require("components.SpineGraphicExpand")
+
+function DisplayUtils:createSpine( url )
+	local spani = SpineGraphicExpand.new(url);
+	return spani
+end

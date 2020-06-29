@@ -1,0 +1,38 @@
+SpineGraphicExpand = class("SpineGraphicExpand")
+
+
+--对应的c#对象 Object
+SpineGraphicExpand.__cobject = nil
+SpineGraphicExpand.__spineAni = nil
+--构造器函数
+function SpineGraphicExpand:ctor( url )
+	-- body
+	local obj =  CS.UnityEngine.Resources.Load(url)
+	self.__cobject = CS.UnityEngine.Object.Instantiate(obj)
+	self.__spineAni = self.__cobject:GetComponent("SkeletonGraphic")
+end
+
+
+
+--播放动画
+function SpineGraphicExpand:play( label ,loop)
+	self.__spineAni.freeze = false
+	self.__spineAni.AnimationState:SetAnimation(0, label, loop);
+end
+
+--停止动画
+function SpineGraphicExpand:stop(  )
+	self.__spineAni.freeze = true
+end
+
+
+--销毁动画
+function SpineGraphicExpand:dispose( )
+	if(not self.__cobject) then
+		return
+	end
+	self.__cobject.__luaobject = nil
+	self.__cobject = nil
+end
+
+return SpineGraphicExpand

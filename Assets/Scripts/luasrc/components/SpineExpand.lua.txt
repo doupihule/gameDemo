@@ -1,0 +1,20 @@
+local SpineExpand = class("SpineExpand")
+
+
+--对应的c#对象 Object
+SpineExpand.__cobject = nil
+--构造器函数
+function SpineExpand:ctor( url )
+	-- body
+	self.__cobject = CS.UnityEngine.Resources:Load(url)
+end
+
+
+
+function initSpine( skel,maitel )
+	-- body
+end
+
+
+
+return SpineExpand

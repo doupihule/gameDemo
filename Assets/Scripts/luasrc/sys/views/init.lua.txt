@@ -1,0 +1,2 @@
+local packageName = "sys.views."
+require(packageName.."UIBase")

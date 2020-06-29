@@ -1,0 +1,30 @@
+UIBase = class("UIBase")
+
+
+--所有的ui的_rootView指向 对应ui的gameObject
+UIBase._rootView = nil
+--对应的window配置
+UIBase.windowCfgs = nil
+
+--设置数据
+function UIBase:setData( ... )
+	print("____setData",self.__cname);
+end
+
+
+--关闭ui
+function UIBase:close(  )
+	
+end
+
+--显示完成
+function UIBase:onShowCompData(  )
+	
+end
+
+
+
+--销毁
+function UIBase:dispose(  )
+	self._rootView.transform.parent = nil
+end
