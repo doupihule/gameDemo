@@ -9,7 +9,9 @@ public class Main : MonoBehaviour
 {
     void Awake() {
         XLuaBridge.Init();
-        GameObject a = (GameObject)Resources.Load("ui/GameMainUI");
+
+
+        GameObject a = (GameObject)Resources.Load("UI/Prefabs/GameMainUI");
         GameObject ui = Instantiate(a);
         //把ui添加到舞台
         RectTransform  childUI = ui.GetComponent<RectTransform>();
