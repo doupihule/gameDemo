@@ -182,7 +182,6 @@
 		<type fullname="UnityEngine.AnimatorStateInfo" preserve="all"/>
 		<type fullname="UnityEngine.AnimatorTransitionInfo" preserve="all"/>
 		<type fullname="UnityEngine.MatchTargetWeightMask" preserve="all"/>
-		<type fullname="UnityEngine.AnimatorControllerParameter" preserve="all"/>
 		<type fullname="UnityEngine.AnimatorOverrideController" preserve="all"/>
 		<type fullname="UnityEngine.AnimatorUtility" preserve="all"/>
 		<type fullname="UnityEngine.Avatar" preserve="all"/>
@@ -211,7 +210,6 @@
 
 	<assembly fullname="UnityEngine.AudioModule">
 	    <type fullname="UnityEngine.AudioConfiguration" preserve="all"/>
-		<type fullname="UnityEngine.AudioSettings" preserve="all"/>
 		<type fullname="UnityEngine.AudioClip" preserve="all"/>
 		<type fullname="UnityEngine.AudioBehaviour" preserve="all"/>
 		<type fullname="UnityEngine.AudioListener" preserve="all"/>
@@ -251,7 +249,6 @@
 		<type fullname="UnityEngine.BoundsInt" preserve="all"/>
 		<type fullname="UnityEngine.CachedAssetBundle" preserve="all"/>
 		<type fullname="UnityEngine.Cache" preserve="all"/>
-		<type fullname="UnityEngine.Caching" preserve="all"/>
 		<type fullname="UnityEngine.Camera" preserve="all"/>
 		<type fullname="UnityEngine.Camera+GateFitParameters" preserve="all"/>
 		<type fullname="UnityEngine.Color" preserve="all"/>
@@ -282,12 +279,8 @@
 		<type fullname="UnityEngine.ScalableBufferManager" preserve="all"/>
 		<type fullname="UnityEngine.FrameTiming" preserve="all"/>
 		<type fullname="UnityEngine.FrameTimingManager" preserve="all"/>
-		<type fullname="UnityEngine.LightmapData" preserve="all"/>
-		<type fullname="UnityEngine.LightmapSettings" preserve="all"/>
-		<type fullname="UnityEngine.LightProbes" preserve="all"/>
 		<type fullname="UnityEngine.Resolution" preserve="all"/>
 		<type fullname="UnityEngine.RenderTargetSetup" preserve="all"/>
-		<type fullname="UnityEngine.QualitySettings" preserve="all"/>
 		<type fullname="UnityEngine.RendererExtensions" preserve="all"/>
 		<type fullname="UnityEngine.ImageEffectTransformsToLDR" preserve="all"/>
 		<type fullname="UnityEngine.ImageEffectAllowedInSceneView" preserve="all"/>
@@ -306,11 +299,8 @@
 		<type fullname="UnityEngine.OcclusionArea" preserve="all"/>
 		<type fullname="UnityEngine.Flare" preserve="all"/>
 		<type fullname="UnityEngine.LensFlare" preserve="all"/>
-		<type fullname="UnityEngine.LightBakingOutput" preserve="all"/>
-		<type fullname="UnityEngine.Light" preserve="all"/>
 		<type fullname="UnityEngine.Skybox" preserve="all"/>
 		<type fullname="UnityEngine.MeshFilter" preserve="all"/>
-		<type fullname="UnityEngine.LightProbeProxyVolume" preserve="all"/>
 		<type fullname="UnityEngine.SkinnedMeshRenderer" preserve="all"/>
 		<type fullname="UnityEngine.MeshRenderer" preserve="all"/>
 		<type fullname="UnityEngine.RectOffset" preserve="all"/>
@@ -323,9 +313,7 @@
 		<type fullname="UnityEngine.LocationInfo" preserve="all"/>
 		<type fullname="UnityEngine.LocationService" preserve="all"/>
 		<type fullname="UnityEngine.Compass" preserve="all"/>
-		<type fullname="UnityEngine.Input" preserve="all"/>
 		<type fullname="UnityEngine.LayerMask" preserve="all"/>
-		<type fullname="UnityEngine.LightProbeGroup" preserve="all"/>
 		<type fullname="UnityEngine.LineUtility" preserve="all"/>
 		<type fullname="UnityEngine.LOD" preserve="all"/>
 		<type fullname="UnityEngine.LODGroup" preserve="all"/>
@@ -392,7 +380,6 @@
 		<type fullname="UnityEngine.DynamicGI" preserve="all"/>
 		<type fullname="UnityEngine.Logger" preserve="all"/>
 		<type fullname="UnityEngine.StaticBatchingUtility" preserve="all"/>
-		<type fullname="UnityEngine.DrivenRectTransformTracker" preserve="all"/>
 		<type fullname="UnityEngine.RectTransform" preserve="all"/>
 		<type fullname="UnityEngine.Transform" preserve="all"/>
 		<type fullname="UnityEngine.SpriteRenderer" preserve="all"/>
@@ -458,7 +445,6 @@
 		<type fullname="UnityEngine.ParticleSystemRenderer" preserve="all"/>
 		<type fullname="UnityEngine.ParticleCollisionEvent" preserve="all"/>
 		<type fullname="UnityEngine.ParticlePhysicsExtensions" preserve="all"/>
-		<type fullname="UnityEngine.ParticleSystemForceField" preserve="all"/>
 		
 	</assembly>
 
@@ -581,10 +567,7 @@
 	</assembly>
 
 	<assembly fullname="UnityEngine.UIModule">
-	    <type fullname="UnityEngine.Canvas" preserve="all"/>
-		<type fullname="UnityEngine.UISystemProfilerApi" preserve="all"/>
-		<type fullname="UnityEngine.CanvasGroup" preserve="all"/>
-		<type fullname="UnityEngine.CanvasRenderer" preserve="all"/>
+	    <type fullname="UnityEngine.UISystemProfilerApi" preserve="all"/>
 		<type fullname="UnityEngine.RectTransformUtility" preserve="all"/>
 		
 	</assembly>

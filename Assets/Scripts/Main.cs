@@ -4,14 +4,18 @@ using XLua;
 using UnityEngine.UI;
 //using Resource;
 using Spine.Unity;
+using Resource;
 
 public class Main : MonoBehaviour
 {
     void Awake() {
         XLuaBridge.Init();
 
+        ResourceManager.Instance.Init(gameObject);
 
-        GameObject a = (GameObject)Resources.Load("UI/Prefabs/GameMainUI");
+        GameObject a = ResourceManager.Instance.LoadAsset< GameObject >("Assets/UI/Prefabs/main/GameMainUI", "Assets/UI/Prefabs/main/GameMainUI", "mainab");
+
+         //= (GameObject)Resources.Load("UI/Prefabs/GameMainUI");
         GameObject ui = Instantiate(a);
         //把ui添加到舞台
         RectTransform  childUI = ui.GetComponent<RectTransform>();

@@ -72,10 +72,10 @@ namespace Resource
 
             TextAsset configTxt = Resources.Load<TextAsset>( "gameConfig" );
  
-            goDonwloadManager = new GameObject( "donwloadManager" );
-            downloadResource = goDonwloadManager.AddComponent<DownloadResource>();
-            downloadResource.Init( configTxt != null ? configTxt.text : null );
-            uncompressFile = goDonwloadManager.AddComponent<UncompressFile>();
+            //goDonwloadManager = new GameObject( "donwloadManager" );
+            //downloadResource = goDonwloadManager.AddComponent<DownloadResource>();
+            //downloadResource.Init( configTxt != null ? configTxt.text : null );
+            //uncompressFile = goDonwloadManager.AddComponent<UncompressFile>();
 
             //cacheBundleNameList = new List<string>();
 

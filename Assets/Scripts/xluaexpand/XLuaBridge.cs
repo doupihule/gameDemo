@@ -40,7 +40,7 @@ namespace XLua
             {
                 luaEnv = new LuaEnv();  //all lua behaviour shared one luaenv only!
                 xLuaBridge = new XLuaBridge();
-                luaEnv.DoString("package.path = 'Assets/Game/Scripts/luasrc/?.lua.txt;'..package.path");
+                luaEnv.DoString("package.path = 'Assets/Scripts/luasrc/?.lua.txt;'..package.path");
                 luaEnv.DoString("require 'Main'");
             }
             else

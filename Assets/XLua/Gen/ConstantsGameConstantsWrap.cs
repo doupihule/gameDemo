@@ -31,7 +31,7 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 11, 1, 1);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 11, 0, 0);
 			
 			
             Utils.RegisterObject(L, translator, Utils.CLS_IDX, "SERVER_URL_BRANCH", Constants.GameConstants.SERVER_URL_BRANCH);
@@ -45,10 +45,8 @@ namespace XLua.CSObjectWrap
             Utils.RegisterObject(L, translator, Utils.CLS_IDX, "VERSION_FILE_NAME", Constants.GameConstants.VERSION_FILE_NAME);
             Utils.RegisterObject(L, translator, Utils.CLS_IDX, "DOWN_LOAD_COMPLETE_MARK", Constants.GameConstants.DOWN_LOAD_COMPLETE_MARK);
             
-			Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "LoadAssetByEditor", _g_get_LoadAssetByEditor);
-            
-			Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "LoadAssetByEditor", _s_set_LoadAssetByEditor);
-            
+			
+			
 			
 			Utils.EndClassRegister(type, L, translator);
         }
@@ -86,32 +84,7 @@ namespace XLua.CSObjectWrap
         
         
         
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_LoadAssetByEditor(RealStatePtr L)
-        {
-		    try {
-            
-			    LuaAPI.lua_pushboolean(L, Constants.GameConstants.LoadAssetByEditor);
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            return 1;
-        }
         
-        
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _s_set_LoadAssetByEditor(RealStatePtr L)
-        {
-		    try {
-                
-			    Constants.GameConstants.LoadAssetByEditor = LuaAPI.lua_toboolean(L, 1);
-            
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            return 0;
-        }
         
 		
 		

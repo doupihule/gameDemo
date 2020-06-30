@@ -59,29 +59,7 @@ namespace XLua
 #endif
 		}
         
-		public void __Gen_Delegate_Imp2(bool p0)
-		{
-#if THREAD_SAFE || HOTFIX_ENABLE
-            lock (luaEnv.luaEnvLock)
-            {
-#endif
-                RealStatePtr L = luaEnv.rawL;
-                int errFunc = LuaAPI.pcall_prepare(L, errorFuncRef, luaReference);
-                
-                LuaAPI.lua_pushboolean(L, p0);
-                
-                PCall(L, 1, 0, errFunc);
-                
-                
-                
-                LuaAPI.lua_settop(L, errFunc - 1);
-                
-#if THREAD_SAFE || HOTFIX_ENABLE
-            }
-#endif
-		}
-        
-		public void __Gen_Delegate_Imp3(float[] p0)
+		public void __Gen_Delegate_Imp2(float[] p0)
 		{
 #if THREAD_SAFE || HOTFIX_ENABLE
             lock (luaEnv.luaEnvLock)
@@ -103,7 +81,7 @@ namespace XLua
 #endif
 		}
         
-		public void __Gen_Delegate_Imp4(int p0)
+		public void __Gen_Delegate_Imp3(int p0)
 		{
 #if THREAD_SAFE || HOTFIX_ENABLE
             lock (luaEnv.luaEnvLock)
@@ -125,7 +103,7 @@ namespace XLua
 #endif
 		}
         
-		public void __Gen_Delegate_Imp5(string p0, bool p1, string p2)
+		public void __Gen_Delegate_Imp4(string p0, bool p1, string p2)
 		{
 #if THREAD_SAFE || HOTFIX_ENABLE
             lock (luaEnv.luaEnvLock)
@@ -149,7 +127,7 @@ namespace XLua
 #endif
 		}
         
-		public void __Gen_Delegate_Imp6(string p0, string p1, UnityEngine.LogType p2)
+		public void __Gen_Delegate_Imp5(string p0, string p1, UnityEngine.LogType p2)
 		{
 #if THREAD_SAFE || HOTFIX_ENABLE
             lock (luaEnv.luaEnvLock)
@@ -163,6 +141,28 @@ namespace XLua
                 translator.Push(L, p2);
                 
                 PCall(L, 3, 0, errFunc);
+                
+                
+                
+                LuaAPI.lua_settop(L, errFunc - 1);
+                
+#if THREAD_SAFE || HOTFIX_ENABLE
+            }
+#endif
+		}
+        
+		public void __Gen_Delegate_Imp6(bool p0)
+		{
+#if THREAD_SAFE || HOTFIX_ENABLE
+            lock (luaEnv.luaEnvLock)
+            {
+#endif
+                RealStatePtr L = luaEnv.rawL;
+                int errFunc = LuaAPI.pcall_prepare(L, errorFuncRef, luaReference);
+                
+                LuaAPI.lua_pushboolean(L, p0);
+                
+                PCall(L, 1, 0, errFunc);
                 
                 
                 
@@ -750,16 +750,6 @@ namespace XLua
 			    return new UnityEngine.Font.FontTextureRebuildCallback(__Gen_Delegate_Imp1);
 			}
 		
-		    if (type == typeof(UnityEngine.Canvas.WillRenderCanvases))
-			{
-			    return new UnityEngine.Canvas.WillRenderCanvases(__Gen_Delegate_Imp1);
-			}
-		
-		    if (type == typeof(UnityEngine.CanvasRenderer.OnRequestRebuild))
-			{
-			    return new UnityEngine.CanvasRenderer.OnRequestRebuild(__Gen_Delegate_Imp1);
-			}
-		
 		    if (type == typeof(UnityEngine.RemoteSettings.UpdatedEventHandler))
 			{
 			    return new UnityEngine.RemoteSettings.UpdatedEventHandler(__Gen_Delegate_Imp1);
@@ -770,34 +760,29 @@ namespace XLua
 			    return new Spine.Unity.SkeletonUtility.SkeletonUtilityDelegate(__Gen_Delegate_Imp1);
 			}
 		
-		    if (type == typeof(UnityEngine.AudioSettings.AudioConfigurationChangeHandler))
-			{
-			    return new UnityEngine.AudioSettings.AudioConfigurationChangeHandler(__Gen_Delegate_Imp2);
-			}
-		
-		    if (type == typeof(System.Action<bool>))
-			{
-			    return new System.Action<bool>(__Gen_Delegate_Imp2);
-			}
-		
 		    if (type == typeof(UnityEngine.AudioClip.PCMReaderCallback))
 			{
-			    return new UnityEngine.AudioClip.PCMReaderCallback(__Gen_Delegate_Imp3);
+			    return new UnityEngine.AudioClip.PCMReaderCallback(__Gen_Delegate_Imp2);
 			}
 		
 		    if (type == typeof(UnityEngine.AudioClip.PCMSetPositionCallback))
 			{
-			    return new UnityEngine.AudioClip.PCMSetPositionCallback(__Gen_Delegate_Imp4);
+			    return new UnityEngine.AudioClip.PCMSetPositionCallback(__Gen_Delegate_Imp3);
 			}
 		
 		    if (type == typeof(UnityEngine.Application.AdvertisingIdentifierCallback))
 			{
-			    return new UnityEngine.Application.AdvertisingIdentifierCallback(__Gen_Delegate_Imp5);
+			    return new UnityEngine.Application.AdvertisingIdentifierCallback(__Gen_Delegate_Imp4);
 			}
 		
 		    if (type == typeof(UnityEngine.Application.LogCallback))
 			{
-			    return new UnityEngine.Application.LogCallback(__Gen_Delegate_Imp6);
+			    return new UnityEngine.Application.LogCallback(__Gen_Delegate_Imp5);
+			}
+		
+		    if (type == typeof(System.Action<bool>))
+			{
+			    return new System.Action<bool>(__Gen_Delegate_Imp6);
 			}
 		
 		    if (type == typeof(System.Func<bool>))

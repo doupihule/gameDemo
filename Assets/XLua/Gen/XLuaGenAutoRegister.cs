@@ -67,9 +67,6 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(UnityEngine.MatchTargetWeightMask), UnityEngineMatchTargetWeightMaskWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityEngine.AnimatorControllerParameter), UnityEngineAnimatorControllerParameterWrap.__Register);
-        
-        
             translator.DelayWrapLoader(typeof(UnityEngine.AnimatorOverrideController), UnityEngineAnimatorOverrideControllerWrap.__Register);
         
         
@@ -130,9 +127,6 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(UnityEngine.AudioConfiguration), UnityEngineAudioConfigurationWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityEngine.AudioSettings), UnityEngineAudioSettingsWrap.__Register);
-        
-        
             translator.DelayWrapLoader(typeof(UnityEngine.AudioClip), UnityEngineAudioClipWrap.__Register);
         
         
@@ -174,16 +168,16 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.WebCamTexture), UnityEngineWebCamTextureWrap.__Register);
         
-        }
-        
-        static void wrapInit1(LuaEnv luaenv, ObjectTranslator translator)
-        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.AudioRenderer), UnityEngineAudioRendererWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.ClothSphereColliderPair), UnityEngineClothSphereColliderPairWrap.__Register);
         
+        }
+        
+        static void wrapInit1(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.Cloth), UnityEngineClothWrap.__Register);
         
@@ -228,9 +222,6 @@ namespace XLua.CSObjectWrap
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.Cache), UnityEngineCacheWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.Caching), UnityEngineCachingWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.Camera), UnityEngineCameraWrap.__Register);
@@ -323,26 +314,10 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(UnityEngine.FrameTimingManager), UnityEngineFrameTimingManagerWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityEngine.LightmapData), UnityEngineLightmapDataWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.LightmapSettings), UnityEngineLightmapSettingsWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.LightProbes), UnityEngineLightProbesWrap.__Register);
-        
-        }
-        
-        static void wrapInit2(LuaEnv luaenv, ObjectTranslator translator)
-        {
-        
             translator.DelayWrapLoader(typeof(UnityEngine.Resolution), UnityEngineResolutionWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.RenderTargetSetup), UnityEngineRenderTargetSetupWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.QualitySettings), UnityEngineQualitySettingsWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.RendererExtensions), UnityEngineRendererExtensionsWrap.__Register);
@@ -356,6 +331,10 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.ImageEffectOpaque), UnityEngineImageEffectOpaqueWrap.__Register);
         
+        }
+        
+        static void wrapInit2(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.ImageEffectAfterScale), UnityEngineImageEffectAfterScaleWrap.__Register);
         
@@ -399,19 +378,10 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(UnityEngine.LensFlare), UnityEngineLensFlareWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityEngine.LightBakingOutput), UnityEngineLightBakingOutputWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.Light), UnityEngineLightWrap.__Register);
-        
-        
             translator.DelayWrapLoader(typeof(UnityEngine.Skybox), UnityEngineSkyboxWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.MeshFilter), UnityEngineMeshFilterWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.LightProbeProxyVolume), UnityEngineLightProbeProxyVolumeWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.SkinnedMeshRenderer), UnityEngineSkinnedMeshRendererWrap.__Register);
@@ -450,13 +420,7 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(UnityEngine.Compass), UnityEngineCompassWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityEngine.Input), UnityEngineInputWrap.__Register);
-        
-        
             translator.DelayWrapLoader(typeof(UnityEngine.LayerMask), UnityEngineLayerMaskWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.LightProbeGroup), UnityEngineLightProbeGroupWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.LineUtility), UnityEngineLineUtilityWrap.__Register);
@@ -488,10 +452,6 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.CombineInstance), UnityEngineCombineInstanceWrap.__Register);
         
-        }
-        
-        static void wrapInit3(LuaEnv luaenv, ObjectTranslator translator)
-        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.MonoBehaviour), UnityEngineMonoBehaviourWrap.__Register);
         
@@ -528,6 +488,10 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.Rect), UnityEngineRectWrap.__Register);
         
+        }
+        
+        static void wrapInit3(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.RectInt), UnityEngineRectIntWrap.__Register);
         
@@ -645,10 +609,6 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.WaitUntil), UnityEngineWaitUntilWrap.__Register);
         
-        }
-        
-        static void wrapInit4(LuaEnv luaenv, ObjectTranslator translator)
-        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.WaitWhile), UnityEngineWaitWhileWrap.__Register);
         
@@ -663,9 +623,6 @@ namespace XLua.CSObjectWrap
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.StaticBatchingUtility), UnityEngineStaticBatchingUtilityWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.DrivenRectTransformTracker), UnityEngineDrivenRectTransformTrackerWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.RectTransform), UnityEngineRectTransformWrap.__Register);
@@ -688,6 +645,10 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.Event), UnityEngineEventWrap.__Register);
         
+        }
+        
+        static void wrapInit4(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.ImageConversion), UnityEngineImageConversionWrap.__Register);
         
@@ -791,9 +752,6 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(UnityEngine.ParticlePhysicsExtensions), UnityEngineParticlePhysicsExtensionsWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityEngine.ParticleSystemForceField), UnityEngineParticleSystemForceFieldWrap.__Register);
-        
-        
             translator.DelayWrapLoader(typeof(UnityEngine.WheelFrictionCurve), UnityEngineWheelFrictionCurveWrap.__Register);
         
         
@@ -802,10 +760,6 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.SoftJointLimitSpring), UnityEngineSoftJointLimitSpringWrap.__Register);
         
-        }
-        
-        static void wrapInit5(LuaEnv luaenv, ObjectTranslator translator)
-        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.JointDrive), UnityEngineJointDriveWrap.__Register);
         
@@ -848,6 +802,10 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.BoxCollider), UnityEngineBoxColliderWrap.__Register);
         
+        }
+        
+        static void wrapInit5(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.SphereCollider), UnityEngineSphereColliderWrap.__Register);
         
@@ -959,10 +917,6 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.CompositeCollider2D), UnityEngineCompositeCollider2DWrap.__Register);
         
-        }
-        
-        static void wrapInit6(LuaEnv luaenv, ObjectTranslator translator)
-        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.Joint2D), UnityEngineJoint2DWrap.__Register);
         
@@ -1005,6 +959,10 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.BuoyancyEffector2D), UnityEngineBuoyancyEffector2DWrap.__Register);
         
+        }
+        
+        static void wrapInit6(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.PointEffector2D), UnityEnginePointEffector2DWrap.__Register);
         
@@ -1060,16 +1018,7 @@ namespace XLua.CSObjectWrap
             translator.DelayWrapLoader(typeof(UnityEngine.GridBrushBase), UnityEngineGridBrushBaseWrap.__Register);
         
         
-            translator.DelayWrapLoader(typeof(UnityEngine.Canvas), UnityEngineCanvasWrap.__Register);
-        
-        
             translator.DelayWrapLoader(typeof(UnityEngine.UISystemProfilerApi), UnityEngineUISystemProfilerApiWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.CanvasGroup), UnityEngineCanvasGroupWrap.__Register);
-        
-        
-            translator.DelayWrapLoader(typeof(UnityEngine.CanvasRenderer), UnityEngineCanvasRendererWrap.__Register);
         
         
             translator.DelayWrapLoader(typeof(UnityEngine.RectTransformUtility), UnityEngineRectTransformUtilityWrap.__Register);
@@ -1116,10 +1065,6 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.UI.Dropdown), UnityEngineUIDropdownWrap.__Register);
         
-        }
-        
-        static void wrapInit7(LuaEnv luaenv, ObjectTranslator translator)
-        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.UI.Dropdown.OptionData), UnityEngineUIDropdownOptionDataWrap.__Register);
         
@@ -1171,6 +1116,10 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(UnityEngine.UI.Navigation), UnityEngineUINavigationWrap.__Register);
         
+        }
+        
+        static void wrapInit7(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(UnityEngine.UI.RawImage), UnityEngineUIRawImageWrap.__Register);
         
@@ -1273,10 +1222,6 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(Main), MainWrap.__Register);
         
-        }
-        
-        static void wrapInit8(LuaEnv luaenv, ObjectTranslator translator)
-        {
         
             translator.DelayWrapLoader(typeof(GameResourceCacheObjects), GameResourceCacheObjectsWrap.__Register);
         
@@ -1328,6 +1273,10 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(Spine.AttachmentTimeline), SpineAttachmentTimelineWrap.__Register);
         
+        }
+        
+        static void wrapInit8(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(Spine.DeformTimeline), SpineDeformTimelineWrap.__Register);
         
@@ -1430,10 +1379,6 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(Spine.Skeleton), SpineSkeletonWrap.__Register);
         
-        }
-        
-        static void wrapInit9(LuaEnv luaenv, ObjectTranslator translator)
-        {
         
             translator.DelayWrapLoader(typeof(Spine.SkeletonBinary), SpineSkeletonBinaryWrap.__Register);
         
@@ -1485,6 +1430,10 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(Spine.Unity.EventDataReferenceAsset), SpineUnityEventDataReferenceAssetWrap.__Register);
         
+        }
+        
+        static void wrapInit9(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(Spine.Unity.RegionlessAttachmentLoader), SpineUnityRegionlessAttachmentLoaderWrap.__Register);
         
@@ -1587,10 +1536,6 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(Spine.Unity.SpineAtlasRegion), SpineUnitySpineAtlasRegionWrap.__Register);
         
-        }
-        
-        static void wrapInit10(LuaEnv luaenv, ObjectTranslator translator)
-        {
         
             translator.DelayWrapLoader(typeof(Spine.Unity.Playables.SkeletonAnimationPlayableHandle), SpineUnityPlayablesSkeletonAnimationPlayableHandleWrap.__Register);
         
@@ -1642,6 +1587,10 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(Spine.Unity.Modules.SkeletonUtilityEyeConstraint), SpineUnityModulesSkeletonUtilityEyeConstraintWrap.__Register);
         
+        }
+        
+        static void wrapInit10(LuaEnv luaenv, ObjectTranslator translator)
+        {
         
             translator.DelayWrapLoader(typeof(Spine.Unity.Modules.SkeletonUtilityGroundConstraint), SpineUnityModulesSkeletonUtilityGroundConstraintWrap.__Register);
         
@@ -1744,10 +1693,6 @@ namespace XLua.CSObjectWrap
         
             translator.DelayWrapLoader(typeof(Spine.Unity.MeshRendererBuffers.SmartMesh), SpineUnityMeshRendererBuffersSmartMeshWrap.__Register);
         
-        }
-        
-        static void wrapInit11(LuaEnv luaenv, ObjectTranslator translator)
-        {
         
             translator.DelayWrapLoader(typeof(Spine.Unity.SpineAttachment.Hierarchy), SpineUnitySpineAttachmentHierarchyWrap.__Register);
         
@@ -1794,8 +1739,6 @@ namespace XLua.CSObjectWrap
             wrapInit9(luaenv, translator);
             
             wrapInit10(luaenv, translator);
-            
-            wrapInit11(luaenv, translator);
             
             
         }

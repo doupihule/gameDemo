@@ -31,7 +31,7 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 6, 2, 1);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 6, 1, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "GetPlatformString", _m_GetPlatformString_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "EncodingToMd5", _m_EncodingToMd5_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "ReverseBytes", _m_ReverseBytes_xlua_st_);
@@ -41,10 +41,8 @@ namespace XLua.CSObjectWrap
 			
             
 			Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "IsIphoneX", _g_get_IsIphoneX);
-            Utils.RegisterFunc(L, Utils.CLS_GETTER_IDX, "LoadAssetsWay", _g_get_LoadAssetsWay);
             
-			Utils.RegisterFunc(L, Utils.CLS_SETTER_IDX, "LoadAssetsWay", _s_set_LoadAssetsWay);
-            
+			
 			
 			Utils.EndClassRegister(type, L, translator);
         }
@@ -218,32 +216,7 @@ namespace XLua.CSObjectWrap
             return 1;
         }
         
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _g_get_LoadAssetsWay(RealStatePtr L)
-        {
-		    try {
-            
-			    LuaAPI.lua_pushboolean(L, GameUtils.CommonUtil.LoadAssetsWay);
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            return 1;
-        }
         
-        
-        
-        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-        static int _s_set_LoadAssetsWay(RealStatePtr L)
-        {
-		    try {
-                
-			    GameUtils.CommonUtil.LoadAssetsWay = LuaAPI.lua_toboolean(L, 1);
-            
-            } catch(System.Exception gen_e) {
-                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
-            }
-            return 0;
-        }
         
 		
 		
