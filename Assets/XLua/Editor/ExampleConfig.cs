@@ -54,7 +54,20 @@ public static class ExampleConfig
         "ClusterInput", "Motion",
         "UnityEngine.UI.ReflectionMethodsCache", "NativeLeakDetection",
         "NativeLeakDetectionMode", "WWWAudioExtensions", "UnityEngine.Experimental",
-        "Examples"
+        "Examples",
+
+        "UnityEngine.DrivenRectTransformTracker",
+        "UnityEngine.Caching",
+        "UnityEngine.LightProbeGroup",
+        "UnityEngine.ParticleSystemForceField",
+        "UnityEngine.Canvas",
+        "UnityEngine.AnimatorControllerParameter",
+        "UnityEngine.AudioSettings",
+        "UnityEngine.Input",
+        "UnityEngine.Light",
+        "UnityEngine.QualitySettings"
+
+
     };
 
     static bool isExcluded(Type type)
@@ -273,5 +286,17 @@ public static class ExampleConfig
                 new List<string>(){"System.IO.DirectoryInfo", "CreateSubdirectory", "System.String", "System.Security.AccessControl.DirectorySecurity"},
                 new List<string>(){"System.IO.DirectoryInfo", "Create", "System.Security.AccessControl.DirectorySecurity"},
                 new List<string>(){"UnityEngine.MonoBehaviour", "runInEditMode"},
-            };
+    #if UNITY_EDITOR
+        new List<string>(){ "Constants.GameConstants","LoadAssetByEditor"},
+        new List<string>(){ "GameUtils.CommonUtil", "LoadAssetsWay"},
+        
+    #endif
+                new List<string>(){ "UnityEngine.CanvasRenderer", "OnRequestRebuild"},
+                new List<string>(){ "UnityEngine.AudioSettings", "SetSpatializerPluginName"},
+                new List<string>(){ "UnityEngine.Caching", "SetNoBackupFlag"},
+                new List<string>(){ "UnityEngine.Texture", "imageContentsHash"},
+                new List<string>(){ "UnityEngine.UI.Text", "OnRebuildRequested"},
+                new List<string>(){ "UnityEngine.UI.Graphic", "OnRebuildRequested"},
+                new List<string>(){ "UnityEngine.CanvasRenderer", "OnRequestRebuild"},
+    };
 }
