@@ -12,6 +12,7 @@ using XLua;
 
 namespace Resource
 {
+    [LuaCallCSharp]
     public class ResourceManager
     {
         private static ResourceManager instance;
@@ -220,6 +221,12 @@ namespace Resource
             }
 
         }
+
+        public GameObject luaLoadAsset(string assetName, string path = null, string bundleName = null)
+        {
+            return LoadAsset<GameObject>(assetName, path, bundleName);
+        }
+
 
         public T LoadAsset<T>( string assetName, string path = null, string bundleName = null ) where T : UObject
         {

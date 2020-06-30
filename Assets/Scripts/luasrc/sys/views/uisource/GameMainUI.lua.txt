@@ -11,17 +11,13 @@ function  GameMainUI:start()
 end
 
 function GameMainUI:OnAwake()
-    print("lua OnAwake...",self);
-	print(3333333333333333)
 	--UITools:setUIViewPos(self.testButton,300,-200)
-	self:setData("---")
 	self.testButton:GetComponent("Button").onClick:AddListener(function(a)
 		print("clicked, test Button",a)
 	end)
 
-	local sp = DisplayUtils:createSpine( "spine/spine_role");
+	local sp = DisplayUtils:createSpine( "spine_role");
 	UITools:bindUIFunc(self);
-	print("____",sp)
 	self:addChild(sp)
 	UITools:setUIViewPos(sp,100,200)
 

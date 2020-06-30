@@ -1,8 +1,9 @@
-DisplayUtils = {}
-
 require("components.SpineGraphicExpand")
+DisplayUtils = {}
+local spinePath = "Assets/Animation/spine/"
 
-function DisplayUtils:createSpine( url )
-	local spani = SpineGraphicExpand.new(url);
+
+function DisplayUtils:createSpine( name )
+	local spani = SpineGraphicExpand.new(spinePath..name..".prefab");
 	return spani
 end

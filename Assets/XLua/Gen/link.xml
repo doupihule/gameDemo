@@ -8,6 +8,7 @@
 		<type fullname="XLua.UILuaBehaviour" preserve="all"/>
 		<type fullname="XLua.XLuaHelper" preserve="all"/>
 		<type fullname="GameUtils.ExtensionMethods" preserve="all"/>
+		<type fullname="Resource.ResourceManager" preserve="all"/>
 		<type fullname="Main" preserve="all"/>
 		<type fullname="GameResourceCacheObjects" preserve="all"/>
 		<type fullname="FPSLabel" preserve="all"/>
@@ -152,7 +153,6 @@
 		<type fullname="Resource.FileVersionData" preserve="all"/>
 		<type fullname="Resource.LoadAssetBundle" preserve="all"/>
 		<type fullname="Resource.LoadResources" preserve="all"/>
-		<type fullname="Resource.ResourceManager" preserve="all"/>
 		<type fullname="Resource.UncompressFile" preserve="all"/>
 		<type fullname="Constants.GameConstants" preserve="all"/>
 		<type fullname="Constants.AssetBundleAlwaysCache" preserve="all"/>

@@ -21,7 +21,7 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(Resource.ResourceManager);
-			Utils.BeginObjectRegister(type, L, translator, 0, 14, 2, 4);
+			Utils.BeginObjectRegister(type, L, translator, 0, 15, 2, 4);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Init", _m_Init);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Dispose", _m_Dispose);
@@ -31,6 +31,7 @@ namespace XLua.CSObjectWrap
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "UncompressResources", _m_UncompressResources);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "RemoveDonwloadObject", _m_RemoveDonwloadObject);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "InitLoadManager", _m_InitLoadManager);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "luaLoadAsset", _m_luaLoadAsset);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "FindInBundle", _m_FindInBundle);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "GetCustomSpriteRendererMaterial", _m_GetCustomSpriteRendererMaterial);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ReleaseAsset", _m_ReleaseAsset);
@@ -306,6 +307,64 @@ namespace XLua.CSObjectWrap
             } catch(System.Exception gen_e) {
                 return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
             }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_luaLoadAsset(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                Resource.ResourceManager gen_to_be_invoked = (Resource.ResourceManager)translator.FastGetCSObj(L, 1);
+            
+            
+			    int gen_param_count = LuaAPI.lua_gettop(L);
+            
+                if(gen_param_count == 4&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 3) || LuaAPI.lua_type(L, 3) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 4) || LuaAPI.lua_type(L, 4) == LuaTypes.LUA_TSTRING)) 
+                {
+                    string _assetName = LuaAPI.lua_tostring(L, 2);
+                    string _path = LuaAPI.lua_tostring(L, 3);
+                    string _bundleName = LuaAPI.lua_tostring(L, 4);
+                    
+                        UnityEngine.GameObject gen_ret = gen_to_be_invoked.luaLoadAsset( _assetName, _path, _bundleName );
+                        translator.Push(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                if(gen_param_count == 3&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)&& (LuaAPI.lua_isnil(L, 3) || LuaAPI.lua_type(L, 3) == LuaTypes.LUA_TSTRING)) 
+                {
+                    string _assetName = LuaAPI.lua_tostring(L, 2);
+                    string _path = LuaAPI.lua_tostring(L, 3);
+                    
+                        UnityEngine.Object gen_ret = gen_to_be_invoked.luaLoadAsset( _assetName, _path );
+                        translator.Push(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                if(gen_param_count == 2&& (LuaAPI.lua_isnil(L, 2) || LuaAPI.lua_type(L, 2) == LuaTypes.LUA_TSTRING)) 
+                {
+                    string _assetName = LuaAPI.lua_tostring(L, 2);
+                    
+                        UnityEngine.Object gen_ret = gen_to_be_invoked.luaLoadAsset( _assetName );
+                        translator.Push(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+            return LuaAPI.luaL_error(L, "invalid arguments to Resource.ResourceManager.luaLoadAsset!");
             
         }
         

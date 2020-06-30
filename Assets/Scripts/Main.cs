@@ -13,7 +13,7 @@ public class Main : MonoBehaviour
 
         ResourceManager.Instance.Init(gameObject);
 
-        GameObject a = ResourceManager.Instance.LoadAsset< GameObject >("Assets/UI/Prefabs/main/GameMainUI", "Assets/UI/Prefabs/main/GameMainUI", "mainab");
+        GameObject a = ResourceManager.Instance.LoadAsset< GameObject >("Assets/UI/Prefabs/main/GameMainUI.prefab", "Assets/UI/Prefabs/main/GameMainUI.prefab", "mainab");
 
          //= (GameObject)Resources.Load("UI/Prefabs/GameMainUI");
         GameObject ui = Instantiate(a);

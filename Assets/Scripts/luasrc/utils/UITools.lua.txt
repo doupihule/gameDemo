@@ -55,7 +55,6 @@ local tempAddChildFunc = function (self, childLuaInstance ,index)
 	else 
 		childTransform = childLuaInstance:GetComponent("RectTransform");
 	end
-	print("childTransform__",childTransform.SetParent,"__selfTransform:_",selfTransform)
 	childTransform:SetParent(selfTransform,false)
 	--设置parent
 	if(index ~= nil and index >=0) then
@@ -77,6 +76,11 @@ local tempRemoveUIInstance = function (self, childLuaInstance )
 	childTransform:SetParent(nil)
 end
 
+--移除自己.和移除子对象一样
+local tempRemoveSelf = function ( self )
+	tempRemoveUIInstance(self,self)
+end
+
 
 --移除某个位置的子对象
 local tempRemoveChildAt = function (self, index )
@@ -94,6 +98,7 @@ function UITools:bindUIFunc( luaInstance )
 	end
 	luaInstance.addChild = tempAddChildFunc
 	luaInstance.removeChild = tempRemoveChild
+	luaInstance.removeSelf = 
 
 end
 
