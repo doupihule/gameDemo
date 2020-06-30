@@ -3,3 +3,5 @@
 /.vs
 /Library
 /obj
+/Unity.AssetBundleBrowser.Editor.Tests.csproj
+/Unity.AssetBundleBrowser.Editor.csproj
