@@ -98,7 +98,7 @@ function UITools:bindUIFunc( luaInstance )
 	end
 	luaInstance.addChild = tempAddChildFunc
 	luaInstance.removeChild = tempRemoveChild
-	luaInstance.removeSelf = 
+	luaInstance.removeSelf = tempRemoveSelf
 
 end
 
