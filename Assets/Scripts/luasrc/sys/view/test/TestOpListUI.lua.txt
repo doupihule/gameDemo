@@ -1,0 +1,396 @@
+require("stringutil")
+require("ui/layaMaxUI")
+require("framework/manager/WindowManager")
+require("game/sys/consts/WindowCfgs")
+require("game/sys/model/UserModel")
+require("framework/common/kakura/Client")
+require("game/sys/common/kakura/Method")
+require("framework/manager/CacheManager")
+require("framework/func/TranslateFunc")
+require("utils/Global")
+require("game/sys/consts/GMConst")
+require("framework/server/SingleCommonServer")
+
+TestOpListUI = newClass({ui.gameui.test.TestOpListUI}, {name = 'TestOpListUI'})
+TestOpListUI.res = {"gameui/TestOpList.scene"};
+function TestOpListUI:__new__()
+  self:superCall('__new__')
+  self._params = {};
+  self._defaultText = "选择方法";
+  self._defaultInput = "参数";
+  self._selectIndex = 0;
+  self.returnInfoPanel.vScrollBarSkin = ""
+  self.errorPanel.vScrollBarSkin = ""
+  self:showParamsList({})
+end
+
+function TestOpListUI:setData(data)
+  self._firstSelect = "opFirstSelect" .. UserModel.instance:getUserRid()
+  self._secondSelect = "opSecondSelect" .. UserModel.instance:getUserRid()
+  self:initData()
+  self:initView()
+end
+
+function TestOpListUI:initData()
+  if Global.checkUserCloudStorage() then
+    local oplistData = GMConst.getOplistData()
+    self:afterGetData(oplistData.result)
+  else
+    Client.instance:send(Method.test_system_getTestOpList, {}, function(result)
+      self:afterGetData(result)
+    end
+    , self)
+  end
+end
+
+function TestOpListUI:afterGetData(result)
+  local oplist = result.data.oplist
+  local firstData = {}
+  for key in pairs(oplist) do
+    if oplist:hasOwnProperty(key) then
+      -- [ts2lua]oplist下标访问可能不正确
+      local element = oplist[key]
+      element.actDes = element.label .. "：" .. element.desc
+      local len = #element.ops
+      local i = 0
+      repeat
+        element.ops[i+1].actDes = element.ops[i+1].action .. "：" .. element.ops[i+1].desc
+        i=i+1
+      until not(i < len)
+      table.insert(firstData, element)
+    end
+  end
+  self._testOpData = firstData
+  self._firstListData = self._testOpData
+  self.list_first.array = self._firstListData
+  self.list_first.renderHandler = Laya.Handler(self, self.onFirstListRender)
+  self:initClickEvent()
+  self:showHisSelect()
+end
+
+function TestOpListUI:initView()
+  self.backBtn:on(Laya.Event.CLICK, self, self.close)
+  self.clickPanel.visible = false
+  self.firstPanel.visible = false
+  self.secondPanel.visible = false
+  self._params = {}
+  self.clickPanel:on(Laya.Event.CLICK, self, function()
+    self.firstPanel.visible = false
+    self.secondPanel.visible = false
+    self.clickPanel.visible = false
+  end
+  )
+  self.takeBtn:on(Laya.Event.CLICK, self, function()
+    if not self._selectAction then
+      return
+    end
+    if not self._selectOpId then
+      return
+    end
+    if self._params == {} or not self._params then
+      return
+    end
+    if Global.checkUserCloudStorage() then
+      local info = self._selectAction:split(".")
+      if info[0+1] == "delModel" then
+        -- [ts2lua]self._params下标访问可能不正确
+        self:doDelData(info[1+1], self._params[info[2+1]])
+      else
+        if #info == 4 then
+          -- [ts2lua]self._params下标访问可能不正确
+          -- [ts2lua]self._params下标访问可能不正确
+          self:doUpdateData(info[0+1], info[1+1], self._params[info[2+1]], self._params[info[3+1]])
+        elseif #info == 3 then
+          -- [ts2lua]self._params下标访问可能不正确
+          -- [ts2lua]self._params下标访问可能不正确
+          self:doUpdateData(info[0+1], self._params[info[1+1]], info[2+1], self._params[info[2+1]])
+        else
+          -- [ts2lua]self._params下标访问可能不正确
+          self:doUpdateData(info[0+1], info[1+1], nil, self._params[info[1+1]])
+        end
+      end
+    else
+      Client.instance:send("" .. self._selectOpId, self._params, function(result)
+        self:resetOutputText()
+        self.resultLabel.text = JSON:stringify(result)
+        if result.error then
+          self.errorLabel.text = JSON:stringify(result.error)
+        end
+      end
+      , self)
+    end
+  end
+  )
+  self.testBtn:on(Laya.Event.CLICK, self, self.clickTestBtn)
+  self.ridLab.text = "rid:" .. UserModel.instance:getUserRid()
+end
+
+function TestOpListUI:clickTestBtn()
+  self._selectIndex = self._selectIndex + 1 % 2
+  self.titleLabel.text = TranslateFunc.instance:getTranslate("#TestTitle" .. self._selectIndex)
+  self:resetView()
+  if self._selectIndex == 0 then
+    self._firstListData = self._testOpData
+  else
+    self._opData = self:getOpData()
+    self._firstListData = self._opData
+  end
+  self.list_first.array = self._firstListData
+  self.list_first.renderHandler = Laya.Handler(self, self.onFirstListRender)
+  self:showParamsList({})
+  self:showHisSelect()
+end
+
+function TestOpListUI:resetView()
+  self.firstLabel.text = TranslateFunc.instance:getTranslate("#TestFirstLb")
+  self.secondLabel.text = TranslateFunc.instance:getTranslate("#TestSecondLb")
+  self:resetOutputText()
+end
+
+function TestOpListUI:resetOutputText()
+  self.resultLabel.text = ""
+  self.errorLabel.text = ""
+end
+
+function TestOpListUI:getOpData()
+  if not self._opData then
+    Client.instance:send(Method.test_system_getOpList, {}, function(result)
+      local oplist = result.data.oplist
+      local firstData = {}
+      for key in pairs(oplist) do
+        if oplist:hasOwnProperty(key) then
+          -- [ts2lua]oplist下标访问可能不正确
+          local element = oplist[key]
+          element.actDes = element.label .. "：" .. element.desc
+          local len = #element.ops
+          local i = 0
+          repeat
+            element.ops[i+1].actDes = element.ops[i+1].action .. "：" .. element.ops[i+1].desc
+            i=i+1
+          until not(i < len)
+          table.insert(firstData, element)
+        end
+      end
+      self._opData = firstData
+    end
+    , self)
+  else
+    return self._opData
+  end
+end
+
+function TestOpListUI:onFirstListRender(cell, index)
+  -- [ts2lua]self.list_first.array下标访问可能不正确
+  local data = self.list_first.array[index]
+  local desTxt = cell:getChildAt(0):getChildByName("descTxt")
+  desTxt.text = data.actDes
+  cell:on(Laya.Event.CLICK, self, self.clickFirstItem, {data})
+end
+
+function TestOpListUI:onSecondListRender(cell, index)
+  -- [ts2lua]self.list_second.array下标访问可能不正确
+  local data = self.list_second.array[index]
+  local desTxt = cell:getChildAt(0):getChildByName("descTxt")
+  desTxt.text = data.actDes
+  cell:on(Laya.Event.CLICK, self, self.clickSecondItem, {data})
+end
+
+function TestOpListUI:clickFirstItem(data)
+  self.firstLabel.text = data.actDes
+  self._SecondListData = data.ops
+  self.list_second.array = self._SecondListData
+  self.list_second.renderHandler = Laya.Handler(self, self.onSecondListRender)
+  self._selectOpId = nil
+  self._params = {}
+  self.secondLabel.text = self._defaultText
+  self:showParamsList({})
+  self:clickFirstLabel()
+  CacheManager.instance:setGlobalCache(self._firstSelect + self._selectIndex, data.label)
+end
+
+function TestOpListUI:clickSecondItem(data)
+  self._params = {}
+  self._selectAction = data.action
+  self._selectOpId = data.op
+  self.secondLabel.text = data.actDes
+  self:clickSecondLabel()
+  self:showParamsList(data.params)
+  CacheManager.instance:setGlobalCache(self._secondSelect + self._selectIndex, data.op)
+end
+
+function TestOpListUI:showParamsList(params)
+  self._params = {}
+  self.list_params.array = params
+  -- [ts2lua]修改数组长度需要手动处理。
+  self.list_params.repeatY = params.length
+  self.list_params.renderHandler = Laya.Handler(self, self.onParamsListRender)
+end
+
+function TestOpListUI:onParamsListRender(cell, index)
+  -- [ts2lua]self.list_params.array下标访问可能不正确
+  local data = self.list_params.array[index]
+  local params = cell:getChildByName("params")
+  local paramsName = params:getChildByName("paramsName")
+  local paramsDes = params:getChildByName("paramsDes")
+  local paramsType = params:getChildByName("paramsType")
+  local paramsInput = params:getChildByName("paramsInput")
+  paramsName.text = data.name
+  paramsDes.text = data.desc
+  paramsType.text = data.type
+  paramsInput.text = self._defaultInput
+  paramsInput:offAll()
+  paramsInput:on(Laya.Event.FOCUS, self, function()
+    paramsInput.text = ""
+  end
+  )
+  paramsInput:on(Laya.Event.BLUR, self, function()
+    local params = paramsInput.text
+    if params == "" then
+      paramsInput.text = self._defaultInput
+    else
+      local needType = data.type
+      local isRight = false
+      local endParams = nil
+      local switch = {
+        ["int"] = function()
+          endParams = Number(params)
+          isRight = not isNaN(endParams)
+        end,
+        ["String"] = function()
+          isRight = type(params) == "string"
+          endParams = params
+        end,
+        ["Array"] = function()
+          endParams = params:split(",")
+          isRight = true
+        end
+      }
+      local casef = switch[needType]
+      if not casef then casef = switch["default"] end
+      if casef then casef() end
+      if isRight then
+        if paramsInput.text ~= self._defaultInput then
+          -- [ts2lua]self._params下标访问可能不正确
+          self._params[data.name] = endParams
+        end
+      else
+        paramsInput.text = self._defaultInput
+        WindowManager.ShowTip(TranslateFunc.instance:getTranslate("#inputerr"))
+      end
+    end
+  end
+  )
+end
+
+function TestOpListUI:initClickEvent()
+  self.firstLabel:on(Laya.Event.CLICK, self, self.clickFirstLabel)
+  self.secondLabel:on(Laya.Event.CLICK, self, self.clickSecondLabel)
+end
+
+function TestOpListUI:clickFirstLabel()
+  self.firstPanel.visible = not self.firstPanel.visible
+  self.clickPanel.visible = self.firstPanel.visible
+end
+
+function TestOpListUI:clickSecondLabel()
+  if not self._SecondListData then
+    WindowManager.ShowTip("请先选择类别")
+    return
+  end
+  self.secondPanel.visible = not self.secondPanel.visible
+  self.clickPanel.visible = self.secondPanel.visible
+end
+
+function TestOpListUI:showHisSelect()
+  local hisFirst = CacheManager.instance:getGlobalCache(self._firstSelect + self._selectIndex)
+  if hisFirst then
+    local i = 0
+    repeat
+      local data = self._firstListData[i+1]
+      if data.label == hisFirst then
+        self.firstLabel.text = data.actDes
+        self._SecondListData = data.ops
+        self.list_second.array = self._SecondListData
+        self.list_second.renderHandler = Laya.Handler(self, self.onSecondListRender)
+        local hisSecond = CacheManager.instance:getGlobalCache(self._secondSelect + self._selectIndex)
+        if hisSecond then
+          local j = 0
+          repeat
+            local jData = self._SecondListData[j+1]
+            if jData.op == hisSecond then
+              self.secondLabel.text = jData.actDes
+              self._selectOpId = jData.op
+              self._selectAction = jData.action
+              self:showParamsList(jData.params)
+              break
+            end
+            j=j+1
+          until not(j < #self._SecondListData)
+        end
+        break
+      end
+      i=i+1
+    until not(i < #self._firstListData)
+  end
+end
+
+function TestOpListUI:close()
+  WindowManager.CloseUI(WindowCfgs.TestOpListUI)
+end
+
+function TestOpListUI:recvMsg(cmd, data)
+  local switch = {
+    
+  }
+  local casef = switch[cmd]
+  if not casef then casef = switch["default"] end
+  if casef then casef() end
+end
+
+function TestOpListUI:doUpdateData(parent, key, key1, value)
+  local upData = {}
+  if parent == "User" then
+    -- [ts2lua]upData下标访问可能不正确
+    upData[key] = value
+  else
+    -- [ts2lua]upData下标访问可能不正确
+    upData[parent] = {}
+    local upTData = {}
+    local upTData2 = {}
+    if key1 then
+      -- [ts2lua]upTData下标访问可能不正确
+      upTData[key1] = value
+      -- [ts2lua]upData下标访问可能不正确
+      -- [ts2lua]upData[parent]下标访问可能不正确
+      upData[parent][key] = upTData
+    else
+      -- [ts2lua]upData下标访问可能不正确
+      -- [ts2lua]upData[parent]下标访问可能不正确
+      upData[parent][key] = value
+    end
+  end
+  if key == "sp" then
+    -- [ts2lua]upData下标访问可能不正确
+    -- [ts2lua]upData[parent]下标访问可能不正确
+    upData[parent]["upSpTime"] = Client.instance.serverTime
+  end
+  local deData = {}
+  local backData = Client.instance:doDummyServerBack(nil, upData, deData)
+  SingleCommonServer.startSaveClientData()
+end
+
+function TestOpListUI:doDelData(parent, key)
+  local deData = {}
+  local de1 = {}
+  if key then
+    -- [ts2lua]de1下标访问可能不正确
+    de1[key] = 1
+    -- [ts2lua]deData下标访问可能不正确
+    deData[parent] = de1
+  else
+    -- [ts2lua]deData下标访问可能不正确
+    deData[parent] = 1
+  end
+  local backData = Client.instance:doDummyServerBack(nil, nil, deData)
+  SingleCommonServer.startSaveClientData()
+end

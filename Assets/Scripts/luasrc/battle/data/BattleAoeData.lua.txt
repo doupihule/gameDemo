@@ -1,0 +1,137 @@
+require("game/battle/data/SkillActionData")
+require("game/sys/func/BattleFunc")
+require("framework/utils/PoolTools")
+require("game/sys/consts/PoolCode")
+require("game/battle/trigger/ChooseTrigger")
+require("game/battle/trigger/SkillActionTrigger")
+require("game/sys/manager/BattleLogsManager")
+require("game/battle/trigger/SkillExpandTrigger")
+
+BattleAoeData = newClass({Class}, {name = 'BattleAoeData'})
+
+BattleAoeData._aloneEffectExpandParams = {isAlone=true};
+function BattleAoeData:__new__(id)
+  self.delayFrame = 0;
+  self.effectiveTimes = 0;
+  self.intervalFrame = 0;
+  self.existFrame = 0;
+  self.aoeId = id
+  self.cfgData = BattleFunc.instance:getCfgDatas("AoeEffect", id)
+  self.delayFrame = BattleFunc.instance:turnMinisecondToframe(self.cfgData.delayTime)
+  self.intervalFrame = BattleFunc.instance:turnMinisecondToframe(self.cfgData.interval)
+  self.existFrame = BattleFunc.instance:turnMinisecondToframe(self.cfgData.existTime)
+  if self.cfgData.target then
+    self.chooseTartgetCfg = BattleFunc.instance:getCfgDatas("Target", String(self.cfgData.target))
+  end
+  self.effectiveTimes = Number(self.cfgData.effectiveTimes)
+  self._initTargtPos = Laya.Vector3()
+end
+
+function BattleAoeData:setData(skillAction, attacker)
+  self.owner = skillAction.owner
+  self.attacker = attacker
+  self.skill = skillAction.skill
+  if not self.skillActionArr then
+    local actArr = self.cfgData.skillEffect
+    self.skillActionArr = {}
+    local i = 0
+    repeat
+      local actionData = SkillActionData(actArr[i+1], skillAction.owner, skillAction.skill, 0, 1, 0, 0, 0)
+      table.insert(self.skillActionArr, actionData)
+      i=i+1
+    until not(i < #actArr)
+  else
+    local i = 0
+    repeat
+      self.skillActionArr[i+1]:updateData(skillAction.owner, skillAction.skill)
+      i=i+1
+    until not(i < #self.skillActionArr)
+  end
+end
+
+function BattleAoeData:doAoeAction(targetInstance, pos, targetBullet)
+  if pos == nil then
+    pos=nil
+  end
+  if targetBullet == nil then
+    targetBullet=nil
+  end
+  if not pos then
+    pos = targetInstance.pos
+  end
+  self._initTargtPos.x = pos.x
+  self._initTargtPos.y = pos.y
+  self._initTargtPos.z = pos.z
+  self.targetInstance = targetInstance
+  self.targetBullet = targetBullet
+  local expandParams = {ignoreScale=self.attacker.ignoreTimeScale}
+  if targetBullet then
+    targetBullet:createEffByParams(self.cfgData.specialEffect, false, false, expandParams)
+  else
+    targetInstance:createEffByParams(self.cfgData.specialEffect, false, false, expandParams)
+  end
+  targetInstance.controler:setLastCallBack(self.delayFrame, self.intervalFrame, self.effectiveTimes, self.checkAoe, self)
+  targetInstance.controler:setCallBack(self.existFrame, self.onAoeEnd, self)
+  local chooseArr = nil
+  local tempChooseArr = nil
+  if self.cfgData.expand and self.cfgData.expand[0+1][0+1] == SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT then
+    if not self.chooseTartgetCfg then
+      chooseArr = self.skill.tempChooseArr
+    else
+      tempChooseArr = BattleFunc.getOneTempArr()
+      ChooseTrigger.getAoeTargetRole(self, self.owner, self.targetInstance, tempChooseArr)
+      chooseArr = tempChooseArr
+    end
+  end
+  if chooseArr then
+    if self.cfgData.type then
+      local index = chooseArr:find(targetInstance)
+      if index ~= -1 then
+        chooseArr:splice(index, 1)
+      end
+    end
+  end
+  SkillExpandTrigger.onCheckExpand(targetInstance, self.skill, self.cfgData.expand, chooseArr, true)
+  if tempChooseArr then
+    BattleFunc.cacheOneTempArr(tempChooseArr)
+  end
+end
+
+function BattleAoeData:onAoeEnd()
+  self.targetInstance = nil
+  PoolTools.cacheItem(PoolCode.POOL_AOEDATA + self.aoeId, self)
+end
+
+function BattleAoeData:checkAoe()
+  if not self.targetInstance then
+    BattleLogsManager.battleEcho("battle没有设置目标instance")
+    return
+  end
+  local i = 0
+  repeat
+    local chooseArr = nil
+    local tempChooseArr = nil
+    if not self.chooseTartgetCfg then
+      chooseArr = self.skill.tempChooseArr
+    else
+      tempChooseArr = BattleFunc.getOneTempArr()
+      ChooseTrigger.getAoeTargetRole(self, self.owner, self.targetInstance, tempChooseArr)
+      chooseArr = tempChooseArr
+    end
+    if #chooseArr > 0 then
+      if self.cfgData.type then
+        local index = chooseArr:find(self.targetInstance)
+        if index ~= -1 then
+          chooseArr:splice(index, 1)
+        end
+      end
+      if #chooseArr > 0 then
+        SkillActionTrigger.checkSkillAction(self.owner, self.skillActionArr[i+1], chooseArr)
+      end
+    end
+    if tempChooseArr then
+      BattleFunc.cacheOneTempArr(tempChooseArr)
+    end
+    i=i+1
+  until not(i < #self.skillActionArr)
+end

@@ -1,0 +1,56 @@
+require("game/sys/model/BaseModel")
+require("framework/common/kakura/Client")
+
+CountsModel = newClass({BaseModel}, {name = 'CountsModel'})
+function CountsModel:__new__()
+  self:superCall('__new__')
+end
+
+CountsModel.freeTurnableCount = "1";
+CountsModel.luckyCount = "2";
+CountsModel.talentFreeUpdateCount = "3";
+CountsModel.autoOpenAirDrop = "4";
+CountsModel.equipPieceFreeGet = "5";
+CountsModel.equipPieceAdCount = "6";
+CountsModel.fogStreetCount = "7";
+CountsModel.fogStreetVideoCount = "8";
+function CountsModel.__getters.instance()
+  if not CountsModel._instance then
+    CountsModel._instance = CountsModel()
+  end
+  return CountsModel._instance
+end
+
+function CountsModel:initData(d)
+  self:superCall('initData',d)
+end
+
+function CountsModel:updateData(d)
+  self:superCall('updateData',d)
+end
+
+function CountsModel:deleteData(d)
+  self:superCall('deleteData',d)
+end
+
+function CountsModel:getCountsById(id)
+  local counts = self._data or {}
+  -- [ts2lua]counts下标访问可能不正确
+  -- [ts2lua]counts下标访问可能不正确
+  -- [ts2lua]counts[id]下标访问可能不正确
+  local count = counts[id] and counts[id]["count"] or 0
+  if count == 0 then
+    return 0
+  else
+    -- [ts2lua]counts下标访问可能不正确
+    -- [ts2lua]counts下标访问可能不正确
+    -- [ts2lua]counts[id]下标访问可能不正确
+    local time = counts[id] and counts[id]["expireTime"] or 0
+    local curT = Client.instance.serverTime
+    time = time - curT
+    if time < 0 then
+      return 0
+    end
+    return count
+  end
+end

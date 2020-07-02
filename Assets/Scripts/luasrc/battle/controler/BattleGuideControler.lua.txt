@@ -1,0 +1,178 @@
+require("game/sys/model/UserModel")
+require("game/sys/manager/GuideManager")
+require("game/sys/consts/GuideConst")
+require("framework/manager/WindowManager")
+require("game/sys/consts/WindowCfgs")
+require("game/sys/func/GlobalParamsFunc")
+require("game/sys/func/BattleFunc")
+require("game/sys/manager/StatisticsManager")
+
+BattleGuideControler = newClass({Class}, {name = 'BattleGuideControler'})
+
+function BattleGuideControler:__new__(controler)
+  self.controler = controler
+  self.battleUI = self.controler.battleUI
+end
+
+function BattleGuideControler:checkGuide_101()
+  if UserModel.instance:getMainGuide() == 0 and not GuideManager.ins.recentGuideId then
+    self.battleUI.isUseCamera = false
+    self.battleUI.pauseBtn.visible = false
+    self:showGuide_101()
+    return true
+  end
+  return false
+end
+
+function BattleGuideControler:showGuide_101()
+  GuideManager.ins:setGuideData(GuideConst.GUIDE_1_101, GuideManager.GuideType.None)
+  GuideManager.ins:openGuideUI(GuideConst.GUIDE_1_101, self.checkGuide_101_finish, self, self.checkGuide_107_finish)
+end
+
+function BattleGuideControler:checkGuide_101_finish()
+  GuideManager.ins:guideFin(GuideConst.GUIDE_1_101, self.checkGuide_101_1, self, false)
+end
+
+function BattleGuideControler:checkGuide_101_1()
+  GuideManager.ins:setGuideData(GuideConst.GUIDE_1_101_1, GuideManager.GuideType.None)
+  GuideManager.ins:openGuideUI(GuideConst.GUIDE_1_101_1, self.checkGuide_101_1_finish, self, self.checkGuide_107_finish)
+end
+
+function BattleGuideControler:checkGuide_101_1_finish()
+  GuideManager.ins:guideFin(GuideConst.GUIDE_1_101_1, self.checkGuide_101_2, self, false)
+end
+
+function BattleGuideControler:checkGuide_101_2()
+  GuideManager.ins:setGuideData(GuideConst.GUIDE_1_101_2, GuideManager.GuideType.None)
+  GuideManager.ins:openGuideUI(GuideConst.GUIDE_1_101_2, self.checkGuide_101_2_finish, self, self.checkGuide_107_finish)
+end
+
+function BattleGuideControler:checkGuide_101_2_finish()
+  GuideManager.ins:guideFin(GuideConst.GUIDE_1_101_2, self.checkGuide_102, self, false)
+end
+
+function BattleGuideControler:checkGuide_102()
+  GuideManager.ins:setGuideData(GuideConst.GUIDE_1_102, GuideManager.GuideType.Static, self.battleUI.energyGroup, self.battleUI, 78, 209)
+  GuideManager.ins:openGuideUI(GuideConst.GUIDE_1_102, self.checkGuide_102_finish, self, self.checkGuide_107_finish)
+end
+
+function BattleGuideControler:checkGuide_102_finish()
+  GuideManager.ins:guideFin(GuideConst.GUIDE_1_102, self.checkGuide_103, self, false)
+end
+
+function BattleGuideControler:checkGuide_103()
+  GuideManager.ins:setGuideData(GuideConst.GUIDE_1_103, GuideManager.GuideType.Static, self.battleUI.firstRole, self.battleUI, 165, 103)
+  GuideManager.ins:openGuideUI(GuideConst.GUIDE_1_103, self.checkGuide_103_finish, self, self.checkGuide_107_finish)
+end
+
+function BattleGuideControler:checkGuide_103_finish()
+  GuideManager.ins:guideFin(GuideConst.GUIDE_1_103, function()
+    -- [ts2lua]self.battleUI.firstRole下标访问可能不正确
+    self.controler:createMyRole(self.battleUI.firstRole["id"] or "1009")
+    self:checkGuide_104()
+  end
+  , self, false)
+end
+
+function BattleGuideControler:checkGuide_104()
+  GuideManager.ins:setGuideData(GuideConst.GUIDE_1_104, GuideManager.GuideType.Static, self.battleUI.smallMapGroup, self.battleUI, 597, 69)
+  GuideManager.ins:openGuideUI(GuideConst.GUIDE_1_104, nil, self, self.checkGuide_107_finish)
+  self.controler:setCallBack(BattleFunc.instance:turnMinisecondToframe(GlobalParamsFunc.instance:getDataNum("GuideNoHandleTime")), self.checkGuide_104_finish, self)
+end
+
+function BattleGuideControler:checkGuide_104_finish()
+  self.controler:clearCallBack(self, self.checkGuide_104_finish)
+  if GuideManager.ins.recentGuideId == GuideConst.GUIDE_1_103 then
+    GuideManager.ins:guideFin(GuideConst.GUIDE_1_104, function()
+      WindowManager.CloseGuideUI(WindowCfgs.GuideUI)
+      self:checkGuide_105()
+    end
+    , self, false)
+  end
+end
+
+function BattleGuideControler:checkGuide_105()
+  local img = Laya.Image()
+  img.x = 0
+  img.y = BattleFunc.battleCenterY - 280
+  img.width = 768
+  img.height = 300
+  self.controler.layerControler.a22:addChild(img)
+  GuideManager.ins:setGuideData(GuideConst.GUIDE_1_105, GuideManager.GuideType.Static, img, self.battleUI, nil, nil, nil, nil, {handOffestX=100})
+  self.controler.cameraControler.focusPos.x = self.controler.enemyHome.pos.x
+  self.controler.cameraControler.inControlBg = true
+  self.controler.cameraControler:updateCtnPos()
+  GuideManager.ins:openGuideUI(GuideConst.GUIDE_1_105, self.checkGuide_105_finish, self, self.checkGuide_107_finish)
+  self.controler.layerControler.a22:removeChild(img)
+end
+
+function BattleGuideControler:checkGuide_105_finish()
+  self.controler.cameraControler.inControlBg = false
+  GuideManager.ins:guideFin(GuideConst.GUIDE_1_105, self.checkGuide_106, self, false)
+end
+
+function BattleGuideControler:checkGuide_106()
+  local item = self.battleUI.skillGroup:getChildAt(0)
+  local skillData = self.controler.skillContent.normalSkills[0+1]
+  skillData.leftSkillCd = 0
+  GuideManager.ins:setGuideData(GuideConst.GUIDE_1_106, GuideManager.GuideType.Static, item, self.battleUI)
+  GuideManager.ins:openGuideUI(GuideConst.GUIDE_1_106, self.checkGuide_106_finish, self, self.checkGuide_107_finish)
+end
+
+function BattleGuideControler:checkGuide_106_finish()
+  self.controler.skillContent:onClickSkill(0)
+  GuideManager.ins:guideFin(GuideConst.GUIDE_1_106, self.checkGuide_107, self, false)
+end
+
+function BattleGuideControler:checkGuide_107()
+  GuideManager.ins:setGuideData(GuideConst.GUIDE_1_107, GuideManager.GuideType.None)
+  -- [ts2lua]GuideManager.ins.guideData下标访问可能不正确
+  StatisticsManager.ins:onEvent(GuideManager.ins.guideData[GuideConst.GUIDE_1_107].statisticsIndex)
+  self.battleUI:showArrow()
+  self:checkGuide_107_finish()
+end
+
+function BattleGuideControler:checkGuide_107_finish()
+  self.battleUI.isUseCamera = true
+  self.battleUI.isAllowFollw = true
+  self.battleUI:freshCameraImg()
+  GuideManager.ins:guideFin(GuideConst.GUIDE_1_107, nil, nil, true)
+end
+
+function BattleGuideControler:checkFogGuide_801()
+  if GuideManager.ins.recentGuideId == GuideConst.GUIDE_7_702 then
+    GuideManager.ins:setGuideData(GuideConst.GUIDE_8_801, GuideManager.GuideType.Static, self.battleUI.energyGroup, self.battleUI, 78, 209)
+    GuideManager.ins:openGuideUI(GuideConst.GUIDE_8_801, self.checkGuide_801_finish, self)
+    return true
+  end
+  return false
+end
+
+function BattleGuideControler:checkGuide_801_finish()
+  GuideManager.ins:guideFin(GuideConst.GUIDE_8_801, self.checkFogGuide_802, self, false)
+end
+
+function BattleGuideControler:checkFogGuide_802()
+  local img = Laya.Image()
+  img.x = 0
+  img.y = BattleFunc.battleCenterY - 280
+  img.width = 768
+  img.height = 300
+  self.battleUI:addChild(img)
+  GuideManager.ins:setGuideData(GuideConst.GUIDE_8_802, GuideManager.GuideType.Static, img, self.battleUI)
+  GuideManager.ins:openGuideUI(GuideConst.GUIDE_8_802, self.checkGuide_802_finish, self)
+  self.battleUI:removeChild(img)
+end
+
+function BattleGuideControler:checkGuide_802_finish()
+  GuideManager.ins:guideFin(GuideConst.GUIDE_8_802, self.checkGuide_803, self, false)
+end
+
+function BattleGuideControler:checkGuide_803()
+  GuideManager.ins:setGuideData(GuideConst.GUIDE_8_803, GuideManager.GuideType.Static, self.battleUI.roleList, self.battleUI)
+  GuideManager.ins:openGuideUI(GuideConst.GUIDE_8_803)
+end
+
+function BattleGuideControler:checkGuide_803_finish()
+  GuideManager.ins:guideFin(GuideConst.GUIDE_8_803, nil, nil, true)
+end

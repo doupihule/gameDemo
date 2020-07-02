@@ -1,0 +1,103 @@
+require("framework/manager/WindowManager")
+require("game/sys/consts/WindowCfgs")
+require("framework/utils/ButtonUtils")
+require("framework/consts/ButtonConst")
+require("framework/manager/ShareOrTvManager")
+require("game/sys/func/ShareTvOrderFunc")
+require("framework/common/UserInfo")
+require("game/sys/consts/ResourceConst")
+require("game/sys/func/LevelFunc")
+require("game/sys/func/GlobalParamsFunc")
+require("framework/manager/TimerManager")
+require("framework/func/TranslateFunc")
+require("game/sys/manager/StatisticsManager")
+require("framework/manager/BannerAdManager")
+require("ui/layaMaxUI")
+
+BattleFullEnergyUI = newClass({ui.gameui.battle.BattleFullEnergyUI}, {name = 'BattleFullEnergyUI'})
+
+function BattleFullEnergyUI:__new__()
+  self:superCall('__new__')
+  self.isEnterBattle = false;
+  self:addEvent()
+  ButtonUtils(self.closeBtn, self.close, self)
+  (ButtonUtils(self.fullStartBtn, self.onClickFullStart, self)):setBtnType(ButtonConst.BUTTON_TYPE_4)
+  ButtonUtils(self.normalStartBtn, self.normalStart, self)
+end
+
+function BattleFullEnergyUI:addEvent() end
+function BattleFullEnergyUI:setData(data)
+  BannerAdManager.addBannerQuick(self)
+  self.isEnterBattle = false
+  self.normalStartBtn.visible = false
+  self.freeType = ShareOrTvManager.instance:getShareOrTvType(ShareTvOrderFunc.SHARELINE_BATTLE_START)
+  if self.freeType == ShareOrTvManager.TYPE_SHARE then
+    if UserInfo.isWX() then
+      self.freeImg.skin = ResourceConst.ADV_PNG
+      StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_SHOW, {battleAddtionId=self.battleAddtionId})
+    else
+      self.freeImg.skin = ResourceConst.SHARE_PNG
+    end
+  elseif self.freeType == ShareOrTvManager.TYPE_ADV then
+    self.freeImg.skin = ResourceConst.ADV_PNG
+    StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_SHOW, {battleAddtionId=self.battleAddtionId})
+  end
+  self.battleAddtionId = data.battleAddtionId
+  local battleAddtionInfo = LevelFunc.instance:getBattleAddtionById(self.battleAddtionId)
+  self.rewardLab.text = TranslateFunc.instance:getTranslate(battleAddtionInfo.desc, "TranslateGlobal")
+  self.rewardImg.skin = "uisource/video/video/" .. battleAddtionInfo.addtionIcon .. ".png"
+  self.detail = data.detail
+  local showTvGetShtarLateTime = GlobalParamsFunc.instance:getDataNum("showTvGetShtarLateTime")
+  TimerManager.instance:add(function()
+    self.normalStartBtn.visible = true
+  end
+  , self, showTvGetShtarLateTime, 1)
+end
+
+function BattleFullEnergyUI:normalStart()
+  if self.isEnterBattle then
+    return
+  end
+  self.isEnterBattle = true
+  self.battleAddtionId = 0
+  self:onClickCLose()
+end
+
+function BattleFullEnergyUI:onClickFullStart()
+  if self.freeType == ShareOrTvManager.TYPE_ADV then
+    StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_CLICK, {battleAddtionId=self.battleAddtionId})
+  end
+  ShareOrTvManager.instance:shareOrTv(ShareTvOrderFunc.SHARELINE_BATTLE_START, ShareOrTvManager.TYPE_ADV, {id="1", extraData={}}, self.fullStart, self.closeCall, self)
+end
+
+function BattleFullEnergyUI:fullStart()
+  if self.freeType == ShareOrTvManager.TYPE_ADV then
+    StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_FINISH, {battleAddtionId=self.battleAddtionId})
+  elseif self.freeType == ShareOrTvManager.TYPE_SHARE then
+    StatisticsManager.ins:onEvent(StatisticsManager.SHARE_BATTLEADDTION_FINISH, {battleAddtionId=self.battleAddtionId})
+  end
+  if self.isEnterBattle then
+    return
+  end
+  self.isEnterBattle = true
+  self:onClickCLose()
+end
+
+function BattleFullEnergyUI:closeCall() end
+function BattleFullEnergyUI:close()
+  WindowManager.CloseUI(WindowCfgs.BattleFullEnergyUI)
+end
+
+function BattleFullEnergyUI:onClickCLose()
+  self.detail:dispose()
+  WindowManager.SwitchUI({WindowCfgs.BattleUI}, {WindowCfgs.BattleDetailUI, WindowCfgs.BattleFullEnergyUI}, {fullStart=self.battleAddtionId})
+end
+
+function BattleFullEnergyUI:recvMsg(cmd, data)
+  local switch = {
+    
+  }
+  local casef = switch[cmd]
+  if not casef then casef = switch["default"] end
+  if casef then casef() end
+end

@@ -1,0 +1,140 @@
+require("game/sys/func/BattleFunc")
+require("framework/utils/TableUtils")
+require("game/battle/data/SkillActionData")
+require("game/sys/consts/BattleConst")
+require("game/battle/controler/BattleDebugTool")
+require("game/sys/func/FogFunc")
+
+BattleSkillData = newClass({Class}, {name = 'BattleSkillData'})
+
+function BattleSkillData:__new__(skillId, level, role, skillType, relyonSkill, lifeType)
+  self.leftSkillCd = 0;
+  self._cfgSkillCd = 0;
+  self.isActive = false;
+  self.skillWaitFrame = 0;
+  if relyonSkill == nil then
+    relyonSkill=nil
+  end
+  if lifeType == nil then
+    lifeType=nil
+  end
+  self._skillId = skillId
+  self.owner = role
+  self.skillType = skillType
+  self.relyonSkill = relyonSkill
+  self.parentLifeType = lifeType
+  self:updateLevel(level)
+  self.tempChooseArr = {}
+end
+
+function BattleSkillData:updateLevel(level)
+  if self.parentLifeType == BattleConst.LIFE_PLAYER then
+    self.isActive = true
+  else
+    if level == 0 then
+      level = 1
+      self.isActive = false
+    else
+      self.isActive = true
+    end
+  end
+  if BattleDebugTool.isNoHeroCd() then
+    self.isActive = true
+  end
+  if not self.isActive then
+    self.level = level
+  else
+    if self.level == level then
+      return
+    end
+  end
+  self.level = level
+  if self.relyonSkill then
+    self.skillPropParams = BattleFunc.instance:getCfgDatasByMultyKey("SkillUpdate", self.relyonSkill._skillId, String(self.relyonSkill.level), "params", true)
+  else
+    self.skillPropParams = BattleFunc.instance:getCfgDatasByMultyKey("SkillUpdate", self._skillId, String(level), "params", true)
+  end
+  if self.skillType ~= BattleConst.skill_kind_passive then
+    self.cfgData = BattleFunc.instance:getCfgDatas("Skill", self._skillId)
+    local value = self.cfgData.action and self.cfgData.action[4+1]
+    if value then
+      self.skillWaitFrame = BattleFunc.instance:turnMinisecondToframe(Number(value))
+    end
+    self.chooseTartgetCfg = BattleFunc.instance:getCfgDatas("Target", String(self.cfgData.target))
+    if not self.skillLabel then
+      if self.cfgData.action then
+        self.skillLabel = TableUtils.copyOneArr(self.cfgData.action)
+        local i = 1
+        repeat
+          self.skillLabel[i+1] = Number(self.skillLabel[i+1])
+          i=i+1
+        until not(i < #self.skillLabel)
+      end
+    end
+    local skillEffect = self.cfgData.skillEffect
+    if skillEffect then
+      if not self.skillActionArr then
+        self.skillActionArr = {}
+        local i = 0
+        repeat
+          local info = skillEffect[i+1]
+          local actionData = SkillActionData(info[0+1], self.owner, self, Number(info[1+1]), Number(info[2+1]), Number(info[3+1]), Number(info[4+1]), 0)
+          table.insert(self.skillActionArr, actionData)
+          i=i+1
+        until not(i < #skillEffect)
+      else
+        local i = 0
+        repeat
+          local actionData = self.skillActionArr[i+1]
+          actionData:updateData(self.owner, self)
+          i=i+1
+        until not(i < #skillEffect)
+      end
+    end
+    -- [ts2lua]FogFunc.warHomeSkillCd下标访问可能不正确
+    if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR and FogFunc.warHomeSkillCd[self._skillId] then
+      -- [ts2lua]FogFunc.warHomeSkillCd下标访问可能不正确
+      self._cfgSkillCd = Math:ceil(FogFunc.warHomeSkillCd[self._skillId] * BattleFunc.miniSecondToFrame)
+    else
+      if self.cfgData.cdTime then
+        self._cfgSkillCd = Math:ceil(self.cfgData.cdTime * BattleFunc.miniSecondToFrame)
+      end
+    end
+  end
+end
+
+function BattleSkillData:getActionById(id)
+  local i = 0
+  repeat
+    local act = self.skillActionArr[i+1]
+    if act.skillEffectId == id then
+      return act
+    end
+    i=i+1
+  until not(i < #self.skillActionArr)
+  return nil
+end
+
+function BattleSkillData:resetData()
+  self.leftSkillCd = 0
+end
+
+function BattleSkillData.__getters:skillInitCd()
+  return Math:ceil(self._cfgSkillCd * self.owner.attrData:getSkillCdAdded(self._skillId) / 10000)
+end
+
+function BattleSkillData:getSkillValue(key, tag)
+  if tag == nil then
+    tag=nil
+  end
+  if not self.skillPropParams then
+    return Number(key)
+  end
+  return BattleFunc.instance:getSkillValueByParams(key, self.relyonSkill and self.relyonSkill._skillId or self._skillId, self.level, self.skillPropParams, tag)
+end
+
+function BattleSkillData:dispose()
+  self.skillData = nil
+  self.skillData = nil
+  self.skillPropParams = nil
+end

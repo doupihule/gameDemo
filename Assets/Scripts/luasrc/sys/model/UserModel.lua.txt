@@ -1,0 +1,544 @@
+require("date")
+require("game/sys/model/BaseModel")
+require("framework/common/Message")
+require("framework/common/UserInfo")
+require("framework/common/kakura/Client")
+require("game/sys/func/GlobalParamsFunc")
+require("utils/GameUtils")
+require("framework/manager/CacheManager")
+require("game/sys/consts/StorageCode")
+require("framework/server/SingleCommonServer")
+require("game/sys/event/GameMainEvent")
+require("utils/Global")
+require("game/sys/func/RolesFunc")
+require("framework/model/UserGlobalModel")
+require("framework/utils/BigNumUtils")
+require("framework/manager/LogsManager")
+require("game/sys/func/LevelFunc")
+require("framework/consts/SceneReference")
+require("framework/func/WhiteListFunc")
+require("game/sys/event/UserEvent")
+require("game/sys/server/SevenDayServer")
+require("game/sys/server/UserExtServer")
+require("game/sys/func/InviteFunc")
+require("game/sys/event/FogEvent")
+require("game/sys/model/UserExtModel")
+
+UserModel = newClass({BaseModel}, {name = 'UserModel'})
+function UserModel:__new__(...)
+  self:superCall('__new__', unpack({...}))
+  self.incomeCoin = {};
+  self.refuseAuth = "refuseWxAuth";
+end
+
+function UserModel.__getters.instance()
+  if not UserModel._instance then
+    UserModel._instance = UserModel()
+  end
+  return UserModel._instance
+end
+
+function UserModel:getUserRid()
+  if not self._data then
+    return "nologin"
+  end
+  return self._data.uid
+end
+
+function UserModel:getRidMark()
+  return self._data.ridMark or 123456
+end
+
+function UserModel:initData(d)
+  self:superCall('initData',d)
+  UserInfo.platform:initChannelUserId(self:getUserRid())
+  self:setGuideCache()
+  SingleCommonServer.initData()
+end
+
+function UserModel:updateData(d)
+  local coinFlag = false
+  if d.coin then
+    if BigNumUtils.compare(d.coin, UserModel.instance:getLogicCoin()) then
+      local oldNum = UserModel.instance:getLogicCoin()
+      coinFlag = true
+    end
+  end
+  self:superCall('updateData',d)
+  if ((((d.coin or d.coin == 0) or d.giftGold) or d.giftGold == 0) or d.gold) or d.gold == 0 then
+    Message.instance:send(GameMainEvent.GAMEMAIN_EVENT_FRESHMONEY)
+    if coinFlag then
+      Message.instance:send(UserEvent.USER_EVET_COIN_CHANGE_TWEEN, {oldNum=oldNum})
+    end
+  end
+  if d.fogCoin or d.fogCoin == 0 then
+    Message.instance:send(FogEvent.FOGEVENT_REFRESH_FOGCOIN)
+  end
+  self:setGuideCache()
+end
+
+function UserModel:deleteData(d)
+  self:superCall('deleteData',d)
+end
+
+function UserModel:getUserName()
+  return self._data.name
+end
+
+function UserModel:getHeadImage()
+  local newPath = GameUtils.getHeadImg(self._data.userInfo.headImage)
+  if newPath then
+    return newPath
+  else
+    return self._data.userInfo.headImage
+  end
+end
+
+function UserModel:getUserHead()
+  return self._data.userInfo.headImage
+end
+
+function UserModel:setNameAndImg(userInfo)
+  -- [ts2lua]userInfo下标访问可能不正确
+  if userInfo["name"] then
+    -- [ts2lua]userInfo下标访问可能不正确
+    self._data.name = userInfo["name"]
+  end
+  -- [ts2lua]userInfo下标访问可能不正确
+  if userInfo["avatarUrl"] then
+    -- [ts2lua]userInfo下标访问可能不正确
+    self._data.userInfo.headImage = userInfo["avatarUrl"]
+  end
+end
+
+function UserModel:getCoin()
+  return self._data.coin or "0"
+end
+
+function UserModel:getLogicCoin()
+  return "1"
+end
+
+function UserModel:getGold()
+  return BigNumUtils.sum(self._data.gold or "0", self._data.giftGold or "0")
+end
+
+function UserModel:getGiftGold()
+  return self._data.giftGold or "0"
+end
+
+function UserModel:costGold(num)
+  local giftGold = self._data.giftGold or "0"
+  local chargeGold = self._data.gold or "0"
+  if not BigNumUtils.compare(BigNumUtils.sum(giftGold, chargeGold), String(num), true) then
+    return {"0", "0"}
+  end
+  giftGold = BigNumUtils.substract(giftGold, num)
+  if not BigNumUtils.compare(giftGold, 0) then
+    chargeGold = BigNumUtils.sum(chargeGold, giftGold)
+    giftGold = "0"
+  end
+  return {giftGold, chargeGold}
+end
+
+function UserModel:getVideo()
+  if self._data.userExt and self._data.userExt.video then
+    return self._data.userExt.video
+  end
+  return 0
+end
+
+function UserModel:getShopVideo(id)
+  -- [ts2lua]self._data.userExt.shopVideo下标访问可能不正确
+  if (self._data.userExt and self._data.userExt.shopVideo) and self._data.userExt.shopVideo[id] then
+    -- [ts2lua]self._data.userExt.shopVideo下标访问可能不正确
+    return self._data.userExt.shopVideo[id]
+  end
+  return 0
+end
+
+function UserModel:getLevel()
+  return self:getMaxBattleLevel()
+end
+
+function UserModel:getMaxLevel(id)
+  -- [ts2lua]self._data.userExt.goodsMaxLevel下标访问可能不正确
+  if (self._data.userExt and self._data.userExt.goodsMaxLevel) and self._data.userExt.goodsMaxLevel[id] then
+    -- [ts2lua]self._data.userExt.goodsMaxLevel下标访问可能不正确
+    return Number(self._data.userExt.goodsMaxLevel[id])
+  end
+  return 0
+end
+
+function UserModel:getMaxBattleLevel()
+  if self._data.userExt and self._data.userExt.maxStage then
+    return self._data.userExt.maxStage
+  end
+  return 0
+end
+
+function UserModel:getRoleBuyInfo(type, roleId)
+  if roleId == nil then
+    roleId=nil
+  end
+  local time = 0
+  if self._data.market then
+    if roleId then
+      -- [ts2lua]self._data.market下标访问可能不正确
+      local info = self._data.market[roleId]
+      -- [ts2lua]info下标访问可能不正确
+      if info and info[type .. "PurchaseTime"] then
+        -- [ts2lua]info下标访问可能不正确
+        time = time + Number(info[type .. "PurchaseTime"])
+      end
+    else
+      for id in pairs(self._data.market) do
+        -- [ts2lua]self._data.market下标访问可能不正确
+        local info = self._data.market[id]
+        -- [ts2lua]info下标访问可能不正确
+        if info and info[type .. "PurchaseTime"] then
+          -- [ts2lua]info下标访问可能不正确
+          time = time + Number(info[type .. "PurchaseTime"])
+        end
+      end
+    end
+  end
+  return time
+end
+
+function UserModel:getRoleBuyTimes()
+  if self._data.userExt and self._data.userExt.buyTimes then
+    return self._data.userExt.buyTimes
+  end
+  return 0
+end
+
+function UserModel:getRole()
+  if self._data.userExt and self._data.userExt.equipedGoods then
+    return self._data.userExt.equipedGoods
+  end
+  return "1"
+end
+
+function UserModel:isLandDeathRevive(levelId)
+  -- [ts2lua]self._data.levels下标访问可能不正确
+  -- [ts2lua]self._data.levels下标访问可能不正确
+  -- [ts2lua]self._data.levels下标访问可能不正确
+  if (((self._data and self._data.levels) and self._data.levels[levelId]) and self._data.levels[levelId].deathRevive) and self._data.levels[levelId].expireTime > Client.instance.serverTime then
+    return true
+  end
+  return false
+end
+
+function UserModel:getBattleLevelById(id)
+  -- [ts2lua]self._data.battleLevel下标访问可能不正确
+  if self._data.battleLevel and self._data.battleLevel[id] then
+    -- [ts2lua]self._data.battleLevel下标访问可能不正确
+    return self._data.battleLevel[id]
+  end
+  return {}
+end
+
+function UserModel:getGoodsAccumuStartTime()
+  if self._data.userExt and self._data.userExt.goodsAccumuStartTime then
+    return self._data.userExt.goodsAccumuStartTime
+  end
+  return 0
+end
+
+function UserModel:getExp()
+  return self._data.exp or 0
+end
+
+function UserModel:getSpeedUpTime()
+  return (self._data and self._data.userExt) and self._data.userExt.speedUpTime or 0
+end
+
+function UserModel:getSupplyBoxId()
+  return (self._data and self._data.userExt) and self._data.userExt.supplyBoxId or 0
+end
+
+function UserModel:getSupplyBoxTime()
+  return (self._data and self._data.userExt) and self._data.userExt.supplyBoxTime or 0
+end
+
+function UserModel:getTurnable()
+  return (self._data and self._data.userExt) and self._data.userExt.turnable or 0
+end
+
+function UserModel:checkIsOld()
+  return (self._data and self._data.userExt) and self._data.userExt.isNew or 0
+end
+
+function UserModel:getMainGuide()
+  local guide = Number(((self._data and self._data.userExt) and self._data.userExt.newGuide) and Number(self._data.userExt.newGuide)) or 0
+  if UserExtModel.instance:getEnterFogFlag() and guide < 9 then
+    return 17
+  end
+  local level = self:getMaxBattleLevel()
+  if level >= GlobalParamsFunc.instance:getDataNum("equipUnlock") and guide < 6 then
+    return 8
+  end
+  if guide == 0 then
+    if level >= 1 then
+      return 2
+    end
+  end
+  return guide
+end
+
+function UserModel:checkIsNew()
+  return (self._data and self._data.userExt) and self._data.userExt.newGuide or 0
+end
+
+function UserModel:getMails()
+  return self._data.mails
+end
+
+function UserModel:getSubGuide()
+  return self._data.guide or {}
+end
+
+function UserModel:getSubGuideById(id)
+  local guide = self:getSubGuide()
+  -- [ts2lua]guide下标访问可能不正确
+  return guide[id] or 0
+end
+
+function UserModel.__getters:isAuthorized()
+  return self._data.isAuthorized
+end
+
+function UserModel:setRefuseAuth()
+  CacheManager.instance:setLocalCache(self.refuseAuth, true)
+end
+
+function UserModel:getRefuseAuth()
+  local authSta = CacheManager.instance:getLocalCache(self.refuseAuth)
+  return authSta ~= "0"
+end
+
+function UserModel:setGuideCache()
+  if Global.isNew() then
+    CacheManager.instance:setFileStorageCache(StorageCode.storage_isOldPlayer, true)
+  end
+end
+
+function UserModel:getUserExt()
+  return self._data.userExt
+end
+
+function UserModel:getIsNewAccount()
+  return self._data.isNewAccount
+end
+
+function UserModel:getSimulateLand()
+  local simulateUnlock = GlobalParamsFunc.instance:getGlobalCfgDatas("runSiteUnlock").arr
+  local num = 0
+  for index in pairs(simulateUnlock) do
+    -- [ts2lua]simulateUnlock下标访问可能不正确
+    if Number(UserModel.instance:getLevel()) >= Number(simulateUnlock[index]) then
+      num=num+1
+    end
+  end
+  return num
+end
+
+function UserModel:getIncomeTime()
+  return (self._data and self._data.userExt) and self._data.userExt.upCoinTime or 0
+end
+
+function UserModel:getShareTvOrder(id)
+  -- [ts2lua]self._data.leadShare下标访问可能不正确
+  return self._data.leadShare and self._data.leadShare[id] or 0
+end
+
+function UserModel:login()
+  if self:checkIsNewDay() then
+    local signAddShareNum = GlobalParamsFunc.instance:getDataNum("shareDayNmb")
+    UserGlobalModel.instance:setShareNum(signAddShareNum)
+    SevenDayServer.setLoginStep()
+    UserExtServer.setEverydayInvite(0)
+    UserExtServer.setDailyFirstEnterFog(0)
+  end
+  local upData = {}
+  local upUserExtData = {}
+  -- [ts2lua]upUserExtData下标访问可能不正确
+  upUserExtData["loginTime"] = Date:parse((Date()):toString())
+  if self:getGoodsAccumuStartTime() then
+    if (self._data and self._data.sendTime) and Number(self._data.sendTime) * 1000 > self:getGoodsAccumuStartTime() then
+      LogsManager.echo("登陆修改宝箱累计时间，原累计时间：" .. self:getGoodsAccumuStartTime())
+      LogsManager.echo("最后一次同步数据时间：" .. self._data.sendTime)
+      local newGoodsAccumuStartTime = Client.instance.serverTimeMicro - Number(self._data.sendTime) * 1000 - self:getGoodsAccumuStartTime()
+      LogsManager.echo("新宝箱累计时间：" .. newGoodsAccumuStartTime)
+      -- [ts2lua]upUserExtData下标访问可能不正确
+      upUserExtData["goodsAccumuStartTime"] = newGoodsAccumuStartTime
+    end
+  end
+  if not self._data.sceneBlack and not SceneReference.checkWhiteSceneId(Global.currentSceneId, WhiteListFunc.TYPE_LOGIN) then
+    -- [ts2lua]upData下标访问可能不正确
+    upData["sceneBlack"] = 1
+  end
+  -- [ts2lua]upData下标访问可能不正确
+  upData["userExt"] = upUserExtData
+  local backData = Client.instance:doDummyServerBack(nil, upData, nil)
+  SingleCommonServer.startSaveClientData()
+end
+
+function UserModel:getLogoutTime()
+  return self._data.userExt.logoutTime
+end
+
+function UserModel:checkIsNewDay()
+  if not self._data.userExt.loginTime then
+    return true
+  end
+  local now_time = Date:parse((Date()):toString())
+  local newDayTime = Date:parse((Date((Date((Date()):toLocaleDateString())):getTime() + 4 * 60 * 60 * 1000)):toString())
+  if now_time > newDayTime and self._data.userExt.loginTime < newDayTime then
+    return true
+  end
+  return false
+end
+
+function UserModel:getLevelMinRoleLevel(levelId)
+  local levelInfo = LevelFunc.instance:getCfgDatas("Level", levelId)
+  return levelInfo.minCar or 1
+end
+
+function UserModel:getBannerOrder()
+  return self._data.leadBanner or 0
+end
+
+function UserModel:isSceneBlack()
+  -- [ts2lua]lua中0和空字符串也是true，此处self._data.sceneBlack需要确认
+  return (self._data.sceneBlack and {self._data.sceneBlack} or {0})[1]
+end
+
+function UserModel:getRecycleTime()
+  -- [ts2lua]lua中0和空字符串也是true，此处self._data.getRecycleTime需要确认
+  return (self._data.getRecycleTime and {Number(self._data.getRecycleTime)} or {0})[1]
+end
+
+function UserModel:getLand()
+  local roleInfo = RolesFunc.instance:getAllRole()
+  local landNum = 0
+  for id in pairs(roleInfo) do
+    local maxLevel = UserModel.instance:getMaxLevel(id)
+    -- [ts2lua]roleInfo下标访问可能不正确
+    for level in pairs(roleInfo[id]) do
+      if Number(level) <= Number(maxLevel) then
+        -- [ts2lua]roleInfo下标访问可能不正确
+        -- [ts2lua]roleInfo[id]下标访问可能不正确
+        if roleInfo[id][level].land then
+          landNum=landNum+1
+        end
+      end
+    end
+  end
+  return landNum
+end
+
+function UserModel:getLastSendTime()
+  return self._data.lastSendTime * 1000
+end
+
+function UserModel:getInviteRewardStatus(id)
+  -- [ts2lua]self._data.inviteReward下标访问可能不正确
+  if not self._data.inviteReward or not self._data.inviteReward[id] then
+    return false
+  end
+  -- [ts2lua]self._data.inviteReward下标访问可能不正确
+  return self._data.inviteReward[id]
+end
+
+function UserModel:getFirstNoGetInviteReward()
+  local data = InviteFunc.instance:getAll()
+  local gainStatus = nil
+  for i in pairs(data) do
+    gainStatus = UserModel.instance:getInviteRewardStatus(i)
+    if not gainStatus then
+      return Number(i)
+    end
+  end
+  return 0
+end
+
+function UserModel:checkNoGetInviteReward()
+  local shareNum = #Object:keys(UserGlobalModel.instance:getInviteInfo())
+  local data = InviteFunc.instance:getAll()
+  local gainStatus = nil
+  local info = nil
+  for i in pairs(data) do
+    info = InviteFunc.instance:getInviteInfo(i)
+    if Number(info.count) <= Number(shareNum) then
+      gainStatus = UserModel.instance:getInviteRewardStatus(i)
+      if not gainStatus then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+function UserModel:getFogShopGoodsList()
+  local goodLsit = {}
+  local data = self:getData()
+  if (not data or not data.fogOuterShop) or not #Object:keys(data.fogOuterShop.goods) then
+    return goodLsit
+  end
+  -- [ts2lua]lua中0和空字符串也是true，此处data.fogOuterShop.expireTime需要确认
+  local expireTime = (data.fogOuterShop.expireTime and {data.fogOuterShop.expireTime} or {GameUtils.getNextRefreshTByTime(4)})[1]
+  if expireTime < Client.instance.serverTime then
+    return goodLsit
+  end
+  local goods = data.fogOuterShop.goods
+  local i = 0
+  repeat
+    -- [ts2lua]goods下标访问可能不正确
+    table.insert(goodLsit, goods[i + 1].id)
+    i=i+1
+  until not(i < #Object:keys(goods))
+  return goodLsit
+end
+
+function UserModel:getFogShopExpireTime()
+  local data = self:getData()
+  if (not data or not data.fogOuterShop) or not #Object:keys(data.fogOuterShop.goods) then
+    return GameUtils.getNextRefreshTByTime(4)
+  end
+  -- [ts2lua]lua中0和空字符串也是true，此处data.fogOuterShop.expireTime需要确认
+  local expireTime = (data.fogOuterShop.expireTime and {data.fogOuterShop.expireTime} or {GameUtils.getNextRefreshTByTime(4)})[1]
+  return expireTime
+end
+
+function UserModel:getFogShopStatus(index)
+  local data = self:getData()
+  -- [ts2lua]data.fogOuterShop.goods下标访问可能不正确
+  -- [ts2lua]data.fogOuterShop.goods下标访问可能不正确
+  if (((not data or not data.fogOuterShop) or not data.fogOuterShop.goods) or not data.fogOuterShop.goods[index]) or not data.fogOuterShop.goods[index].status then
+    return 0
+  end
+  -- [ts2lua]lua中0和空字符串也是true，此处data.fogOuterShop.expireTime需要确认
+  local expireTime = (data.fogOuterShop.expireTime and {data.fogOuterShop.expireTime} or {GameUtils.getNextRefreshTByTime(4)})[1]
+  if expireTime < Client.instance.serverTime then
+    LogsManager.echo("whn outshop 已经过期")
+    return false
+  end
+  -- [ts2lua]data.fogOuterShop.goods下标访问可能不正确
+  return data.fogOuterShop.goods[index].status
+end
+
+function UserModel:getFogShopGoods()
+  local goodLsit = {}
+  local data = self:getData()
+  if (not data or not data.fogOuterShop) or not data.fogOuterShop.goods then
+    return {}
+  end
+  return data.fogOuterShop.goods
+end
+
+function UserModel:getFogCoinNum()
+  local data = self:getData()
+  return Number(data and data.fogCoin) or 0
+end

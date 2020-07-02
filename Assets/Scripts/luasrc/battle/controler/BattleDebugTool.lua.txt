@@ -1,0 +1,114 @@
+require("game/sys/func/BattleFunc")
+require("framework/func/TranslateFunc")
+require("game/sys/manager/BattleLogsManager")
+require("framework/common/GameSwitch")
+require("game/sys/consts/GameSwitchConst")
+require("framework/utils/TableUtils")
+
+BattleDebugTool = newClass({Class}, {name = 'BattleDebugTool'})
+
+function BattleDebugTool:__new__(controler)
+  self.controler = controler
+  self._attrCfgs = BattleFunc.instance:getAllCfgData("AttributeList")
+  BattleDebugTool.initDebugValue()
+end
+
+function BattleDebugTool:startExportRoleInfo()
+  BattleLogsManager.battleEcho("我方阵营数据:\n")
+  self:exportCampInfo(self.controler.campArr_1)
+  BattleLogsManager.battleEcho("对方阵营数据:\n")
+  self:exportCampInfo(self.controler.campArr_2)
+end
+
+function BattleDebugTool:exportCampInfo(campArr)
+  local i = 0
+  repeat
+    self:exportOneRoleInfo(campArr[i+1])
+    i=i+1
+  until not(i < #campArr)
+end
+
+function BattleDebugTool:exportOneRoleInfo(role)
+  local str = nil
+  if role.cfgData.name then
+    str = "id:" .. role.dataId .. ",name:" .. TranslateFunc.instance:getTranslate(role.cfgData.name) .. ","
+  else
+    str = "id:" .. role.dataId .. ",monster,"
+  end
+  local index = 3
+  for i in pairs(self._attrCfgs) do
+    local info = self._attrCfgs[i+1]
+    if Number(i) < 100 then
+      index=index+1
+      local keyName = TranslateFunc.instance:getTranslate(info.AttributeName)
+      local value = role.attrData:getOneAttr(i)
+      str = str .. keyName .. ":" .. value .. ", "
+      if index % 8 == 0 then
+        str = str .. "\n"
+      end
+    end
+  end
+  BattleLogsManager.battleEcho(str, "attrInfo:", role.attrData, "\n")
+end
+
+function BattleDebugTool.initDebugValue()
+  if not BattleDebugTool._debugMap then
+    BattleDebugTool._debugMap = {}
+    local debugMap = BattleDebugTool._debugMap
+    local value = GameSwitch.getSwitchState(GameSwitchConst.SWITCH_BATTLE_DEBUGLEVEL)
+    if value and value ~= "0" then
+      local arr = TableUtils.turnCsvStrTogGameArr(value)
+      local i = 0
+      repeat
+        local tempArr = arr[i+1]
+        if #tempArr == 1 then
+          -- [ts2lua]debugMap下标访问可能不正确
+          debugMap[tempArr[0+1]] = true
+        else
+          -- [ts2lua]debugMap下标访问可能不正确
+          debugMap[tempArr[0+1]] = tempArr:slice(1, #tempArr)
+        end
+        i=i+1
+      until not(i < #arr)
+    end
+  end
+  local t = BattleDebugTool.getDebugRoleId()
+  if t == true then
+    t = {}
+  end
+  BattleLogsManager.debugRoleIDs = t
+end
+
+function BattleDebugTool.isNoHeroCd()
+  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
+  return BattleDebugTool._debugMap["1"]
+end
+
+function BattleDebugTool.getDebugSkill()
+  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
+  return BattleDebugTool._debugMap["2"]
+end
+
+function BattleDebugTool.getDebugPassiveSkill()
+  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
+  return BattleDebugTool._debugMap["3"]
+end
+
+function BattleDebugTool.isInfiniteHp()
+  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
+  return BattleDebugTool._debugMap["4"]
+end
+
+function BattleDebugTool.getBattleAddSped()
+  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
+  local rt = BattleDebugTool._debugMap["6"]
+  if not rt then
+    return 1
+  end
+  return Number(rt[0+1]) or 1
+end
+
+function BattleDebugTool.getDebugRoleId()
+  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
+  return BattleDebugTool._debugMap["9"]
+end

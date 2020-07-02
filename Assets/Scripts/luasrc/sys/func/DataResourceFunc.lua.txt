@@ -1,0 +1,68 @@
+require("framework/func/BaseFunc")
+require("game/sys/consts/ResourceConst")
+require("framework/manager/WindowManager")
+require("game/sys/func/RolesFunc")
+require("game/sys/func/DataResourceFunc/DataResourceType")
+
+DataResourceFunc = newClass({BaseFunc}, {name = 'DataResourceFunc'})
+
+function DataResourceFunc.__getters.instance()
+  if not DataResourceFunc._instance then
+    DataResourceFunc._instance = DataResourceFunc()
+  end
+  return DataResourceFunc._instance
+end
+
+function DataResourceFunc:getCfgsPathArr()
+  return {{name="DataResource_json"}}
+end
+
+function DataResourceFunc:getIconById(id)
+  local icon = self:getCfgDatasByKey("DataResource_json", id, "icon")
+  icon = "native/main/main/" .. icon .. ".png"
+  return icon
+end
+
+function DataResourceFunc:getDataResourceInfo(dataArr)
+  local result = {}
+  if dataArr[0+1] then
+    local switch = {
+      [DataResourceType.COIN] = function()
+        result = {img=ResourceConst.COIN_PNG, num=dataArr[1+1]}
+      end,
+      [DataResourceType.GOLD] = function()
+        result = {img=ResourceConst.GOLD_PNG, num=dataArr[1+1]}
+      end,
+      [DataResourceType.SP] = function()
+        result = {img=ResourceConst.SP_PNG, num=dataArr[1+1]}
+      end,
+      [DataResourceType.PIECE] = function()
+        result = {img=RolesFunc.instance:getEquipIcon(RolesFunc.instance:getCfgDatasByKey("EquipMaterial", dataArr[1+1], "icon")), id=dataArr[1+1], num=dataArr[2+1]}
+      end,
+      [DataResourceType.COMP] = function()
+        result = {img=ResourceConst.COMP_PNG, num=dataArr[1+1]}
+      end,
+      [DataResourceType.FOGCOIN] = function()
+        result = {img=ResourceConst.FOGCOIN_PNG, num=dataArr[1+1]}
+      end,
+      [DataResourceType.ACT] = function()
+        result = {img=ResourceConst.ACT_PNG, num=dataArr[1+1]}
+      end,
+      [DataResourceType.FOGITEM] = function()
+        result = {img=RolesFunc.instance:getEquipIcon(RolesFunc.instance:getCfgDatasByKey("EquipMaterial", dataArr[1+1], "icon")), id=dataArr[1+1], num=dataArr[2+1]}
+      end
+    }
+    local casef = switch[Number(dataArr[0+1])]
+    if not casef then casef = switch["default"] end
+    if casef then casef() end
+  end
+  return result
+end
+
+function DataResourceFunc:showTip(reward)
+  if Number(reward[0+1]) == DataResourceType.COIN then
+    WindowManager.ShowTip("获得金币 x" .. reward[1+1])
+  elseif Number(reward[0+1]) == DataResourceType.GOLD then
+    WindowManager.ShowTip("获得钻石 x" .. reward[1+1])
+  end
+end

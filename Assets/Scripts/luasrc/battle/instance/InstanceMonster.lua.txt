@@ -1,0 +1,26 @@
+require("game/battle/instance/InstanceLogical")
+require("game/sys/consts/BattleConst")
+
+InstanceMonster = newClass({InstanceLogical}, {name = 'InstanceMonster'})
+
+InstanceMonster._tempPos = Laya.Point();
+function InstanceMonster:__new__(controler)
+  self:superCall('__new__',controler)
+  self._changeTrackCd = 0;
+  self._isSleep = false;
+  self._aiFlyFrame = 0;
+  self.isAutoSKill = true
+  self.classModel = BattleConst.model_monster
+  self._goldTweenParams = {}
+end
+
+function InstanceMonster:setLiveFrame(value)
+  self._liveFrame = value
+  if self._liveFrame > 0 then
+    self.controler:setCallBack(self._liveFrame, self.doDiedLogical, self)
+  end
+end
+
+function InstanceMonster:doDiedLogical()
+  self:superCall('doDiedLogical')
+end

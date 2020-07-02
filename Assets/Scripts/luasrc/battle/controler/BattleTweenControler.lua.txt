@@ -1,0 +1,184 @@
+require("game/sys/consts/BattleConst")
+
+BattleTweenControler = newClass({Class}, {name = 'BattleTweenControler'})
+
+function BattleTweenControler:__new__(controler)
+  self.controler = controler
+  self._tweenInfoMap = {}
+end
+
+function BattleTweenControler:setData()
+  self._tweenInfoMap = {}
+end
+
+function BattleTweenControler:updateFrame()
+  local i = #self._tweenInfoMap - 1
+  repeat
+    local info = self._tweenInfoMap[i+1]
+    local isEnd = self:updateOneTween(info)
+    if isEnd then
+      self._tweenInfoMap:splice(i, 1)
+    end
+    i=i-1
+  until not(i >= 0)
+end
+
+function BattleTweenControler:updateOneTween(tweenInfo)
+  local type = tweenInfo.type
+  tweenInfo.frame=tweenInfo.frame+1
+  local ratio = tweenInfo.frame / tweenInfo.totalFrame
+  local mode = tweenInfo.mode
+  local startParams = tweenInfo.startParams
+  local targetParams = tweenInfo.targetParams
+  local disParams = tweenInfo.disParams
+  local instance = tweenInfo.instance
+  if self:checkHasType(type, BattleConst.TWEEN_MOVE) then
+    local targetx = nil
+    local targety = nil
+    local targetz = nil
+    if mode == 1 then
+      -- [ts2lua]lua中0和空字符串也是true，此处disParams.x == 0需要确认
+      (disParams.x == 0 and {targetx = instance.pos.x} or {targetx = startParams.x + disParams.x * ratio})[1]
+      -- [ts2lua]lua中0和空字符串也是true，此处disParams.y == 0需要确认
+      (disParams.y == 0 and {targety = instance.pos.y} or {targety = startParams.y + disParams.y * ratio})[1]
+      -- [ts2lua]lua中0和空字符串也是true，此处disParams.z == 0需要确认
+      (disParams.z == 0 and {targetz = instance.pos.z} or {targetz = startParams.z + disParams.z * ratio})[1]
+      instance:setPos(targetx, targety, targetz)
+    else
+      -- [ts2lua]lua中0和空字符串也是true，此处disParams.x == 0需要确认
+      (disParams.x == 0 and {targetx = instance.x} or {instance.x = startParams.x + disParams.x * ratio})[1]
+      -- [ts2lua]lua中0和空字符串也是true，此处disParams.y == 0需要确认
+      (disParams.y == 0 and {targety = instance.y} or {instance.y = startParams.y + disParams.y * ratio})[1]
+    end
+  end
+  if self:checkHasType(type, BattleConst.TWEEN_ROTATE) then
+    local rx = nil
+    local ry = nil
+    local rz = nil
+    if mode == 1 then
+      -- [ts2lua]lua中0和空字符串也是true，此处disParams.r == 0需要确认
+      (disParams.r == 0 and {false} or {instance:setRotation(startParams.r + disParams.r * ratio)})[1]
+    else
+      -- [ts2lua]lua中0和空字符串也是true，此处disParams.r == 0需要确认
+      (disParams.r == 0 and {false} or {instance.rotation = startParams.r + disParams.r * ratio})[1]
+    end
+  end
+  if self:checkHasType(type, BattleConst.TWEEN_SCALE) then
+    local scale = startParams.s + disParams.s * ratio
+    if mode == 1 then
+      instance:setViewScale(scale)
+    else
+      instance:scale(scale, scale)
+    end
+  end
+  if self:checkHasType(type, BattleConst.TWEEN_ALPHA) then
+    local value = startParams.a + disParams.a * ratio
+    if mode == 1 then
+      instance:setViewAlpha(value)
+    else
+      instance.alpha = value
+    end
+  end
+  if tweenInfo.frame == tweenInfo.totalFrame then
+    if tweenInfo.callBack then
+      tweenInfo.callBack:call(tweenInfo.thisObj, tweenInfo.callParams)
+    end
+    return true
+  end
+  return false
+end
+
+function BattleTweenControler:setOneTween(frame, instance, targetParams, type, callBack, thisObj, callBackParams)
+  if callBack == nil then
+    callBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if callBackParams == nil then
+    callBackParams=nil
+  end
+  self:clearOneTween(instance)
+  local startParams = {x=instance.pos.x, y=instance.pos.y, z=instance.pos.z, s=instance.viewScale, r=instance._myView.rotation, a=instance:getView().alpha}
+  local disParams = {}
+  if self:checkHasType(type, BattleConst.TWEEN_MOVE) then
+    disParams.x = self:adjustNumber(targetParams.x - startParams.x)
+    disParams.y = self:adjustNumber(targetParams.y - startParams.y)
+    disParams.z = self:adjustNumber(targetParams.z - startParams.z)
+  end
+  if self:checkHasType(type, BattleConst.TWEEN_ROTATE) then
+    disParams.r = self:adjustNumber(targetParams.r - startParams.r)
+  end
+  if self:checkHasType(type, BattleConst.TWEEN_SCALE) then
+    disParams.s = targetParams.s - startParams.s
+  end
+  if self:checkHasType(type, BattleConst.TWEEN_ALPHA) then
+    disParams.a = targetParams.a - startParams.a
+  end
+  local tweenInfo = {startParams=startParams, targetParams=targetParams, type=type, callBack=callBack, thisObj=thisObj, callParams=callBackParams, instance=instance, frame=0, totalFrame=frame, disParams=disParams, mode=1}
+  table.insert(self._tweenInfoMap, tweenInfo)
+end
+
+function BattleTweenControler:setTweenByView(frame, view, targetParams, type, callBack, thisObj, callBackParams)
+  if callBack == nil then
+    callBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if callBackParams == nil then
+    callBackParams=nil
+  end
+  self:clearOneTween(view)
+  local startParams = {x=view.x, y=view.y, s=view.scale, r=view.rotation, a=view.alpha}
+  local disParams = {}
+  if self:checkHasType(type, BattleConst.TWEEN_MOVE) then
+    disParams.x = self:adjustNumber(targetParams.x - startParams.x)
+    disParams.y = self:adjustNumber(targetParams.y - startParams.y)
+    disParams.z = self:adjustNumber(targetParams.z - startParams.z)
+  end
+  if self:checkHasType(type, BattleConst.TWEEN_ROTATE) then
+    disParams.r = self:adjustNumber(targetParams.r - startParams.r)
+  end
+  if self:checkHasType(type, BattleConst.TWEEN_SCALE) then
+    disParams.s = targetParams.s - startParams.s
+  end
+  if self:checkHasType(type, BattleConst.TWEEN_ALPHA) then
+    disParams.a = targetParams.a - startParams.a
+  end
+  local tweenInfo = {startParams=startParams, targetParams=targetParams, type=type, callBack=callBack, thisObj=thisObj, callParams=callBackParams, instance=view, frame=0, totalFrame=frame, disParams=disParams, mode=2}
+  table.insert(self._tweenInfoMap, tweenInfo)
+end
+
+function BattleTweenControler:clearOneTween(instance)
+  local i = #self._tweenInfoMap - 1
+  repeat
+    local info = self._tweenInfoMap[i+1]
+    if info.instance == instance then
+      self._tweenInfoMap:splice(i, 1)
+    end
+    i=i-1
+  until not(i >= 0)
+end
+
+function BattleTweenControler:checkHasType(bit, type)
+  return bit & type ~= 0
+end
+
+function BattleTweenControler:adjustNumber(value)
+  if Math:abs(value) < 0.001 then
+    return 0
+  end
+  return value
+end
+
+function BattleTweenControler:dispose()
+  local i = #self._tweenInfoMap - 1
+  repeat
+    local info = self._tweenInfoMap[i+1]
+    if info.callBack then
+      info.callBack:call(info.thisObj, info.callParams)
+    end
+    i=i-1
+  until not(i >= 0)
+end

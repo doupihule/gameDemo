@@ -1,0 +1,639 @@
+require("stringutil")
+require("framework/manager/WindowManager")
+require("game/sys/consts/WindowCfgs")
+require("game/sys/manager/BattleSceneManager")
+require("framework/common/Message")
+require("game/sys/event/BattleEvent")
+require("framework/utils/ButtonUtils")
+require("game/sys/func/BattleFunc")
+require("framework/utils/ScreenAdapterTools")
+require("framework/manager/SoundManager")
+require("game/sys/consts/MusicConst")
+require("game/sys/manager/StatisticsManager")
+require("game/sys/func/GlobalParamsFunc")
+require("framework/utils/StringUtils")
+require("game/sys/model/UserModel")
+require("game/sys/func/LevelFunc")
+require("game/sys/func/RolesFunc")
+require("game/sys/model/RolesModel")
+require("game/sys/consts/BattleConst")
+require("game/sys/func/DataResourceFunc/DataResourceType")
+require("game/sys/consts/ResourceConst")
+require("framework/utils/PoolTools")
+require("game/sys/consts/PoolCode")
+require("game/sys/manager/GuideManager")
+require("game/sys/consts/GuideConst")
+require("framework/manager/TimerManager")
+require("framework/manager/SubPackageManager")
+require("game/sys/func/FogFunc")
+require("game/sys/model/FogModel")
+require("game/fog/trigger/FogPropTrigger")
+require("game/sys/consts/FogConst")
+require("ui/layaMaxUI")
+
+BattleUI = newClass({ui.gameui.battle.BattleUI}, {name = 'BattleUI'})
+
+function BattleUI:__new__()
+  self:superCall('__new__')
+  self.isUseCamera = true;
+  self.maxEnergy = 0;
+  self.nowEnergy = 0;
+  self.recoverPer = 60;
+  self.nowAreaMaxX = 0;
+  self.mapHeightRate = 1;
+  self.isAllowFollw = true;
+  self.handBaseY = 0;
+  self.arrowCode = 0;
+  self.battleAdditionId = 0;
+  self.tweenCode = 0;
+  self.continueTime = 0;
+  self.timeRate = 0;
+  self.recoverCode = 0;
+  self.energyCostTable = {};
+  ButtonUtils(self.pauseBtn, self.onClickPauseBtn, self)
+  ButtonUtils(self.returnMainBtn, self.onClickMainBtn, self)
+  ButtonUtils(self.continueBtn, self.onContinueBtn, self)
+  ButtonUtils(self.rePlayBtn, self.onReplayGame, self)
+  ButtonUtils(self.autoGroup, self.onClickCameraFollow, self)
+  ScreenAdapterTools.alignNotch(self.topGroup, ScreenAdapterTools.Align_MiddleTop)
+  self.battleCtn:on(Laya.Event.MOUSE_DOWN, self, self.onTouchBegin)
+  self.battleCtn:on(Laya.Event.MOUSE_MOVE, self, self.onTouchMove)
+  self.battleCtn:on(Laya.Event.MOUSE_UP, self, self.onTouchUp)
+  ButtonUtils(self.startWarBtn, self.onClickStartWar, self)
+  ButtonUtils(self.roleSignBtn, self.onClickRoleSign, self)
+  ButtonUtils(self.enemySignBtn, self.onClickEnemySign, self)
+  ButtonUtils(self.revokeLineBtn, self.onClickRevokeLine, self)
+  SubPackageManager.loadDynamics({"main01", "main02", "main03"}, {})
+end
+
+function BattleUI:setData(data)
+  self.energyCostTable = {}
+  self.battleAdditionId = 0
+  if data and data.fullStart then
+    self.battleAdditionId = data.fullStart
+  end
+  local isShowTalk = 1
+  if data and data.isShowTalk then
+    isShowTalk = data.isShowTalk
+  end
+  SoundManager.playBGM(MusicConst.SOUND_BATTLE_BG)
+  WindowManager.CloseGuideUI(WindowCfgs.GuideUI)
+  self.mapHeightRate = ScreenAdapterTools.height / 65
+  self.pauseGroup.visible = false
+  self.isUseCamera = true
+  self.isAllowFollw = true
+  self.pauseBtn.visible = true
+  self.guideArrow.visible = false
+  self.skillTipGroup.visible = false
+  self:initTopShow(isShowTalk)
+  self.controler:initGame()
+  BattleFunc.curGameState = nil
+  if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+    self.controler.cameraControler.focusPos.x = self.controler.enemyHome.pos.x
+    self.controler.cameraControler.inControlBg = true
+    BattleFunc.curGameState = BattleConst.WARSTATE_LINE
+    self.enemySignBtn.visible = false
+    self.roleSignBtn.visible = true
+    self:freshWarTipShow()
+  else
+    self:initHomeSkill()
+  end
+  self:initSmallMapTouchEvent()
+end
+
+function BattleUI:initTopShow(isShowTalk)
+  self.levelTxt.visible = false
+  self.rewardGroup.visible = false
+  self.autoGroup.visible = false
+  self.roleSignBtn.visible = false
+  self.enemySignBtn.visible = false
+  self.warTipGroup.visible = false
+  if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
+    self.levelTxt.visible = true
+    self.rewardGroup.visible = true
+    self.autoGroup.visible = true
+    self.smallMapGroup.visible = true
+    self.bottomImg.height = 335
+    local nextLevel = Number(UserModel.instance:getMaxBattleLevel()) + 1
+    if nextLevel > LevelFunc.instance:getMaxLevel() then
+      nextLevel = LevelFunc.instance:getMaxLevel()
+    end
+    self.levelId = nextLevel
+    self.levelTxt:changeText("第" .. nextLevel .. "关")
+    self:freshNormalRoleList()
+    self:freshReward()
+    self:setNormalLevelEnergy()
+    BattleSceneManager.instance:enterBattle({levelId=nextLevel}, self.battleCtn, self)
+    StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_START, {levelId=self.levelId, entrance="main"})
+    self.controler = BattleSceneManager.instance.autoBattleControler
+    if not self.controler.guideControler:checkGuide_101() then
+      if isShowTalk ~= 2 then
+        local levelInfo = LevelFunc.instance:getLevelInfoById(self.levelId)
+        if levelInfo.dialogue then
+          WindowManager.OpenUI(WindowCfgs.FogNpcTalkUI, {viewType=FogConst.VIEW_TYPE_MAIN_LEVEL})
+          BattleSceneManager.instance:setGamePlayOrPause(true)
+        end
+      end
+    end
+    self.openCameraImg.visible = self.isUseCamera
+  elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+    BattleSceneManager.instance:enterBattle({}, self.battleCtn, self)
+    self.controler = BattleSceneManager.instance.autoBattleControler
+    self:setWarEnergy()
+    self:freshWarRoleList()
+    if self.controler.guideControler:checkFogGuide_801() then
+      self.pauseBtn.visible = false
+    end
+  end
+end
+
+function BattleUI:freshWarTipShow()
+  self.warTipGroup.visible = true
+  self.smallMapGroup.visible = false
+  self.readyLineGroup.visible = false
+  self.startWarBtn.visible = false
+  self.revokeLineBtn.visible = false
+  self.bottomImg.height = 265
+  self.autoGroup.visible = false
+  self.isUseCamera = false
+  self.skillGroup.visible = false
+  if BattleFunc.curGameState == BattleConst.WARSTATE_LINE then
+    self.readyLineGroup.visible = true
+  elseif BattleFunc.curGameState == BattleConst.WARSTATE_CANFIGHT then
+    self.controler.cameraControler.inControlBg = false
+    self.controler.layerControler.isInTouch = false
+    self.controler.cameraControler.focusPos.x = self.controler.myHome.pos.x
+    self.startWarBtn.visible = true
+    self.isUseCamera = true
+    self:freshCameraImg()
+    self.roleSignBtn.visible = false
+    self.enemySignBtn.visible = true
+    self.revokeLineBtn.visible = true
+  elseif BattleFunc.curGameState == BattleConst.WARSTATE_INFIGHT then
+    self.readyLineGroup.visible = false
+    self.smallMapGroup.visible = true
+    self.bottomImg.height = 335
+    self.warTipGroup.visible = false
+    self.roleSignBtn.visible = false
+    self.enemySignBtn.visible = false
+    self.revokeLineBtn.visible = false
+    self.autoGroup.visible = true
+    self.skillGroup.visible = true
+    self.isUseCamera = true
+    self:freshCameraImg()
+    self:initHomeSkill()
+    self:setRoleGray()
+  end
+end
+
+function BattleUI:freshCameraImg()
+  self.openCameraImg.visible = self.isUseCamera
+end
+
+function BattleUI:showArrow()
+  self.guideArrow.visible = true
+  TimerManager.instance:remove(self.arrowCode)
+  self.handBaseY = self.guideArrow.y
+  Laya.Tween:clearTween(self.guideArrow)
+  if self.guideArrow.visible then
+    self:addHandTween()
+    self.arrowCode = TimerManager.instance:add(self.addHandTween, self, 600)
+  end
+end
+
+function BattleUI:addHandTween()
+  Laya.Tween:to(self.guideArrow, {y=self.handBaseY + 10}, 200, nil, Laya.Handler:create(self, function()
+    Laya.Tween:to(self.guideArrow, {y=self.handBaseY - 10}, 200, nil, Laya.Handler:create(self, function()
+      Laya.Tween:to(self.guideArrow, {y=self.handBaseY}, 200, nil, nil)
+    end
+    ))
+  end
+  ))
+end
+
+function BattleUI:initHomeSkill()
+  self.skillGroup:removeChildren()
+  local homeLevel = RolesModel.instance:getRoleLevelById(GlobalParamsFunc.instance:getDataNum("bornHomeId"))
+  local homeSkill = GlobalParamsFunc.instance:getDataArray("baseSkillList")
+  local unlockSkill = {}
+  local i = 0
+  repeat
+    local info = homeSkill[i+1]:split(",")
+    if Number(info[0+1]) <= homeLevel then
+      table.insert(unlockSkill, info[1+1])
+    end
+    i=i+1
+  until not(i < #homeSkill)
+  self.controler.skillContent = self.controler:createSkillContent(unlockSkill, self.skillGroup)
+end
+
+function BattleUI:setWarEnergy()
+  self.maxEnergy = FogFunc.instance:getCfgDatasByKey("BusUpGrade", FogModel.instance:getBusLevel(), "attribute")[2+1]
+  FogPropTrigger.checkPropTriggerOnInstance(FogPropTrigger.Prop_type_AddEnergy, self)
+  self.nowEnergy = self.maxEnergy
+  self:freshEnergyShow()
+end
+
+function BattleUI:setNormalLevelEnergy()
+  self.maxEnergy = GlobalParamsFunc.instance:getDataNum("energyMaxNub")
+  if self.battleAdditionId and self.battleAdditionId == BattleConst.battle_start_full_energy then
+    self.nowEnergy = self.maxEnergy
+  else
+    self.nowEnergy = GlobalParamsFunc.instance:getDataNum("energyBattleStartNub")
+  end
+  local energyRestoreNub = GlobalParamsFunc.instance:getDataNum("energyRestoreNub")
+  if self.battleAdditionId and self.battleAdditionId == BattleConst.battle_start_energy_resume then
+    local battleAddNum = LevelFunc.instance:getBattleAddtionoByTwoId(self.battleAdditionId, "addtionNub") / 10000
+    self.recoverPer = BattleFunc.instance:turnMinisecondToframe(energyRestoreNub * 1 - battleAddNum)
+  else
+    self.recoverPer = BattleFunc.instance:turnMinisecondToframe(energyRestoreNub)
+  end
+  self:freshEnergyShow()
+end
+
+function BattleUI:freshEnergyShow()
+  -- [ts2lua]lua中0和空字符串也是true，此处self.nowEnergy * 140 / self.maxEnergy > 140需要确认
+  self.energyImg.height = (self.nowEnergy * 140 / self.maxEnergy > 140 and {140} or {self.nowEnergy * 140 / self.maxEnergy})[1]
+  self.energyTxt.text = self.nowEnergy .. ""
+  self.roleList:refresh()
+end
+
+function BattleUI:autoAddEnergy()
+  if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+    return
+  end
+  if self.nowEnergy >= self.maxEnergy then
+    return
+  end
+  self.nowEnergy = self.nowEnergy + 1
+  self:freshEnergyShow()
+end
+
+function BattleUI:freshReward()
+  local rewardList = LevelFunc.instance:getLevelInfoById(self.levelId).victoryReward
+  local coin = 0
+  local gold = 0
+  for index in pairs(rewardList) do
+    -- [ts2lua]rewardList下标访问可能不正确
+    local reward = rewardList[index]:split(",")
+    local switch = {
+      [DataResourceType.COIN] = function()
+        coin = coin + Number(reward[1+1])
+      end,
+      [DataResourceType.GOLD] = function()
+        gold = gold + Number(reward[1+1])
+      end
+    }
+    local casef = switch[Number(reward[0+1])]
+    if not casef then casef = switch["default"] end
+    if casef then casef() end
+  end
+  if gold then
+    self.levelRewardImg.skin = ResourceConst.GOLD_PNG
+    self.levelReward.text = StringUtils.getCoinStr(gold .. "")
+  else
+    self.levelRewardImg.skin = ResourceConst.COIN_PNG
+    self.levelReward.text = StringUtils.getCoinStr(coin .. "")
+  end
+end
+
+function BattleUI:freshWarRoleList()
+  local data = RolesModel.instance:getFogRole()
+  self.roleList.array = data
+  self.roleList.renderHandler = Laya.Handler(self, self.onListRender2)
+end
+
+function BattleUI:freshNormalRoleList()
+  local data = RolesModel.instance:getInLineRole()
+  self.roleList.array = data
+  self.roleList.renderHandler = Laya.Handler(self, self.onListRender2)
+end
+
+function BattleUI:onListRender2(cell, index)
+  -- [ts2lua]self.roleList.array下标访问可能不正确
+  local data = self.roleList.array[index]
+  cell:offAll()
+  local item = cell:getChildByName("item")
+  local bg = item:getChildByName("bgImg")
+  local icon = item:getChildByName("iconImg")
+  local cost = item:getChildByName("energyCost")
+  local maskImg = item:getChildByName("maskImg")
+  maskImg.visible = true
+  -- [ts2lua]self.energyCostTable下标访问可能不正确
+  local energy = self.energyCostTable[data.id]
+  -- [ts2lua]self.energyCostTable下标访问可能不正确
+  if not self.energyCostTable[data.id] then
+    energy = RolesFunc.instance:setEnergyCost(data.id, data.payEnergyNmb)
+    -- [ts2lua]self.energyCostTable下标访问可能不正确
+    self.energyCostTable[data.id] = energy
+  end
+  if energy <= self.nowEnergy then
+    maskImg.visible = false
+    -- [ts2lua]item下标访问可能不正确
+    -- [ts2lua]item下标访问可能不正确
+    -- [ts2lua]item下标访问可能不正确
+    -- [ts2lua]item下标访问可能不正确
+    if not item["__lastButtonUtils"] or (item["__lastButtonUtils"] and item["id"]) and item["id"] ~= data.id then
+      -- [ts2lua]item下标访问可能不正确
+      item["id"] = data.id
+      ButtonUtils(item, self.onClickRoleItem, self, nil, nil, {data.id, energy})
+    end
+  end
+  if BattleFunc.curGameState == BattleConst.WARSTATE_INFIGHT then
+    maskImg.visible = true
+  end
+  -- [ts2lua]ResourceConst.BATTLE_ICON_DI下标访问可能不正确
+  bg.skin = ResourceConst.BATTLE_ICON_DI[data.qualityType]
+  icon.skin = RolesFunc.instance:getBattleRoleIcon(data.battleIcon)
+  cost.text = energy .. ""
+  if index == 0 and not self.firstRole then
+    self.firstRole = item
+  end
+end
+
+function BattleUI:initSmallMapTouchEvent()
+  self.nowArea.visible = true
+  self.nowArea.width = ScreenAdapterTools.width * self.smallMapGroup.width / self.controler.mapControler._maxSceneWidth
+  self.nowArea.x = 0
+  self.nowAreaMaxX = self.smallMapGroup.width - self.nowArea.width
+  self.nowArea:on(Laya.Event.MOUSE_DOWN, self, self.touchBeginMap)
+  self.nowArea:on(Laya.Event.MOUSE_MOVE, self, self.touchMoveMap)
+  self.nowArea:on(Laya.Event.MOUSE_UP, self, self.touchOverMap)
+  self.smallMapBg:on(Laya.Event.CLICK, self, self.clickSmallBg)
+  self.smallMapBg:on(Laya.Event.MOUSE_DOWN, self, self.touchBeginMap)
+  self.smallMapBg:on(Laya.Event.MOUSE_MOVE, self, self.touchMoveMap)
+  self.smallMapBg:on(Laya.Event.MOUSE_UP, self, self.touchOverMap)
+end
+
+function BattleUI:clickSmallBg(event)
+  local point = Laya.Point(event.stageX, 0)
+  local tsvar_local = self.smallMapGroup:globalToLocal(point)
+  self:moveNowArea(tsvar_local.x - self.nowArea.width / 2 - self.nowArea.x)
+  self:touchBeginMap(event)
+end
+
+function BattleUI:touchBeginMap(event)
+  self.controler and self.controler:clearCallBack(self, self.resstCameraFollow)
+  self.isAllowFollw = false
+  self._sMapStartTouchX = event.stageX
+end
+
+function BattleUI:touchMoveMap(event)
+  if not self._sMapStartTouchX then
+    return
+  end
+  self:moveNowArea(event.stageX - self._sMapStartTouchX)
+  self._sMapStartTouchX = event.stageX
+  if GuideManager.ins.recentGuideId == GuideConst.GUIDE_1_103 then
+    self.controler.guideControler:checkGuide_104_finish()
+  end
+end
+
+function BattleUI:touchOverMap(event)
+  self._sMapStartTouchX = nil
+  self.controler:setCallBack(60 * 5, self.resstCameraFollow, self)
+end
+
+function BattleUI:resstCameraFollow()
+  self.isAllowFollw = true
+end
+
+function BattleUI:moveNowArea(x)
+  self.nowArea.x = self.nowArea.x + x
+  if self.nowArea.x < 0 then
+    self.nowArea.x = 0
+  end
+  if self.nowArea.x > self.nowAreaMaxX then
+    self.nowArea.x = self.nowAreaMaxX
+  end
+  local tempPos = self.controler.cameraControler.focusPos.x + x * self.controler.layerControler.sceneWidthRate
+  tempPos = self.controler.layerControler:getTweenEndPos(tempPos)
+  self.controler.cameraControler.focusPos.x = tempPos
+  self.controler.cameraControler:updateCtnPos(1)
+end
+
+function BattleUI:freshSmallMap(x)
+  self.nowArea.x = self.nowArea.x + x
+  if self.nowArea.x < 0 then
+    self.nowArea.x = 0
+  end
+  if self.nowArea.x > self.nowAreaMaxX then
+    self.nowArea.x = self.nowAreaMaxX
+  end
+end
+
+function BattleUI:onClickRoleItem(info)
+  if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR and BattleFunc.curGameState == BattleConst.WARSTATE_INFIGHT then
+    return
+  end
+  local id = info[0+1]
+  local cost = info[1+1]
+  if cost > self.nowEnergy then
+    return
+  end
+  if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR and BattleFunc.curGameState ~= BattleConst.WARSTATE_CANFIGHT then
+    BattleFunc.curGameState = BattleConst.WARSTATE_CANFIGHT
+    self:freshWarTipShow()
+  end
+  self.controler:createMyRole(id)
+  self.nowEnergy = self.nowEnergy - cost
+  self:freshEnergyShow()
+end
+
+function BattleUI:onClickPauseBtn()
+  self.pauseGroup.visible = true
+  BattleSceneManager.instance:setGamePlayOrPause(true)
+end
+
+function BattleUI:onClickCameraFollow()
+  self.isUseCamera = not self.isUseCamera
+  self.openCameraImg.visible = self.isUseCamera
+end
+
+function BattleUI:onClickMainBtn()
+  if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
+    WindowManager.OpenUI(WindowCfgs.GameMainUI)
+  end
+  self:close()
+  BattleSceneManager.instance:exitBattle()
+end
+
+function BattleUI:onContinueBtn()
+  BattleSceneManager.instance:setGamePlayOrPause(false)
+  self.pauseGroup.visible = false
+end
+
+function BattleUI:onReplayGame()
+  SoundManager.stopMusicOrSound(MusicConst.SOUND_BATTLE_BG)
+  Message.instance:send(BattleEvent.BATTLEEVENT_REVIEW_RESET_REVIVECOUNT)
+  self.pauseGroup.visible = false
+  BattleSceneManager.instance:replayBattle()
+  StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_START, {levelId=self.levelId, entrance="replay"})
+  self:resetStatus()
+end
+
+function BattleUI:onTouchBegin(event)
+  self.controler.layerControler:onTouchBegin(event)
+end
+
+function BattleUI:onTouchMove(event)
+  self.controler.layerControler:onTouchMove(event)
+end
+
+function BattleUI:onTouchUp(event)
+  self.controler.layerControler:onTouchUp(event)
+end
+
+function BattleUI:onClickRoleSign()
+  self.isUseCamera = false
+  self.controler.cameraControler.focusPos.x = self.controler.myHome.pos.x
+  self.controler.cameraControler.inControlBg = true
+  self.roleSignBtn.visible = false
+  self.enemySignBtn.visible = true
+end
+
+function BattleUI:onClickRevokeLine()
+  self.controler:clearAllRole()
+  self.revokeLineBtn.visible = false
+  self:setWarEnergy()
+  BattleFunc.curGameState = BattleConst.WARSTATE_LINE
+  self:freshWarTipShow()
+end
+
+function BattleUI:onClickEnemySign()
+  self.isUseCamera = false
+  self.controler.cameraControler.focusPos.x = self.controler.enemyHome.pos.x
+  self.controler.cameraControler.inControlBg = true
+  self.roleSignBtn.visible = true
+  self.enemySignBtn.visible = false
+end
+
+function BattleUI:onClickStartWar()
+  local isCanLine = false
+  for key in pairs(self.energyCostTable) do
+    -- [ts2lua]self.energyCostTable下标访问可能不正确
+    local cost = self.energyCostTable[key]
+    if cost <= self.nowEnergy then
+      isCanLine = true
+      break
+    end
+  end
+  if not isCanLine then
+    self:startWar()
+  else
+    local data = {callBack=self.startWar, thisObj=self}
+    WindowManager.OpenUI(WindowCfgs.FogStartWarUI, data)
+  end
+end
+
+function BattleUI:startWar()
+  BattleFunc.curGameState = BattleConst.WARSTATE_INFIGHT
+  self:freshWarTipShow()
+  self.controler:addAllTiggerOnBorn()
+end
+
+function BattleUI:createOneMapPoint(obj)
+  local point = nil
+  local type = obj.lifeType
+  if obj.camp == BattleConst.ROLEGROUP_MYSELF then
+    if type == BattleConst.LIFE_JIDI then
+      point = PoolTools.getItem(PoolCode.SELF_MAP_HOME_POINT_POOL) or Laya.Image(ResourceConst.SELF_MAP_HOME_POINT)
+      point.anchorY = 0.5
+    elseif type == BattleConst.LIFE_AIRHERO then
+      point = PoolTools.getItem(PoolCode.SELF_MAP_SKY_POINT_POOL) or Laya.Image(ResourceConst.SELF_MAP_SKY_POINT)
+    else
+      point = PoolTools.getItem(PoolCode.SELF_MAP_POINT_POOL) or Laya.Image(ResourceConst.SELF_MAP_POINT)
+    end
+  else
+    if type == BattleConst.LIFE_JIDI then
+      point = PoolTools.getItem(PoolCode.ENEMY_MAP_HOME_POINT_POOL) or Laya.Image(ResourceConst.ENEMY_MAP_HOME_POINT)
+      point.anchorY = 0.5
+    elseif type == BattleConst.LIFE_AIRHERO then
+      point = PoolTools.getItem(PoolCode.ENEMY_MAP_SKY_POINT_POOL) or Laya.Image(ResourceConst.ENEMY_MAP_SKY_POINT)
+    else
+      point = PoolTools.getItem(PoolCode.ENEMY_MAP_POINT_POOL) or Laya.Image(ResourceConst.ENEMY_MAP_POINT)
+    end
+  end
+  self.pointGroup:addChild(point)
+  self:setSmallMapXByScreen(point, obj.pos)
+  return point
+end
+
+function BattleUI:setRoleGray()
+  self.roleList:refresh()
+end
+
+function BattleUI:setSmallMapXByScreen(point, screenPos)
+  if self.controler.layerControler then
+    point.x = screenPos.x / self.controler.layerControler.sceneWidthRate
+    point.y = screenPos.z + screenPos.y / self.mapHeightRate
+  end
+end
+
+function BattleUI:setGameNormalSpeed()
+  self:setGameSpeed(1)
+end
+
+function BattleUI:freshSkillTipGroup(name, continueTime, timeScale)
+  self.continueTime = continueTime
+  self.timeRate = timeScale
+  Laya.Tween:clearTween(self.skillTipGroup)
+  TimerManager.instance:clearTimeout(self.tweenCode)
+  self:setGameSpeed(self.timeRate)
+  TimerManager.instance:clearTimeout(self.recoverCode)
+  self.recoverCode = TimerManager.instance:setTimeout(self.setGameNormalSpeed, self, self.continueTime)
+  if self.skillTipGroup.visible then
+    self:skillTipHideTween({self.skillTipShowTween, name, 0.2})
+  else
+    self:skillTipShowTween(name)
+  end
+end
+
+function BattleUI:skillTipShowTween(name)
+  if name == nil then
+    name=nil
+  end
+  if name then
+    self.skillIcon.skin = "uisource/battle/battle/" .. name .. ".png"
+  end
+  self.skillTipGroup.x = 0 - self.skillTipGroup.width
+  self.skillTipGroup.visible = true
+  self.skillTipGroup.alpha = 1
+  Laya.Tween:to(self.skillTipGroup, {x=0}, 300, nil, Laya.Handler:create(self, function()
+    self.tweenCode = TimerManager.instance:setTimeout(self.skillTipHideTween, self, 300, {nil, name, 0.5})
+  end
+  ))
+end
+
+function BattleUI:skillTipHideTween(data)
+  local callBack = data[0+1]
+  local name = data[1+1]
+  local rate = data[2+1]
+  local times = ScreenAdapterTools.width - self.skillTipGroup.x * rate
+  Laya.Tween:to(self.skillTipGroup, {x=ScreenAdapterTools.width, alpha=0}, times, nil, Laya.Handler:create(self, function()
+    self.skillTipGroup.visible = false
+    callBack and callBack:call(self, name)
+  end
+  ))
+end
+
+function BattleUI:setGameSpeed(speed)
+  local arr = self.controler:getAllInstanceArr()
+  local i = 0
+  repeat
+    local item = arr[i+1]
+    if not item.ignoreTimeScale then
+      item:setUpTimeScale(speed)
+    end
+    i=i+1
+  until not(i < #arr)
+end
+
+function BattleUI:close()
+  WindowManager.CloseUI(WindowCfgs.BattleUI)
+end
+
+function BattleUI:updateBlood(waveLeftHp, waveTotalHp) end
+function BattleUI:updateGameTime(leftFrame, batteTotalFrame) end
+function BattleUI:resetStatus() end
+function BattleUI:recvMsg() end

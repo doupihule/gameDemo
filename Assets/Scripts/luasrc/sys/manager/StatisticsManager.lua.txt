@@ -1,0 +1,243 @@
+require("framework/common/UserInfo")
+require("framework/manager/LogsManager")
+require("framework/utils/FileUtils")
+require("framework/manager/StatisticsExtendManager")
+
+StatisticsManager = newClass({Class}, {name = 'StatisticsManager'})
+function StatisticsManager:__new__(...)
+  self:superCall('__new__', unpack({...}))
+  self._event_with_switch = {};
+end
+
+StatisticsManager.mainStartT = 0;
+StatisticsManager.isLoadingLog = false;
+StatisticsManager.loadingOutT = 0;
+StatisticsManager.isNewPlayer = false;
+function StatisticsManager:__new__() end
+function StatisticsManager.__getters.ins()
+  if not StatisticsManager._ins then
+    StatisticsManager._ins = StatisticsManager()
+  end
+  return StatisticsManager._ins
+end
+
+function StatisticsManager:init() end
+function StatisticsManager:setAccount(accountId, level, gameServer, accountType, age, accountName, gender)
+  if UserInfo.isWeb() then
+    
+  end
+end
+
+function StatisticsManager.onLoadingLog()
+  if StatisticsManager.isLoadingLog then
+    return
+  end
+  if FileUtils.isUserWXSource() then
+    StatisticsManager.isLoadingLog = true
+    local disT = Laya.Browser:now() - StatisticsManager.mainStartT
+    if disT > StatisticsManager.loadingOutT then
+      disT = disT - StatisticsManager.loadingOutT
+    end
+    if disT > 100000 then
+      LogsManager.echo("krma. start " .. StatisticsManager.mainStartT .. " end " .. Laya.Browser:now() .. " time " .. disT .. " except " .. StatisticsManager.loadingOutT)
+      LogsManager.sendErrorToPlatform("loadingTime_moreThan_100000", LogsManager.errorTage_serverError, 1000, "loadingTime_moreThan_100000")
+    end
+    LogsManager.sendLoadingToAiCloud(disT)
+  end
+end
+
+function StatisticsManager.addLoadingOutTime(disT)
+  if StatisticsManager.isLoadingLog then
+    return
+  end
+  if disT > 0 then
+    StatisticsManager.loadingOutT = StatisticsManager.loadingOutT + disT
+  end
+end
+
+function StatisticsManager:onEvent(event, eventData)
+  if eventData == nil then
+    eventData=nil
+  end
+  StatisticsExtendManager.onEvent(event, eventData)
+end
+
+StatisticsManager.GROUP_Level = 'C_Level';
+StatisticsManager.GROUP_Hero = 'D_Hero';
+StatisticsManager.GROUP_ShowTv = 'G_ShowTv';
+StatisticsManager.GROUP_Share = 'H_Share';
+StatisticsManager.GROUP_GUIDE = "E_Guide";
+StatisticsManager.GROUP_EQUIP = "F_Equip";
+StatisticsManager.GROUP_LOTTERY = "I_Lottery";
+StatisticsManager.GROUP_FOG = "K_fog";
+StatisticsManager.LEVEL_START = {groupId=StatisticsManager.GROUP_Level, sortId=1, name="level_start"};
+StatisticsManager.LEVEL_VICTORY = {groupId=StatisticsManager.GROUP_Level, sortId=2, name="level_victory"};
+StatisticsManager.LEVEL_FAIL = {groupId=StatisticsManager.GROUP_Level, sortId=3, name="level_fail"};
+StatisticsManager.HERO_OPEN = {groupId=StatisticsManager.GROUP_Hero, sortId=1, name="hero_openId"};
+StatisticsManager.HERO_LEVEL = {groupId=StatisticsManager.GROUP_Hero, sortId=2, name="hero_level"};
+StatisticsManager.HERO_EVOLUTION = {groupId=StatisticsManager.GROUP_Hero, sortId=3, name="hero_evolution"};
+StatisticsManager.SHOWTV_PLANTSUCEEDNUB = {groupId=StatisticsManager.GROUP_ShowTv, sortId=1, name="showTv_LuckyRewardNub_finish"};
+StatisticsManager.SHOWTV_PLANT_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=1.1, name="showTv_LuckyRewardNub_show"};
+StatisticsManager.SHOWTV_PLANT_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=1.2, name="showTv_LuckyRewardNub_click"};
+StatisticsManager.SHOWTV_BATTLEVICTORY_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=2, name="showTv_BattleVictory_finish"};
+StatisticsManager.SHOWTV_BATTLEVICTORY_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=2.1, name="showTv_BattleVictory_show"};
+StatisticsManager.SHOWTV_BATTLEVICTORY_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=2.2, name="showTv_BattleVictory_click"};
+StatisticsManager.SHOWTV_NOPOWERSUCEEDNUB = {groupId=StatisticsManager.GROUP_ShowTv, sortId=3, name="showTv_PowerRecovery_finish"};
+StatisticsManager.SHOWTV_NOPOWER_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=3.1, name="showTv_PowerRecovery_show"};
+StatisticsManager.SHOWTV_NOPOWER_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=3.2, name="showTv_PowerRecovery_click"};
+StatisticsManager.SHOWTV_FREEGOLD_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=4, name="showTv_freeGold_finish"};
+StatisticsManager.SHOWTV_FREEGOLD_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=4.1, name="showTv_freeGold_show"};
+StatisticsManager.SHOWTV_FREEGOLD_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=5.2, name="showTv_freeGold_click"};
+StatisticsManager.SHOWTV_OFFLINECOIN_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=5, name="showTv_offlineCoin_finish"};
+StatisticsManager.SHOWTV_OFFLINECOIN_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=5.1, name="showTv_offlineCoin_show"};
+StatisticsManager.SHOWTV_OFFLINECOIN_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=5.2, name="showTv_offlineCoin_click"};
+StatisticsManager.SHOWTV_UNLOCKROLE_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=6, name="showTv_unlockRole_finish"};
+StatisticsManager.SHOWTV_UNLOCKROLE_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=6.1, name="showTv_unlockRole_show"};
+StatisticsManager.SHOWTV_UNLOCKROLE_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=6.2, name="showTv_unlockRole_click"};
+StatisticsManager.SHOWTV_BATTLEADDTION_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=7, name="showTv_battleAddtion_finish"};
+StatisticsManager.SHOWTV_BATTLEADDTION_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=7.1, name="showTv_battleAddtion_show"};
+StatisticsManager.SHOWTV_BATTLEADDTION_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=7.2, name="showTv_battleAddtion_click"};
+StatisticsManager.SHOWTV_FLYBOX_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=8, name="showTv_flyBox_finish"};
+StatisticsManager.SHOWTV_FLYBOX_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=8.1, name="showTv_flyBox_show"};
+StatisticsManager.SHOWTV_FLYBOX_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=8.2, name="showTv_flyBox_click"};
+StatisticsManager.SHOWTV_SEVENDAY_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=9, name="showTv_sevenDay_finish"};
+StatisticsManager.SHOWTV_SEVENDAY_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=9.1, name="showTv_sevenDay_show"};
+StatisticsManager.SHOWTV_SEVENDAY_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=9.2, name="showTv_sevenDay_click"};
+StatisticsManager.SHOWTV_UNLOCKROLEREWARD_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=10, name="showTv_unlockRoleReward_finish"};
+StatisticsManager.SHOWTV_UNLOCKROLEREWARD_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=10.1, name="showTv_unlockRoleReward_show"};
+StatisticsManager.SHOWTV_UNLOCKROLEREWARD_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=10.2, name="showTv_unlockRoleReward_click"};
+StatisticsManager.SHOWTV_ROLEEVO_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=11, name="showTv_roleEvolution_finish"};
+StatisticsManager.SHOWTV_ROLEEVO_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=11.1, name="showTv_roleEvolution_show"};
+StatisticsManager.SHOWTV_ROLEEVO_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=11.2, name="showTv_roleEvolution_click"};
+StatisticsManager.SHOWTV_VIDEOPIECE_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=12, name="showTv_videoLottery_finish"};
+StatisticsManager.SHOWTV_VIDEOPIECE_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=12.1, name="showTv_videoLottery_show"};
+StatisticsManager.SHOWTV_VIDEOPIECE_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=12.2, name="showTv_videoLottery_click"};
+StatisticsManager.SHOWTV_ROLEVOREWARD_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=13, name="showTv_evolutionRoleReward_finish"};
+StatisticsManager.SHOWTV_ROLEVOREWARD_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=13.1, name="showTv_evolutionRoleReward_show"};
+StatisticsManager.SHOWTV_ROLEVOREWARD_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=13.2, name="showTv_evolutionRoleReward_click"};
+StatisticsManager.SHOWTV_VIDEOPIECE_REWARD_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=14, name="showTv_videoLotteryReward_finish"};
+StatisticsManager.SHOWTV_VIDEOPIECE_REWARD_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=14.1, name="showTv_videoLotteryReward_show"};
+StatisticsManager.SHOWTV_VIDEOPIECE_REWARD_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=14.2, name="showTv_videoLotteryReward_click"};
+StatisticsManager.SHOWTV_FOG_STARTROLE_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=15, name="showTv_fog_startRole_finish"};
+StatisticsManager.SHOWTV_FOG_STARTROLE_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=15.1, name="showTv_fog_startRole_show"};
+StatisticsManager.SHOWTV_FOG_STARTROLE_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=15.2, name="showTv_fog_startRole_click"};
+StatisticsManager.SHOWTV_FOG_MOBILITYRECOVERY_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=16, name="showTv_fog_mobilityRecovery_finish"};
+StatisticsManager.SHOWTV_FOG_MOBILITYRECOVERY_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=16.1, name="showTv_fog_mobilityRecovery_show"};
+StatisticsManager.SHOWTV_FOG_MOBILITYRECOVERY_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=16.2, name="showTv_fog_mobilityRecovery_click"};
+StatisticsManager.SHOWTV_FOG_SETTLEMANT_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=17, name="showTv_fog_settlement_finish"};
+StatisticsManager.SHOWTV_FOG_SETTLEMANT_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=17.1, name="showTv_fog_settlement_show"};
+StatisticsManager.SHOWTV_FOG_SETTLEMANT_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=17.2, name="showTv_fog_settlement_click"};
+StatisticsManager.SHOWTV_FOG_SHOPREFRESH_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=18, name="showTv_fog_shopRefresh_finish"};
+StatisticsManager.SHOWTV_FOG_SHOPREFRESH_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=18.1, name="showTv_fog_shopRefresh_show"};
+StatisticsManager.SHOWTV_FOG_SHOPREFRESH_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=18.2, name="showTv_fog_shopRefresh_click"};
+StatisticsManager.SHOWTV_FOG_CHOOSE_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=19, name="showTv_fog_choose_finish"};
+StatisticsManager.SHOWTV_FOG_CHOOSE_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=19.1, name="showTv_fog_choose_show"};
+StatisticsManager.SHOWTV_FOG_CHOOSE_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=19.2, name="showTv_fog_choose_click"};
+StatisticsManager.SHOWTV_FOG_BROKENROAD_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=20, name="showTv_fog_brokenRoad_finish"};
+StatisticsManager.SHOWTV_FOG_BROKENROAD_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=20.1, name="showTv_fog_brokenRoad_show"};
+StatisticsManager.SHOWTV_FOG_BROKENROAD_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=20.2, name="showTv_fog_brokenRoad_click"};
+StatisticsManager.SHOWTV_FOG_BATTLE_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=21, name="showTv_fog_battle_finish"};
+StatisticsManager.SHOWTV_FOG_BATTLE_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=21.1, name="showTv_fog_battle_show"};
+StatisticsManager.SHOWTV_FOG_BATTLE_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=21.2, name="showTv_fog_battle_click"};
+StatisticsManager.SHOWTV_FOG_REMOVEBLOCK_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=22, name="showTv_fog_removeBlock_finish"};
+StatisticsManager.SHOWTV_FOG_REMOVEBLOCK_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=22.1, name="showTv_fog_removeBlock_show"};
+StatisticsManager.SHOWTV_FOG_REMOVEBLOCK_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=22.2, name="showTv_fog_removeBlock_click"};
+StatisticsManager.SHOWTV_FOG_START_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=23, name="showTv_fog_start_finish"};
+StatisticsManager.SHOWTV_FOG_START_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=23.1, name="showTv_fog_start_show"};
+StatisticsManager.SHOWTV_FOG_START_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=23.2, name="showTv_fog_start_click"};
+StatisticsManager.SHOWTV_FOG_JITANG_FINISH = {groupId=StatisticsManager.GROUP_ShowTv, sortId=24, name="showTv_fog_jitang_finish"};
+StatisticsManager.SHOWTV_FOG_JITANG_SHOW = {groupId=StatisticsManager.GROUP_ShowTv, sortId=24, name="showTv_fog_jitang_show"};
+StatisticsManager.SHOWTV_FOG_JITANG_CLICK = {groupId=StatisticsManager.GROUP_ShowTv, sortId=24, name="showTv_fog_jitang_click"};
+StatisticsManager.SHARE_TURNTABLE_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=1, name="share_LuckyRewardNub_finish"};
+StatisticsManager.SHARE_SETTLEMENT_CLICKSUCCESS = {groupId=StatisticsManager.GROUP_Share, sortId=2, name="share_BattleVictory_finish"};
+StatisticsManager.SHARE_POWERRECOVERY_CLICKSUCCESS = {groupId=StatisticsManager.GROUP_Share, sortId=3, name="share_PowerRecovery_finish"};
+StatisticsManager.SHARE_FREEGOLD_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=4, name="share_freeGold_finish"};
+StatisticsManager.SHARE_OFFLINECOIN_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=5, name="share_offlineCoin_finish"};
+StatisticsManager.SHARE_UNLOCKROLE_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=6, name="share_unlockRole_finish"};
+StatisticsManager.SHARE_BATTLEADDTION_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=7, name="share_battleAddtion_finish"};
+StatisticsManager.SHARE_FLYBOX_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=8, name="share_flyBox_finish"};
+StatisticsManager.SHARE_SEVENDAY_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=9, name="share_sevenDay_finish"};
+StatisticsManager.SHARE_UNLOCKROLEREWARD_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=10, name="share_unlockRoleReward_finish"};
+StatisticsManager.SHARE_FRIEND_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=11, name="share_friend_finish"};
+StatisticsManager.SHARE_FRIEND_REWARD = {groupId=StatisticsManager.GROUP_Share, sortId=11.1, name="share_friend_reward"};
+StatisticsManager.SHARE_CLICKCARD = {groupId=StatisticsManager.GROUP_Share, sortId=100, name="share_clickCard"};
+StatisticsManager.SHARE_ROLEEVO_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=12, name="share_roleEvolution_finish"};
+StatisticsManager.SHARE_VIDEOPIECE_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=13, name="share_videoLottery_finish"};
+StatisticsManager.SHARE_ROLEEVOREWARD_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=14, name="share_evolutionRoleReward_finish"};
+StatisticsManager.SHARE_VIDEOPIECE_REWARD_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=15, name="share_videoLotteryReward_finish"};
+StatisticsManager.SHARE_FOG_STARTROLE_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=16, name="share_fog_startRole_finish"};
+StatisticsManager.SHARE_FOG_MOBILITYRECOVERY_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=17, name="share_fog_mobilityRecovery_finish"};
+StatisticsManager.SHARE_FOG_SETTLEMENT_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=18, name="share_fog_settlement_finish"};
+StatisticsManager.SHARE_FOG_SHOPREFRESH_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=19, name="share_fog_shopRefresh_finish"};
+StatisticsManager.SHARE_FOG_CHOOSE_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=20, name="share_fog_choose_finish"};
+StatisticsManager.SHARE_FOG_BROKENROAD_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=21, name="share_fog_brokenRoad_finish"};
+StatisticsManager.SHARE_FOG_BATTLE_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=22, name="share_fog_battle_finish"};
+StatisticsManager.SHARE_FOG_REMOVEBLOCK_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=23, name="share_fog_removeBlock_finish"};
+StatisticsManager.SHARE_FOG_START_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=24, name="share_fog_start_finish"};
+StatisticsManager.SHARE_FOG_JITANG_FINISH = {groupId=StatisticsManager.GROUP_Share, sortId=25, name="share_fog_jitang_finish"};
+StatisticsManager.GUIDE_1_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=1, name="guide_forced_1_1"};
+StatisticsManager.GUIDE_1_2 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=2, name="guide_forced_1_2"};
+StatisticsManager.GUIDE_1_3 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=3, name="guide_forced_1_3"};
+StatisticsManager.GUIDE_1_4 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=4, name="guide_forced_1_4"};
+StatisticsManager.GUIDE_1_5 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=5, name="guide_forced_1_5"};
+StatisticsManager.GUIDE_1_6 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=6, name="guide_forced_1_6"};
+StatisticsManager.GUIDE_1_7 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=7, name="guide_forced_1_7"};
+StatisticsManager.GUIDE_1_8 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=7.1, name="guide_forced_1_8"};
+StatisticsManager.GUIDE_1_9 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=7.2, name="guide_forced_1_9"};
+StatisticsManager.GUIDE_2_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=8, name="guide_forced_2_1"};
+StatisticsManager.GUIDE_2_2 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=9, name="guide_forced_2_2"};
+StatisticsManager.GUIDE_2_3 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=10, name="guide_forced_2_3"};
+StatisticsManager.GUIDE_2_4 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=11, name="guide_forced_2_4"};
+StatisticsManager.GUIDE_3_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=12, name="guide_forced_3_1"};
+StatisticsManager.GUIDE_3_2 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13, name="guide_forced_3_2"};
+StatisticsManager.GUIDE_4_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.1, name="guide_forced_4_1"};
+StatisticsManager.GUIDE_4_2 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.2, name="guide_forced_4_2"};
+StatisticsManager.GUIDE_4_3 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.3, name="guide_forced_4_3"};
+StatisticsManager.GUIDE_4_4 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.4, name="guide_forced_4_4"};
+StatisticsManager.GUIDE_4_5 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.5, name="guide_forced_4_5"};
+StatisticsManager.GUIDE_4_6 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.6, name="guide_forced_4_6"};
+StatisticsManager.GUIDE_4_7 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.7, name="guide_forced_4_7"};
+StatisticsManager.GUIDE_4_8 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.8, name="guide_forced_4_8"};
+StatisticsManager.GUIDE_4_9 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.9, name="guide_forced_4_9"};
+StatisticsManager.GUIDE_5_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.901, name="guide_forced_5_1"};
+StatisticsManager.GUIDE_6_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.902, name="guide_forced_6_1"};
+StatisticsManager.GUIDE_6_2 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.903, name="guide_forced_6_2"};
+StatisticsManager.GUIDE_6_3 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.904, name="guide_forced_6_3"};
+StatisticsManager.GUIDE_7_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.905, name="guide_forced_7_1"};
+StatisticsManager.GUIDE_7_2 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.906, name="guide_forced_7_2"};
+StatisticsManager.GUIDE_8_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.907, name="guide_forced_8_1"};
+StatisticsManager.GUIDE_8_2 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.908, name="guide_forced_8_2"};
+StatisticsManager.GUIDE_8_3 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.909, name="guide_forced_8_3"};
+StatisticsManager.GUIDE_9_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.91, name="guide_forced_9_1"};
+StatisticsManager.GUIDE_9_2 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.911, name="guide_forced_9_2"};
+StatisticsManager.GUIDE_10_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.912, name="guide_forced_10_1"};
+StatisticsManager.GUIDE_10_2 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.913, name="guide_forced_10_2"};
+StatisticsManager.GUIDE_10_3 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.914, name="guide_forced_10_3"};
+StatisticsManager.GUIDE_10_4 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.915, name="guide_forced_10_4"};
+StatisticsManager.GUIDE_11_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.916, name="guide_forced_11_1"};
+StatisticsManager.GUIDE_11_2 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.917, name="guide_forced_11_2"};
+StatisticsManager.GUIDE_11_3 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.918, name="guide_forced_11_3"};
+StatisticsManager.GUIDE_12_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.919, name="guide_forced_12_1"};
+StatisticsManager.GUIDE_13_1 = {groupId=StatisticsManager.GROUP_GUIDE, sortId=13.92, name="guide_forced_13_1"};
+StatisticsManager.GUIDE_FINISH = {groupId=StatisticsManager.GROUP_GUIDE, sortId=14, name="guide_forced_doAll"};
+StatisticsManager.GUIDE_UNLOCKROLE = {groupId=StatisticsManager.GROUP_GUIDE, sortId=15, name="guide_unforced_10001"};
+StatisticsManager.EQUIP_OPEN = {groupId=StatisticsManager.GROUP_EQUIP, sortId=1, name="equip_open"};
+StatisticsManager.EQUIP_COMPOSE = {groupId=StatisticsManager.GROUP_EQUIP, sortId=2, name="equip_compose"};
+StatisticsManager.PIECE_OPEN = {groupId=StatisticsManager.GROUP_LOTTERY, sortId=1, name="lottery_open"};
+StatisticsManager.PIECE_FREE = {groupId=StatisticsManager.GROUP_LOTTERY, sortId=2, name="lottery_free"};
+StatisticsManager.PIECE_GOLD = {groupId=StatisticsManager.GROUP_LOTTERY, sortId=3, name="lottery_gold"};
+StatisticsManager.FOG_START = {groupId=StatisticsManager.GROUP_FOG, sortId=1, name="fog_start"};
+StatisticsManager.FOG_END = {groupId=StatisticsManager.GROUP_FOG, sortId=2, name="fog_end"};
+StatisticsManager.FOG_LEAVE = {groupId=StatisticsManager.GROUP_FOG, sortId=3, name="fog_leave"};
+StatisticsManager.FOG_ENTER = {groupId=StatisticsManager.GROUP_FOG, sortId=4, name="fog_enter"};
+StatisticsManager.FOG_NEXTLEVEL = {groupId=StatisticsManager.GROUP_FOG, sortId=5, name="fog_nextLevel"};
+StatisticsManager.FOG_EVENT_TRIGGER = {groupId=StatisticsManager.GROUP_FOG, sortId=6, name="fog_event_trigger"};
+StatisticsManager.FOG_EVENT_COMPLETE = {groupId=StatisticsManager.GROUP_FOG, sortId=7, name="fog_event_complete"};
+StatisticsManager.FOG_BUS_UPGRADE = {groupId=StatisticsManager.GROUP_FOG, sortId=8, name="fog_bus_upGrade"};
+StatisticsManager.FOG_ITEM_GET = {groupId=StatisticsManager.GROUP_FOG, sortId=9, name="fog_item_get"};
+StatisticsManager.FOG_BATTLE_START = {groupId=StatisticsManager.GROUP_FOG, sortId=10, name="fog_battle_start"};
+StatisticsManager.FOG_BATTLE_VICTORY = {groupId=StatisticsManager.GROUP_FOG, sortId=11, name="fog_battle_victory"};
+StatisticsManager.FOG_BATTLE_FAIL = {groupId=StatisticsManager.GROUP_FOG, sortId=12, name="fog_battle_fail"};
+StatisticsManager.FOG_SHOP_OPEN = {groupId=StatisticsManager.GROUP_FOG, sortId=13, name="fog_shop_open"};
+StatisticsManager.FOG_SHOP_BUY = {groupId=StatisticsManager.GROUP_FOG, sortId=14, name="fog_shop_buy"};
+StatisticsManager.FOG_JITANG_USE = {groupId=StatisticsManager.GROUP_FOG, sortId=15, name="fog_jitang_use"};

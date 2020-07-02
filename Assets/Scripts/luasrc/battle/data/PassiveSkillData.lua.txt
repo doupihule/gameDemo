@@ -1,0 +1,48 @@
+require("game/battle/data/BattleSkillData")
+require("game/sys/func/BattleFunc")
+
+PassiveSkillData = newClass({BattleSkillData}, {name = 'PassiveSkillData'})
+
+function PassiveSkillData:__new__(skillId, level, role, skillType, relyonSkill)
+  if relyonSkill == nil then
+    relyonSkill=nil
+  end
+  self:superCall('__new__',skillId, level, role, skillType, relyonSkill)
+  self.triggerNums = 0;
+  self.triggerFrame = 0;
+  self.triggerNums = 0
+  self.skillActionArr = {}
+end
+
+function PassiveSkillData:cacheOneSkillAction(skillAction)
+  table.insert(self.skillActionArr, skillAction)
+end
+
+function PassiveSkillData:updateLevel(level)
+  self:superCall('updateLevel',level)
+  self.cfgData = BattleFunc.instance:getCfgDatas("PassiveSkill", self._skillId)
+  if self.cfgData.cdTime then
+    self._cfgSkillCd = Math:ceil(self.cfgData.cdTime * BattleFunc.miniSecondToFrame)
+  end
+  local tempArr = self.cfgData.effectParams
+  local tagStr = "PassiveSkillData" .. self._skillId
+  if tempArr then
+    if not self.skillLogicalParams then
+      self.skillLogicalParams = {}
+    end
+    self.skillLogicalParams = {}
+    local i = 0
+    repeat
+      if not self.skillLogicalParams[i+1] then
+        self.skillLogicalParams[i+1] = {}
+      end
+      local temp = tempArr[i+1]
+      local s = 0
+      repeat
+        self.skillLogicalParams[i+1][s+1] = self:getSkillValue(temp[s+1], tagStr)
+        s=s+1
+      until not(s < #temp)
+      i=i+1
+    until not(i < #tempArr)
+  end
+end

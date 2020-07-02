@@ -1,0 +1,40 @@
+require("framework/common/UserInfo")
+
+FrameRateManager = newClass({Class}, {name = 'FrameRateManager'})
+function FrameRateManager:__new__(...)
+  self:superCall('__new__', unpack({...}))
+  self.num = 0;
+  self.lowFrameFPS = 30;
+  self.highFrameFPS = 60;
+  self.readRate = 10;
+  self.mulplite = 1.5;
+end
+
+function FrameRateManager:__new__() end
+function FrameRateManager.__getters.instance()
+  if not FrameRateManager._instance then
+    FrameRateManager._instance = FrameRateManager()
+  end
+  return FrameRateManager._instance
+end
+
+function FrameRateManager:updateFrame()
+  if Laya.stage.frameRate == Laya.Stage.FRAME_SLOW then
+    return
+  end
+  self.num=self.num+1
+  if self.num % self.highFrameFPS * self.readRate == 0 then
+    local nowTime = Laya.Browser:now()
+    local disTime = nowTime - self._lastTime
+    if disTime > self.readRate * 10 * self.mulplite then
+      UserInfo.platform:setGameFrame()
+    else
+      self._lastTime = Laya.Browser:now()
+    end
+  end
+end
+
+function FrameRateManager:initData()
+  self.num = 0
+  self._lastTime = Laya.Browser:now()
+end

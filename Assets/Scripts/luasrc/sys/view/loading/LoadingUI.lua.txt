@@ -1,0 +1,211 @@
+require("framework/manager/WindowManager")
+require("utils/Global")
+require("framework/utils/ScreenAdapterTools")
+require("game/battle/view/BattleRoleView")
+
+LoadingUI = newClass({Class}, {name = 'LoadingUI'})
+
+function LoadingUI:__new__()
+  self.progress = 0;
+  self.isShowWxInfo = false;
+  self.alphaFlag = 1;
+  LoadingUI.instance = self
+  self:initView()
+  self.mainbg.mouseThrough = false
+  self.mainbg.mouseEnabled = true
+end
+
+function LoadingUI:showLoading()
+  if self.mainbg then
+    WindowManager.topUILayer:addChild(self.mainbg)
+  end
+  if WindowManager.topUILayer.numChildren > 0 then
+    WindowManager.topUILayer.mouseEnabled = true
+  end
+end
+
+function LoadingUI:hideLoading()
+  if self.mainbg then
+    WindowManager.topUILayer:removeChild(self.mainbg)
+  end
+  if WindowManager.topUILayer.numChildren == 0 then
+    WindowManager.topUILayer.mouseEnabled = false
+  end
+end
+
+function LoadingUI:initView()
+  if not self.mainbg then
+    self.mainbg = Laya.Image("static/loading_bp_beijing.png")
+    self.mainbg.width = 768
+    self.mainbg.height = 1400
+    self.mainbg.x = ScreenAdapterTools.width / 2 - ScreenAdapterTools.maxWidth / 2
+    self.mainbg.y = ScreenAdapterTools.height / 2 - ScreenAdapterTools.maxHeight / 2
+    local title = Laya.Image("static/loading_image_logo.png")
+    title.centerX = 0
+    title.top = 280
+    self.mainbg:addChildren(title)
+  end
+  if not self.clientVersionTxt then
+    self.clientVersionTxt = Laya.Label()
+    self.clientVersionTxt.text = "client_version:1.0.1"
+    self.clientVersionTxt.width = 134
+    self.clientVersionTxt.height = 16
+    self.clientVersionTxt.right = 10 + self:getHorizontalOffset()
+    self.clientVersionTxt.bottom = 12 + self:getVerticalOffset()
+    self.clientVersionTxt.color = "#ffffff"
+    self.clientVersionTxt.stroke = 1
+    self.clientVersionTxt.strokeColor = "#000000"
+    self.mainbg:addChild(self.clientVersionTxt)
+  end
+  if not self.powerlaya then
+    self.powerlaya = Laya.Label()
+    self.powerlaya.text = "Powered by LayaAir Engine"
+    self.powerlaya.width = 159
+    self.powerlaya.height = 16
+    self.powerlaya.color = "#ffffff"
+    self.powerlaya.left = 10 + self:getHorizontalOffset()
+    self.powerlaya.bottom = 12 + self:getVerticalOffset()
+    self.powerlaya.stroke = 1
+    self.powerlaya.strokeColor = "#000000"
+    self.mainbg:addChild(self.powerlaya)
+  end
+  if not self.profgBg then
+    self.profgBg = Laya.Image("static/loading_image_jindudi.png")
+    self.profgBg.sizeGrid = "17,39,7,28"
+    self.profgBg.width = 578
+    self.profgBg.centerX = 0
+    self.profgBg.bottom = 43 + self:getVerticalOffset()
+    self.mainbg:addChild(self.profgBg)
+    self.profg = Laya.Image("static/loading_image_jindu.png")
+    self.profgBg:addChild(self.profg)
+    self.profg.sizeGrid = "16,33,10,25"
+    self.profg.width = 0
+  end
+  if not self.loadingtips then
+    self.loadingtips = Laya.Label()
+    self.loadingtips.text = "资源加载加载中，请稍后..."
+    self.loadingtips.x = -33
+    self.loadingtips.y = -37.5
+    self.loadingtips.width = 640
+    self.loadingtips.height = 31
+    self.loadingtips.fontSize = 20
+    self.loadingtips.font = "Microsoft YaHei"
+    self.loadingtips.color = "#ffffff"
+    self.loadingtips.align = "center"
+    self.profgBg:addChild(self.loadingtips)
+  end
+  if not self.loadingstar then
+    self.loadingstar = Laya.Image("")
+    self.loadingstar.x = -26
+    self.loadingstar.y = -22
+    self.profgBg:addChild(self.loadingstar)
+    self.loadingicon = Laya.Image("static/loading_image_jindudiche.png")
+    self.loadingicon.x = 15
+    self.loadingicon.y = -27
+    self.loadingicon.anchorX = 0.5
+    self.loadingicon.anchorY = 0.5
+    self.loadingstar:addChild(self.loadingicon)
+  end
+  if not self.aniGroup then
+    self.aniGroup = Laya.Image()
+    self.aniGroup.centerX = 0
+    self.aniGroup.bottom = 400 + self:getVerticalOffset()
+    self.aniGroup.anchorX = 0.5
+    self.aniGroup.anchorY = 1
+    self.mainbg:addChild(self.aniGroup)
+    local bg = Laya.Image("static/loading_bp_beijing2.png")
+    bg.width = 279
+    bg.height = 38
+    bg.x = -bg.width / 2
+    bg.y = 0
+    self.aniGroup:addChild(bg)
+  end
+  if not self.roleAni then
+    self.roleAni = BattleRoleView("role_16", 0.5, 0)
+    self.aniGroup:addChild(self.roleAni)
+    self.roleAni:play("idle", true)
+  end
+end
+
+function LoadingUI:setData()
+  self.clientVersionTxt.text = "client_version:" .. Global.client_version
+  self.progress = 0
+  self.profg.width = 0
+  self:onLoop()
+  Laya.timer:loop(60, self, self.onLoop)
+  self.alphaFlag = 1
+  Laya.timer:loop(50, self, self.loadingFlash)
+end
+
+function LoadingUI:loadingFlash()
+  if self.alphaFlag then
+    self.loadingtips.alpha = self.loadingtips.alpha - 0.1
+  else
+    self.loadingtips.alpha = self.loadingtips.alpha + 0.1
+  end
+  if self.loadingtips.alpha >= 0.95 then
+    self.alphaFlag = 1
+  end
+  if self.loadingtips.alpha <= 0.05 then
+    self.alphaFlag = 0
+  end
+end
+
+function LoadingUI:onLoop()
+  if self.progress + 1 < 95 then
+    self.progress = self.progress + 1
+  end
+  if self.progress >= 100 then
+    self.progress = 100
+    Laya.timer:clearAll(LoadingUI.instance)
+  end
+  if self.profg then
+    self.profg.width = 574 * self.progress * 0.01
+  end
+  if self.loadingstar then
+    local starX = -13 + self.progress * 0.01 * 574
+    self.loadingstar.x = -13 + self.progress * 0.01 * 574
+    if self.loadingicon then
+      self.loadingicon.rotation = self.progress * 0.01 * 360
+    end
+  end
+end
+
+function LoadingUI:setProgress(progress)
+  print("Loading Progress is : " .. progress)
+  self.progress = Number((progress * 100):toFixed(2))
+  self:onLoop()
+end
+
+function LoadingUI:addProgress(progress)
+  self.progress = self.progress + progress
+end
+
+function LoadingUI:getProgress()
+  return self.progress
+end
+
+function LoadingUI:recvMsg(cmd, data)
+  local switch = {
+    
+  }
+  local casef = switch[cmd]
+  if not casef then casef = switch["default"] end
+  if casef then casef() end
+end
+
+function LoadingUI:getVerticalOffset()
+  local offset = 1400 - ScreenAdapterTools.height * 0.5
+  if offset < 0 then
+    offset = 0
+  end
+  return offset
+end
+
+function LoadingUI:getHorizontalOffset()
+  local offset = 768 - ScreenAdapterTools.width * 0.5
+  if offset < 0 then
+    offset = 0
+  end
+  return offset
+end

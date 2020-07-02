@@ -1,0 +1,447 @@
+require("game/battle/instance/InstanceMoveEntity")
+require("game/battle/instance/InstanceMoveMultyEntity")
+require("game/sys/func/BattleFunc")
+require("framework/manager/LogsManager")
+require("game/sys/consts/BattleConst")
+require("game/battle/instance/InstanceBasic")
+require("game/sys/consts/PoolCode")
+require("game/battle/trigger/SkillExpandTrigger")
+
+InstanceMove = newClass({InstanceBasic}, {name = 'InstanceMove'})
+InstanceMove.moveType_none = 0;
+InstanceMove.moveType_onePoint = 1;
+InstanceMove.moveType_multyPoint = 2;
+InstanceMove.moveType_tween = 3;
+InstanceMove.state_stand = "stand";
+InstanceMove.state_move = "move";
+function InstanceMove:__new__(controler)
+  self:superCall('__new__',controler)
+  self.movePointType = 0;
+  self.enbleRotate = false;
+  self._myState = "stand";
+  self.gravityAble = false;
+  self.landPos = BattleFunc.defaultRoleYpos;
+  self.isViewShow = true;
+  self.cfgScale = 1;
+  self.gridPos = Laya.Vector3()
+  self.speed = Laya.Vector3()
+  self.rotateSpeed = Laya.Vector3()
+  self.addSpeed = Laya.Vector3()
+  self.unitVector = Laya.Vector3()
+  self.dragForce = Laya.Vector3(1, 1, 1)
+  self.blookSpeed = Laya.Vector3(0, 0, 0)
+  self.isViewShow = true
+  self.initRotateCtnPos = Laya.Vector3()
+  self._followEffGroup = {}
+end
+
+function InstanceMove:initStand()
+  self._myState = BattleConst.state_stand
+  self.speed.x = 0
+  self.speed.y = 0
+  self.speed.z = 0
+end
+
+function InstanceMove:initMove(x, y, z, outAdjustWay)
+  if x == nil then
+    x=0
+  end
+  if y == nil then
+    y=0
+  end
+  if z == nil then
+    z=0
+  end
+  if outAdjustWay == nil then
+    outAdjustWay=false
+  end
+  self.speed.x = x
+  self.speed.y = y
+  self.speed.z = z
+  self._myState = BattleConst.state_move
+  if not outAdjustWay then
+    if x > 0 then
+      self:setViewWay(1)
+    elseif x < 0 then
+      self:setViewWay(-1)
+    end
+  end
+end
+
+function InstanceMove:initJump(y)
+  self.speed.y = y
+  self._myState = BattleConst.state_jump
+  self.gravityAble = true
+end
+
+function InstanceMove:doAiLogical()
+  self:checkMoveEnd()
+end
+
+function InstanceMove:updateSpeed()
+  if self._myState == BattleConst.state_stand then
+    return
+  end
+  self.speed.x = self:setSpeed(self.speed.x, self.addSpeed.x, self.dragForce.x)
+  if self._myState == BattleConst.state_jump then
+    self.speed.y = self:setSpeed(self.speed.y, self.addSpeed.y, self.dragForce.y)
+  end
+  self.speed.z = self:setSpeed(self.speed.z, self.addSpeed.z, self.dragForce.z)
+end
+
+function InstanceMove:setSpeed(speedSpace, addSpead, force)
+  speedSpace = speedSpace * force
+  speedSpace = speedSpace + addSpead
+  return speedSpace
+end
+
+function InstanceMove:movePos()
+  if self._myState == BattleConst.state_stand then
+    return
+  end
+  self.pos.x = self.pos.x + self.speed.x
+  self.pos.y = self.pos.y + self.speed.y
+  self.pos.z = self.pos.z + self.speed.z
+  if ((self.speed.y < 0 and self.pos.y <= self.landPos) and self._myState == BattleConst.state_jump) and self.gravityAble then
+    self:onHitLand()
+  end
+end
+
+function InstanceMove:onHitLand() end
+function InstanceMove:moveToOnePoint(x, y, z, spd, callFunc, thisObj, callParams, expandParams, movePointType)
+  if z == nil then
+    z=0
+  end
+  if spd == nil then
+    spd=0
+  end
+  if callFunc == nil then
+    callFunc=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if callParams == nil then
+    callParams=nil
+  end
+  if expandParams == nil then
+    expandParams=nil
+  end
+  if movePointType == nil then
+    movePointType=1
+  end
+  if not self._moveParams then
+    self._moveParams = InstanceMoveEntity(Laya.Vector3(x, y, z))
+  end
+  self._moveParams.expandParams = expandParams
+  self._moveParams.followTarget = nil
+  self._moveParams.totalFrame = 0
+  self._moveParams.target.x = x
+  self._moveParams.target.y = y
+  self._moveParams.target.z = z
+  if expandParams then
+    if expandParams.target then
+      self._moveParams.followTarget = expandParams.target
+      self._moveParams.offsetPos.x = x
+      self._moveParams.offsetPos.y = y
+      self._moveParams.offsetPos.z = z
+      self._moveParams:updateTargetPos()
+    end
+    if expandParams.frame then
+      self._moveParams.totalFrame = expandParams.frame
+    end
+  end
+  local temp = BattleFunc.tempPoint
+  Laya.Vector3:subtract(self._moveParams.target, self.pos, temp)
+  local distance = Laya.Vector3:scalarLength(temp)
+  if self._moveParams.totalFrame > 0 and spd == 0 then
+    spd = distance / self._moveParams.totalFrame
+  else
+    spd = spd or BattleFunc.moveSpeed
+  end
+  self._moveParams.spd = spd
+  self._moveParams.moveFrame = 0
+  self._moveParams.callParams = callParams
+  self._moveParams.callFunc = callFunc
+  self._moveParams.thisObj = thisObj
+  self:countMoveSpeed()
+  self.movePointType = movePointType
+  self:checkMoveEnd()
+end
+
+function InstanceMove:countMoveSpeed()
+  local temp = BattleFunc.tempPoint
+  Laya.Vector3:subtract(self._moveParams.target, self.pos, temp)
+  local speed = self._moveParams.spd
+  Laya.Vector3:normalize(temp, self.unitVector)
+  Laya.Vector3:scale(self.unitVector, speed, self._moveParams.initSpeed)
+  if self._moveParams.totalFrame == 0 then
+    local distance = Laya.Vector3:scalarLength(temp)
+    self._moveParams.totalFrame = Math:round(distance / speed)
+  end
+  self:initMove(self._moveParams.initSpeed.x, self._moveParams.initSpeed.y, self._moveParams.initSpeed.z)
+end
+
+function InstanceMove:moveToOnePointByEntity(enetity, movePointType, isGrid)
+  if movePointType == nil then
+    movePointType=1
+  end
+  if isGrid == nil then
+    isGrid=false
+  end
+  local x = enetity.target.x
+  local y = enetity.target.y
+  if x == nil and enetity.target.y ~= nil then
+    x = enetity.target.x
+    y = enetity.target.y
+  end
+  self:moveToOnePoint(x, y, enetity.target.z, enetity.spd, enetity.callFunc, enetity.thisObj, enetity.callParams, enetity.expandParams, movePointType)
+end
+
+function InstanceMove:moveToGroupPoints(pointArr, speed, callFunc, thisObj, expandParams, loopParams)
+  if speed == nil then
+    speed=0
+  end
+  if callFunc == nil then
+    callFunc=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if loopParams == nil then
+    loopParams=nil
+  end
+  if not self._multyparams then
+    self._multyparams = InstanceMoveMultyEntity()
+  end
+  self._multyparams:initData(pointArr, speed, callFunc, thisObj, loopParams, false)
+  self._multyparams.expandParams = expandParams
+  local param = self._multyparams:getNextpos()
+  if not param then
+    LogsManager.errorTag(nil, "没有找到当前运动的点")
+    return
+  end
+  self:moveToOnePointByEntity(param, InstanceMove.moveType_multyPoint, false)
+end
+
+function InstanceMove:checkMoveEnd()
+  if self.movePointType == InstanceMove.moveType_none then
+    return
+  end
+  self._moveParams.moveFrame=self._moveParams.moveFrame+1
+  if self._moveParams.followTarget then
+    self._moveParams:updateTargetPos()
+    self:countMoveSpeed()
+    if not self._moveParams.followTarget:checkIsUsing() then
+      self:overFinalPoint()
+      return
+    end
+  end
+  if self._moveParams.moveFrame >= self._moveParams.totalFrame then
+    self.pos.x = self._moveParams.target.x
+    self.pos.y = self._moveParams.target.y
+    self.pos.z = self._moveParams.target.z
+    if self.movePointType == InstanceMove.moveType_onePoint then
+      self:overFinalPoint()
+    else
+      local param = self._multyparams:getNextpos()
+      if not param then
+        self:overFinalPoint()
+      else
+        self:onArriveOnePoint()
+        self:moveToOnePointByEntity(param, InstanceMove.moveType_multyPoint, self._multyparams.isGrid)
+      end
+    end
+  end
+end
+
+function InstanceMove:onArriveOnePoint() end
+function InstanceMove:checkHasMoveType()
+  if self.movePointType == InstanceMove.moveType_none then
+    return false
+  end
+  return true
+end
+
+function InstanceMove:overFinalPoint()
+  self:initStand()
+  self.movePointType = InstanceMove.moveType_none
+  local callBack = nil
+  local thisObj = nil
+  if self._moveParams then
+    callBack = self._moveParams.callFunc
+    thisObj = self._moveParams.thisObj
+    self._moveParams:reset()
+    if callBack then
+      callBack:call(thisObj)
+    end
+  end
+  if self._multyparams then
+    callBack = self._multyparams.callFunc
+    thisObj = self._multyparams.thisObj
+    self._multyparams:dispose()
+    self._multyparams = nil
+    if callBack then
+      callBack:call(thisObj)
+    end
+  end
+end
+
+function InstanceMove:realShowView()
+  if self.movePointType == InstanceMove.moveType_tween then
+    return
+  end
+  self:superCall('realShowView')
+end
+
+function InstanceMove:moveToTargetRole(spd, targetRole)
+  local dx = targetRole.pos.x - self.pos.x
+  local dz = targetRole.pos.z - self.pos.z
+  local ang = Math:atan2(dz, dx)
+  local spdx = spd * Math:cos(ang)
+  local spdz = spd * Math:sin(ang)
+  self:initMove(spdx, 0, spdz)
+end
+
+function InstanceMove:createEffByParams(effectParamsArr, isFollow, isLoop, expandParams, aniSpeed)
+  if isFollow == nil then
+    isFollow=false
+  end
+  if isLoop == nil then
+    isLoop=false
+  end
+  if expandParams == nil then
+    expandParams=nil
+  end
+  if aniSpeed == nil then
+    aniSpeed=1
+  end
+  if not effectParamsArr or #effectParamsArr == 0 then
+    return
+  end
+  if not self.controler then
+    LogsManager.warn("已经放入缓存了不应该走到这里来")
+    return
+  end
+  local i = 0
+  repeat
+    local params = effectParamsArr[i+1]
+    self:createOneEffByParam(params, isFollow, isLoop, expandParams, aniSpeed)
+    i=i+1
+  until not(i < #effectParamsArr)
+end
+
+function InstanceMove:createOneEffByParam(params, isFollow, isLoop, expandParams, aniSpeed)
+  if isFollow == nil then
+    isFollow=false
+  end
+  if isLoop == nil then
+    isLoop=false
+  end
+  if expandParams == nil then
+    expandParams=nil
+  end
+  if aniSpeed == nil then
+    aniSpeed=1
+  end
+  local delayTime = Number(params[7+1]) or 0
+  params.isFollow = isFollow
+  params.isLoop = isLoop
+  params.expandParams = expandParams
+  params.aniSpeed = aniSpeed
+  if delayTime > 0 then
+    self.controler:setCallBack(BattleFunc.instance:turnMinisecondToframe(delayTime), self.delayCreateEffByParams, self, params)
+  else
+    self:delayCreateEffByParams(params)
+  end
+end
+
+InstanceMove._defaultViewSize = {0, 0};
+function InstanceMove:delayCreateEffByParams(params)
+  local isFollow = params.isFollow
+  local isLoop = params.isLoop
+  local offsetType = Number(params[2+1])
+  local offsetX = Number(params[3+1])
+  local offsetY = Number(params[4+1])
+  local effectName = params[0+1]
+  local aniIndex = Number(params[1+1])
+  local aniSpeed = params.aniSpeed or 1
+  if offsetType == 2 then
+    if not self.cfgData then
+      -- [ts2lua]self下标访问可能不正确
+      LogsManager.errorTag("cgfserror", "没有配置size,rid:", self.dataId, "类型:", self["lifeType"])
+    end
+    local viewSize = self.cfgData.size
+    if not viewSize then
+      viewSize = InstanceMove._defaultViewSize
+    end
+    offsetX = offsetX / 10000 * viewSize[1+1]
+    offsetY = -offsetY / 10000 * viewSize[0+1]
+  else
+    offsetY = offsetY * -1
+  end
+  offsetX = offsetX * self.cfgScale
+  offsetY = offsetY * self.cfgScale
+  local frame = -1
+  if not isLoop then
+    frame = self.controler.performanceControler:getEffectLength(effectName, aniIndex - 1)
+  end
+  local layerIndex = Number(params[5+1])
+  local ani = self:createEfect(effectName, aniIndex - 1, isLoop, offsetX, offsetY, 0, isFollow, layerIndex, Number(params[6+1]), frame, aniSpeed)
+  local sysFrame = Number(params[8+1])
+  if (sysFrame and sysFrame > 0) and #params > 10 then
+    -- [ts2lua]params下标访问可能不正确
+    -- [ts2lua]params下标访问可能不正确
+    ani:playSpecialSysAction(aniIndex - 1, sysFrame, Number(params[9+1]), Number(params[10]), Number(params[11]) * BattleFunc.battleViewFrameScale, aniSpeed)
+  end
+  if params.expandParams then
+    ani:setExpandParams(params.expandParams)
+  end
+  if (params.expandParams and params.expandParams.follow or isFollow) or layerIndex == 5 then
+    if params.expandParams and params.expandParams.type == SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT then
+      return
+    end
+    ani._followTarget = self
+    self:clearEffByName(ani.cacheId, true)
+    table.insert(self._followEffGroup, ani)
+  end
+end
+
+function InstanceMove:clearEffByParams(effectParams)
+  if not effectParams or #effectParams == 0 then
+    return
+  end
+  local i = 0
+  repeat
+    self:clearEffByName(PoolCode.POOL_EFFECT + effectParams[i+1][0+1] + Number(effectParams[i+1][1+1] - 1))
+    i=i+1
+  until not(i < #effectParams)
+end
+
+function InstanceMove:clearEffByName(name, clearAll)
+  if clearAll == nil then
+    clearAll=false
+  end
+  local i = #self._followEffGroup - 1
+  repeat
+    local eff = self._followEffGroup[i+1]
+    if eff.cacheId == name then
+      self._followEffGroup:splice(i, 1)
+      self.controler:destoryEffect(eff)
+      if not clearAll then
+        break
+      end
+    end
+    i=i-1
+  until not(i >= 0)
+end
+
+function InstanceMove:clearAllFollowEffect()
+  local i = 0
+  repeat
+    self.controler:destoryEffect(self._followEffGroup[i+1])
+    i=i+1
+  until not(i < #self._followEffGroup)
+  -- [ts2lua]修改数组长度需要手动处理。
+  self._followEffGroup.length = 0
+end

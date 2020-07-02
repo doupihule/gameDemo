@@ -1,0 +1,46 @@
+require("framework/func/BaseFunc")
+
+DailyDiamondFunc = newClass({BaseFunc}, {name = 'DailyDiamondFunc'})
+
+function DailyDiamondFunc.__getters.instance()
+  if not DailyDiamondFunc._instance then
+    DailyDiamondFunc._instance = DailyDiamondFunc()
+  end
+  return DailyDiamondFunc._instance
+end
+
+function DailyDiamondFunc:getCfgsPathArr()
+  return {{name="DailyDiamond_json"}}
+end
+
+function DailyDiamondFunc:getDataById(id)
+  return self:getCfgDatas("DailyDiamond_json", id)
+end
+
+function DailyDiamondFunc:getMaxId()
+  local allData = self:getAllCfgData("DailyDiamond_json")
+  local dataKeys = Object:keys(allData)
+  local maxId = "0"
+  local i = 0
+  repeat
+    if Number(dataKeys[i+1]) >= Number(maxId) then
+      maxId = dataKeys[i+1]
+    end
+    i=i+1
+  until not(i < #dataKeys)
+  return Number(maxId)
+end
+
+function DailyDiamondFunc:getNextShowTime(currentStep)
+  currentStep = Number(currentStep)
+  local i = 0
+  repeat
+    if self:getDataById(currentStep).showDiamond == 1 then
+      break
+    else
+      currentStep = currentStep + 1
+    end
+    i=i+1
+  until not(i <= self:getMaxId() - currentStep)
+  return currentStep
+end

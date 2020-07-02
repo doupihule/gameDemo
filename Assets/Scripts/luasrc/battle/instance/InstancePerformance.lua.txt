@@ -1,0 +1,529 @@
+require("game/battle/instance/InstanceMove")
+require("framework/utils/DisplayUtils")
+require("game/sys/consts/GameConsts")
+require("game/sys/consts/BattleConst")
+require("game/sys/func/BattleFunc")
+require("framework/manager/LogsManager")
+require("framework/utils/PoolTools")
+require("game/sys/consts/PoolCode")
+require("game/sys/manager/BattleLogsManager")
+require("game/battle/view/BattleRoleView")
+require("framework/utils/TableUtils")
+
+InstancePerformance = newClass({InstanceMove}, {name = 'InstancePerformance'})
+
+function InstancePerformance:__new__(controler)
+  self:superCall('__new__',controler)
+  self.childViewNums = 1;
+  self.totalViewNums = 1;
+  self.stillFrame = 0;
+  self._flashFrame = 0;
+  self.mass = 1;
+  self.diedState = 0;
+  self._leftDiedFrame = 0;
+  self._noteAlpha = 1;
+  self.targetZPos = 0;
+  self._viewPasuseValue = 0;
+  self.txtUpdateCount = 0;
+  self.shadeOffestX = 0;
+  self._followEffGroup = {}
+  self.realSize = {10, 10}
+  self._shakeParams = {frame=0, stype="x", strength=1, intervel=1, x=0, y=0}
+end
+
+function InstancePerformance:setData(data)
+  if not self.lastPos then
+    self.lastPos = Laya.Vector3()
+  end
+  self._sKillSppedUpMap = {}
+  self:superCall('setData',data)
+  self._viewPasuseValue = 0
+  if self._myView then
+    self._myView.alpha = 1
+    self._myView:setChildViewPos(0, 0)
+  end
+  self._noteAlpha = 1
+  self._leftDiedFrame = 0
+  if self._myView2 then
+    self._myView2.alpha = 1
+    self._myView:setChildViewPos(0, 0)
+  end
+  self._aniPlaySpeed = 1
+end
+
+function InstancePerformance:doAiLogical()
+  self:superCall('doAiLogical')
+  self:doPerformance()
+  self:doDiedEffect()
+  self:doShadeFollow()
+end
+
+function InstancePerformance:doPerformance()
+  self:checkShake()
+end
+
+function InstancePerformance:checkShake()
+  local shakeParams = self._shakeParams
+  if shakeParams.frame <= 0 then
+    return
+  end
+  self.controler.cameraControler:updateShakeParams(shakeParams)
+  self._myView:setChildViewPos(shakeParams.x * self._viewWay, shakeParams.y)
+end
+
+function InstancePerformance:addTxtCreateTime()
+  self.txtUpdateCount = self.txtUpdateCount + 5
+end
+
+function InstancePerformance:doShadeFollow()
+  if not self._shade then
+    return
+  end
+  self._shade.x = self.pos.x + self.shadeOffestX
+  self._shade.y = self.pos.z
+end
+
+function InstancePerformance:createShade()
+  self._shade = Laya.Image()
+  local scale = BattleFunc.instance:getShadeScale(self.cfgData.size[1+1] * self.cfgScale)
+  local formation = BattleRoleView.getPosArrByViewNums(self.childViewNums)
+  local i = 0
+  repeat
+    local childShade = self.controler:createShade()
+    childShade:scale(scale, scale)
+    local posOffset = formation[i+1]
+    local xSpace = self._myView._xSpace
+    local ySpace = self._myView._ySpace
+    childShade:pos(xSpace * posOffset[0+1] + 2, ySpace * posOffset[1+1] + 3, true)
+    childShade:scale(scale, scale, true)
+    self._shade:addChild(childShade)
+    i=i+1
+  until not(i < self.childViewNums)
+  self.controler.layerControler.a21:addChild(self._shade)
+  self._shade.x = self.pos.x
+  self._shade.y = self.pos.z
+end
+
+function InstancePerformance:setViewName(value)
+  self.viewName = value
+  local frameCfg = BattleFunc.instance:getCfgDatasByKey("RoleAct", value, "act")
+  if not frameCfg then
+    self._frameDatas = {}
+    return
+  end
+  if self._frameDatas then
+    return
+  end
+  self._frameDatas = {}
+  local i = 0
+  repeat
+    local info = frameCfg[i+1]
+    -- [ts2lua]self._frameDatas下标访问可能不正确
+    self._frameDatas[info[0+1]] = Number(info[1+1])
+    i=i+1
+  until not(i < #frameCfg)
+end
+
+function InstancePerformance:doDiedEffect()
+  if self._leftDiedFrame > 0 then
+    local yushu = self._leftDiedFrame % 4
+    self._noteAlpha = self._noteAlpha - 0.05
+    local disAlpha = 0.2
+    if yushu == 0 then
+      self._myView.alpha = self._noteAlpha + disAlpha
+    elseif yushu == 2 then
+      self._myView.alpha = self._noteAlpha - disAlpha
+    end
+    self._leftDiedFrame=self._leftDiedFrame-1
+    if self._myView2 then
+      self._myView2.alpha = self._myView.alpha
+    end
+    if self._leftDiedFrame == 0 then
+      self._myView.alpha = 0
+      self:doEndDiedLogical()
+    end
+  end
+end
+
+function InstancePerformance:doEndDiedLogical()
+  self.diedState = BattleConst.DIED_STATE_OVER
+  if self.hpBar then
+    self.hpBar:delayHide()
+  end
+  if self._shade then
+    self._shade.visible = false
+  end
+end
+
+function InstancePerformance:doRelivePerformance()
+  self:setViewAlpha(0.3)
+  self.controler.tweenControler:setOneTween(30, self, {a=1}, BattleConst.TWEEN_ALPHA)
+end
+
+function InstancePerformance:startDoDiedPerformance()
+  self:initStand()
+  -- [ts2lua]self._frameDatas下标访问可能不正确
+  local frame = self._frameDatas[BattleConst.LABEL_DEAD]
+  if self.lifeType ~= BattleConst.LIFE_LANDBUILD and frame then
+    frame = self:getActionFrame(BattleConst.LABEL_DEAD)
+    self:playAction(BattleConst.LABEL_DEAD, false, false)
+    self.controler:setCallBack(frame, self.onDeadActionEnd, self)
+  else
+    self:onDeadActionEnd()
+  end
+end
+
+function InstancePerformance:onDeadActionEnd()
+  self._leftDiedFrame = BattleFunc.deadLastFrame
+  self._noteAlpha = 1
+  self.controler.tweenControler:clearOneTween(self)
+end
+
+function InstancePerformance:hitedflash(frame)
+  if frame == nil then
+    frame=4
+  end
+  DisplayUtils.setViewLittleRed(self._myView)
+  self._myView2 and DisplayUtils.setViewLittleRed(self._myView2)
+  self.controler:setCallBack(frame, self.clearFlash, self)
+end
+
+function InstancePerformance:clearFlash()
+  DisplayUtils.clearViewFilter(self._myView)
+  self._myView2 and DisplayUtils.clearViewFilter(self._myView2)
+end
+
+function InstancePerformance:onHitedFly(attacker, impulse, lastFrame)
+  if lastFrame == nil then
+    lastFrame=0
+  end
+  
+
+end
+
+function InstancePerformance:onHitedBack(attacker, impulse, impulseZ, lastFrame)
+  if lastFrame == nil then
+    lastFrame=0
+  end
+  if not impulseZ then
+    impulseZ = 0
+  end
+  if self._myState == BattleConst.state_jump then
+    return
+  end
+  if self.diedState ~= BattleConst.DIED_STATE_NONE then
+    return
+  end
+  local speed = impulse / self.mass / GameConsts.gameFrameRate
+  local disx = attacker.pos.x - self.pos.x
+  local way = -1
+  if disx > 0 then
+    way = -1
+  else
+    way = 1
+  end
+  local speedz = 0
+  if impulseZ ~= 0 then
+    local disz = attacker.pos.z - self.pos.z
+    local wayz = -1
+    if disz > 0 then
+      wayz = -1
+    else
+      wayz = 1
+    end
+    speedz = impulseZ / self.mass / GameConsts.gameFrameRate * wayz
+  end
+  self.controler:clearCallBack(self, self.resumeIdleAction)
+  self.controler:clearCallBack(self, self.resumeHitedBody)
+  self:changeViewPauseValue(1)
+  self.dragForce.x = 0.95
+  self.dragForce.z = 0.95
+  self:setViewWay(-way)
+  self:initMove(speed * way, 0, speedz, true)
+  self.controler:setCallBack(lastFrame, self.resumeHitedBody, self)
+  self.controler.cameraControler:shakeCamera(2, nil, 1, 1)
+end
+
+function InstancePerformance:resumeHitedBody()
+  self.dragForce.x = 1
+  self:initStand()
+  self:changeViewPauseValue(-1)
+  self:playAction(BattleConst.LABEL_IDLE, true, false, true)
+end
+
+function InstancePerformance:onBeHitFly(params, attacker)
+  if self.lifeType == BattleConst.LIFE_AIRHERO then
+    return
+  end
+  if self.diedState ~= BattleConst.DIED_STATE_NONE then
+    return
+  end
+  if self._myState == BattleConst.state_jump then
+    return
+  end
+  self.gravityAble = true
+  local disx = attacker.pos.x - self.pos.x
+  local way = -1
+  if disx > 0 then
+    way = -1
+  else
+    way = 1
+  end
+  local dis = self.mass / 100 * params[3+1]
+  local flyDisTance = params[1+1] / 10000 * dis
+  local maxFlyDis = params[2+1]
+  if flyDisTance > maxFlyDis then
+    flyDisTance = maxFlyDis
+  end
+  local spdValue = BattleFunc.instance:turnSpeedToFrame(params[0+1])
+  local moveFrame = Math:ceil(dis / spdValue)
+  self:initMove(spdValue * way, 0, 0, true)
+  local halft = moveFrame / 2
+  self.addSpeed.y = flyDisTance * 2 / halft * halft
+  self:initJump(-self.addSpeed.y * halft)
+  local slideSpeed = BattleFunc.instance:turnSpeedToFrame(params[4+1]) * way
+  local addSpeed = BattleFunc.instance:turnAddSpeedToFrame(params[5+1]) * way
+  self.controler:setCallBack(moveFrame, self.onStartSlide, self, {slideSpeed, addSpeed}, true)
+end
+
+function InstancePerformance:onStartSlide(speedValue, addSpeed)
+  self.pos.y = 0
+  self.gravityAble = false
+  local frame = Math:floor(Math:abs(speedValue / addSpeed))
+  self:initMove(speedValue, 0, 0, true)
+  self.addSpeed.x = addSpeed
+  self.controler:setCallBack(frame, self.resumeHitedBody, self)
+end
+
+function InstancePerformance:playAction(label, loop, resumeIdle, force, start, tsvar_end)
+  if resumeIdle == nil then
+    resumeIdle=true
+  end
+  if force == nil then
+    force=false
+  end
+  if start == nil then
+    start=0
+  end
+  if tsvar_end == nil then
+    tsvar_end=0
+  end
+  if self.label == label and not force then
+    return
+  end
+  self._viewPasuseValue = 0
+  self.label = label
+  if not self._myView then
+    return
+  end
+  self._myView:play(label, loop, force, start, tsvar_end)
+  self._myView2 and self._myView2:play(label, loop, force, start, tsvar_end)
+  if not loop then
+    if resumeIdle then
+      self.controler:setCallBack(self:getActionFrame(label), self.resumeIdleAction, self)
+    end
+  end
+end
+
+function InstancePerformance:playSpecialSysAction(actionName, sysTime, startTime, endTime, actionLength)
+  if actionLength == nil then
+    actionLength=0
+  end
+  local totalframe = self:superCall('playSpecialSysAction',actionName, sysTime, startTime, endTime, actionLength, self._aniPlaySpeed)
+  self._viewPasuseValue = 0
+  self.label = actionName
+  self.controler:setCallBack(Math:round(totalframe / self._aniPlaySpeed), self.resumeIdleAction, self)
+  return totalframe
+end
+
+function InstancePerformance:onStartActionComp()
+  local aniParams = self._tempAnimObj
+  if self.label ~= aniParams.actionName then
+    return
+  end
+  self._myView:play(self._tempAnimObj.actionName, true, true, aniParams.startTime, aniParams.endTime)
+end
+
+function InstancePerformance:onSysActionComp()
+  local aniParams = self._tempAnimObj
+  if self.label ~= aniParams.actionName then
+    return
+  end
+  self._myView:play(self._tempAnimObj.actionName, false, true, aniParams.endTime)
+end
+
+function InstancePerformance:resumeAction()
+  if self.controler._isGamePause or self.controler.isSkillPause then
+    return
+  end
+  if self._viewPasuseValue > 0 then
+    return
+  end
+  self._myView:resume()
+  self._myView2 and self._myView:resume()
+  self:playAction(BattleConst.LABEL_IDLE, true, false, true)
+end
+
+function InstancePerformance:stopAction()
+  self._myView:stop()
+  self._myView2 and self._myView:stop()
+end
+
+function InstancePerformance:changeViewPauseValue(value)
+  self._viewPasuseValue = self._viewPasuseValue + value
+  if self._viewPasuseValue < 0 then
+    self._viewPasuseValue = 0
+  end
+  if self._viewPasuseValue > 0 then
+    self:stopAction()
+  else
+    self:resumeAction()
+  end
+end
+
+function InstancePerformance:insterOneBuff(buff)
+  self:createEffByParams(buff.cfgData.buffEffect, true, true)
+  if buff.cfgData.sound then
+    self:playSound(buff.cfgData.sound)
+  end
+end
+
+function InstancePerformance:clearOneBuff(buff)
+  self:clearEffByParams(buff.cfgData.buffEffect)
+end
+
+function InstancePerformance:adjustToTargetZpos()
+  local disZ = self.targetZPos - self.pos.z
+  local absDisz = Math:abs(disZ)
+  if absDisz > 2 then
+    self.speed.z = absDisz / disZ
+  end
+end
+
+function InstancePerformance:resumeIdleAction()
+  if self._myState ~= BattleConst.state_stand then
+    return
+  end
+  self:playAction(BattleConst.LABEL_IDLE, true, false, true)
+end
+
+function InstancePerformance:getActionFrame(label)
+  -- [ts2lua]self._frameDatas下标访问可能不正确
+  local frame = self._frameDatas[label]
+  if not frame then
+    BattleLogsManager.battleWarn("动作标签没有配置长度,id:", self.dataId, "label:", label)
+    frame = 10
+  end
+  return frame * BattleFunc.battleViewFrameScale
+end
+
+function InstancePerformance:resumeToLastPos()
+  self:setPos(self.lastPos.x, self.lastPos.y, self.lastPos.z)
+end
+
+function InstancePerformance:setLastPos(x, y, z)
+  self.lastPos.x = x
+  self.lastPos.y = y
+  self.lastPos.z = z
+end
+
+function InstancePerformance:movePos()
+  self:superCall('movePos')
+  if self.pos.z > BattleFunc.battleDownY then
+    self.pos.z = BattleFunc.battleDownY
+  elseif self.pos.z < BattleFunc.battleUpY then
+    self.pos.z = BattleFunc.battleUpY
+  end
+end
+
+function InstancePerformance:createSoundByParams(soundCfgs)
+  if not soundCfgs or #soundCfgs == 0 then
+    return
+  end
+  local i = 0
+  repeat
+    local cfgs = soundCfgs[i+1]
+    local delayFrame = BattleFunc.instance:turnMinisecondToframe(cfgs[1+1])
+    local times = Number(cfgs[2+1])
+    local inteval = BattleFunc.instance:turnMinisecondToframe(cfgs[3+1])
+    self.controler:setLastCallBack(delayFrame, inteval, times, self.playSound, self, cfgs[0+1])
+    i=i+1
+  until not(i < #soundCfgs)
+end
+
+function InstancePerformance:playSound(str)
+  self.controler:playSound(str)
+end
+
+function InstancePerformance:setShakeParams(shakeFrame, style, strength, intervel)
+  if style == nil then
+    style=0
+  end
+  if strength == nil then
+    strength=3
+  end
+  if intervel == nil then
+    intervel=2
+  end
+  if self._shakeParams.frame > 0 then
+    return
+  end
+  self._shakeParams.frame = shakeFrame
+  self._shakeParams.style = style
+  self._shakeParams.strength = strength
+  self._shakeParams.intervel = intervel
+end
+
+function InstancePerformance:shakeCameraByParams(params)
+  local frame = Number(params[3+1])
+  BattleLogsManager.battleEcho("battle,被硬直了", TableUtils.safelyJsonStringfy(params))
+  self:setShakeParams(frame, Number(params[2+1]), Number(params[4+1]), Number(params[5+1]))
+end
+
+function InstancePerformance:setSkillSpeedUpValue(skillId, value)
+  -- [ts2lua]self._sKillSppedUpMap下标访问可能不正确
+  local tempValue = self._sKillSppedUpMap[skillId]
+  if tempValue == nil then
+    tempValue = 10000
+  end
+  tempValue = tempValue + value
+  if tempValue < 0 then
+    tempValue = 0
+  end
+  -- [ts2lua]self._sKillSppedUpMap下标访问可能不正确
+  self._sKillSppedUpMap[skillId] = tempValue
+end
+
+function InstancePerformance:getSkillSpeedUpValue(skillId)
+  -- [ts2lua]self._sKillSppedUpMap下标访问可能不正确
+  local tempValue = self._sKillSppedUpMap[skillId]
+  if tempValue == nil then
+    tempValue = 10000
+  end
+  if tempValue < 0 then
+    LogsManager.errorTag("技能速率不能为0,设置最低速率为30%")
+    tempValue = 3000
+  end
+  return tempValue / 10000
+end
+
+function InstancePerformance:onSetToCache()
+  self:superCall('onSetToCache')
+  self:clearAllFollowEffect()
+  if self._shade then
+    self._shade:removeSelf()
+    local i = self.totalViewNums - 1
+    repeat
+      local childShade = self._shade:getChildAt(i)
+      PoolTools.cacheItem(PoolCode.POOL_SHADE, childShade)
+      childShade:removeSelf()
+      i=i-1
+    until not(i >= 0)
+    self._shade = nil
+  end
+  self:clearFlash()
+end
+
+function InstancePerformance:checkCanMove()
+  return self.lifeType ~= BattleConst.LIFE_JIDI and self.lifeType ~= BattleConst.LIFE_LANDBUILD
+end

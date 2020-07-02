@@ -1,0 +1,847 @@
+require("game/battle/controler/BattleLayerControler")
+require("game/battle/controler/BattleControler")
+require("game/battle/controler/RefreshControler")
+require("game/battle/instance/InstanceHero")
+require("game/battle/instance/InstanceMonster")
+require("framework/utils/PoolTools")
+require("game/sys/consts/PoolCode")
+require("framework/utils/TableUtils")
+require("game/sys/func/BattleFunc")
+require("framework/common/Message")
+require("game/sys/event/BattleEvent")
+require("framework/utils/RandomUtis")
+require("game/sys/func/LevelFunc")
+require("game/battle/instance/InstanceEffect")
+require("game/battle/controler/BattleMapControler")
+require("game/sys/consts/BattleConst")
+require("framework/manager/SoundManager")
+require("game/battle/controler/BattleStatisticsControler")
+require("game/battle/view/BattleRoleView")
+require("game/battle/view/RoleHealthBar")
+require("game/battle/trigger/BuffTrigger")
+require("game/battle/instance/InstanceBullet")
+require("game/sys/manager/BattleLogsManager")
+require("game/battle/instance/InstancePlayer")
+require("game/battle/data/BattleSkillData")
+require("game/battle/trigger/ChooseTrigger")
+require("framework/manager/LogsManager")
+require("game/sys/consts/ResourceConst")
+require("game/battle/data/PassiveSkillData")
+require("game/battle/trigger/PassiveSkillTrigger")
+require("game/battle/controler/BattleGuideControler")
+require("framework/common/kakura/Client")
+require("game/battle/instance/InstanceHome")
+require("game/sys/func/GlobalParamsFunc")
+require("game/sys/model/RolesModel")
+require("game/battle/view/RoleBuffBar")
+require("game/battle/trigger/ConditionTrigger")
+require("game/sys/func/FogFunc")
+require("game/sys/model/FogModel")
+
+BattleLogicalControler = newClass({BattleControler}, {name = 'BattleLogicalControler'})
+
+function BattleLogicalControler:__new__(ctn, ui, gameMode)
+  if gameMode == nil then
+    gameMode=1
+  end
+  self:superCall('__new__',ctn)
+  self.gameMode = BattleConst.battle_game_mode_auto;
+  self.hasPosDirty1 = false;
+  self.hasPosDirty2 = false;
+  self.frontPos2 = 0;
+  self.startTime = 0;
+  self.isGameOver = false;
+  self.gameMode = gameMode
+  self.isGameOver = false
+  BuffTrigger.init()
+  Message.instance:add(BattleEvent.BATTLEEVENT_CONTINUE_BATTLE, self)
+  self.campArr_1 = {}
+  self.campArr_2 = {}
+  self.diedArr_1 = {}
+  self.diedArr_2 = {}
+  self.battleUI = ui
+  self.globalPassiveAttrMap = {}
+  local time = Laya.Browser:now()
+  BattleLogsManager.battleEcho("battle 设置随机种子:", time, "用来做复盘用")
+  RandomUtis.setOneRandomYinzi(time, BattleFunc.battleRandomIndex)
+  self.refreshControler = RefreshControler(self)
+  self.mapControler = BattleMapControler(self)
+  self.statistControler = BattleStatisticsControler(self)
+  self.layerControler = BattleLayerControler(self, ctn)
+  self.guideControler = BattleGuideControler(self)
+  self.passive = nil
+  self.globalAttrMap = {}
+end
+
+function BattleLogicalControler:setData(data)
+  self.statistControler:setData()
+  self.battleData = data
+  self.battleState = BattleConst.battleState_in
+  self.frontPos2 = 0
+  self._isGamePause = false
+  self.tweenControler:setData()
+  self.startTime = Client.instance.serverTime
+  if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
+    self:setNormalMap()
+  elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+    self:setWarMap()
+  end
+  self.cameraControler:updateCtnPos()
+end
+
+function BattleLogicalControler:setNormalMap()
+  self.levelCfgData = LevelFunc.instance:getLevelInfoById(self.battleData.levelId)
+  self.mapControler:setData(self.levelCfgData.sceneId or "1")
+end
+
+function BattleLogicalControler:setWarMap()
+  local mapId = nil
+  if FogFunc.enemyCell then
+    local event = FogFunc.enemyCell.eventData
+    mapId = FogFunc.instance:getCfgDatasByKey("Enemy", event.params[0+1], "sceneId")
+  else
+    LogsManager.errorTag("", "没有当前的敌人事件格子")
+  end
+  self.mapControler:setData(mapId or "1")
+end
+
+function BattleLogicalControler:initGame()
+  self.cameraControler:setData()
+  self.refreshControler:initData()
+  Message.instance:send(BattleEvent.BATTLEEVENT_BATTLESTART)
+  Laya.timer:frameLoop(1, self, self.onceUpdateFrame)
+end
+
+function BattleLogicalControler:updateFrame()
+  if self._isGamePause then
+    return
+  end
+  if self._isDisposed then
+    return
+  end
+  self:superCall('updateFrame')
+end
+
+function BattleLogicalControler:playSound(soundName, lastTime)
+  if lastTime == nil then
+    lastTime=-1
+  end
+  if lastTime == 0 then
+    SoundManager.playSE(soundName, 1)
+  else
+    SoundManager.playSE(soundName, 0)
+    if lastTime > 0 then
+      self:setCallBack(lastTime, self.stopSound, self, soundName)
+    end
+  end
+end
+
+function BattleLogicalControler:playSoundByParams(params)
+  self:playSound(params[2+1], Number(params[3+1]))
+end
+
+function BattleLogicalControler:stopSound(soundName)
+  SoundManager.stopMusicOrSound(soundName)
+end
+
+function BattleLogicalControler:createInstance(data, cacheId, model, classModel, resName, x, y, z, viewScale, viewIndex)
+  if viewScale == nil then
+    viewScale=1
+  end
+  if viewIndex == nil then
+    viewIndex=0
+  end
+  local instance = PoolTools.getItem(cacheId)
+  if instance then
+    instance.controler = self
+    instance:setPos(x, y, z)
+    if instance._myView and instance._myView._viewScale ~= viewScale then
+      instance._myView:setItemViewScale(viewScale)
+    end
+    instance:setData(data)
+  else
+    local view = nil
+    instance = classModel(self)
+    instance.cacheId = cacheId
+    if resName then
+      local expandView = nil
+      local viewName = resName
+      if type(resName) == "string" then
+        view = BattleRoleView(resName, viewScale, viewIndex)
+      else
+        view = BattleRoleView(resName[0+1], viewScale, viewIndex)
+        viewName = resName[0+1]
+        if #resName > 1 then
+          expandView = BattleRoleView(resName[1+1], viewScale, viewIndex)
+          instance:setView2(expandView)
+        end
+      end
+      instance:setViewName(viewName)
+      instance:setView(view)
+    end
+    instance:setPos(x, y, z)
+    instance:setData(data)
+  end
+  return instance
+end
+
+function BattleLogicalControler:createEffect(data)
+  local cacheId = PoolCode.POOL_EFFECT + data.id + data.index
+  local cacheItem = self.performanceControler:getCacheEffect(cacheId)
+  if not cacheItem then
+    cacheItem = self:createInstance(data, cacheId, BattleConst.model_effect, InstanceEffect, data.id, 0, 0, 0, BattleFunc.defaultScale)
+  else
+    cacheItem:setData(data)
+  end
+  return cacheItem
+end
+
+function BattleLogicalControler:preCreateEffect(name, frame)
+  if frame == nil then
+    frame=10
+  end
+  local eff = self:createEffect({id=name, index=0})
+  eff:setLastFrame(frame)
+  eff:setPos(10000, 100000, 10000)
+end
+
+function BattleLogicalControler:createBullet(id, owner, skillAction, x, y, rotation, targetRole, offz)
+  if offz == nil then
+    offz=0
+  end
+  local cacheId = PoolCode.POOL_BUTTLE + id
+  local resname = BattleFunc.instance:getCfgDatasByKey("Bullet", id, "model", true)
+  local data = {id=id}
+  local cacheItem = self:createInstance(data, cacheId, BattleConst.model_bullet, InstanceBullet, resname, x, y, owner.pos.z + offz, BattleFunc.defaultScale * owner.cfgScale)
+  cacheItem:setOwner(owner, skillAction, rotation, targetRole)
+  cacheItem:setZorderOffset(owner.zorderOffset)
+  table.insert(self._allInstanceArr, cacheItem)
+  if cacheItem:getView() then
+    self.layerControler.a22:addChild(cacheItem:getView())
+  end
+  return nil
+end
+
+function BattleLogicalControler:createRole(id, data, lifeType, camp, offestX, offestY)
+  if offestX == nil then
+    offestX=0
+  end
+  if offestY == nil then
+    offestY=0
+  end
+  local cacheId = PoolCode.POOL_ROLE + id .. "_" .. data.level .. "_" .. data.starLevel .. "_" .. lifeType .. "_" .. camp
+  local scale = 1
+  local resname = "role_1002"
+  if not data.id then
+    data.id = id
+  end
+  local modelName = nil
+  local classObj = nil
+  local cfgs = BattleFunc.instance:getCfgDatas("Role", id)
+  if camp == BattleConst.ROLEGROUP_MYSELF then
+    modelName = BattleConst.model_role
+    classObj = InstanceHero
+  else
+    modelName = BattleConst.model_monster
+    classObj = InstanceMonster
+  end
+  resname = cfgs.spine
+  scale = cfgs.scale / 10000 or 1
+  local tempPos = BattleFunc.tempPoint
+  self:getPosByTypeAndCamp(camp, lifeType, tempPos, offestX, offestY, cfgs.warHeroplace or 1)
+  local ypos = 0
+  if lifeType == BattleConst.LIFE_AIRHERO then
+    ypos = -BattleFunc.airArmyHigh
+    -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+    if not BattleFunc.CreateRoleIndex[BattleConst.LIFE_AIRHERO] then
+      -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+      BattleFunc.CreateRoleIndex[BattleConst.LIFE_AIRHERO] = 0
+    end
+    -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+    -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+    -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+    -- [ts2lua]lua中0和空字符串也是true，此处BattleFunc.CreateRoleIndex[BattleConst.LIFE_AIRHERO] + 1 > #BattleFunc.landArmyStartYLocation - 1需要确认
+    BattleFunc.CreateRoleIndex[BattleConst.LIFE_AIRHERO] = (BattleFunc.CreateRoleIndex[BattleConst.LIFE_AIRHERO] + 1 > #BattleFunc.landArmyStartYLocation - 1 and {0} or {BattleFunc.CreateRoleIndex[BattleConst.LIFE_AIRHERO] + 1})[1]
+  else
+    -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+    if not BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] then
+      -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+      BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] = 0
+    end
+    -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+    -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+    -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+    -- [ts2lua]lua中0和空字符串也是true，此处BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] + 1 > #BattleFunc.landArmyStartYLocation - 1需要确认
+    BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] = (BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] + 1 > #BattleFunc.landArmyStartYLocation - 1 and {0} or {BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] + 1})[1]
+  end
+  local viewIndex = BattleFunc.instance:getCfgDatasByKey("RoleUpdate", id, data.level).body or 0
+  if camp == BattleConst.ROLEGROUP_ENEMY and BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+    viewIndex = 9
+  end
+  local cacheItem = self:createInstance(data, cacheId, modelName, classObj, resname, tempPos.x, ypos, tempPos.z, BattleFunc.defaultScale * scale, viewIndex)
+  self.layerControler.a22:addChild(cacheItem:getView())
+  if cacheItem._myView2 then
+    self.layerControler.a22:addChild(cacheItem._myView2)
+  end
+  table.insert(self._allInstanceArr, cacheItem)
+  cacheItem:setCamp(camp)
+  cacheItem:setLifeType(lifeType)
+  cacheItem.hpBar = self:createHealthBar(cacheItem.camp, cacheItem)
+  cacheItem.hpBar:followTarget()
+  cacheItem.buffBar = self:createBuffBar(cacheItem.camp, cacheItem)
+  cacheItem.buffBar:followTarget()
+  -- [ts2lua]self下标访问可能不正确
+  table.insert(self["campArr_" .. camp], cacheItem)
+  if camp == BattleConst.ROLEGROUP_ENEMY then
+    cacheItem:setViewWay(-1)
+  else
+    cacheItem:setViewWay(1)
+  end
+  PassiveSkillTrigger.runAllPassiveGlobalAttr(self.globalPassiveAttrMap, cacheItem, 1)
+  local passiveSkills = cacheItem.passiveSkills
+  if passiveSkills then
+    local i = 0
+    repeat
+      self:insterGlobalPassive(passiveSkills[i+1])
+      i=i+1
+    until not(i < #passiveSkills)
+  end
+  if camp == BattleConst.ROLEGROUP_MYSELF then
+    if self.battleUI.battleAdditionId and (self.battleUI.battleAdditionId == BattleConst.battle_start_attack_add or self.battleUI.battleAdditionId == BattleConst.battle_start_life_add) then
+      local battleAdditionId = self.battleUI.battleAdditionId
+      local skillId = LevelFunc.instance:getBattleAddtionoByTwoId(battleAdditionId, "addtionNub")
+      local passive = PassiveSkillData(skillId, 1, cacheItem, BattleConst.skill_kind_passive)
+      self:insterGlobalPassive(passive)
+      self.passive = passive
+    end
+  end
+  if camp == BattleConst.ROLEGROUP_ENEMY and BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+    local level = FogModel.instance:getCurLayer() + 1
+    local passivSkill = data.passivSkill
+    if passivSkill then
+      local passiveData = nil
+      local i = 0
+      repeat
+        passiveData = PassiveSkillData(passivSkill[i+1], level, cacheItem, BattleConst.skill_kind_passive)
+        self:insterGlobalPassive(passiveData)
+        i=i+1
+      until not(i < #passivSkill)
+    end
+  end
+  if cacheItem.attrData.hasDataChange then
+    cacheItem.attrData:countAllAttr()
+  end
+  if camp == BattleConst.ROLEGROUP_MYSELF then
+    if self.battleUI.battleAdditionId and self.battleUI.battleAdditionId == BattleConst.battle_start_life_add then
+      local battleAdditionId = self.battleUI.battleAdditionId
+      cacheItem.hp = cacheItem.attrData:getOneAttr(BattleConst.attr_maxHp)
+    end
+  end
+  if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
+    ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_createMySelf, cacheItem)
+  end
+  return cacheItem
+end
+
+function BattleLogicalControler:createHome(id, data, lifeType, camp, offestX, offestY)
+  if offestX == nil then
+    offestX=0
+  end
+  if offestY == nil then
+    offestY=0
+  end
+  local cacheId = PoolCode.POOL_HOME + id .. "_" .. lifeType .. "_" .. camp
+  local scale = 1
+  local resname = "role_1000"
+  if not data.id then
+    data.id = id
+  end
+  local modelName = BattleConst.model_home
+  local classObj = InstanceHome
+  local cfgs = BattleFunc.instance:getCfgDatas("Role", id)
+  resname = cfgs.spine
+  scale = cfgs.scale / 10000 or 1
+  local tempPos = BattleFunc.tempPoint
+  if camp == BattleConst.ROLEGROUP_MYSELF then
+    tempPos.x = GlobalParamsFunc.instance:getDataNum("myHomeLocation")
+  else
+    tempPos.x = self.mapControler._maxSceneWidth - GlobalParamsFunc.instance:getDataNum("enemyHomeLocation")
+  end
+  tempPos.z = BattleFunc.battleCenterY
+  local ypos = 0
+  local viewIndex = BattleFunc.instance:getCfgDatasByKey("RoleUpdate", id, data.level).body or 0
+  if camp == BattleConst.ROLEGROUP_ENEMY and BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+    viewIndex = 9
+  end
+  local cacheItem = self:createInstance(data, cacheId, modelName, classObj, resname, tempPos.x, ypos, tempPos.z, BattleFunc.defaultScale * scale, viewIndex)
+  self.layerControler.a22:addChild(cacheItem:getView())
+  if cacheItem._myView2 then
+    self.layerControler.a22:addChild(cacheItem._myView2)
+  end
+  table.insert(self._allInstanceArr, cacheItem)
+  cacheItem:setCamp(camp)
+  cacheItem:setLifeType(lifeType)
+  cacheItem.hpBar = self:createHealthBar(cacheItem.camp, cacheItem)
+  cacheItem.hpBar:followTarget()
+  -- [ts2lua]self下标访问可能不正确
+  table.insert(self["campArr_" .. camp], cacheItem)
+  if camp == BattleConst.ROLEGROUP_ENEMY then
+    cacheItem:setViewWay(-1)
+  else
+    cacheItem:setViewWay(1)
+  end
+  PassiveSkillTrigger.runAllPassiveGlobalAttr(self.globalPassiveAttrMap, cacheItem, 1)
+  local passiveSkills = cacheItem.passiveSkills
+  if passiveSkills then
+    local i = 0
+    repeat
+      self:insterGlobalPassive(passiveSkills[i+1])
+      i=i+1
+    until not(i < #passiveSkills)
+  end
+  if camp == BattleConst.ROLEGROUP_MYSELF then
+    if self.battleUI.battleAdditionId and self.battleUI.battleAdditionId == BattleConst.battle_start_homeCd then
+      local battleAdditionId = self.battleUI.battleAdditionId
+      local skillId = LevelFunc.instance:getBattleAddtionoByTwoId(battleAdditionId, "addtionNub")
+      local passive = PassiveSkillData(skillId, 1, cacheItem, BattleConst.skill_kind_passive)
+      self:insterGlobalPassive(passive)
+      self.passive = passive
+    end
+    if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+      local level = FogModel.instance:getBusLevel()
+      local passiveSkillId = FogFunc.instance:getCfgDatasByKey("BusUpGrade_json", level, "passiveSkill")
+      if passiveSkillId then
+        local passive = PassiveSkillData(passiveSkillId, level, cacheItem, BattleConst.skill_kind_passive)
+        self:insterGlobalPassive(passive)
+      end
+      if BattleFunc.fog_battleStart_passive then
+        local passive1 = PassiveSkillData(BattleFunc.fog_battleStart_passive, 1, cacheItem, BattleConst.skill_kind_passive)
+        self:insterGlobalPassive(passive1)
+        BattleFunc.fog_battleStart_passive = nil
+      end
+    end
+  end
+  if cacheItem.attrData.hasDataChange then
+    cacheItem.attrData:countAllAttr()
+  end
+  return cacheItem
+end
+
+function BattleLogicalControler:createSummoned(id, data, x, z, fromRole, liveFrame)
+  if liveFrame == nil then
+    liveFrame=-1
+  end
+  local cacheId = PoolCode.POOL_MONSTER + id .. "_" .. data.level .. "_" .. data.starLevel
+  local cfgData = BattleFunc.instance:getCfgDatas("Role", id)
+  local resname = cfgData.spine
+  if not data.id then
+    data.id = id
+  end
+  local scale = cfgData.scale / 10000
+  local viewIndex = BattleFunc.instance:getCfgDatasByKey("RoleUpdate", id, data.level).body or 0
+  local cacheItem = self:createInstance(data, cacheId, BattleConst.model_role, InstanceMonster, resname, x, 0, z, BattleFunc.defaultScale * scale, viewIndex)
+  cacheItem.attrData:countSummonedAttr(data.level, fromRole.attrData)
+  cacheItem.hp = cacheItem.maxHp
+  table.insert(self._allInstanceArr, cacheItem)
+  self.layerControler.a22:addChild(cacheItem:getView())
+  if cacheItem._myView2 then
+    self.layerControler.a22:addChild(cacheItem._myView2)
+  end
+  cacheItem:setCamp(fromRole.camp)
+  cacheItem:setLifeType(BattleFunc.instance:getCfgDatasByKey("Role", id, "kind"))
+  cacheItem.hpBar = self:createHealthBar(cacheItem.camp, cacheItem)
+  table.insert(fromRole.campArr, cacheItem)
+  cacheItem:checkMoveOrAttack(true)
+  cacheItem:setLiveFrame(liveFrame)
+  PassiveSkillTrigger.runAllPassiveGlobalAttr(self.globalPassiveAttrMap, cacheItem, 1)
+  local passiveSkills = cacheItem.passiveSkills
+  if passiveSkills then
+    local i = 0
+    repeat
+      self:insterGlobalPassive(passiveSkills[i+1])
+      i=i+1
+    until not(i < #passiveSkills)
+  end
+  if cacheItem.attrData.hasDataChange then
+    cacheItem.attrData:countAllAttr()
+  end
+  return cacheItem
+end
+
+function BattleLogicalControler:createBuffBar(camp, instance)
+  local cacheItem = PoolTools.getItem(PoolCode.POOL_BUFFBAR + camp)
+  if not cacheItem then
+    cacheItem = RoleBuffBar()
+  end
+  cacheItem:setData(instance, self.layerControler.a23)
+  return cacheItem
+end
+
+function BattleLogicalControler:createHealthBar(camp, instance)
+  local cacheItem = PoolTools.getItem(PoolCode.POOL_HPBAR + camp)
+  if not cacheItem then
+    cacheItem = RoleHealthBar()
+  end
+  cacheItem:setData(instance, self.layerControler.a23)
+  return cacheItem
+end
+
+function BattleLogicalControler:createSkillContent(skillArr, parent)
+  local item = InstancePlayer(self)
+  local data = TableUtils.copyOneTable(self.myHome.cfgData)
+  item:setData(data)
+  item:setSkillInfo(skillArr, parent)
+  item:setCamp(BattleConst.ROLEGROUP_MYSELF)
+  table.insert(self._allInstanceArr, item)
+  return item
+end
+
+function BattleLogicalControler:createSkillData(skillId, level, role, skillType, lifeType)
+  if lifeType == nil then
+    lifeType=nil
+  end
+  return BattleSkillData(skillId, level, role, skillType, nil, lifeType)
+end
+
+function BattleLogicalControler:createPassiveSkill(skillId, level, role, relyonSkill)
+  if relyonSkill == nil then
+    relyonSkill=nil
+  end
+  return PassiveSkillData(skillId, level, role, BattleConst.skill_kind_passive, relyonSkill)
+end
+
+function BattleLogicalControler:createShade()
+  local sp = PoolTools.getItem(PoolCode.POOL_SHADE)
+  if not sp then
+    sp = Laya.Image(ResourceConst.BATTLE_SHADE)
+    sp.anchorX = 0.5
+    sp.anchorY = 0.5
+  end
+  sp.visible = true
+  sp:scale(1, 1)
+  return sp
+end
+
+function BattleLogicalControler:destoryInstance(instance, outRemoveAllArr)
+  if outRemoveAllArr == nil then
+    outRemoveAllArr=false
+  end
+  local cacheId = instance.cacheId
+  local model = instance.classModel
+  if not instance:checkIsUsing() then
+    return
+  end
+  PoolTools.cacheItem(cacheId, instance)
+  instance:onSetToCache()
+  if not outRemoveAllArr then
+    TableUtils.removeValue(self._allInstanceArr, instance)
+  end
+  if model == BattleConst.model_effect then
+    self.performanceControler:removeCacheEffect(instance)
+  elseif model == BattleConst.model_role then
+    instance:destroyPoint()
+    TableUtils.removeValue(self.campArr_1, instance)
+    TableUtils.removeValue(self.diedArr_1, instance)
+  elseif model == BattleConst.model_monster then
+    instance:destroyPoint()
+    TableUtils.removeValue(self.campArr_2, instance)
+    TableUtils.removeValue(self.diedArr_2, instance)
+  elseif model == BattleConst.model_home then
+    instance:destroyPoint()
+    TableUtils.removeValue(self.campArr_1, instance)
+    TableUtils.removeValue(self.diedArr_1, instance)
+    TableUtils.removeValue(self.campArr_2, instance)
+    TableUtils.removeValue(self.diedArr_2, instance)
+  end
+  self:clearCallBack(instance)
+end
+
+function BattleLogicalControler:destoryMonster(monster)
+  if not monster:checkIsUsing() then
+    return
+  end
+  self:destoryInstance(monster)
+  self.hasPosDirty2 = true
+end
+
+function BattleLogicalControler:destoryHero(role)
+  if not role:checkIsUsing() then
+    return
+  end
+  local passives = role.passiveSkills
+  local i = #passives - 1
+  repeat
+    self:clearOnePassiveAttr(passives[i+1])
+    i=i-1
+  until not(i >= 0)
+  self:destoryInstance(role)
+  self.hasPosDirty1 = true
+end
+
+function BattleLogicalControler:destroyBullet(bullet)
+  if not bullet:checkIsUsing() then
+    return
+  end
+  self:destoryInstance(bullet)
+end
+
+function BattleLogicalControler:destoryEffect(effect)
+  self:destoryInstance(effect)
+end
+
+function BattleLogicalControler:destoryInstanceArr(instanceArr, outRemoveAllArr)
+  if outRemoveAllArr == nil then
+    outRemoveAllArr=false
+  end
+  local i = #instanceArr - 1
+  repeat
+    if instanceArr[i+1] then
+      self:destoryInstance(instanceArr[i+1], outRemoveAllArr)
+    end
+    i=i-1
+  until not(i >= 0)
+end
+
+function BattleLogicalControler:createMyRole(id, level, starLevel, type)
+  if level == nil then
+    level=1
+  end
+  if starLevel == nil then
+    starLevel=nil
+  end
+  if type == nil then
+    type=nil
+  end
+  local data = BattleFunc.instance:getCfgDatas("Role", id)
+  level = RolesModel.instance:getRoleLevelById(id)
+  if starLevel == nil then
+    starLevel = RolesModel.instance:getRoleStarLevel(id)
+  end
+  local num = data.heroNub or 1
+  local offestX = 0
+  local j = 0
+  repeat
+    if j ~= 0 then
+      offestX = data.startSite[j+1]
+    end
+    self:createRole(id, {level=level, starLevel=starLevel, type=type}, data.kind, BattleConst.ROLEGROUP_MYSELF, offestX)
+    j=j+1
+  until not(j < num)
+end
+
+function BattleLogicalControler:getPosByTypeAndCamp(camp, type, outpos, offestX, offestY, xIndex)
+  if xIndex == nil then
+    xIndex=1
+  end
+  local middlePos = self.cameraControler.focusPos.x
+  local targetX = 0
+  local targetY = nil
+  if type == BattleConst.LIFE_AIRHERO then
+    local posX = BattleFunc.airArmyStartXLocation
+    if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+      -- [ts2lua]BattleFunc.warRoleXoffest下标访问可能不正确
+      posX = Number(BattleFunc.warRoleXoffest[xIndex - 1])
+    end
+    if camp == BattleConst.ROLEGROUP_ENEMY then
+      targetX = self.mapControler._maxSceneWidth - posX
+    else
+      targetX = posX
+    end
+    targetX = targetX + offestX
+    -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+    local index = BattleFunc.CreateRoleIndex[BattleConst.LIFE_AIRHERO] or 0
+    -- [ts2lua]BattleFunc.landArmyStartYLocation下标访问可能不正确
+    targetY = BattleFunc.battleCenterY + Number(BattleFunc.landArmyStartYLocation[index]) + offestY
+  else
+    if type == BattleConst.LIFE_LANDBUILD then
+      local posX = BattleFunc.pylonStartXLocation
+      if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+        -- [ts2lua]BattleFunc.warRoleXoffest下标访问可能不正确
+        posX = Number(BattleFunc.warRoleXoffest[xIndex - 1])
+      end
+      offestX = Math:random() * BattleFunc.pylonTwoLocation
+      if camp == BattleConst.ROLEGROUP_ENEMY then
+        targetX = self.mapControler._maxSceneWidth - posX + offestX
+      else
+        targetX = posX + offestX
+      end
+    else
+      local posX = BattleFunc.landArmyStartXLocation
+      if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+        -- [ts2lua]BattleFunc.warRoleXoffest下标访问可能不正确
+        posX = Number(BattleFunc.warRoleXoffest[xIndex - 1])
+      end
+      if camp == BattleConst.ROLEGROUP_ENEMY then
+        targetX = self.mapControler._maxSceneWidth - posX
+      else
+        targetX = posX
+      end
+      targetX = targetX + offestX
+    end
+    -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
+    local index1 = BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] or 0
+    -- [ts2lua]BattleFunc.landArmyStartYLocation下标访问可能不正确
+    targetY = BattleFunc.battleCenterY + Number(BattleFunc.landArmyStartYLocation[index1]) + offestY
+  end
+  if isNaN(targetY) then
+    LogsManager.errorTag("无效的z坐标", "无效的z坐标")
+  end
+  outpos.x = targetX
+  outpos.z = targetY
+  return outpos
+end
+
+function BattleLogicalControler:getRoleById(id)
+  local i = 0
+  repeat
+    local role = self.campArr_1[i+1]
+    if role.dataId == id then
+      return role
+    end
+    i=i+1
+  until not(i < #self.campArr_1)
+  local i = 0
+  repeat
+    local role = self.diedArr_1[i+1]
+    if role.dataId == id then
+      return role
+    end
+    i=i+1
+  until not(i < #self.diedArr_1)
+  return nil
+end
+
+function BattleLogicalControler:onClickRole(rid)
+  local role = ChooseTrigger.getPlayerById(rid, self.campArr_1)
+  if role then
+    role:onCheckGiveEnergySkill()
+  end
+end
+
+function BattleLogicalControler:insterGlobalPassive(passive)
+  local type = passive.cfgData.effectType
+  if type ~= BattleConst.passive_effect_global_attr then
+    return false
+  end
+  if not passive.isActive then
+    return false
+  end
+  local i = #self.globalPassiveAttrMap - 1
+  repeat
+    local info = self.globalPassiveAttrMap[i+1]
+    if info.passive._skillId == passive._skillId then
+      self:clearOnePassiveAttr(passive)
+    end
+    i=i-1
+  until not(i >= 0)
+  local attrInfo = TableUtils.deepCopy(passive.skillLogicalParams, {})
+  local map = {attr=attrInfo, passive=passive}
+  table.insert(self.globalPassiveAttrMap, map)
+  PassiveSkillTrigger.runOnePassiveGlobalAttr(map.passive, map.attr)
+  return true
+end
+
+function BattleLogicalControler:clearOnePassiveAttr(passive)
+  local type = passive.cfgData.effectType
+  if type ~= BattleConst.passive_effect_global_attr then
+    return
+  end
+  if not passive.isActive then
+    return
+  end
+  local i = #self.globalPassiveAttrMap - 1
+  repeat
+    local info = self.globalPassiveAttrMap[i+1]
+    if info.passive._skillId == passive._skillId then
+      self.globalPassiveAttrMap:splice(i, 1)
+      PassiveSkillTrigger.runOnePassiveGlobalAttr(info.passive, info.attr, nil, -1)
+    end
+    i=i-1
+  until not(i >= 0)
+end
+
+function BattleLogicalControler:clearAllRole()
+  local arr = self.campArr_1
+  local i = #arr - 1
+  repeat
+    local item = arr[i+1]
+    if (not item.roleType or item.roleType ~= BattleConst.ROLETYPE_HELPROLE) and item.lifeType ~= BattleConst.LIFE_JIDI then
+      self:destoryHero(item)
+    end
+    i=i-1
+  until not(i >= 0)
+end
+
+function BattleLogicalControler:addAllTiggerOnBorn()
+  local camp1 = self.campArr_1
+  local i = 0
+  repeat
+    ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_createMySelf, camp1[i+1])
+    i=i+1
+  until not(i < #camp1)
+  local camp2 = self.campArr_2
+  local i = 0
+  repeat
+    ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_createMySelf, camp2[i+1])
+    i=i+1
+  until not(i < #camp2)
+end
+
+function BattleLogicalControler:exitBattle()
+  self:dispose()
+end
+
+function BattleLogicalControler:hideBattle()
+  self.layerControler.a:removeSelf()
+  self:setGamePlayOrPause(true)
+end
+
+function BattleLogicalControler:showBattle()
+  self.layerControler.rootCtn:addChild(self.layerControler.a)
+  self:setGamePlayOrPause(false)
+end
+
+function BattleLogicalControler:recvMsg(cmd)
+  local switch = {
+    [BattleEvent.BATTLEEVENT_CONTINUE_BATTLE] = function()
+      self:setGamePlayOrPause(false)
+    end,
+    [BattleEvent.BATTLEEVENT_PAUSE_BATTLE] = function()
+      self:setGamePlayOrPause(true)
+    end
+  }
+  local casef = switch[cmd]
+  if not casef then casef = switch["default"] end
+  if casef then casef() end
+end
+
+function BattleLogicalControler:dispose()
+  BattleLogsManager.battleEcho("退出战斗----")
+  Laya.timer:clear(self, self.onceUpdateFrame)
+  self.tweenControler:dispose()
+  self.statistControler:startSendStatistics()
+  self:destoryInstanceArr(self._allInstanceArr)
+  -- [ts2lua]修改数组长度需要手动处理。
+  self._timeList.length = 0
+  -- [ts2lua]修改数组长度需要手动处理。
+  self.campArr_1.length = 0
+  -- [ts2lua]修改数组长度需要手动处理。
+  self.campArr_2.length = 0
+  -- [ts2lua]修改数组长度需要手动处理。
+  self.diedArr_1.length = 0
+  -- [ts2lua]修改数组长度需要手动处理。
+  self.diedArr_2.length = 0
+  -- [ts2lua]修改数组长度需要手动处理。
+  self._allInstanceArr.length = 0
+  self.tweenControler:dispose()
+  self.cameraControler = nil
+  self.refreshControler and self.refreshControler:dispose()
+  self.layerControler:dispose()
+  self.layerControler = nil
+  self.mapControler:dispose()
+  self.mapControler = nil
+  self.player = nil
+  self:superCall('dispose')
+  Message.instance:removeObjEvents(self)
+  BattleFunc.CreateRoleIndex = {}
+end

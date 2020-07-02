@@ -1,0 +1,96 @@
+require("game/sys/model/UserModel")
+require("framework/common/UserInfo")
+require("game/sys/manager/StatisticsManager")
+require("framework/consts/StatisticsCommonConst")
+require("framework/model/UserGlobalModel")
+require("game/sys/func/GlobalParamsFunc")
+require("framework/manager/WindowManager")
+require("game/sys/consts/WindowCfgs")
+require("framework/common/Message")
+require("framework/event/FrameWorkEvent")
+require("framework/func/TranslateFunc")
+require("framework/manager/LogsManager")
+require("utils/GameUtils")
+require("game/sys/func/BattleFunc")
+require("game/sys/consts/BattleConst")
+require("framework/manager/SoundManager")
+require("game/sys/model/SwitchModel")
+
+FrameWorkHandle = newClass({Class}, {name = 'FrameWorkHandle'})
+
+function FrameWorkHandle.__getters.instance()
+  if not FrameWorkHandle._instance then
+    FrameWorkHandle._instance = FrameWorkHandle()
+  end
+  return FrameWorkHandle._instance
+end
+
+function FrameWorkHandle.init()
+  if not FrameWorkHandle._instance then
+    FrameWorkHandle._instance = FrameWorkHandle()
+  end
+end
+
+function FrameWorkHandle:__new__()
+  Message.instance:add(FrameWorkEvent.FRAMEWORKEVENT_STARTENTERMAIN, self)
+end
+
+function FrameWorkHandle:onStartEnterGameMain()
+  SoundManager.setSoundVolume(SwitchModel.instance:getSwitchByType(SwitchModel.sound_switch))
+  SoundManager.setMusicVol(SwitchModel.instance:getSwitchByType(SwitchModel.music_switch))
+  if UserInfo.platform.shareLinkParams and UserInfo.platform.shareLinkParams.contentId then
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.SHARE_CLICK_ENTER, {contentId=UserInfo.platform.shareLinkParams.contentId})
+  end
+  if UserInfo.platform.shareLinkParams and UserInfo.platform.shareLinkParams.inviterRid then
+    if UserInfo.platform.shareLinkParams.inviterRid ~= UserModel.instance:getUserRid() then
+      UserGlobalModel.setInviteUser(UserInfo.platform.shareLinkParams.inviterRid)
+      local shareAddNum = GlobalParamsFunc.instance:getDataNum("shareTruePlayerNmb")
+      UserGlobalModel.setOtherShareNum(UserInfo.platform.shareLinkParams.inviterRid, shareAddNum)
+    end
+  end
+  local guideStep = UserModel.instance:getMainGuide()
+  if guideStep == 0 and not UserModel.instance:getMaxBattleLevel() then
+    BattleFunc.curBattleType = BattleConst.BATTLETYPE_NORMAL
+    if not GameUtils.isReview then
+      WindowManager.SwitchUIFromLoading(WindowCfgs.CartoonPicUI, WindowCfgs.LoginUI)
+    else
+      WindowManager.SwitchUIFromLoading(WindowCfgs.BattleUI, WindowCfgs.LoginUI)
+    end
+  else
+    WindowManager.SwitchUIFromLoading(WindowCfgs.GameMainUI, WindowCfgs.LoginUI)
+  end
+end
+
+function FrameWorkHandle:onCheckShareSucess(distime, shareExtraData)
+  local shareResult = false
+  if UserInfo.platform._shareNoWait or distime >= 3000 then
+    shareResult = true
+  end
+  if shareResult then
+    UserInfo.platform:onShareComplete(true)
+  else
+    local failHandleType = GlobalParamsFunc.instance.shareHandleType
+    if failHandleType == 1 then
+      WindowManager.ShowTip("分享失败，请稍后再试")
+      UserInfo.platform:onShareComplete(false)
+    elseif failHandleType == 2 then
+      -- [ts2lua]TranslateFunc.shareTranslateArr下标访问可能不正确
+      UserInfo.platform:showPopTip("提示", TranslateFunc.shareTranslateArr[Math:floor(Math:random() * #TranslateFunc.shareTranslateArr)], {confirmText=TranslateFunc.shareLabTranslate, success=function(res)
+        if res.confirm then
+          LogsManager.echo('用户点击确定,再次拉起分享')
+          UserInfo.platform:share(UserInfo.platform._shareId, UserInfo.platform._shareExtraData, UserInfo.platform._shareCallback, UserInfo.platform._shareThisObj)
+        elseif res.cancel then
+          LogsManager.echo("用户取消了再次分享")
+          UserInfo.platform:onShareComplete(false)
+        end
+      end
+      })
+    end
+  end
+end
+
+function FrameWorkHandle:recvMsg(cmd, data)
+  if cmd == FrameWorkEvent.FRAMEWORKEVENT_STARTENTERMAIN then
+    self:onStartEnterGameMain()
+  end
+end

@@ -1,0 +1,20 @@
+require("game/battle/instance/InstanceLogical")
+require("game/sys/consts/BattleConst")
+require("game/sys/func/BattleFunc")
+
+InstanceHome = newClass({InstanceLogical}, {name = 'InstanceHome'})
+function InstanceHome:__new__(controler)
+  self:superCall('__new__',controler)
+  self.classModel = BattleConst.model_home
+  self.lifeType = BattleConst.LIFE_JIDI
+end
+
+function InstanceHome:checkMoveOrAttack(force)
+  if force == nil then
+    force=false
+  end
+  if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
+    return
+  end
+  self:superCall('checkMoveOrAttack',force)
+end

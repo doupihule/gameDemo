@@ -1,0 +1,27 @@
+require("framework/utils/TableUtils")
+require("game/sys/func/BattleFunc")
+
+AttributeEntity = newClass({Class}, {name = 'AttributeEntity'})
+
+function AttributeEntity:__new__(data)
+  local scaleValue = 1
+  self.basePower = BattleFunc.instance:turnAddSpeedToFrame(data.basePower)
+  self.baseSlowDownPower = BattleFunc.instance:turnAddSpeedToFrame(data.baseSlowDownPower)
+  self.baseMaxSpeed = BattleFunc.instance:turnSpeedToFrame(data.baseMaxSpeed)
+  self.turnSpeed = BattleFunc.instance:turnRotateSpeedToFrame(data.turnSpeed)
+  self.turnPower = BattleFunc.instance:turnAddSpeedToFrame(data.turnPower)
+  self.turnPowerTime = BattleFunc.instance:turnMinisecondToframe(data.turnPowerTime)
+  self.turnPowerMaxTime = BattleFunc.instance:turnMinisecondToframe(data.turnPowerMaxTime)
+  self.turnMaxspeed = BattleFunc.instance:turnSpeedToFrame(data.turnMaxspeed)
+  self.unsafeFallTurnTime = BattleFunc.instance:turnMinisecondToframe(data.unsafeFallTurnTime)
+  self.unsafeFallSlowDownPower = BattleFunc.instance:turnAddSpeedToFrame(data.unsafeFallSlowDownPower)
+  self.slowDownPower = BattleFunc.instance:turnAddSpeedToFrame(data.slowDownPower)
+  self.slowDownPower = BattleFunc.instance:turnAddSpeedToFrame(data.slowDownPower)
+  self.collisionSpeedChange = TableUtils.copyOneArr(data.collisionSpeedChange)
+  self.collisionSpeedChange[0+1] = self.collisionSpeedChange[0+1] / 10000
+  self.collisionSpeedChange[1+1] = self.collisionSpeedChange[1+1] / 10000
+  self.roadChangeDirection = data.roadChangeDirection
+  self.skyChangeDirection = data.skyChangeDirection
+  self.carLength = data.carLength / 10000
+  self.box = data.box
+end

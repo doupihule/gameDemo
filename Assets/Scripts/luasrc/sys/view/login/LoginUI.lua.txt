@@ -1,0 +1,59 @@
+require("ui/layaMaxUI")
+require("framework/common/kakura/Client")
+require("game/sys/common/kakura/Method")
+require("framework/manager/WindowManager")
+require("game/sys/consts/WindowCfgs")
+require("framework/manager/CacheManager")
+require("utils/Global")
+require("framework/manager/MainModule")
+require("framework/utils/ButtonUtils")
+require("game/sys/consts/StorageCode")
+require("framework/common/UserInfo")
+
+LoginUI = newClass({ui.gameui.login.LoginUI}, {name = 'LoginUI'})
+LoginUI.res = {"gameui/Login.scene"};
+function LoginUI:__new__()
+  self:superCall('__new__')
+  LoginUI.instance = self
+  ButtonUtils(self.loginbtn, self.onLoginClick, self)
+  self.loginbtn.clickHandler = Laya.Handler:create(self, self.onLoginClick, nil, false)
+end
+
+function LoginUI:setData()
+  self._saveAccount = CacheManager.instance:getGlobalCache(StorageCode.storage_acount)
+  if (self._saveAccount and self._saveAccount ~= "0") and #self._saveAccount > 0 then
+    self.account.text = self._saveAccount
+  end
+end
+
+function LoginUI:onLoginClick()
+  local account = self.account.text
+  local inviteId = self.invite.text
+  local shareInfo = self.shareInfo.text
+  if account == "" then
+    print("please input you account")
+    return
+  else
+    self._saveAccount = account
+    CacheManager.instance:setGlobalCache(StorageCode.storage_acount, account)
+    print("login account>>>>" .. account)
+  end
+  self:sendLogin(account, inviteId, shareInfo)
+  WindowManager.CloseUI(WindowCfgs.LoginUI)
+end
+
+function LoginUI:sendLogin(account, inviteId, shareInfo)
+  local params = {method=Method.global_Account_loginTest, params={passport=account, password=self.password.text, device=Global.deviceModel, comeFrom=UserInfo.LoginSceneInfo}}
+  UserInfo.platform.inviteBy = inviteId
+  UserInfo.platform.shareInfo = shareInfo
+  UserInfo.platform:reqGlobal(params)
+end
+
+function LoginUI:loginResult()
+  Client.instance:send(Method.User_login, {}, LoginUI.instance.onLoginResult, LoginUI.instance)
+end
+
+function LoginUI:onLoginResult(result)
+  WindowManager.CloseUI(WindowCfgs.LoginUI)
+  MainModule.instance:onLoginResult(result)
+end

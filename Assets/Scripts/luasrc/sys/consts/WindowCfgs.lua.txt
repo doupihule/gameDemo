@@ -1,11 +1,171 @@
-WindowCfgs = {
-	
-	
-	GameMainUI = {}
-	
-}
+require("game/sys/view/loading/LoadingUI")
+require("game/sys/view/login/LoginUI")
+require("game/sys/view/popup/AlertUILocal")
+require("game/sys/view/tip/TipsUI")
+require("game/sys/view/loading/ReqLoadingUI")
+require("game/sys/view/main/GameMainUI")
+require("game/sys/view/test/TestOpListUI")
+require("game/sys/view/jump/ResultJumpUI")
+require("game/sys/view/battle/BattleUI")
+require("game/sys/view/battle/BattleResultUI")
+require("game/sys/view/role/RoleInfoUI")
+require("game/sys/view/role/RoleDetailUI")
+require("game/sys/view/guide/GuideUI")
+require("game/sys/view/main/OfflineIncomeUI")
+require("game/sys/view/jump/JumpListUI")
+require("game/sys/view/main/TurnableUI")
+require("game/sys/view/jump/MainJumpZhiseUI")
+require("game/sys/view/jump/JumpListZhiseUI")
+require("game/sys/view/jump/ResultJumpDoubleUI")
+require("game/sys/view/main/FreeResourceUI")
+require("game/sys/view/main/FlatItemUI")
+require("game/sys/view/role/HomeUpgradeUI")
+require("game/sys/view/battle/BattleDetailUI")
+require("game/sys/view/roleLine/RoleLineItemUI")
+require("game/sys/view/roleLine/RoleItemUI")
+require("game/sys/view/roleLine/RoleInLineUI")
+require("game/sys/view/main/SevenDaysUI")
+require("game/sys/view/main/BoxInfoUI")
+require("game/sys/view/role/UnlockRoleUI")
+require("game/sys/view/main/DailyGoldUI")
+require("game/sys/view/common/ComRewardDoubleUI")
+require("game/sys/view/main/AirDropDetailUI")
+require("game/sys/view/battle/BattleFullEnergyUI")
+require("game/sys/view/share/InviteUI")
+require("game/sys/view/share/InviteListUI")
+require("game/sys/view/role/RoleEquipmentUI")
+require("game/sys/view/role/EquipItemUI")
+require("game/sys/view/role/EquipComposeUI")
+require("game/sys/view/role/EvoPreviewUI")
+require("game/sys/view/role/EvoRewardUI")
+require("game/sys/view/role/EquipPieceGetUI")
+require("framework/consts/WindowCommonCfgs")
+require("game/sys/view/role/RoleBarrageUI")
+require("game/sys/view/cartoon/CartoonPicUI")
+require("game/sys/view/cartoon/FogCartoonPicUI")
+require("game/sys/view/fog/FogInitRoleUI")
+require("game/sys/view/fog/FogRoleItemUI")
+require("game/sys/view/fog/FogMainUI")
+require("game/sys/view/fog/FogVideoEnterUI")
+require("game/sys/view/fog/FogBusUI")
+require("game/sys/view/fog/FogBagUI")
+require("game/sys/view/fog/FogBagItemUI")
+require("game/sys/view/fog/FogBagItemDetailUI")
+require("game/sys/view/fog/FogMultiRewardUI")
+require("game/sys/view/fog/FogShopUI")
+require("game/sys/view/fog/event/FogBusinessmanUI")
+require("game/sys/view/fog/event/FogComRewardUI")
+require("game/sys/view/fog/event/FogChooseUI")
+require("game/sys/view/fog/event/FogAnswerUI")
+require("game/sys/view/fog/event/FogHandinUI")
+require("game/sys/view/fog/event/FogBoxUI")
+require("game/sys/view/fog/event/FogBagItemFullLevelUI")
+require("game/sys/view/fog/FogFreeActUI")
+require("game/sys/view/fog/FogRoleLineItemUI")
+require("game/sys/view/fog/event/FogUserRoleUI")
+require("game/sys/view/fog/event/FogObstacleUI")
+require("game/sys/view/fog/event/FogNpcTalkUI")
+require("game/sys/view/fog/event/FogDoorUI")
+require("game/sys/view/fog/FogTipUI")
+require("game/sys/view/fog/FogStartWarUI")
+require("game/sys/view/fog/result/FogResultRewardUI")
+require("game/sys/view/fog/result/FogResultUI")
+require("game/sys/view/fog/result/FogRewardItemUI")
+require("game/sys/view/fog/FogShopItemDetailUI")
+require("framework/view/changeData/ChangeDataUI")
+require("game/sys/view/fog/FogBattleStartAlertUI")
+require("game/sys/view/main/SettingUI")
+require("game/sys/consts/SubPackageConst")
 
-
-
-
-return WindowCfgs
+WindowCfgs = newClass({Class}, {name = 'WindowCfgs'})
+function WindowCfgs:__new__() end
+WindowCfgs.UISHOWTYPE_SCALEIN = 1;
+WindowCfgs.UISHOWTYPE_FADEIN = 2;
+WindowCfgs.UILAYER = "uilayer";
+WindowCfgs.TOPLAYER = "toplayer";
+WindowCfgs.HIGHLAYER = "highlayer";
+WindowCfgs.DEBUGLAYER = "debugLayer";
+WindowCfgs.LoadingUI = "LoadingControler";
+WindowCfgs.ReqLoadingUI = "ReqLoadingUI";
+WindowCfgs.AlertUILocal = "AlertUILocal";
+WindowCfgs.AlertUI = "AlertUI";
+WindowCfgs.TestOpListUI = "TestOpListUI";
+WindowCfgs.LoginUI = "LoginUI";
+WindowCfgs.GuideUI = "GuideUI";
+WindowCfgs.TipsUI = "TipsUI";
+WindowCfgs.TalkFrameUI = "TalkFrameUI";
+WindowCfgs.JumpListUI = "JumpListUI";
+WindowCfgs.ResultJumpUI = "ResultJumpUI";
+WindowCfgs.ResultJumpDoubleUI = "ResultJumpDoubleUI";
+WindowCfgs.GameMainUI = "GameMainUI";
+WindowCfgs.BattleUI = "BattleUI";
+WindowCfgs.BattleResultUI = "BattleResultUI";
+WindowCfgs.RoleInfoUI = "RoleInfoUI";
+WindowCfgs.OfflineIncomeUI = "OfflineIncomeUI";
+WindowCfgs.TurnableUI = "TurnableUI";
+WindowCfgs.MainJumpZhiseUI = "MainJumpZhiseUI";
+WindowCfgs.JumpListZhiseUI = "JumpListZhiseUI";
+WindowCfgs.FreeResourceUI = "FreeResourceUI";
+WindowCfgs.FlatItemUI = "FlatItemUI";
+WindowCfgs.HomeUpgradeUI = "HomeUpgradeUI";
+WindowCfgs.BattleDetailUI = "BattleDetailUI";
+WindowCfgs.RoleInLineUI = "RoleInLineUI";
+WindowCfgs.RoleItemUI = "RoleItemUI";
+WindowCfgs.RoleLineItemUI = "RoleLineItemUI";
+WindowCfgs.SevenDaysUI = "SevenDaysUI";
+WindowCfgs.BoxInfoUI = "BoxInfoUI";
+WindowCfgs.UnlockRoleUI = "UnlockRoleUI";
+WindowCfgs.DailyGoldUI = "DailyGoldUI";
+WindowCfgs.ComRewardDoubleUI = "ComRewardDoubleUI";
+WindowCfgs.AirDropDetailUI = "AirDropDetailUI";
+WindowCfgs.BattleFullEnergyUI = "BattleFullEnergyUI";
+WindowCfgs.InviteUI = "InviteUI";
+WindowCfgs.InviteListUI = "InviteListUI";
+WindowCfgs.RoleDetailUI = "RoleDetailUI";
+WindowCfgs.RoleEquipmentUI = "RoleEquipmentUI";
+WindowCfgs.EquipItemUI = "EquipItemUI";
+WindowCfgs.EquipComposeUI = "EquipComposeUI";
+WindowCfgs.EvoPreviewUI = "EvoPreviewUI";
+WindowCfgs.EvoRewardUI = "EvoRewardUI";
+WindowCfgs.EquipPieceGetUI = "EquipPieceGetUI";
+WindowCfgs.RoleBarrageUI = "RoleBarrageUI";
+WindowCfgs.CartoonPicUI = "CartoonPicUI";
+WindowCfgs.FogCartoonPicUI = "FogCartoonPicUI";
+WindowCfgs.FogInitRoleUI = "FogInitRoleUI";
+WindowCfgs.FogRoleItemUI = "FogRoleItemUI";
+WindowCfgs.FogMainUI = "FogMainUI";
+WindowCfgs.FogVideoEnterUI = "FogVideoEnterUI";
+WindowCfgs.FogBusUI = "FogBusUI";
+WindowCfgs.FogBagItemUI = "FogBagItemUI";
+WindowCfgs.FogBagUI = "FogBagUI";
+WindowCfgs.FogBagItemDetailUI = "FogBagItemDetailUI";
+WindowCfgs.FogMultiRewardUI = "FogMultiRewardUI";
+WindowCfgs.FogShopUI = "FogShopUI";
+WindowCfgs.FogBusinessmanUI = "FogBusinessmanUI";
+WindowCfgs.FogComRewardUI = "FogComRewardUI";
+WindowCfgs.FogChooseUI = "FogChooseUI";
+WindowCfgs.FogAnswerUI = "FogAnswerUI";
+WindowCfgs.FogHandinUI = "FogHandinUI";
+WindowCfgs.FogBoxUI = "FogBoxUI";
+WindowCfgs.FogBagItemFullLevelUI = "FogBagItemFullLevelUI";
+WindowCfgs.FogFreeActUI = "FogFreeActUI";
+WindowCfgs.FogRoleLineItemUI = "FogRoleLineItemUI";
+WindowCfgs.FogUserRoleUI = "FogUserRoleUI";
+WindowCfgs.FogObstacleUI = "FogObstacleUI";
+WindowCfgs.FogNpcTalkUI = "FogNpcTalkUI";
+WindowCfgs.FogDoorUI = "FogDoorUI";
+WindowCfgs.FogTipUI = "FogTipUI";
+WindowCfgs.FogStartWarUI = "FogStartWarUI";
+WindowCfgs.FogResultUI = "FogResultUI";
+WindowCfgs.FogResultRewardUI = "FogResultRewardUI";
+WindowCfgs.FogRewardItemUI = "FogRewardItemUI";
+WindowCfgs.FogShopItemDetailUI = "FogShopItemDetailUI";
+WindowCfgs.FogBattleStartAlertUI = "FogBattleStartAlertUI";
+WindowCfgs.SettingUI = "SettingUI";
+WindowCfgs.commonCfgs = {modal=1, modalAlpha=0.3, parent=WindowCfgs.UILAYER, offset={0, 0}, full=false, group={}, sound=true, autoClose=false, style=0, cache=false};
+function WindowCfgs.__getters.windowcfgs()
+  if not WindowCfgs._windowcfgs then
+    WindowCfgs._windowcfgs = {WindowCfgs.LoadingUI={modal=1, path=LoadingUI, modalAlpha=0, position=8, offset={0, -100}}, WindowCfgs.ReqLoadingUI={modal=1, path=ReqLoadingUI, parent=WindowCfgs.TOPLAYER, autoClose=true, modalAlpha=0.01}, WindowCfgs.AlertUILocal={modal=1, path=AlertUILocal, parent=WindowCfgs.HIGHLAYER, autoClose=true, modalAlpha=0.01}, WindowCfgs.TestOpListUI={modal=1, path=TestOpListUI, parent=WindowCfgs.HIGHLAYER, autoClose=true, modalAlpha=0.01, group={"gameui/test/TestOpList.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.LoginUI={modal=1, path=LoginUI, parent=WindowCfgs.TOPLAYER, modalAlpha=0.01, group={"gameui/login/Login.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.TipsUI={modal=1, path=TipsUI, modalAlpha=0.01}, WindowCfgs.ResultJumpUI={modal=1, path=ResultJumpUI, modalAlpha=0.01, group={"gameui/jump/ResultJump.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.ResultJumpDoubleUI={modal=1, path=ResultJumpDoubleUI, modalAlpha=0.01, group={"gameui/jump/ResultJumpDouble.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.JumpListUI={modal=1, path=JumpListUI, modalAlpha=0.01, group={"gameui/jump/JumpList.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.GameMainUI={path=GameMainUI, group={"native/GameMain.scene"}, subPackage={"uisource", "atlas_source"}, full=true}, WindowCfgs.BattleUI={path=BattleUI, group={"gameui/battle/Battle.scene"}, subPackage={"uisource", "atlas_source"}, full=true}, WindowCfgs.BattleResultUI={modal=1, path=BattleResultUI, modalAlpha=0.8, group={"gameui/battle/BattleResult.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.RoleInfoUI={modal=1, path=RoleInfoUI, modalAlpha=0, group={"gameui/role/RoleInfo.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FlatItemUI={modal=1, path=FlatItemUI, modalAlpha=0, group={"gameui/main/FlatItem.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.HomeUpgradeUI={modal=1, path=HomeUpgradeUI, modalAlpha=0.6, group={"gameui/role/HomeUpgrade.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.RoleInLineUI={modal=1, path=RoleInLineUI, modalAlpha=0.9, group={"gameui/roleLine/RoleInLine.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.RoleItemUI={modal=1, path=RoleItemUI, modalAlpha=0, group={"gameui/roleLine/RoleItem.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.RoleLineItemUI={modal=1, path=RoleLineItemUI, modalAlpha=0, group={"gameui/roleLine/RoleLineItem.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.SevenDaysUI={modal=1, path=SevenDaysUI, parent=WindowCfgs.HIGHLAYER, modalAlpha=0.6, group={"gameui/main/SevenDays.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.BattleDetailUI={path=BattleDetailUI, group={"gameui/battle/BattleDetail.scene"}, subPackage={"uisource", "atlas_source"}, full=true}, WindowCfgs.TurnableUI={modal=1, path=TurnableUI, modalAlpha=0.6, group={"gameui/main/Turnable.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.BoxInfoUI={modal=1, path=BoxInfoUI, modalAlpha=0.6, group={"gameui/main/BoxInfo.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FreeResourceUI={modal=1, path=FreeResourceUI, modalAlpha=0.6, group={"gameui/main/FreeResource.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.GuideUI={modal=1, path=GuideUI, modalAlpha=0.01, group={"gameui/guide/Guide.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.AirDropDetailUI={modal=1, path=AirDropDetailUI, modalAlpha=0.6, group={"gameui/main/AirDropDetail.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.OfflineIncomeUI={modal=1, path=OfflineIncomeUI, parent=WindowCfgs.HIGHLAYER, modalAlpha=0.6, group={"gameui/main/OfflineIncome.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.ComRewardDoubleUI={modal=1, path=ComRewardDoubleUI, parent=WindowCfgs.HIGHLAYER, modalAlpha=0.6, group={"gameui/common/ComRewardDouble.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.UnlockRoleUI={modal=1, path=UnlockRoleUI, modalAlpha=0.8, group={"gameui/role/UnlockRole.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.BattleFullEnergyUI={modal=1, path=BattleFullEnergyUI, modalAlpha=0.6, group={"gameui/battle/BattleFullEnergy.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.DailyGoldUI={modal=1, path=DailyGoldUI, modalAlpha=0.6, group={"gameui/main/DailyGold.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.InviteUI={modal=1, path=InviteUI, modalAlpha=0.6, group={"gameui/share/Invite.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.InviteListUI={modal=1, path=InviteListUI, modalAlpha=0, group={"gameui/share/InviteList.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.RoleDetailUI={modal=1, path=RoleDetailUI, modalAlpha=0.6, group={"gameui/role/RoleDetail.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.RoleEquipmentUI={modal=1, path=RoleEquipmentUI, modalAlpha=0, group={"gameui/role/RoleEquipment.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.EquipItemUI={modal=1, path=EquipItemUI, modalAlpha=0, group={"gameui/role/EquipItem.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.EquipComposeUI={modal=1, path=EquipComposeUI, modalAlpha=0.6, group={"gameui/role/EquipCompose.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.EvoPreviewUI={modal=1, path=EvoPreviewUI, modalAlpha=0.6, group={"gameui/role/EvoPreview.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.EvoRewardUI={modal=1, path=EvoRewardUI, modalAlpha=0.8, group={"gameui/role/EvoReward.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.EquipPieceGetUI={modal=1, path=EquipPieceGetUI, modalAlpha=0.6, group={"gameui/role/EquipPieceGet.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.RoleBarrageUI={modal=1, path=RoleBarrageUI, modalAlpha=0.9, group={"gameui/role/RoleBarrage.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.CartoonPicUI={path=CartoonPicUI, group={"gameui/cartoon/CartoonPic.scene"}, subPackage={"uisource", "atlas_source"}, full=true}, WindowCfgs.FogCartoonPicUI={path=FogCartoonPicUI, group={"gameui/cartoon/FogCartoonPic.scene"}, subPackage={"uisource", "atlas_source"}, full=true}, WindowCfgs.FogInitRoleUI={modal=1, path=FogInitRoleUI, modalAlpha=0.7, group={"gameui/fog/FogInitRole.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogRoleItemUI={modal=1, path=FogRoleItemUI, modalAlpha=0, group={"gameui/fog/FogRoleItem.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogMainUI={modal=1, path=FogMainUI, modalAlpha=0.01, group={"gameui/fog/FogMain.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogVideoEnterUI={modal=1, path=FogVideoEnterUI, modalAlpha=0.6, group={"gameui/fog/FogVideoEnter.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogBusUI={modal=1, path=FogBusUI, modalAlpha=0.6, group={"gameui/fog/FogBus.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogBagItemUI={modal=0, path=FogBagItemUI, modalAlpha=0, group={"gameui/fog/FogBagItem.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogBagUI={modal=1, path=FogBagUI, modalAlpha=0.6, group={"gameui/fog/FogBag.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogBagItemDetailUI={modal=1, path=FogBagItemDetailUI, modalAlpha=0.6, group={"gameui/fog/FogBagItemDetail.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogMultiRewardUI={modal=1, path=FogMultiRewardUI, modalAlpha=0.6, group={"gameui/fog/FogMultiReward.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogShopUI={modal=1, path=FogShopUI, modalAlpha=0.6, group={"gameui/fog/FogShop.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogBusinessmanUI={modal=1, path=FogBusinessmanUI, modalAlpha=0.6, group={"gameui/fog/FogBusinessman.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogComRewardUI={modal=1, path=FogComRewardUI, modalAlpha=0.6, group={"gameui/fog/FogComReward.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogChooseUI={modal=1, path=FogChooseUI, modalAlpha=0.6, group={"gameui/fog/FogChoose.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogAnswerUI={modal=1, path=FogAnswerUI, modalAlpha=0.6, group={"gameui/fog/FogAnswer.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogHandinUI={modal=1, path=FogHandinUI, modalAlpha=0.6, group={"gameui/fog/FogHandin.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogBoxUI={modal=1, path=FogBoxUI, modalAlpha=0.6, group={"gameui/fog/FogBox.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogBagItemFullLevelUI={modal=1, path=FogBagItemFullLevelUI, modalAlpha=0.6, group={"gameui/fog/FogBagItemFullLevel.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogFreeActUI={modal=1, path=FogFreeActUI, modalAlpha=0.6, group={"gameui/fog/FogFreeAct.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogRoleLineItemUI={modal=1, path=FogRoleLineItemUI, modalAlpha=0, group={"gameui/fog/FogRoleLineItem.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogUserRoleUI={modal=1, path=FogUserRoleUI, modalAlpha=0.6, group={"gameui/fog/FogUserRole.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogObstacleUI={modal=1, path=FogObstacleUI, modalAlpha=0.6, group={"gameui/fog/FogObstacle.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogNpcTalkUI={modal=1, path=FogNpcTalkUI, modalAlpha=0.6, group={"gameui/fog/FogNpcTalk.scene"}, subPackage={"uisource", "atlas_source", SubPackageConst.packName_heroIconBig}}, WindowCfgs.FogDoorUI={modal=1, path=FogDoorUI, modalAlpha=0.6, group={"gameui/fog/FogDoor.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogTipUI={modal=1, path=FogTipUI, modalAlpha=0.6, group={"gameui/fog/FogTip.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogStartWarUI={modal=1, path=FogStartWarUI, modalAlpha=0.6, group={"gameui/fog/FogStartWar.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogResultRewardUI={modal=1, path=FogResultRewardUI, modalAlpha=0.6, group={"gameui/fog/FogResultReward.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogResultUI={modal=1, path=FogResultUI, modalAlpha=0.7, group={"gameui/fog/FogResult.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogRewardItemUI={modal=1, path=FogRewardItemUI, modalAlpha=0, group={"gameui/fog/FogRewardItem.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogShopItemDetailUI={modal=1, path=FogShopItemDetailUI, modalAlpha=0.6, group={"gameui/fog/FogShopItemDetail.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCfgs.FogBattleStartAlertUI={modal=1, path=FogBattleStartAlertUI, modalAlpha=0.6, group={"gameui/fog/FogBattleStartAlert.scene"}, subPackage={"uisource", "atlas_source"}}, WindowCommonCfgs.ChangeDataView={modal=1, path=ChangeDataUI, modalAlpha=0.01, group={"gameui/changeData/ChangeData.scene"}}, WindowCfgs.SettingUI={modal=1, path=SettingUI, modalAlpha=0.6, group={"gameui/main/Setting.scene"}}}
+  end
+  return WindowCfgs._windowcfgs
+end
