@@ -19,7 +19,7 @@ namespace Resource
         public static ResourceManager Instance { get { if( instance == null ) { instance = new ResourceManager(); } return instance; } }
         private ResourceManager() { }
 
-        public const string BUNDLE_PATH = "bundle/";
+        public const string BUNDLE_PATH = "bundles/";
         public const string BYTES_PATH = "bytes/";
         public const string TEMP_PATH = "temp/";
 
@@ -47,7 +47,11 @@ namespace Resource
 
         public void Init( GameObject go )
         {
+#if UNITY_EDITOR
+            assetPath = "Assets" + "/AssetsBoundles/";
+#else
             assetPath = string.Concat( Application.persistentDataPath, "/", GameConstants.SERVER_URL_BRANCH, "/GameResources/" );
+#endif
             bytesLuaTxtPath = string.Concat( assetPath, BYTES_PATH, "{0}.byte" );
 
 			SetVersionNumber ();
@@ -69,6 +73,7 @@ namespace Resource
 
             goBoot = go;
             bundleManager = goBoot.AddComponent<LoadAssetBundle>();
+            bundleManager.Init();
             loadResources = goBoot.AddComponent<LoadResources>();
 
             TextAsset configTxt = Resources.Load<TextAsset>( "gameConfig" );
@@ -237,9 +242,9 @@ namespace Resource
             else
             {
 #if UNITY_EDITOR
-                if( GameConstants.LoadAssetByEditor )
+                if (GameConstants.LoadAssetByEditor)
                 {
-                    return UnityEditor.AssetDatabase.LoadAssetAtPath<T>( path );
+                    return UnityEditor.AssetDatabase.LoadAssetAtPath<T>(path);
                 }
 #endif
                 //SetCacheBundleName( bundleName );
@@ -359,9 +364,9 @@ namespace Resource
             return mat;
         }
 
-        #endregion
+#endregion
 
-        #region Release asset API
+#region Release asset API
 
         public void ReleaseAsset( string bundleName, string assetName )
         {
@@ -387,9 +392,9 @@ namespace Resource
             bundleManager.UnloadBundle( bundleName, unloadAllLoadedObjects );
         }
 
-        #endregion
+#endregion
 
-        #region Get table data
+#region Get table data
 
         /// <summary>
         /// Get bundle table info

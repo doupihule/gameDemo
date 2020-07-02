@@ -25,7 +25,7 @@ namespace Constants
 #endif
         public const string ZIP_SECRET_KEY = "OXZpSnBTWGJ4VExlYlN3bw==";
         public const string BUNDLE_EXT_NAME = ".bundle";
-        public const string BUNDLE_MANIFEST = "assetbundle";
+        public const string BUNDLE_MANIFEST = "AssetsBoundles";
         public const string LOCAL_ZIP_TIMETAMP_PATH = "timestampZip.dat";
         public const string LOCAL_BYTE_TIMETAMP_PATH = "timestampByte.dat";
         public const string ZIP_FILE_LIST_DAT = "zipFileList.dat";
