@@ -34,7 +34,7 @@ require("game/fog/trigger/FogPropTrigger")
 require("game/sys/manager/GuideManager")
 require("game/sys/consts/GuideConst")
 
-BattleDetailUI = newClass({ui.gameui.battle.BattleDetailUI}, {name = 'BattleDetailUI'})
+BattleDetailUI = class('BattleDetailUI',ui.gameui.battle.BattleDetailUI)
 
 function BattleDetailUI:ctor()
   self:superCall('ctor')

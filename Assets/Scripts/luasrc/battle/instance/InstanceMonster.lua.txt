@@ -1,7 +1,7 @@
 require("game/battle/instance/InstanceLogical")
 require("game/sys/consts/BattleConst")
 
-InstanceMonster = newClass({InstanceLogical}, {name = 'InstanceMonster'})
+InstanceMonster = class('InstanceMonster',InstanceLogical)
 
 InstanceMonster._tempPos = Laya.Point();
 function InstanceMonster:ctor(controler)

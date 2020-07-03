@@ -14,7 +14,7 @@ require("game/sys/manager/StatisticsManager")
 require("framework/manager/BannerAdManager")
 require("ui/layaMaxUI")
 
-BattleFullEnergyUI = newClass({ui.gameui.battle.BattleFullEnergyUI}, {name = 'BattleFullEnergyUI'})
+BattleFullEnergyUI = class('BattleFullEnergyUI',ui.gameui.battle.BattleFullEnergyUI)
 
 function BattleFullEnergyUI:ctor()
   self:superCall('ctor')

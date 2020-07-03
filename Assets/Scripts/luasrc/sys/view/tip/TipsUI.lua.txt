@@ -1,6 +1,6 @@
 require("framework/utils/ScreenAdapterTools")
 
-TipsUI = newClass({Laya.Sprite}, {name = 'TipsUI'})
+TipsUI = class('TipsUI',Laya.Sprite)
 
 TipsUI.res = {};
 function TipsUI:ctor()

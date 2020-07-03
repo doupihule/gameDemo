@@ -1,7 +1,7 @@
 require("game/sys/model/BaseModel")
 require("framework/common/kakura/Client")
 
-CountsModel = newClass({BaseModel}, {name = 'CountsModel'})
+CountsModel = class('CountsModel',BaseModel)
 function CountsModel:ctor()
   self:superCall('ctor')
 end

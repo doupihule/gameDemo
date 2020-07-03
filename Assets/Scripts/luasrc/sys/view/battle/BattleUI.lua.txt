@@ -31,7 +31,7 @@ require("game/fog/trigger/FogPropTrigger")
 require("game/sys/consts/FogConst")
 require("ui/layaMaxUI")
 
-BattleUI = newClass({ui.gameui.battle.BattleUI}, {name = 'BattleUI'})
+BattleUI = class('BattleUI',ui.gameui.battle.BattleUI)
 
 function BattleUI:ctor()
   self:superCall('ctor')

@@ -24,7 +24,7 @@ require("game/sys/func/InviteFunc")
 require("game/sys/event/FogEvent")
 require("game/sys/model/UserExtModel")
 
-UserModel = newClass({BaseModel}, {name = 'UserModel'})
+UserModel = class('UserModel',BaseModel)
 function UserModel:ctor(...)
   self:superCall('ctor', unpack({...}))
   self.incomeCoin = {};

@@ -1,6 +1,6 @@
 require("framework/func/BaseFunc")
 
-DailyDiamondFunc = newClass({BaseFunc}, {name = 'DailyDiamondFunc'})
+DailyDiamondFunc = class('DailyDiamondFunc',BaseFunc)
 
 function DailyDiamondFunc.__getters.instance()
   if not DailyDiamondFunc._instance then

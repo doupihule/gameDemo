@@ -14,7 +14,7 @@ require("game/sys/func/LevelFunc")
 require("game/sys/model/TalentSkillsModel")
 require("game/sys/model/UserModel")
 
-UserExtModel = newClass({BaseModel}, {name = 'UserExtModel'})
+UserExtModel = class('UserExtModel',BaseModel)
 
 function UserExtModel:ctor()
   self:superCall('ctor')

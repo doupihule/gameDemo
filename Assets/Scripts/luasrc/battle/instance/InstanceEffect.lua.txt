@@ -3,7 +3,7 @@ require("game/sys/consts/BattleConst")
 require("game/sys/func/BattleFunc")
 require("game/battle/trigger/SkillExpandTrigger")
 
-InstanceEffect = newClass({InstanceBasic}, {name = 'InstanceEffect'})
+InstanceEffect = class('InstanceEffect',InstanceBasic)
 function InstanceEffect:ctor(controler)
   self:superCall('ctor',controler)
   self.layerIndex = 2;

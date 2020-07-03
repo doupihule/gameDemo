@@ -2,7 +2,7 @@ require("game/battle/instance/InstanceLogical")
 require("game/sys/consts/BattleConst")
 require("game/sys/func/BattleFunc")
 
-InstanceHome = newClass({InstanceLogical}, {name = 'InstanceHome'})
+InstanceHome = class('InstanceHome',InstanceLogical)
 function InstanceHome:ctor(controler)
   self:superCall('ctor',controler)
   self.classModel = BattleConst.model_home

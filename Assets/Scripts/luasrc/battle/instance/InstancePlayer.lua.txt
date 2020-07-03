@@ -8,7 +8,7 @@ require("game/sys/consts/GameConsts")
 require("framework/manager/WindowManager")
 require("framework/func/TranslateFunc")
 
-InstancePlayer = newClass({InstanceHero}, {name = 'InstancePlayer'})
+InstancePlayer = class('InstancePlayer',InstanceHero)
 
 function InstancePlayer:ctor(controler)
   self:superCall('ctor',controler)

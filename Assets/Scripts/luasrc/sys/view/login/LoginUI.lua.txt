@@ -10,7 +10,7 @@ require("framework/utils/ButtonUtils")
 require("game/sys/consts/StorageCode")
 require("framework/common/UserInfo")
 
-LoginUI = newClass({ui.gameui.login.LoginUI}, {name = 'LoginUI'})
+LoginUI = class('LoginUI',ui.gameui.login.LoginUI)
 LoginUI.res = {"gameui/Login.scene"};
 function LoginUI:ctor()
   self:superCall('ctor')

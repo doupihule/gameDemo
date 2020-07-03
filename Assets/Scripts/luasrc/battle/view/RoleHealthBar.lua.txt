@@ -1,6 +1,6 @@
 require("game/sys/consts/ResourceConst")
 
-RoleHealthBar = newClass({Laya.Sprite}, {name = 'RoleHealthBar'})
+RoleHealthBar = class('RoleHealthBar',Laya.Sprite)
 
 function RoleHealthBar:ctor()
   self:superCall('ctor')

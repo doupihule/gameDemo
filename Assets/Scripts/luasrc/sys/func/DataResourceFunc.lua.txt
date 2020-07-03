@@ -4,7 +4,7 @@ require("framework/manager/WindowManager")
 require("game/sys/func/RolesFunc")
 require("game/sys/func/DataResourceFunc/DataResourceType")
 
-DataResourceFunc = newClass({BaseFunc}, {name = 'DataResourceFunc'})
+DataResourceFunc = class('DataResourceFunc',BaseFunc)
 
 function DataResourceFunc.__getters.instance()
   if not DataResourceFunc._instance then

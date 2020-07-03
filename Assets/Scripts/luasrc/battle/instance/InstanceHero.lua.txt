@@ -9,7 +9,7 @@ require("game/battle/trigger/BuffTrigger")
 require("framework/manager/WindowManager")
 require("framework/func/TranslateFunc")
 
-InstanceHero = newClass({InstanceLogical}, {name = 'InstanceHero'})
+InstanceHero = class('InstanceHero',InstanceLogical)
 
 function InstanceHero:ctor(controler)
   self:superCall('ctor',controler)

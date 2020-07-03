@@ -9,7 +9,7 @@ require("framework/common/GameSwitch")
 require("framework/common/UserInfo")
 require("game/battle/view/BattleRoleView")
 
-BattleFunc = newClass({BaseFunc}, {name = 'BattleFunc'})
+BattleFunc = class('BattleFunc',BaseFunc)
 BattleFunc.debugValue = "0";
 BattleFunc.idToShowMap = {};
 BattleFunc.zorder_blackScreen = 2000 * 10;

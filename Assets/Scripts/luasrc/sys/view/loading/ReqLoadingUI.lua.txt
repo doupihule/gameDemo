@@ -1,5 +1,5 @@
 
-ReqLoadingUI = newClass({Laya.View}, {name = 'ReqLoadingUI'})
+ReqLoadingUI = class('ReqLoadingUI',Laya.View)
 ReqLoadingUI.res = nil;
 function ReqLoadingUI:ctor()
   self:superCall('ctor')

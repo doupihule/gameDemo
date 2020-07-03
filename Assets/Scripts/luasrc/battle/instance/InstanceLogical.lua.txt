@@ -10,7 +10,7 @@ require("game/battle/trigger/ConditionTrigger")
 require("game/sys/manager/BattleLogsManager")
 require("game/battle/trigger/SkillExpandTrigger")
 
-InstanceLogical = newClass({InstanceLife}, {name = 'InstanceLogical'})
+InstanceLogical = class('InstanceLogical',InstanceLife)
 function InstanceLogical:ctor(...)
   self:superCall('ctor', unpack({...}))
   self.leftWaitFrame = 0;

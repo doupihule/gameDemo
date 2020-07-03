@@ -10,7 +10,7 @@ require("game/sys/manager/BattleLogsManager")
 require("game/battle/view/BattleRoleView")
 require("framework/utils/TableUtils")
 
-InstancePerformance = newClass({InstanceMove}, {name = 'InstancePerformance'})
+InstancePerformance = class('InstancePerformance',InstanceMove)
 
 function InstancePerformance:ctor(controler)
   self:superCall('ctor',controler)

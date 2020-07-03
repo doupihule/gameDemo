@@ -1,7 +1,7 @@
 require("framework/utils/PoolTools")
 require("game/sys/consts/PoolCode")
 
-RoleBuffBar = newClass({Laya.Sprite}, {name = 'RoleBuffBar'})
+RoleBuffBar = class('RoleBuffBar',Laya.Sprite)
 
 function RoleBuffBar:ctor()
   self:superCall('ctor')

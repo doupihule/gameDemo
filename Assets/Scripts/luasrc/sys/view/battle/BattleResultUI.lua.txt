@@ -44,7 +44,7 @@ require("game/fog/trigger/FogPropTrigger")
 require("game/sys/server/FogServer")
 require("game/sys/consts/FogConst")
 
-BattleResultUI = newClass({ui.gameui.battle.BattleResultUI}, {name = 'BattleResultUI'})
+BattleResultUI = class('BattleResultUI',ui.gameui.battle.BattleResultUI)
 
 function BattleResultUI:ctor()
   self:superCall('ctor')

@@ -18,7 +18,7 @@ require("game/sys/consts/ResourceConst")
 require("game/sys/func/RolesFunc")
 require("game/battle/instance/InstanceMove")
 
-InstanceLife = newClass({InstancePerformance}, {name = 'InstanceLife'})
+InstanceLife = class('InstanceLife',InstancePerformance)
 
 function InstanceLife.__getters:maxHp()
   return self.attrData:getOneAttr(BattleConst.attr_maxHp)

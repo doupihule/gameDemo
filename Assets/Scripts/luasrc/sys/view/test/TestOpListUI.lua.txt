@@ -11,7 +11,7 @@ require("utils/Global")
 require("game/sys/consts/GMConst")
 require("framework/server/SingleCommonServer")
 
-TestOpListUI = newClass({ui.gameui.test.TestOpListUI}, {name = 'TestOpListUI'})
+TestOpListUI = class('TestOpListUI',ui.gameui.test.TestOpListUI)
 TestOpListUI.res = {"gameui/TestOpList.scene"};
 function TestOpListUI:ctor()
   self:superCall('ctor')

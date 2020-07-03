@@ -7,7 +7,7 @@ require("game/battle/instance/InstanceBasic")
 require("game/sys/consts/PoolCode")
 require("game/battle/trigger/SkillExpandTrigger")
 
-InstanceMove = newClass({InstanceBasic}, {name = 'InstanceMove'})
+InstanceMove = class('InstanceMove',InstanceBasic)
 InstanceMove.moveType_none = 0;
 InstanceMove.moveType_onePoint = 1;
 InstanceMove.moveType_multyPoint = 2;

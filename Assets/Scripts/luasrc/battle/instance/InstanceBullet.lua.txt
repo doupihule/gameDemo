@@ -10,7 +10,7 @@ require("framework/utils/PoolTools")
 require("game/battle/data/BattleAoeData")
 require("game/sys/consts/PoolCode")
 
-InstanceBullet = newClass({InstanceMove}, {name = 'InstanceBullet'})
+InstanceBullet = class('InstanceBullet',InstanceMove)
 
 function InstanceBullet:ctor(controler)
   self:superCall('ctor',controler)

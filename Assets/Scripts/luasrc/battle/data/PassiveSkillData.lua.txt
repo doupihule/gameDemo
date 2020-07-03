@@ -1,7 +1,7 @@
 require("game/battle/data/BattleSkillData")
 require("game/sys/func/BattleFunc")
 
-PassiveSkillData = newClass({BattleSkillData}, {name = 'PassiveSkillData'})
+PassiveSkillData = class('PassiveSkillData',BattleSkillData)
 
 function PassiveSkillData:ctor(skillId, level, role, skillType, relyonSkill)
   if relyonSkill == nil then

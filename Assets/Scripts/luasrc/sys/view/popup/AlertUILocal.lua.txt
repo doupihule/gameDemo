@@ -4,7 +4,7 @@ require("framework/manager/WindowManager")
 require("game/sys/consts/WindowCfgs")
 require("framework/utils/TableUtils")
 
-AlertUILocal = newClass({Laya.View}, {name = 'AlertUILocal'})
+AlertUILocal = class('AlertUILocal',Laya.View)
 AlertUILocal.res = nil;
 AlertUILocal.instance = nil;
 function AlertUILocal:ctor()
