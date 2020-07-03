@@ -16,7 +16,7 @@ require("game/sys/consts/BattleConst")
 require("framework/manager/SoundManager")
 require("game/sys/model/SwitchModel")
 
-FrameWorkHandle = newClass({Class}, {name = 'FrameWorkHandle'})
+FrameWorkHandle = class('FrameWorkHandle')
 
 function FrameWorkHandle.__getters.instance()
   if not FrameWorkHandle._instance then

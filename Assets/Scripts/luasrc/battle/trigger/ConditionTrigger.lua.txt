@@ -6,7 +6,7 @@ require("framework/manager/LogsManager")
 require("game/battle/trigger/PassiveSkillTrigger")
 require("game/sys/manager/BattleLogsManager")
 
-ConditionTrigger = newClass({Class}, {name = 'ConditionTrigger'})
+ConditionTrigger = class('ConditionTrigger')
 ConditionTrigger.opportunity_refreshMonster = 1;
 ConditionTrigger.opportunity_startBattle = 2;
 ConditionTrigger.opportunity_onRoleDied = 3;

@@ -1,4 +1,4 @@
-InstanceMoveEntity = newClass({Class}, {name = 'InstanceMoveEntity'})
+InstanceMoveEntity = class('InstanceMoveEntity')
 
 function InstanceMoveEntity:ctor(target, spd, callFunc, thisObj, expandParams)
   self.spd = 0;

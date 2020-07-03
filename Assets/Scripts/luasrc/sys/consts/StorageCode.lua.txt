@@ -3,7 +3,7 @@ require("game/sys/consts/GameConsts")
 require("framework/manager/PackConfigManager")
 require("framework/common/UserInfo")
 
-StorageCode = newClass({Class}, {name = 'StorageCode'})
+StorageCode = class('StorageCode')
 StorageCode.storage_vmsversion = "storage_vmsversion";
 StorageCode.storage_wxGuide = "wxGuide";
 StorageCode.storage_isNewPlayer = "isNewPlayer";

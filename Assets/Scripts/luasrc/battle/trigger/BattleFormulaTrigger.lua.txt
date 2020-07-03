@@ -8,7 +8,7 @@ require("game/sys/consts/GameSwitchConst")
 require("game/sys/manager/BattleLogsManager")
 require("framework/common/UserInfo")
 
-BattleFormulaTrigger = newClass({Class}, {name = 'BattleFormulaTrigger'})
+BattleFormulaTrigger = class('BattleFormulaTrigger')
 BattleFormulaTrigger._cacheLogsMap = {};
 function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue, skillPercentValue, buff)
   if buff == nil then

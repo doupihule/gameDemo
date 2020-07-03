@@ -1,5 +1,5 @@
 require("framework/utils/TableUtils")
-BaseModel = newClass({Class}, {name = 'BaseModel'})
+BaseModel = class('BaseModel')
 
 function BaseModel:initData(data)
   self._data = data

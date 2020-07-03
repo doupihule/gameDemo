@@ -1,7 +1,7 @@
 require("utils/Global")
 require("framework/common/UserInfo")
 
-TestPlatform = newClass({Class}, {name = 'TestPlatform'})
+TestPlatform = class('TestPlatform')
 TestPlatform.dev = {platform="dev", upgrade_path="web_cn", vms_url="https://overtake-dev.fantasyfancy.com:8443", vms_version=1};
 TestPlatform.test = {platform="test", upgrade_path="web_cn", vms_url="https://gunner-test-vms.fantasyfancy.com:8604/", vms_version=1};
 TestPlatform.testWEB = {platform="test", upgrade_path="web_cn", vms_url="https://football-test.fantasyfancy.com:8443/", vms_version=1};

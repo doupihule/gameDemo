@@ -1,6 +1,6 @@
 require("framework/common/UserInfo")
 
-SubPackageConst = newClass({Class}, {name = 'SubPackageConst'})
+SubPackageConst = class('SubPackageConst')
 SubPackageConst.packName_share = "share";
 SubPackageConst.packName_json = "json";
 SubPackageConst.packName_jsonreview = "jsonreview";

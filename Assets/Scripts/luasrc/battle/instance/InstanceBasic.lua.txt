@@ -2,7 +2,7 @@ require("game/sys/func/BattleFunc")
 require("framework/manager/LogsManager")
 require("game/sys/consts/BattleConst")
 
-InstanceBasic = newClass({Class}, {name = 'InstanceBasic'})
+InstanceBasic = class('InstanceBasic')
 
 InstanceBasic._instanceCount = 0;
 function InstanceBasic:ctor(controler)

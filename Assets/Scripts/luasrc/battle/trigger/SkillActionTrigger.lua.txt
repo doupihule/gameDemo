@@ -13,7 +13,7 @@ require("game/battle/trigger/ChooseTrigger")
 require("game/battle/trigger/SkillExpandTrigger")
 require("framework/utils/TableUtils")
 
-SkillActionTrigger = newClass({Class}, {name = 'SkillActionTrigger'})
+SkillActionTrigger = class('SkillActionTrigger')
 SkillActionTrigger.action_dmage = 1;
 SkillActionTrigger.action_resumehp = 2;
 SkillActionTrigger.action_xixue = 3;

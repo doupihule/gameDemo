@@ -2,7 +2,7 @@ require("framework/manager/TimerManager")
 require("framework/utils/StringUtils")
 require("framework/utils/BigNumUtils")
 
-TweenAniManager = newClass({Class}, {name = 'TweenAniManager'})
+TweenAniManager = class('TweenAniManager')
 
 function TweenAniManager:ctor() end
 function TweenAniManager.__getters.instance()

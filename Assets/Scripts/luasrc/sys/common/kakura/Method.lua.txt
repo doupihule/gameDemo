@@ -1,4 +1,4 @@
-Method = newClass({Class}, {name = 'Method'})
+Method = class('Method')
 Method.global_HeartBeat = "heartBeat";
 Method.global_Account_loginTest = "201";
 Method.global_Account_loginOurpalm = "211";

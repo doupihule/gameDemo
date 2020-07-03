@@ -1,2 +1,2 @@
-ShareBtnName = newClass({Class}, {name = 'ShareBtnName'})
+ShareBtnName = class('ShareBtnName')
 ShareBtnName.FightShareBtn = "FightResultUI.sharebtn";

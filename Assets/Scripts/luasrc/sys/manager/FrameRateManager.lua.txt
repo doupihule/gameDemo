@@ -1,6 +1,6 @@
 require("framework/common/UserInfo")
 
-FrameRateManager = newClass({Class}, {name = 'FrameRateManager'})
+FrameRateManager = class('FrameRateManager')
 function FrameRateManager:ctor(...)
   self:superCall('ctor', unpack({...}))
   self.num = 0;

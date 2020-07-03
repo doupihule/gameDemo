@@ -1,4 +1,4 @@
-PoolCode = newClass({Class}, {name = 'PoolCode'})
+PoolCode = class('PoolCode')
 PoolCode.POOL_MONSTER = "POOL_MONSTER";
 PoolCode.POOL_PLAYER = "POOL_PLAYER";
 PoolCode.POOL_BUTTLE = "POOL_BUTTLE";

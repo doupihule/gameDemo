@@ -1,4 +1,4 @@
-ErrorCode = newClass({Class}, {name = 'ErrorCode'})
+ErrorCode = class('ErrorCode')
 ErrorCode.sec_maintain = "10053";
 ErrorCode.player_lv_not_enough = "10013";
 ErrorCode.sec_close = "10054";

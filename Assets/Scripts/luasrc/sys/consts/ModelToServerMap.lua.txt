@@ -12,7 +12,7 @@ require("game/sys/model/DailyGoldModel")
 require("game/sys/model/PiecesModel")
 require("game/sys/model/FogModel")
 
-ModelToServerMap = newClass({Class}, {name = 'ModelToServerMap'})
+ModelToServerMap = class('ModelToServerMap')
 function ModelToServerMap:ctor() end
 ModelToServerMap.modelToServerMap = {};
 function ModelToServerMap.initModelToServerMap()

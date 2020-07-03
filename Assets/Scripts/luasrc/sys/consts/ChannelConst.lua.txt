@@ -1,6 +1,6 @@
 require("framework/manager/LogsManager")
 
-ChannelConst = newClass({Class}, {name = 'ChannelConst'})
+ChannelConst = class('ChannelConst')
 ChannelConst.web = {};
 ChannelConst.wxgame = {adVideoId='adunit-8d1631776e7b6007', adBannerId='adunit-95eefbc9b5fec03d', adInterstitialId='adunit-e8cfc0e2ebf39115', recommendBannerId='PBgAAc_gXjntOKNM', recommendPortalId='PBgAAc_gXjngbFsw'};
 ChannelConst.tt = {adVideoId='2cb0dh6hae701gje0l', adBannerId='4mugmrf2ekd10c6db7'};

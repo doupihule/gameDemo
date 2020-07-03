@@ -1,6 +1,6 @@
 require("framework/common/UserInfo")
 
-GameConsts = newClass({Class}, {name = 'GameConsts'})
+GameConsts = class('GameConsts')
 GameConsts.defaultPhysicsMemory = 16;
 GameConsts.gameFrameRate = 60;
 GameConsts.isUsePhysics = false;

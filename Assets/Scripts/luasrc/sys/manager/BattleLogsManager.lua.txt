@@ -1,6 +1,6 @@
 require("framework/manager/LogsManager")
 
-BattleLogsManager = newClass({Class}, {name = 'BattleLogsManager'})
+BattleLogsManager = class('BattleLogsManager')
 
 BattleLogsManager.isShowBattleLog = true;
 function BattleLogsManager.__getters.instance()

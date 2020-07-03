@@ -77,7 +77,7 @@ require("game/sys/view/fog/FogBattleStartAlertUI")
 require("game/sys/view/main/SettingUI")
 require("game/sys/consts/SubPackageConst")
 
-WindowCfgs = newClass({Class}, {name = 'WindowCfgs'})
+WindowCfgs = class('WindowCfgs')
 function WindowCfgs:ctor() end
 WindowCfgs.UISHOWTYPE_SCALEIN = 1;
 WindowCfgs.UISHOWTYPE_FADEIN = 2;

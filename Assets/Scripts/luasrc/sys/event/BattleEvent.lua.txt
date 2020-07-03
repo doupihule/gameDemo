@@ -1,4 +1,4 @@
-BattleEvent = newClass({Class}, {name = 'BattleEvent'})
+BattleEvent = class('BattleEvent')
 BattleEvent.BATTLEEVENT_BATTLESTART = "BATTLEEVENT_BATTLESTART";
 BattleEvent.BATTLEEVENT_BATTLEEXIT = "BATTLEEVENT_BATTLEEXIT";
 BattleEvent.GUIDEEVENT_REPLAY_BATTLE = "GUIDEEVENT_REPLAY_BATTLE";

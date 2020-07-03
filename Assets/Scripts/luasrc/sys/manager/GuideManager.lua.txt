@@ -7,7 +7,7 @@ require("game/sys/consts/WindowCfgs")
 require("game/sys/server/GuideServer")
 require("game/sys/consts/GuideConst")
 
-GuideManager = newClass({Class}, {name = 'GuideManager'})
+GuideManager = class('GuideManager')
 function GuideManager:ctor(...)
   self:superCall('ctor', unpack({...}))
   self.noMask = false;

@@ -1,4 +1,4 @@
-GuideConst = newClass({Class}, {name = 'GuideConst'})
+GuideConst = class('GuideConst')
 GuideConst.GUIDE_1_101 = "101";
 GuideConst.GUIDE_1_101_1 = "102";
 GuideConst.GUIDE_1_101_2 = "103";

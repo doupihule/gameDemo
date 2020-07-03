@@ -6,7 +6,7 @@ require("framework/utils/RandomUtis")
 require("framework/utils/TableUtils")
 require("game/sys/model/SwitchModel")
 
-SkillExpandTrigger = newClass({Class}, {name = 'SkillExpandTrigger'})
+SkillExpandTrigger = class('SkillExpandTrigger')
 SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT = "1";
 function SkillExpandTrigger.onCheckExpand(instance, skill, expandParams, useArr, isFollow)
   if isFollow == nil then

@@ -1,4 +1,4 @@
-MusicConst = newClass({Class}, {name = 'MusicConst'})
+MusicConst = class('MusicConst')
 MusicConst.MUSIC_BGM = "main_bg";
 MusicConst.MUSIC_BATTLE_MUSIC = "main_bg";
 MusicConst.SOUND_BATTLE_BG = "main_bg";

@@ -8,7 +8,7 @@ require("game/sys/consts/PoolCode")
 require("game/battle/trigger/BattleFormulaTrigger")
 require("game/sys/manager/BattleLogsManager")
 
-BuffTrigger = newClass({Class}, {name = 'BuffTrigger'})
+BuffTrigger = class('BuffTrigger')
 BuffTrigger.buff_logical_dmage = 1;
 BuffTrigger.buff_logical_prop = 2;
 BuffTrigger.buff_logical_otherprop = 3;

@@ -5,7 +5,7 @@ require("game/sys/consts/BattleConst")
 require("game/battle/trigger/BuffTrigger")
 require("game/sys/manager/BattleLogsManager")
 
-ChooseTrigger = newClass({Class}, {name = 'ChooseTrigger'})
+ChooseTrigger = class('ChooseTrigger')
 function ChooseTrigger.chooseNearRole(targetRole, instanceArr)
   local resultRole = nil
   local targetDis = 0

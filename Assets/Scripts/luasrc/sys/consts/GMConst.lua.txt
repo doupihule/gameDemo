@@ -1,4 +1,4 @@
-GMConst = newClass({Class}, {name = 'GMConst'})
+GMConst = class('GMConst')
 
 function GMConst.getOplistData()
   if not GMConst._oplistData then

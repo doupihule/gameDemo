@@ -5,7 +5,7 @@ require("game/sys/consts/BattleConst")
 require("game/battle/trigger/ChooseTrigger")
 require("framework/utils/TableUtils")
 
-PassiveSkillTrigger = newClass({Class}, {name = 'PassiveSkillTrigger'})
+PassiveSkillTrigger = class('PassiveSkillTrigger')
 function PassiveSkillTrigger.runOnePassiveGlobalAttr(passive, attrMap, targtRole, way)
   if targtRole == nil then
     targtRole=nil

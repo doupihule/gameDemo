@@ -3,7 +3,7 @@ require("framework/manager/LogsManager")
 require("framework/utils/FileUtils")
 require("framework/manager/StatisticsExtendManager")
 
-StatisticsManager = newClass({Class}, {name = 'StatisticsManager'})
+StatisticsManager = class('StatisticsManager')
 function StatisticsManager:ctor(...)
   self:superCall('ctor', unpack({...}))
   self._event_with_switch = {};

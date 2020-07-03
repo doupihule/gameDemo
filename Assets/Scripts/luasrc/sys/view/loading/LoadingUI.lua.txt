@@ -3,7 +3,7 @@ require("utils/Global")
 require("framework/utils/ScreenAdapterTools")
 require("game/battle/view/BattleRoleView")
 
-LoadingUI = newClass({Class}, {name = 'LoadingUI'})
+LoadingUI = class('LoadingUI')
 
 function LoadingUI:ctor()
   self.progress = 0;

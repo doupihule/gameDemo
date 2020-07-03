@@ -5,7 +5,7 @@ require("game/sys/consts/BattleConst")
 require("game/battle/controler/BattleDebugTool")
 require("game/sys/func/FogFunc")
 
-BattleSkillData = newClass({Class}, {name = 'BattleSkillData'})
+BattleSkillData = class('BattleSkillData')
 
 function BattleSkillData:ctor(skillId, level, role, skillType, relyonSkill, lifeType)
   self.leftSkillCd = 0;

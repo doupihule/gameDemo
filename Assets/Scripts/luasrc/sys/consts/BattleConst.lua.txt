@@ -1,4 +1,4 @@
-BattleConst = newClass({Class}, {name = 'BattleConst'})
+BattleConst = class('BattleConst')
 BattleConst.battle_game_mode_auto = 1;
 BattleConst.battle_game_mode_boss = 2;
 BattleConst.ROLEGROUP_MYSELF = 1;

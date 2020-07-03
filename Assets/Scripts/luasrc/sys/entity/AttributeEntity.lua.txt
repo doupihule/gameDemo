@@ -1,7 +1,7 @@
 require("framework/utils/TableUtils")
 require("game/sys/func/BattleFunc")
 
-AttributeEntity = newClass({Class}, {name = 'AttributeEntity'})
+AttributeEntity = class('AttributeEntity')
 
 function AttributeEntity:ctor(data)
   local scaleValue = 1
