@@ -4,7 +4,7 @@ require("game/sys/func/BattleFunc")
 
 BattleDamageLabel = class('BattleDamageLabel',Laya.Sprite)
 function BattleDamageLabel:ctor()
-  self:superCall('ctor')
+  BattleDamageLabel.super.ctor(self)
   self._childLabels = {}
 end
 

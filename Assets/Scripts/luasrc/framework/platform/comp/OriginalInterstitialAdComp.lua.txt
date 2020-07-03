@@ -10,7 +10,7 @@ require("framework/platform/AdVideoManager")
 
 OriginalInterstitialAdComp = class('OriginalInterstitialAdComp',OriginalAdBaseComp)
 function OriginalInterstitialAdComp:ctor(...)
-  self:superCall('ctor', unpack({...}))
+  OriginalInterstitialAdComp.super.ctor(self, unpack({...}))
   self.logName = 'original_interstitial';
 end
 

@@ -26,7 +26,7 @@ function RecommendationBaiduComp:ctor(parent, type, left, top, onloadCallback)
   if onloadCallback == nil then
     onloadCallback=nil
   end
-  self:superCall('ctor')
+  RecommendationBaiduComp.super.ctor(self)
   self._retryTimes = 0;
   self._loadFinish = false;
   self._hideType = TopViewAutoComp.HIDE_TYPE_HIDE;
@@ -70,7 +70,7 @@ function RecommendationBaiduComp.canUseRecommendBaidu()
 end
 
 function RecommendationBaiduComp:destroy()
-  self:superCall('destroy')
+  RecommendationBaiduComp.super.destroy(self)
   self._loadFinish = false
   if self._recommendationButton then
     self._recommendationButton:destroy()

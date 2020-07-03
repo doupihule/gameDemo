@@ -3,7 +3,6 @@ require("framework/common/UserInfo")
 
 WhiteListFunc = class('WhiteListFunc',BaseFunc)
 function WhiteListFunc:ctor(...)
-  self:superCall('ctor', unpack({...}))
   self.whiteList = {};
 end
 

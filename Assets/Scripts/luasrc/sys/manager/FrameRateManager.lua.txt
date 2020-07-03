@@ -2,7 +2,7 @@ require("framework/common/UserInfo")
 
 FrameRateManager = class('FrameRateManager')
 function FrameRateManager:ctor(...)
-  self:superCall('ctor', unpack({...}))
+  FrameRateManager.super.ctor(self, unpack({...}))
   self.num = 0;
   self.lowFrameFPS = 30;
   self.highFrameFPS = 60;

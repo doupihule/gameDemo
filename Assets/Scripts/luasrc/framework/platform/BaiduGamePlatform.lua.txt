@@ -13,7 +13,7 @@ require("framework/common/kakura/MethodCommon")
 BaiduGamePlatform = class('BaiduGamePlatform',TTGamePlatform)
 
 function BaiduGamePlatform:ctor()
-  self:superCall('ctor')
+  BaiduGamePlatform.super.ctor(self)
   self._swanid = nil;
   self._swanid_signature = nil;
   -- [ts2lua]window下标访问可能不正确
@@ -28,7 +28,7 @@ function BaiduGamePlatform:getWX()
 end
 
 function BaiduGamePlatform:initPlatformData()
-  self:superCall('initPlatformData')
+  BaiduGamePlatform.super.initPlatformData(self)
   try_catch{
     main = function()
       self:initAntiAddiction()

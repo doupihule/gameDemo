@@ -17,7 +17,7 @@ require("game/sys/model/UserModel")
 UserExtModel = class('UserExtModel',BaseModel)
 
 function UserExtModel:ctor()
-  self:superCall('ctor')
+  UserExtModel.super.ctor(self)
   self.curSp = 0;
   self.upSpTime = 0;
   Message.instance:add(MsgCMD.GAME_ONHIDE, self)
@@ -32,11 +32,11 @@ function UserExtModel.__getters.instance()
 end
 
 function UserExtModel:initData(d)
-  self:superCall('initData',d)
+  UserExtModel.super.initData(self,d)
 end
 
 function UserExtModel:updateData(d)
-  self:superCall('updateData',d)
+  UserExtModel.super.updateData(self,d)
   if ((d.sp or d.sp == 0) or d.upSpTime) or d.upSpTime == 0 then
     Message.instance:send(UserEvent.USER_SP_CHANGE)
   end
@@ -46,7 +46,7 @@ function UserExtModel:updateData(d)
 end
 
 function UserExtModel:deleteData(d)
-  self:superCall('deleteData',d)
+  UserExtModel.super.deleteData(self,d)
 end
 
 function UserExtModel:getIsClickInvite()

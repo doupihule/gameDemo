@@ -6,7 +6,6 @@ require("game/sys/common/kakura/ErrorCode")
 
 KakuraMessage = class('KakuraMessage')
 function KakuraMessage:ctor(...)
-  self:superCall('ctor', unpack({...}))
   self.defaultAesKey = "ilo24wEFS*^^*2Ewilo24wEFS*^^*2Ew";
   self.headlength = 13;
   self._lastSendTime = 0;

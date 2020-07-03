@@ -6,7 +6,7 @@ require("framework/common/GameSwitch")
 
 OriginalIconAdComp = class('OriginalIconAdComp',OriginalAdBaseComp)
 function OriginalIconAdComp:ctor(...)
-  self:superCall('ctor', unpack({...}))
+  OriginalIconAdComp.super.ctor(self, unpack({...}))
   self.logName = 'original_icon';
 end
 

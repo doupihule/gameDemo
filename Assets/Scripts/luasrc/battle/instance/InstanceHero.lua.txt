@@ -12,13 +12,13 @@ require("framework/func/TranslateFunc")
 InstanceHero = class('InstanceHero',InstanceLogical)
 
 function InstanceHero:ctor(controler)
-  self:superCall('ctor',controler)
+  InstanceHero.super.ctor(self,controler)
   self._leftReliveFrame = 0;
   self.classModel = BattleConst.model_role
 end
 
 function InstanceHero:onDataChange(changeData)
-  self:superCall('onDataChange',changeData)
+  InstanceHero.super.onDataChange(self,changeData)
   local hasPassiveChange = false
   local tempPrassArr = BattleFunc.getOneTempArr()
   local tempPassiveData = BattleFunc.getOneTempArr()

@@ -2,7 +2,7 @@ require("game/battle/controler/BattleLogicalControler")
 
 BattleSceneManager = class('BattleSceneManager')
 function BattleSceneManager:ctor(...)
-  self:superCall('ctor', unpack({...}))
+  BattleSceneManager.super.ctor(self, unpack({...}))
   self._battestate = 0;
 end
 

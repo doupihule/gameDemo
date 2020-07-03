@@ -47,7 +47,7 @@ require("game/sys/consts/FogConst")
 BattleResultUI = class('BattleResultUI',ui.gameui.battle.BattleResultUI)
 
 function BattleResultUI:ctor()
-  self:superCall('ctor')
+  BattleResultUI.super.ctor(self)
   self.isWin = false;
   self.timeCode = 0;
   self.addPercent = 1;

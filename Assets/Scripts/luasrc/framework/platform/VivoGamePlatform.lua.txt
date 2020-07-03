@@ -16,7 +16,7 @@ require("framework/common/GameSwitch")
 VivoGamePlatform = class('VivoGamePlatform',WXGamePlatform)
 
 function VivoGamePlatform:ctor()
-  self:superCall('ctor')
+  VivoGamePlatform.super.ctor(self)
   self._lastShowVideoTime = 0;
   VivoGamePlatform.instance = self
 end

@@ -7,7 +7,7 @@ SkeletonExpand = class('SkeletonExpand',Laya.Skeleton)
 SkeletonExpand.cacheAniCompleteMap = {};
 SkeletonExpand._textureCache = {};
 function SkeletonExpand:ctor(templet, aniMode)
-  self:superCall('ctor',templet, aniMode)
+  SkeletonExpand.super.ctor(self,templet, aniMode)
   self._state = 0;
   self._changeTextureState = 0;
   self._cacheAniMode = 0;
@@ -130,7 +130,7 @@ function SkeletonExpand:play(nameOrIndex, loop, force, start, tsvar_end, freshSk
     self._cachePlayParams = {nameOrIndex, loop, force, start, tsvar_end, freshSkin, playAudio}
     return
   end
-  self:superCall('play',nameOrIndex, loop, force, start, tsvar_end, freshSkin, playAudio)
+  SkeletonExpand.super.play(self,nameOrIndex, loop, force, start, tsvar_end, freshSkin, playAudio)
 end
 
 function SkeletonExpand:showOrHideSlot(slotName, value)
@@ -179,5 +179,5 @@ function SkeletonExpand:stop()
     self._cachePlayParams = nil
     return
   end
-  self:superCall('stop')
+  SkeletonExpand.super.stop(self)
 end

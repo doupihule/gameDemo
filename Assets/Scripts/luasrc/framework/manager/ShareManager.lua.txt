@@ -1,6 +1,5 @@
 ShareManager = class('ShareManager')
 function ShareManager:ctor(...)
-  self:superCall('ctor', unpack({...}))
   self.sceneShare = {20001=410001, 20002=410002, 20003=410003, 20004=410004, 20005=410005};
 end
 

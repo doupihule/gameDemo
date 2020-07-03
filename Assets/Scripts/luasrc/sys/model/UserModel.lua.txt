@@ -26,7 +26,7 @@ require("game/sys/model/UserExtModel")
 
 UserModel = class('UserModel',BaseModel)
 function UserModel:ctor(...)
-  self:superCall('ctor', unpack({...}))
+  UserModel.super.ctor(self, unpack({...}))
   self.incomeCoin = {};
   self.refuseAuth = "refuseWxAuth";
 end
@@ -50,7 +50,7 @@ function UserModel:getRidMark()
 end
 
 function UserModel:initData(d)
-  self:superCall('initData',d)
+  UserModel.super.initData(self,d)
   UserInfo.platform:initChannelUserId(self:getUserRid())
   self:setGuideCache()
   SingleCommonServer.initData()
@@ -64,7 +64,7 @@ function UserModel:updateData(d)
       coinFlag = true
     end
   end
-  self:superCall('updateData',d)
+  UserModel.super.updateData(self,d)
   if ((((d.coin or d.coin == 0) or d.giftGold) or d.giftGold == 0) or d.gold) or d.gold == 0 then
     Message.instance:send(GameMainEvent.GAMEMAIN_EVENT_FRESHMONEY)
     if coinFlag then
@@ -78,7 +78,7 @@ function UserModel:updateData(d)
 end
 
 function UserModel:deleteData(d)
-  self:superCall('deleteData',d)
+  UserModel.super.deleteData(self,d)
 end
 
 function UserModel:getUserName()

@@ -11,7 +11,7 @@ require("framework/server/SingleCommonServer")
 ChangeDataUI = class('ChangeDataUI',ui.gameui.changeData.ChangeDataUI)
 
 function ChangeDataUI:ctor()
-  self:superCall('ctor')
+  ChangeDataUI.super.ctor(self)
   ButtonUtils(self.returnBtn, self.close, self)
   ButtonUtils(self.sureBtn, self.onClickSure, self)
 end

@@ -2,7 +2,7 @@ require("game/sys/model/BaseModel")
 
 UserExtCommonModel = class('UserExtCommonModel',BaseModel)
 function UserExtCommonModel:ctor()
-  self:superCall('ctor')
+  UserExtCommonModel.super.ctor(self)
 end
 
 function UserExtCommonModel.__getters.instance()
@@ -13,11 +13,11 @@ function UserExtCommonModel.__getters.instance()
 end
 
 function UserExtCommonModel:initData(d)
-  self:superCall('initData',d)
+  UserExtCommonModel.super.initData(self,d)
 end
 
 function UserExtCommonModel:updateData(d)
-  self:superCall('updateData',d)
+  UserExtCommonModel.super.updateData(self,d)
 end
 
 function UserExtCommonModel:getTestSceneMark()

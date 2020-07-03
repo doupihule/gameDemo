@@ -3,7 +3,7 @@ require("game/sys/consts/ResourceConst")
 RoleHealthBar = class('RoleHealthBar',Laya.Sprite)
 
 function RoleHealthBar:ctor()
-  self:superCall('ctor')
+  RoleHealthBar.super.ctor(self)
   self._initWidth = 80;
   self._initHeight = 8;
   self._offsetY = 0;

@@ -11,7 +11,7 @@ function BattleRoleView:ctor(viewName, scale, viewIndex)
   if viewIndex == nil then
     viewIndex=0
   end
-  self:superCall('ctor')
+  BattleRoleView.super.ctor(self)
   self.aniScale = 1;
   self._viewIndex = 0;
   self._viewScale = 1;

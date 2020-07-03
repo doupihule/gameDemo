@@ -1,6 +1,5 @@
 WaitEntity = class('WaitEntity')
 function WaitEntity:ctor(...)
-  self:superCall('ctor', unpack({...}))
   self.cmd = 0;
   self.time = 0;
 end

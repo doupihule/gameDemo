@@ -4,7 +4,7 @@ require("framework/manager/LogsManager")
 Sprite3DExpand = class('Sprite3DExpand',Laya.Sprite3D)
 
 function Sprite3DExpand:ctor(name)
-  self:superCall('ctor',name)
+  Sprite3DExpand.super.ctor(self,name)
   self._childMap = {}
 end
 

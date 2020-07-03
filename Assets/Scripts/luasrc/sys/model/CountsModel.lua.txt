@@ -3,7 +3,7 @@ require("framework/common/kakura/Client")
 
 CountsModel = class('CountsModel',BaseModel)
 function CountsModel:ctor()
-  self:superCall('ctor')
+  CountsModel.super.ctor(self)
 end
 
 CountsModel.freeTurnableCount = "1";
@@ -22,15 +22,15 @@ function CountsModel.__getters.instance()
 end
 
 function CountsModel:initData(d)
-  self:superCall('initData',d)
+  CountsModel.super.initData(self,d)
 end
 
 function CountsModel:updateData(d)
-  self:superCall('updateData',d)
+  CountsModel.super.updateData(self,d)
 end
 
 function CountsModel:deleteData(d)
-  self:superCall('deleteData',d)
+  CountsModel.super.deleteData(self,d)
 end
 
 function CountsModel:getCountsById(id)

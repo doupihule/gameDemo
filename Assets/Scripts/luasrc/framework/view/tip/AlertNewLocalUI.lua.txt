@@ -16,7 +16,7 @@ function AlertNewLocalUI.__getters.instance()
 end
 
 function AlertNewLocalUI:ctor()
-  self:superCall('ctor')
+  AlertNewLocalUI.super.ctor(self)
   self._callback = nil;
   self._thisObj = nil;
   self.bgCover = nil;

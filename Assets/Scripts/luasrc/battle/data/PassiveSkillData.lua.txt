@@ -7,7 +7,7 @@ function PassiveSkillData:ctor(skillId, level, role, skillType, relyonSkill)
   if relyonSkill == nil then
     relyonSkill=nil
   end
-  self:superCall('ctor',skillId, level, role, skillType, relyonSkill)
+  PassiveSkillData.super.ctor(self,skillId, level, role, skillType, relyonSkill)
   self.triggerNums = 0;
   self.triggerFrame = 0;
   self.triggerNums = 0
@@ -19,7 +19,7 @@ function PassiveSkillData:cacheOneSkillAction(skillAction)
 end
 
 function PassiveSkillData:updateLevel(level)
-  self:superCall('updateLevel',level)
+  PassiveSkillData.super.updateLevel(self,level)
   self.cfgData = BattleFunc.instance:getCfgDatas("PassiveSkill", self._skillId)
   if self.cfgData.cdTime then
     self._cfgSkillCd = Math:ceil(self.cfgData.cdTime * BattleFunc.miniSecondToFrame)

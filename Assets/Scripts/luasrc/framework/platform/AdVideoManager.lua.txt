@@ -19,7 +19,6 @@ require("framework/func/PlaqueFunc")
 
 AdVideoManager = class('AdVideoManager')
 function AdVideoManager:ctor(...)
-  self:superCall('ctor', unpack({...}))
   self.ttInterstitialAdLastShowTime = Client.instance.miniserverTime;
   self._isInitAdv = true;
 end

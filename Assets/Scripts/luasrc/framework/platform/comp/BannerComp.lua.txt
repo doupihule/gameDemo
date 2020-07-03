@@ -126,7 +126,7 @@ function BannerComp:ctor(parentName, onErrorCallback, callbackObj, hideType, sty
   if style == nil then
     style=nil
   end
-  self:superCall('ctor')
+  BannerComp.super.ctor(self)
   self._loadSuccess = false;
   self._loadState = 0;
   self._errorCount = 0;
@@ -547,7 +547,7 @@ function BannerComp:hide(force)
     NativeBridge.instance:callNative(JSToNativeEvent.TTADSDK_BANNER, {status=0})
     return
   end
-  self:superCall('hide',force)
+  BannerComp.super.hide(self,force)
 end
 
 function BannerComp:_compShow()
@@ -689,7 +689,7 @@ function BannerComp:handleNativeBannerBack(data)
 end
 
 function BannerComp:recvMsg(event, data)
-  self:superCall('recvMsg',event, data)
+  BannerComp.super.recvMsg(self,event, data)
   if event == NativeToJSEvent.TTSDK_BANNER_EVENT then
     self:handleNativeBannerBack(data)
   end

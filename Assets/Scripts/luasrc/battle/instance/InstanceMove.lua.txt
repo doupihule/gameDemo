@@ -15,7 +15,7 @@ InstanceMove.moveType_tween = 3;
 InstanceMove.state_stand = "stand";
 InstanceMove.state_move = "move";
 function InstanceMove:ctor(controler)
-  self:superCall('ctor',controler)
+  InstanceMove.super.ctor(self,controler)
   self.movePointType = 0;
   self.enbleRotate = false;
   self._myState = "stand";
@@ -291,7 +291,7 @@ function InstanceMove:realShowView()
   if self.movePointType == InstanceMove.moveType_tween then
     return
   end
-  self:superCall('realShowView')
+  InstanceMove.super.realShowView(self)
 end
 
 function InstanceMove:moveToTargetRole(spd, targetRole)

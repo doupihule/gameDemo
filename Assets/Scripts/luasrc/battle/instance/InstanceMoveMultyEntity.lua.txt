@@ -2,7 +2,7 @@ require("game/battle/instance/InstanceMoveEntity")
 
 InstanceMoveMultyEntity = class('InstanceMoveMultyEntity')
 function InstanceMoveMultyEntity:ctor(...)
-  self:superCall('ctor', unpack({...}))
+  InstanceMoveMultyEntity.super.ctor(self, unpack({...}))
   self.currentStep = 0;
   self.isGrid = false;
   self.currentLoopIndex = 0;

@@ -12,7 +12,7 @@ require("game/sys/consts/StorageCode")
 
 EgretPlatform = class('EgretPlatform',GamePlatform)
 function EgretPlatform:ctor()
-  self:superCall('ctor')
+  EgretPlatform.super.ctor(self)
   self:registFocusEvent()
 end
 
@@ -61,5 +61,5 @@ function EgretPlatform:loginOut()
 end
 
 function EgretPlatform:setGameFrame()
-  self:superCall('setGameFrame')
+  EgretPlatform.super.setGameFrame(self)
 end

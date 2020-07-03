@@ -14,7 +14,7 @@ require("framework/server/SingleCommonServer")
 TestOpListUI = class('TestOpListUI',ui.gameui.test.TestOpListUI)
 TestOpListUI.res = {"gameui/TestOpList.scene"};
 function TestOpListUI:ctor()
-  self:superCall('ctor')
+  TestOpListUI.super.ctor(self)
   self._params = {};
   self._defaultText = "选择方法";
   self._defaultInput = "参数";

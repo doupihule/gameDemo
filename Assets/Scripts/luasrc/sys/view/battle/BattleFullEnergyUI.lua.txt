@@ -17,7 +17,7 @@ require("ui/layaMaxUI")
 BattleFullEnergyUI = class('BattleFullEnergyUI',ui.gameui.battle.BattleFullEnergyUI)
 
 function BattleFullEnergyUI:ctor()
-  self:superCall('ctor')
+  BattleFullEnergyUI.super.ctor(self)
   self.isEnterBattle = false;
   self:addEvent()
   ButtonUtils(self.closeBtn, self.close, self)

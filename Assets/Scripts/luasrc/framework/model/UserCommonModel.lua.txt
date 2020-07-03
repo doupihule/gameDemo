@@ -3,7 +3,7 @@ require("framework/common/kakura/Client")
 
 UserCommonModel = class('UserCommonModel',BaseModel)
 function UserCommonModel:ctor()
-  self:superCall('ctor')
+  UserCommonModel.super.ctor(self)
 end
 
 function UserCommonModel.__getters.instance()
@@ -14,11 +14,11 @@ function UserCommonModel.__getters.instance()
 end
 
 function UserCommonModel:initData(d)
-  self:superCall('initData',d)
+  UserCommonModel.super.initData(self,d)
 end
 
 function UserCommonModel:updateData(d)
-  self:superCall('updateData',d)
+  UserCommonModel.super.updateData(self,d)
 end
 
 function UserCommonModel:getJumpedList()

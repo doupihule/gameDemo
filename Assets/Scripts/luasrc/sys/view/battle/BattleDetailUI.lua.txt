@@ -37,7 +37,7 @@ require("game/sys/consts/GuideConst")
 BattleDetailUI = class('BattleDetailUI',ui.gameui.battle.BattleDetailUI)
 
 function BattleDetailUI:ctor()
-  self:superCall('ctor')
+  BattleDetailUI.super.ctor(self)
   self.timeCode = 0;
   self._pickNums = 3;
   self._allMapCount = 5;

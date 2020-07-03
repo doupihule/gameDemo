@@ -13,7 +13,7 @@ require("game/sys/consts/PoolCode")
 InstanceBullet = class('InstanceBullet',InstanceMove)
 
 function InstanceBullet:ctor(controler)
-  self:superCall('ctor',controler)
+  InstanceBullet.super.ctor(self,controler)
   self.moveSpeed = 0;
   self.moveLength = 0;
   self.leftCollisionTimes = 1;
@@ -31,7 +31,7 @@ function InstanceBullet:setData(data)
     -- [ts2lua]修改数组长度需要手动处理。
     self._mingzhongArr.length = 0
   end
-  self:superCall('setData',data)
+  InstanceBullet.super.setData(self,data)
   self._followRole = nil
   self:setViewWay(1)
   self:setRotation(0)

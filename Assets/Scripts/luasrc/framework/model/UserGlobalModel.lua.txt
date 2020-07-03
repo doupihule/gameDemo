@@ -29,7 +29,7 @@ function UserGlobalModel:initData(data)
   if not data then
     data = {}
   end
-  self:superCall('initData',data)
+  UserGlobalModel.super.initData(self,data)
 end
 
 function UserGlobalModel:getInviteInfo()

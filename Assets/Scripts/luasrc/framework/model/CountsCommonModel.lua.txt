@@ -3,7 +3,7 @@ require("framework/common/kakura/Client")
 
 CountsCommonModel = class('CountsCommonModel',BaseModel)
 function CountsCommonModel:ctor()
-  self:superCall('ctor')
+  CountsCommonModel.super.ctor(self)
 end
 
 CountsCommonModel.TYPE_INTERVALAD_COUNT = "1";
@@ -17,11 +17,11 @@ function CountsCommonModel.__getters.instance()
 end
 
 function CountsCommonModel:initData(d)
-  self:superCall('initData',d)
+  CountsCommonModel.super.initData(self,d)
 end
 
 function CountsCommonModel:updateData(d)
-  self:superCall('updateData',d)
+  CountsCommonModel.super.updateData(self,d)
 end
 
 function CountsCommonModel:getCountById(id)

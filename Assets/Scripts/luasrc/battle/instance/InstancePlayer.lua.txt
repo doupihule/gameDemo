@@ -11,7 +11,7 @@ require("framework/func/TranslateFunc")
 InstancePlayer = class('InstancePlayer',InstanceHero)
 
 function InstancePlayer:ctor(controler)
-  self:superCall('ctor',controler)
+  InstancePlayer.super.ctor(self,controler)
   self.lifeType = BattleConst.LIFE_PLAYER
   self.classModel = BattleConst.model_player
   self.targetRole = self.controler.myHome
@@ -62,7 +62,7 @@ end
 
 function InstancePlayer:setData(data)
   self.cfgData = data
-  self:superCall('setData',data)
+  InstancePlayer.super.setData(self,data)
   self.ignoreTimeScale = true
 end
 

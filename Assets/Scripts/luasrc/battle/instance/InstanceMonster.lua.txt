@@ -5,7 +5,7 @@ InstanceMonster = class('InstanceMonster',InstanceLogical)
 
 InstanceMonster._tempPos = Laya.Point();
 function InstanceMonster:ctor(controler)
-  self:superCall('ctor',controler)
+  InstanceMonster.super.ctor(self,controler)
   self._changeTrackCd = 0;
   self._isSleep = false;
   self._aiFlyFrame = 0;
@@ -22,5 +22,5 @@ function InstanceMonster:setLiveFrame(value)
 end
 
 function InstanceMonster:doDiedLogical()
-  self:superCall('doDiedLogical')
+  InstanceMonster.super.doDiedLogical(self)
 end

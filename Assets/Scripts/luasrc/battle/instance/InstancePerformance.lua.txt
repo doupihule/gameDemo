@@ -13,7 +13,7 @@ require("framework/utils/TableUtils")
 InstancePerformance = class('InstancePerformance',InstanceMove)
 
 function InstancePerformance:ctor(controler)
-  self:superCall('ctor',controler)
+  InstancePerformance.super.ctor(self,controler)
   self.childViewNums = 1;
   self.totalViewNums = 1;
   self.stillFrame = 0;
@@ -36,7 +36,7 @@ function InstancePerformance:setData(data)
     self.lastPos = Laya.Vector3()
   end
   self._sKillSppedUpMap = {}
-  self:superCall('setData',data)
+  InstancePerformance.super.setData(self,data)
   self._viewPasuseValue = 0
   if self._myView then
     self._myView.alpha = 1
@@ -52,7 +52,7 @@ function InstancePerformance:setData(data)
 end
 
 function InstancePerformance:doAiLogical()
-  self:superCall('doAiLogical')
+  InstancePerformance.super.doAiLogical(self)
   self:doPerformance()
   self:doDiedEffect()
   self:doShadeFollow()
@@ -329,7 +329,7 @@ function InstancePerformance:playSpecialSysAction(actionName, sysTime, startTime
   if actionLength == nil then
     actionLength=0
   end
-  local totalframe = self:superCall('playSpecialSysAction',actionName, sysTime, startTime, endTime, actionLength, self._aniPlaySpeed)
+  local totalframe = InstancePerformance.super.playSpecialSysAction(self,actionName, sysTime, startTime, endTime, actionLength, self._aniPlaySpeed)
   self._viewPasuseValue = 0
   self.label = actionName
   self.controler:setCallBack(Math:round(totalframe / self._aniPlaySpeed), self.resumeIdleAction, self)
@@ -428,7 +428,7 @@ function InstancePerformance:setLastPos(x, y, z)
 end
 
 function InstancePerformance:movePos()
-  self:superCall('movePos')
+  InstancePerformance.super.movePos(self)
   if self.pos.z > BattleFunc.battleDownY then
     self.pos.z = BattleFunc.battleDownY
   elseif self.pos.z < BattleFunc.battleUpY then
@@ -508,7 +508,7 @@ function InstancePerformance:getSkillSpeedUpValue(skillId)
 end
 
 function InstancePerformance:onSetToCache()
-  self:superCall('onSetToCache')
+  InstancePerformance.super.onSetToCache(self)
   self:clearAllFollowEffect()
   if self._shade then
     self._shade:removeSelf()

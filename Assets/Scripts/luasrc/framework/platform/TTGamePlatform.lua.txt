@@ -21,7 +21,7 @@ require("framework/event/RecordEvent")
 TTGamePlatform = class('TTGamePlatform',WXGamePlatform)
 
 function TTGamePlatform:ctor()
-  self:superCall('ctor')
+  TTGamePlatform.super.ctor(self)
   self._recordType = self.RECORD_TYPE_AUTO;
   self._hasInitMoreGame = false;
   TTGamePlatform.instance = self
@@ -369,7 +369,7 @@ function TTGamePlatform:saveImg(filePath, callBack, thisObject)
 end
 
 function TTGamePlatform:loginOut()
-  self:superCall('loginOut')
+  TTGamePlatform.super.loginOut(self)
   local obj = {success=function()
     LogsManager.echo("_loginOut success__")
   end

@@ -68,7 +68,7 @@ function RecommendationInterstitialComp:ctor(parent, onErrorCallback, onCloseCal
   if callbackObj == nil then
     callbackObj=nil
   end
-  self:superCall('ctor')
+  RecommendationInterstitialComp.super.ctor(self)
   self._loadSuccess = false;
   self._hasError = false;
   self:updateInfo(parent, onErrorCallback, onCloseCallback, callbackObj)
@@ -170,7 +170,7 @@ end
 
 function RecommendationInterstitialComp:destroy()
   LogsManager.echo("hlx 推荐插屏 InterstitialAd destroy:", GameUtils.decryptStr(self._parentName))
-  self:superCall('destroy')
+  RecommendationInterstitialComp.super.destroy(self)
   self._onErrorCallback = nil
   self._onCloseCallback = nil
   self._callbackObj = nil

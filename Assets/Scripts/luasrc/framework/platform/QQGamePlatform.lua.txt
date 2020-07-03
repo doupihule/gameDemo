@@ -6,7 +6,7 @@ require("framework/consts/StatisticsCommonConst")
 
 QQGamePlatform = class('QQGamePlatform',WXGamePlatform)
 function QQGamePlatform:ctor()
-  self:superCall('ctor')
+  QQGamePlatform.super.ctor(self)
 end
 
 function QQGamePlatform:shareAldAppMsg(data, shareCallBack)

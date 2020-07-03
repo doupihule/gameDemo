@@ -10,7 +10,6 @@ require("framework/consts/StatisticsCommonConst")
 
 OriginalAdBaseComp = class('OriginalAdBaseComp')
 function OriginalAdBaseComp:ctor(...)
-  self:superCall('ctor', unpack({...}))
   self._isLoadOriginalSucc = false;
   self._isOriginalObjReady = false;
   self._startLoadTime = nil;

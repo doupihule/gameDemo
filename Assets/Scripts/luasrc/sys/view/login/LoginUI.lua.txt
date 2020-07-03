@@ -13,7 +13,7 @@ require("framework/common/UserInfo")
 LoginUI = class('LoginUI',ui.gameui.login.LoginUI)
 LoginUI.res = {"gameui/Login.scene"};
 function LoginUI:ctor()
-  self:superCall('ctor')
+  LoginUI.super.ctor(self)
   LoginUI.instance = self
   ButtonUtils(self.loginbtn, self.onLoginClick, self)
   self.loginbtn.clickHandler = Laya.Handler:create(self, self.onLoginClick, nil, false)

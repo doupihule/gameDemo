@@ -70,7 +70,7 @@ function RecommendationBannerComp:ctor(parent, onErrorCallback, callbackObj, hid
   if hideType == nil then
     hideType=TopViewAutoComp.HIDE_TYPE_DESTROY
   end
-  self:superCall('ctor')
+  RecommendationBannerComp.super.ctor(self)
   self._loadSuccess = false;
   self._hasError = false;
   self:updateInfo(parent, onErrorCallback, callbackObj, hideType)
@@ -186,7 +186,7 @@ end
 
 function RecommendationBannerComp:destroy()
   LogsManager.echo("hlx recommend banner destroy:", GameUtils.decryptStr(self._parentName))
-  self:superCall('destroy')
+  RecommendationBannerComp.super.destroy(self)
   self._onErrorCallback = nil
   self._callbackObj = nil
   if self._bannerAd then
@@ -254,7 +254,7 @@ function RecommendationBannerComp:_compShow()
 end
 
 function RecommendationBannerComp:_compHide()
-  self:superCall('destroy')
+  RecommendationBannerComp.super.destroy(self)
   self._onErrorCallback = nil
   self._callbackObj = nil
   if self._hasError then

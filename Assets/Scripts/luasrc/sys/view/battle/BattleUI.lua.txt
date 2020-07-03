@@ -34,7 +34,7 @@ require("ui/layaMaxUI")
 BattleUI = class('BattleUI',ui.gameui.battle.BattleUI)
 
 function BattleUI:ctor()
-  self:superCall('ctor')
+  BattleUI.super.ctor(self)
   self.isUseCamera = true;
   self.maxEnergy = 0;
   self.nowEnergy = 0;

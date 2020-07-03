@@ -5,7 +5,7 @@ require("framework/manager/StatisticsExtendManager")
 
 StatisticsManager = class('StatisticsManager')
 function StatisticsManager:ctor(...)
-  self:superCall('ctor', unpack({...}))
+  StatisticsManager.super.ctor(self, unpack({...}))
   self._event_with_switch = {};
 end
 

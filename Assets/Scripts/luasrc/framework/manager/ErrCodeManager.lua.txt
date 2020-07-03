@@ -11,7 +11,6 @@ require("utils/Global")
 
 ErrCodeManager = class('ErrCodeManager')
 function ErrCodeManager:ctor(...)
-  self:superCall('ctor', unpack({...}))
   self.ERROR_STATE_NOHANDLE = 0;
   self.ERROR_STATE_HADNLE_SENDERROR = 1;
   self.ERROR_STATE_HANDLE_NOSEND = 2;

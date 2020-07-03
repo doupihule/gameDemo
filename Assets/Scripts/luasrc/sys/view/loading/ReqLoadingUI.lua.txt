@@ -2,7 +2,7 @@
 ReqLoadingUI = class('ReqLoadingUI',Laya.View)
 ReqLoadingUI.res = nil;
 function ReqLoadingUI:ctor()
-  self:superCall('ctor')
+  ReqLoadingUI.super.ctor(self)
   self.rollAsset = Laya.Label("loading...");
   self.rollAsset.color = "#ffffff"
   self.rollAsset.font = "Microsoft YaHei"

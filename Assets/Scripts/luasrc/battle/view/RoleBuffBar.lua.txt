@@ -4,7 +4,7 @@ require("game/sys/consts/PoolCode")
 RoleBuffBar = class('RoleBuffBar',Laya.Sprite)
 
 function RoleBuffBar:ctor()
-  self:superCall('ctor')
+  RoleBuffBar.super.ctor(self)
   self._initWidth = 80;
   self._initHeight = 8;
   self._offsetY = 0;

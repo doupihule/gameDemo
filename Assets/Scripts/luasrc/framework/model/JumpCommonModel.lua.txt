@@ -3,7 +3,7 @@ require("framework/common/kakura/Client")
 
 JumpCommonModel = class('JumpCommonModel',BaseModel)
 function JumpCommonModel:ctor()
-  self:superCall('ctor')
+  JumpCommonModel.super.ctor(self)
 end
 
 function JumpCommonModel.__getters.instance()
@@ -14,11 +14,11 @@ function JumpCommonModel.__getters.instance()
 end
 
 function JumpCommonModel:initData(d)
-  self:superCall('initData',d)
+  JumpCommonModel.super.initData(self,d)
 end
 
 function JumpCommonModel:updateData(d)
-  self:superCall('updateData',d)
+  JumpCommonModel.super.updateData(self,d)
 end
 
 function JumpCommonModel:getJumpedList()

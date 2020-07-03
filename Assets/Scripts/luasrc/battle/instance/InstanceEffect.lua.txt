@@ -5,7 +5,7 @@ require("game/battle/trigger/SkillExpandTrigger")
 
 InstanceEffect = class('InstanceEffect',InstanceBasic)
 function InstanceEffect:ctor(controler)
-  self:superCall('ctor',controler)
+  InstanceEffect.super.ctor(self,controler)
   self.layerIndex = 2;
   self.withTargetWay = 0;
   self.classModel = BattleConst.model_effect
@@ -13,7 +13,7 @@ function InstanceEffect:ctor(controler)
 end
 
 function InstanceEffect:setData(data)
-  self:superCall('setData',data)
+  InstanceEffect.super.setData(self,data)
   self.ignoreTimeScale = nil
   self.effectName = data.id
   self.zorderOffset = 0
@@ -99,7 +99,7 @@ function InstanceEffect:playSpecialSysAction(actionName, sysTime, startTime, end
   if aniSpeed == nil then
     aniSpeed=1
   end
-  local len = self:superCall('playSpecialSysAction',actionName, sysTime, startTime, endTime, actionLength, aniSpeed)
+  local len = InstanceEffect.super.playSpecialSysAction(self,actionName, sysTime, startTime, endTime, actionLength, aniSpeed)
   self:setLastFrame(len)
   return len
 end
@@ -158,7 +158,7 @@ function InstanceEffect:checkLineFollowTarget()
 end
 
 function InstanceEffect:onSetToCache()
-  self:superCall('onSetToCache')
+  InstanceEffect.super.onSetToCache(self)
   if self._followTarget and self._followTarget.clearEffByName then
     self._followTarget:clearEffByName(self.cacheId, true)
   end

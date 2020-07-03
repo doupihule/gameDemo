@@ -4,7 +4,7 @@ require("game/sys/func/BattleFunc")
 
 InstanceHome = class('InstanceHome',InstanceLogical)
 function InstanceHome:ctor(controler)
-  self:superCall('ctor',controler)
+  InstanceHome.super.ctor(self,controler)
   self.classModel = BattleConst.model_home
   self.lifeType = BattleConst.LIFE_JIDI
 end
@@ -16,5 +16,5 @@ function InstanceHome:checkMoveOrAttack(force)
   if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
     return
   end
-  self:superCall('checkMoveOrAttack',force)
+  InstanceHome.super.checkMoveOrAttack(self,force)
 end

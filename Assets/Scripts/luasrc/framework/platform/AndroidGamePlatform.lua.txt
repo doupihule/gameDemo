@@ -31,7 +31,7 @@ require("framework/utils/StringUtils")
 AndroidGamePlatform = class('AndroidGamePlatform',GamePlatform)
 
 function AndroidGamePlatform:ctor()
-  self:superCall('ctor')
+  AndroidGamePlatform.super.ctor(self)
   self._reloginCount = 0;
   window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, errorObj)
     LogsManager.systemError(errorMessage, errorObj and errorObj.stack, "uri:", scriptURI)
@@ -167,7 +167,7 @@ end
 
 function AndroidGamePlatform:setGameFrame()
   if GameConsts.gameFrameRate == 30 then
-    self:superCall('setGameFrame')
+    AndroidGamePlatform.super.setGameFrame(self)
     -- [ts2lua]window下标访问可能不正确
     window['conch'].config:setSlowFrame(true)
   end
@@ -205,7 +205,7 @@ function AndroidGamePlatform:addUpdateListener()
       return
     end
   end
-  self:superCall('addUpdateListener')
+  AndroidGamePlatform.super.addUpdateListener(self)
 end
 
 function AndroidGamePlatform:gotoPackageUrl()

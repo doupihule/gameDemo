@@ -4,7 +4,7 @@ require("framework/manager/LogsManager")
 SpriteFrameExpand = class('SpriteFrameExpand',Laya.Sprite)
 SpriteFrameExpand._cacheFrameData = {};
 function SpriteFrameExpand:ctor()
-  self:superCall('ctor')
+  SpriteFrameExpand.super.ctor(self)
   self.currentIndex = 0;
   self.currentFrame = 0;
   self.frameIndex = 0;

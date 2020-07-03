@@ -9,7 +9,7 @@ require("framework/common/kakura/MethodCommon")
 UCGamePlatform = class('UCGamePlatform',WXGamePlatform)
 
 function UCGamePlatform:ctor()
-  self:superCall('ctor')
+  UCGamePlatform.super.ctor(self)
   self.guestid = '';
   self.code = '';
   -- [ts2lua]GameSwitch.switchMap下标访问可能不正确

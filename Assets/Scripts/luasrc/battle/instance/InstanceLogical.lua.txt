@@ -12,12 +12,12 @@ require("game/battle/trigger/SkillExpandTrigger")
 
 InstanceLogical = class('InstanceLogical',InstanceLife)
 function InstanceLogical:ctor(...)
-  self:superCall('ctor', unpack({...}))
+  InstanceLogical.super.ctor(self, unpack({...}))
   self.leftWaitFrame = 0;
 end
 
 function InstanceLogical:doAiLogical()
-  self:superCall('doAiLogical')
+  InstanceLogical.super.doAiLogical(self)
   if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR and BattleFunc.curGameState ~= BattleConst.WARSTATE_INFIGHT then
     return
   end

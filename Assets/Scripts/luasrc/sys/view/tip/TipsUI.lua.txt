@@ -4,7 +4,7 @@ TipsUI = class('TipsUI',Laya.Sprite)
 
 TipsUI.res = {};
 function TipsUI:ctor()
-  self:superCall('ctor')
+  TipsUI.super.ctor(self)
   self.tipsbg = Laya.Sprite()
   self.tipsbg.alpha = 0.5
   self.tipsbg.mouseEnabled = true

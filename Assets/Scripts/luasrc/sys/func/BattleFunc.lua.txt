@@ -101,7 +101,7 @@ function BattleFunc:getCfgsPathArr()
 end
 
 function BattleFunc:ctor()
-  self:superCall('ctor')
+  BattleFunc.super.ctor(self)
   self._cacheCfgMap = {baseAttr={}, addAttr={}, advanceAttr={}, rebornAttr={}};
 end
 
