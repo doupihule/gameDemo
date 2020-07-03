@@ -4,8 +4,8 @@ require("game/sys/consts/BattleConst")
 InstanceMonster = newClass({InstanceLogical}, {name = 'InstanceMonster'})
 
 InstanceMonster._tempPos = Laya.Point();
-function InstanceMonster:__new__(controler)
-  self:superCall('__new__',controler)
+function InstanceMonster:ctor(controler)
+  self:superCall('ctor',controler)
   self._changeTrackCd = 0;
   self._isSleep = false;
   self._aiFlyFrame = 0;

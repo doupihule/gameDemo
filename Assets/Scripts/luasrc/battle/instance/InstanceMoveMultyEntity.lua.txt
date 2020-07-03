@@ -1,14 +1,14 @@
 require("game/battle/instance/InstanceMoveEntity")
 
 InstanceMoveMultyEntity = newClass({Class}, {name = 'InstanceMoveMultyEntity'})
-function InstanceMoveMultyEntity:__new__(...)
-  self:superCall('__new__', unpack({...}))
+function InstanceMoveMultyEntity:ctor(...)
+  self:superCall('ctor', unpack({...}))
   self.currentStep = 0;
   self.isGrid = false;
   self.currentLoopIndex = 0;
 end
 
-function InstanceMoveMultyEntity:__new__() end
+function InstanceMoveMultyEntity:ctor() end
 function InstanceMoveMultyEntity:initData(pointArr, speed, callFunc, thisObj, loopParams, isGrid)
   if speed == nil then
     speed=0

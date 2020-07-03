@@ -7,10 +7,10 @@ require("game/battle/trigger/SkillActionTrigger")
 require("game/sys/manager/BattleLogsManager")
 require("game/battle/trigger/SkillExpandTrigger")
 
-BattleAoeData = newClass({Class}, {name = 'BattleAoeData'})
+BattleAoeData = class('BattleAoeData')
 
 BattleAoeData._aloneEffectExpandParams = {isAlone=true};
-function BattleAoeData:__new__(id)
+function BattleAoeData:ctor(id)
   self.delayFrame = 0;
   self.effectiveTimes = 0;
   self.intervalFrame = 0;

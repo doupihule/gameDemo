@@ -1,9 +1,9 @@
 require("framework/utils/Equation")
 require("framework/utils/ScreenAdapterTools")
 
-CameraControler = newClass({Class}, {name = 'CameraControler'})
+CameraControler = class('CameraControler')
 
-function CameraControler:__new__(controler)
+function CameraControler:ctor(controler)
   self.shakeFrame = 0;
   self.shakeStyle = 0;
   self.shakeIntervel = 2;

@@ -3,8 +3,8 @@ require("game/sys/consts/BattleConst")
 require("game/sys/func/BattleFunc")
 
 InstanceHome = newClass({InstanceLogical}, {name = 'InstanceHome'})
-function InstanceHome:__new__(controler)
-  self:superCall('__new__',controler)
+function InstanceHome:ctor(controler)
+  self:superCall('ctor',controler)
   self.classModel = BattleConst.model_home
   self.lifeType = BattleConst.LIFE_JIDI
 end

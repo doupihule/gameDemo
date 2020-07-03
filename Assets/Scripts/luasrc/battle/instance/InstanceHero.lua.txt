@@ -11,8 +11,8 @@ require("framework/func/TranslateFunc")
 
 InstanceHero = newClass({InstanceLogical}, {name = 'InstanceHero'})
 
-function InstanceHero:__new__(controler)
-  self:superCall('__new__',controler)
+function InstanceHero:ctor(controler)
+  self:superCall('ctor',controler)
   self._leftReliveFrame = 0;
   self.classModel = BattleConst.model_role
 end

@@ -3,7 +3,7 @@ require("framework/manager/LogsManager")
 
 SkillActionData = newClass({Class}, {name = 'SkillActionData'})
 
-function SkillActionData:__new__(id, owner, skill, delay, trigTimes, interval, resumeEnergy, opportunity, relyOnSill)
+function SkillActionData:ctor(id, owner, skill, delay, trigTimes, interval, resumeEnergy, opportunity, relyOnSill)
   self.trigTimes = 0;
   self.delay = 0;
   self.interval = 0;

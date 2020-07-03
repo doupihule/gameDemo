@@ -7,9 +7,9 @@ require("game/sys/func/GlobalParamsFunc")
 require("game/sys/func/BattleFunc")
 require("game/sys/manager/StatisticsManager")
 
-BattleGuideControler = newClass({Class}, {name = 'BattleGuideControler'})
+BattleGuideControler = class('BattleGuideControler')
 
-function BattleGuideControler:__new__(controler)
+function BattleGuideControler:ctor(controler)
   self.controler = controler
   self.battleUI = self.controler.battleUI
 end

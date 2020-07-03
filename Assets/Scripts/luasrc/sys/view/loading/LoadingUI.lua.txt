@@ -5,7 +5,7 @@ require("game/battle/view/BattleRoleView")
 
 LoadingUI = newClass({Class}, {name = 'LoadingUI'})
 
-function LoadingUI:__new__()
+function LoadingUI:ctor()
   self.progress = 0;
   self.isShowWxInfo = false;
   self.alphaFlag = 1;

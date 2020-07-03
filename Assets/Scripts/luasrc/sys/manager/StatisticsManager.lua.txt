@@ -4,8 +4,8 @@ require("framework/utils/FileUtils")
 require("framework/manager/StatisticsExtendManager")
 
 StatisticsManager = newClass({Class}, {name = 'StatisticsManager'})
-function StatisticsManager:__new__(...)
-  self:superCall('__new__', unpack({...}))
+function StatisticsManager:ctor(...)
+  self:superCall('ctor', unpack({...}))
   self._event_with_switch = {};
 end
 
@@ -13,7 +13,7 @@ StatisticsManager.mainStartT = 0;
 StatisticsManager.isLoadingLog = false;
 StatisticsManager.loadingOutT = 0;
 StatisticsManager.isNewPlayer = false;
-function StatisticsManager:__new__() end
+function StatisticsManager:ctor() end
 function StatisticsManager.__getters.ins()
   if not StatisticsManager._ins then
     StatisticsManager._ins = StatisticsManager()

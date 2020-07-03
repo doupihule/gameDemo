@@ -78,7 +78,7 @@ require("game/sys/view/main/SettingUI")
 require("game/sys/consts/SubPackageConst")
 
 WindowCfgs = newClass({Class}, {name = 'WindowCfgs'})
-function WindowCfgs:__new__() end
+function WindowCfgs:ctor() end
 WindowCfgs.UISHOWTYPE_SCALEIN = 1;
 WindowCfgs.UISHOWTYPE_FADEIN = 2;
 WindowCfgs.UILAYER = "uilayer";

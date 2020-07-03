@@ -11,9 +11,9 @@ require("framework/manager/TimerManager")
 require("game/sys/manager/BattleLogsManager")
 require("framework/viewcomp/SkeletonExpand")
 
-PerformanceControler = newClass({Class}, {name = 'PerformanceControler'})
+PerformanceControler = class('PerformanceControler')
 
-function PerformanceControler:__new__(controler)
+function PerformanceControler:ctor(controler)
   self._effectCacheMap = {};
   self.effectMaxNumsMap = {testEffect=1, POOL_EFFECTeffect_foxi_attack_self0=30};
   self.controler = controler

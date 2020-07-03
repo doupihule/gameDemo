@@ -4,7 +4,7 @@ require("framework/utils/BigNumUtils")
 
 TweenAniManager = newClass({Class}, {name = 'TweenAniManager'})
 
-function TweenAniManager:__new__() end
+function TweenAniManager:ctor() end
 function TweenAniManager.__getters.instance()
   if not TweenAniManager._instance then
     TweenAniManager._instance = TweenAniManager()

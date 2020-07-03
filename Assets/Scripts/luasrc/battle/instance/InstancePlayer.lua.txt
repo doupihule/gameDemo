@@ -10,8 +10,8 @@ require("framework/func/TranslateFunc")
 
 InstancePlayer = newClass({InstanceHero}, {name = 'InstancePlayer'})
 
-function InstancePlayer:__new__(controler)
-  self:superCall('__new__',controler)
+function InstancePlayer:ctor(controler)
+  self:superCall('ctor',controler)
   self.lifeType = BattleConst.LIFE_PLAYER
   self.classModel = BattleConst.model_player
   self.targetRole = self.controler.myHome

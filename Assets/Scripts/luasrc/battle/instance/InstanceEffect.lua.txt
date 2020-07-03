@@ -4,8 +4,8 @@ require("game/sys/func/BattleFunc")
 require("game/battle/trigger/SkillExpandTrigger")
 
 InstanceEffect = newClass({InstanceBasic}, {name = 'InstanceEffect'})
-function InstanceEffect:__new__(controler)
-  self:superCall('__new__',controler)
+function InstanceEffect:ctor(controler)
+  self:superCall('ctor',controler)
   self.layerIndex = 2;
   self.withTargetWay = 0;
   self.classModel = BattleConst.model_effect

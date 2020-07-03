@@ -2,9 +2,9 @@ require("framework/utils/ScreenAdapterTools")
 require("game/sys/func/BattleFunc")
 require("game/sys/consts/BattleConst")
 
-BattleLayerControler = newClass({Class}, {name = 'BattleLayerControler'})
+BattleLayerControler = class('BattleLayerControler')
 
-function BattleLayerControler:__new__(controler, rootCtn)
+function BattleLayerControler:ctor(controler, rootCtn)
   self.isInTouch = false;
   self.minX = 0;
   self.maxX = 0;

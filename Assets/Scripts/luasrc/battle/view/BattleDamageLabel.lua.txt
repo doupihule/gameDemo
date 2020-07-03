@@ -3,8 +3,8 @@ require("framework/utils/BigNumUtils")
 require("game/sys/func/BattleFunc")
 
 BattleDamageLabel = newClass({Laya.Sprite}, {name = 'BattleDamageLabel'})
-function BattleDamageLabel:__new__()
-  self:superCall('__new__')
+function BattleDamageLabel:ctor()
+  self:superCall('ctor')
   self._childLabels = {}
 end
 

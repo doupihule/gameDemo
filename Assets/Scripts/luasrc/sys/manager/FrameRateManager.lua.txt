@@ -1,8 +1,8 @@
 require("framework/common/UserInfo")
 
 FrameRateManager = newClass({Class}, {name = 'FrameRateManager'})
-function FrameRateManager:__new__(...)
-  self:superCall('__new__', unpack({...}))
+function FrameRateManager:ctor(...)
+  self:superCall('ctor', unpack({...}))
   self.num = 0;
   self.lowFrameFPS = 30;
   self.highFrameFPS = 60;
@@ -10,7 +10,7 @@ function FrameRateManager:__new__(...)
   self.mulplite = 1.5;
 end
 
-function FrameRateManager:__new__() end
+function FrameRateManager:ctor() end
 function FrameRateManager.__getters.instance()
   if not FrameRateManager._instance then
     FrameRateManager._instance = FrameRateManager()

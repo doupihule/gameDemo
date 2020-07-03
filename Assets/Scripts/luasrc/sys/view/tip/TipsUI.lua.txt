@@ -3,8 +3,8 @@ require("framework/utils/ScreenAdapterTools")
 TipsUI = newClass({Laya.Sprite}, {name = 'TipsUI'})
 
 TipsUI.res = {};
-function TipsUI:__new__()
-  self:superCall('__new__')
+function TipsUI:ctor()
+  self:superCall('ctor')
   self.tipsbg = Laya.Sprite()
   self.tipsbg.alpha = 0.5
   self.tipsbg.mouseEnabled = true

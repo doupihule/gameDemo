@@ -12,8 +12,8 @@ require("framework/utils/TableUtils")
 
 InstancePerformance = newClass({InstanceMove}, {name = 'InstancePerformance'})
 
-function InstancePerformance:__new__(controler)
-  self:superCall('__new__',controler)
+function InstancePerformance:ctor(controler)
+  self:superCall('ctor',controler)
   self.childViewNums = 1;
   self.totalViewNums = 1;
   self.stillFrame = 0;

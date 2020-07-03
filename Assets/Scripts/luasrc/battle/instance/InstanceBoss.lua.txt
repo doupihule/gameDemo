@@ -1,6 +1,6 @@
 require("game/battle/instance/InstanceMonster")
 
 InstanceBoss = newClass({InstanceMonster}, {name = 'InstanceBoss'})
-function InstanceBoss:__new__(controler)
-  self:superCall('__new__',controler)
+function InstanceBoss:ctor(controler)
+  self:superCall('ctor',controler)
 end

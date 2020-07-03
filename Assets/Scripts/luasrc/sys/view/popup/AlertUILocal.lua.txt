@@ -7,8 +7,8 @@ require("framework/utils/TableUtils")
 AlertUILocal = newClass({Laya.View}, {name = 'AlertUILocal'})
 AlertUILocal.res = nil;
 AlertUILocal.instance = nil;
-function AlertUILocal:__new__()
-  self:superCall('__new__')
+function AlertUILocal:ctor()
+  self:superCall('ctor')
   self._callback = nil;
   self._thisObj = nil;
   self.bgCover = nil;

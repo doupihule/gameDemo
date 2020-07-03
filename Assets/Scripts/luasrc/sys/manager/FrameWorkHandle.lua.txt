@@ -31,7 +31,7 @@ function FrameWorkHandle.init()
   end
 end
 
-function FrameWorkHandle:__new__()
+function FrameWorkHandle:ctor()
   Message.instance:add(FrameWorkEvent.FRAMEWORKEVENT_STARTENTERMAIN, self)
 end
 

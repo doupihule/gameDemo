@@ -16,9 +16,9 @@ require("game/fog/trigger/FogPropTrigger")
 require("framework/utils/TableUtils")
 require("game/sys/manager/StatisticsManager")
 
-RefreshControler = newClass({Class}, {name = 'RefreshControler'})
+RefreshControler = class('RefreshControler')
 
-function RefreshControler:__new__(controler)
+function RefreshControler:ctor(controler)
   self.currentWave = 0;
   self.maxWave = 0;
   self.waveTotalHp = 0;

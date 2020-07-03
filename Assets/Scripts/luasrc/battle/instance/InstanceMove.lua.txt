@@ -14,8 +14,8 @@ InstanceMove.moveType_multyPoint = 2;
 InstanceMove.moveType_tween = 3;
 InstanceMove.state_stand = "stand";
 InstanceMove.state_move = "move";
-function InstanceMove:__new__(controler)
-  self:superCall('__new__',controler)
+function InstanceMove:ctor(controler)
+  self:superCall('ctor',controler)
   self.movePointType = 0;
   self.enbleRotate = false;
   self._myState = "stand";

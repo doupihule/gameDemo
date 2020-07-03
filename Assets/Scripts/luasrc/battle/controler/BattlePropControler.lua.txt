@@ -1,8 +1,0 @@
-
-BattlePropControler = newClass({Class}, {name = 'BattlePropControler'})
-
-function BattlePropControler:__new__(controler)
-  self.controler = controler
-end
-
-function BattlePropControler:setData() end

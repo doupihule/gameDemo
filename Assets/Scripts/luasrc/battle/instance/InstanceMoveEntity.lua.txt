@@ -1,6 +1,6 @@
 InstanceMoveEntity = newClass({Class}, {name = 'InstanceMoveEntity'})
 
-function InstanceMoveEntity:__new__(target, spd, callFunc, thisObj, expandParams)
+function InstanceMoveEntity:ctor(target, spd, callFunc, thisObj, expandParams)
   self.spd = 0;
   self.moveFrame = 0;
   self.totalFrame = 0;

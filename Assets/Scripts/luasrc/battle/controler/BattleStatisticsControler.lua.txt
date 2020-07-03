@@ -1,7 +1,7 @@
 
-BattleStatisticsControler = newClass({Class}, {name = 'BattleStatisticsControler'})
+BattleStatisticsControler = class('BattleStatisticsControler')
 
-function BattleStatisticsControler:__new__(controler)
+function BattleStatisticsControler:ctor(controler)
   self.killNums = 0;
   self.totalDmage = 0;
   self.totalCoin = 0;

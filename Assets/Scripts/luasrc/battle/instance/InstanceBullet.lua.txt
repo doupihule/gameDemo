@@ -12,8 +12,8 @@ require("game/sys/consts/PoolCode")
 
 InstanceBullet = newClass({InstanceMove}, {name = 'InstanceBullet'})
 
-function InstanceBullet:__new__(controler)
-  self:superCall('__new__',controler)
+function InstanceBullet:ctor(controler)
+  self:superCall('ctor',controler)
   self.moveSpeed = 0;
   self.moveLength = 0;
   self.leftCollisionTimes = 1;

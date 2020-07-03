@@ -2,9 +2,9 @@ require("game/sys/consts/BattleConst")
 require("game/sys/func/BattleFunc")
 require("game/sys/func/RolesFunc")
 
-AttributeExtendData = newClass({Class}, {name = 'AttributeExtendData'})
+AttributeExtendData = class('AttributeExtendData')
 
-function AttributeExtendData:__new__(id, roleData, lifeType, userData, globalAttrMap, outRecount)
+function AttributeExtendData:ctor(id, roleData, lifeType, userData, globalAttrMap, outRecount)
   self.level = 1;
   self.starLevel = 0;
   self.hasDataChange = false;

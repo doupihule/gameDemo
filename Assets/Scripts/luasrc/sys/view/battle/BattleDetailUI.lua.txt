@@ -36,8 +36,8 @@ require("game/sys/consts/GuideConst")
 
 BattleDetailUI = newClass({ui.gameui.battle.BattleDetailUI}, {name = 'BattleDetailUI'})
 
-function BattleDetailUI:__new__()
-  self:superCall('__new__')
+function BattleDetailUI:ctor()
+  self:superCall('ctor')
   self.timeCode = 0;
   self._pickNums = 3;
   self._allMapCount = 5;

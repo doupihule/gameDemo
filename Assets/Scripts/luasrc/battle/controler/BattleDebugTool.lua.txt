@@ -5,9 +5,9 @@ require("framework/common/GameSwitch")
 require("game/sys/consts/GameSwitchConst")
 require("framework/utils/TableUtils")
 
-BattleDebugTool = newClass({Class}, {name = 'BattleDebugTool'})
+BattleDebugTool = class('BattleDebugTool')
 
-function BattleDebugTool:__new__(controler)
+function BattleDebugTool:ctor(controler)
   self.controler = controler
   self._attrCfgs = BattleFunc.instance:getAllCfgData("AttributeList")
   BattleDebugTool.initDebugValue()

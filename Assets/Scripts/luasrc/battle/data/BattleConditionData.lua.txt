@@ -2,7 +2,7 @@ require("game/sys/func/BattleFunc")
 
 BattleConditionData = newClass({Class}, {name = 'BattleConditionData'})
 
-function BattleConditionData:__new__(id)
+function BattleConditionData:ctor(id)
   self._id = id
   self.cfgData = BattleFunc.instance:getCfgDatas("Condition", id)
   self.type = self.cfgData.type

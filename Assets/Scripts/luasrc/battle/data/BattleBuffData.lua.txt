@@ -2,7 +2,7 @@ require("game/sys/func/BattleFunc")
 
 BattleBuffData = newClass({Class}, {name = 'BattleBuffData'})
 
-function BattleBuffData:__new__(id)
+function BattleBuffData:ctor(id)
   self.leftFrame = -1;
   self.leftTimes = 0;
   self.interval = 0;

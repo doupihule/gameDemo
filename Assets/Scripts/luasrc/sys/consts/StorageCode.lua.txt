@@ -27,4 +27,4 @@ function StorageCode.__getters.storage_userinfo()
   return "storage_userinfo" .. key
 end
 
-function StorageCode:__new__() end
+function StorageCode:ctor() end

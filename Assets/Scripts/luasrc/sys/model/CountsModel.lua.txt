@@ -2,8 +2,8 @@ require("game/sys/model/BaseModel")
 require("framework/common/kakura/Client")
 
 CountsModel = newClass({BaseModel}, {name = 'CountsModel'})
-function CountsModel:__new__()
-  self:superCall('__new__')
+function CountsModel:ctor()
+  self:superCall('ctor')
 end
 
 CountsModel.freeTurnableCount = "1";

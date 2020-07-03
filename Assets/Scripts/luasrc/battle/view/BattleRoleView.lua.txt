@@ -4,14 +4,14 @@ require("game/sys/consts/ResourceConst")
 
 BattleRoleView = newClass({Laya.Sprite}, {name = 'BattleRoleView'})
 
-function BattleRoleView:__new__(viewName, scale, viewIndex)
+function BattleRoleView:ctor(viewName, scale, viewIndex)
   if scale == nil then
     scale=1
   end
   if viewIndex == nil then
     viewIndex=0
   end
-  self:superCall('__new__')
+  self:superCall('ctor')
   self.aniScale = 1;
   self._viewIndex = 0;
   self._viewScale = 1;

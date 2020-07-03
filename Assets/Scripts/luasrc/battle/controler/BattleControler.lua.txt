@@ -7,9 +7,8 @@ require("game/battle/controler/PerformanceControler")
 require("game/sys/manager/BattleLogsManager")
 require("game/battle/controler/BattleDebugTool")
 
-BattleControler = newClass({Class}, {name = 'BattleControler'})
-
-function BattleControler:__new__(ctn)
+BattleControler = class('BattleControler')
+function BattleControler:ctor(ctn)
   self._isGamePause = false;
   self.isSkillPause = false;
   self._leftFrameDt = 0;

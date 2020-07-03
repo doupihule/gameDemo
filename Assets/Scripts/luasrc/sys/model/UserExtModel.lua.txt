@@ -16,8 +16,8 @@ require("game/sys/model/UserModel")
 
 UserExtModel = newClass({BaseModel}, {name = 'UserExtModel'})
 
-function UserExtModel:__new__()
-  self:superCall('__new__')
+function UserExtModel:ctor()
+  self:superCall('ctor')
   self.curSp = 0;
   self.upSpTime = 0;
   Message.instance:add(MsgCMD.GAME_ONHIDE, self)

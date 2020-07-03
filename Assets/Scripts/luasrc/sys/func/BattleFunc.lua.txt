@@ -100,8 +100,8 @@ function BattleFunc:getCfgsPathArr()
   return {"AttributeList", "Role", "RoleUpdate", "Scene", "Decoration", "Skill", "SkillUpdate", "Buff", "Condition", "SkillEffect", "Target", "RoleAct", "Level", "LevelWave", "PassiveSkill", "AoeEffect", "Bullet", "TranslateLevel", "TranslateMonster", "Lottery"}
 end
 
-function BattleFunc:__new__()
-  self:superCall('__new__')
+function BattleFunc:ctor()
+  self:superCall('ctor')
   self._cacheCfgMap = {baseAttr={}, addAttr={}, advanceAttr={}, rebornAttr={}};
 end
 

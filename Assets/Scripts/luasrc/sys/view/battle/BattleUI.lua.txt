@@ -33,8 +33,8 @@ require("ui/layaMaxUI")
 
 BattleUI = newClass({ui.gameui.battle.BattleUI}, {name = 'BattleUI'})
 
-function BattleUI:__new__()
-  self:superCall('__new__')
+function BattleUI:ctor()
+  self:superCall('ctor')
   self.isUseCamera = true;
   self.maxEnergy = 0;
   self.nowEnergy = 0;

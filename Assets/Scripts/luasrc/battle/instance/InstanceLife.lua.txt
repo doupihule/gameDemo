@@ -24,8 +24,8 @@ function InstanceLife.__getters:maxHp()
   return self.attrData:getOneAttr(BattleConst.attr_maxHp)
 end
 
-function InstanceLife:__new__(controler)
-  self:superCall('__new__',controler)
+function InstanceLife:ctor(controler)
+  self:superCall('ctor',controler)
   self.camp = 1;
   self.toCamp = 2;
   self.hp = 50;

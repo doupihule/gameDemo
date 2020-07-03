@@ -13,7 +13,7 @@ require("game/sys/model/PiecesModel")
 require("game/sys/model/FogModel")
 
 ModelToServerMap = newClass({Class}, {name = 'ModelToServerMap'})
-function ModelToServerMap:__new__() end
+function ModelToServerMap:ctor() end
 ModelToServerMap.modelToServerMap = {};
 function ModelToServerMap.initModelToServerMap()
   ModelToServerMap.modelToServerMap = {{key="user", model=UserModel}, {key="switches", model=SwitchModel}, {key="userExt", model=UserExtModel}, {key="roles", model=RolesModel}, {key="counts", model=CountsModel}, {key="talentSkills", model=TalentSkillsModel}, {key="sign", model=SevenDayModel}, {key="dailyGold", model=DailyGoldModel}, {key="pieces", model=PiecesModel}, {key="fog", model=FogModel}}

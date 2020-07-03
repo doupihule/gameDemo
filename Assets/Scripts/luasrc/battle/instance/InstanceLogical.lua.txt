@@ -11,8 +11,8 @@ require("game/sys/manager/BattleLogsManager")
 require("game/battle/trigger/SkillExpandTrigger")
 
 InstanceLogical = newClass({InstanceLife}, {name = 'InstanceLogical'})
-function InstanceLogical:__new__(...)
-  self:superCall('__new__', unpack({...}))
+function InstanceLogical:ctor(...)
+  self:superCall('ctor', unpack({...}))
   self.leftWaitFrame = 0;
 end
 

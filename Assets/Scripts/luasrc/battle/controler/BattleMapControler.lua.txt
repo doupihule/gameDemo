@@ -5,9 +5,9 @@ require("game/sys/consts/SubPackageConst")
 require("game/sys/func/BattleFunc")
 require("framework/common/UserInfo")
 
-BattleMapControler = newClass({Class}, {name = 'BattleMapControler'})
+BattleMapControler = class('BattleMapControler')
 
-function BattleMapControler:__new__(controler)
+function BattleMapControler:ctor(controler)
   self._areaWidth = 256;
   self._pickNums = 4;
   self._allMapCount = 5;

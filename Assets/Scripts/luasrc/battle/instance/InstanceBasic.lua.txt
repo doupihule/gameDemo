@@ -5,7 +5,7 @@ require("game/sys/consts/BattleConst")
 InstanceBasic = newClass({Class}, {name = 'InstanceBasic'})
 
 InstanceBasic._instanceCount = 0;
-function InstanceBasic:__new__(controler)
+function InstanceBasic:ctor(controler)
   self.useState = 0;
   self.zorderOffset = 0;
   self.updateCount = 0;

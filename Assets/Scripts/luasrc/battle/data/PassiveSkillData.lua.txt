@@ -3,11 +3,11 @@ require("game/sys/func/BattleFunc")
 
 PassiveSkillData = newClass({BattleSkillData}, {name = 'PassiveSkillData'})
 
-function PassiveSkillData:__new__(skillId, level, role, skillType, relyonSkill)
+function PassiveSkillData:ctor(skillId, level, role, skillType, relyonSkill)
   if relyonSkill == nil then
     relyonSkill=nil
   end
-  self:superCall('__new__',skillId, level, role, skillType, relyonSkill)
+  self:superCall('ctor',skillId, level, role, skillType, relyonSkill)
   self.triggerNums = 0;
   self.triggerFrame = 0;
   self.triggerNums = 0

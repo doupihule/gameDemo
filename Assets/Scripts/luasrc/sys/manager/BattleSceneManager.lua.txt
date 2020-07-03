@@ -1,8 +1,8 @@
 require("game/battle/controler/BattleLogicalControler")
 
 BattleSceneManager = newClass({Class}, {name = 'BattleSceneManager'})
-function BattleSceneManager:__new__(...)
-  self:superCall('__new__', unpack({...}))
+function BattleSceneManager:ctor(...)
+  self:superCall('ctor', unpack({...}))
   self._battestate = 0;
 end
 
@@ -13,7 +13,7 @@ function BattleSceneManager.__getters.instance()
   return BattleSceneManager._instance
 end
 
-function BattleSceneManager:__new__() end
+function BattleSceneManager:ctor() end
 function BattleSceneManager:enterBattle(data, ctn, ui)
   self._battestate = 1
   self.autoBattleControler = BattleLogicalControler(ctn, ui)

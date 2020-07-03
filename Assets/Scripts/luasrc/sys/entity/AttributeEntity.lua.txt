@@ -3,7 +3,7 @@ require("game/sys/func/BattleFunc")
 
 AttributeEntity = newClass({Class}, {name = 'AttributeEntity'})
 
-function AttributeEntity:__new__(data)
+function AttributeEntity:ctor(data)
   local scaleValue = 1
   self.basePower = BattleFunc.instance:turnAddSpeedToFrame(data.basePower)
   self.baseSlowDownPower = BattleFunc.instance:turnAddSpeedToFrame(data.baseSlowDownPower)

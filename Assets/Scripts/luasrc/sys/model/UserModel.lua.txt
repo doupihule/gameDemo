@@ -25,8 +25,8 @@ require("game/sys/event/FogEvent")
 require("game/sys/model/UserExtModel")
 
 UserModel = newClass({BaseModel}, {name = 'UserModel'})
-function UserModel:__new__(...)
-  self:superCall('__new__', unpack({...}))
+function UserModel:ctor(...)
+  self:superCall('ctor', unpack({...}))
   self.incomeCoin = {};
   self.refuseAuth = "refuseWxAuth";
 end

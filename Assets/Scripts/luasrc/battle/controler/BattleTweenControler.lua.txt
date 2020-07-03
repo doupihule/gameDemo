@@ -1,8 +1,8 @@
 require("game/sys/consts/BattleConst")
 
-BattleTweenControler = newClass({Class}, {name = 'BattleTweenControler'})
+BattleTweenControler = class('BattleTweenControler')
 
-function BattleTweenControler:__new__(controler)
+function BattleTweenControler:ctor(controler)
   self.controler = controler
   self._tweenInfoMap = {}
 end
