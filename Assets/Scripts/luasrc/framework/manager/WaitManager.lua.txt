@@ -1,0 +1,101 @@
+require("framework/entity/WaitEntity")
+require("framework/manager/WindowManager")
+require("game/sys/view/loading/ReqLoadingUI")
+require("framework/utils/ScreenAdapterTools")
+
+WaitManager = class('WaitManager')
+
+function WaitManager:ctor()
+  self.waitList = {}
+  self.waitPool = {}
+  self._waitView = ReqLoadingUI()
+  self._waitView.width = ScreenAdapterTools.width
+  self._waitView.height = ScreenAdapterTools.height
+  Laya.timer:loop(1000, self, self.timeCallBack)
+end
+
+function WaitManager.__getters.instance()
+  if not WaitManager._instance then
+    WaitManager._instance = WaitManager()
+  end
+  return WaitManager._instance
+end
+
+function WaitManager:add(cmd)
+  local wait = nil
+  if #self.waitPool > 0 then
+    wait = self.waitPool:shift()
+  else
+    wait = WaitEntity()
+  end
+  wait.cmd = cmd
+  wait.time = Laya.timer.currTimer
+  table.insert(self.waitList, wait)
+  self:showOrHideWaitView(true)
+  Laya.timer:loop(1000, self, self.timeCallBack)
+end
+
+function WaitManager:remove(cmd)
+  local len = #self.waitList
+  local i = 0
+  repeat
+    if cmd == self.waitList[i+1].cmd then
+      table.insert(self.waitPool, self.waitList:splice(i, 1)[0+1])
+      break
+    end
+    i=i+1
+  until not(i < len)
+  self:checkWait()
+end
+
+function WaitManager:clear()
+  while(#self.waitList > 0)
+  do
+  table.insert(self.waitPool, self.waitList:shift())
+  end
+  self:checkWait()
+end
+
+function WaitManager:checkWait()
+  if #self.waitList <= 0 then
+    self:showOrHideWaitView(false)
+    Laya.timer:clearAll(self)
+  end
+end
+
+function WaitManager:timeCallBack()
+  local len = #self.waitList
+  local nowTime = Laya.timer.currTimer
+  local i = 0
+  repeat
+    repeat
+      if nowTime - self.waitList[i+1].time > 20000 then
+        print("cmd=" .. self.waitList[i+1].cmd .. " request timeout...")
+        table.insert(self.waitPool, self.waitList:splice(i, 1)[0+1])
+        len=len-1
+        break
+      end
+      i=i+1
+    until true
+  until not(i < len)
+  self:checkWait()
+end
+
+function WaitManager:checkIsWaiting()
+  return #self.waitList ~= 0
+end
+
+function WaitManager:showOrHideWaitView(value)
+  if value then
+    if not self._waitView.parent then
+      WindowManager.topUILayer:addChild(self._waitView)
+    end
+    self._waitView.visible = true
+    self._waitView:setData(nil)
+  else
+    self._waitView.visible = false
+    if self._waitView.parent then
+      self._waitView.parent:removeChild(self._waitView)
+    end
+  end
+end

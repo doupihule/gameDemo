@@ -1,0 +1,63 @@
+require("framework/manager/VersionManager")
+
+SoundChannel = class('SoundChannel')
+
+SoundChannel._emptyFunc = function() end;
+function SoundChannel:ctor()
+  self._loops = 1;
+  self._audio = wx:createInnerAudioContext()
+end
+
+function SoundChannel:play()
+  self._audio:play()
+  self._audio:offEnded(nil)
+  self._audio:onEnded((function()
+    self:onEnd()
+  end
+  ):bind(self))
+end
+
+function SoundChannel:offAll()
+  self._audio:offEnded(nil)
+  self._audio:stop()
+  self._audio:onEnded(SoundChannel._emptyFunc)
+end
+
+function SoundChannel:setData(url, loops, complete, soundClass, startTime)
+  if self._url == url then
+    return
+  end
+  local formatPath = VersionManager.getVirtualUrl(url)
+  self._audio.src = formatPath
+  self._url = url
+  self._loops = loops
+  self._audio.loop = self._loops == 0
+  if not startTime then
+    startTime = 0
+  end
+  self._audio.startTime = startTime
+end
+
+function SoundChannel.__setters:volume(v)
+  if not self._audio then
+    return
+  end
+  self._audio.volume = v
+end
+
+function SoundChannel:stop()
+  if self._audio then
+    self._audio:stop()
+  end
+end
+
+function SoundChannel:onEnd()
+  if self._loops == 1 then
+    self:stop()
+    return
+  end
+  if self._loops > 0 then
+    self._loops=self._loops-1
+  end
+  self:play()
+end

@@ -1,0 +1,30 @@
+require("stringutil")
+require("framework/platform/comp/OriginalAdBaseComp")
+require("game/sys/consts/ChannelConst")
+require("framework/common/UserInfo")
+require("framework/common/GameSwitch")
+
+OriginalIconAdComp = class('OriginalIconAdComp',OriginalAdBaseComp)
+function OriginalIconAdComp:ctor(...)
+  self:superCall('ctor', unpack({...}))
+  self.logName = 'original_icon';
+end
+
+function OriginalIconAdComp.__getters.instance()
+  if not OriginalIconAdComp._instance then
+    OriginalIconAdComp._instance = OriginalIconAdComp()
+  end
+  return OriginalIconAdComp._instance
+end
+
+function OriginalIconAdComp.__getters:adOriginalIds()
+  if not self._adOriginalIds then
+    if ChannelConst.getChannelConst(UserInfo.platformId).adOriginalIconIds then
+      self._adOriginalIds = String(ChannelConst.getChannelConst(UserInfo.platformId).adOriginalIconIds):split("|")
+    end
+    if GameSwitch.getSwitchState(GameSwitch.ORIGIN_ICON_ID) then
+      self._adOriginalIds = String(GameSwitch.getSwitchState(GameSwitch.ORIGIN_ICON_ID)):split("|")
+    end
+  end
+  return self._adOriginalIds
+end

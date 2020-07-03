@@ -1,0 +1,26 @@
+require("game/sys/model/BaseModel")
+
+UserExtCommonModel = class('UserExtCommonModel',BaseModel)
+function UserExtCommonModel:ctor()
+  self:superCall('ctor')
+end
+
+function UserExtCommonModel.__getters.instance()
+  if not UserExtCommonModel._instance then
+    UserExtCommonModel._instance = UserExtCommonModel()
+  end
+  return UserExtCommonModel._instance
+end
+
+function UserExtCommonModel:initData(d)
+  self:superCall('initData',d)
+end
+
+function UserExtCommonModel:updateData(d)
+  self:superCall('updateData',d)
+end
+
+function UserExtCommonModel:getTestSceneMark()
+  -- [ts2lua]lua中0和空字符串也是true，此处self._data.testSceneMark需要确认
+  return (self._data.testSceneMark and {self._data.testSceneMark} or {0})[1]
+end

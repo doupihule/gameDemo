@@ -1,0 +1,152 @@
+EaseUtils = class('EaseUtils')
+
+function EaseUtils:ctor(touchObject, onPosChangeFunc, onEaseEndFunc, easeNum, thisObj, onClickFunc, onGloablEndFunc, onMovedFunc, onTouchDownFunc)
+  self._easeObject = nil;
+  self._touchObject = nil;
+  self._startX = 0;
+  self._startY = 0;
+  self._easeNum = 0;
+  self._disX = 0;
+  self._disY = 0;
+  self._speedX = 0;
+  self._speedY = 0;
+  self._isDragMoved = false;
+  self._isDragDown = false;
+  self._originX = 0;
+  self._originY = 0;
+  self._moveStart = false;
+  if easeNum == nil then
+    easeNum=0.75
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if onClickFunc == nil then
+    onClickFunc=nil
+  end
+  if onGloablEndFunc == nil then
+    onGloablEndFunc=nil
+  end
+  if onMovedFunc == nil then
+    onMovedFunc=nil
+  end
+  if onTouchDownFunc == nil then
+    onTouchDownFunc=nil
+  end
+  self._easeObject = thisObj
+  self._onPosChangeFunc = onPosChangeFunc
+  self._onEaseEndFunc = onEaseEndFunc
+  self._easeNum = easeNum
+  self._touchObject = touchObject
+  self._onClickFunc = onClickFunc
+  self._onGloablEndFunc = onGloablEndFunc
+  self._onMovedFunc = onMovedFunc
+  self._onTouchDownFunc = onTouchDownFunc
+  self._touchObject:on(Laya.Event.MOUSE_DOWN, self, self.touchBeginHandler)
+  self._touchObject:on(Laya.Event.MOUSE_MOVE, self, self.touchMoveHandler)
+  self._touchObject:on(Laya.Event.MOUSE_UP, self, self.touchEndHandler)
+  self._touchObject:on(Laya.Event.MOUSE_OUT, self, self.touchEndHandler)
+  self._touchObject.mouseEnabled = true
+end
+
+function EaseUtils:onTouchTap(event)
+  if self._onClickFunc then
+    self._onClickFunc:call(self._easeObject, event.stageX, event.stageY)
+  end
+end
+
+function EaseUtils:touchBeginHandler(event)
+  self._originX = event.stageX
+  self._originY = event.stageY
+  self._startX = event.stageX
+  self._startY = event.stageY
+  self._isDragDown = true
+  self._isDragMoved = false
+  self:stopEase()
+  if self._onTouchDownFunc then
+    self._onTouchDownFunc:call(self._easeObject, event.stageX, event.stageY)
+  end
+  self._touchObject:off(Laya.Event.MOUSE_DOWN, self, self.touchBeginHandler)
+end
+
+function EaseUtils:touchMoveHandler(event)
+  if not self._isDragDown then
+    return
+  end
+  if not self._moveStart then
+    if Math:pow(event.stageX - self._originX, 2) + Math:pow(event.stageY - self._originY, 2) >= 900 then
+      self._moveStart = true
+    end
+  end
+  if not self._moveStart then
+    return
+  end
+  local disX = event.stageX - self._startX
+  local disY = event.stageY - self._startY
+  self._speedX = disX
+  self._speedY = disY
+  self._onPosChangeFunc:call(self._easeObject, disX, disY, event.stageX, event.stageY)
+  self._startX = event.stageX
+  self._startY = event.stageY
+  if self._onMovedFunc then
+    self._onMovedFunc:call(self._easeObject, event.stageX, event.stageY)
+  end
+  self._isDragMoved = true
+end
+
+function EaseUtils:touchEndHandler(event)
+  if self._onClickFunc then
+    if not self._moveStart then
+      self._onClickFunc:call(self._easeObject, event.stageX, event.stageY)
+    end
+  end
+  self._isDragDown = false
+  self._moveStart = false
+  local disX = event.stageX - self._startX
+  local disY = event.stageY - self._startY
+  print(disX .. " " .. event.stageX .. " " .. self._startX .. " " .. disY .. " " .. event.stageY .. " " .. self._startY .. " ")
+  self._startX = event.stageX
+  self._startY = event.stageY
+  if self._isDragMoved then
+    self:startEase(self._speedX, self._speedY)
+  elseif self._onEaseEndFunc then
+    self._onEaseEndFunc:call(self._easeObject, 0, 0)
+  end
+  if self._onGloablEndFunc then
+    self._onGloablEndFunc:call(self._easeObject, event.stageX, event.stageY)
+  end
+  self._isDragMoved = false
+  print(event.type)
+  self._touchObject:on(Laya.Event.MOUSE_DOWN, self, self.touchBeginHandler)
+end
+
+function EaseUtils:startEase(x, y)
+  Laya.timer:frameLoop(1, self, self.onEase)
+end
+
+function EaseUtils:onEase()
+  self._speedX = self._speedX * self._easeNum
+  self._speedY = self._speedY * self._easeNum
+  if Math:abs(self._speedX) <= 1 and Math:abs(self._speedY) <= 1 then
+    self._speedX = 0
+    self._speedY = 0
+    self:stopEase()
+    if self._onEaseEndFunc then
+      self._onEaseEndFunc:call(self._easeObject, 0, 0)
+    end
+  end
+  local func = nil
+  self._onPosChangeFunc:call(self._easeObject, self._speedX, self._speedY)
+  return false
+end
+
+function EaseUtils:stopEase()
+  Laya.timer:clear(self, self.onEase)
+end
+
+function EaseUtils:dispose()
+  self._touchObject:off(Laya.Event.MOUSE_DOWN, self, self.touchBeginHandler)
+  self._touchObject:off(Laya.Event.MOUSE_MOVE, self, self.touchMoveHandler)
+  self._touchObject:off(Laya.Event.MOUSE_UP, self, self.touchEndHandler)
+  self._touchObject:off(Laya.Event.MOUSE_OUT, self, self.touchEndHandler)
+end

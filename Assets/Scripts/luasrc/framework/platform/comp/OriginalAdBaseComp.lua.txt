@@ -1,0 +1,176 @@
+require("stringutil")
+require("framework/common/GameSwitch")
+require("framework/common/UserInfo")
+require("framework/manager/LogsManager")
+require("framework/platform/AdVideoManager")
+require("framework/common/kakura/Client")
+require("framework/manager/TimerManager")
+require("game/sys/manager/StatisticsManager")
+require("framework/consts/StatisticsCommonConst")
+
+OriginalAdBaseComp = class('OriginalAdBaseComp')
+function OriginalAdBaseComp:ctor(...)
+  self:superCall('ctor', unpack({...}))
+  self._isLoadOriginalSucc = false;
+  self._isOriginalObjReady = false;
+  self._startLoadTime = nil;
+end
+
+function OriginalAdBaseComp.__getters:adOriginalIds()
+  if not self._adOriginalIds then
+    if GameSwitch.getSwitchState(GameSwitch.ORIGIN_ID) then
+      self._adOriginalIds = String(GameSwitch.getSwitchState(GameSwitch.ORIGIN_ID)):split("|")
+    end
+  end
+  return self._adOriginalIds
+end
+
+function OriginalAdBaseComp:canOriginalAdv()
+  if not (UserInfo.isOppo() or UserInfo.isVivo()) then
+    LogsManager.echo("hlx " .. self.logName .. "关闭：平台不支持原生广告")
+    return false
+  end
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ORIGIN) then
+    LogsManager.echo("hlx " .. self.logName .. "关闭：开关关闭")
+    return false
+  end
+  if not AdVideoManager.instance._isInitAdv then
+    LogsManager.echo("hlx " .. self.logName .. "关闭：_isInitAdv 广告组件未初始化完毕")
+    LogsManager.errorTag('originAd_id_not_init', 'originAd_id_not_init')
+    return false
+  end
+  if not UserInfo.platform:getWX().createNativeAd then
+    LogsManager.echo("hlx " .. self.logName .. "关闭：createNativeAd函数不存在")
+    LogsManager.errorTag("noOriginalAd", "这个设备没有原生广告组件")
+    return false
+  end
+  if not self.adOriginalIds or not (#self.adOriginalIds >= 1) then
+    LogsManager.echo('hlx ' .. self.logName .. '关闭：adOriginalIds未配置')
+    return false
+  end
+  return true
+end
+
+function OriginalAdBaseComp:registerOrigionAdv(callBack, thisObj, params)
+  if callBack == nil then
+    callBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if params == nil then
+    params={}
+  end
+  self._isLoadOriginalSucc = false
+  LogsManager.echo("hlx " .. self.logName .. "原生广告初始化开始--------------------")
+  if not self:canOriginalAdv() then
+    return
+  end
+  self._tryCount = 1
+  if self._curIdsKey == nil then
+    self._curIdsKey = Math:floor(Math:random() * #self.adOriginalIds)
+  end
+  self:createOriginalSysc(self.adOriginalIds, callBack, thisObj, params)
+end
+
+function OriginalAdBaseComp:getArrNextKey(currentKey, length)
+  if currentKey + 1 >= length then
+    return 0
+  else
+    return currentKey + 1
+  end
+end
+
+function OriginalAdBaseComp:createOriginalSysc(idArr, callBack, thisObj, params)
+  if callBack == nil then
+    callBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if params == nil then
+    params={}
+  end
+  LogsManager.echo("hlx " .. self.logName .. " 原生广告初始化开始2--------------------" .. self._curIdsKey)
+  if self._startLoadTime ~= nil then
+    if Client.instance.serverTime - self._startLoadTime < 5 then
+      LogsManager.warn("hlx " .. self.logName .. " 广告实例未初始化完成，不重复初始化: 建议查询代码不要频繁加载原生广告！", Client.instance.serverTime - self._startLoadTime)
+      callBack and callBack:call(thisObj, false, params)
+      return
+    else
+      LogsManager.errorTag('original_lock_expire', "startTime:" .. self._startLoadTime .. " nowTime:" .. Client.instance.serverTime)
+    end
+  end
+  if self._isLoadOriginalSucc then
+    LogsManager.errorTag('origin_LoadOriginalSucc_error', '成功不应该走到此处')
+    return
+  end
+  if self._tryCount > #self.adOriginalIds then
+    callBack and callBack:call(thisObj, false, params)
+    return
+  end
+  if self._originalAd then
+    if self._isOriginalObjReady then
+      LogsManager.echo("hlx " .. self.logName .. " 原生广告已缓存，直接显示--------------------" .. self._curIdsKey)
+      callBack and callBack:call(thisObj, true, params, self.adList)
+      return
+    else
+      local destory_originalAd = self._originalAd
+      self._originalAd = nil
+      if 'function' == type(destory_originalAd.destroy) then
+        destory_originalAd:destroy()
+      end
+    end
+  end
+  LogsManager.echo("hlx " .. self.logName .. " 创建原生广告对象")
+  -- [ts2lua]self.adOriginalIds下标访问可能不正确
+  local id = self.adOriginalIds[self._curIdsKey]
+  local wx = UserInfo.platform:getWX()
+  self._startLoadTime = Client.instance.serverTime
+  self._originalAd = wx:createNativeAd({posId=id})
+  if self._originalAd then
+    local _originalAd = self._originalAd
+    _originalAd:onError(function(err)
+      LogsManager.echo("hlx " .. self.logName .. " onError--------------------" .. self._curIdsKey, JSON:stringify(err))
+      self._startLoadTime = nil
+      self._isLoadOriginalSucc = false
+      if UserInfo.isVivo() then
+        return
+      end
+      self._tryCount=self._tryCount+1
+      if self._curIdsKey + 1 >= #self.adOriginalIds then
+        self._curIdsKey = 0
+      else
+        self._curIdsKey=self._curIdsKey+1
+      end
+      TimerManager.instance:setTimeout(self.createOriginalSysc, self, 300, idArr, callBack, thisObj, params)
+    end
+    )
+    _originalAd:onLoad(function(res)
+      LogsManager.echo("hlx " .. self.logName .. " onLoad--------------------" .. self._curIdsKey, JSON:stringify(res))
+      self._startLoadTime = nil
+      self._isLoadOriginalSucc = true
+      self.adList = res.adList[0+1]
+      if res.adList[0+1] then
+        self._isOriginalObjReady = true
+        LogsManager.echo("原生广告初始化开始6--------------------")
+        callBack and callBack:call(thisObj, true, params, self.adList)
+      end
+    end
+    )
+    _originalAd:load()
+  end
+end
+
+function OriginalAdBaseComp:reportClickOriginal(adId)
+  LogsManager.echo("hlx " .. self.logName .. " 汇报点击")
+  StatisticsManager.ins:onEvent(StatisticsCommonConst.ORIGINAL_CLICK, {type=self.logName})
+  self._originalAd:reportAdClick({adId=adId})
+end
+
+function OriginalAdBaseComp:reportShowOriginal(adId)
+  LogsManager.echo("hlx " .. self.logName .. " 汇报展示")
+  StatisticsManager.ins:onEvent(StatisticsCommonConst.ORIGINAL_SHOW, {type=self.logName})
+  self._isOriginalObjReady = false
+  self._originalAd:reportAdShow({adId=adId})
+end

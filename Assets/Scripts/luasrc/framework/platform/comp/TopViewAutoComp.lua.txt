@@ -1,0 +1,80 @@
+require("framework/common/Message")
+require("framework/manager/LogsManager")
+require("framework/event/WindowEvent")
+require("framework/manager/WindowManager")
+require("utils/GameUtils")
+
+TopViewAutoComp = class('TopViewAutoComp')
+TopViewAutoComp.STATUS_SHOW = 1;
+TopViewAutoComp.STATUS_HIDE = 0;
+TopViewAutoComp.HIDE_TYPE_DESTROY = 1;
+TopViewAutoComp.HIDE_TYPE_HIDE = 0;
+function TopViewAutoComp:ctor()
+  self._status = TopViewAutoComp.STATUS_HIDE;
+  self._hideType = TopViewAutoComp.HIDE_TYPE_DESTROY;
+  Message.instance:add(WindowEvent.WINDOW_EVENT_SWITCHUIFIN, self)
+end
+
+function TopViewAutoComp:show(force)
+  if force == nil then
+    force=false
+  end
+  if not force and self._status == TopViewAutoComp.STATUS_SHOW then
+    return
+  end
+  self._status = TopViewAutoComp.STATUS_SHOW
+  self:_changeStatus()
+end
+
+function TopViewAutoComp:hide(force)
+  if force == nil then
+    force=false
+  end
+  if not force and self._status == TopViewAutoComp.STATUS_HIDE then
+    return
+  end
+  self._status = TopViewAutoComp.STATUS_HIDE
+  self:_changeStatus()
+end
+
+function TopViewAutoComp:destroy()
+  Message.instance:removeObjEvents(self)
+  self._status = TopViewAutoComp.STATUS_HIDE
+  self._parentName = nil
+end
+
+function TopViewAutoComp:_changeStatus()
+  if self._status == TopViewAutoComp.STATUS_SHOW then
+    self:_compShow()
+  elseif self._status == TopViewAutoComp.STATUS_HIDE then
+    self:_compHide()
+  end
+end
+
+function TopViewAutoComp:_compShow() end
+function TopViewAutoComp:_compHide() end
+function TopViewAutoComp:_checkUIState(force)
+  if force == nil then
+    force=false
+  end
+  if self._parentName then
+    LogsManager.echo("hlx TopViewAutoComp _parentName:", GameUtils.decryptStr(self._parentName), " CurrentWindowName:", GameUtils.decryptStr(WindowManager.getCurrentWindowName()))
+    if self._parentName == WindowManager.getCurrentWindowName() then
+      self:show(force)
+    else
+      if self._hideType == TopViewAutoComp.HIDE_TYPE_HIDE then
+        self:hide(force)
+      elseif self._hideType == TopViewAutoComp.HIDE_TYPE_DESTROY then
+        self:destroy()
+      end
+    end
+  else
+    LogsManager.echo("hlx TopViewAutoComp 组件未绑定任何页面，无需设置显示状态。此日志不是异常。")
+  end
+end
+
+function TopViewAutoComp:recvMsg(cmd, data)
+  if cmd == WindowEvent.WINDOW_EVENT_SWITCHUIFIN then
+    self:_checkUIState(false)
+  end
+end

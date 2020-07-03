@@ -1,0 +1,64 @@
+require("framework/platform/WXGamePlatform")
+require("utils/Global")
+require("framework/manager/LogsManager")
+require("game/sys/manager/StatisticsManager")
+require("framework/consts/StatisticsCommonConst")
+
+QQGamePlatform = class('QQGamePlatform',WXGamePlatform)
+function QQGamePlatform:ctor()
+  self:superCall('ctor')
+end
+
+function QQGamePlatform:shareAldAppMsg(data, shareCallBack)
+  qq:shareAppMessage({title=data.title, imageUrl=data.imgUrl, query=data.params, success=function(res)
+    print(">>>>>>>> QQGamePlatform share succ1>>>>>>>", res)
+    shareCallBack(1)
+  end
+  , fail=function(res)
+    print(">>>>>>>> QQGamePlatform share fail1>>>>>>>", res)
+    shareCallBack(0)
+  end
+  })
+  print(">>>>>>>>shareAppMessage>>>>>>>", data)
+end
+
+function QQGamePlatform:myOnShare(callback)
+  qq:onShareAppMessage(callback)
+end
+
+function QQGamePlatform:addToDesktop(thisObj, successCall, failCall, channelParams)
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if successCall == nil then
+    successCall=nil
+  end
+  if failCall == nil then
+    failCall=nil
+  end
+  if channelParams == nil then
+    channelParams={}
+  end
+  if not self:canAddToDesktop() then
+    failCall and failCall:call(thisObj)
+    return
+  end
+  self:getWX():saveAppToDesktop({success=function(res)
+    LogsManager.echo("hlx 添加到桌面成功", JSON:stringify(res))
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.ADD_DESKTOP_SUCCESS)
+    successCall and successCall:call(thisObj)
+  end
+  , fail=function(res)
+    LogsManager.echo("hlx 添加到桌面失败", JSON:stringify(res))
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.ADD_DESKTOP_FAIL)
+    failCall and failCall:call(thisObj)
+  end
+  })
+end
+
+function QQGamePlatform:isFromFavourite()
+  if Global.currentSceneId ~= "3003" then
+    return false
+  end
+  return true
+end

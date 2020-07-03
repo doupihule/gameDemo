@@ -1,0 +1,31 @@
+require("utils/Global")
+require("framework/manager/LogsManager")
+require("framework/common/GameSwitch")
+
+DeviceTools = class('DeviceTools')
+function DeviceTools:ctor() end
+DeviceTools.lowDeviceGroup = {};
+DeviceTools._isLowDevice = false;
+DeviceTools._hasCheckDevice = false;
+DeviceTools.network = "none";
+function DeviceTools.checkIsLowDevice()
+  if DeviceTools._hasCheckDevice then
+    return DeviceTools._isLowDevice
+  end
+  DeviceTools._hasCheckDevice = true
+  local deviceModel = Global.deviceModel
+  if DeviceTools.lowDeviceGroup:find(deviceModel) ~= -1 then
+    DeviceTools._isLowDevice = true
+    LogsManager.echo("this is lowDevice ")
+  else
+    DeviceTools._isLowDevice = false
+  end
+  return DeviceTools._isLowDevice
+end
+
+function DeviceTools.checkBySwitch()
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_LOWDEVICE) then
+    DeviceTools._hasCheckDevice = true
+    DeviceTools._isLowDevice = false
+  end
+end

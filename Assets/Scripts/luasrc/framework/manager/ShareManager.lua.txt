@@ -1,0 +1,40 @@
+ShareManager = class('ShareManager')
+function ShareManager:ctor(...)
+  self:superCall('ctor', unpack({...}))
+  self.sceneShare = {20001=410001, 20002=410002, 20003=410003, 20004=410004, 20005=410005};
+end
+
+function ShareManager:ctor() end
+function ShareManager.__getters.ins()
+  if not ShareManager._ins then
+    ShareManager._ins = ShareManager()
+  end
+  return ShareManager._ins
+end
+
+function ShareManager:setData(shareData, translate)
+  self._shareData = shareData
+  self._translate = translate
+end
+
+function ShareManager:getSceneShareById(sceneId)
+  -- [ts2lua]self.sceneShare下标访问可能不正确
+  local shareId = self.sceneShare[sceneId]
+  -- [ts2lua]self._shareData下标访问可能不正确
+  local data = self._shareData[shareId]
+  if data then
+    -- [ts2lua]self._translate下标访问可能不正确
+    return {self._translate[data.descId], data.pic[0+1]}
+  end
+  return nil
+end
+
+function ShareManager:getShareById(shareId)
+  -- [ts2lua]self._shareData下标访问可能不正确
+  local data = self._shareData[shareId]
+  if data then
+    -- [ts2lua]self._translate下标访问可能不正确
+    return {self._translate[data.descId], data.pic[0+1]}
+  end
+  return nil
+end

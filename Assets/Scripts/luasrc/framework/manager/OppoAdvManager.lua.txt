@@ -1,0 +1,67 @@
+require("framework/common/GameSwitch")
+require("framework/manager/LogsManager")
+require("framework/manager/TimerManager")
+require("framework/platform/AdVideoManager")
+
+OppoAdvManager = class('OppoAdvManager')
+
+OppoAdvManager.fastReceive = 1;
+OppoAdvManager.origionAdv = 2;
+OppoAdvManager.intervalAdv = 3;
+OppoAdvManager.rewardAdv = 4;
+OppoAdvManager.origionAndReward = 5;
+OppoAdvManager.intervalAndReward = 6;
+function OppoAdvManager.__getters.instance()
+  if not OppoAdvManager._instance then
+    OppoAdvManager._instance = OppoAdvManager()
+  end
+  return OppoAdvManager._instance
+end
+
+function OppoAdvManager.tipItemType(parent, receiveType, successCall, thisObj, extraType)
+  if receiveType == nil then
+    receiveType=nil
+  end
+  if successCall == nil then
+    successCall=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if extraType == nil then
+    extraType=0
+  end
+  local type = nil
+  local insertDelay = Number(GameSwitch.getSwitchState(GameSwitch.SCREEN_AD_DELAY)) * 1000
+  local originalDelay = Number(GameSwitch.getSwitchState(GameSwitch.ORIGIN_AD_DELAY)) * 1000
+  local tipType = nil
+  tipType = Number(GameSwitch.getSwitchState(receiveType))
+  LogsManager.echo("tipType------------------", tipType)
+  if tipType == 4 then
+    type = OppoAdvManager.rewardAdv
+  end
+  if tipType == 2 or tipType == 5 then
+    if tipType == 5 then
+      type = OppoAdvManager.rewardAdv
+    end
+    TimerManager.instance:setTimeout(function()
+      AdVideoManager.instance:showInterstitialAd(parent, function()
+        TimerManager.instance:setTimeout(function()
+          AdVideoManager.instance:showOriginalAdView()
+        end
+        , OppoAdvManager, originalDelay)
+      end
+      )
+    end
+    , OppoAdvManager, insertDelay)
+  elseif tipType == 3 or tipType == 6 then
+    if tipType == 6 then
+      type = OppoAdvManager.rewardAdv
+    end
+    TimerManager.instance:setTimeout(function()
+      AdVideoManager.instance:showOriginalAdView()
+    end
+    , OppoAdvManager, originalDelay)
+  end
+  return type
+end

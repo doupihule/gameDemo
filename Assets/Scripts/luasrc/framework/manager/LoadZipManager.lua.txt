@@ -1,0 +1,150 @@
+require("trycatch")
+require("framework/manager/LogsManager")
+require("framework/manager/TimerManager")
+require("framework/common/Message")
+require("game/sys/common/MsgCMD")
+require("game/sys/consts/WindowCfgs")
+require("framework/func/TranslateFunc")
+require("framework/manager/WindowManager")
+require("framework/utils/FileUtils")
+require("framework/manager/VersionManager")
+require("framework/consts/LogsErrorCode")
+
+LoadZipManager = class('LoadZipManager')
+
+function LoadZipManager:ctor()
+  self._reloadCount = 0;
+  self._maxReloadcount = 1;
+  self._isTestError = false;
+  self._timeCode = 0;
+  self._timeCount = 0;
+  self._startLoadTime = 0;
+  self._loadCacheArr = {}
+  self._hasCacheMap = {}
+end
+
+function LoadZipManager.__getters.instance()
+  if not LoadZipManager._instance then
+    LoadZipManager._instance = LoadZipManager()
+  end
+  return LoadZipManager._instance
+end
+
+function LoadZipManager:loadZip(url, modelName, completeFunc, errorFunc, isInsert)
+  if isInsert == nil then
+    isInsert=false
+  end
+  if VersionManager.instance:checkModelFilesIsRight(modelName, true) then
+    LogsManager.echo("xd zip url ", url, " 本地已经有缓存了无需重复下载")
+    if completeFunc then
+      completeFunc:run()
+    end
+    return
+  end
+  local params = {url=url, model=modelName, name=url, completeFunc=completeFunc, errorFunc=completeFunc}
+  if isInsert then
+    self._loadCacheArr:splice(0, 0, params)
+  else
+    table.insert(self._loadCacheArr, params)
+  end
+  self:checkLoad()
+end
+
+function LoadZipManager:checkLoad()
+  if self.currentLoadinfo then
+    return
+  end
+  if #self._loadCacheArr == 0 then
+    return
+  end
+  local info = self._loadCacheArr[0+1]
+  self._loadCacheArr:splice(0, 1)
+  self:sureLoad(info)
+end
+
+function LoadZipManager:sureLoad(info)
+  self.currentLoadinfo = info
+  if info.isLoading then
+    Message.instance:send(MsgCMD.MODULE_SHOW, WindowCfgs.LoadingUI)
+  end
+  local t1 = Laya.Browser:now()
+  LogsManager.echo("xd_开始zip:", info.name:slice(0, 100))
+  self._timeCode = TimerManager.instance:add(self.timerHandler, self, 20000, 1)
+  self._startLoadTime = Laya.Browser:now()
+  local virtualUrl = VersionManager.getVirtualUrl(info.url)
+  local remoteUrl = Laya.URL.basePath + virtualUrl
+  local saveUrl = FileUtils.getLocalZipCacheFullPath() + virtualUrl
+  local dirName = FileUtils.getFilePathByUrl(saveUrl)
+  FileUtils.mkdirsSync(dirName)
+  local targetUnZipFolder = VersionManager.instance:getUnZipFilePath(info.model)
+  self:loadZipFoldler(targetUnZipFolder)
+  local thisObj = self
+  local onDownLoadSuccess = function(r)
+    if r.statusCode == 200 then
+      LogsManager.echo("xd donwLoadZip", info.url, "_costTime:", Laya.Browser:now() - t1)
+      thisObj.currentLoadinfo = nil
+      VersionManager.instance:initUnZipFilePath(info.model)
+      FileUtils.unZipFile(saveUrl, targetUnZipFolder, info.completeFunc, info.errorFunc)
+      thisObj:checkLoad()
+    else
+      LogsManager.echo("_加载失败,statusCode:", r.statusCode)
+      thisObj:onLoadError()
+    end
+  end
+  
+  local onDownLoadError = function(e)
+    LogsManager.echo("xd wx.downLoadFileError", e:toString())
+    thisObj:onLoadError()
+  end
+  
+  wx:downloadFile({url=remoteUrl, success=onDownLoadSuccess, fail=onDownLoadError, filePath=saveUrl, complete=nil})
+end
+
+function LoadZipManager:loadZipFoldler(targetUnZipFolder)
+  if FileUtils.existsLocalFile(targetUnZipFolder) then
+    wx:getFileSystemManager():rmdir({dirPath=targetUnZipFolder, success=function()
+      LogsManager.echo("zm删除文件夹成功:", targetUnZipFolder)
+      -- [ts2lua]FileUtils.fs_cache下标访问可能不正确
+      FileUtils.fs_cache[targetUnZipFolder] = 0
+      FileUtils.mkdirsSync(targetUnZipFolder)
+    end
+    , fail=function(ee)
+      local errorStr = nil
+      try_catch{
+        main = function()
+          errorStr = JSON:stringify(ee)
+        end,
+        catch = function(e)
+          errorStr = ee:toString()
+        end
+      }
+      LogsManager.errorTag(LogsErrorCode.FILE_ERROR, "zm_删除目录失败", targetUnZipFolder, errorStr)
+    end
+    , recursive=true}, true)
+  else
+    FileUtils.mkdirsSync(targetUnZipFolder)
+  end
+end
+
+function LoadZipManager:onLoadError()
+  local errorMessage = TranslateFunc.instance:getTranslate("#error110")
+  WindowManager.setPopupTip(1, errorMessage, self.reloadGroup, self)
+end
+
+function LoadZipManager:timerHandler()
+  LogsManager.echo("xd_loadres 超时")
+end
+
+function LoadZipManager:reloadGroup()
+  self:sureLoad(self.currentLoadinfo)
+end
+
+function LoadZipManager:checkHasCache(url)
+  local key = url
+  if type(key) ~= "string" then
+    key = JSON:stringify(url)
+  end
+  -- [ts2lua]self._hasCacheMap下标访问可能不正确
+  local result = self._hasCacheMap[key]
+  return result
+end

@@ -1,0 +1,26 @@
+KariquShareConst = class('KariquShareConst')
+KariquShareConst.KARIQU_LOGIN_URL = "https://wxxyx.17tcw.com:7851/fcqs/login/reqLogin";
+KariquShareConst.KARIQU_SAVELEVEL_URL = "https://wxxyx.17tcw.com:7851/fcqs/game/reqSaveUser";
+KariquShareConst.KARIQU_CONFIG_URL = "https://wxxyx.17tcw.com:7851/fcqs/lobby/reqConfig";
+KariquShareConst.KARIQU_GAMESTATIC_URL = "https://conglin.17tcw.com:8082/collect/pushEvents";
+KariquShareConst.KARIQU_SHAREIMAGEINFO_URL = "https://xyx.17tcw.com:5267/xyx/basic/reqFenxiang";
+KariquShareConst.KARIQU_SHAREBEGIN_URL = "https://xyx.17tcw.com:5201/xyx/statis/reqBeginShare";
+KariquShareConst.KARIQU_SHAREMETHOD_URL = "https://wxxyx.17tcw.com:8500/zzzw/game/getShareStrategy";
+KariquShareConst.KARIQU_POSTENTERGAME_URL = "https://wxxyx.17tcw.com:8500/zzzw/game/clickShare";
+KariquShareConst.KARIQU_CHANNEL_TITLE = "krq_zzzw";
+KariquShareConst.KARIQU_GETOPENID = "GotOpenId";
+KariquShareConst.KARIQU_GETLAUNCHSCENE = "LaunchScene";
+KariquShareConst.KARIQU_GAMEMAIN = "HomeStartGame";
+KariquShareConst.KARIQU_RESULT = "GameEnd";
+KariquShareConst.KARIQU_STARTGAME = "PlayGame";
+KariquShareConst.KARIQU_TRYADV = "TryPlayVideoAd";
+KariquShareConst.KARIQU_SHOWADV_SUCC = "VideoAdSuccess";
+KariquShareConst.KARIQU_SHOWADV_FAIL = "VideoAdFailed";
+KariquShareConst.KARIQU_CENTER_EXIT = "VideoAdClosed";
+KariquShareConst.KARIQU_END = "VideoAdEnded";
+KariquShareConst.KARIQU_ONLINETIME = "onlinetime";
+function KariquShareConst.initKariquUrl(map)
+  for i in pairs(map) do
+    KariquShareConst[i+1] = map[i+1]
+  end
+end

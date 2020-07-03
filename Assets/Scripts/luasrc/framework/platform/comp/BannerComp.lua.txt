@@ -1,0 +1,767 @@
+require("trycatch")
+require("framework/manager/LogsManager")
+require("game/sys/manager/StatisticsManager")
+require("framework/platform/comp/TopViewAutoComp")
+require("game/sys/consts/ChannelConst")
+require("framework/common/UserInfo")
+require("framework/common/GameSwitch")
+require("framework/common/Message")
+require("framework/platform/AdVideoManager")
+require("framework/consts/StatisticsCommonConst")
+require("utils/GameUtils")
+require("framework/manager/WindowManager")
+require("framework/manager/TimerManager")
+require("framework/common/kakura/Client")
+require("framework/native/NativeBridge")
+require("framework/event/JSToNativeEvent")
+require("framework/utils/ScreenAdapterTools")
+require("framework/event/NativeToJSEvent")
+
+BannerComp = class('BannerComp',TopViewAutoComp)
+
+BannerComp.bannerHeight = 200;
+function BannerComp.emptyFunc(m) end
+BannerComp.platformToCacheBannerNumsMap = {wxgame=1};
+function BannerComp.__getters.cacheBannerNums()
+  -- [ts2lua]BannerComp.platformToCacheBannerNumsMap下标访问可能不正确
+  local rt = BannerComp.platformToCacheBannerNumsMap[UserInfo.platformId]
+  if not rt then
+    return 0
+  end
+  return rt
+end
+
+BannerComp.TRY_LOAD_COUNT = 0;
+BannerComp.BANNER_USE_COUNT = 5;
+function BannerComp.__getters.instance()
+  return BannerComp._instance
+end
+
+BannerComp._cacheInfo = {};
+BannerComp._cacheBannerArr = {};
+BannerComp.lastCreateBannerTime = 0;
+BannerComp.bannerCloseCount = 0;
+function BannerComp.__getters.bannerId()
+  if not BannerComp._bannerId then
+    if ChannelConst.getChannelConst(UserInfo.platformId).adBannerId then
+      BannerComp._bannerId = ChannelConst.getChannelConst(UserInfo.platformId).adBannerId
+    end
+    if GameSwitch.getSwitchState(GameSwitch.BANNER_ID) then
+      BannerComp._bannerId = GameSwitch.getSwitchState(GameSwitch.BANNER_ID)
+    end
+  end
+  return BannerComp._bannerId
+end
+
+function BannerComp.__getters.appSid()
+  if not BannerComp._appSid then
+    if ChannelConst.getChannelConst(UserInfo.platformId).appSid then
+      BannerComp._appSid = ChannelConst.getChannelConst(UserInfo.platformId).appSid
+    end
+  end
+  return BannerComp._appSid
+end
+
+function BannerComp.register()
+  LogsManager.echo("hlx banner 预加载")
+  if not BannerComp.canUseBanner() then
+    return
+  end
+  if not BannerComp._instance then
+    BannerComp._instance = BannerComp(nil, nil, nil)
+  end
+  if not BannerComp._instance._bannerAd then
+    BannerComp._instance:registerBanner()
+  end
+end
+
+function BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style)
+  if onErrorCallback == nil then
+    onErrorCallback=nil
+  end
+  if callbackObj == nil then
+    callbackObj=nil
+  end
+  if hideType == nil then
+    hideType=TopViewAutoComp.HIDE_TYPE_DESTROY
+  end
+  if style == nil then
+    style=nil
+  end
+  local windowName = parent.windowName
+  LogsManager.echo("hlx bannerComp create start:", GameUtils.decryptStr(windowName))
+  if not windowName then
+    LogsManager.errorTag("banner_noparent", "没有传递parent")
+    onErrorCallback and onErrorCallback:call(BannerComp)
+    return
+  end
+  if not BannerComp.canUseBanner() then
+    onErrorCallback and onErrorCallback:call(BannerComp)
+    return
+  end
+  -- [ts2lua]BannerComp._cacheInfo下标访问可能不正确
+  if BannerComp._cacheInfo[windowName] then
+    BannerComp._instance:updateInfo(windowName, onErrorCallback, callbackObj, hideType, style)
+    return
+  end
+  -- [ts2lua]BannerComp._cacheInfo下标访问可能不正确
+  BannerComp._cacheInfo[windowName] = {name=windowName, params={onErrorCallback=onErrorCallback, callbackObj=callbackObj, hideType=hideType, style=style}}
+  if not BannerComp._instance then
+    BannerComp._instance = BannerComp(windowName, onErrorCallback, callbackObj, hideType, style)
+  else
+    BannerComp._instance:updateInfo(windowName, onErrorCallback, callbackObj, hideType, style)
+  end
+end
+
+function BannerComp:ctor(parentName, onErrorCallback, callbackObj, hideType, style)
+  if onErrorCallback == nil then
+    onErrorCallback=nil
+  end
+  if callbackObj == nil then
+    callbackObj=nil
+  end
+  if hideType == nil then
+    hideType=TopViewAutoComp.HIDE_TYPE_DESTROY
+  end
+  if style == nil then
+    style=nil
+  end
+  self:superCall('ctor')
+  self._loadSuccess = false;
+  self._loadState = 0;
+  self._errorCount = 0;
+  self._leftUseCount = 0;
+  self._hasError = false;
+  self._style = nil;
+  self:updateInfo(parentName, onErrorCallback, callbackObj, hideType, style)
+  Message.instance:add(NativeToJSEvent.TTSDK_BANNER_EVENT, self)
+end
+
+function BannerComp:updateInfo(parentName, onErrorCallback, callbackObj, hideType, style)
+  if onErrorCallback == nil then
+    onErrorCallback=nil
+  end
+  if callbackObj == nil then
+    callbackObj=nil
+  end
+  if hideType == nil then
+    hideType=TopViewAutoComp.HIDE_TYPE_DESTROY
+  end
+  if style == nil then
+    style=nil
+  end
+  self._onErrorCallback = onErrorCallback
+  self._parentName = parentName
+  self._callbackObj = callbackObj
+  self._hideType = hideType
+  self._style = style
+  LogsManager.echo("ycn banner style", style)
+  if not parentName then
+    return
+  end
+  self:_checkUIState(true)
+end
+
+function BannerComp:updateDataByName(parentName)
+  -- [ts2lua]BannerComp._cacheInfo下标访问可能不正确
+  local cacheInfo = BannerComp._cacheInfo[parentName]
+  if not cacheInfo then
+    LogsManager.errorTag("banner_error", "没有找到缓存的uibanner信息", parentName)
+    return
+  end
+  local params = cacheInfo.params
+  self._onErrorCallback = params.onErrorCallback
+  self._parentName = parentName
+  self._callbackObj = params.callbackObj
+  self._hideType = params.hideType
+  LogsManager.echo("ycn banner style", params.style)
+  self._style = params.style
+end
+
+function BannerComp:registerBanner(hasError)
+  if hasError == nil then
+    hasError=false
+  end
+  StatisticsManager.ins:onEvent(StatisticsCommonConst.BANNER_PULLNUM)
+  if UserInfo.isSystemNative() then
+    self._loadSuccess = false
+    NativeBridge.instance:callNative(JSToNativeEvent.TTADSDK_BANNER, {status=2})
+    return
+  end
+  LogsManager.echo("hlx register Banner")
+  local tempThis = self
+  local wx = UserInfo.platform:getWX()
+  if not wx then
+    return
+  end
+  if self._bannerAd then
+    LogsManager.warn("hlx banner 实例已经创建，无需重复注册，请检查代码逻辑是否存在异常")
+    return
+  end
+  if not wx.createBannerAd then
+    LogsManager.warn("hlx banner noGameBanner", "没有Gamebanner组件")
+    self:_doBannerCallBack()
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.BANNER_PULLFAILED)
+    return
+  end
+  local systemInfo = UserInfo.platform:getSystemInfo()
+  local w = systemInfo.windowWidth
+  local h = systemInfo.windowHeight
+  local bannerWidth = w
+  local left = w - bannerWidth / 2
+  if hasError then
+    local banner = BannerComp.getCacheBanner()
+    if banner then
+      LogsManager.echo("xd_banner_这是一个缓存的banner")
+      self._loadSuccess = true
+      self._hasError = false
+      self._leftUseCount = BannerComp.BANNER_USE_COUNT
+      self._bannerAd = banner
+      self:_checkUIState(true)
+      return
+    end
+  end
+  self._leftUseCount = 0
+  if UserInfo.isOppo() then
+    LogsManager.echo("ycn oppo banner style", tempThis._style)
+    if tempThis._style and tempThis._style.offsetY then
+      LogsManager.echo("ycn oppo banner with style")
+      self._bannerAd = wx:createBannerAd({adUnitId=BannerComp.bannerId, style={left=left, top=h - 200 + tempThis._style.offsetY}})
+    else
+      self._bannerAd = wx:createBannerAd({adUnitId=BannerComp.bannerId})
+    end
+  elseif UserInfo.isVivo() then
+    if BannerComp.lastCreateBannerTime ~= 0 then
+      local leftCD = 11 - Math:ceil(Client.instance.miniserverTime - BannerComp.lastCreateBannerTime / 1000)
+      if leftCD > 0 then
+        LogsManager.echo("hlx banner vivo平台Banner创建最小间隔10秒。直接return")
+        return
+      end
+    end
+    self._bannerAd = wx:createBannerAd({posId=BannerComp.bannerId, style={}})
+    BannerComp.lastCreateBannerTime = Client.instance.miniserverTime
+  elseif UserInfo.isTT() then
+    bannerWidth = Math:max(w, 208)
+    left = w - bannerWidth / 2
+    local offsetY = 0
+    if tempThis._style and tempThis._style.offsetY then
+      offsetY = tempThis._style.offsetY
+    end
+    local top = h - bannerWidth / 16 * 9 + offsetY
+    self._bannerAd = wx:createBannerAd({adUnitId=BannerComp.bannerId, style={left=left, top=top, width=bannerWidth}, adIntervals=30})
+  elseif UserInfo.isBaidu() then
+    self._bannerAd = wx:createBannerAd({adUnitId=BannerComp.bannerId, appSid=BannerComp.appSid, style={left=left, top=76, width=bannerWidth}, adIntervals=30})
+  elseif UserInfo.isUC() then
+    local offsetY = 0
+    if tempThis._style and tempThis._style.offsetY then
+      offsetY = tempThis._style.offsetY
+    end
+    local width = systemInfo.screenWidth
+    if tempThis._style and tempThis._style.retio then
+      width = systemInfo.screenWidth * tempThis._style.retio
+    elseif tempThis._style and tempThis._style.width then
+      width = tempThis._style.width
+    end
+    local bannerHeight = width * 150 / 600
+    local bottom = offsetY + bannerHeight
+    self._bannerAd = wx:createBannerAd({style={gravity=7, width=width, bottom=bottom, height=0}})
+  else
+    self._bannerAd = wx:createBannerAd({adUnitId=BannerComp.bannerId, style={left=left, top=1136, width=bannerWidth}, adIntervals=30})
+  end
+  local bannerAd = nil
+  local onErrorBack = function(err)
+    if tempThis._leftUseCount > 0 then
+      LogsManager.echo("当前是缓存的banner 什么都不要做")
+      tempThis:_checkUIState(true)
+      return
+    end
+    if bannerAd and bannerAd.__isDestoryed then
+      LogsManager.errorTag("bannerError", "这个banner已经被销毁了可能是网络原因导致的.再做一次销毁逻辑")
+      BannerComp.checkCahceOrDestoryBanner(bannerAd, true)
+      return
+    end
+    LogsManager.echo("hlx bannerAd.onError----------------------count:", tempThis._errorCount, JSON:stringify(err))
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.BANNER_PULLFAILED)
+    tempThis._hasError = true
+    tempThis._loadSuccess = false
+    tempThis._errorCount=tempThis._errorCount+1
+    if tempThis._errorCount <= BannerComp.TRY_LOAD_COUNT then
+      tempThis:reLoadBanner(true)
+    else
+      if tempThis._bannerAd then
+        BannerComp.checkCahceOrDestoryBanner(tempThis._bannerAd, tempThis._hasError)
+        tempThis._bannerAd = nil
+      end
+      if #BannerComp._cacheBannerArr > 0 then
+        tempThis:reLoadBanner()
+      else
+        if tempThis._errorCount == 1 then
+          tempThis:reLoadBanner(true)
+        else
+          tempThis._hasError = false
+          tempThis:_doBannerCallBack()
+        end
+      end
+    end
+  end
+  
+  local onLoadBack = function(res)
+    LogsManager.echo('hlx bannerAd.onload:', JSON:stringify(res))
+    if bannerAd.__isDestoryed then
+      LogsManager.errorTag("bannerError", "这个banner已经被销毁了可能是网络原因导致的.再做一次销毁逻辑")
+      BannerComp.checkCahceOrDestoryBanner(bannerAd, true)
+      return
+    end
+    tempThis._hasError = false
+    tempThis._loadSuccess = true
+    tempThis._errorCount = 0
+    local offsetY = 0
+    if tempThis._style and tempThis._style.offsetY then
+      offsetY = tempThis._style.offsetY
+    end
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.BANNER_PULLSUCCESS)
+    if UserInfo.isWX() or UserInfo.isQQGame() then
+      bannerAd.style.left = w - bannerAd.style.realWidth / 2
+      bannerAd.style.top = h - bannerAd.style.realHeight + offsetY
+    elseif UserInfo.isTT() then
+      bannerAd.style.left = w - bannerAd.style.width / 2
+      bannerAd.style.top = h - bannerAd.style.width / 16 * 9 + offsetY
+    elseif UserInfo.isBaidu() then
+      bannerAd.style.left = w - bannerAd.style.width / 2
+      bannerAd.style.top = h - bannerAd.style.height + offsetY
+    elseif UserInfo.isOppo() then
+      bannerAd.style.left = w - bannerAd.style.width / 2
+      bannerAd.style.top = h - bannerAd.style.height + offsetY
+    end
+    self:_checkUIState(true)
+  end
+  
+  local onResizeBack = function(size)
+    LogsManager.echo("hlx bannerAd.onResize:", size.width, size.height)
+    if size.width ~= 0 then
+      local offsetY = 0
+      if tempThis._style and tempThis._style.offsetY then
+        offsetY = tempThis._style.offsetY
+      end
+      bannerAd.style.left = Math:floor(w - size.width / 2)
+      bannerAd.style.top = Math:floor(h - size.height + offsetY)
+    end
+  end
+  
+  if self._bannerAd then
+    self._isShowBanner = false
+    self._loadSuccess = false
+    self._bannerAd.__isDestoryed = false
+    bannerAd = self._bannerAd
+    table.insert(BannerComp._bannerCallBackCache, {instance=self._bannerAd, onLoad=onLoadBack, onError=onErrorBack, onResize=onResizeBack})
+    bannerAd:onError(onErrorBack)
+    if UserInfo.isOppo() then
+      self._loadSuccess = true
+      bannerAd:onShow(function()
+        LogsManager.echo("hlx banner 广告显示")
+      end
+      )
+      bannerAd:onHide(function()
+        BannerComp.bannerCloseCount=BannerComp.bannerCloseCount+1
+        LogsManager.echo("hlx banner 广告隐藏")
+      end
+      )
+      self:_checkUIState(true)
+    elseif UserInfo.isVivo() then
+      bannerAd:onLoad(onLoadBack)
+    elseif UserInfo.isUC() then
+      bannerAd:onLoad(onLoadBack)
+    else
+      bannerAd:onLoad(onLoadBack)
+      bannerAd:onResize(onResizeBack)
+    end
+  else
+    LogsManager.warn('hlx registerBanner error:ad not found')
+  end
+end
+
+function BannerComp:setTop()
+  local offsetY = 0
+  if self._style and self._style.offsetY then
+    offsetY = self._style.offsetY
+  end
+  local h = UserInfo.platform:getSystemInfo().windowHeight
+  if UserInfo.isWX() or UserInfo.isQQGame() then
+    self._bannerAd.style.top = h - self._bannerAd.style.realHeight + offsetY
+  elseif UserInfo.isTT() then
+    self._bannerAd.style.top = h - self._bannerAd.style.width / 16 * 9 + offsetY
+  elseif UserInfo.isBaidu() then
+    self._bannerAd.style.top = h - self._bannerAd.style.height + offsetY
+  elseif UserInfo.isOppo() then
+    self._bannerAd.style.top = h - self._bannerAd.style.height + offsetY
+  end
+end
+
+function BannerComp:_doBannerCallBack()
+  LogsManager.echo("hlx _doBannerCallBack _onErrorCallback")
+  local tempFunc = self._onErrorCallback
+  local tempObj = self._callbackObj
+  self._loadSuccess = false
+  self._isShowBanner = true
+  self._hasError = false
+  tempFunc and tempFunc:call(tempObj)
+end
+
+function BannerComp.canUseBanner()
+  if not AdVideoManager.instance._isInitAdv then
+    return false
+  end
+  if UserInfo.isSystemNative() then
+    return true
+  end
+  if not BannerComp.bannerId and not UserInfo.isUC() then
+    LogsManager.warn("hlx bannerId 未配置，不初始化banner")
+    return false
+  end
+  if not UserInfo.platform:getWX().createBannerAd then
+    LogsManager.echo("hlx createBannerAd 方法不存在，不初始化banner")
+    return false
+  end
+  if UserInfo.isBaidu() and not BannerComp.appSid then
+    LogsManager.warn("hlx appSid 未配置，不初始化banner")
+    return false
+  end
+  if UserInfo.isTT() then
+    LogsManager.echo("krma. UserInfo.platform.getSystemInfo().appName " .. UserInfo.platform:getSystemInfo().appName)
+    if UserInfo.platform:getSystemInfo().appName == "Douyin" or UserInfo.platform:getSystemInfo().appName == "PPX" then
+      LogsManager.echo("krma. 该渠道不支持banner", UserInfo.platform:getSystemInfo().appName)
+      return false
+    end
+  end
+  if UserInfo.isOppo() then
+    if GameSwitch.checkOnOff(GameSwitch.SWITCH_OPPO_REVIEW) and BannerComp.bannerCloseCount >= 5 then
+      LogsManager.echo("hlx banner 超过最大关闭上线 5，不在显示banner")
+      return false
+    end
+  end
+  return true
+end
+
+function BannerComp:destroy(forceDestroy)
+  if forceDestroy == nil then
+    forceDestroy=false
+  end
+  LogsManager.echo("hlx banner destroy:", GameUtils.decryptStr(self._parentName))
+  self._status = TopViewAutoComp.STATUS_HIDE
+  self._parentName = nil
+  self._onErrorCallback = nil
+  self._callbackObj = nil
+  if UserInfo.isSystemNative() then
+    self._loadSuccess = false
+    self._hasError = false
+    self._isShowBanner = false
+    NativeBridge.instance:callNative(JSToNativeEvent.TTADSDK_BANNER, {status=0})
+    self:reLoadBanner()
+    return
+  end
+  if UserInfo.isVivo() or forceDestroy then
+    if self._bannerAd then
+      BannerComp._destroyBannerInstance(self._bannerAd)
+      self._bannerAd = nil
+    end
+    self._loadSuccess = false
+    self._hasError = false
+    self._isShowBanner = false
+  else
+    self:reLoadBanner()
+  end
+end
+
+function BannerComp:reLoadBanner(forceTry)
+  if forceTry == nil then
+    forceTry=false
+  end
+  LogsManager.echo("hlx banner reLoad Banner,_leftUseCount", self._leftUseCount, "_loadSuccess", self._loadSuccess, "_hasError", self._hasError)
+  if UserInfo.isSystemNative() then
+    self:registerBanner(false)
+    return
+  end
+  if not forceTry and not self._hasError then
+    if self._leftUseCount > 0 then
+      self._leftUseCount=self._leftUseCount-1
+      self:hide(true)
+      return
+    end
+  end
+  if self._bannerAd then
+    self._bannerAd:hide()
+  end
+  if self._loadSuccess and not self._isShowBanner then
+    LogsManager.echo("xd banner 加载成功 但是还没有显示过 on reLoadBanner")
+    return
+  end
+  if self._loadSuccess or self._hasError then
+    LogsManager.echo("hlx banner reload, ad destory: _isShowBanner:", self._isShowBanner, " _hasError:", self._hasError)
+    local hasError = self._hasError
+    self._hasError = false
+    BannerComp.checkCahceOrDestoryBanner(self._bannerAd, hasError)
+    self._bannerAd = nil
+    if forceTry then
+      self:registerBanner(false)
+    else
+      self:registerBanner(hasError)
+    end
+  end
+end
+
+function BannerComp:show(force)
+  if force == nil then
+    force=false
+  end
+  if UserInfo.isSystemNative() then
+    if self._loadState == 0 then
+      self:reLoadBanner()
+    end
+    self._status = TopViewAutoComp.STATUS_SHOW
+    local offsetY = 0
+    if self._style and self._style.offsetY then
+      offsetY = self._style.offsetY
+    end
+    NativeBridge.instance:callNative(JSToNativeEvent.TTADSDK_BANNER, {status=1, x=0, y=ScreenAdapterTools.height - BannerComp.bannerHeight + offsetY})
+    return
+  end
+  if self._lastParentName ~= self._parentName then
+    if self._loadSuccess then
+      self:reLoadBanner()
+    end
+    self._lastParentName = self._parentName
+  end
+  if not force and self._status == TopViewAutoComp.STATUS_SHOW then
+    return
+  end
+  self._status = TopViewAutoComp.STATUS_SHOW
+  self:_changeStatus()
+end
+
+function BannerComp:hide(force)
+  if force == nil then
+    force=false
+  end
+  if UserInfo.isSystemNative() then
+    self._status = TopViewAutoComp.STATUS_HIDE
+    NativeBridge.instance:callNative(JSToNativeEvent.TTADSDK_BANNER, {status=0})
+    return
+  end
+  self:superCall('hide',force)
+end
+
+function BannerComp:_compShow()
+  LogsManager.echo("hlx banner _compShow", Laya.timer.currTimer)
+  if not self._bannerAd then
+    local hasError = self._hasError
+    self._hasError = false
+    self:registerBanner(hasError)
+  end
+  if self._hasError then
+    LogsManager.echo("hlx banner _compShow：banner加载存在error直接执行失败回调")
+    self:_doBannerCallBack()
+    return
+  end
+  local thisObj = self
+  if self._bannerAd and self._loadSuccess then
+    self._isShowBanner = true
+    self:channgeStyle()
+    LogsManager.echo("hlx banner show", Laya.timer.currTimer)
+    local promise = self._bannerAd:show()
+    if type(promise) == 'object' and promise.tsvar_then then
+      local tempBanner = self._bannerAd
+      local sureHide = function()
+        if type(tempBanner.hide) == "function" then
+          try_catch{
+            main = function()
+              tempBanner:hide()
+            end,
+            catch = function(e)
+              LogsManager.errorTag("bannererror", "bannerHideError", e)
+            end
+          }
+        end
+      end
+      
+      promise:tsvar_then(function()
+        LogsManager.echo("hlx banner广告组件show success", Laya.timer.currTimer)
+        if UserInfo.isQQGame() and thisObj._status == TopViewAutoComp.STATUS_HIDE then
+          sureHide()
+          TimerManager.instance:setTimeout(sureHide, thisObj, 10)
+          LogsManager.errorTag("bannererror", "在banner显示的过程中又关掉banner了,这里需要再强制hide")
+        end
+      end
+      ):catch(function(err)
+        LogsManager.echo("hlx banner广告组件show error", err)
+        self:_doBannerCallBack()
+      end
+      )
+    end
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.BANNER_EXPOSURENUM)
+  else
+    LogsManager.echo("hlx banner comp show 没有达到条件：loadSuccess ", self._loadSuccess)
+  end
+end
+
+function BannerComp:channgeStyle()
+  if self._style then
+    if UserInfo.isWX() or UserInfo.isQQGame() then
+      LogsManager.echo('hlx banner comp changeStyle:', JSON:stringify(self._style))
+      if self._style.retio then
+        self._bannerAd.style.width = UserInfo.platform:getSystemInfo().windowWidth * self._style.retio
+      elseif self._style.width then
+        self._bannerAd.style.width = self._style.width
+      end
+    end
+  end
+  self:setTop()
+end
+
+function BannerComp:_compHide()
+  self._status = TopViewAutoComp.STATUS_HIDE
+  self._parentName = nil
+  self._onErrorCallback = nil
+  self._callbackObj = nil
+  if self._hasError then
+    BannerComp.checkCahceOrDestoryBanner(self._bannerAd, self._hasError)
+    self._bannerAd = nil
+    self:registerBanner()
+  elseif self._bannerAd and self._isShowBanner then
+    self._isShowBanner = false
+    self._bannerAd:hide()
+  end
+end
+
+function BannerComp:_checkUIState(force)
+  if force == nil then
+    force=false
+  end
+  local targetWindowName = WindowManager.getCurrentWindowName()
+  if not targetWindowName then
+    return
+  end
+  if targetWindowName == self._parentName then
+    self:show(force)
+  else
+    -- [ts2lua]BannerComp._cacheInfo下标访问可能不正确
+    if not BannerComp._cacheInfo[targetWindowName] then
+      if self._status ~= TopViewAutoComp.HIDE_TYPE_HIDE then
+        if self._hideType == TopViewAutoComp.HIDE_TYPE_DESTROY then
+          self:destroy()
+        else
+          self:hide(force)
+        end
+      else
+        self:hide(force)
+      end
+    else
+      if UserInfo.isSystemMini() then
+        if self._hideType == TopViewAutoComp.HIDE_TYPE_DESTROY then
+          if self._parentName and (self._loadSuccess or self._hasError) then
+            self:reLoadBanner()
+          end
+        end
+      end
+      self:updateDataByName(targetWindowName)
+      self:show(true)
+    end
+  end
+end
+
+function BannerComp:handleNativeBannerBack(data)
+  local status = data.status
+  if status == 1 then
+    self._loadSuccess = true
+    self._loadState = 2
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.BANNER_PULLSUCCESS)
+  elseif status == 2 then
+    self._loadSuccess = false
+    self._loadState = 3
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.BANNER_PULLFAILED)
+  elseif status == 3 then
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.BANNER_PULLFAILED)
+    self._loadState = 3
+  elseif status == 4 then
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.BANNER_EXPOSURENUM)
+  elseif status == 11 then
+    LogsManager.echo("banner xd handleNativeBannerBack 点击banner")
+  end
+end
+
+function BannerComp:recvMsg(event, data)
+  self:superCall('recvMsg',event, data)
+  if event == NativeToJSEvent.TTSDK_BANNER_EVENT then
+    self:handleNativeBannerBack(data)
+  end
+end
+
+function BannerComp.checkCahceOrDestoryBanner(bannerInstance, hasError)
+  if not bannerInstance then
+    return
+  end
+  if (not hasError and #BannerComp._cacheBannerArr < BannerComp.cacheBannerNums) and not bannerInstance.__isDestoryed then
+    table.insert(BannerComp._cacheBannerArr, bannerInstance)
+    LogsManager.echo("xd banner _缓存一个banner")
+    bannerInstance:hide()
+  else
+    BannerComp._destroyBannerInstance(bannerInstance)
+  end
+end
+
+function BannerComp._destroyBannerInstance(bannerInstance)
+  LogsManager.echo("销毁一个banner---")
+  BannerComp._offBannerCallBack(bannerInstance)
+  if bannerInstance.__isDestoryed then
+    LogsManager.warn("这个banner已经执行过销毁了 为什么会重复执行--")
+    return
+  end
+  if type(bannerInstance.destroy) == "function" then
+    bannerInstance.__isDestoryed = true
+    bannerInstance:destroy()
+  end
+end
+
+function BannerComp.getCacheBanner()
+  if #BannerComp._cacheBannerArr > 0 then
+    local bannerAd = BannerComp._cacheBannerArr[0+1]
+    BannerComp._cacheBannerArr:splice(0, 1)
+    return bannerAd
+  end
+  return nil
+end
+
+BannerComp._bannerCallBackCache = {};
+function BannerComp._offBannerCallBack(bannerInstance)
+  local i = #BannerComp._bannerCallBackCache - 1
+  repeat
+    local info = BannerComp._bannerCallBackCache[i+1]
+    if info.instance == bannerInstance then
+      if type(bannerInstance.offResize) == "function" then
+        bannerInstance:offResize(info.onResize)
+      end
+      if type(bannerInstance.offLoad) == "function" then
+        bannerInstance:offLoad(info.onLoad)
+      end
+      if type(bannerInstance.offError) == "function" then
+        bannerInstance:offError(info.onError)
+      end
+      LogsManager.echo("xd banner _销毁banner注册的回调")
+      BannerComp._bannerCallBackCache:splice(i, 1)
+    end
+    i=i-1
+  until not(i >= 0)
+end
+
+function BannerComp.cancleOneView(viewName)
+  if not BannerComp._instance then
+    return
+  end
+  if not viewName then
+    return
+  end
+  -- [ts2lua]BannerComp._cacheInfo下标访问可能不正确
+  BannerComp._cacheInfo[viewName] = nil
+  if BannerComp._instance._parentName == viewName then
+    BannerComp._instance:destroy()
+  end
+end

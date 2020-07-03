@@ -1,0 +1,399 @@
+require("framework/manager/LogsManager")
+require("framework/manager/SoundManager")
+require("framework/consts/ButtonConst")
+require("framework/manager/TimerManager")
+require("game/sys/consts/ResourceConst")
+require("framework/common/Message")
+require("framework/event/FrameWorkEvent")
+
+ButtonUtils = class('ButtonUtils')
+
+function ButtonUtils:ctor(button, callBack, thisObj, defUrl, tapUrl, args)
+  self._button = nil;
+  self._realButton = nil;
+  self._callBack = nil;
+  self._thisObj = nil;
+  self._isEnable = true;
+  self._defUrl = "";
+  self._tapUrl = "";
+  self._endCallBack = nil;
+  self._type = ButtonConst.BUTTON_TYPE_5;
+  self._typeParams = {};
+  self.shieldTime = 0;
+  self.isCanClick = true;
+  self.timeCode = 0;
+  self._time = 0;
+  self._longPress = false;
+  self._button = button
+  self._realButton = self._button
+  self._defUrl = defUrl
+  self._tapUrl = tapUrl
+  self.oldScaleX = self._button.scaleX
+  self.oldScaleY = self._button.scaleY
+  self:setCallBackInfo(callBack, thisObj, args)
+  if button.__lastButtonUtils then
+    LogsManager.echo("这个按钮重复注册事件,先销毁上一次注册的事件")
+    button.__lastButtonUtils:destoryButtonUtil()
+  end
+  button.__lastButtonUtils = self
+  self:registBtnListener()
+end
+
+function ButtonUtils:setCallBackInfo(callBack, thisObj, args)
+  self._callBack = callBack
+  self._thisObj = thisObj
+  self._callBackParam = args
+end
+
+function ButtonUtils:touchHandler(e)
+  if not self._isEnable then
+    return
+  end
+  local switch = {
+    [Laya.Event.MOUSE_DOWN] = function()
+      if self._isTouch then
+        return
+      end
+      if not self.isCanClick then
+        return
+      end
+      if self._clickSound then
+        SoundManager.playSE(self._clickSound)
+      else
+        -- [ts2lua]ResourceConst下标访问可能不正确
+        if ResourceConst["BASE_SOUND_CLICK"] then
+          -- [ts2lua]ResourceConst下标访问可能不正确
+          SoundManager.playSE(ResourceConst["BASE_SOUND_CLICK"])
+        end
+      end
+      self._isTouch = true
+      local switch = {
+        [ButtonConst.BUTTON_TYPE_1] = function()
+          self._button.scaleX = 0.9
+          self._button.scaleY = 0.9
+        end,
+        [ButtonConst.BUTTON_TYPE_2] = function()
+          self._button.scaleX = self._button.scaleX * 0.9
+          self._button.scaleY = self._button.scaleY * 0.9
+        end,
+        [ButtonConst.BUTTON_TYPE_3] = function()
+         end,
+        [ButtonConst.BUTTON_TYPE_4] = function()
+          (self._buttonTween and self._buttonTween.pause) and self._buttonTween:pause()
+          self._button.scaleX = self._button.scaleX * 0.9
+          self._button.scaleY = self._button.scaleY * 0.9
+        end,
+        [ButtonConst.BUTTON_TYPE_5] = function()
+          self._button.scaleX = 1.1
+          self._button.scaleY = 1.1
+        end,
+        [ButtonConst.BUTTON_TYPE_6] = function()
+          (self._buttonTween and self._buttonTween.pause) and self._buttonTween:pause()
+          self._button.scaleX = self._button.scaleX * 0.8
+          self._button.scaleY = self._button.scaleY * 0.8
+        end,
+        [ButtonConst.BUTTON_TYPE_7] = function()
+          if self._buttonTween then
+            Laya.Tween:clear(self._buttonTween)
+            self._buttonTween = nil
+          else
+            self._button._downY = self._button.y
+          end
+          -- [ts2lua]self._typeParams下标访问可能不正确
+          local clickTargetY = self._button._downY + self._typeParams['diffY']
+          -- [ts2lua]self._typeParams下标访问可能不正确
+          -- [ts2lua]self._typeParams下标访问可能不正确
+          -- [ts2lua]lua中0和空字符串也是true，此处self._typeParams['downDuration']需要确认
+          local downDuration = (self._typeParams['downDuration'] and {self._typeParams['downDuration']} or {100})[1]
+          self._buttonTween = Laya.Tween:to(self._button, {y=clickTargetY}, downDuration, nil, Laya.Handler:create(self, function()
+            self._buttonTween = nil
+          end
+          ))
+        end
+      }
+      local casef = switch[self._type]
+      if not casef then casef = switch["default"] end
+      if casef then casef() end
+      if self._defUrl and self._defUrl ~= "" then
+        self._button.skin = self._tapUrl
+      end
+      if self._longPress then
+        self:setLongPress()
+      end
+    end,
+    [Laya.Event.MOUSE_UP] = function()
+      if not self._isTouch then
+        return
+      end
+      Message.instance:send(FrameWorkEvent.FRAMEWORKEVENT_BUTTONCLICK)
+      self:delayEnableBtn()
+      local switch = {
+        [ButtonConst.BUTTON_TYPE_1] = function()
+          self._button.scaleX = 1
+          self._button.scaleY = 1
+        end,
+        [ButtonConst.BUTTON_TYPE_2] = function()
+          self._button.scaleX = self._button.scaleX / 0.9
+          self._button.scaleY = self._button.scaleY / 0.9
+        end,
+        [ButtonConst.BUTTON_TYPE_3] = function()
+         end,
+        [ButtonConst.BUTTON_TYPE_4] = function()
+          (self._buttonTween and self._buttonTween.resume) and self._buttonTween:resume()
+          self._button.scaleX = self._button.scaleX / 0.9
+          self._button.scaleY = self._button.scaleY / 0.9
+        end,
+        [ButtonConst.BUTTON_TYPE_5] = function()
+          self._button.scaleX = 1
+          self._button.scaleY = 1
+        end,
+        [ButtonConst.BUTTON_TYPE_6] = function()
+          (self._buttonTween and self._buttonTween.resume) and self._buttonTween:resume()
+          self._button.scaleX = self._button.scaleX / 0.8
+          self._button.scaleY = self._button.scaleY / 0.8
+        end,
+        [ButtonConst.BUTTON_TYPE_7] = function()
+          self._buttonTween and Laya.Tween:clear(self._buttonTween)
+          -- [ts2lua]self._typeParams下标访问可能不正确
+          -- [ts2lua]self._typeParams下标访问可能不正确
+          -- [ts2lua]lua中0和空字符串也是true，此处self._typeParams['upDuration']需要确认
+          local upDuration = (self._typeParams['upDuration'] and {self._typeParams['upDuration']} or {300})[1]
+          self._buttonTween = Laya.Tween:to(self._button, {y=self._button._downY}, upDuration, Laya.Ease.backOut, Laya.Handler:create(self, function()
+            self._buttonTween = nil
+          end
+          ))
+        end
+      }
+      local casef = switch[self._type]
+      if not casef then casef = switch["default"] end
+      if casef then casef() end
+      if self._defUrl and self._defUrl ~= "" then
+        self._button.skin = self._defUrl
+      end
+      if self._isTouch and self._callBack ~= nil then
+        self._callBack:call(self._thisObj, self._callBackParam)
+      end
+      self._isTouch = false
+      if self._endCallBack then
+        self._endCallBack:call(self._thisObj)
+      end
+      if self._longPress then
+        self:closeLongPress()
+      end
+    end,
+    [Laya.Event.MOUSE_OUT] = function()
+      if not self._isTouch then
+        return
+      end
+      Message.instance:send(FrameWorkEvent.FRAMEWORKEVENT_BUTTONCLICK)
+      self:delayEnableBtn()
+      self._isTouch = false
+      local switch = {
+        [ButtonConst.BUTTON_TYPE_1] = function()
+          self._button.scaleX = 1
+          self._button.scaleY = 1
+        end,
+        [ButtonConst.BUTTON_TYPE_2] = function()
+          self._button.scaleX = self._button.scaleX / 0.9
+          self._button.scaleY = self._button.scaleY / 0.9
+        end,
+        [ButtonConst.BUTTON_TYPE_3] = function()
+         end,
+        [ButtonConst.BUTTON_TYPE_4] = function()
+          (self._buttonTween and self._buttonTween.resume) and self._buttonTween:resume()
+          self._button.scaleX = self._button.scaleX / 0.9
+          self._button.scaleY = self._button.scaleY / 0.9
+        end,
+        [ButtonConst.BUTTON_TYPE_5] = function()
+          self._button.scaleX = 1
+          self._button.scaleY = 1
+        end,
+        [ButtonConst.BUTTON_TYPE_6] = function()
+          (self._buttonTween and self._buttonTween.resume) and self._buttonTween:resume()
+          self._button.scaleX = self._button.scaleX / 0.8
+          self._button.scaleY = self._button.scaleY / 0.8
+        end,
+        [ButtonConst.BUTTON_TYPE_7] = function()
+          self._buttonTween and Laya.Tween:clear(self._buttonTween)
+          -- [ts2lua]self._typeParams下标访问可能不正确
+          -- [ts2lua]self._typeParams下标访问可能不正确
+          -- [ts2lua]lua中0和空字符串也是true，此处self._typeParams['upDuration']需要确认
+          local upDuration = (self._typeParams['upDuration'] and {self._typeParams['upDuration']} or {300})[1]
+          self._buttonTween = Laya.Tween:to(self._button, {y=self._button._downY}, upDuration, Laya.Ease.backOut, Laya.Handler:create(self, function()
+            self._buttonTween = nil
+          end
+          ))
+          if self._callBack ~= nil then
+            self._callBack:call(self._thisObj, self._callBackParam)
+          end
+        end
+      }
+      local casef = switch[self._type]
+      if not casef then casef = switch["default"] end
+      if casef then casef() end
+      if self._defUrl and self._defUrl ~= "" then
+        self._button.skin = self._defUrl
+      end
+      if self._endCallBack then
+        self._endCallBack:call(self._thisObj)
+      end
+      if self._longPress then
+        self:closeLongPress()
+      end
+    end
+  }
+  local casef = switch[e.type]
+  if not casef then casef = switch["default"] end
+  if casef then casef() end
+end
+
+function ButtonUtils:setTouchEnd(func)
+  self._endCallBack = func
+end
+
+function ButtonUtils:setBtnType(type, typeParams)
+  if typeParams == nil then
+    typeParams={}
+  end
+  self:removeBtnListener()
+  self._type = type
+  self._typeParams = typeParams
+  self:registBtnListener()
+  return self
+end
+
+function ButtonUtils:setBtnClickSound(sound)
+  if sound == nil then
+    sound=''
+  end
+  self._clickSound = sound
+  return self
+end
+
+function ButtonUtils:removeBtnListener()
+  self._realButton:offAll(Laya.Event.MOUSE_DOWN)
+  self._realButton:offAll(Laya.Event.MOUSE_OUT)
+  self._realButton:offAll(Laya.Event.MOUSE_UP)
+  self._realButton:offAll(Laya.Event.DISPLAY)
+  self._realButton:offAll(Laya.Event.UNDISPLAY)
+  self:removeStageCallback()
+end
+
+function ButtonUtils:registBtnListener()
+  self._realButton:on(Laya.Event.MOUSE_DOWN, self, self.touchHandler)
+  self._realButton:on(Laya.Event.MOUSE_UP, self, self.touchHandler)
+  self._realButton:on(Laya.Event.MOUSE_OUT, self, self.touchHandler)
+  if self._type == ButtonConst.BUTTON_TYPE_4 or self._type == ButtonConst.BUTTON_TYPE_6 then
+    if self._realButton.displayedInStage then
+      self:addStageCallback()
+    end
+    self._realButton:on(Laya.Event.DISPLAY, self, self.addStageCallback)
+    self._realButton:on(Laya.Event.UNDISPLAY, self, self.removeStageCallback)
+  end
+end
+
+function ButtonUtils:addStageCallback()
+  if self._type == ButtonConst.BUTTON_TYPE_4 then
+    if not self._buttonTween then
+      self:addButtonTween()
+    end
+  end
+  if self._type == ButtonConst.BUTTON_TYPE_6 then
+    if not self._buttonTween then
+      self:addButtonTween1()
+    end
+  end
+end
+
+function ButtonUtils:addButtonTween1()
+  if not self._button then
+    print()
+  end
+  self._buttonTween = Laya.Tween:to(self._button, {scaleX=1.3 * self.oldScaleX, scaleY=1.3 * self.oldScaleY}, 750, Laya.Ease.sineIn, Laya.Handler:create(self, function()
+    self._buttonTween = Laya.Tween:to(self._button, {scaleX=self.oldScaleX, scaleY=self.oldScaleY}, 750, Laya.Ease.sineOut, Laya.Handler:create(self, function()
+      self._buttonTween = nil
+      self:addButtonTween1()
+    end
+    ))
+  end
+  ))
+end
+
+function ButtonUtils:addButtonTween()
+  if not self._button then
+    print()
+  end
+  self._buttonTween = Laya.Tween:to(self._button, {scaleX=1.1 * self.oldScaleX, scaleY=1.1 * self.oldScaleY}, 750, Laya.Ease.sineIn, Laya.Handler:create(self, function()
+    self._buttonTween = Laya.Tween:to(self._button, {scaleX=self.oldScaleX, scaleY=self.oldScaleY}, 750, Laya.Ease.sineOut, Laya.Handler:create(self, function()
+      self._buttonTween = nil
+      self:addButtonTween()
+    end
+    ))
+  end
+  ))
+end
+
+function ButtonUtils:removeStageCallback()
+  if self._type == ButtonConst.BUTTON_TYPE_4 then
+    Laya.Tween:clearAll(self._button)
+    self._buttonTween = nil
+  end
+end
+
+function ButtonUtils:setRealButton(btn)
+  self:removeBtnListener()
+  self._realButton = btn
+  self:registBtnListener()
+  return self
+end
+
+function ButtonUtils.__setters:longPress(val)
+  self._longPress = val
+end
+
+function ButtonUtils:setLongPress()
+  Laya.timer:once(1000, self, self.onHold)
+end
+
+function ButtonUtils:onHold()
+  if self._isTouch and self._callBack ~= nil then
+    self._callBack:call(self._thisObj, self._button, self._callBackParam)
+  end
+end
+
+function ButtonUtils:closeLongPress()
+  Laya.timer:clear(self, self.onHold)
+end
+
+function ButtonUtils.__setters:enabled(val)
+  self._isEnable = val
+end
+
+function ButtonUtils:destoryButtonUtil()
+  self:removeBtnListener()
+  self._callBackParam = nil
+  self._callBack = nil
+  self._thisObj = nil
+  self._button.__lastButtonUtils = nil
+  self._button = nil
+  self._realButton = nil
+end
+
+function ButtonUtils:setUnEnableTime(shieldTime)
+  if shieldTime == nil then
+    shieldTime=0
+  end
+  self.shieldTime = shieldTime
+  return self
+end
+
+function ButtonUtils:delayEnableBtn()
+  if self.shieldTime ~= 0 then
+    TimerManager.instance:clearTimeout(self.timeCode)
+    self.isCanClick = false
+    TimerManager.instance:setTimeout(function()
+      self.isCanClick = true
+    end
+    , self, self.shieldTime)
+  end
+end

@@ -1,0 +1,2 @@
+JumpEvent = class('JumpEvent')
+JumpEvent.JUMP_RETURN_GAMEMAIN = "JUMP_RETURN_GAMEMAIN";

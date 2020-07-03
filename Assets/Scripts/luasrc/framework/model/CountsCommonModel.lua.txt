@@ -1,0 +1,62 @@
+require("game/sys/model/BaseModel")
+require("framework/common/kakura/Client")
+
+CountsCommonModel = class('CountsCommonModel',BaseModel)
+function CountsCommonModel:ctor()
+  self:superCall('ctor')
+end
+
+CountsCommonModel.TYPE_INTERVALAD_COUNT = "1";
+CountsCommonModel.TYPE_INTERVALAD_LASTSHOWTIME = "2";
+CountsCommonModel.TYPE_INTERVAL_ORIGINAL_CLICK_COUNT = "3";
+function CountsCommonModel.__getters.instance()
+  if not CountsCommonModel._instance then
+    CountsCommonModel._instance = CountsCommonModel()
+  end
+  return CountsCommonModel._instance
+end
+
+function CountsCommonModel:initData(d)
+  self:superCall('initData',d)
+end
+
+function CountsCommonModel:updateData(d)
+  self:superCall('updateData',d)
+end
+
+function CountsCommonModel:getCountById(id)
+  local num = 0
+  if not self:IsExpire(id) then
+    -- [ts2lua]self._data下标访问可能不正确
+    -- [ts2lua]self._data[id]下标访问可能不正确
+    num = self._data[id]["count"]
+  end
+  return num
+end
+
+function CountsCommonModel:getShareTvCountById(id)
+  return self:getCountById(self:turnShareTvId(id))
+end
+
+function CountsCommonModel:turnShareTvId(id)
+  return "shareTv" .. id
+end
+
+function CountsCommonModel:IsExpire(id)
+  -- [ts2lua]self._data下标访问可能不正确
+  if self._data[id] then
+    -- [ts2lua]self._data下标访问可能不正确
+    -- [ts2lua]self._data[id]下标访问可能不正确
+    if self._data[id]["expireTime"] then
+      -- [ts2lua]self._data下标访问可能不正确
+      -- [ts2lua]self._data[id]下标访问可能不正确
+      local expireTime = self._data[id]["expireTime"]
+      if expireTime > Client.instance.serverTime then
+        return false
+      else
+        return true
+      end
+    end
+  end
+  return true
+end

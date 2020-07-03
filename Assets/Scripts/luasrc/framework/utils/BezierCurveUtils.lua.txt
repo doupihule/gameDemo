@@ -1,0 +1,29 @@
+BezierCurveUtils = class('BezierCurveUtils')
+function BezierCurveUtils.getBezierPosOne(t, from, to)
+  return 1 - t * from + t * to
+end
+
+function BezierCurveUtils.getBezierPos(t, _from, _to, _temp, vector)
+  local a = nil
+  if vector then
+    a = vector
+  else
+    a = Laya.Vector3(0, 0, 0)
+  end
+  a.x = t * t * _to.x - 2 * _temp.x + _from.x + _from.x + 2 * t * _temp.x - _from.x
+  a.y = t * t * _to.y - 2 * _temp.y + _from.y + _from.y + 2 * t * _temp.y - _from.y
+  a.z = t * t * _to.z - 2 * _temp.z + _from.z + _from.z + 2 * t * _temp.z - _from.z
+  return a
+end
+
+function BezierCurveUtils.getBezierPosVector2(t, _from, _to, _temp, vector)
+  local a = nil
+  if vector then
+    a = vector
+  else
+    a = Laya.Vector2(0, 0)
+  end
+  a.x = t * t * _to.x - 2 * _temp.x + _from.x + _from.x + 2 * t * _temp.x - _from.x
+  a.y = t * t * _to.y - 2 * _temp.y + _from.y + _from.y + 2 * t * _temp.y - _from.y
+  return a
+end

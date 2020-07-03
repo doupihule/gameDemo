@@ -1,0 +1,321 @@
+require("framework/common/UserInfo")
+require("framework/model/UserGlobalModel")
+require("framework/manager/LogsManager")
+require("framework/manager/WindowManager")
+require("game/sys/consts/ResourceCommonConst")
+require("game/sys/func/ShareTvOrderFunc")
+require("framework/server/ShareOrTvServer")
+require("framework/func/TranslateFunc")
+require("framework/manager/KariqiShareManager")
+require("framework/consts/KariquShareConst")
+require("framework/common/GameSwitch")
+require("framework/common/Message")
+require("framework/event/VideoAdvEvent")
+require("framework/platform/comp/BannerComp")
+require("framework/utils/TableUtils")
+require("framework/model/CountsCommonModel")
+
+ShareOrTvManager = class('ShareOrTvManager')
+
+function ShareOrTvManager:ctor() end
+ShareOrTvManager.TYPE_SHARE = 1;
+ShareOrTvManager.TYPE_ADV = 2;
+ShareOrTvManager.TYPE_QUICKRECEIVE = 3;
+ShareOrTvManager.TYPE_SHAREVIDEO = 4;
+ShareOrTvManager.ORDER_ID_VIDEO = 0;
+ShareOrTvManager.ORDER_ID_SHARE = 1;
+ShareOrTvManager.ORDER_ID_SHAREVIDEO = 2;
+ShareOrTvManager.leadTypeId = nil;
+function ShareOrTvManager.__getters.instance()
+  if not ShareOrTvManager._instance then
+    ShareOrTvManager._instance = ShareOrTvManager()
+  end
+  return ShareOrTvManager._instance
+end
+
+function ShareOrTvManager:getShareOrTvType(id, failType, firstType)
+  if id == nil then
+    id=nil
+  end
+  if failType == nil then
+    failType=ShareOrTvManager.TYPE_SHARE
+  end
+  if firstType == nil then
+    firstType=ShareOrTvManager.TYPE_ADV
+  end
+  if UserInfo.isWeb() then
+    UserInfo.platform.loadAdvFailed = false
+  end
+  local successType = ShareOrTvManager.TYPE_QUICKRECEIVE
+  local index = 0
+  if id then
+    index = CountsCommonModel.instance:getShareTvCountById(id)
+    local info = KariqiShareManager.getShareOrTvType(id, index)
+    if info then
+      LogsManager.echo("kariqu shareTvinfo", TableUtils.safelyJsonStringfy(info))
+      successType = info.type
+    else
+      local orderCfg = ShareTvOrderFunc.instance:getOrder(id)
+      local order = nil
+      ShareOrTvManager.curOrderName = orderCfg.desc
+      local types = nil
+      local orderType = 0
+      if orderCfg then
+        if orderCfg.manOrder then
+          if UserInfo.userSex == 1 then
+            order = orderCfg.manOrder
+          else
+            order = orderCfg.order
+          end
+        else
+          order = orderCfg.order
+        end
+        if order and #order then
+          if index >= #order then
+            index = index % #order
+          end
+          -- [ts2lua]order下标访问可能不正确
+          orderType = Number(order[index])
+        end
+        local switch = {
+          [ShareOrTvManager.ORDER_ID_SHARE] = function()
+            successType = ShareOrTvManager.TYPE_SHARE
+          end,
+          [ShareOrTvManager.ORDER_ID_VIDEO] = function()
+            successType = ShareOrTvManager.TYPE_ADV
+          end,
+          [ShareOrTvManager.ORDER_ID_SHAREVIDEO] = function()
+            successType = ShareOrTvManager.TYPE_SHAREVIDEO
+          end
+        }
+        local casef = switch[orderType]
+        if not casef then casef = switch["default"] end
+        if casef then casef() end
+      end
+    end
+  else
+    successType = firstType
+  end
+  local isFail = false
+  local switch = {
+    [ShareOrTvManager.TYPE_SHARE] = function()
+      if self:canShare() then
+        types = ShareOrTvManager.TYPE_SHARE
+      else
+        isFail = true
+      end
+    end,
+    [ShareOrTvManager.TYPE_ADV] = function()
+      if self:canAdv() then
+        types = ShareOrTvManager.TYPE_ADV
+      else
+        UserInfo.platform:loadVideoAd()
+        isFail = true
+      end
+    end,
+    [ShareOrTvManager.TYPE_SHAREVIDEO] = function()
+      if self:canShareVideo() then
+        types = ShareOrTvManager.TYPE_SHAREVIDEO
+      else
+        isFail = true
+      end
+    end
+  }
+  local casef = switch[successType]
+  if not casef then casef = switch["default"] end
+  if casef then casef() end
+  if isFail then
+    local switch = {
+      [ShareOrTvManager.TYPE_SHARE] = function()
+        if self:canShare() then
+          types = ShareOrTvManager.TYPE_SHARE
+        elseif self:canAdv() then
+          types = ShareOrTvManager.TYPE_ADV
+        else
+          types = ShareOrTvManager.TYPE_QUICKRECEIVE
+        end
+      end,
+      [ShareOrTvManager.TYPE_ADV] = function()
+        -- [ts2lua]lua中0和空字符串也是true，此处self:canAdv()需要确认
+        types = (self:canAdv() and {ShareOrTvManager.TYPE_ADV} or {ShareOrTvManager.TYPE_QUICKRECEIVE})[1]
+      end,
+      [ShareOrTvManager.TYPE_SHAREVIDEO] = function()
+        if self:canShareVideo() then
+          types = ShareOrTvManager.TYPE_SHAREVIDEO
+        elseif self:canAdv() then
+          types = ShareOrTvManager.TYPE_ADV
+        else
+          types = ShareOrTvManager.TYPE_QUICKRECEIVE
+        end
+      end,
+      [ShareOrTvManager.TYPE_QUICKRECEIVE] = function()
+        types = ShareOrTvManager.TYPE_QUICKRECEIVE
+      end
+    }
+    local casef = switch[failType]
+    if not casef then casef = switch["default"] end
+    if casef then casef() end
+  end
+  return types
+end
+
+function ShareOrTvManager:canShare()
+  if not UserInfo.platform:canShare() then
+    return false
+  end
+  local times = Number(UserGlobalModel.instance:getShareNum())
+  if times <= 0 then
+    return false
+  end
+  LogsManager.echo("shareOrTv 还有分享次数，走了分享")
+  return true
+end
+
+function ShareOrTvManager:canAdv()
+  if not UserInfo.platform:canAdv() then
+    return false
+  end
+  if UserInfo.platform.loadAdvFailed then
+    return false
+  end
+  return true
+end
+
+function ShareOrTvManager:canShareVideo()
+  return UserInfo.platform:canShareVideo()
+end
+
+function ShareOrTvManager:setShareOrTvImg(id, type)
+  if id then
+    type = self:getShareOrTvType(id)
+  end
+  if type == ShareOrTvManager.TYPE_SHARE or type == ShareOrTvManager.TYPE_SHAREVIDEO then
+    return ResourceCommonConst.SHARE_IMG
+  else
+    return ResourceCommonConst.VIDEO_IMG
+  end
+end
+
+function ShareOrTvManager:shareOrTv(id, firstType, shareData, successCall, closeCall, thisObj, failType)
+  if failType == nil then
+    failType=ShareOrTvManager.TYPE_SHARE
+  end
+  if id then
+    ShareOrTvManager.leadTypeId = id
+  end
+  local type = self:getShareOrTvType(id, failType, firstType)
+  LogsManager.echo("krma. shareOrTv type " .. type)
+  shareData = shareData or {}
+  local doFaillVedioCall = function()
+    closeCall and closeCall:call(thisObj, type)
+    ShareOrTvManager.leadTypeId = nil
+  end
+  
+  local switch = {
+    [ShareOrTvManager.TYPE_ADV] = function()
+      KariqiShareManager.addAdvPoint({eventId=KariquShareConst.KARIQU_TRYADV, name=ShareOrTvManager.curOrderName})
+      if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ADV) then
+        closeCall and closeCall:call(thisObj, type)
+        return
+      end
+      local extraData = {callback=self.setVideoExtraCall, thisObj=self}
+      if BannerComp.instance then
+        BannerComp.instance:destroy(true)
+      end
+      
+      UserInfo.platform:showVideoAd(function(res)
+        ShareOrTvServer.shareOrTvSend({type=ShareOrTvManager.TYPE_ADV}, function()
+          successCall and successCall:call(thisObj, type)
+          ShareOrTvManager.leadTypeId = nil
+          Message.instance:send(VideoAdvEvent.VIDEOADV_EVENT_ADV_SUCCESS)
+          KariqiShareManager.addAdvPoint({eventId=KariquShareConst.KARIQU_SHOWADV_SUCC, name=ShareOrTvManager.curOrderName}, true)
+        end
+        , self)
+      end
+      , function(res)
+        if KariqiShareManager.checkIsKariquChannel() then
+          doFaillVedioCall()
+          return
+        end
+        ShareOrTvServer.shareOrTvSend({type=ShareOrTvManager.TYPE_ADV}, function()
+          doFaillVedioCall()
+        end
+        , self)
+      end
+      , self, extraData)
+    end,
+    [ShareOrTvManager.TYPE_SHARE] = function()
+      if not self:canShare() then
+        closeCall and closeCall:call(thisObj, type)
+        return
+      end
+      UserInfo.platform:share(shareData.id, shareData.extraData, function(res)
+        local callback = nil
+        if res then
+          callback = successCall
+        else
+          callback = closeCall
+        end
+        if KariqiShareManager.checkIsKariquChannel() then
+          if not res then
+            ShareOrTvManager.leadTypeId = nil
+            callback and callback:call(thisObj, type)
+            return
+          end
+        end
+        ShareOrTvServer.shareOrTvSend({type=ShareOrTvManager.TYPE_SHARE}, function()
+          ShareOrTvManager.leadTypeId = nil
+          callback and callback:call(thisObj, type)
+        end
+        , self)
+      end
+      , self)
+    end,
+    [ShareOrTvManager.TYPE_SHAREVIDEO] = function()
+      UserInfo.platform:shareVideo(function(res)
+        local callback = nil
+        if res then
+          callback = successCall
+        else
+          callback = closeCall
+        end
+        if not res then
+          ShareOrTvManager.leadTypeId = nil
+          callback and callback:call(thisObj, type)
+          return
+        end
+        ShareOrTvServer.shareOrTvSend({type=ShareOrTvManager.TYPE_SHAREVIDEO}, function()
+          ShareOrTvManager.leadTypeId = nil
+          callback and callback:call(thisObj, type)
+        end
+        , self)
+      end
+      , self)
+    end,
+    [ShareOrTvManager.TYPE_QUICKRECEIVE] = function()
+      if (UserInfo.isWX() or UserInfo.isQQGame()) or UserInfo.isTT() then
+        UserInfo.platform:showPopTip(TranslateFunc.instance:getTranslate("#tid_share_or_tv_tishi", "localTranslateCommon"), TranslateFunc.instance:getTranslate("#tid_share_or_tv_error", "localTranslateCommon"), {showCancel=false, success=function(res)
+          closeCall and closeCall:call(thisObj, type)
+        end
+        })
+      else
+        WindowManager.ShowTip(TranslateFunc.instance:getTranslate("#tid_share_or_tv_error", "localTranslateCommon"))
+        closeCall and closeCall:call(thisObj, type)
+      end
+    end
+  }
+  local casef = switch[type]
+  if not casef then casef = switch["default"] end
+  if casef then casef() end
+  return type
+end
+
+function ShareOrTvManager:setVideoExtraCall(result)
+  if KariqiShareManager.checkIsKariquChannel() then
+    if result then
+      KariqiShareManager.addAdvPoint({eventId=KariquShareConst.KARIQU_END, name=ShareOrTvManager.curOrderName})
+    else
+      KariqiShareManager.addAdvPoint({eventId=KariquShareConst.KARIQU_CENTER_EXIT, name=ShareOrTvManager.curOrderName})
+    end
+  end
+end

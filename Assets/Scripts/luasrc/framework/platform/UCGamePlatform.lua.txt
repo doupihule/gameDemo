@@ -1,0 +1,176 @@
+require("trycatch")
+require("framework/platform/WXGamePlatform")
+require("framework/manager/LogsManager")
+require("framework/common/UserInfo")
+require("utils/Global")
+require("framework/common/GameSwitch")
+require("framework/common/kakura/MethodCommon")
+
+UCGamePlatform = class('UCGamePlatform',WXGamePlatform)
+
+function UCGamePlatform:ctor()
+  self:superCall('ctor')
+  self.guestid = '';
+  self.code = '';
+  -- [ts2lua]GameSwitch.switchMap下标访问可能不正确
+  GameSwitch.switchMap[GameSwitch.SWITCH_LOCAL_RES] = 0
+  UCGamePlatform.instance = self
+end
+
+function UCGamePlatform:getWX()
+  -- [ts2lua]window下标访问可能不正确
+  return window['uc']
+end
+
+function UCGamePlatform:initPlatformData()
+  LogsManager.echo("hlx 初始化平台数据")
+  self:registerAd()
+end
+
+function UCGamePlatform:shareAldAppMsg(data)
+  self:getWX():shareAppMessage(data)
+end
+
+function UCGamePlatform:myOnShare(callback)
+  self:getWX():onShareAppMessage(callback)
+end
+
+function UCGamePlatform:getWxInfo()
+  local mythis = self
+  self:_guestLogin(function(result)
+    if not result then
+      mythis:retryGetWxInfo()
+      return
+    end
+    mythis:getWX():isLogin({success=function(data)
+      if data and data.isLogin then
+        mythis:_login(function(result)
+          if not result then
+            mythis:retryGetWxInfo()
+            return
+          end
+          mythis:_sendGlobalLoginReq()
+        end
+        , mythis)
+      else
+        mythis:_sendGlobalLoginReq()
+      end
+    end
+    , fail=function(data)
+      LogsManager.warn("hlx isLogin fail")
+      mythis:retryGetWxInfo()
+      return
+    end
+    })
+  end
+  , self)
+end
+
+function UCGamePlatform:_sendGlobalLoginReq()
+  local gParams = {method=MethodCommon.global_Account_loginUC, params={code=self.code, guestid=self.guestid, device=Global.deviceModel, comeFrom=UserInfo.LoginSceneInfo, sceneId=String(Global.sceneId)}}
+  self:reqGlobal(gParams)
+end
+
+function UCGamePlatform:_guestLogin(callback, thisObj)
+  if callback == nil then
+    callback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if self.guestid then
+    LogsManager.echo("hlx _guestLogin 已经进行过游客登录，直接成功回调")
+    callback and callback:call(thisObj, true)
+    return
+  end
+  local myThis = self
+  self:getWX():getGuestInfo({success=function(res)
+    LogsManager.echo("getGuestInfo 加载成功", JSON:stringify(res))
+    if res.guestid then
+      myThis.guestid = res.guestid
+      myThis.platformUserInfo = {name=res.nickName, headImage=res.avatarUrl}
+      callback and callback:call(thisObj, true)
+    else
+      LogsManager.errorTag("getGuestInfo_error", "getGuestInfo 加载成功,返回值异常")
+      callback and callback:call(thisObj, false)
+    end
+  end
+  , fail=function(res)
+    try_catch{
+      main = function()
+        LogsManager.errorTag("getGuestInfo_error", "getGuestInfo 加载失败", JSON:stringify(res))
+      end,
+      catch = function(e)
+        LogsManager.errorTag("getGuestInfo_error", "getGuestInfo 加载失败,无法序列化error")
+      end
+    }
+    callback and callback:call(thisObj, false)
+  end
+  })
+end
+
+function UCGamePlatform:_login(callback, thisObj)
+  local myThis = self
+  try_catch{
+    main = function()
+      self:getWX():login({success=function(res)
+        LogsManager.echo('>>login成功回调>>', JSON:stringify(res))
+        myThis:setLaunchOptions()
+        if res and res.code then
+          myThis.code = res.code
+          callback and callback:call(thisObj, true)
+        else
+          LogsManager.errorTag("login_error", "login 加载成功,返回值异常")
+          callback and callback:call(thisObj, false)
+        end
+      end
+      , fail=function(err)
+        LogsManager.warn('>>login失败回调>>', err)
+        callback and callback:call(thisObj, false)
+      end
+      })
+    end,
+    catch = function(e)
+      LogsManager.echo('login_error:', e)
+    end
+  }
+end
+
+function UCGamePlatform:getUserInfoAndReq()
+  local myThis = self
+  myThis.platformUserInfo = {}
+  self:getWX():getSetting({success=function(res)
+    LogsManager.echo("hlx UC getSetting success", JSON:stringify(res))
+    if res.userInfo then
+      LogsManager.echo("hlx UC start getUserInfo")
+      myThis:getWX():getUserInfo({success=function(res)
+        LogsManager.echo("hlx UC getUserInfo success", JSON:stringify(res))
+        myThis.platformUserInfo = {name=res.nickName, headImage=res.avatarUrl}
+        myThis:sendKakuraInit()
+      end
+      , fail=function(err)
+        LogsManager.echo("hlx UC getUserInfo fail", JSON:stringify(err))
+        myThis:sendKakuraInit()
+      end
+      })
+    else
+      myThis:sendKakuraInit()
+    end
+  end
+  , fail=function()
+    LogsManager.echo("hlx UC getSetting ==fail===")
+    myThis:sendKakuraInit()
+  end
+  })
+end
+
+function UCGamePlatform:addListener()
+  -- [ts2lua]window下标访问可能不正确
+  LogsManager.echo("hlx addListener ", type(window['onerror']))
+  -- [ts2lua]window下标访问可能不正确
+  window['onerror'] = function(errorMessage, scriptURI, lineNumber, columnNumber, errorObj)
+    LogsManager.systemError("onError!!!!!!!!!!!!", JSON:stringify(errorMessage))
+  end
+  
+
+end

@@ -1,0 +1,122 @@
+require("framework/manager/ResourceManager")
+require("framework/manager/LogsManager")
+
+Sprite3DExpand = class('Sprite3DExpand',Laya.Sprite3D)
+
+function Sprite3DExpand:ctor(name)
+  self:superCall('ctor',name)
+  self._childMap = {}
+end
+
+function Sprite3DExpand:startLoadModel(modelName, completeFunc, thisObj, args)
+  if completeFunc == nil then
+    completeFunc=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if args == nil then
+    args=nil
+  end
+  self.modelName = modelName
+  if completeFunc then
+    self._onCompleteBack = Laya.Handler(thisObj, completeFunc, args)
+  end
+  ResourceManager.load3dmodel(modelName, false, self.onLoadComplete, self)
+end
+
+function Sprite3DExpand:applyChildFullName(view, path)
+  if path == nil then
+    path=""
+  end
+  if path == "" then
+    -- [ts2lua]view下标访问可能不正确
+    view["__fullName"] = view.name
+  else
+    -- [ts2lua]view下标访问可能不正确
+    view["__fullName"] = path .. "." .. view.name
+  end
+  -- [ts2lua]view下标访问可能不正确
+  path = view["__fullName"]
+  -- [ts2lua]self._childMap下标访问可能不正确
+  if self._childMap[path] then
+    LogsManager.errorTag("viewError", "这个对象同层级有对象重名了,路径:", path, "模型:", self.modelName)
+  end
+  -- [ts2lua]self._childMap下标访问可能不正确
+  self._childMap[path] = view
+  local i = 0
+  repeat
+    local child = view:getChildAt(i)
+    self:applyChildFullName(child, path)
+    i=i+1
+  until not(i < view.numChildren)
+end
+
+function Sprite3DExpand:getChildViewByFullName(fullname)
+  -- [ts2lua]self._childMap下标访问可能不正确
+  return self._childMap[fullname]
+end
+
+function Sprite3DExpand:onLoadComplete()
+  self.currentView = ResourceManager.get3dmodelRes(self.modelName, false, true)
+  self:addChild(self.currentView)
+  local i = 0
+  repeat
+    self:applyChildFullName(self.currentView:getChildAt(i), "")
+    i=i+1
+  until not(i < self.currentView.numChildren)
+  self:showChildView()
+  self:doExpandOnShow()
+  if self._onCompleteBack then
+    self._onCompleteBack:run()
+    self._onCompleteBack = nil
+  end
+end
+
+function Sprite3DExpand:doExpandOnShow() end
+function Sprite3DExpand:showChildView()
+  for i in pairs(self._childMap) do
+    local view = self._childMap[i+1]
+    local needShow = false
+    if self.showViewArr then
+      local s = 0
+      repeat
+        local tempUrl = self.showViewArr[s+1]
+        if i:slice(0, #tempUrl) == tempUrl or tempUrl:slice(0, #i) == i then
+          needShow = true
+          break
+        end
+        s=s+1
+      until not(s < #self.showViewArr)
+    else
+      needShow = true
+    end
+    view.active = needShow
+  end
+end
+
+function Sprite3DExpand:setShowViewArr(showViewArr)
+  if self.showViewArr == showViewArr then
+    return
+  end
+  self.showViewArr = showViewArr
+  if not self.currentView then
+    return
+  end
+  self:showChildView()
+end
+
+function Sprite3DExpand:destroy()
+  self._childMap = nil
+  if self._onCompleteBack then
+    self._onCompleteBack = nil
+  end
+  self.showViewArr = nil
+  if self.currentView then
+    self.currentView:removeSelf()
+  end
+  self.currentView = nil
+  if self.parent then
+    self:removeSelf()
+  end
+end

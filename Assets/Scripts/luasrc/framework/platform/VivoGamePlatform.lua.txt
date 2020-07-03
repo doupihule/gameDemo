@@ -1,0 +1,217 @@
+require("trycatch")
+require("framework/platform/WXGamePlatform")
+require("framework/manager/LogsManager")
+require("framework/common/kakura/Client")
+require("framework/manager/SoundManager")
+require("game/sys/manager/StatisticsManager")
+require("framework/consts/StatisticsCommonConst")
+require("framework/func/TranslateFunc")
+require("framework/manager/WindowManager")
+require("framework/manager/TimerManager")
+require("framework/manager/MainModule")
+require("utils/Global")
+require("framework/utils/ScreenAdapterTools")
+require("framework/common/GameSwitch")
+
+VivoGamePlatform = class('VivoGamePlatform',WXGamePlatform)
+
+function VivoGamePlatform:ctor()
+  self:superCall('ctor')
+  self._lastShowVideoTime = 0;
+  VivoGamePlatform.instance = self
+end
+
+function VivoGamePlatform:getWX()
+  -- [ts2lua]window下标访问可能不正确
+  return window['qg']
+end
+
+function VivoGamePlatform:initPlatformData()
+  self:registerAd()
+  LogsManager.echo("平台登录就添加桌面 --------------------")
+  if not GameSwitch.checkOnOff(GameSwitch.SWITCH_OPPO_REVIEW) then
+    self:addToDesktop()
+  end
+end
+
+function VivoGamePlatform:showVideoAd(successCallBack, closeCallBack, thisObj, extraData)
+  if successCallBack == nil then
+    successCallBack=nil
+  end
+  if closeCallBack == nil then
+    closeCallBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if extraData == nil then
+    extraData={}
+  end
+  LogsManager.echo("hlx videoad.showVideoAd 视频开始展示！！！", Client.instance.serverTime)
+  WindowManager.SwitchMaskUI(true, 0.5)
+  SoundManager.stopMusic()
+  StatisticsManager.ins:onEvent(StatisticsCommonConst.NORMAL_VIDEO_AD)
+  self._videoLoaded = true
+  self._videoSucCallback = successCallBack
+  self._videoFailCallback = closeCallBack
+  self._extraData = extraData
+  self._videoThisObj = thisObj
+  local platformObj = self
+  if not self._videoAd then
+    self:registerAd()
+  end
+  if not self._videoAd then
+    WindowManager.SwitchMaskUI(false, 0.5)
+    LogsManager.echo("yrc 没有广告实例，直接执行失败回调")
+    self:_doVedioCallBack(false)
+    return
+  end
+  local videoAd = self._videoAd
+  if self.advHasShow then
+    LogsManager.echo("hlx videoAd.load.begin")
+    self._lastShowVideoTime = Client.instance.serverTime
+    local loadResult = videoAd:load()
+    LogsManager.echo("hlx videoAd.load.end")
+    if loadResult then
+      LogsManager.echo("hlx videoAd.load Promise begin")
+      loadResult:tsvar_then(function()
+        LogsManager.echo('hlx video.load.then', Client.instance.serverTime)
+      end
+      ):catch(function(err)
+        LogsManager.echo("hlx videoAd.load.err 激励视频广告加载失败", JSON:stringify(err))
+        if platformObj._videoLoaded then
+          WindowManager.ShowTip(TranslateFunc.instance:getTranslate("#tid_ad_error"))
+          StatisticsManager.ins:onEvent(StatisticsCommonConst.NORMAL_VIDEO_AD_FAIL)
+          WindowManager.SwitchMaskUI(false, 0.5)
+          platformObj:_doVedioCallBack(false)
+        end
+      end
+      ):finally(function()
+        LogsManager.echo("hlx videoAd.load.finally")
+      end
+      )
+      LogsManager.echo("hlx videoAd.load Promise end")
+    else
+      LogsManager.warn('hlx videoAd.load 没有result，直接执行show')
+    end
+  else
+    self._lastShowVideoTime = Client.instance.serverTime
+    self:_showVideo()
+  end
+end
+
+function VivoGamePlatform:afterVideoLoadCallBack()
+  if self._videoLoaded then
+    self:_showVideo()
+  end
+end
+
+function VivoGamePlatform:_showVideo()
+  LogsManager.echo('hlx video._showVideo 开始显示视频广告', Client.instance.serverTime)
+  self.videoState = 1
+  self._videoAd:show()
+  WindowManager.SwitchMaskUI(false, 0.5)
+  self.advHasShow = true
+end
+
+function VivoGamePlatform:addToDesktop(thisObj, successCall, failCall, channelParams)
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if successCall == nil then
+    successCall=nil
+  end
+  if failCall == nil then
+    failCall=nil
+  end
+  if channelParams == nil then
+    channelParams={}
+  end
+  if not self:canAddToDesktop() then
+    failCall and failCall:call(thisObj)
+    return
+  end
+  self:getWX():installShortcut({success=function(res)
+    LogsManager.echo("hlx 添加到桌面成功", JSON:stringify(res))
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.ADD_DESKTOP_SUCCESS)
+    successCall and successCall:call(thisObj)
+  end
+  , fail=function(res)
+    LogsManager.echo("hlx 添加到桌面失败", JSON:stringify(res))
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.ADD_DESKTOP_FAIL)
+    failCall and failCall:call(thisObj)
+  end
+  })
+end
+
+function VivoGamePlatform:setUseRankInfo(data)
+  if data == nil then
+    data={}
+  end
+  
+
+end
+
+function VivoGamePlatform:addUpdateListener()
+  local thisObj = self
+  local timeCode = TimerManager.instance:setTimeout(function()
+    thisObj.isOutTime = true
+    thisObj:setVersionCheckResult(1)
+    MainModule.instance:changeShowMainTask(-1, MainModule.task_updateListerner, "addUpdateListener overtime")
+  end
+  , self, 5000)
+  self:changeLeftTask(-1, "addUpdateListener")
+  self:startDownloadSubPackage()
+  MainModule.instance:checkSystem()
+  local timer = Client.instance.serverTime
+  self:getWX():onUpdateReady(function(res)
+    LogsManager.echo("请求完新版本信息的回调", JSON:stringify(res), "costTime :", Client.instance.serverTime - timer)
+    -- [ts2lua]lua中0和空字符串也是true，此处res == 1需要确认
+    thisObj:setVersionCheckResult((res == 1 and {2} or {1})[1])
+    if not thisObj.isOutTime then
+      timeCode and TimerManager.instance:remove(timeCode)
+    end
+    if res == 1 then
+      WindowManager.ShowTip(TranslateFunc.instance:getTranslate("#versionForceUpdate"))
+      TimerManager.instance:setTimeout(function()
+        Global.isGameDestory = true
+        thisObj:getWX():applyUpdate()
+      end
+      , self, 300)
+    else
+      if not thisObj.isOutTime then
+        MainModule.instance:changeShowMainTask(-1, MainModule.task_updateListerner, "addUpdateListener sucess")
+      end
+    end
+  end
+  )
+end
+
+function VivoGamePlatform:getUserInfoAndReq()
+  local myThis = self
+  myThis.platformUserInfo = {}
+  self:sendKakuraInit()
+  return
+end
+
+function VivoGamePlatform:reCheckBar()
+  if type(self:getWX().getNotchHeight) == 'function' then
+    try_catch{
+      main = function()
+        self:getWX():getNotchHeight({success=function(data)
+          ScreenAdapterTools.toolBarWidth = data.height
+          LogsManager.echo()
+        end
+        , fail=function(data, code)
+          LogsManager.echo()
+        end
+        })
+      end,
+      catch = function(e)
+        LogsManager.echo('hlx getNotchHeight 方法报错:', JSON:stringify(e))
+      end
+    }
+  else
+    LogsManager.echo('hlx 无 getNotchHeight 方法')
+  end
+end

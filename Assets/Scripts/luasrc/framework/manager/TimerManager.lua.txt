@@ -1,0 +1,209 @@
+require("framework/entity/TimeEntity")
+require("game/sys/consts/GameConsts")
+require("framework/common/kakura/Client")
+require("framework/manager/LogsManager")
+
+TimerManager = class('TimerManager')
+
+TimerManager.timeOurOffset = 8;
+function TimerManager:ctor()
+  self.timeCount = 0;
+  self._timeMap = {};
+  self._lastFrameTime = 0;
+  self._maxFrameDt = 5 * 1000 / GameConsts.gameFrameRate;
+  self._leftFrameDt = 0;
+  self._oneFrameDt = 1000 / GameConsts.gameFrameRate;
+  self.updateCallFuncGroup = {};
+  self.callFuncNums = 0;
+  Laya.timer:frameLoop(1, self, self.tickHandler)
+end
+
+function TimerManager.__getters.instance()
+  if not TimerManager._instance then
+    TimerManager._instance = TimerManager()
+  end
+  return TimerManager._instance
+end
+
+function TimerManager:add(callBack, thisObject, delay, maxCount, immediate, args)
+  if delay == nil then
+    delay=1000
+  end
+  if maxCount == nil then
+    maxCount=Number.MAX_VALUE
+  end
+  if immediate == nil then
+    immediate=false
+  end
+  if args == nil then
+    args={}
+  end
+  local timeEntity = nil
+  self.timeCount=self.timeCount+1
+  if immediate then
+    timeEntity = TimeEntity(delay, callBack, thisObject, maxCount - 1, args)
+    if #args > 0 then
+      callBack:apply(thisObject, args)
+    else
+      callBack:apply(thisObject, {1})
+    end
+  else
+    timeEntity = TimeEntity(delay, callBack, thisObject, maxCount, args)
+  end
+  timeEntity.code = self.timeCount
+  -- [ts2lua]self._timeMap下标访问可能不正确
+  self._timeMap[String(self.timeCount)] = timeEntity
+  return timeEntity.code
+end
+
+function TimerManager:remove(code)
+  if code > 0 then
+    -- [ts2lua]self._timeMap下标访问可能不正确
+    self._timeMap[String(code)] = nil
+  end
+end
+
+function TimerManager:removeByCallBack(thisObject, callBack)
+  for i in pairs(self._timeMap) do
+    local time = self._timeMap[i+1]
+    if time.thisObject == thisObject and time.callBack == callBack then
+      time.isRemove = true
+      self._timeMap[i+1] = nil
+    end
+  end
+end
+
+function TimerManager:removeByObject(obj)
+  for i in pairs(self._timeMap) do
+    local time = self._timeMap[i+1]
+    if time.thisObject == obj then
+      time.isRemove = true
+      self._timeMap[i+1] = nil
+    end
+  end
+end
+
+function TimerManager:removeAll()
+  LogsManager.errorTag("timeError", "移除了所有计时器--禁止调用")
+  self._timeMap = {}
+end
+
+function TimerManager:tickHandler(time)
+  self:onceUpdateFrame()
+  local timeEntity = nil
+  local curTime = Laya.timer.currTimer
+  local num = 0
+  for i in pairs(self._timeMap) do
+    timeEntity = self._timeMap[i+1]
+    local isRemove = false
+    num = Math:floor(curTime - timeEntity.oldTime / timeEntity.delay)
+    if num > 0 then
+      timeEntity.maxCount = timeEntity.maxCount - num
+      timeEntity.oldTime = timeEntity.oldTime + num * timeEntity.delay
+      local args = timeEntity.args
+      local callBack = timeEntity.callBack
+      local thisObject = timeEntity.thisObject
+      if timeEntity.maxCount <= 0 then
+        self._timeMap[i+1] = nil
+        isRemove = true
+      end
+      if #args > 0 then
+        callBack:apply(thisObject, args)
+      else
+        callBack:apply(thisObject, {num})
+      end
+    end
+  end
+  return true
+end
+
+function TimerManager:onceUpdateFrame()
+  local currentT = Laya.timer.currTimer
+  local dt = currentT - self._lastFrameTime
+  if dt > self._maxFrameDt then
+    dt = self._maxFrameDt
+  end
+  if dt > self._maxFrameDt then
+    dt = self._maxFrameDt
+  end
+  self._lastFrameTime = currentT
+  self._leftFrameDt = self._leftFrameDt + dt
+  local nums = Math:floor(self._leftFrameDt / self._oneFrameDt)
+  self._leftFrameDt = self._leftFrameDt - nums * self._oneFrameDt
+  local i = 0
+  repeat
+    self:_updateFrame()
+    i=i+1
+  until not(i < nums)
+end
+
+function TimerManager:_updateFrame()
+  for i in pairs(self.updateCallFuncGroup) do
+    local info = self.updateCallFuncGroup[i+1]
+    if info then
+      if info.frame > 0 then
+        info.frame=info.frame-1
+        if info.frame == 0 then
+          self.updateCallFuncGroup[i+1] = nil
+        end
+      end
+      info.callBack:call(info.thisObj, info.params)
+    end
+  end
+end
+
+function TimerManager:setTimeout(callBack, thisObject, delay, ...)
+  return self:add(callBack, thisObject, delay, 1, false, args)
+end
+
+function TimerManager:clearTimeout(key)
+  return self:remove(key)
+end
+
+function TimerManager:registObjUpdate(callFunc, callThisObj, params, frame)
+  if params == nil then
+    params=nil
+  end
+  if frame == nil then
+    frame=-1
+  end
+  self.callFuncNums=self.callFuncNums+1
+  -- [ts2lua]self.updateCallFuncGroup下标访问可能不正确
+  self.updateCallFuncGroup[String(self.callFuncNums)] = {callBack=callFunc, thisObj=callThisObj, params=params, frame=frame}
+  return self.callFuncNums
+end
+
+function TimerManager:deleteObjUpdate(callId, callFunc, callThisObj)
+  if callId == nil then
+    callId=nil
+  end
+  if callFunc == nil then
+    callFunc=nil
+  end
+  if callThisObj == nil then
+    callThisObj=nil
+  end
+  local info = nil
+  if callId then
+    -- [ts2lua]self.updateCallFuncGroup下标访问可能不正确
+    self.updateCallFuncGroup[callId] = nil
+  else
+    for i in pairs(self.updateCallFuncGroup) do
+      local info = self.updateCallFuncGroup[i+1]
+      if info.callBack == callFunc and info.thisObj == callThisObj then
+        self.updateCallFuncGroup[i+1] = nil
+        break
+      end
+    end
+  end
+end
+
+function TimerManager:checkOverDay(targetTime)
+  local daySecond = 3600000 * 24
+  local day1 = Math:floor(targetTime - TimerManager.timeOurOffset * 3600000 / daySecond)
+  local day2 = Math:floor(Client.instance.miniserverTime - TimerManager.timeOurOffset * 3600000 / daySecond)
+  if day1 ~= day2 then
+    return true
+  end
+  return false
+end

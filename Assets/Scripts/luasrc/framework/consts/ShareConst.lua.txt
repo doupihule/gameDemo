@@ -1,0 +1,2 @@
+ShareConst = class('ShareConst')
+ShareConst.DOUYIN_VIDEO_TOPICS = {'抖音小游戏', '小游戏', '游戏'};

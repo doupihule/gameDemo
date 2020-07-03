@@ -1,0 +1,197 @@
+require("stringutil")
+require("framework/platform/WXGamePlatform")
+require("framework/platform/EgretPlatform")
+require("framework/platform/QQGamePlatform")
+require("framework/platform/TTGamePlatform")
+require("framework/platform/OppoGamePlatform")
+require("utils/Global")
+require("framework/consts/SceneReference")
+require("framework/platform/BaiduGamePlatform")
+require("framework/platform/VivoGamePlatform")
+require("framework/platform/UCGamePlatform")
+require("framework/platform/AndroidGamePlatform")
+require("framework/manager/IosGamePlatform")
+require("framework/manager/PackConfigManager")
+require("framework/common/UserInfo/PlatformIdType")
+
+UserInfo = class('UserInfo')
+UserInfo.paramStr = "";
+UserInfo.urlParams = nil;
+UserInfo.platformId = "web";
+UserInfo.platform = nil;
+UserInfo.wxVersionType = nil;
+UserInfo.systemId = "mini";
+UserInfo.isUseHttpServer = false;
+function UserInfo.__getters.LoginSceneInfo()
+  if not Global.firstRunSystemInfo.sceneId then
+    return "no info"
+  end
+  return SceneReference.getSceneName(Global.firstRunSystemInfo.sceneId) + Global.firstRunSystemInfo.appId
+end
+
+UserInfo.language = "zh_CN";
+UserInfo.defaultLanguage = "zh_CN";
+UserInfo.isNewAccount = false;
+function UserInfo.isSystemAndroid()
+  return UserInfo.systemId == "android"
+end
+
+function UserInfo.isSystemMini()
+  return UserInfo.systemId == "mini"
+end
+
+function UserInfo.isSystemIos()
+  return UserInfo.systemId == "ios"
+end
+
+function UserInfo.isSystemNative()
+  return UserInfo.systemId == "ios" or UserInfo.systemId == "android"
+end
+
+function UserInfo.initDeviceSys()
+  if UserInfo.deviceSys then
+    return
+  end
+  if UserInfo.systemId == "mini" then
+    local rt = Global.getOs()
+    if (rt == "IPad" or rt == "IOS") or rt == "IPhone" then
+      UserInfo.deviceSys = "ios"
+    elseif rt == "Android" then
+      UserInfo.deviceSys = "android"
+    else
+      UserInfo.deviceSys = "window"
+    end
+  elseif UserInfo.isSystemIos() then
+    UserInfo.deviceSys = "ios"
+  elseif UserInfo.isSystemAndroid() then
+    UserInfo.deviceSys = "android"
+  else
+    UserInfo.deviceSys = "window"
+  end
+end
+
+function UserInfo.isOnIosDevice()
+  UserInfo.initDeviceSys()
+  return UserInfo.deviceSys == "ios"
+end
+
+function UserInfo.isOnAndroidDevice()
+  UserInfo.initDeviceSys()
+  return UserInfo.deviceSys == "android"
+end
+
+function UserInfo.initSystemId()
+  local androidStr = "android"
+  local iosStr = "ios"
+  if UserInfo.platformId:slice(0, #androidStr) == androidStr then
+    UserInfo.systemId = androidStr
+  elseif UserInfo.platformId:slice(0, #iosStr) == iosStr then
+    UserInfo.systemId = iosStr
+  else
+    UserInfo.systemId = "mini"
+  end
+  -- [ts2lua]window下标访问可能不正确
+  window["LogsManager"]:echo("xd initSystemId:" .. UserInfo.systemId)
+end
+
+function UserInfo.init()
+  UserInfo.urlParams = UserInfo.parseUrl() or {}
+  UserInfo.initSystemId()
+  if UserInfo.isSystemAndroid() then
+    UserInfo.platform = AndroidGamePlatform()
+  elseif UserInfo.isSystemIos() then
+    UserInfo.platform = IosGamePlatform()
+  else
+    if UserInfo.isTT() then
+      UserInfo.platform = TTGamePlatform()
+    elseif UserInfo.isWX() then
+      UserInfo.platform = WXGamePlatform()
+    elseif UserInfo.isQQGame() then
+      UserInfo.platform = QQGamePlatform()
+    elseif UserInfo.isWeb() then
+      UserInfo.platform = EgretPlatform()
+    elseif UserInfo.isOppo() then
+      UserInfo.platform = OppoGamePlatform()
+    elseif UserInfo.isBaidu() then
+      UserInfo.platform = BaiduGamePlatform()
+    elseif UserInfo.isVivo() then
+      UserInfo.platform = VivoGamePlatform()
+    elseif UserInfo.isUC() then
+      UserInfo.platform = UCGamePlatform()
+    else
+      UserInfo.platform = EgretPlatform()
+    end
+  end
+  UserInfo.platform:initPlatform()
+end
+
+function UserInfo.isWeb()
+  return UserInfo.platformId == PlatformIdType.web
+end
+
+function UserInfo.isTT()
+  return UserInfo.platformId == PlatformIdType.tt
+end
+
+function UserInfo.isWX()
+  return UserInfo.platformId == PlatformIdType.wxgame
+end
+
+function UserInfo.isQQGame()
+  return UserInfo.platformId == PlatformIdType.qqgame
+end
+
+function UserInfo.isOppo()
+  return UserInfo.platformId == PlatformIdType.oppo
+end
+
+function UserInfo.isBaidu()
+  return UserInfo.platformId == PlatformIdType.baidugame
+end
+
+function UserInfo.isVivo()
+  return UserInfo.platformId == PlatformIdType.vivogame
+end
+
+function UserInfo.isUC()
+  return UserInfo.platformId == PlatformIdType.ucgame
+end
+
+function UserInfo.isTest()
+  if UserInfo.isWeb() or PackConfigManager.ins.platform.platform == "test" then
+    return true
+  end
+  return false
+end
+
+function UserInfo.getNativeDefaultUid()
+  return UserInfo.systemId + Global.deviceId
+end
+
+function UserInfo.parseUrl()
+  local obj = {}
+  if UserInfo.paramStr then
+    local params = UserInfo.paramStr:split('&')
+    local len = #params
+    local i = 0
+    repeat
+      -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+      local value = params[i+1]:gsub(/#.*$/g, ''):split('=')
+      if not value[1+1] then
+        value[1+1] = ''
+      end
+      -- [ts2lua]obj下标访问可能不正确
+      obj[value[0+1]] = value[1+1]
+      i=i+1
+    until not(i < len)
+  end
+  return obj
+end
+
+local AppIdType = class('AppIdType')
+AppIdType.test = "9173";
+AppIdType.qqbrowser = "ogqq";
+AppIdType.wxhortor = "hortor";
+AppIdType.gz1758 = "i1758";
+AppIdType.egret = "egret";
+AppIdType.wxgame = "wxgame";

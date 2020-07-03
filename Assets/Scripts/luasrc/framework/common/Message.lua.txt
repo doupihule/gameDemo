@@ -1,0 +1,77 @@
+require("framework/utils/HashMap")
+
+Message = class('Message')
+
+function Message:ctor()
+  self.msgMap = HashMap()
+end
+
+function Message.__getters.instance()
+  if not Message._instance then
+    Message._instance = Message()
+  end
+  return Message._instance
+end
+
+function Message:add(cmd, msg)
+  local list = self.msgMap:get(cmd)
+  if not list then
+    list = {}
+    self.msgMap:put(cmd, list)
+  end
+  if list:find(msg) == -1 then
+    table.insert(list, msg)
+  end
+end
+
+function Message:remove(cmd, msg)
+  local list = self.msgMap:get(cmd)
+  if list then
+    local len = #list
+    local i = len - 1
+    repeat
+      if list[i+1] == msg then
+        list:splice(i, 1)
+      end
+      i=i-1
+    until not(i >= 0)
+  end
+end
+
+function Message:send(cmd, data)
+  if data == nil then
+    data=nil
+  end
+  local list = self.msgMap:get(cmd)
+  if list then
+    local len = #list
+    local i = len - 1
+    repeat
+      list[i+1].recvMsg:call(list[i+1], cmd, data)
+      i=i-1
+    until not(i >= 0)
+    if len <= 0 then
+      self.msgMap:remove(cmd)
+    end
+  end
+end
+
+function Message:removeObjEvents(msg)
+  for i in pairs(self.msgMap) do
+    local list = self.msgMap[i+1]
+    if #list > 0 then
+      local len = #list
+      local ii = len - 1
+      repeat
+        -- [ts2lua]list下标访问可能不正确
+        if list[ii] == msg then
+          list:splice(ii, 1)
+        end
+        ii=ii-1
+      until not(ii >= 0)
+      if #list == 0 then
+        self.msgMap[i+1] = nil
+      end
+    end
+  end
+end

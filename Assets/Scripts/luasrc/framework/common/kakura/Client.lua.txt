@@ -1,0 +1,555 @@
+require("date")
+require("framework/common/kakura/KakuraClient")
+require("framework/utils/HashMap")
+require("framework/manager/PackConfigManager")
+require("utils/Global")
+require("framework/manager/ErrCodeManager")
+require("game/sys/model/UserModel")
+require("framework/manager/NotifyManager")
+require("game/sys/consts/ModelToServerMap")
+require("framework/common/GameSwitch")
+require("framework/manager/LogsManager")
+require("framework/server/SingleCommonServer")
+require("framework/common/HttpMessage")
+require("game/sys/common/kakura/ErrorCode")
+require("framework/common/UserInfo")
+require("framework/common/kakura/MethodCommon")
+require("framework/common/GameHttpControler")
+
+Client = class('Client')
+
+Client.temDirtList = {};
+function Client:ctor()
+  self._requestId = 0;
+  self._baseUnqiueRequestId = 0;
+  self.OPCODE_KAKURA_INIT = 1000;
+  self.OPCODE_KAKURA_HEARTBEAT = 1001;
+  self.OPCODE_KAKURA_REAUTH = 1014;
+  self.OPCODE_BACKEND_REQUEST = 100001;
+  self.heartBeatInterval = 60;
+  self.PUBLIC_KEY = "ilo24wEFS*^^*2Ewilo24wEFS*^^*2Ew";
+  self._token = "";
+  self._gs_token = "";
+  self._url = "";
+  self._version = "";
+  self._upgrade = "";
+  self._hashMap = HashMap();
+  self.hasLoginComplete = false;
+  self.RELOGIN_INTVERL_TIME = 60;
+  self.SWITCH_RELOGIN_INTVERL_TIME = "SWITCH_RELOGIN_INTVERL_TIME";
+  self.lastLoginTime = 0;
+  self._loginState = 0;
+  self._defaultExpandParams = {forceConnect=false};
+  self._serverTime = 0
+end
+
+function Client.__getters.instance()
+  if not Client._instance then
+    Client._instance = Client()
+  end
+  return Client._instance
+end
+
+function Client:checkConnect()
+  KakuraClient.instance:aginConnect()
+end
+
+function Client:sendInit(token, userInfo, callback, thisObj, invitedBy, shareInfo)
+  if userInfo == nil then
+    userInfo=nil
+  end
+  if callback == nil then
+    callback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if invitedBy == nil then
+    invitedBy=""
+  end
+  if shareInfo == nil then
+    shareInfo=""
+  end
+  self._gs_token = token
+  self._callback = callback
+  self._thisObj = thisObj
+  self._url = PackConfigManager.ins.platform.kakura_url
+  self._version = Global.version
+  self._upgrade = PackConfigManager.ins.platform.upgrade_path
+  self._sec = PackConfigManager.ins.platform.sec
+  self._kakuraInitParams = self:getKakuraInitMsg(userInfo, invitedBy, shareInfo)
+  KakuraClient.instance:init(self._url, self._version, "", self.pushResult, self, self.onConnectBack, self)
+end
+
+function Client:initResult(result)
+  if result.error then
+    return
+  end
+  KakuraClient.instance.hasGetUserInfo = true
+  self._requestId = result.initRequestId
+  self._token = result.token
+  self._rid = result.rid
+  self._callback and self._callback:call(self._thisObj)
+end
+
+function Client:sendHeart(method, param, callback, thisObj, addParam)
+  if method == nil then
+    method=nil
+  end
+  if param == nil then
+    param=nil
+  end
+  if callback == nil then
+    callback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if addParam == nil then
+    addParam=nil
+  end
+  if KakuraClient.instance._currentConn then
+    return
+  end
+  KakuraClient.instance:sendRequest(self.OPCODE_KAKURA_HEARTBEAT, KakuraClient.method_heartBeat, param, callback, thisObj, false)
+end
+
+function Client:send(method, param, callback, thisObj, opcode, isWait, addParam, expandParams)
+  if opcode == nil then
+    opcode=self.OPCODE_BACKEND_REQUEST
+  end
+  if isWait == nil then
+    isWait=true
+  end
+  if addParam == nil then
+    addParam=nil
+  end
+  if expandParams == nil then
+    expandParams=nil
+  end
+  if Global.checkUserCloudStorage() then
+    self:saveDataToCloud(param, callback, thisObj, addParam, expandParams)
+  else
+    if not opcode then
+      opcode = self.OPCODE_BACKEND_REQUEST
+    end
+    if (not param or param == nil) or param == "" then
+      param = {}
+    else
+      for key in pairs(param) do
+        
+      end
+    end
+    if opcode == self.OPCODE_BACKEND_REQUEST then
+      if Global.checkIsSingleMode() then
+        if not param.clientDirty then
+          param.clientDirty = SingleCommonServer.getClientDirtyList()
+        end
+      end
+    end
+    self._curMethod = method
+    KakuraClient.instance:sendRequest(opcode, method, param, callback, thisObj, isWait, false, addParam)
+  end
+end
+
+function Client:onResult(result, isPush)
+  if isPush == nil then
+    isPush=false
+  end
+  if result.data then
+    local rdata = result.data
+    if rdata.dirtyList then
+      self:onDirtyList(rdata.dirtyList)
+    end
+    if isPush then
+      if rdata.d then
+        self:deleteBaseData(rdata.d)
+      end
+      if rdata.u then
+        self:updateBaseData(rdata.u)
+      end
+    end
+  elseif result.error then
+    local err = result.error
+    ErrCodeManager.ins:setErr(err.code)
+  end
+  if result.serverInfo then
+    self._reqBackTime = result.serverInfo.serverTime
+    self._serverTime = parseInt(result.serverInfo.serverTime) - Math:floor(Laya.Browser:now())
+  end
+end
+
+function Client:onDirtyList(baseData)
+  if not baseData then
+    return
+  end
+  if baseData.d then
+    self:deleteBaseData(baseData.d)
+  end
+  if baseData.u then
+    self:updateBaseData(baseData.u)
+  end
+end
+
+function Client:updateBaseData(upData)
+  local mapArr = ModelToServerMap.modelToServerMap
+  local length = #mapArr
+  local userChangeData = self:getUserData(upData)
+  if userChangeData then
+    UserModel.instance:updateData(userChangeData)
+  end
+  local i = 0
+  repeat
+    local info = mapArr[i+1]
+    local key = info.key
+    local model = info.model
+    -- [ts2lua]upData下标访问可能不正确
+    if upData[key] then
+      -- [ts2lua]upData下标访问可能不正确
+      model.instance:updateData(upData[key])
+    end
+    i=i+1
+  until not(i < length)
+end
+
+function Client:deleteBaseData(delData)
+  local mapArr = ModelToServerMap.modelToServerMap
+  local length = #mapArr
+  local userChangeData = self:getUserData(delData)
+  if userChangeData then
+    UserModel.instance:deleteData(userChangeData)
+  end
+  local i = 0
+  repeat
+    local info = mapArr[i+1]
+    local key = info.key
+    local model = info.model
+    -- [ts2lua]delData下标访问可能不正确
+    if delData[key] then
+      -- [ts2lua]delData下标访问可能不正确
+      model.instance:deleteData(delData[key])
+    end
+    i=i+1
+  until not(i < length)
+end
+
+function Client:getUserData(data)
+  local mapArr = ModelToServerMap.modelToServerMap
+  local length = #mapArr
+  local userChangeData = nil
+  for i in pairs(data) do
+    local model = nil
+    local value = data[i+1]
+    if i ~= "_id" then
+      local j = 0
+      repeat
+        local info = mapArr[j+1]
+        if info.key == i then
+          model = info.model
+          break
+        end
+        j=j+1
+      until not(j < length)
+      if not model and i ~= "_id" then
+        if not userChangeData then
+          userChangeData = {}
+        end
+        userChangeData[i+1] = value
+      end
+    end
+  end
+  return userChangeData
+end
+
+function Client:pushResult(result)
+  if result.params.dirtyList then
+    self:onDirtyList(result.params.dirtyList)
+  end
+  NotifyManager.onServerNotify(result)
+end
+
+function Client:onConnectBack(isFirstInit)
+  if isFirstInit then
+    local params = self._kakuraInitParams
+    KakuraClient.instance:clearOneMethod(MethodCommon.User_kakuraInit)
+    KakuraClient.instance:sendRequest(self.OPCODE_KAKURA_INIT, MethodCommon.User_kakuraInit, params, self.initResult, self, true, true)
+  else
+    local param = {token=self._token}
+    param.ver = self._version
+    param.upgrade = self._upgrade
+    param.deviceId = Global.deviceId
+    KakuraClient.instance:sendRequest(self.OPCODE_KAKURA_REAUTH, MethodCommon.User_kakuraReauth, param, self.relogin, self, true, true)
+  end
+end
+
+function Client:doDummyServerBack(data, u, d)
+  if data == nil then
+    data=nil
+  end
+  if u == nil then
+    u=nil
+  end
+  if d == nil then
+    d=nil
+  end
+  if not data then
+    data = {}
+  end
+  if u or d then
+    data.dirtyList = {u=u, d=d}
+    Client.temDirtList = data.dirtyList
+    self:onDirtyList(data.dirtyList)
+  end
+  return {data=data}
+end
+
+function Client:relogin()
+  KakuraClient.instance:sendRequest(self.OPCODE_BACKEND_REQUEST, MethodCommon.User_relogin, {}, self.reloginBack, self, true, true)
+end
+
+function Client:reloginBack(result)
+  if (result.data and result.data.config) and result.data.config.switch then
+    GameSwitch.coverServerSwitchConditionMap(result.data.config.switchCondition)
+    GameSwitch.coverServerSwitchMap(result.data.config.switch)
+  end
+end
+
+function Client.__getters:serverTime()
+  return Math:floor(self._serverTime + Math:floor(Laya.Browser:now()) * 0.001)
+end
+
+function Client.__getters:miniserverTime()
+  return self._serverTime + Laya.Browser:now()
+end
+
+function Client.__getters:serverTimeMicro()
+  return self._serverTime + Laya.Browser:now()
+end
+
+function Client.__getters:reqBackTime()
+  return self._reqBackTime * 0.001
+end
+
+function Client:getRequestId()
+  if self._requestId >= 0 then
+    self._requestId=self._requestId+1
+  end
+  return self._requestId
+end
+
+function Client:getUniqueRequestId(requestId)
+  if requestId == nil then
+    requestId=""
+  end
+  self._baseUnqiueRequestId = self._baseUnqiueRequestId + 1
+  local rid = 1
+  local timestamp = (Date()):getTime()
+  return "h5_" .. rid .. "_" .. timestamp .. "_" .. self._baseUnqiueRequestId .. "_"
+end
+
+function Client:getKakuraInitMsg(userInfo, invitedBy, shareInfo)
+  if userInfo == nil then
+    userInfo=nil
+  end
+  if invitedBy == nil then
+    invitedBy=""
+  end
+  if shareInfo == nil then
+    shareInfo=""
+  end
+  local params = {ver=self._version, account_name="1", upgrade=self._upgrade, gs_token=self._gs_token, sec=self._sec, account_id="1", deviceId=Global.deviceId}
+  if invitedBy ~= "" and shareInfo ~= "" then
+    -- [ts2lua]params下标访问可能不正确
+    params["invitedBy"] = invitedBy
+    -- [ts2lua]params下标访问可能不正确
+    params["shareInfo"] = shareInfo
+  end
+  if userInfo ~= nil then
+    -- [ts2lua]params下标访问可能不正确
+    params["userInfo"] = userInfo
+  end
+  return params
+end
+
+function Client.__getters:rid()
+  return self._rid
+end
+
+function Client.__getters:webSocketConnet()
+  return KakuraClient.instance.webSocketConnet
+end
+
+function Client:testClose()
+  KakuraClient.instance:testClose()
+end
+
+function Client:saveDataToCloud(params, callback, thisObj, addParam, expandParams)
+  if addParam == nil then
+    addParam=nil
+  end
+  if expandParams == nil then
+    expandParams=nil
+  end
+  local token = self.globalLoginBackData.loginToken or ""
+  if not params.token then
+    params.token = token
+  end
+  LogsManager.echo("krma. cloud authenticate token=" .. token .. "body=" .. JSON:stringify(params.clientDirty) .. "sendTime=" .. params.sendTime)
+  self:startRequestCloud(MethodCommon.cloudStorage_setByUser, params, callback, thisObj, addParam, expandParams)
+end
+
+function Client:getCloudGlobalData(params, callback, thisObj, addParam)
+  if callback == nil then
+    callback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if addParam == nil then
+    addParam=nil
+  end
+  if not self.hasLoginComplete then
+    callback and callback:call(thisObj, {error={code=ErrorCode.nologin}}, addParam)
+    return
+  end
+  local token = self.globalLoginBackData.loginToken
+  if not token then
+    callback and callback:call(thisObj, {error={code=ErrorCode.nologin}}, addParam)
+    return
+  end
+  if not params.token then
+    params.token = token
+  end
+  self:startRequestCloud(MethodCommon.cloudStorage_getGlobalData, params, callback, thisObj, addParam)
+end
+
+function Client:sendSubscribeMessage(params, callback, thisObj, addParam)
+  if callback == nil then
+    callback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if addParam == nil then
+    addParam=nil
+  end
+  self:startRequestCloud(MethodCommon.saveSubscribeMsg, params, callback, thisObj, addParam)
+end
+
+function Client:setCloudGlobalData(params, callback, thisObj, addParam)
+  if callback == nil then
+    callback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if addParam == nil then
+    addParam=nil
+  end
+  local token = self.globalLoginBackData.loginToken or ""
+  if not params.token then
+    params.token = token
+  end
+  self:startRequestCloud(MethodCommon.cloudStorage_setGlobalData, params, callback, thisObj, addParam)
+end
+
+function Client:startRequestCloud(method, params, callback, thisObj, addParam, expandParams)
+  if callback == nil then
+    callback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if addParam == nil then
+    addParam=nil
+  end
+  if expandParams == nil then
+    expandParams=nil
+  end
+  if not self.hasLoginComplete then
+    self:startRelogin()
+    callback and callback:call(thisObj, {error={code=ErrorCode.nologin}}, addParam)
+    return
+  end
+  expandParams = expandParams or self._defaultExpandParams
+  local url = Global.global_url
+  params.sendTime = self.serverTime
+  local thisValue = self
+  local onErrorBack = function(error)
+    if type(error) == "object" and error.code then
+      local errorCode = String(error.code)
+      if errorCode == "10038" or errorCode == "10003" then
+        thisValue:startRelogin()
+      end
+    end
+    LogsManager.echo("_errorBack;")
+    if callback then
+      callback:call(thisObj, error, addParam)
+    end
+    Client.instance.lastLoginTime = Client.instance.serverTime
+  end
+  
+  local onHttpBack = function(backData)
+    if backData[0+1] then
+      backData = backData[0+1]
+    end
+    if (backData.result and backData.result.serverInfo) and backData.result.serverInfo.serverTime then
+      thisValue._reqBackTime = backData.result.serverInfo.serverTime
+      thisValue._serverTime = thisValue._reqBackTime - Laya.Browser:now()
+    end
+    if backData.error then
+      onErrorBack(backData.error)
+      return
+    end
+    if callback then
+      callback:call(thisObj, backData, addParam)
+    end
+    Client.instance.lastLoginTime = Client.instance.serverTime
+  end
+  
+  local sendData = {method=method, params=params}
+  local webParams = {errorCall=onErrorBack}
+  if UserInfo.isUseHttpServer and expandParams.forceConnect then
+    webParams.url = url
+    expandParams.url = Global.global_url
+    GameHttpControler.instance:sendRequest(method, params, callback, thisObj, true, false, addParam, expandParams)
+  else
+    HttpMessage.instance:send(url, sendData, onHttpBack, self, "post", webParams)
+  end
+end
+
+function Client:startRelogin()
+  if not self:checkCanRelogin() then
+    return
+  end
+  if self._loginState ~= 0 then
+    return
+  end
+  LogsManager.echo("xd_ 开始重登-")
+  self._loginState = 1
+  self.hasLoginComplete = false
+  UserInfo.platform:getWxInfo()
+end
+
+function Client:onReloginBack(data, isError)
+  if isError == nil then
+    isError=false
+  end
+  self._loginState = 0
+  LogsManager.echo("xd_重登回来,重置状态")
+end
+
+function Client:checkCanRelogin()
+  if self.serverTime - self.lastLoginTime < self:getReloginIntverlTime() then
+    return false
+  end
+  return true
+end
+
+function Client:getReloginIntverlTime()
+  local state = GameSwitch.getSwitchState(self.SWITCH_RELOGIN_INTVERL_TIME)
+  if not state then
+    state = self.RELOGIN_INTVERL_TIME
+  end
+  return state
+end

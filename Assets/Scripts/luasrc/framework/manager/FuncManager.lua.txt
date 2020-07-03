@@ -1,0 +1,45 @@
+require("framework/func/BaseFunc")
+require("framework/manager/ErrCodeManager")
+require("framework/manager/LoadManager")
+require("framework/manager/LoadZipManager")
+require("framework/manager/LogsManager")
+require("framework/utils/FileUtils")
+require("framework/manager/VersionManager")
+require("framework/manager/SubPackageManager")
+require("game/sys/consts/SubPackageConst")
+require("utils/GameUtils")
+
+FuncManager = class('FuncManager')
+function FuncManager.init(callback, thisobj)
+  local t1 = Laya.Browser:now()
+  local onZipComeplete = function()
+    local congfigName = BaseFunc._globalConfigsName
+    if GameUtils.isReview then
+      congfigName = BaseFunc._globalConfigsReviewName
+    end
+    LoadManager.instance:load({congfigName}, Laya.Handler:create(FuncManager, function()
+      BaseFunc.onConfigGroupLoadComplete()
+      BaseFunc.onTranslateGroupLoadComplete()
+      ErrCodeManager.ins:initConfig()
+      if callback then
+        callback:call(thisobj)
+      end
+      LogsManager.echo("xd__下载加解析配表总耗时", Laya.Browser:now() - t1)
+    end
+    ), nil, Laya.Loader.JSON)
+  end
+  
+  if FileUtils.checkIsUseZip() then
+    LoadZipManager.instance:loadZip("json.zip", VersionManager.ZIP_MODEL_KEY_CONFIG, Laya.Handler(FuncManager, onZipComeplete), nil)
+  else
+    local packName_json = SubPackageConst.packName_json
+    if GameUtils.isReview then
+      packName_json = SubPackageConst.packName_jsonreview
+    end
+    if SubPackageManager.getModelFileStyle(packName_json) == SubPackageConst.PATH_STYLE_SUBPACK then
+      SubPackageManager.loadSubPackage(packName_json, onZipComeplete, FuncManager, true)
+    else
+      onZipComeplete()
+    end
+  end
+end

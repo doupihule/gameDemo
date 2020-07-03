@@ -1,0 +1,298 @@
+require("framework/manager/LogsManager")
+require("utils/Global")
+
+ScreenAdapterTools = class('ScreenAdapterTools')
+ScreenAdapterTools.Align_Left = 1;
+ScreenAdapterTools.Align_LeftTop = 2;
+ScreenAdapterTools.Align_MiddleTop = 3;
+ScreenAdapterTools.Align_RightTop = 4;
+ScreenAdapterTools.Align_Right = 5;
+ScreenAdapterTools.Align_RightBottom = 6;
+ScreenAdapterTools.Align_MiddleBottom = 7;
+ScreenAdapterTools.Align_LeftBottom = 8;
+ScreenAdapterTools.Align_Middle = 9;
+ScreenAdapterTools.Align_ScaleWidth = 10;
+ScreenAdapterTools.designWidth = 640;
+ScreenAdapterTools.designHeight = 1136;
+ScreenAdapterTools.isLandSpace = false;
+ScreenAdapterTools.maxWidth = 768;
+ScreenAdapterTools.maxHeight = 1400;
+ScreenAdapterTools.width = 0;
+ScreenAdapterTools.height = 0;
+ScreenAdapterTools.UIOffsetX = 0;
+ScreenAdapterTools.UIOffsetY = 0;
+ScreenAdapterTools.sceneOffsetX = 0;
+ScreenAdapterTools.sceneOffsetY = 0;
+ScreenAdapterTools.toolBarWidth = 0;
+ScreenAdapterTools.phoneSys = "";
+ScreenAdapterTools.PHONE_BANGS = {"iPhone X", "PACM00", "ANE-AL00", "COL-AL10", "JSN-AL00a", "V1813BA", "PBEM00", "vivo Z3x", "MI 9", "PBAM00", "PAAT00", "PBCM10", "vivo X21A", "ONEPLUS A6000"};
+ScreenAdapterTools.windowWidth = 640;
+ScreenAdapterTools.windowHeight = 1136;
+ScreenAdapterTools.toolBarWay = -1;
+function ScreenAdapterTools.isNotchDevice()
+  return ScreenAdapterTools.toolBarWidth ~= 0
+end
+
+function ScreenAdapterTools.getStageScaleX()
+  return ScreenAdapterTools.width / ScreenAdapterTools.windowWidth
+end
+
+function ScreenAdapterTools.getStageScaleY()
+  return ScreenAdapterTools.height / ScreenAdapterTools.windowHeight
+end
+
+function ScreenAdapterTools.checkScreenFixMode(browWidth, browHeight)
+  ScreenAdapterTools.stageWidth = browWidth
+  ScreenAdapterTools.stageHeight = browHeight
+  if ScreenAdapterTools.designWidth > ScreenAdapterTools.designHeight then
+    ScreenAdapterTools.isLandSpace = true
+  end
+  local minScale = ScreenAdapterTools.designWidth / ScreenAdapterTools.designHeight
+  local borderScale = ScreenAdapterTools.designWidth / ScreenAdapterTools.designHeight
+  local targetScale = browWidth / browHeight
+  local scaleMode = nil
+  if ScreenAdapterTools.isLandSpace then
+    minScale = ScreenAdapterTools.designHeight / ScreenAdapterTools.maxWidth
+    if targetScale < borderScale then
+      ScreenAdapterTools.width = ScreenAdapterTools.designWidth
+      local targetHei = Math:round(ScreenAdapterTools.width / targetScale)
+      if targetHei > ScreenAdapterTools.maxHeight then
+        ScreenAdapterTools.sceneOffsetY = targetHei - ScreenAdapterTools.maxHeight / 2
+        ScreenAdapterTools.height = ScreenAdapterTools.maxHeight
+      else
+        ScreenAdapterTools.height = targetHei
+      end
+      scaleMode = "fixedwidth"
+    else
+      ScreenAdapterTools.height = ScreenAdapterTools.designHeight
+      ScreenAdapterTools.width = Math:round(ScreenAdapterTools.designHeight * targetScale)
+      scaleMode = "fixedheight"
+    end
+  else
+    if targetScale > borderScale then
+      ScreenAdapterTools.height = ScreenAdapterTools.designHeight
+      local targetWid = Math:round(ScreenAdapterTools.designHeight * targetScale)
+      if targetWid > ScreenAdapterTools.maxWidth then
+        ScreenAdapterTools.sceneOffsetX = targetWid - ScreenAdapterTools.maxWidth / 2
+        ScreenAdapterTools.width = ScreenAdapterTools.maxWidth
+      else
+        ScreenAdapterTools.width = targetWid
+      end
+      scaleMode = "fixedheight"
+    else
+      ScreenAdapterTools.width = ScreenAdapterTools.designWidth
+      ScreenAdapterTools.height = Math:round(ScreenAdapterTools.designWidth / targetScale)
+      scaleMode = "fixedwidth"
+    end
+  end
+  ScreenAdapterTools.UIOffsetX = ScreenAdapterTools.width - ScreenAdapterTools.designWidth / 2
+  ScreenAdapterTools.UIOffsetY = ScreenAdapterTools.height - ScreenAdapterTools.designHeight / 2
+  LogsManager.echo("适配结果:this.isLandSpace", scaleMode, ScreenAdapterTools.isLandSpace, ScreenAdapterTools.sceneOffsetX, ScreenAdapterTools.sceneOffsetY)
+  LogsManager.echo("stageW:", browWidth, "stageH:", browHeight, "wd:", ScreenAdapterTools.width, "hei:", ScreenAdapterTools.height, "ofx:", ScreenAdapterTools.UIOffsetX, "ofy:", ScreenAdapterTools.UIOffsetY)
+  return scaleMode
+end
+
+function ScreenAdapterTools.checkFillBorder()
+  if ScreenAdapterTools.sceneOffsetX == 0 then
+    return
+  end
+  local image = Laya.Image("static/global_image_heibian.png")
+  image.anchorX = 1
+  image.anchorY = 0.5
+  image.x = ScreenAdapterTools.sceneOffsetX
+  image.y = ScreenAdapterTools.height / 2 + ScreenAdapterTools.UIOffsetY
+  Laya.stage:addChild(image)
+  image.zOrder = 10000000
+  image = Laya.Image("static/global_image_heibian.png")
+  image.anchorX = 0
+  image.anchorY = 0.5
+  image.x = ScreenAdapterTools.sceneOffsetX + ScreenAdapterTools.width
+  image.y = ScreenAdapterTools.height / 2 + ScreenAdapterTools.UIOffsetY
+  Laya.stage:addChild(image)
+  image.zOrder = 10000000
+end
+
+function ScreenAdapterTools.setPhoneSys(sysInfo)
+  ScreenAdapterTools.windowWidth = sysInfo.windowWidth
+  ScreenAdapterTools.windowHeight = sysInfo.windowHeight
+  if ScreenAdapterTools.phoneSys ~= "" then
+    return
+  end
+  local phoneModel = sysInfo.model
+  Global.deviceModel = phoneModel
+  if phoneModel:find("iPhone") > -1 or phoneModel:find("iPad") > -1 then
+    ScreenAdapterTools.phoneSys = "iphone"
+  elseif phoneModel:find("Android") then
+    ScreenAdapterTools.phoneSys = "android"
+  end
+  ScreenAdapterTools.checkBarBySafeArea(sysInfo)
+  ScreenAdapterTools.checkBarByStatusBarHeight(sysInfo)
+  ScreenAdapterTools.checkBarByBangs(phoneModel)
+end
+
+function ScreenAdapterTools.checkBarByBangs(phoneModel)
+  if ScreenAdapterTools.toolBarWidth > 0 then
+    return
+  end
+  local keys = ScreenAdapterTools.PHONE_BANGS
+  local len = #keys
+  local i = 0
+  repeat
+    local key = keys[i+1]
+    if phoneModel:find(key) > -1 then
+      ScreenAdapterTools.toolBarWidth = 60
+      Global.isPhoneBangs = true
+      LogsManager.echo("hlx 刘海屏高度修改:根据白名单", phoneModel, key)
+    end
+    i=i+1
+  until not(i < len)
+end
+
+function ScreenAdapterTools.checkBarBySafeArea(sysInfo)
+  if ScreenAdapterTools.toolBarWidth > 0 then
+    return
+  end
+  if not sysInfo.safeArea then
+    return
+  end
+  local top = sysInfo.safeArea.top or 0
+  if top > 20 then
+    ScreenAdapterTools.toolBarWidth = top * ScreenAdapterTools.getStageScaleY()
+    if ScreenAdapterTools.toolBarWidth > 60 then
+      ScreenAdapterTools.toolBarWidth = 60
+    end
+    Global.isPhoneBangs = true
+    LogsManager.echo("hlx 刘海屏高度修改:根据安全区域 top:", top, "    this.height:", ScreenAdapterTools.height, "    this.windowHeight:", ScreenAdapterTools.windowHeight, "    toolBarWidth:", ScreenAdapterTools.toolBarWidth)
+  end
+end
+
+function ScreenAdapterTools.checkBarByStatusBarHeight(sysInfo)
+  if ScreenAdapterTools.toolBarWidth > 0 then
+    return
+  end
+  local barH = sysInfo.statusBarHeight
+  if ScreenAdapterTools.toolBarWidth == 0 and barH > 44 then
+    LogsManager.echo("hlx 刘海屏高度修改:根据状态拦高度 statusBarHeight:", barH)
+    ScreenAdapterTools.toolBarWidth = 60
+    Global.isPhoneBangs = true
+  end
+end
+
+function ScreenAdapterTools.reCheckBar(menuInfo)
+  if ScreenAdapterTools.toolBarWidth > 0 then
+    return
+  end
+  if not menuInfo then
+    return
+  end
+  local top = menuInfo.top or 0
+  LogsManager.echo("ycn reCheckBar top: ", top)
+  if top > 20 then
+    ScreenAdapterTools.toolBarWidth = top * ScreenAdapterTools.getStageScaleY()
+    if ScreenAdapterTools.toolBarWidth > 60 then
+      ScreenAdapterTools.toolBarWidth = 60
+    end
+    Global.isPhoneBangs = true
+    LogsManager.echo("hlx 刘海屏高度修改:根据胶囊位置 reCheckBar top:", top, "    this.height:", ScreenAdapterTools.height, "    this.windowHeight:", ScreenAdapterTools.windowHeight, "    toolBarWidth:", ScreenAdapterTools.toolBarWidth)
+  end
+end
+
+function ScreenAdapterTools.setViewAlign(view, alignType, moveScaleX, moveScaleY, withNotch)
+  if moveScaleX == nil then
+    moveScaleX=1
+  end
+  if moveScaleY == nil then
+    moveScaleY=1
+  end
+  if withNotch == nil then
+    withNotch=false
+  end
+  local offsetX = 0
+  local offsetY = 0
+  if alignType == ScreenAdapterTools.Align_Left then
+    offsetX = -ScreenAdapterTools.UIOffsetX
+  elseif alignType == ScreenAdapterTools.Align_LeftTop then
+    offsetX = -ScreenAdapterTools.UIOffsetX
+    offsetY = -ScreenAdapterTools.UIOffsetY
+  elseif alignType == ScreenAdapterTools.Align_MiddleTop then
+    offsetY = -ScreenAdapterTools.UIOffsetY
+  elseif alignType == ScreenAdapterTools.Align_RightTop then
+    offsetX = ScreenAdapterTools.UIOffsetX
+    offsetY = -ScreenAdapterTools.UIOffsetY
+  elseif alignType == ScreenAdapterTools.Align_Right then
+    offsetX = ScreenAdapterTools.UIOffsetX
+  elseif alignType == ScreenAdapterTools.Align_RightBottom then
+    offsetX = ScreenAdapterTools.UIOffsetX
+    offsetY = ScreenAdapterTools.UIOffsetY
+  elseif alignType == ScreenAdapterTools.Align_MiddleBottom then
+    offsetY = ScreenAdapterTools.UIOffsetY
+  elseif alignType == ScreenAdapterTools.Align_LeftBottom then
+    offsetX = -ScreenAdapterTools.UIOffsetX
+    offsetY = ScreenAdapterTools.UIOffsetY
+  end
+  local offsetNotchX = 0
+  local offsetNotchY = 0
+  ScreenAdapterTools.offsetView(view, offsetX + offsetNotchX, offsetY + offsetNotchY)
+  if not withNotch then
+    ScreenAdapterTools.alignNotch(view, alignType)
+  end
+end
+
+function ScreenAdapterTools.alignNotch(view, alignType)
+  if alignType == nil then
+    alignType=ScreenAdapterTools.Align_LeftTop
+  end
+  if not Global.isPhoneBangs then
+    return
+  end
+  if ScreenAdapterTools.isLandSpace then
+    if (alignType == ScreenAdapterTools.Align_Left or alignType == ScreenAdapterTools.Align_LeftBottom) or ScreenAdapterTools.Align_LeftTop then
+      ScreenAdapterTools.offsetView(view, ScreenAdapterTools.toolBarWidth, 0)
+    elseif (alignType == ScreenAdapterTools.Align_Right or alignType == ScreenAdapterTools.Align_RightBottom) or alignType == ScreenAdapterTools.Align_RightTop then
+      ScreenAdapterTools.offsetView(view, -ScreenAdapterTools.toolBarWidth, 0)
+    end
+  else
+    if (alignType == ScreenAdapterTools.Align_LeftTop or alignType == ScreenAdapterTools.Align_MiddleTop) or ScreenAdapterTools.Align_RightTop then
+      ScreenAdapterTools.offsetView(view, 0, ScreenAdapterTools.toolBarWidth)
+    end
+  end
+end
+
+function ScreenAdapterTools.checkNativeSystemInfo(info)
+  Global.deviceModel = info.model
+  if info.toolBarHeight > 0 then
+    ScreenAdapterTools.toolBarWidth = 60
+    Global.isPhoneBangs = true
+  else
+    Global.isPhoneBangs = false
+  end
+end
+
+function ScreenAdapterTools.checkIsAlignUp(alignType)
+  return (alignType == ScreenAdapterTools.Align_LeftTop or alignType == ScreenAdapterTools.Align_MiddleTop) or alignType == ScreenAdapterTools.Align_RightTop
+end
+
+function ScreenAdapterTools.offsetView(view, offsetX, offsetY)
+  if view.left or view.left == 0 then
+    view.left = view.left + offsetX
+  elseif view.right or view.right == 0 then
+    view.right = view.right - offsetX
+  elseif view.centerX or view.centerX == 0 then
+    view.centerX = view.centerX + offsetX
+  elseif view.horizontalCenter or view.horizontalCenter == 0 then
+    view.horizontalCenter = view.horizontalCenter + offsetX
+  else
+    view.x = view.x + offsetX
+  end
+  if view.top or view.top == 0 then
+    view.top = view.top + offsetY
+  elseif view.bottom or view.bottom == 0 then
+    view.bottom = view.bottom - offsetY
+  elseif view.centerY or view.centerY == 0 then
+    view.centerY = view.centerY + offsetY
+  elseif view.verticalCenter or view.verticalCenter == 0 then
+    view.verticalCenter = view.verticalCenter + offsetY
+  else
+    view.y = view.y + offsetY
+  end
+end

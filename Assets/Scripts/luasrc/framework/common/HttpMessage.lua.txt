@@ -1,0 +1,286 @@
+require("trycatch")
+require("framework/manager/WaitManager")
+require("framework/manager/ErrCodeManager")
+require("framework/manager/LogsManager")
+require("framework/manager/TimerManager")
+require("framework/func/TranslateFunc")
+require("framework/manager/WindowManager")
+require("game/sys/common/kakura/ErrorCode")
+require("utils/Global")
+require("framework/common/UserInfo")
+require("framework/consts/LogsErrorCode")
+require("framework/common/kakura/Client")
+require("framework/manager/PackConfigManager")
+
+HttpMessage = class('HttpMessage')
+
+HttpMessage.URLLoaderDataFormat = {TEXT="text", TEXTURE="texture", BINARY="binary"};
+function HttpMessage:ctor()
+  self._connectCacheArr = nil;
+  self.reqsId = 0;
+  self.isReqs = false;
+  self.sTime = 0;
+  self.reqTime = 0;
+  self.key = "";
+  self.errCount = 0;
+  self._reconnectCount = 0;
+  self.autoConnectCount = 0;
+  self._connectCacheArr = {}
+end
+
+function HttpMessage.__getters.instance()
+  if not HttpMessage._instance then
+    HttpMessage._instance = HttpMessage()
+  end
+  return HttpMessage._instance
+end
+
+function HttpMessage:send(url, params, callBack, thisObject, method, webParams)
+  if method == nil then
+    method="get"
+  end
+  if webParams == nil then
+    webParams=nil
+  end
+  url = url
+  if not webParams then
+    webParams = {dataFormat=HttpMessage.URLLoaderDataFormat.TEXT}
+  end
+  local connectData = {url=url, params=params, callBack=callBack, thisObj=thisObject, method=method, webParams=webParams}
+  table.insert(self._connectCacheArr, connectData)
+  self:doRequest()
+end
+
+function HttpMessage:doRequest()
+  if self._currentConn then
+    return
+  end
+  if #self._connectCacheArr == 0 then
+    return
+  end
+  local con = self._connectCacheArr[0+1]
+  self._connectCacheArr:splice(0, 1)
+  self._currentConn = con
+  self:sureSend(con)
+end
+
+function HttpMessage:sureSend(data)
+  local url = data.url
+  local params = data.params or {}
+  local callBack = data.callBack
+  local thisObject = data.thisObj
+  local method = data.method
+  local format = data.webParams.dataFormat
+  local hr = Laya.HttpRequest()
+  hr.http.time = 60000
+  hr:once(Laya.Event.COMPLETE, self, self.onHttpSuccess)
+  hr:once(Laya.Event.ERROR, self, self.onHttpError)
+  self._currentHp = hr
+  local targetStrData = params
+  local sendMethod = ""
+  if type(targetStrData) ~= "string" then
+    if params.method then
+      sendMethod = params.method
+    end
+    if params then
+      if params.reqId then
+        params.reqId = "req_repeat_" .. Global.deviceId .. "_" .. Client.instance.miniserverTime .. "_" .. Math:floor(Math:random() * 100000)
+      else
+        params.reqId = "req" .. Global.deviceId .. "_" .. Client.instance.miniserverTime .. "_" .. Math:floor(Math:random() * 100000)
+      end
+    end
+    targetStrData = JSON:stringify(params)
+  end
+  local shortSendData = self:turnShortLogs(targetStrData)
+  LogsManager.echo("http send url is :" .. url:slice(0, Math:min(200, #url)) .. "   method :" .. sendMethod .. "  data is : " .. shortSendData)
+  self.reqTime = Laya.Browser:now()
+  local head = nil
+  if UserInfo.isSystemNative() then
+    head = {"Content-Type", "application/json;charset=utf-8"}
+  end
+  if method:find("get") > -1 then
+    local dataStr = self:objectToUrlParam(params)
+    hr:send(url, dataStr, method, "text", head)
+  elseif method:find("post") > -1 then
+    hr:send(url, targetStrData, method, "text", head)
+  end
+end
+
+function HttpMessage:turnShortLogs(targetStr)
+  if LogsManager.isOpenLogsDebug then
+    return targetStr
+  end
+  if PackConfigManager.ins.platform.platform == "dev" or PackConfigManager.ins.platform.platform == "test" then
+    return targetStr
+  end
+  if #targetStr < 1000 then
+    return targetStr
+  end
+  return targetStr:slice(0, 1000)
+end
+
+function HttpMessage:sendOtherHttpRequest(url, params, callBack, thisObject, method, webParams, sendCount, addParams)
+  if method == nil then
+    method="get"
+  end
+  if webParams == nil then
+    webParams=nil
+  end
+  if sendCount == nil then
+    sendCount=1
+  end
+  if addParams == nil then
+    addParams=nil
+  end
+  local hr = Laya.HttpRequest()
+  hr.http.time = 60000
+  local startTime = Laya.Browser:now()
+  local onComplete = function(data)
+    LogsManager.echo("sendOtherHttpRequest cost time:", Laya.Browser:now() - startTime, "url:", url:slice(0, Math:min(100, #url)))
+    if callBack then
+      callBack:call(thisObject, data, addParams)
+    end
+  end
+  
+  local onError = function(error)
+    if sendCount > 1 then
+      error = error:slice(0, 100)
+      LogsManager.errorTag(LogsErrorCode.ALIYUN_SENDERROR, error)
+    else
+      if webParams then
+        local callback = webParams.errorCall
+        callback and callback:call(webParams.thisObj)
+      end
+    end
+  end
+  
+  hr:once(Laya.Event.COMPLETE, self, onComplete)
+  hr:once(Laya.Event.ERROR, self, onError)
+  self._currentOtherHttp = hr
+  local head = nil
+  if (not UserInfo.isWeb() and webParams) and webParams.contentType then
+    head = {"Content-Type", webParams.contentType}
+  else
+    if UserInfo.isSystemNative() then
+      head = {"Content-Type", "application/json;charset=UTF-8"}
+    end
+  end
+  if method:find("get") > -1 then
+    local dataStr = self:objectToUrlParam(params)
+    hr:send(url, dataStr, method, "text", head)
+  elseif method:find("post") > -1 then
+    hr:send(url, params, method, "text", head)
+  end
+end
+
+function HttpMessage:onHttpSuccess(data)
+  if data == nil then
+    data=nil
+  end
+  local url = self._currentConn.url
+  WaitManager.instance:remove(url)
+  if (data and type(data) == "string") and data:find("!DOCTYPE HTML") ~= -1 then
+    LogsManager.echo("url is off," .. url)
+    HttpMessage.instance:onHttpError({error={code=ErrorCode.webOffline}})
+    return
+  end
+  if not data then
+    HttpMessage.instance:onHttpError({error={code=ErrorCode.webOffline}})
+    return
+  end
+  if not data then
+    LogsManager.echo("没有返回数据")
+    HttpMessage.instance:onHttpError({error={code=ErrorCode.webOffline}})
+    return
+  end
+  local callBack = self._currentConn.callBack
+  local thisObj = self._currentConn.thisObj
+  local isOrigin = self._currentConn.webParams.isOrigin
+  local originData = data
+  if not isOrigin then
+    try_catch{
+      main = function()
+        data = JSON:parse(data)
+      end,
+      catch = function(e)
+        LogsManager.errorTag(nil, "httpError,url:", url, "backData:")
+        HttpMessage.instance:onHttpError({error={code=ErrorCode.webOffline}})
+        return
+      end
+    }
+    local platforms = data
+    local len = #platforms
+    local i = 0
+    repeat
+      if not platforms[i+1].result or platforms[i+1].error then
+        local errs = platforms[i+1].error or {code=ErrorCode.webOffline}
+        if Global.checkUserCloudStorage() then
+          self:onHttpError({error=errs})
+          return
+        end
+        ErrCodeManager.ins:setErr(errs.code)
+        return
+      end
+      i=i+1
+    until not(i < len)
+  end
+  self._currentConn = nil
+  self._reconnectCount = 0
+  local shortLogs = self:turnShortLogs(originData)
+  LogsManager.echo("http callback,url:" .. url:slice(0, Math:min(200, #url)) .. " cosTime:" .. Laya.Browser:now() - self.reqTime, "len:", #originData, "backData:", shortLogs)
+  if callBack then
+    callBack:call(thisObj, data)
+  end
+  self:doRequest()
+end
+
+function HttpMessage:onHttpError(err)
+  if not self._currentConn then
+    return
+  end
+  local url = self._currentConn.url
+  WaitManager.instance:remove(url)
+  LogsManager.warn("error>>>>>", url, err.type, err)
+  self._reconnectCount=self._reconnectCount+1
+  if self._reconnectCount <= self.autoConnectCount then
+    TimerManager.instance:setTimeout(self.reSendRequest, self, 1000)
+  else
+    if self._currentConn.webParams.errorCall then
+      local coninfo = self._currentConn
+      self._currentConn = nil
+      coninfo.webParams.errorCall:call(coninfo.thisObj, err)
+      self:doRequest()
+      return
+    end
+    local errorMessage = TranslateFunc.instance:getTranslate("#error110")
+    WindowManager.setPopupTip(1, errorMessage, self.reSendRequest, self)
+  end
+end
+
+function HttpMessage:reSendRequest()
+  self:sureSend(self._currentConn)
+end
+
+function HttpMessage:objectToUrlParam(data)
+  local retStr = ""
+  if type(data) == "string" then
+    return data
+  end
+  for key in pairs(data) do
+    -- [ts2lua]data下标访问可能不正确
+    local value = data[key]
+    if value ~= nil and value ~= undefined then
+      if value.constructor == Array or value.constructor == Object then
+        retStr = retStr .. key .. "=" .. JSON:stringify(value) .. "&"
+      else
+        retStr = retStr .. key .. "=" .. value .. "&"
+      end
+    else
+      retStr = retStr .. key .. "=&"
+    end
+  end
+  if #retStr > 0 then
+    retStr = retStr:substring(0, #retStr - 1)
+  end
+  return retStr
+end

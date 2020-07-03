@@ -1,0 +1,347 @@
+require("framework/utils/FileUtils")
+require("framework/manager/VersionManager")
+require("framework/manager/LogsManager")
+require("game/sys/consts/SubPackageConst")
+require("game/sys/consts/GameConsts")
+
+EngineExpand = class('EngineExpand')
+EngineExpand.localResArr = {"MainScene.json", "static/", "version.json", "fileconfig.json", "layaNativeDir", "wxlocal"};
+function EngineExpand.initEngineExpand()
+  if FileUtils.isUserWXSource() then
+    EngineExpand.initWXExpand()
+  end
+  Laya.URL.customFormat = VersionManager.getVirtualUrl
+  EngineExpand.MouseManager_runEvent()
+  EngineExpand.URL_formatURL()
+  EngineExpand.Scene3D_update_prototype()
+  EngineExpand.LoadImagerExpand()
+  EngineExpand.spineSkeletonExpand()
+  if GameConsts.isUsePhysics then
+    EngineExpand.initPhysicsExpand()
+  end
+end
+
+function EngineExpand.initWXExpand()
+  EngineExpand.MiniFileMgr_isLocalNativeFileExpand()
+  EngineExpand.AtlasInfoManager_getFileLoadPath()
+  EngineExpand.MiniFileMgr_getFileInfo()
+end
+
+function EngineExpand.initPhysicsExpand()
+  EngineExpand._innerDerivePhysicsTransformation_expand()
+end
+
+function EngineExpand.spineSkeletonExpand()
+  if not Laya.Templet then
+    return
+  end
+  local old_func = Laya.Templet.prototype.deleteAniData
+  Laya.Templet.prototype.deleteAniData = function(aniIndex)
+    return
+  end
+  
+  -- [ts2lua]Laya.Skeleton.prototype下标访问可能不正确
+  local old_func2 = Laya.Skeleton.prototype["_update"]
+  -- [ts2lua]Laya.Skeleton.prototype下标访问可能不正确
+  Laya.Skeleton.prototype["_update"] = function(autoKey)
+    if not self.stage then
+      return
+    end
+    old_func2:call(self, autoKey)
+  end
+  
+
+end
+
+function EngineExpand.LoadImagerExpand()
+  -- [ts2lua]Laya.Loader.prototype下标访问可能不正确
+  local old_func = Laya.Loader.prototype["_loadImage"]
+  -- [ts2lua]Laya.Loader.prototype下标访问可能不正确
+  Laya.Loader.prototype["_loadImage"] = function(url, isformatURL)
+    if isformatURL == nil then
+      isformatURL=true
+    end
+    old_func:call(self, url, true)
+  end
+  
+
+end
+
+function EngineExpand.MiniFileMgr_getFileInfo()
+  local old_func = Laya.MiniFileMgr.getFileInfo
+  Laya.MiniFileMgr.getFileInfo = function(url)
+    local info = old_func:call(Laya.MiniFileMgr, url)
+    if not info then
+      url = Laya.URL:formatURL(url)
+      info = old_func:call(Laya.MiniFileMgr, url)
+    end
+    return info
+  end
+  
+
+end
+
+EngineExpand._nativeFileCheckCache = {};
+function EngineExpand.MiniFileMgr_isLocalNativeFileExpand()
+  local old_isLocalNativeFile = Laya.MiniFileMgr.isLocalNativeFile
+  Laya.MiniFileMgr.isLocalNativeFile = function(url)
+    return EngineExpand.isLocalNativeFileExpand(url)
+  end
+  
+
+end
+
+function EngineExpand.isLocalNativeFileExpand(url)
+  -- [ts2lua]EngineExpand._nativeFileCheckCache下标访问可能不正确
+  if EngineExpand._nativeFileCheckCache[url] ~= nil then
+    -- [ts2lua]EngineExpand._nativeFileCheckCache下标访问可能不正确
+    return EngineExpand._nativeFileCheckCache[url]
+  end
+  local result = false
+  if EngineExpand.checkFileIsCdn(url) then
+    result = false
+  else
+    result = true
+  end
+  -- [ts2lua]EngineExpand._nativeFileCheckCache下标访问可能不正确
+  EngineExpand._nativeFileCheckCache[url] = result
+  return result
+end
+
+function EngineExpand.checkFileIsCdn(url)
+  if url:find("version.json") ~= -1 then
+    return false
+  end
+  local subPackConst = SubPackageConst.subPackData
+  for i in pairs(subPackConst) do
+    local info = subPackConst[i+1]
+    if info.style == SubPackageConst.PATH_STYLE_CDN then
+      local path = info.path
+      if path and url:find(path) ~= -1 then
+        return true
+      end
+    end
+  end
+  return false
+end
+
+function EngineExpand.AtlasInfoManager_getFileLoadPath() end
+function EngineExpand.MouseManager_runEvent()
+  EngineExpand.SingletonList_expand()
+  local old_func = Laya.MouseManager.prototype.runEvent
+  Laya.MouseManager.prototype.runEvent = function(evt)
+    if evt.type == "touchstart" then
+      self._curTouchID = NaN
+    end
+    old_func:call(self, evt)
+  end
+  
+
+end
+
+function EngineExpand.Scene3D_update_prototype()
+  if not Laya.Scene3D then
+    return
+  end
+  -- [ts2lua]Laya.Scene3D.prototype下标访问可能不正确
+  local old_func = Laya.Scene3D.prototype["_update"]
+  -- [ts2lua]Laya.Scene3D.prototype下标访问可能不正确
+  Laya.Scene3D.prototype["_update"] = function()
+    if self._physicsSimulation then
+      old_func:call(self)
+    else
+      local delta = self.timer._delta / 1000
+      self._time = self._time + delta
+      self:_updateScript()
+      Laya.Animator:_update(self)
+      self:_lateUpdateScript()
+    end
+  end
+  
+
+end
+
+function EngineExpand.MiniFileMgr_checkIsWrongFile() end
+function EngineExpand.SingletonList_expand()
+  if not Laya.SingletonList then
+    return
+  end
+  -- [ts2lua]Laya.SingletonList.prototype下标访问可能不正确
+  Laya.SingletonList.prototype["_remove"] = function(index)
+    if index == -1 then
+      return
+    end
+    #self=#self-1
+    if index ~= #self then
+      -- [ts2lua]self.elements下标访问可能不正确
+      local tsvar_end = self.elements[#self]
+      if tsvar_end then
+        -- [ts2lua]self.elements下标访问可能不正确
+        self.elements[index] = tsvar_end
+        tsvar_end:_setIndexInList(index)
+      end
+    end
+  end
+  
+  local old_func = Laya.SimpleSingletonList.prototype.add
+  Laya.SimpleSingletonList.prototype.add = function(element)
+    local index = element:_getIndexInList()
+    if index ~= -1 then
+      LogsManager.echo("SimpleSingletonList:element has  in  SingletonList.")
+      return
+    end
+    old_func:call(self, element)
+  end
+  
+  local old_func2 = Laya.SimpleSingletonList.prototype.remove
+  Laya.SimpleSingletonList.prototype.remove = function(element)
+    local index = element:_getIndexInList()
+    #self=#self-1
+    if index ~= #self then
+      -- [ts2lua]self.elements下标访问可能不正确
+      local tsvar_end = self.elements[#self]
+      if tsvar_end then
+        -- [ts2lua]self.elements下标访问可能不正确
+        self.elements[index] = tsvar_end
+        tsvar_end:_setIndexInList(index)
+      else
+        LogsManager.echo("SimpleSingletonList:element has  in  SingletonList.")
+      end
+    end
+    element:_setIndexInList(-1)
+  end
+  
+
+end
+
+function EngineExpand.URL_formatURL()
+  -- [ts2lua]Laya.URL下标访问可能不正确
+  Laya.URL["_cacheFormat"] = {}
+  Laya.URL.formatURL = function(url)
+    local tempUrl = url
+    -- [ts2lua]self._cacheFormat下标访问可能不正确
+    if self._cacheFormat[tempUrl] then
+      -- [ts2lua]self._cacheFormat下标访问可能不正确
+      return self._cacheFormat[tempUrl]
+    end
+    local resultStr = nil
+    if not url then
+      resultStr = "null path"
+    elseif url:find(":") > 0 then
+      -- [ts2lua]self._cacheFormat下标访问可能不正确
+      self._cacheFormat[tempUrl] = url
+      return url
+    else
+      if Laya.URL.customFormat ~= nil then
+        url = Laya.URL:customFormat(url)
+      end
+      if EngineExpand.isLocalNativeFileExpand(url) then
+        resultStr = url
+        -- [ts2lua]self._cacheFormat下标访问可能不正确
+        self._cacheFormat[url] = resultStr
+        return resultStr
+      end
+      if url:find(":") > 0 then
+        -- [ts2lua]self._cacheFormat下标访问可能不正确
+        self._cacheFormat[tempUrl] = url
+        return url
+      end
+      local char1 = url:sub(0)
+      if char1 == "." then
+        -- [ts2lua]self._cacheFormat下标访问可能不正确
+        self._cacheFormat[tempUrl] = Laya.URL:_formatRelativePath(Laya.URL.basePath + url)
+        -- [ts2lua]self._cacheFormat下标访问可能不正确
+        return self._cacheFormat[tempUrl]
+      elseif char1 == '~' then
+        -- [ts2lua]self._cacheFormat下标访问可能不正确
+        self._cacheFormat[tempUrl] = Laya.URL.rootPath + url:substring(1)
+        -- [ts2lua]self._cacheFormat下标访问可能不正确
+        return self._cacheFormat[tempUrl]
+      elseif char1 == "d" then
+        if url:find("data:image") == 0 then
+          -- [ts2lua]self._cacheFormat下标访问可能不正确
+          self._cacheFormat[tempUrl] = url
+          return url
+        end
+      elseif char1 == "/" then
+        -- [ts2lua]self._cacheFormat下标访问可能不正确
+        self._cacheFormat[tempUrl] = url
+        return url
+      end
+    end
+    -- [ts2lua]self._cacheFormat下标访问可能不正确
+    self._cacheFormat[tempUrl] = Laya.URL.basePath + url
+    -- [ts2lua]self._cacheFormat下标访问可能不正确
+    return self._cacheFormat[tempUrl]
+  end
+  
+
+end
+
+function EngineExpand._innerDerivePhysicsTransformation_expand()
+  -- [ts2lua]Laya.PhysicsComponent.prototype下标访问可能不正确
+  Laya.PhysicsComponent.prototype["_innerDerivePhysicsTransformation"] = function(physicTransformOut, force)
+    -- [ts2lua]Laya.Physics3D下标访问可能不正确
+    local bt = Laya.Physics3D["_bullet"]
+    local transform = self.owner._transform
+    local rotation = transform.rotation
+    local scale = transform:getWorldLossyScale()
+    -- [ts2lua]Laya.Transform3D下标访问可能不正确
+    if force or self:_getTransformFlag(Laya.Transform3D["TRANSFORM_WORLDPOSITION"]) then
+      local shapeOffset = self._colliderShape.localOffset
+      local position = transform.position
+      -- [ts2lua]Laya.PhysicsComponent下标访问可能不正确
+      local btPosition = Laya.PhysicsComponent["_btVector30"]
+      if (shapeOffset.x ~= 0 or shapeOffset.y ~= 0) or shapeOffset.z ~= 0 then
+        -- [ts2lua]Laya.PhysicsComponent下标访问可能不正确
+        local physicPosition = Laya.PhysicsComponent["_tempVector30"]
+        if not self._colliderShape.preScale then
+          self._colliderShape.preScale = Laya.Vector3(1, 1, 1)
+        end
+        local preScale = self._colliderShape.preScale
+        preScale.x = 1 / preScale.x
+        preScale.y = 1 / preScale.y
+        preScale.z = 1 / preScale.z
+        Laya.Vector3:multiply(scale, preScale, preScale)
+        Laya.Vector3:multiply(shapeOffset, preScale, shapeOffset)
+        preScale.x = scale.x
+        preScale.y = scale.y
+        preScale.z = scale.z
+        Laya.Vector3:transformQuat(shapeOffset, rotation, physicPosition)
+        Laya.Vector3:add(position, physicPosition, physicPosition)
+        bt:btVector3_setValue(btPosition, -physicPosition.x, physicPosition.y, physicPosition.z)
+      else
+        bt:btVector3_setValue(btPosition, -position.x, position.y, position.z)
+      end
+      bt:btTransform_setOrigin(physicTransformOut, btPosition)
+      -- [ts2lua]Laya.Transform3D下标访问可能不正确
+      self:_setTransformFlag(Laya.Transform3D["TRANSFORM_WORLDPOSITION"], false)
+    end
+    -- [ts2lua]Laya.Transform3D下标访问可能不正确
+    if force or self:_getTransformFlag(Laya.Transform3D["TRANSFORM_WORLDQUATERNION"]) then
+      local shapeRotation = self._colliderShape.localRotation
+      -- [ts2lua]Laya.PhysicsComponent下标访问可能不正确
+      local btRotation = Laya.PhysicsComponent["_btQuaternion0"]
+      if ((shapeRotation.x ~= 0 or shapeRotation.y ~= 0) or shapeRotation.z ~= 0) or shapeRotation.w ~= 1 then
+        -- [ts2lua]Laya.PhysicsComponent下标访问可能不正确
+        local physicRotation = Laya.PhysicsComponent["_tempQuaternion0"]
+        -- [ts2lua]Laya.PhysicsComponent下标访问可能不正确
+        Laya.PhysicsComponent["physicQuaternionMultiply"](rotation.x, rotation.y, rotation.z, rotation.w, shapeRotation, physicRotation)
+        bt:btQuaternion_setValue(btRotation, -physicRotation.x, physicRotation.y, physicRotation.z, -physicRotation.w)
+      else
+        bt:btQuaternion_setValue(btRotation, -rotation.x, rotation.y, rotation.z, -rotation.w)
+      end
+      bt:btTransform_setRotation(physicTransformOut, btRotation)
+      -- [ts2lua]Laya.Transform3D下标访问可能不正确
+      self:_setTransformFlag(Laya.Transform3D["TRANSFORM_WORLDQUATERNION"], false)
+    end
+    -- [ts2lua]Laya.Transform3D下标访问可能不正确
+    if force or self:_getTransformFlag(Laya.Transform3D["TRANSFORM_WORLDSCALE"]) then
+      self:_onScaleChange(transform:getWorldLossyScale())
+      -- [ts2lua]Laya.Transform3D下标访问可能不正确
+      self:_setTransformFlag(Laya.Transform3D["TRANSFORM_WORLDSCALE"], false)
+    end
+  end
+  
+
+end

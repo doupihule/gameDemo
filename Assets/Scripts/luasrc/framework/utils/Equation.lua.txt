@@ -1,0 +1,783 @@
+Equation = class('Equation')
+Equation.MATH2PI = Math.PI * 2;
+Equation.ANGLETORADIAN = 180 / Math.PI;
+Equation.RADIANTOANGLE = Math.PI / 180;
+function Equation.transToSmallRadian(num)
+  local result = nil
+  if num > 0 and num < Math.PI / 2 then
+    result = num
+  elseif num > -Math.PI and num < -Math.PI / 2 then
+    result = Math.PI - Math:abs(num)
+  elseif num > -Math.PI / 2 and num < 0 then
+    result = num
+  elseif num > Math.PI / 2 and num < Math.PI then
+    result = -(Math.PI - num)
+  end
+  return result
+end
+
+function Equation.transToSmallVerticalRadian(num)
+  local result = nil
+  result = Equation.transToSmallRadian(num)
+  if result > 0 and result < Math.PI / 2 then
+    result = -(Math.PI / 2 - result)
+  elseif result > -Math.PI and result < -Math.PI / 2 then
+    result = -(Math.PI / 2 - Math.PI - Math:abs(result))
+  elseif result > -Math.PI / 2 and result < 0 then
+    result = Math.PI / 2 - Math:abs(result)
+  elseif result > Math.PI / 2 and result < Math.PI then
+    result = Math.PI / 2 - Math.PI - result
+  end
+  return result
+end
+
+function Equation.triangleLength(tan, a)
+  local c = nil
+  c = a * Math:sqrt(tan * tan + 1) / tan
+  return c
+end
+
+function Equation.tempInarea()
+  return true
+end
+
+function Equation.creat_1_1_a(startX, startY, radian)
+  local eqObj = {}
+  if radian == Math.PI / 2 then
+    eqObj.a = 1
+    eqObj.b = 0
+    eqObj.c = -startX
+  elseif radian == 0 then
+    eqObj.a = 0
+    eqObj.b = 1
+    eqObj.c = -startY
+  else
+    eqObj.b = 1
+    eqObj.a = -Math:tan(radian)
+    eqObj.c = -eqObj.a * startX - startY
+  end
+  return eqObj
+end
+
+function Equation.creat_1_1_b(startX, startY, endX, endY, haveArea)
+  if haveArea == nil then
+    haveArea=true
+  end
+  local eqObj = {}
+  eqObj.haveArea = haveArea
+  if startX == endX then
+    eqObj.a = 1
+    eqObj.b = 0
+    eqObj.c = -endX
+  elseif startY == endY then
+    eqObj.a = 0
+    eqObj.b = 1
+    eqObj.c = -endY
+  else
+    eqObj.b = 1
+    eqObj.a = -(endY - startY) / endX - startX
+    eqObj.c = -eqObj.a * startX - startY
+  end
+  if haveArea then
+    eqObj.inArea = function(p)
+      if eqObj.haveArea then
+        local inX = nil
+        if p.x <= startX and p.x >= endX then
+          inX = true
+        elseif p.x >= startX and p.x <= endX then
+          inX = true
+        end
+        local inY = nil
+        if p.y <= startY and p.y >= endY then
+          inY = true
+        elseif p.y >= startY and p.y <= endY then
+          inY = true
+        end
+        if inX and inY then
+          return true
+        else
+          return false
+        end
+      else
+        return true
+      end
+    end
+    
+  
+  end
+  return eqObj
+end
+
+function Equation.lineTangent(eq1, eq2)
+  local tan = 0
+  local k1 = nil
+  local k2 = nil
+  if eq1.b == 0 and eq2.a ~= 0 then
+    tan = eq2.b / eq2.a
+    return tan
+  end
+  if eq2.b == 0 and eq1.a ~= 0 then
+    tan = eq1.b / eq1.a
+    return tan
+  else
+    k1 = -eq1.a / eq1.b
+    k2 = -eq2.a / eq2.b
+    tan = k2 - k1 / k2 * k1 + 1
+    return tan
+  end
+end
+
+function Equation.pointOf(eqObj1, eqObj2)
+  local p = nil
+  if eqObj1.a == 0 and eqObj2.a == 0 then
+    return nil
+  elseif eqObj1.a == 0 then
+    p = Laya.Vector3()
+    p.y = -eqObj1.c
+    p.x = -eqObj2.c - eqObj2.b * p.y / eqObj2.a
+  elseif eqObj2.a == 0 then
+    p = Laya.Vector3()
+    p.y = -eqObj2.c
+    p.x = -eqObj1.c - eqObj1.b * p.y / eqObj1.a
+  elseif eqObj1.a ~= 0 and eqObj2.a ~= 0 then
+    p = Laya.Vector3()
+    if eqObj1.b == 0 then
+      p.x = -eqObj1.c
+      p.y = -eqObj2.c - eqObj2.a * p.x / eqObj2.b
+    elseif eqObj2.b == 0 then
+      p.x = -eqObj2.c
+      p.y = -eqObj1.c - eqObj1.a * p.x / eqObj1.b
+    else
+      p.y = eqObj2.c / eqObj2.a - eqObj1.c / eqObj1.a / eqObj1.b / eqObj1.a - eqObj2.b / eqObj2.a
+      p.x = -eqObj1.c - eqObj1.b * p.y / eqObj1.a
+    end
+  end
+  if not eqObj1.inArea or not eqObj2.inArea then
+    return p
+  end
+  if p == nil then
+    return nil
+  elseif eqObj1:inArea(p) and eqObj2:inArea(p) then
+    return p
+  else
+    return nil
+  end
+end
+
+function Equation.pointDistance(p1, p2)
+  local dis = Math:sqrt(p1.x - p2.x * p1.x - p2.x + p1.y - p2.y * p1.y - p2.y)
+  return dis
+end
+
+function Equation.plumbLine(x, y, eqobj)
+  local eq = nil
+  if eqobj.a == 0 then
+    eq = Equation.creat_1_1_a(x, y, Math.PI / 2)
+  elseif eqobj.b == 0 then
+    eq = Equation.creat_1_1_a(x, y, 0)
+  else
+    eq = {}
+    eq.a = eqobj.b
+    eq.b = -eqobj.a
+    eq.c = eqobj.a * y - eqobj.b * x
+  end
+  return eq
+end
+
+function Equation.pointLineDistance(x, y, eqobj, tpy)
+  if tpy == nil then
+    tpy=0
+  end
+  local distance = nil
+  if tpy == 0 then
+    distance = Math:abs(eqobj.a * x + eqobj.b * y + eqobj.c) / Math:sqrt(eqobj.a * eqobj.a + eqobj.b * eqobj.b)
+  elseif tpy == 1 then
+    distance = eqobj.a * x + eqobj.b * y + eqobj.c / Math:sqrt(eqobj.a * eqobj.a + eqobj.b * eqobj.b)
+  elseif tpy == 2 then
+    distance = -(eqobj.a * x + eqobj.b * y + eqobj.c) / Math:sqrt(eqobj.a * eqobj.a + eqobj.b * eqobj.b)
+  end
+  return distance
+end
+
+function Equation.adjustPosByLine(p, dis, r, ang, eq)
+  local angDis = ang - eq.angle
+  local length = r - dis * eq.type / Math:abs(Math:sin(angDis))
+  p.x = p.x - length * Math:cos(ang)
+  p.y = p.y - length * Math:sin(ang)
+  return p
+end
+
+function Equation.checkPlumbPoint(x, y, eq)
+  local plumbLine = Equation.plumbLine(x, y, eq)
+  if Equation.pointOf(plumbLine, eq) == nil then
+    return false
+  else
+    return true
+  end
+end
+
+function Equation.checkPointByThreePoint(x, y, linep1, linep2)
+  local line = Equation.creat_1_1_b(linep1.x, linep1.y, linep2.x, linep2.y)
+  local plumbLine = Equation.plumbLine(x, y, line)
+  if Equation.pointOf(plumbLine, line) == nil then
+    return false
+  else
+    return true
+  end
+end
+
+function Equation.pointLineDistance2(x, y, lineP1, lineP2)
+  local line = Equation.creat_1_1_b(lineP1.x, lineP1.y, lineP2.x, lineP2.y)
+  if Equation.checkPlumbPoint(x, y, line) then
+    return Equation.pointLineDistance(x, y, line)
+  else
+    local dis1 = lineP1.x - x * lineP1.x - x + lineP1.y - y * lineP1.y - y
+    local dis2 = lineP2.x - x * lineP2.x - x + lineP2.y - y * lineP2.y - y
+    local dis = Math:min(dis1, dis2)
+    return Math:sqrt(dis)
+  end
+end
+
+function Equation.symmetryByPAToPB(pa, pb)
+  local arr = {}
+  arr[0+1] = 2 * pb[0+1] - pa[0+1]
+  arr[1+1] = 2 * pb[1+1] - pa[1+1]
+  if pb[2+1] ~= nil then
+    arr[2+1] = 2 * pb[2+1] - pa[2+1]
+  end
+  return arr
+end
+
+function Equation.getPlumbPoint(x, y, eq)
+  local line = Equation.plumbLine(x, y, eq)
+  return Equation.pointOf(line, eq)
+end
+
+function Equation.roundLinePointof(centrePoint, r, eq, ang, type)
+  local dis = Equation.pointLineDistance(centrePoint.x, centrePoint.y, eq)
+  local length = Math:sqrt(r * r - dis * dis)
+  local plumb = Equation.plumbLine(centrePoint.x, centrePoint.y, eq)
+  local point1 = Equation.pointOf(eq, plumb)
+  local pointoff = Laya.Vector3()
+  pointoff.x = point1.x + length * type * Math:cos(ang)
+  pointoff.y = point1.y + length * type * Math:sin(ang)
+  return pointoff
+end
+
+function Equation.check3PointPos(p1, p2, p3, type)
+  if type == nil then
+    type=0
+  end
+  local xCheck = nil
+  local yCheck = nil
+  if type == 0 then
+    if p2.x <= p1.x and p2.x >= p3.x then
+      xCheck = true
+    elseif p2.x <= p3.x and p2.x >= p1.x then
+      xCheck = true
+    else
+      xCheck = false
+    end
+    if p2.y <= p1.y and p2.y >= p3.y then
+      yCheck = true
+    elseif p2.y <= p3.y and p2.y >= p1.y then
+      yCheck = true
+    else
+      yCheck = false
+    end
+    if xCheck and yCheck then
+      return true
+    else
+      return false
+    end
+  else
+    if p2.x < p1.x and p2.x > p3.x then
+      xCheck = true
+    elseif p2.x < p3.x and p2.x > p1.x then
+      xCheck = true
+    else
+      xCheck = false
+    end
+    if p2.y < p1.y and p2.y > p3.y then
+      yCheck = true
+    elseif p2.y < p3.y and p2.y > p1.y then
+      yCheck = true
+    else
+      yCheck = false
+    end
+    if xCheck and yCheck then
+      return true
+    else
+      return false
+    end
+  end
+end
+
+function Equation.creat_2_2(pa, pb, pc, g)
+  local eqObj = {}
+  eqObj.pa = pa
+  eqObj.pb = pb
+  eqObj.pc = pc
+  if Math:abs(pa.x - pb.x) <= 2 then
+    pb.x = pb.x + 3
+    eqObj.pb.x = eqObj.pb.x + 3
+  end
+  eqObj.b = pb.x * Math:sqrt(pa.y - pc.y / pb.y - pc.y) + pa.x / 1 + Math:sqrt(pa.y - pc.y / pb.y - pc.y)
+  eqObj.a = pa.y - pc.y / pa.x - eqObj.b / pa.x - eqObj.b
+  eqObj.c = pc.y
+  eqObj.pc.x = eqObj.b
+  eqObj.yCd = function(xCd)
+    return eqObj.a * xCd - eqObj.b * xCd - eqObj.b + eqObj.c
+  end
+  
+  eqObj.radian = Math:atan(2 * eqObj.a * pa.x - 2 * eqObj.a * eqObj.b)
+  eqObj.currentRad = function(xCd)
+    return Math:atan(2 * eqObj.a * xCd - 2 * eqObj.a * eqObj.b)
+  end
+  
+  eqObj.t1 = Math:sqrt(2 * pc.y - pa.y / -g)
+  eqObj.t2 = Math:sqrt(2 * pc.y - pb.y / -g)
+  eqObj.speed = -g * eqObj.t1 / Math:sin(eqObj.radian)
+  return eqObj
+end
+
+function Equation.getNumByDecimalAnalyserNode(num, index)
+  if index == nil then
+    index=0
+  end
+  local result = Math:round(num / pow) * pow
+  if index >= 0 then
+    local pow = Math:pow(10, index)
+    result = Math:round(num / pow) * pow
+  else
+    local str = String(num)
+    local dianIndex = str:find(".")
+    if dianIndex == -1 then
+      return num
+    end
+    str = str:slice(0, dianIndex - index + 1)
+    result = Number(str)
+  end
+  return result
+end
+
+function Equation.countPlumbSpeedBySVG(sx, vx, g)
+  local t = Math:abs(sx / vx)
+  local vy = -g * t / 2
+  local sy = -g * t * t / 4
+  return {vy, sy}
+end
+
+function Equation.countPlumbSpeedBySVS(sx, vx, sy)
+  local t = Math:abs(sx / vx)
+  local g = Math:abs(sy) * 2 / t * t
+  return {-g * t / 2, g}
+end
+
+function Equation.ratoteFormulation(nx, ny, ang, boo)
+  if boo == nil then
+    boo=true
+  end
+  local cos = Math:cos(ang)
+  local sin = Math:sin(ang)
+  local p = nil
+  local newX = cos * nx - sin * ny
+  local newY = cos * ny + sin * nx
+  local backX = cos * nx + sin * ny
+  local backY = cos * ny - sin * nx
+  if boo then
+    p = Laya.Vector3(newX, newY)
+  else
+    p = Laya.Vector3(backX, backY)
+  end
+  return p
+end
+
+function Equation.countSpeedByTime(dx, dy, g, time)
+  local obj = {}
+  obj.xSpeed = dx / time
+  obj.ySpeed = dy - 0.5 * g * time * time / time
+  obj.angle = Math:atan2(obj.ySpeed, obj.xSpeed)
+  return obj
+end
+
+function Equation.countSpeedByHeight(dx, dy, g)
+  local obj = {}
+  local time = Math:sqrt(-2 * dy / g)
+  obj.ySpeed = -g * time
+  obj.xSpeed = dx / time * 2
+  obj.time = time
+  obj.angle = Math:atan2(obj.ySpeed, obj.xSpeed)
+  return obj
+end
+
+function Equation.getRadomFromMinMax(start, tsvar_end, decimal)
+  if decimal == nil then
+    decimal=0
+  end
+  local dis = tsvar_end - start
+  local radom = Math:random()
+  local k = tsvar_end - start / 1 - 0
+  local result = k * radom - 0 + start
+  return Equation.getNumByDecimal(result, decimal)
+end
+
+function Equation.getSpeedBySEGH(s, e, g, h)
+  local t = nil
+  local xSpeed = nil
+  local ySpeed = nil
+  local zSpeed = nil
+  local dx = e[0+1] - s[0+1]
+  local dy = e[1+1] - s[1+1]
+  if -(e[2+1] - s[2+1]) > h then
+    e[2+1] = s[2+1] - h
+  end
+  local dz = e[2+1] - s[2+1]
+  local halfT = nil
+  halfT = Math:sqrt(2 * h / g)
+  zSpeed = -g * halfT
+  t = halfT + Math:sqrt(dz + h * 2 / g)
+  xSpeed = dx / t
+  ySpeed = dy / t
+  return {xSpeed, ySpeed, zSpeed}
+end
+
+function Equation.log(base, logarithm)
+  if base == 1 then
+    return 1
+  end
+  return Math:log(logarithm) / Math:log(base)
+end
+
+function Equation.averageByNums(numsArr)
+  local average = 0
+  local i = 0
+  repeat
+    average = average + numsArr[i+1]
+    i=i+1
+  until not(i < #numsArr)
+  -- [ts2lua]修改数组长度需要手动处理。
+  average = average / numsArr.length
+  return average
+end
+
+function Equation.varianceByNums(numsArr)
+  local average = Equation.averageByNums(numsArr)
+  local variance = 0
+  local i = 0
+  repeat
+    variance = variance + numsArr[i+1] - average * numsArr[i+1] - average
+    i=i+1
+  until not(i < #numsArr)
+  return variance
+end
+
+function Equation.getRadomPointByRadius(r, r2, a, a2)
+  if r == nil then
+    r=200
+  end
+  if r2 == nil then
+    r2=0
+  end
+  if a == nil then
+    a=0
+  end
+  if a2 == nil then
+    a2=Math.PI * 2
+  end
+  local radomR = Equation.getRadomFromMinMax(r, r2)
+  local ang = Equation.getRadomFromMinMax(a, a2, -2)
+  local xPos = radomR * Math:cos(ang)
+  local ypos = radomR * Math:sin(ang)
+  return Laya.Vector3(xPos, ypos)
+end
+
+function Equation.getNumByDecimal(num, index)
+  if index == nil then
+    index=0
+  end
+  local pow = Math:pow(10, index)
+  local result = Math:round(num / pow) * pow
+  if index >= 0 then
+    result = Math:round(num / pow) * pow
+  else
+    local str = String(num)
+    local dianIndex = str:find(".")
+    if dianIndex == -1 then
+      return num
+    end
+    str = str:slice(0, dianIndex - index + 1)
+    result = Number(str)
+  end
+  return result
+end
+
+function Equation.easyToTargetPos(tovalue, fromvalue, f, min)
+  if f == nil then
+    f=0.1
+  end
+  if min == nil then
+    min=1
+  end
+  local dis = tovalue - fromvalue
+  local absDistance = Math:abs(dis)
+  if absDistance < min then
+    return dis
+  end
+  local way = dis / absDistance
+  absDistance = absDistance * f
+  if absDistance < min then
+    absDistance = min
+  end
+  return absDistance * way
+end
+
+function Equation.easyToTargetAngle(tovalue, fromvalue, f, min, t)
+  if f == nil then
+    f=0.1
+  end
+  if min == nil then
+    min=1
+  end
+  if t == nil then
+    t=0
+  end
+  local disang = tovalue - fromvalue
+  if t == 0 then
+    if disang > Math.PI then
+      tovalue = tovalue - Math.PI * 2
+    elseif disang < -Math.PI then
+      tovalue = tovalue + Math.PI * 2
+    end
+  else
+    if disang > 180 then
+      tovalue = tovalue - 360
+    elseif disang < -180 then
+      tovalue = tovalue + 360
+    end
+  end
+  return Equation.easyToTargetPos(tovalue, fromvalue, f, min)
+end
+
+function Equation.getAngDis(ang1, ang2, t)
+  if t == nil then
+    t=0
+  end
+  local disAng = ang2 - ang1
+  if t == 0 then
+    if disAng > Math.PI then
+      disAng = disAng - Equation.MATH2PI
+    elseif disAng < -Math.PI then
+      disAng = disAng + Equation.MATH2PI
+    end
+  else
+    if disAng > 180 then
+      disAng = disAng - 360
+    elseif disAng < -180 then
+      disAng = disAng + 360
+    end
+  end
+  return disAng
+end
+
+function Equation.adjustAngle(ang)
+  if ang > Math.PI then
+    return ang - Equation.MATH2PI
+  elseif ang < -Math.PI then
+    return ang + Equation.MATH2PI
+  end
+  return ang
+end
+
+function Equation.ballBallCollision(b1posx, b1posy, b1spdx, b1spdy, b2posx, b2posy, b2spdx, b2spdy)
+  local lenX = b2posx - b1posx
+  local lenY = b2posy - b1posy
+  local angle = Math:atan2(lenY, lenX)
+  local cos = Math:cos(angle)
+  local sin = Math:sin(angle)
+  local vel0 = Equation.rotateCalculate(b1spdx, b1spdy, sin, cos, true)
+  local vel1 = Equation.rotateCalculate(b2spdx, b2spdy, sin, cos, true)
+  local vxTotal = vel0.x - vel1.x
+  vel0.x = vel1.x
+  vel1.x = vxTotal + vel0.x
+  local vel0F = Equation.rotateCalculate(vel0.x, vel0.y, sin, cos, false)
+  local vel1F = Equation.rotateCalculate(vel1.x, vel1.y, sin, cos, false)
+  return {Equation.convertToValueAndAngle(Laya.Vector3(vel0F.x, vel0F.y)), Equation.convertToValueAndAngle(Laya.Vector3(vel1F.x, vel1F.y))}
+end
+
+function Equation.convertToVector(value, angle)
+  return Laya.Vector3(value * Math:cos(angle), value * Math:sin(angle))
+end
+
+function Equation.convertToValueAndAngle(vector)
+  return {Math:sqrt(vector.x * vector.x + vector.y * vector.y), Math:atan2(vector.y, vector.x)}
+end
+
+function Equation.rotateCalculate(xpos, ypos, sin, cos, reverse)
+  local resultPoint = Laya.Vector3()
+  if reverse then
+    resultPoint.x = xpos * cos + ypos * sin
+    resultPoint.y = ypos * cos - xpos * sin
+  else
+    resultPoint.x = xpos * cos - ypos * sin
+    resultPoint.y = ypos * cos + xpos * sin
+  end
+  return resultPoint
+end
+
+function Equation.rectangularCollisionDetection(p1, p2, p3, p4, p5, p6, p7, p8)
+  local centerPointx1 = p1.x + p2.x + p3.x + p4.x / 4
+  local centerPointy1 = p1.y + p2.y + p3.y + p4.y / 4
+  local width1 = Equation.pointDistance(p1, p2)
+  local height1 = Equation.pointDistance(p2, p3)
+  local centerPointx2 = p5.x + p6.x + p7.x + p8.x / 4
+  local centerPointy2 = p5.y + p6.y + p7.y + p8.y / 4
+  local width2 = Equation.pointDistance(p5, p6)
+  local height2 = Equation.pointDistance(p6, p7)
+  local short1 = Math:min(height1, width1)
+  local short2 = Math:min(width2, height2)
+  local distanceSqrt = centerPointx1 - centerPointx2 * centerPointx1 - centerPointx2 + centerPointy1 - centerPointy2 * centerPointy1 - centerPointy2
+  if distanceSqrt > width1 + width2 * width1 + width2 / 4 + height1 + height2 * height1 + height2 / 4 then
+    return nil
+  else
+    return Equation.separationAxisAlgorithm(p1, p2, p3, p4, p5, p6, p7, p8)
+  end
+end
+
+function Equation.separationAxisAlgorithm(p1, p2, p3, p4, p5, p6, p7, p8)
+  local oll = Equation.isPointsOnLine(p1, p2, p5, p6, p7, p8)
+  local overLapLen = oll
+  local skewInfo = nil
+  if oll == -1 then
+    skewInfo = nil
+  else
+    skewInfo = {overLapLen, p1, p2}
+    oll = Equation.isPointsOnLine(p2, p3, p5, p6, p7, p8)
+    if oll == -1 then
+      skewInfo = nil
+    else
+      if oll < overLapLen then
+        overLapLen = oll
+        skewInfo = {overLapLen, p2, p3}
+      end
+      oll = Equation.isPointsOnLine(p5, p6, p1, p2, p3, p4)
+      if oll == -1 then
+        skewInfo = nil
+      else
+        if oll < overLapLen then
+          overLapLen = oll
+          skewInfo = {overLapLen, p5, p6}
+        end
+        oll = Equation.isPointsOnLine(p6, p7, p1, p2, p3, p4)
+        if oll == -1 then
+          skewInfo = nil
+        else
+          if oll < overLapLen then
+            overLapLen = oll
+            skewInfo = {overLapLen, p6, p7}
+          end
+        end
+      end
+    end
+  end
+  return skewInfo
+end
+
+function Equation.isPointsOnLine(p1, p2, p3, p4, p5, p6)
+  local axis1 = nil
+  local pp1 = nil
+  local pp2 = nil
+  local pp3 = nil
+  local pp4 = nil
+  local ppp1 = nil
+  local ppp2 = nil
+  axis1 = Equation.creat_1_1_b(p1.x, p1.y, p2.x, p2.y, false)
+  pp1 = Equation.getPlumbPoint(p3.x, p3.y, axis1)
+  pp2 = Equation.getPlumbPoint(p4.x, p4.y, axis1)
+  pp3 = Equation.getPlumbPoint(p5.x, p5.y, axis1)
+  pp4 = Equation.getPlumbPoint(p6.x, p6.y, axis1)
+  local disSqrt1 = pp1.x - pp3.x * pp1.x - pp3.x + pp1.y - pp3.y * pp1.y - pp3.y
+  local disSqrt2 = pp2.x - pp4.x * pp2.x - pp4.x + pp2.y - pp4.y * pp2.y - pp4.y
+  if disSqrt1 > disSqrt2 then
+    ppp1 = pp1
+    ppp2 = pp3
+  else
+    ppp1 = pp2
+    ppp2 = pp4
+  end
+  return Equation.lineOverlap(p1, p2, ppp1, ppp2)
+end
+
+function Equation.lineOverlap(pStart1, pEnd1, pStart2, pEnd2)
+  local pxs1 = pStart1.x
+  local pxe1 = pEnd1.x
+  local pxs2 = pStart2.x
+  local pxe2 = pEnd2.x
+  local pys1 = pStart1.y
+  local pye1 = pEnd1.y
+  local pys2 = pStart2.y
+  local pye2 = pEnd2.y
+  local pDis1 = Equation.pointDistance(pStart1, pEnd1)
+  local pDis2 = Equation.pointDistance(pStart2, pEnd2)
+  local maxLen = pDis1 + pDis2
+  local l1 = Math:sqrt(pxs1 - pxs2 * pxs1 - pxs2 + pys1 - pys2 * pys1 - pys2)
+  local l2 = Math:sqrt(pxs1 - pxe2 * pxs1 - pxe2 + pys1 - pye2 * pys1 - pye2)
+  local l3 = Math:sqrt(pxe1 - pxs2 * pxe1 - pxs2 + pye1 - pys2 * pye1 - pys2)
+  local l4 = Math:sqrt(pxe1 - pxe2 * pxe1 - pxe2 + pye1 - pye2 * pye1 - pye2)
+  if ((l1 > maxLen or l2 > maxLen) or l3 > maxLen) or l4 > maxLen then
+    return -1
+  else
+    local len = l1 + l2 + l3 + l4 - 2 * Math:max(l1, l2, l3, l4, pDis1, pDis2)
+    if len == 0 then
+      len = Math:min(pDis1, pDis2)
+    end
+    return len
+  end
+end
+
+function Equation.judgeFormerIsLarge(a, b, total)
+  local remainderA = a % total
+  local remainderB = b % total
+  if remainderA > remainderB then
+    return remainderB + total / 2 > remainderA
+  else
+    return remainderA + total / 2 <= remainderB
+  end
+end
+
+function Equation.countReflectSegment(angle, lineAngle, value, yDamp, xDamp)
+  if value == nil then
+    value=0
+  end
+  if yDamp == nil then
+    yDamp=0
+  end
+  if xDamp == nil then
+    xDamp=0
+  end
+  local arr = {}
+  local rsAngle = Equation.getAngDis(angle, lineAngle)
+  local reAngle = angle + 2 * rsAngle
+  if value ~= 0 then
+    local dx = value * Math:cos(rsAngle) * 1 - xDamp
+    local dy = value * Math:sin(rsAngle) * 1 - yDamp
+    local len = Math:sqrt(dx * dx + dy * dy)
+    table.insert(arr, len)
+    local reAngleValue = Math:atan2(dy, dx)
+    reAngle = angle + rsAngle + reAngleValue
+  else
+    table.insert(arr, 0)
+  end
+  table.insert(arr, Equation.adjustAngle(reAngle))
+  return arr
+end
+
+function Equation.countReflect(angle, line)
+  return Equation.countReflectSegment(angle, line)[1+1]
+end
+
+function Equation.getPosByRatio(p1, p2, ratio)
+  local dis = p2 - p1
+  dis = dis * ratio
+  return p1 + dis
+end

@@ -1,0 +1,154 @@
+require("framework/platform/WXGamePlatform")
+require("framework/platform/AdVideoManager")
+require("framework/manager/LogsManager")
+require("framework/common/GameSwitch")
+require("framework/manager/WindowManager")
+require("framework/common/Message")
+require("game/sys/manager/StatisticsManager")
+require("game/sys/common/MsgCMD")
+require("framework/consts/StatisticsCommonConst")
+require("framework/manager/BannerAdManager")
+
+OppoGamePlatform = class('OppoGamePlatform',WXGamePlatform)
+
+function OppoGamePlatform:ctor()
+  self:superCall('ctor')
+  OppoGamePlatform.instance = self
+  AdVideoManager.instance._isInitAdv = false
+end
+
+function OppoGamePlatform:getWX()
+  -- [ts2lua]window下标访问可能不正确
+  return window['qg']
+end
+
+function OppoGamePlatform:setLoadingProgress(num)
+  self:getWX():setLoadingProgress({progress=num})
+end
+
+function OppoGamePlatform:hideLoadingProgress()
+  self:getWX():loadingComplete({complete=function(res) end})
+end
+
+function OppoGamePlatform:loadingComplete()
+  self:getWX():loadingComplete({})
+end
+
+function OppoGamePlatform:initPlatformData()
+  LogsManager.echo("初始化Oppo平台--------------------")
+  local wx = self:getWX()
+  if not wx.initAdService then
+    LogsManager.warn("noAdService:", "无法初始化视频组件")
+    return
+  end
+  local thisObj = self
+  wx:initAdService({appId=self.appId, isDebug=false, success=function(res)
+    print("success")
+    AdVideoManager.instance._isInitAdv = true
+    BannerAdManager.registerBanner()
+    thisObj:registerAd()
+  end
+  , fail=function(res)
+    print("fail:" .. res.code .. res.msg)
+  end
+  , complete=function(res)
+    print("complete")
+  end
+  })
+end
+
+function OppoGamePlatform:loadVideoAd()
+  if not self._videoAd then
+    self:registerAd()
+  else
+    self._videoAd:load()
+  end
+end
+
+function OppoGamePlatform:registerAd()
+  self.loadAdvFailed = false
+  if not AdVideoManager.instance._isInitAdv then
+    return
+  end
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ADV) then
+    return
+  end
+  if self._videoAd then
+    return
+  end
+  local thisObj = self
+  if not self:getWX().createRewardedVideoAd then
+    self.loadAdvFailed = true
+    LogsManager.echo(nil, "这个设备没有广告组件")
+    return
+  end
+  if not self._videoId then
+    return
+  end
+  self._videoAd = self:getWX():createRewardedVideoAd({posId=self._videoId})
+  if self._videoAd then
+    local videoAd = self._videoAd
+    LogsManager.echo("zm registerAd this._videoAd", self._videoAd)
+    videoAd:onError(function(err)
+      thisObj.loadAdvFailed = true
+      WindowManager.closeAdvMask()
+      LogsManager.echo("videoAd.onError:", err:toString())
+      if thisObj._videoLoaded then
+        StatisticsManager.ins:onEvent(StatisticsCommonConst.NORMAL_VIDEO_AD_FAIL)
+        thisObj:_doVedioCallBack(false)
+      end
+    end
+    )
+    videoAd:onLoad(function(res)
+      thisObj.loadAdvFailed = false
+      LogsManager.echo("videoAd.onLoad:", JSON:stringify(res))
+    end
+    )
+    videoAd:onClose(function(res)
+      Message.instance:send(MsgCMD.VIDEO_PLAY, res and res.isEnded)
+      WindowManager.closeAdvMask()
+      if res and res.isEnded then
+        LogsManager.echo("hlx show wx video suc")
+        thisObj:onVideoComplete(true)
+      else
+        LogsManager.echo("hlx show wx video fail")
+        thisObj:onVideoComplete(false)
+      end
+      thisObj:loadVideoAd()
+    end
+    )
+    videoAd:load()
+  else
+    self.loadAdvFailed = true
+  end
+end
+
+function OppoGamePlatform:showVideoAd(successCallBack, thisObj)
+  StatisticsManager.ins:onEvent(StatisticsCommonConst.NORMAL_VIDEO_AD)
+  self.isPlayVideo = false
+  if not AdVideoManager.instance._isInitAdv then
+    return
+  end
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ADV) then
+    return
+  end
+  self._videoSucCallback = successCallBack
+  self._videoThisObj = thisObj
+  WindowManager.openAdvMask()
+  if not self._videoId then
+    WindowManager.closeAdvMask()
+    self:_doVedioCallBack(false)
+    return
+  end
+  if not self._videoAd then
+    self:registerAd()
+  end
+  if not self._videoAd then
+    WindowManager.closeAdvMask()
+    LogsManager.echo("yrc 没有广告实例，直接执行成功回调")
+    self:_doVedioCallBack(false)
+    return
+  end
+  local videoAd = self._videoAd
+  videoAd:show()
+end

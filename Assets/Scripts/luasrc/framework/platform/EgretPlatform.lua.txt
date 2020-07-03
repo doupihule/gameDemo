@@ -1,0 +1,65 @@
+require("framework/common/kakura/Client")
+require("utils/Global")
+require("framework/common/UserInfo")
+require("framework/platform/GamePlatform")
+require("game/sys/view/login/LoginUI")
+require("framework/manager/MainModule")
+require("framework/manager/WindowManager")
+require("game/sys/consts/WindowCfgs")
+require("framework/manager/CacheManager")
+require("game/sys/common/kakura/Method")
+require("game/sys/consts/StorageCode")
+
+EgretPlatform = class('EgretPlatform',GamePlatform)
+function EgretPlatform:ctor()
+  self:superCall('ctor')
+  self:registFocusEvent()
+end
+
+function EgretPlatform:getLoginResult()
+  if Global.checkUserCloudStorage() then
+    return
+  end
+  Client.instance:sendInit(self.loginToken, nil, LoginUI.instance.loginResult, LoginUI.instance, self.inviteBy, self.shareInfo)
+end
+
+function EgretPlatform:createLoginButton(callBack, thisObject)
+  callBack and callBack:call(thisObject)
+end
+
+function EgretPlatform:getWxInfo()
+  if self._reloginCount == 0 then
+    MainModule.instance:changeShowMainTask(-1, MainModule.task_updateListerner, "skip version check")
+    UserInfo.platform:initPhysics3D("skip physics3d subpackage check")
+    WindowManager.OpenUI(WindowCfgs.LoginUI, {platform="web"})
+  else
+    local params = {method=Method.global_Account_loginTest, params={passport=CacheManager.instance:getGlobalCache(StorageCode.storage_acount), password='', device=Global.deviceModel}}
+    UserInfo.platform:reqGlobal(params)
+  end
+end
+
+function EgretPlatform:sharePage() end
+function EgretPlatform:share(id, extraData, callback, thisObj)
+  callback and callback:call(thisObj, true)
+end
+
+function EgretPlatform:showVideoAd(successCallBack, closeCallBack, thisObj)
+  if successCallBack == nil then
+    successCallBack=nil
+  end
+  if closeCallBack == nil then
+    closeCallBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  successCallBack and successCallBack:call(thisObj, true)
+end
+
+function EgretPlatform:loginOut()
+  window.location:reload()
+end
+
+function EgretPlatform:setGameFrame()
+  self:superCall('setGameFrame')
+end

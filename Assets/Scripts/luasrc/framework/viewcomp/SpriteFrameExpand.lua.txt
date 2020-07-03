@@ -1,0 +1,206 @@
+require("framework/manager/TimerManager")
+require("framework/manager/LogsManager")
+
+SpriteFrameExpand = class('SpriteFrameExpand',Laya.Sprite)
+SpriteFrameExpand._cacheFrameData = {};
+function SpriteFrameExpand:ctor()
+  self:superCall('ctor')
+  self.currentIndex = 0;
+  self.currentFrame = 0;
+  self.frameIndex = 0;
+  self.totalFrame = 1;
+  self._startFrame = 0;
+  self._endFrame = -1;
+  self.playSpeed = 1;
+  self._playState = 0;
+  self._childView = Laya.Image()
+  self:addChild(self._childView)
+  self:on(Laya.Event.DISPLAY, self, self.onAddToStage)
+  self:on(Laya.Event.UNDISPLAY, self, self.onRemoveStage)
+end
+
+function SpriteFrameExpand:setFrameData(imagePath, imageHead, labelsArr, anchorX, anchorY, type)
+  if labelsArr == nil then
+    labelsArr=nil
+  end
+  if anchorX == nil then
+    anchorX=0.5
+  end
+  if anchorY == nil then
+    anchorY=0.5
+  end
+  if type == nil then
+    type=1
+  end
+  self._imageHead = imageHead
+  self._imagePath = imagePath
+  self._childView.anchorX = anchorX
+  self._childView.anchorY = anchorY
+  self._fullPath = imagePath + imageHead
+  self._labelMapData = {}
+  labelsArr = self:turnShortLabelData(labelsArr, type)
+  self._labelsData = labelsArr
+end
+
+function SpriteFrameExpand:turnShortLabelData(sourceLabel, frameType)
+  -- [ts2lua]SpriteFrameExpand._cacheFrameData下标访问可能不正确
+  local rtArr = SpriteFrameExpand._cacheFrameData[self._fullPath]
+  if rtArr then
+    return rtArr
+  end
+  rtArr = {}
+  -- [ts2lua]SpriteFrameExpand._cacheFrameData下标访问可能不正确
+  SpriteFrameExpand._cacheFrameData[self._fullPath] = rtArr
+  local i = 0
+  i = 0
+  repeat
+    local tempInfo = sourceLabel[i+1]
+    local groupArr = {}
+    local tempArr = tempInfo.group
+    local offsetArr = tempInfo.offset
+    local lastFrame = nil
+    local rtOffsetArr = {}
+    if frameType == 2 then
+      local startFrame = tempArr[0+1]
+      local endFrame = tempArr[1+1]
+      lastFrame = tempArr[2+1] or 1
+      local s = startFrame
+      repeat
+        local m = 0
+        repeat
+          local len = #groupArr
+          table.insert(groupArr, s)
+          if offsetArr then
+            -- [ts2lua]offsetArr下标访问可能不正确
+            table.insert(rtOffsetArr, offsetArr[len] or 0)
+            -- [ts2lua]offsetArr下标访问可能不正确
+            table.insert(rtOffsetArr, offsetArr[len + 1] or 0)
+          end
+          m=m+1
+        until not(m < lastFrame)
+        s=s+1
+      until not(s <= endFrame)
+    else
+      local tempFrameArr = tempInfo.frame
+      local g = 0
+      repeat
+        if tempFrameArr then
+          lastFrame = tempFrameArr[g+1] or 1
+        else
+          lastFrame = 1
+        end
+        local gg = 0
+        repeat
+          table.insert(groupArr, tempArr[g+1])
+          if offsetArr then
+            table.insert(rtOffsetArr, offsetArr[g+1])
+            -- [ts2lua]offsetArr下标访问可能不正确
+            table.insert(rtOffsetArr, offsetArr[g + 1])
+          end
+          gg=gg+1
+        until not(gg < lastFrame)
+        g=g+1
+      until not(g < #tempArr)
+    end
+    local tempObj = {label=tempInfo.label, group=groupArr, offset=rtOffsetArr}
+    table.insert(rtArr, tempObj)
+    i=i+1
+  until not(i < #sourceLabel)
+  return rtArr
+end
+
+function SpriteFrameExpand:playByLabel(label, isLoop, startFrame, endFrame)
+  if startFrame == nil then
+    startFrame=1
+  end
+  if endFrame == nil then
+    endFrame=-1
+  end
+  self.currentLabel = label
+  local i = 0
+  repeat
+    local tempInfo = self._labelsData[i+1]
+    if tempInfo.label == label then
+      self:playByIndex(i, isLoop, startFrame, endFrame)
+      return
+    end
+    i=i+1
+  until not(i < #self._labelsData)
+  LogsManager.errorTag("labelError", "没有这个动作标签数据,label:", label, "_path:", self._fullPath)
+end
+
+function SpriteFrameExpand:playByIndex(index, isLoop, startFrame, endFrame)
+  if startFrame == nil then
+    startFrame=0
+  end
+  if endFrame == nil then
+    endFrame=-1
+  end
+  if index > #self._labelsData then
+    LogsManager.errorTag("labelIndexError", "动作序号超出了index:", index, "_path:", self._fullPath)
+    return
+  end
+  self._playState = 1
+  -- [ts2lua]self._labelsData下标访问可能不正确
+  local labelData = self._labelsData[index]
+  self.currentLabel = labelData.label
+  self._currentLabelData = labelData
+  -- [ts2lua]修改数组长度需要手动处理。
+  self.totalFrame = labelData.group.length
+  if endFrame == -1 or endFrame > self.totalFrame then
+    self._endFrame = self.totalFrame
+  else
+    self._endFrame = endFrame
+  end
+  self._startFrame = startFrame
+  self.currentFrame = startFrame
+  self:showView()
+end
+
+function SpriteFrameExpand:showView()
+  local group = self._currentLabelData.group
+  local offset = self._currentLabelData.offset
+  local index = nil
+  local targetFrame = Math:floor(self.currentFrame)
+  if targetFrame >= #group then
+    index = #group - 1
+  else
+    index = targetFrame
+  end
+  -- [ts2lua]group下标访问可能不正确
+  self._childView.skin = self._fullPath + group[index] .. ".png"
+  if offset and #offset > 0 then
+    -- [ts2lua]offset下标访问可能不正确
+    self._childView.x = offset[index] or 0
+    -- [ts2lua]offset下标访问可能不正确
+    self._childView.y = offset[index + 1] or 0
+  end
+end
+
+function SpriteFrameExpand:updateFrame()
+  if self._playState == 0 then
+    return
+  end
+  self.currentFrame = self.currentFrame + self.playSpeed
+  local dt = self.currentFrame - self._endFrame
+  if dt >= 0 then
+    self.currentFrame = self._startFrame + dt
+  end
+  self:showView()
+end
+
+function SpriteFrameExpand:onAddToStage()
+  TimerManager.instance:registObjUpdate(self.updateFrame, self, nil)
+end
+
+function SpriteFrameExpand:onRemoveStage()
+  TimerManager.instance:deleteObjUpdate(nil, self.updateFrame, self)
+end
+
+function SpriteFrameExpand:resume()
+  self._playState = 1
+end
+
+function SpriteFrameExpand:pause()
+  self._playState = 0
+end

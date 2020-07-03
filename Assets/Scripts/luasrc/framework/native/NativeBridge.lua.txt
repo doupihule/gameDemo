@@ -1,0 +1,125 @@
+require("framework/common/UserInfo")
+require("framework/manager/LogsManager")
+require("framework/common/Message")
+require("framework/utils/TableUtils")
+require("framework/event/NativeToJSEvent")
+
+NativeBridge = class('NativeBridge')
+
+function NativeBridge:ctor()
+  self._cacheObj = {};
+  self._ignoreEventMap = {NATIVE_VIBRATOR=true};
+  self._cacheBridges = {};
+  self._emptyTable = {};
+  self.bridge = self:createBridge("NativeBridgeExpand", "utils")
+  if not self.bridge then
+    return
+  end
+  if UserInfo.isSystemIos() then
+    self.bridge:callWithBack(self.onNativeCallBack, "sendMessageToJs:sendParams:", "test", {})
+  else
+    self.bridge:callWithBack(self.onNativeCallBack, "sendMessageToJs", "test")
+  end
+end
+
+function NativeBridge:createBridge(className, path)
+  if path == nil then
+    path=""
+  end
+  local bridge = nil
+  if UserInfo.isSystemAndroid() then
+    local fullName = path and path .. "." .. className or className
+    -- [ts2lua]window下标访问可能不正确
+    -- [ts2lua]window下标访问可能不正确
+    bridge = window["PlatformClass"] and window["PlatformClass"]:createClass(fullName)
+  elseif UserInfo.isSystemIos() then
+    -- [ts2lua]window下标访问可能不正确
+    bridge = window["PlatformClass"]:createClass(className)
+  else
+    return nil
+  end
+  return bridge
+end
+
+function NativeBridge:callExpandNativeFunc(className, path, funcName, ...)
+  -- [ts2lua]self._cacheBridges下标访问可能不正确
+  local bridge = self._cacheBridges[className]
+  if not bridge then
+    bridge = self:createBridge(className, path)
+    if not bridge then
+      return nil
+    end
+  end
+  local rt = nil
+  if UserInfo.isSystemAndroid() then
+    rt = bridge:call(funcName, ...)
+  else
+    bridge:call(funcName, ...)
+  end
+  return rt
+end
+
+function NativeBridge.__getters.instance()
+  if not NativeBridge._instance then
+    NativeBridge._instance = NativeBridge()
+  end
+  return NativeBridge._instance
+end
+
+function NativeBridge:callNative(eventName, params, isMainHandle, bridge)
+  if params == nil then
+    params=nil
+  end
+  if isMainHandle == nil then
+    isMainHandle=false
+  end
+  if bridge == nil then
+    bridge=nil
+  end
+  if not bridge then
+    bridge = self.bridge
+  end
+  self._cacheObj.event = eventName
+  if isMainHandle == nil then
+    isMainHandle = false
+  end
+  self._cacheObj.isMainHandle = isMainHandle
+  if not params then
+    params = self._emptyTable
+  end
+  self._cacheObj.params = params
+  local strValue = TableUtils.safelyJsonStringfy(self._cacheObj)
+  -- [ts2lua]NativeBridge.instance._ignoreEventMap下标访问可能不正确
+  if not NativeBridge.instance._ignoreEventMap[eventName] then
+    LogsManager.echo("callNative", bridge and "has bridge" or "null brigdge", strValue)
+  end
+  if not bridge then
+    return
+  end
+  if UserInfo.isSystemIos() then
+    bridge:call("onMessage:", strValue)
+  else
+    bridge:call("onMessage", strValue)
+  end
+end
+
+function NativeBridge:onNativeCallBack(backData)
+  local jsonData = JSON:parse(backData)
+  local eventName = jsonData.event
+  local params = jsonData.params
+  if eventName == NativeToJSEvent.CALL_JSLOGS then
+    if params.type == "echo" then
+      LogsManager.echo("nativeLogs,", params.message)
+    elseif params.type == "warn" then
+      LogsManager.warn("nativeLogs,", params.message)
+    else
+      LogsManager.errorTag(params.tag, params.message)
+    end
+  else
+    -- [ts2lua]NativeBridge.instance._ignoreEventMap下标访问可能不正确
+    if not NativeBridge.instance._ignoreEventMap[eventName] then
+      LogsManager.echo("onNativeCallBack:", "backData:", backData)
+    end
+    Message.instance:send(eventName, params)
+  end
+end

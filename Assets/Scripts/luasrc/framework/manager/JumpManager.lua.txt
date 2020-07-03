@@ -1,0 +1,1271 @@
+require("trycatch")
+require("tableutil")
+require("stringutil")
+require("date")
+require("framework/common/UserInfo")
+require("framework/common/UserInfo/PlatformIdType")
+require("framework/manager/TimerManager")
+require("game/sys/consts/JumpConst")
+require("game/sys/func/GlobalParamsFunc")
+require("utils/Global")
+require("framework/manager/LogsManager")
+require("framework/common/GameSwitch")
+require("game/sys/consts/GameConsts")
+require("framework/common/HttpMessage")
+require("framework/common/kakura/Client")
+require("framework/manager/WindowManager")
+require("framework/utils/ScreenAdapterTools")
+require("framework/manager/LoadManager")
+require("game/sys/view/jump/ResultJumpUI")
+require("framework/common/Message")
+require("framework/event/JumpEvent")
+require("framework/utils/ButtonUtils")
+require("game/sys/consts/ResourceConst")
+require("framework/platform/AdResponse")
+require("utils/GameUtils")
+require("framework/func/JumpFunc")
+require("framework/manager/KariqiShareManager")
+require("framework/consts/WindowCommonCfgs")
+require("framework/consts/JumpCommonConst")
+require("game/sys/view/jump/ResultJumpDoubleUI")
+require("framework/server/SingleCommonServer")
+require("framework/func/FullJumpFunc")
+require("framework/model/JumpCommonModel")
+require("framework/func/BaseFunc")
+require("framework/utils/TableUtils")
+
+JumpManager = class('JumpManager')
+
+JumpManager.interData = {};
+JumpManager.typeData = {};
+JumpManager.mainJumpItems = {};
+JumpManager.isInDrawer = false;
+JumpManager.jumpUIs = {};
+JumpManager.jumpDoubleUIs = {};
+JumpManager.jumpUIName = "jumpUI";
+JumpManager.jumpDoubleUIName = "jumpDoubleUI";
+JumpManager.isWebTest = false;
+JumpManager.blackSceneState = 0;
+JumpManager.interJumpNum = -1;
+JumpManager.jumpChannel = nil;
+JumpManager.curGroup = {};
+JumpManager.clickCount = 0;
+JumpManager.jumpIndexTable = {};
+function JumpManager.checkIsBlackScene()
+  if UserInfo.isWeb() then
+    return false
+  end
+  if JumpManager.blackSceneState == JumpConst.JUMP_SCENE_STATE_NONE then
+    local platCodeMap = {PlatformIdType.wxgame=1, PlatformIdType.tt=2, PlatformIdType.qqgame=3}
+    -- [ts2lua]platCodeMap下标访问可能不正确
+    local platCode = platCodeMap[UserInfo.platformId]
+    local cfgs = GlobalParamsFunc.instance:getAllCfgData("ElectBlackList", true)
+    JumpManager.blackSceneState = JumpConst.JUMP_SCENE_STATE_NORMAL
+    for i in pairs(cfgs) do
+      local info = cfgs[i+1]
+      if info.blackListPlatform == platCode then
+        if String(info.electBlackListNub) == String(Global.currentSceneId) then
+          JumpManager.blackSceneState = JumpConst.JUMP_SCENE_STATE_BLACK
+          LogsManager.echo("jump", "这是一个黑名单的场景值", Global.currentSceneId)
+          break
+        end
+      end
+    end
+  end
+  if JumpManager.blackSceneState == JumpConst.JUMP_SCENE_STATE_NORMAL then
+    return false
+  end
+  return true
+end
+
+function JumpManager.checkShow()
+  if JumpManager.isWebTest then
+    return true
+  end
+  if JumpManager.checkIsBlackScene() or JumpManager.checkIsKariquBlack() then
+    return false
+  end
+  if not UserInfo.platform:canUseJump() then
+    return false
+  end
+  return true
+end
+
+function JumpManager.setJumpChannel(channel)
+  if channel == nil then
+    channel=nil
+  end
+  JumpManager.jumpChannel = channel
+end
+
+function JumpManager.initJumpData(callBack, thisObject, callParams, channel)
+  if callParams == nil then
+    callParams=nil
+  end
+  if channel == nil then
+    channel=nil
+  end
+  if channel then
+    JumpManager.jumpChannel = channel
+  end
+  if not JumpManager.jumpChannel then
+    return
+  end
+  if not JumpManager.checkShow() then
+    return
+  end
+  if JumpManager.data then
+    callBack and callBack:call(thisObject, callParams)
+    return
+  end
+  if JumpManager.jumpChannel == JumpConst.JUMP_CHANNEL_FANTASY then
+    JumpManager.sendFantasyReq(callBack, thisObject, callParams)
+  elseif JumpManager.jumpChannel == JumpConst.JUMP_CHANNEL_MENGJIA then
+    JumpManager.sendMokaReq(callBack, thisObject, callParams)
+  elseif JumpManager.jumpChannel == JumpConst.JUMP_CHANNEL_ZHISE then
+    JumpManager.sendZhiseReq(callBack, thisObject, callParams)
+  elseif KariqiShareManager.checkIsKariquChannel() then
+    JumpManager.sendKariquReq(callBack, thisObject, callParams)
+  end
+end
+
+function JumpManager.getSendData(type)
+  local isIos = false
+  if UserInfo.platform:getSystemInfo() and UserInfo.platform:getSystemInfo().platform == "ios" then
+    isIos = true
+  end
+  local data = {Appid=GameConsts.GAME_APPID, Type=type, IsIOS=isIos}
+  return data
+end
+
+function JumpManager.setKariquList(list)
+  JumpManager.kariquList = list
+end
+
+function JumpManager.sendKariquReq(callBack, thisObject, callParams)
+  if callParams == nil then
+    callParams=nil
+  end
+  if not JumpManager.kariquList then
+    JumpManager.kariquList = {1={url=GameConsts.JUMP_KARIQU_MULTIPLE_URL, type=JumpConst.JUMP_KARIQU_MAINICON, single=false}, 2={url=GameConsts.JUMP_KARIQU_MULTIPLE_URL, type=JumpConst.JUMP_KARIQU_LEFTSIDE, single=false}, 3={url=GameConsts.JUMP_KARIQU_MULTIPLE_URL, type=JumpConst.JUMP_KARIQU_BATTLEICON, single=false}, 4={url=GameConsts.JUMP_KARIQU_MULTIPLE_URL, type=JumpConst.JUMP_KARIQU_RESULT, single=false}}
+  end
+  JumpManager.callBack = callBack
+  JumpManager.thisObject = thisObject
+  JumpManager.callParams = callParams
+  local url = JumpManager.kariquList[1+1].url
+  local params = JumpManager.getSendData(JumpManager.kariquList[1+1].type)
+  HttpMessage.instance:sendOtherHttpRequest(url, params, JumpManager.onKariquSuccess1, JumpManager, "post")
+end
+
+function JumpManager.onKariquSuccess1(data)
+  LogsManager.echo("拉取主界面右上互推列表 onKariquSuccess", data)
+  if data then
+    data = JSON:parse(data)
+  end
+  if data and data.data then
+    if not JumpManager.data then
+      JumpManager.data = {}
+    end
+    AdResponse.changeKariquStruct(data.data, JumpManager.kariquList[1+1].type, JumpManager.data, JumpManager.kariquList[1+1].single)
+  end
+  local url = JumpManager.kariquList[2+1].url
+  local params = JumpManager.getSendData(JumpManager.kariquList[2+1].type)
+  HttpMessage.instance:sendOtherHttpRequest(url, params, JumpManager.onKariquSuccess2, JumpManager, "post")
+end
+
+function JumpManager.onKariquSuccess2(data)
+  LogsManager.echo("拉取主界面左側互推列表 onKariquSuccess", data)
+  if data then
+    data = JSON:parse(data)
+  end
+  if data and data.data then
+    if not JumpManager.data then
+      JumpManager.data = {}
+    end
+    AdResponse.changeKariquStruct(data.data, JumpManager.kariquList[2+1].type, JumpManager.data, JumpManager.kariquList[2+1].single)
+  end
+  local url = JumpManager.kariquList[3+1].url
+  local params = JumpManager.getSendData(JumpManager.kariquList[3+1].type)
+  HttpMessage.instance:sendOtherHttpRequest(url, params, JumpManager.onKariquSuccess3, JumpManager, "post")
+end
+
+function JumpManager.onKariquSuccess3(data)
+  LogsManager.echo("拉取战斗右上互推列表 onKariquSuccess", data)
+  if data then
+    data = JSON:parse(data)
+  end
+  if data and data.data then
+    if not JumpManager.data then
+      JumpManager.data = {}
+    end
+    AdResponse.changeKariquStruct(data.data, JumpManager.kariquList[3+1].type, JumpManager.data, JumpManager.kariquList[3+1].single)
+  end
+  local url = JumpManager.kariquList[4+1].url
+  local params = JumpManager.getSendData(JumpManager.kariquList[4+1].type)
+  HttpMessage.instance:sendOtherHttpRequest(url, params, JumpManager.onKariquSuccess4, JumpManager, "post")
+end
+
+function JumpManager.onKariquSuccess4(data)
+  LogsManager.echo("拉取结算互推列表 onKariquSuccess", data)
+  if data then
+    data = JSON:parse(data)
+  end
+  if data and data.data then
+    if not JumpManager.data then
+      JumpManager.data = {}
+    end
+    AdResponse.changeKariquStruct(data.data, JumpManager.kariquList[4+1].type, JumpManager.data, JumpManager.kariquList[4+1].single)
+  end
+  LogsManager.echo("this.data-----------------", JumpManager.data)
+  JumpManager.callBack and JumpManager.callBack:call(JumpManager.thisObject, JumpManager.callParams)
+end
+
+function JumpManager.sendZhiseReq(callBack, thisObject, callParams)
+  if callParams == nil then
+    callParams=nil
+  end
+  LogsManager.echo("拉取指色互推")
+  JumpManager.callBack = callBack
+  JumpManager.thisObject = thisObject
+  JumpManager.callParams = callParams
+  if not JumpManager.zhiseData then
+    -- [ts2lua]window下标访问可能不正确
+    JumpManager.zhiseData = window["zhise"]
+  end
+  local thisObj = JumpManager
+  JumpManager.zhiseData:loadAd(function(data)
+    if data then
+      thisObj.data = AdResponse.changeStruct(data)
+      local i = 0
+      repeat
+        thisObj.data[i+1].GameIndex = i
+        i=i+1
+      until not(i < #thisObj.data)
+      LogsManager.echo("拉取指色互推Success", thisObj.data)
+      thisObj.callBack and thisObj.callBack:call(thisObj.thisObject, thisObj.callParams)
+    end
+  end
+  )
+end
+
+function JumpManager.sendFantasyReq(callBack, thisObject, callParams)
+  if callParams == nil then
+    callParams=nil
+  end
+  JumpManager.callBack = callBack
+  JumpManager.thisObject = thisObject
+  JumpManager.callParams = callParams
+  if JumpManager.initDataByFunc() then
+    return
+  end
+  local url = GameConsts.JUMP_FANTASY_URL
+  url = url .. "&op=1101"
+  url = url .. "&appkey=" .. GameConsts.JUMP_FANTASY_APPKEY
+  HttpMessage.instance:sendOtherHttpRequest(url, {}, JumpManager.onFantasySuccess, JumpManager, "get")
+end
+
+function JumpManager.initDataByFunc()
+  local data = JumpFunc.instance:getJumpList()
+  if #data ~= 0 then
+    JumpManager.data = {}
+    JumpManager.interData = {}
+    local jumpedAppList = JumpCommonModel.instance:getJumpedList()
+    local i = 0
+    repeat
+      repeat
+        -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+        -- [ts2lua]jumpedAppList下标访问可能不正确
+        if jumpedAppList[data[i+1].GameAppId:gsub(/\./g, "_")] then
+          break
+        end
+        data[i+1].GameIndex = i
+        if data[i+1].Position > 100 then
+          table.insert(JumpManager.interData, data[i+1])
+        else
+          table.insert(JumpManager.data, data[i+1])
+        end
+      until true
+      i=i+1
+    until not(i < #data)
+    LogsManager.echo("ycn fantasyJumpData:", JumpManager.data, JumpManager.interData)
+    JumpManager.callBack and JumpManager.callBack:call(JumpManager.thisObject, JumpManager.callParams)
+    return true
+  end
+  return false
+end
+
+function JumpManager.onFantasySuccess(data)
+  LogsManager.echo("拉取互推列表 onFantasySuccess", data)
+  if data then
+    try_catch{
+      main = function()
+        data = JSON:parse(data)
+      end,
+      catch = function(e)
+        LogsManager.warn("Fantasyjump", "httpError,onFantasySuccess backData:", data)
+        return
+      end
+    }
+    if not data[0+1].result then
+      LogsManager.warn("Fantasyjump", "httpError,onFantasySuccess backData:", data)
+      return
+    end
+    JumpManager.data = data[0+1].result.data
+    local i = 0
+    repeat
+      repeat
+        local jumpedAppList = JumpCommonModel.instance:getJumpedList()
+        local i = 0
+        repeat
+          repeat
+            -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+            -- [ts2lua]jumpedAppList下标访问可能不正确
+            if jumpedAppList[data.data[i+1].GameAppId:gsub(/\./g, "_")] then
+              break
+            end
+            if data.data[i+1].Position <= 100 then
+              table.insert(JumpManager.data, data.data[i+1])
+            elseif data.data[i+1].Position > 100 then
+              table.insert(JumpManager.interData, data.data[i+1])
+            end
+          until true
+          i=i+1
+        until not(i < #data.data)
+        JumpManager.data[i+1].GameIndex = i
+      until true
+      i=i+1
+    until not(i < #JumpManager.data)
+    JumpManager.callBack and JumpManager.callBack:call(JumpManager.thisObject, JumpManager.callParams)
+  end
+end
+
+function JumpManager.sendMokaReq(callBack, thisObject, callParams)
+  if callParams == nil then
+    callParams=nil
+  end
+  JumpManager.callBack = callBack
+  JumpManager.thisObject = thisObject
+  JumpManager.callParams = callParams
+  local url = "https://api.mokagm.com/outer/sdk/data/mutual-pos" .. "?"
+  local timestamp = Client.instance.serverTime
+  local keyStr = GameConsts.JUMP_MENGJIA_APIKEY + timestamp + GameConsts.JUMP_MENGJIA_APISECRET
+  local apisign = Md5:init(keyStr)
+  url = url .. "apisign=" .. apisign
+  url = url .. "&apikey=" .. GameConsts.JUMP_MENGJIA_APIKEY
+  url = url .. "&timestamp=" .. timestamp
+  url = url .. "&apiSecret=" .. GameConsts.JUMP_MENGJIA_APISECRET
+  url = url .. "&appkey=" .. GameConsts.JUMP_MENGJIA_APPKEY
+  HttpMessage.instance:sendOtherHttpRequest(url, {}, JumpManager.onMokaSuccess, JumpManager, "get")
+end
+
+function JumpManager.onMokaSuccess(data)
+  LogsManager.echo("拉取互推列表 onMokaSuccess", data)
+  if data then
+    try_catch{
+      main = function()
+        data = JSON:parse(data)
+      end,
+      catch = function(e)
+        LogsManager.warn("mokajump", "httpError,onMokaSuccess backData:", data)
+        return
+      end
+    }
+    if data.code and data.code == "200" then
+      JumpManager.data = {}
+      JumpManager.interData = {}
+      local jumpedAppList = nil
+      jumpedAppList = JumpCommonModel.instance:getJumpedList()
+      local i = 0
+      repeat
+        repeat
+          -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+          -- [ts2lua]jumpedAppList下标访问可能不正确
+          if jumpedAppList[data.data[i+1].GameAppId:gsub(/\./g, "_")] then
+            break
+          end
+          if data.data[i+1].Position <= 100 then
+            table.insert(JumpManager.data, data.data[i+1])
+          elseif data.data[i+1].Position > 100 then
+            table.insert(JumpManager.interData, data.data[i+1])
+          end
+        until true
+        i=i+1
+      until not(i < #data.data)
+      local i = 0
+      repeat
+        JumpManager.data[i+1].GameIndex = i
+        i=i+1
+      until not(i < #JumpManager.data)
+      JumpManager.callBack and JumpManager.callBack:call(JumpManager.thisObject, JumpManager.callParams)
+    end
+  end
+end
+
+function JumpManager.onMokaError(data)
+  LogsManager.echo("拉取互推列表 失败 onMokaError", data)
+end
+
+function JumpManager.getMokaData(min, max, sort)
+  if min == nil then
+    min=1
+  end
+  if max == nil then
+    max=10
+  end
+  if sort == nil then
+    sort=1
+  end
+  min=min-1
+  max=max-1
+  if not JumpManager.data then
+    return
+  end
+  local result = {}
+  for index in pairs(JumpManager.data) do
+    if Number(index) >= min and Number(index) <= max then
+      -- [ts2lua]JumpManager.data下标访问可能不正确
+      table.insert(result, JumpManager.data[index])
+    end
+  end
+  if sort then
+    result = result:sort(function(a, b)
+      if a.Position > b.Position then
+        return 1
+      else
+        return -1
+      end
+    end
+    )
+  end
+  return result
+end
+
+function JumpManager.getMokaDataByType(type)
+  if not JumpManager.data then
+    return {}
+  end
+  local result = {}
+  local i = 0
+  repeat
+    local newData = JumpManager.data[i+1]
+    if newData.MutualType and ((newData.MutualType == type or newData.MutualType == type .. "") or type(newData.MutualType) == "object" and newData.MutualType:find(type .. "") ~= -1) then
+      table.insert(result, newData)
+    end
+    i=i+1
+  until not(i < #JumpManager.data)
+  -- [ts2lua]JumpManager.typeData下标访问可能不正确
+  JumpManager.typeData[type] = result
+  -- [ts2lua]JumpManager.typeData下标访问可能不正确
+  return JumpManager.typeData[type]
+end
+
+function JumpManager.mtDrawer(data) end
+function JumpManager.showDrawerView(from, extra, uiParam)
+  if extra == nil then
+    extra=nil
+  end
+  if uiParam == nil then
+    uiParam={}
+  end
+  if not uiParam.width then
+    uiParam.width = 350
+  end
+  if not uiParam.height then
+    uiParam.height = 720
+  end
+  if not uiParam.border then
+    uiParam.border = 10
+  end
+  if not uiParam.columns then
+    uiParam.columns = 2
+  end
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_SHOWJUMP_DRAWER_VIEW) then
+    return
+  end
+  JumpManager.setFrom = from
+  LogsManager.echo("returnGame1----------------", from)
+  if not JumpManager.checkShow() then
+    return
+  end
+  if JumpManager.isInDrawer then
+    return
+  end
+  if JumpManager.data then
+    if JumpManager.jumpChannel == JumpConst.JUMP_CHANNEL_ZHISE then
+      WindowManager.OpenUI(WindowCommonCfgs.JUMPLISTZHISEVIEW, extra)
+    elseif JumpManager.jumpChannel == JumpConst.JUMP_CHANNEL_MENGJIA or JumpManager.jumpChannel == JumpConst.JUMP_CHANNEL_FANTASY then
+      local windowName = nil
+      if GameSwitch.getSwitchState(GameSwitch.SWITCH_DRAWER_TYPE) == '1' then
+        windowName = 'JumpListUI'
+      elseif GameSwitch.getSwitchState(GameSwitch.SWITCH_DRAWER_TYPE) == '2' then
+        windowName = 'JumpExitUI'
+      end
+      WindowManager.OpenUI(windowName, uiParam)
+    end
+  end
+end
+
+function JumpManager.showMainJumpZhise(from)
+  JumpManager.setFrom = from
+  LogsManager.echo("returnGame1----------------", from)
+  if not JumpManager.checkShow() then
+    return
+  end
+  if JumpManager.data then
+    WindowManager.OpenUI(WindowCommonCfgs.MAINJUMPZHISEVIEW)
+  end
+end
+
+function JumpManager.showMainJumpKariqu(from)
+  JumpManager.setFrom = from
+  LogsManager.echo("returnGame1----------------", from)
+  if not JumpManager.checkShow() then
+    return
+  end
+  if JumpManager.data then
+    WindowManager.OpenUI(WindowCommonCfgs.MainJumpKariquView)
+  end
+end
+
+function JumpManager.addJumpUI(parent, extraData, param)
+  if extraData == nil then
+    extraData={}
+  end
+  if param == nil then
+    param={}
+  end
+  if not param.uiType then
+    param.uiType = JumpCommonConst.JUMP_LIST_SOFT_UI
+  end
+  if not JumpManager.checkShow() then
+    return
+  end
+  local jumpData = nil
+  extraData.type = JumpConst.JUMP_TYPE_JIESUAN
+  if param.uiType ~= JumpCommonConst.JUMP_LIST_SOLID_UI then
+    jumpData = JumpManager.getMokaDataByType(JumpConst.JUMP_TYPE_JIESUAN)
+  else
+    jumpData = JumpManager.getSolidJumpData()
+  end
+  if #jumpData <= 0 then
+    return
+  end
+  local cfgs = WindowManager.getWindowCfgs(WindowCommonCfgs.ResultJumpView)
+  local res = cfgs.group
+  local subpackage = cfgs.subPackage
+  local resAll = {}
+  LogsManager.echo("extraData.from---------------", extraData.from)
+  local tempFunc = function()
+    JumpManager.initJumpUI(parent, jumpData, extraData, param)
+  end
+  
+  if extraData.isDouble then
+    local cfgs = WindowManager.getWindowCfgs(WindowCommonCfgs.ResultJumpDoubleView)
+    res = table.merge(res, cfgs.group)
+  end
+  LoadManager.instance:loadPacgeAndRes(subpackage, res, Laya.Handler:create(JumpManager, tempFunc))
+end
+
+function JumpManager.getSolidJumpData()
+  if not JumpManager.data then
+    return {}
+  end
+  JumpManager.data:sort(function(a, b)
+    return a.Position - b.Position
+  end
+  )
+  local randNum1 = GameUtils.getRandomInt(2, #self.data - 1)
+  local randNum2 = GameUtils.getRandomInt(2, #self.data - 1)
+  if randNum2 == randNum1 then
+    -- [ts2lua]lua中0和空字符串也是true，此处randNum1 > 2需要确认
+    randNum2 = (randNum1 > 2 and {randNum1 - 1} or {randNum1 + 1})[1]
+  end
+  local jumpData = {}
+  local i = 0
+  repeat
+    if ((i == 0 or i == 1) or i == randNum1) or i == randNum2 then
+      table.insert(jumpData, self.data[i+1])
+    end
+    i=i+1
+  until not(i < #self.data)
+  return jumpData
+end
+
+function JumpManager.initJumpUI(parent, jumpData, extraData, param)
+  local from = extraData.from
+  local jumpUIName = JumpManager.jumpUIName
+  if extraData.isDouble then
+    jumpUIName = JumpManager.jumpDoubleUIName
+  end
+  LogsManager.echo("extraData.from1---------------", from)
+  local jumpUI = JumpManager.getJumpUIIns(jumpData, extraData, param)
+  parent:addChild(jumpUI)
+  jumpUI.name = jumpUIName
+  -- [ts2lua]lua中0和空字符串也是true，此处extraData.scale ~= undefined需要确认
+  jumpUI.scaleY = (extraData.scale ~= undefined and {extraData.scale} or {1})[1]
+  jumpUI.scaleX = jumpUI.scaleY
+  -- [ts2lua]lua中0和空字符串也是true，此处extraData.isDouble需要确认
+  -- [ts2lua]lua中0和空字符串也是true，此处extraData.posX ~= undefined需要确认
+  jumpUI.x = (extraData.posX ~= undefined and {extraData.posX} or {(extraData.isDouble and {43} or {25})[1]})[1]
+  -- [ts2lua]lua中0和空字符串也是true，此处extraData.posY ~= undefined需要确认
+  jumpUI.y = (extraData.posY ~= undefined and {extraData.posY} or {120 + ScreenAdapterTools.toolBarWidth})[1]
+end
+
+function JumpManager.removeJumpUI(parent, isDouble)
+  if isDouble == nil then
+    isDouble=false
+  end
+  local jumpUIName = JumpManager.jumpUIName
+  if isDouble then
+    jumpUIName = JumpManager.jumpDoubleUIName
+  end
+  local jumpUI = parent:getChildByName(jumpUIName)
+  if jumpUI then
+    parent:removeChild(jumpUI)
+    jumpUI:clearMoveLoop()
+    if isDouble then
+      table.insert(JumpManager.jumpDoubleUIs, jumpUI)
+    else
+      table.insert(JumpManager.jumpUIs, jumpUI)
+    end
+  end
+end
+
+function JumpManager.getJumpUIIns(data, extraData, param)
+  LogsManager.echo("extraData.from2-------------", extraData.from)
+  if extraData.isDouble then
+    if #JumpManager.jumpDoubleUIs > 0 then
+      local item = JumpManager.jumpDoubleUIs:shift()
+      item:setFrom(extraData.from)
+      item:initData(data, false)
+      item.setJumpParam and item:setJumpParam(param)
+      return item
+    end
+    LogsManager.echo("yrc new ResultJumpDoubleUI")
+    local ui2 = ResultJumpDoubleUI(data, 90, false, extraData)
+    ui2:initData(data, false)
+    return ui2
+  else
+    if #JumpManager.jumpUIs > 0 then
+      local item = JumpManager.jumpUIs:shift()
+      item:setFrom(extraData.from)
+      item:initData(data)
+      item.setJumpParam and item:setJumpParam(param)
+      return item
+    else
+      LogsManager.echo("yrc new ResultJumpUI")
+      local ui = ResultJumpUI(data, extraData, param)
+      ui:initData(data)
+      return ui
+    end
+  end
+end
+
+function JumpManager.stopResultMove()
+  Message.instance:send(JumpEvent.JUMP_RETURN_GAMEMAIN)
+end
+
+function JumpManager.getKariquOneRandomJump(type)
+  local jumpData = JumpManager.getMokaDataByType(type)
+  local length = #jumpData
+  if length > 0 then
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    if not JumpManager.jumpIndexTable[type] or JumpManager.jumpIndexTable[type] and JumpManager.jumpIndexTable[type] == length then
+      -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+      JumpManager.jumpIndexTable[type] = 0
+    end
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    -- [ts2lua]jumpData下标访问可能不正确
+    local data = jumpData[JumpManager.jumpIndexTable[type]]
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    JumpManager.jumpIndexTable[type] = JumpManager.jumpIndexTable[type] + 1
+    return data
+  end
+end
+
+function JumpManager.getOneRandomJump(type)
+  local jumpData = JumpManager.getMokaDataByType(type)
+  local length = #jumpData
+  if length > 0 then
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    if not JumpManager.jumpIndexTable[type] or JumpManager.jumpIndexTable[type] and JumpManager.jumpIndexTable[type] == length then
+      -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+      JumpManager.jumpIndexTable[type] = 0
+    end
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    -- [ts2lua]jumpData下标访问可能不正确
+    local data = jumpData[JumpManager.jumpIndexTable[type]]
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    -- [ts2lua]JumpManager.jumpIndexTable下标访问可能不正确
+    JumpManager.jumpIndexTable[type] = JumpManager.jumpIndexTable[type] + 1
+    return data
+  end
+end
+
+function JumpManager.getRandomJump(indexList)
+  local jumpData = JumpManager.data
+  if JumpManager.data then
+    local length = #jumpData
+    if length > 0 then
+      local index = 0
+      index = JumpManager.getGroupRandomIndex(indexList)
+      local i = 0
+      repeat
+        if jumpData[i+1].GameIndex == index then
+          return jumpData[i+1]
+        end
+        i=i+1
+      until not(i < length)
+    end
+  end
+  return nil
+end
+
+function JumpManager.getGroupRandomIndex(arr)
+  if arr == nil then
+    arr={}
+  end
+  if #arr == 0 then
+    return 1
+  end
+  local index = GameUtils.getRandomInt(0, #arr - 1)
+  -- [ts2lua]arr下标访问可能不正确
+  local result = arr[index]
+  local i = #arr - 1
+  repeat
+    if i == index then
+      arr:splice(i, 1)
+    end
+    i=i-1
+  until not(i >= 0)
+  return result
+end
+
+function JumpManager.addMainJump(parent, jumpPos, posArr, isNeedSign, isShowBg, mutualType, isShowName, txtSize, txtcolor, isShowLableBg, signWidth, signHeight, bgextraWidth, isNeedRemove)
+  if posArr == nil then
+    posArr={}
+  end
+  if isNeedSign == nil then
+    isNeedSign=false
+  end
+  if isShowBg == nil then
+    isShowBg=false
+  end
+  if mutualType == nil then
+    mutualType=nil
+  end
+  if isShowName == nil then
+    isShowName=false
+  end
+  if txtSize == nil then
+    txtSize=15
+  end
+  if txtcolor == nil then
+    txtcolor="ffffff"
+  end
+  if isShowLableBg == nil then
+    isShowLableBg=false
+  end
+  if signWidth == nil then
+    signWidth=0
+  end
+  if signHeight == nil then
+    signHeight=0
+  end
+  if bgextraWidth == nil then
+    bgextraWidth=0
+  end
+  if isNeedRemove == nil then
+    isNeedRemove=true
+  end
+  if isNeedRemove then
+    JumpManager.removeMainJump()
+    JumpManager.mainJumpItems = {}
+  end
+  local length = #JumpManager.data
+  JumpManager.curGroup = {}
+  local i = 0
+  repeat
+    table.insert(JumpManager.curGroup, JumpManager.data[i+1].GameIndex)
+    i=i+1
+  until not(i < length)
+  local i = 0
+  repeat
+    local jumpData = nil
+    local posItem = posArr[i+1]
+    -- [ts2lua]lua中0和空字符串也是true，此处posItem.mutualType需要确认
+    local tempMutualType = (posItem.mutualType and {posItem.mutualType} or {mutualType})[1]
+    if KariqiShareManager.checkIsKariquChannel() then
+      jumpData = JumpManager.getOneRandomJump(tempMutualType)
+    else
+      jumpData = JumpManager.getRandomJump(JumpManager.curGroup)
+    end
+    if jumpData then
+      -- [ts2lua]lua中0和空字符串也是true，此处posItem.width需要确认
+      posItem.width = (posItem.width and {posItem.width} or {93})[1]
+      local mainJumpItem = JumpManager.createJumpItem(jumpData, posItem.width, posItem.width, {from=jumpPos}, isNeedSign, JumpConst.JUMP_ANI_STYLE_1, isShowName, txtSize, txtcolor, isShowLableBg, signWidth, signHeight, isShowBg, bgextraWidth)
+      mainJumpItem.x = posItem.x
+      mainJumpItem.y = posItem.y
+      mainJumpItem.anchorX = 0.5
+      mainJumpItem.anchorY = 0.5
+      -- [ts2lua]mainJumpItem下标访问可能不正确
+      mainJumpItem["__jumpData"] = jumpData
+      -- [ts2lua]mainJumpItem下标访问可能不正确
+      mainJumpItem["__mutualType"] = tempMutualType
+      -- [ts2lua]mainJumpItem下标访问可能不正确
+      mainJumpItem["__addStageCallback"] = function()
+        JumpManager.startMainJumpTween(self)
+      end
+      
+      -- [ts2lua]mainJumpItem下标访问可能不正确
+      mainJumpItem["__removeStageCallback"] = function()
+        JumpManager.stopMainJumpTween(self)
+      end
+      
+      -- [ts2lua]mainJumpItem下标访问可能不正确
+      mainJumpItem:on(Laya.Event.DISPLAY, mainJumpItem, mainJumpItem["__addStageCallback"])
+      -- [ts2lua]mainJumpItem下标访问可能不正确
+      mainJumpItem:on(Laya.Event.UNDISPLAY, mainJumpItem, mainJumpItem["__removeStageCallback"])
+      parent:addChild(mainJumpItem)
+      table.insert(self.mainJumpItems, mainJumpItem)
+    end
+    i=i+1
+  until not(i < #posArr)
+end
+
+function JumpManager.startMainJumpTween(mainJumpItem)
+  -- [ts2lua]mainJumpItem下标访问可能不正确
+  mainJumpItem["__tempTimeCode"] = TimerManager.instance:setTimeout(JumpManager.scaleShake, JumpManager, 3000, mainJumpItem)
+end
+
+function JumpManager.stopMainJumpTween(mainJumpItem)
+  mainJumpItem.scaleX = 1
+  mainJumpItem.scaleY = 1
+  mainJumpItem.rotation = 0
+  -- [ts2lua]mainJumpItem下标访问可能不正确
+  if mainJumpItem["__tempTimeCode"] then
+    -- [ts2lua]mainJumpItem下标访问可能不正确
+    TimerManager.instance:remove(mainJumpItem["__tempTimeCode"])
+    -- [ts2lua]mainJumpItem下标访问可能不正确
+    mainJumpItem["__tempTimeCode"] = nil
+  end
+  Laya.Tween:clearAll(mainJumpItem)
+end
+
+function JumpManager.removeMainJump()
+  local i = #JumpManager.mainJumpItems - 1
+  repeat
+    local mainJumpItem = JumpManager.mainJumpItems[i+1]
+    if mainJumpItem then
+      JumpManager.destoreJumpItem(mainJumpItem)
+    end
+    i=i-1
+  until not(i >= 0)
+end
+
+function JumpManager.refreshMainJumpImg(mainJumpItem)
+  if mainJumpItem.stage then
+    local img = mainJumpItem:getChildByName("imageIcon")
+    local lastIndex = 0
+    local jumpData = nil
+    if KariqiShareManager.checkIsKariquChannel() then
+      -- [ts2lua]mainJumpItem下标访问可能不正确
+      jumpData = JumpManager.getOneRandomJump(mainJumpItem["__mutualType"])
+    else
+      local i = 0
+      repeat
+        if JumpManager.data[i+1].Icon == img.skin then
+          lastIndex = JumpManager.data[i+1].GameIndex
+          break
+        end
+        i=i+1
+      until not(i < #JumpManager.data)
+      if JumpManager.curGroup:find(lastIndex) == -1 then
+        table.insert(JumpManager.curGroup, lastIndex)
+      else
+        LogsManager.echo("zm.repeat--------------", lastIndex)
+      end
+      jumpData = JumpManager.getRandomJump(JumpManager.curGroup)
+    end
+    local i = 0
+    repeat
+      if JumpManager.mainJumpItems[i+1] and JumpManager.mainJumpItems[i+1] == mainJumpItem then
+        -- [ts2lua]JumpManager.mainJumpItems[i+1]下标访问可能不正确
+        JumpManager.mainJumpItems[i+1]["__jumpData"] = jumpData
+      end
+      i=i+1
+    until not(i < #JumpManager.mainJumpItems)
+    local txt = mainJumpItem:getChildByName("imageTxt")
+    if txt then
+      txt.text = jumpData.GameName
+    end
+    img.skin = jumpData.Icon
+    -- [ts2lua]img下标访问可能不正确
+    local lastButtonUtil = img["__lastButtonUtils"]
+    if lastButtonUtil then
+      local addParam = lastButtonUtil._callBackParam
+      local newParams = {jumpData=jumpData, extraData=addParam.extraData}
+      lastButtonUtil:setCallBackInfo(JumpManager.onClickJumpItem, JumpManager, newParams)
+    end
+  end
+  JumpManager.startMainJumpTween(mainJumpItem)
+end
+
+function JumpManager.scaleShake(mainJumpItem)
+  -- [ts2lua]mainJumpItem下标访问可能不正确
+  mainJumpItem["__tempTimeCode"] = nil
+  Laya.Tween:to(mainJumpItem, {rotation=-5}, 300, nil, Laya.Handler:create(JumpManager, function()
+    Laya.Tween:to(mainJumpItem, {rotation=5}, 600, nil, Laya.Handler:create(JumpManager, function()
+      Laya.Tween:to(mainJumpItem, {rotation=-5}, 600, nil, Laya.Handler:create(JumpManager, function()
+        Laya.Tween:to(mainJumpItem, {rotation=5}, 600, nil, Laya.Handler:create(JumpManager, function()
+          Laya.Tween:to(mainJumpItem, {rotation=0}, 300, nil, Laya.Handler:create(JumpManager, function()
+            JumpManager.refreshMainJumpImg(mainJumpItem)
+          end
+          ))
+        end
+        ))
+      end
+      ))
+    end
+    ))
+  end
+  ))
+end
+
+function JumpManager.createJumpItem(itemData, itemWidth, itemHeight, extraData, needRedPoint, aniStyle, isShowName, txtSize, txtcolor, isShowLableBg, signWidth, signHeight, isShowBg, bgextraWidth)
+  if needRedPoint == nil then
+    needRedPoint=nil
+  end
+  if aniStyle == nil then
+    aniStyle=0
+  end
+  if isShowName == nil then
+    isShowName=true
+  end
+  if txtSize == nil then
+    txtSize=15
+  end
+  if txtcolor == nil then
+    txtcolor="#ffffff"
+  end
+  if isShowLableBg == nil then
+    isShowLableBg=false
+  end
+  if signWidth == nil then
+    signWidth=0
+  end
+  if signHeight == nil then
+    signHeight=0
+  end
+  if isShowBg == nil then
+    isShowBg=false
+  end
+  if bgextraWidth == nil then
+    bgextraWidth=0
+  end
+  local redWidth = 20
+  local redOffset = 3
+  local startY = 7
+  local itemBox = Laya.Image()
+  itemBox.width = itemWidth + bgextraWidth * 2
+  itemBox.height = itemHeight + bgextraWidth * 2
+  if isShowBg then
+    local itemBg = Laya.Image(ResourceConst.JUMP_ITEMBG)
+    itemBg.sizeGrid = "7,7,7,7"
+    itemBg.width = itemWidth + bgextraWidth * 2
+    itemBg.height = itemHeight + bgextraWidth * 2
+    itemBox:addChild(itemBg)
+  end
+  local imgItem = Laya.Image(itemData.Icon)
+  imgItem.width = itemWidth
+  imgItem.height = itemHeight
+  itemBox:addChild(imgItem)
+  imgItem.name = "imageIcon"
+  imgItem.x = bgextraWidth
+  imgItem.y = bgextraWidth
+  if needRedPoint then
+    if JumpManager.jumpChannel == JumpConst.JUMP_CHANNEL_ZHISE or KariqiShareManager.checkIsKariquChannel() then
+      local sign = Laya.Image(needRedPoint)
+      itemBox:addChild(sign)
+      sign.width = signWidth
+      sign.height = signHeight
+      sign.x = itemWidth + bgextraWidth * 2 - signWidth
+      sign.y = 0
+    elseif JumpManager.jumpChannel == JumpConst.JUMP_CHANNEL_MENGJIA or JumpManager.jumpChannel == JumpConst.JUMP_CHANNEL_FANTASY then
+      local redImg = Laya.Image(ResourceConst.COMMON_REDPOINT)
+      itemBox:addChild(redImg)
+      redImg.height = redWidth
+      redImg.width = redImg.height
+      redImg.x = itemWidth + bgextraWidth * 2 - redWidth + redOffset
+      redImg.y = startY - redOffset
+    end
+  end
+  if isShowLableBg then
+    if JumpManager.jumpChannel == JumpConst.JUMP_CHANNEL_ZHISE then
+      local labelBg = Laya.Image(JumpManager.getZhiseLabelBg())
+      itemBox:addChild(labelBg)
+      labelBg.width = itemWidth + bgextraWidth * 2
+      labelBg.height = itemWidth + bgextraWidth * 2 / 3.7
+      labelBg.x = 0
+      labelBg.y = itemBox.height
+    end
+  end
+  if isShowName then
+    local nameTxt = Laya.Label(itemData.GameName)
+    nameTxt.fontSize = txtSize
+    nameTxt.font = "Microsoft YaHei"
+    itemBox:addChild(nameTxt)
+    if labelBg then
+      nameTxt.y = labelBg.y
+      nameTxt.x = 0
+      nameTxt.height = labelBg.height
+      nameTxt.width = labelBg.width
+      nameTxt.valign = "middle"
+    else
+      nameTxt.y = itemBox.height + 10
+      nameTxt.x = 3
+      nameTxt.height = 30
+      nameTxt.width = itemWidth + bgextraWidth * 2
+    end
+    nameTxt.align = "center"
+    nameTxt.name = "imageTxt"
+    nameTxt.color = txtcolor
+    nameTxt.overflow = "hidden"
+  end
+  local sendData = {jumpData=itemData, extraData=extraData}
+  local btnUtil = ButtonUtils(imgItem, JumpManager.onClickJumpItem, JumpManager, nil, nil, sendData)
+  btnUtil:setUnEnableTime(1000)
+  return itemBox
+end
+
+function JumpManager.createOneRandomJumpItem(itemWidth, itemHeight, extraData, needRedPoint, aniStyle)
+  if aniStyle == nil then
+    aniStyle=0
+  end
+  local leftIndexArr = {}
+  local i = 0
+  repeat
+    table.insert(leftIndexArr, i)
+    i=i+1
+  until not(i < #JumpManager.data)
+  local jumpData = JumpManager.getRandomJump(leftIndexArr)
+  if not jumpData then
+    return nil
+  end
+  return JumpManager.createJumpItem(jumpData, itemWidth, itemHeight, extraData, needRedPoint, aniStyle)
+end
+
+function JumpManager.createManyRandomJumpItem(count, itemWidth, itemHeight, extraData, needRedPoint, aniStyle)
+  if aniStyle == nil then
+    aniStyle=0
+  end
+  local itemArray = {}
+  if not JumpManager.data then
+    return itemArray
+  end
+  local leftIndexArr = {}
+  local i = 0
+  repeat
+    table.insert(leftIndexArr, i)
+    i=i+1
+  until not(i < #JumpManager.data)
+  local jumpData = nil
+  local j = 1
+  repeat
+    jumpData = JumpManager.getRandomJump(leftIndexArr)
+    if jumpData then
+      table.insert(itemArray, JumpManager.createJumpItem(jumpData, itemWidth, itemHeight, extraData, needRedPoint, aniStyle))
+    end
+    j=j+1
+  until not(j <= count)
+  return itemArray
+end
+
+function JumpManager.destoreJumpItem(itemBox)
+  if itemBox.parent then
+    itemBox.parent:removeChild(itemBox)
+  end
+  local imageIcon = itemBox:getChildByName("imageIcon")
+  if imageIcon.__lastButtonUtils then
+    imageIcon.__lastButtonUtils:destoryButtonUtil()
+    imageIcon.__lastButtonUtils = nil
+  end
+  local i = 0
+  repeat
+    if itemBox == JumpManager.mainJumpItems[i+1] then
+      JumpManager.mainJumpItems[i+1] = nil
+    end
+    i=i+1
+  until not(i < #JumpManager.mainJumpItems)
+end
+
+function JumpManager.createHotJumpItem(itemData, itemWidth, itemHeight, extraData, playNums, aniStyle)
+  if playNums == nil then
+    playNums=1
+  end
+  if aniStyle == nil then
+    aniStyle=0
+  end
+  local itemBox = JumpManager.createJumpItem(itemData, itemWidth, itemHeight, extraData, true, aniStyle)
+  return itemBox
+end
+
+function JumpManager.onClickJumpItem(data)
+  LogsManager.echo("jumpData----------", data)
+  local jumpData = data.jumpData
+  data.appId = jumpData.GameAppId
+  data.path = jumpData.PromoteLink
+  UserInfo.platform:jumpToMiniProgram(data)
+  if KariqiShareManager.checkIsKariquChannel() then
+    local i = 0
+    repeat
+      JumpManager.stopMainJumpTween(JumpManager.mainJumpItems[i+1])
+      JumpManager.refreshMainJumpImg(JumpManager.mainJumpItems[i+1])
+      i=i+1
+    until not(i < #JumpManager.mainJumpItems)
+  end
+end
+
+function JumpManager.getZhiseLabelBg()
+  local index = GameUtils.getRandomInt(1, 9)
+  return "uisource/jump/" .. index .. ".png"
+end
+
+function JumpManager.getTwoRandom(min, max, data)
+  if #data == 2 then
+    return
+  end
+  local item = GameUtils.getRandomInt(min, max)
+  if data:find(item) == -1 then
+    table.insert(data, item)
+  end
+  JumpManager.getTwoRandom(min, max, data)
+end
+
+function JumpManager.getRandomInterJumpByPosition(defaultPos, minPos, maxPos)
+  if not JumpManager.interData then
+    return
+  end
+  if not JumpManager.currentInterPos then
+    JumpManager.currentInterPos = minPos
+  else
+    JumpManager.currentInterPos = JumpManager.currentInterPos + 1
+  end
+  local randData = nil
+  local defaultData = nil
+  local i = 0
+  repeat
+    if JumpManager.interData[i+1].Position == JumpManager.currentInterPos then
+      randData = JumpManager.interData[i+1]
+      break
+    end
+    if JumpManager.interData[i+1].Position == defaultPos then
+      defaultData = JumpManager.interData[i+1]
+    end
+    i=i+1
+  until not(i < #JumpManager.interData)
+  if not randData then
+    JumpManager.currentInterPos = minPos
+    return defaultData
+  else
+    return randData
+  end
+end
+
+function JumpManager.showInterJump()
+  LogsManager.echo("ycn show inter jump:", JumpManager.interData)
+  if #JumpManager.interData > 0 then
+    local interJumpArgv = GlobalParamsFunc.instance:getDataArray("advertJumpChance")[0+1]:split(',')
+    local jumpData = JumpManager.getRandomInterJumpByPosition(21, 21, 25)
+    LogsManager.echo("ycn interJumpRandResult:", jumpData)
+    if (JumpManager.interJumpNum == -1 or JumpManager.interJumpNum >= interJumpArgv[0+1]) and jumpData then
+      WindowManager.OpenUI(WindowCommonCfgs.INTERJUMPVIEW, jumpData)
+      JumpManager.interJumpNum = 0
+    end
+    JumpManager.interJumpNum = JumpManager.interJumpNum + 1
+  end
+end
+
+function JumpManager.sendKariquJumpClickData(data)
+  local url = GameConsts.JUMP_KARIQU_SAVEJUMP_URL
+  local params = {Openid=UserInfo.channelUserId, Channel=KariqiShareManager.getChannelValue(), Appid=GameConsts.GAME_APPID, Type=Number(data.MutualType), TargetAppid=data.GameAppId, Path=data.PromoteLink}
+  HttpMessage.instance:sendOtherHttpRequest(url, params, JumpManager.onSendClickSuccess, JumpManager, "post")
+end
+
+function JumpManager.onSendClickSuccess(data)
+  if data then
+    LogsManager.echo("zm.上报点击成功")
+  end
+end
+
+function JumpManager.checkIsKariquBlack()
+  if JumpManager.kariquJumpResult ~= nil then
+    return JumpManager.kariquJumpResult
+  end
+  if not KariqiShareManager.checkIsKariquChannel() then
+    JumpManager.kariquJumpResult = false
+    return JumpManager.kariquJumpResult
+  end
+  local curChannel = KariqiShareManager.getChannelValue()
+  if not curChannel then
+    JumpManager.kariquJumpResult = false
+    LogsManager.echo("zm.noCurChannel--------------------", curChannel, JumpManager.kariquJumpResult)
+    return JumpManager.kariquJumpResult
+  end
+  if KariqiShareManager.kariquConfigValue and KariqiShareManager.kariquConfigValue:find(curChannel) ~= -1 then
+    JumpManager.kariquJumpResult = true
+  else
+    JumpManager.kariquJumpResult = false
+  end
+  LogsManager.echo("zm.kariquBlack--------------------", curChannel, JumpManager.kariquJumpResult)
+  return JumpManager.kariquJumpResult
+end
+
+function JumpManager.removeJumpedApp(appid)
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_REMOVE_JUMPED_APP) then
+    local i = #JumpManager.data - 1
+    repeat
+      if JumpManager.data[i+1].GameAppId == appid then
+        TableUtils.removeValue(JumpManager.curGroup, JumpManager.data[i+1].GameIndex)
+        JumpManager.data:splice(i, 1)
+      end
+      i=i-1
+    until not(i > -1)
+    local i = #JumpManager.interData - 1
+    repeat
+      if JumpManager.interData[i+1].GameAppId == appid then
+        JumpManager.interData:splice(i, 1)
+      end
+      i=i-1
+    until not(i > -1)
+    local jumpedAppList = JumpCommonModel.instance:getJumpedList()
+    -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+    -- [ts2lua]jumpedAppList下标访问可能不正确
+    jumpedAppList[appid:gsub(/\./g, "_")] = appid
+    local expireTime = Number(Date((Date()):setHours(0, 0, 0, 0))) / 1000 + 86400
+    local updateData = {jumpCommon={jumpedList={expireTime=expireTime, appList=jumpedAppList}}}
+    Client.instance:doDummyServerBack(nil, updateData, nil)
+    SingleCommonServer.startSaveClientData()
+    Message.instance:send("FRESH_JUMP_LIST")
+  end
+end
+
+function JumpManager.openJumpListViewById(id)
+  if not BaseFunc.globalCfgsHasLoad then
+    return false
+  end
+  if not JumpManager.checkShow() then
+    return
+  end
+  if not JumpManager.data or #JumpManager.data == 0 then
+    return
+  end
+  if FullJumpFunc.instance:canShowFUllJump(id) then
+    WindowManager.OpenUI("JumpListUI")
+  end
+end

@@ -1,0 +1,4 @@
+WindowEvent = class('WindowEvent')
+function WindowEvent:ctor() end
+WindowEvent.WINDOW_EVENT_SWITCHUISTART = "WINDOW_EVENT_SWITCHUISTART";
+WindowEvent.WINDOW_EVENT_SWITCHUIFIN = "WINDOW_EVENT_SWITCHUIFIN";

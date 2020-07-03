@@ -1,0 +1,493 @@
+require("date")
+require("framework/common/kakura/KakuraMessage")
+require("framework/common/kakura/Client")
+require("framework/manager/LogsManager")
+require("framework/manager/WaitManager")
+require("game/sys/common/MsgCMD")
+require("framework/manager/TimerManager")
+require("framework/manager/ErrCodeManager")
+require("game/sys/common/kakura/ErrorCode")
+require("framework/manager/WindowManager")
+require("utils/Global")
+require("framework/func/TranslateFunc")
+require("framework/common/kakura/MethodCommon")
+require("framework/common/kakura/KakuraClient/ConnectObj")
+
+KakuraClient = class('KakuraClient')
+
+KakuraClient.method_heartBeat = "heartBeat";
+KakuraClient.timeOutMiniSecond = 5000;
+KakuraClient.timeOutResendTimes = 1;
+function KakuraClient:ctor()
+  self._isInit = false;
+  self._aginCon = 0;
+  self._timeCode = 0;
+  self._timeCount = 0;
+  self._reconnectCount = 0;
+  self.autoConnectCount = 1;
+  self._defaultAesKey = "ilo24wEFS*^^*2Ewilo24wEFS*^^*2Ew";
+  self._isoffline = false;
+  self._callback = nil;
+  self._thisObj = nil;
+  self._pushCallback = nil;
+  self._pushThisObj = nil;
+  self._webSocketConnet = false;
+  self._isServerInit = false;
+  self.hasGetUserInfo = false;
+  self._hasRegistHeartBeat = false;
+  self._requestId = 1;
+  self._hasOnClose = false;
+  self._connectCacheArr = {}
+  KakuraMessage.instance:setMessageType(KakuraMessage.MESSAGE_FIX_ENC_NO_COMPRESS)
+end
+
+function KakuraClient.__getters.instance()
+  if not KakuraClient._instance then
+    KakuraClient._instance = KakuraClient()
+  end
+  return KakuraClient._instance
+end
+
+function KakuraClient:aginConnect()
+  self._hasOnClose = false
+  LogsManager.echo("kakura _again connect")
+  WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+  self:registConnectEvent()
+end
+
+function KakuraClient:init(url, ver, caFilePath, pushCallback, pushThisObj, callback, thisObj)
+  if pushCallback == nil then
+    pushCallback=nil
+  end
+  if pushThisObj == nil then
+    pushThisObj=nil
+  end
+  if callback == nil then
+    callback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  self._url = url
+  if pushCallback then
+    self._pushCallback = pushCallback
+  end
+  if pushThisObj then
+    self._pushThisObj = pushThisObj
+  end
+  self._callback = callback
+  self._thisObj = thisObj
+  self:registConnectEvent()
+end
+
+function KakuraClient:registConnectEvent()
+  self._aesKey = self._defaultAesKey
+  LogsManager.echo(">>>>>>>>connectByUrl>>>>>>>>>>", self._url)
+  self:clearInitRequest()
+  self:destorySocket()
+  if not self.hasGetUserInfo or not Global.checkIsSingleMode() then
+    WaitManager.instance:add(MsgCMD.ROLL_ANI)
+  end
+  self._websocket = Laya.Socket()
+  self._websocket:on(Laya.Event.MESSAGE, self, self.onReceiveMessage)
+  self._websocket:on(Laya.Event.OPEN, self, self.onSocketOpen)
+  self._websocket:on(Laya.Event.CLOSE, self, self.onSocketClose)
+  self._websocket:on(Laya.Event.ERROR, self, self.onSocketError)
+  self._websocket:connectByUrl(self._url)
+end
+
+function KakuraClient:destorySocket()
+  if self._websocket then
+    self._websocket:offAll()
+    self._websocket:close()
+    self._websocket = nil
+  end
+  self._webSocketConnet = false
+end
+
+function KakuraClient:sendRequest(opcode, method, params, callback, thisObj, isWait, isInsert, addParams)
+  if params == nil then
+    params=nil
+  end
+  if callback == nil then
+    callback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if isWait == nil then
+    isWait=true
+  end
+  if isInsert == nil then
+    isInsert=false
+  end
+  if addParams == nil then
+    addParams=nil
+  end
+  if not self:checkIsInitMethod(method) then
+    if not self._webSocketConnet then
+      LogsManager.echo("发送请求的时候还没连上", method)
+    end
+  end
+  if self._isoffline then
+    return
+  end
+  if not self._webSocketConnet then
+    self:clearOneMethod(method)
+  end
+  local uniuquId = self:getUniqueRequestId()
+  local coninfo = self:turnRequestToSave(opcode, method, params, callback, thisObj, isWait, addParams)
+  if isInsert then
+    self._connectCacheArr:splice(0, 0, coninfo)
+  else
+    table.insert(self._connectCacheArr, coninfo)
+  end
+  if self._currentConn then
+    LogsManager.echo(self._currentConn.method .. "请求正在处理中...缓存:." .. coninfo.method)
+    return
+  end
+  if not self._webSocketConnet then
+    self:aginConnect()
+    return
+  end
+  self:doRequest()
+end
+
+function KakuraClient:requestSocket(con)
+  if con.isWait then
+    WaitManager.instance:add(MsgCMD.ROLL_ANI)
+  end
+  local toSendString = con:toSendString()
+  local packData = KakuraMessage.instance:addPackage(con.opcode, con.id, con.uniqueId, toSendString)
+  local requestId = con.id
+  local requestBuffer = ""
+  requestBuffer = packData.uniqueReqId + packData.sendData
+  local byte = KakuraMessage.instance:encode(requestBuffer, self._aesKey, packData)
+  LogsManager.echo("kakura,发出数据:", toSendString, con.id)
+  self._websocket:send(byte.buffer)
+  if con.method ~= KakuraClient.method_heartBeat then
+    self._timeCode = TimerManager.instance:add(self.timerHandler, self, KakuraClient.timeOutMiniSecond, 1)
+  end
+end
+
+function KakuraClient:doRequest()
+  if self._currentConn then
+    return
+  end
+  if not self._webSocketConnet then
+    return
+  end
+  if #self._connectCacheArr == 0 then
+    return
+  end
+  local con = self._connectCacheArr[0+1]
+  self._connectCacheArr:splice(0, 1)
+  if (con.id == 0 and not self:checkIsHeartBeat(con.method)) and not self:checkIsInitMethod(con.method) then
+    self._requestId=self._requestId+1
+    con.id = self._requestId
+  end
+  if not self:checkIsHeartBeat(con.method) then
+    if not con.uniqueId then
+      con.uniqueId = self:getUniqueRequestId()
+    end
+  end
+  self._currentConn = con
+  if self:checkIsHeartBeat(con.method) then
+    self._currentConn = nil
+  end
+  self:requestSocket(con)
+end
+
+function KakuraClient:timerHandler()
+  TimerManager.instance:remove(self._timeCode)
+  if self._currentConn then
+    LogsManager.echo("kakura _>>>>>>>>>>>>request again>>>>>>>>>>>>", self._currentConn.method)
+  else
+    LogsManager.echo(">>>>>>>>>>>>request again>>>>>>>>>>>>", self._timeCount)
+  end
+  if self._currentConn and self:checkIsInitMethod(self._currentConn.method) then
+    LogsManager.echo("_初始化请求失败", self._currentConn.method)
+    self:destorySocket()
+    WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+    ErrCodeManager.ins:setErr(ErrorCode.webOffline)
+    return
+  end
+  self._timeCount=self._timeCount+1
+  if self._timeCount <= KakuraClient.timeOutResendTimes then
+    WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+    if self._currentConn then
+      self:requestSocket(self._currentConn)
+    end
+  else
+    self._timeCount = 0
+    local con = self._currentConn
+    if not con then
+      return
+    end
+    local tempFunc = function()
+      self:requestSocket(con)
+    end
+    
+    WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+    WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#error110"), tempFunc, self)
+  end
+end
+
+function KakuraClient:resendCurrentConnLater()
+  if self._currentConn then
+    local currentConn = self._currentConn
+    TimerManager.instance:setTimeout(function()
+      self:requestSocket(currentConn)
+    end
+    , self, 100)
+  end
+end
+
+function KakuraClient:onReceiveMessage(evt)
+  local that = self
+  TimerManager.instance:remove(that._timeCode)
+  self._timeCount = 0
+  local byte = Laya.Byte()
+  byte.endian = Laya.Byte.LITTLE_ENDIAN
+  byte:clear()
+  byte:writeArrayBuffer(evt)
+  byte.pos = 0
+  local jsonData = KakuraMessage.instance:decode(self._aesKey, byte)
+  if jsonData.result and jsonData.result.initRequestId then
+    if jsonData.result.aesKey then
+      that._aesKey = jsonData.result.aesKey
+      KakuraMessage.instance:setMessageType(KakuraMessage.MESSAGE_DYNAMIC_ENC_NO_COMPRESS)
+    end
+    that._token = jsonData.result.token
+    that._isInit = false
+    self._requestId = jsonData.result.initRequestId
+    self._isServerInit = true
+    self._reconnectCount = 0
+    self:checkRequestId()
+    WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+  end
+  if jsonData.result then
+    Client.instance:onResult(jsonData.result)
+    if self._currentConn then
+      if not jsonData.uniqueId or jsonData.uniqueId == self._currentConn.uniqueId then
+        self:excuetOneResponce(jsonData.result)
+      else
+        LogsManager.echo("返回的消息可能是超时重发的-", self._currentConn.method, "_serverback method:", jsonData.method)
+      end
+    end
+  elseif jsonData.error then
+    self:checkServerSysError(jsonData.error.code)
+    Client.instance:onResult(jsonData)
+    self:excuetOneResponce(jsonData)
+  elseif jsonData.params then
+    Client.instance:onResult(jsonData.params, true)
+    that._pushCallback and that._pushCallback:call(that._pushThisObj, jsonData)
+  end
+  self:doRequest()
+end
+
+function KakuraClient:excuetOneResponce(jsonData)
+  if self._currentConn then
+    if jsonData == "success" then
+      LogsManager.echo("_心跳请求返回的时候 正好有请求发送 导致解析失败")
+      return
+    end
+    if self._currentConn.isWait then
+      WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+    end
+    local temp = self._currentConn
+    self._currentConn = nil
+    if temp.callback then
+      temp.callback:call(temp.thisObj, jsonData, temp.addParams)
+    end
+  end
+end
+
+function KakuraClient:onSocketOpen()
+  self._hasOnClose = false
+  WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+  print("socket connet success!!!")
+  self._webSocketConnet = true
+  if self.hasGetUserInfo then
+    self._callback and self._callback:call(self._thisObj, false)
+  else
+    self._callback and self._callback:call(self._thisObj, true)
+  end
+  self:doRequest()
+end
+
+function KakuraClient:onSocketClose(e, isFromError)
+  if isFromError == nil then
+    isFromError=false
+  end
+  TimerManager.instance:remove(self._timeCode)
+  LogsManager.echo("socket close!!! is from error:", isFromError)
+  if self._hasOnClose then
+    LogsManager.echo("刚刚收到close消息,避免和error冲突")
+    self._hasOnClose = false
+    return
+  end
+  if not self.hasGetUserInfo then
+    
+  end
+  self._webSocketConnet = false
+  if self._currentConn and not self:checkIsInitMethod(self._currentConn.method) then
+    self._connectCacheArr:splice(0, 0, self._currentConn)
+    self._currentConn = nil
+  end
+  if self._isoffline then
+    return
+  end
+  self:clearInitRequest()
+  self._hasOnClose = true
+  self._reconnectCount=self._reconnectCount+1
+  if self._reconnectCount <= self.autoConnectCount then
+    LogsManager.echo("掉线自动重连:当前次数:", self._reconnectCount)
+    TimerManager.instance:setTimeout(self.aginConnect, self, 100)
+  else
+    if Global.gameMode == Global.gameMode_network or not self.hasGetUserInfo then
+      WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+      ErrCodeManager.ins:setErr(ErrorCode.webOffline)
+    else
+      WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+      self._connectCacheArr = {}
+      self._currentConn = nil
+    end
+  end
+end
+
+function KakuraClient:registHeartBeat()
+  if self._hasRegistHeartBeat then
+    return
+  end
+  if Global.checkIsSingleMode() then
+    return
+  end
+  self._hasRegistHeartBeat = true
+  TimerManager.instance:add(function()
+    if Client.instance.webSocketConnet then
+      Client.instance:sendHeart("heartBeat", nil, nil, nil, "id_1")
+    end
+  end
+  , self, Client.instance.heartBeatInterval * 1000)
+end
+
+function KakuraClient:onSocketError()
+  LogsManager.echo("socket connet error!!!")
+  self:onSocketClose(nil, true)
+end
+
+function KakuraClient.__getters:webSocketConnet()
+  return self._webSocketConnet
+end
+
+function KakuraClient:getUniqueRequestId(requestId)
+  if requestId == nil then
+    requestId=""
+  end
+  local rid = Client.instance.rid
+  local timestamp = (Date()):getTime()
+  return "uniqueId_" .. rid .. "_" .. timestamp .. "_" .. self._requestId
+end
+
+function KakuraClient:turnRequestToSave(opcode, method, params, cb, tobj, isWait, addParams)
+  return ConnectObj(opcode, method, params, cb, tobj, isWait, addParams)
+end
+
+function KakuraClient:checkHasMethod(method)
+  local obj = self:getMethodObj(method)
+  if obj then
+    return true
+  else
+    return false
+  end
+end
+
+function KakuraClient:getMethodObj(method)
+  local len = #self._connectCacheArr
+  if self._currentConn then
+    if self._currentConn.method == method then
+      return self._currentConn
+    end
+  end
+  local i = 0
+  repeat
+    local con = self._connectCacheArr[i+1]
+    if con.method == method then
+      return con
+    end
+    i=i+1
+  until not(i < len)
+  return nil
+end
+
+function KakuraClient:clearOneMethod(method)
+  local len = #self._connectCacheArr
+  if self._currentConn then
+    if self._currentConn.method == method then
+      self._currentConn = nil
+    end
+  end
+  local i = len - 1
+  repeat
+    local con = self._connectCacheArr[i+1]
+    if con.method == method then
+      self._connectCacheArr:splice(i, 1)
+    end
+    i=i-1
+  until not(i >= 0)
+end
+
+function KakuraClient:checkRequestId()
+  if self._currentConn then
+    if self._currentConn.id > self._requestId then
+      self._currentConn.id = 0
+      self._currentConn.uniqueId = nil
+    end
+  end
+  local len = #self._connectCacheArr
+  local i = 0
+  repeat
+    local con = self._connectCacheArr[i+1]
+    if con.id > self._requestId then
+      con.id = 0
+      con.uniqueId = nil
+    end
+    i=i+1
+  until not(i < len)
+end
+
+function KakuraClient:clearInitRequest()
+  self:clearOneMethod(MethodCommon.User_kakuraInit)
+  self:clearOneMethod(MethodCommon.User_kakuraReauth)
+  self:clearOneMethod(MethodCommon.User_relogin)
+end
+
+function KakuraClient:checkIsInitMethod(method)
+  if method == MethodCommon.User_kakuraInit or method == MethodCommon.User_kakuraReauth then
+    return true
+  end
+  return false
+end
+
+function KakuraClient:checkServerSysError(code)
+  if code == ErrorCode.duplicate_login then
+    self._isoffline = true
+    return true
+  end
+  return false
+end
+
+function KakuraClient:checkIsHeartBeat(method)
+  if method == KakuraClient.method_heartBeat then
+    return true
+  end
+  return false
+end
+
+function KakuraClient:testClose()
+  if self._websocket then
+    self._websocket:close()
+  end
+  self._webSocketConnet = false
+end

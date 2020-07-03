@@ -1,0 +1,173 @@
+require("stringutil")
+require("trycatch")
+require("framework/manager/LocalStorageManager")
+require("framework/utils/FileUtils")
+require("framework/manager/LogsManager")
+require("framework/common/UserInfo")
+
+CacheManager = class('CacheManager')
+
+function CacheManager:ctor()
+  self._localCache = {};
+  self._globalCache = {};
+  self._fileCacheName = "fileStorageCache.txt";
+  self._fileCachePath = "fileStorage/";
+  self._localCache = {}
+  self._globalCache = {}
+end
+
+function CacheManager.__getters.instance()
+  if not CacheManager._instance then
+    CacheManager._instance = CacheManager()
+  end
+  return CacheManager._instance
+end
+
+function CacheManager:setLocalCache(key, value)
+  self:addRidKeys(key + self._rid)
+  -- [ts2lua]self._localCache下标访问可能不正确
+  self._localCache[key + self._rid] = value
+  LocalStorageManager.setItem(key + self._rid, value)
+end
+
+function CacheManager:clearLocalCache(rid)
+  if rid == nil then
+    rid=self._rid
+  end
+  local ridKey = LocalStorageManager.getItem(rid)
+  if ridKey then
+    local keys = ridKey:split(",")
+    local i = 0
+    repeat
+      local key = keys[i+1]
+      LocalStorageManager.removeItem(key)
+      i=i+1
+    until not(i < #keys)
+    LocalStorageManager.removeItem(rid)
+  end
+  self._localCache = {}
+end
+
+function CacheManager:getLocalCache(key)
+  local key = key + self._rid
+  -- [ts2lua]self._localCache下标访问可能不正确
+  if self._localCache[key] then
+    -- [ts2lua]self._localCache下标访问可能不正确
+    return self._localCache[key]
+  else
+    -- [ts2lua]self._localCache下标访问可能不正确
+    self._localCache[key] = LocalStorageManager.getItem(key)
+    -- [ts2lua]self._localCache下标访问可能不正确
+    return self._localCache[key]
+  end
+end
+
+function CacheManager:removeLocalCache(key)
+  if key ~= self._rid then
+    LocalStorageManager.removeItem(key + self._rid)
+    -- [ts2lua]self._localCache下标访问可能不正确
+    self._localCache[key + self._rid] = "0"
+  end
+end
+
+function CacheManager:setRid(rid)
+  self._rid = rid
+end
+
+function CacheManager:addRidKeys(key)
+  local ridKey = LocalStorageManager.getItem(self._rid)
+  local isHave = false
+  if ridKey then
+    local keys = ridKey:split(",")
+    local i = 0
+    repeat
+      if keys[i+1] == key then
+        isHave = true
+        break
+      end
+      i=i+1
+    until not(i < #keys)
+  end
+  if not isHave then
+    LocalStorageManager.setItem(self._rid, ridKey .. "," .. key)
+  end
+end
+
+function CacheManager:setGlobalCache(key, value)
+  LocalStorageManager.setItem(key, value)
+  -- [ts2lua]self._globalCache下标访问可能不正确
+  self._globalCache[key] = value
+end
+
+function CacheManager:removeGlobalCache(key)
+  LocalStorageManager.removeItem(key)
+  -- [ts2lua]self._globalCache下标访问可能不正确
+  self._globalCache[key] = "0"
+end
+
+function CacheManager:clearStorage()
+  LocalStorageManager.clearStorage()
+end
+
+function CacheManager:getGlobalCache(key)
+  -- [ts2lua]self._globalCache下标访问可能不正确
+  if self._globalCache[key] then
+    -- [ts2lua]self._globalCache下标访问可能不正确
+    return self._globalCache[key]
+  else
+    -- [ts2lua]self._globalCache下标访问可能不正确
+    self._globalCache[key] = LocalStorageManager.getItem(key)
+    -- [ts2lua]self._globalCache下标访问可能不正确
+    return self._globalCache[key]
+  end
+end
+
+function CacheManager:setFileStorageCache(key, value)
+  if not FileUtils.isUserWXSource() or UserInfo.isVivo() then
+    self:setGlobalCache(key, value)
+    return
+  end
+  self:initFileStorageCahce()
+  -- [ts2lua]self._fileStorage下标访问可能不正确
+  if self._fileStorage[key] == value then
+    return
+  end
+  -- [ts2lua]self._fileStorage下标访问可能不正确
+  self._fileStorage[key] = value
+  local jsStr = JSON:stringify(self._fileStorage)
+  FileUtils.saveFileData(self._fileCacheName, self._fileCachePath, jsStr)
+end
+
+function CacheManager:getFileStorageCache(key)
+  if not FileUtils.isUserWXSource() or UserInfo.isVivo() then
+    return self:getGlobalCache(key)
+  end
+  self:initFileStorageCahce()
+  -- [ts2lua]self._fileStorage下标访问可能不正确
+  return self._fileStorage[key] or "0"
+end
+
+function CacheManager:initFileStorageCahce()
+  if self._fileStorage then
+    return
+  end
+  local fileInfo = FileUtils.getLocalFileData(self._fileCachePath + self._fileCacheName)
+  if self._fileStorage then
+    LogsManager.warn("出现了文件存在但是读取失败的现象,防止_fileStorage 被覆盖")
+    return
+  end
+  if not fileInfo then
+    self._fileStorage = {}
+  else
+    LogsManager.echo("fileCachestr:", fileInfo)
+    try_catch{
+      main = function()
+        self._fileStorage = JSON:parse(fileInfo)
+      end,
+      catch = function(e)
+        self._fileStorage = {}
+        LogsManager.errorTag("FileStorageCahceError", "cacheStr:" .. fileInfo)
+      end
+    }
+  end
+end

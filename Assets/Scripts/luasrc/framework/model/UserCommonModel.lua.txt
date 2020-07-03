@@ -1,0 +1,32 @@
+require("game/sys/model/BaseModel")
+require("framework/common/kakura/Client")
+
+UserCommonModel = class('UserCommonModel',BaseModel)
+function UserCommonModel:ctor()
+  self:superCall('ctor')
+end
+
+function UserCommonModel.__getters.instance()
+  if not UserCommonModel._instance then
+    UserCommonModel._instance = UserCommonModel()
+  end
+  return UserCommonModel._instance
+end
+
+function UserCommonModel:initData(d)
+  self:superCall('initData',d)
+end
+
+function UserCommonModel:updateData(d)
+  self:superCall('updateData',d)
+end
+
+function UserCommonModel:getJumpedList()
+  local jumpList = self._data.jumpedList or {}
+  if not jumpList.expireTime or Client.instance.serverTime > jumpList.expireTime then
+    self._data.jumpedList = {}
+    return {}
+  else
+    return jumpList.appList
+  end
+end

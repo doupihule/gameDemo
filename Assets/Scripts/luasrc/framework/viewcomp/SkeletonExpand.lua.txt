@@ -1,0 +1,183 @@
+require("framework/manager/SubPackageManager")
+require("framework/manager/ResourceManager")
+require("framework/manager/LoadManager")
+require("framework/manager/LogsManager")
+
+SkeletonExpand = class('SkeletonExpand',Laya.Skeleton)
+SkeletonExpand.cacheAniCompleteMap = {};
+SkeletonExpand._textureCache = {};
+function SkeletonExpand:ctor(templet, aniMode)
+  self:superCall('ctor',templet, aniMode)
+  self._state = 0;
+  self._changeTextureState = 0;
+  self._cacheAniMode = 0;
+  self._cacheAniMode = aniMode
+  self._cacheCompleteParams = {}
+end
+
+function SkeletonExpand:startLoadByShortName(shortName)
+  self.shortSkeletonName = shortName
+  SubPackageManager.loadDynamics(ResourceManager.getSpineSubpack(shortName), ResourceManager.getSpinePath(shortName), self.onSubPackComplete, self)
+end
+
+function SkeletonExpand:onSubPackComplete()
+  self:load(ResourceManager.getSpineSkUrl(self.shortSkeletonName), Laya.Handler(self, self.onLoadComplete), self._cacheAniMode)
+end
+
+function SkeletonExpand:_update()
+  -- [ts2lua]self下标访问可能不正确
+  if not self["_player"] then
+    return
+  end
+  -- [ts2lua]super下标访问可能不正确
+  super["_update"]()
+end
+
+function SkeletonExpand:onLoadComplete()
+  self._state = 1
+  if self._cachePlayParams then
+    self.play:apply(self, self._cachePlayParams)
+    self._cachePlayParams = nil
+  end
+  if self._cacheStopParams then
+    self:stop()
+    self._cacheStopParams = nil
+  end
+  if self._changeTextureState == 1 then
+    self:changWholeViewTexture(self._changeTextureUrl)
+  end
+  local i = 0
+  repeat
+    local info = self._cacheCompleteParams[i+1]
+    info.callBack:apply(info.thisObj, info.params)
+    i=i+1
+  until not(i < #self._cacheCompleteParams)
+  -- [ts2lua]修改数组长度需要手动处理。
+  self._cacheCompleteParams.length = 0
+  if self.completeBackFunc then
+    self.completeBackFunc:call(self.completeThisObj, self.completeExpandParams)
+  end
+  -- [ts2lua]SkeletonExpand.cacheAniCompleteMap下标访问可能不正确
+  if not SkeletonExpand.cacheAniCompleteMap[self.shortSkeletonName] then
+    -- [ts2lua]SkeletonExpand.cacheAniCompleteMap下标访问可能不正确
+    SkeletonExpand.cacheAniCompleteMap[self.shortSkeletonName] = {nums=0, templet=self.templet}
+  end
+  -- [ts2lua]SkeletonExpand.cacheAniCompleteMap下标访问可能不正确
+  -- [ts2lua]SkeletonExpand.cacheAniCompleteMap下标访问可能不正确
+  SkeletonExpand.cacheAniCompleteMap[self.shortSkeletonName].nums=SkeletonExpand.cacheAniCompleteMap[self.shortSkeletonName].nums+1
+end
+
+function SkeletonExpand:changWholeViewTexture(url)
+  self._changeTextureState = 1
+  self.visible = false
+  if self._state == 0 then
+    self._changeTextureUrl = url
+    return
+  end
+  LoadManager.instance:load(url, Laya.Handler:create(self, self.onImageCompelte))
+end
+
+function SkeletonExpand:onImageCompelte()
+  self._changeTextureState = 2
+  local tex = Laya.Loader:getRes(self._changeTextureUrl)
+  -- [ts2lua]self下标访问可能不正确
+  local boneSlotArr = self["_boneSlotArray"]
+  local i = 0
+  repeat
+    local slot = boneSlotArr[i+1]
+    local currentTex = slot.currTexture
+    slot:replaceSkin(SkeletonExpand.createSlotTexture(self._changeTextureUrl + slot.name, tex, slot))
+    i=i+1
+  until not(i < #boneSlotArr)
+  self.visible = true
+  -- [ts2lua]self下标访问可能不正确
+  self["_clearCache"]()
+end
+
+function SkeletonExpand.createSlotTexture(key, sourceTexture, slot)
+  -- [ts2lua]SkeletonExpand._textureCache下标访问可能不正确
+  if SkeletonExpand._textureCache[key] then
+    -- [ts2lua]SkeletonExpand._textureCache下标访问可能不正确
+    return SkeletonExpand._textureCache[key]
+  else
+    local uvs = nil
+    local texture = Laya.Texture(sourceTexture.bitmap, uvs)
+    if not slot.currSlotData then
+      LogsManager.warn("SlotTextureWarn,slot:", slot.name, "没有插槽数据")
+      -- [ts2lua]SkeletonExpand._textureCache下标访问可能不正确
+      SkeletonExpand._textureCache[key] = texture
+      return texture
+    end
+    local displayData = slot.currSlotData.displayArr[0+1]
+    if not displayData then
+      LogsManager.warn("SlotTextureWarn,slot:", slot.name, "没有显示对象.可能是空插槽")
+      -- [ts2lua]SkeletonExpand._textureCache下标访问可能不正确
+      SkeletonExpand._textureCache[key] = texture
+      return texture
+    end
+    uvs = displayData.uvs
+    texture.uv = uvs
+    -- [ts2lua]SkeletonExpand._textureCache下标访问可能不正确
+    SkeletonExpand._textureCache[key] = texture
+    return texture
+  end
+end
+
+function SkeletonExpand:play(nameOrIndex, loop, force, start, tsvar_end, freshSkin, playAudio)
+  -- [ts2lua]self下标访问可能不正确
+  if not self["_player"] and self._state == 0 then
+    self._cacheStopParams = nil
+    self._cachePlayParams = {nameOrIndex, loop, force, start, tsvar_end, freshSkin, playAudio}
+    return
+  end
+  self:superCall('play',nameOrIndex, loop, force, start, tsvar_end, freshSkin, playAudio)
+end
+
+function SkeletonExpand:showOrHideSlot(slotName, value)
+  if self._state == 0 then
+    local tempObj = {callBack=self.showOrHideSlot, thisObj=self, params={slotName}}
+    table.insert(self._cacheCompleteParams, tempObj)
+    return
+  end
+  local slot = self:getSlotByName(slotName)
+  if not slot then
+    LogsManager.warn("没有这个slot:", slotName)
+    return
+  end
+  if value == true then
+    slot:replaceDisplayByIndex(0, nil)
+  else
+    slot:replaceDisplayByIndex(0, -1)
+  end
+  -- [ts2lua]self下标访问可能不正确
+  self["_clearCache"]()
+end
+
+function SkeletonExpand.getAniFrame(aniName, aniIndex)
+  if aniIndex == nil then
+    aniIndex=0
+  end
+  -- [ts2lua]SkeletonExpand.cacheAniCompleteMap下标访问可能不正确
+  if not SkeletonExpand.cacheAniCompleteMap[aniName] then
+    return -1
+  end
+  -- [ts2lua]SkeletonExpand.cacheAniCompleteMap下标访问可能不正确
+  local templet = SkeletonExpand.cacheAniCompleteMap[aniName].templet
+  if aniIndex < 0 then
+    return -1
+  end
+  if aniIndex >= templet:getAnimationCount() then
+    LogsManager.errorTag("aniError", "aniIndex错误,ani:", aniName, "动画数量:", templet:getAnimationCount(), "目标aniIndex:", aniIndex)
+    return -1
+  end
+  return Math:round(templet:getAniDuration(aniIndex) / 1000 * templet.rate)
+end
+
+function SkeletonExpand:stop()
+  if self._state == 0 then
+    self._cacheStopParams = true
+    self._cachePlayParams = nil
+    return
+  end
+  self:superCall('stop')
+end

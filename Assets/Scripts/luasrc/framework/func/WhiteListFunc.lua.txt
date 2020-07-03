@@ -1,0 +1,60 @@
+require("framework/func/BaseFunc")
+require("framework/common/UserInfo")
+
+WhiteListFunc = class('WhiteListFunc',BaseFunc)
+function WhiteListFunc:ctor(...)
+  self:superCall('ctor', unpack({...}))
+  self.whiteList = {};
+end
+
+function WhiteListFunc.__getters.instance()
+  if not WhiteListFunc._instance then
+    WhiteListFunc._instance = WhiteListFunc()
+  end
+  return WhiteListFunc._instance
+end
+
+WhiteListFunc.TYPE_REGISTER = 1;
+WhiteListFunc.TYPE_LOGIN = 2;
+function WhiteListFunc:getCfgsPathArr()
+  return {{name="WhiteList_json"}}
+end
+
+function WhiteListFunc:getWhiteList(type)
+  -- [ts2lua]self.whiteList下标访问可能不正确
+  if not self.whiteList[type] then
+    local list = self:getAllCfgData("WhiteList_json", true)
+    -- [ts2lua]self.whiteList下标访问可能不正确
+    self.whiteList[type] = {}
+    local whitePlatform = nil
+    if UserInfo.isWX() then
+      whitePlatform = 1
+    elseif UserInfo.isTT() then
+      whitePlatform = 2
+    elseif UserInfo.isQQGame() then
+      whitePlatform = 3
+    elseif UserInfo.isOppo() then
+      whitePlatform = 4
+    elseif UserInfo.isBaidu() then
+      whitePlatform = 5
+    elseif UserInfo.isVivo() then
+      whitePlatform = 6
+    else
+      return {}
+    end
+    for key in pairs(list) do
+      if list:hasOwnProperty(key) then
+        -- [ts2lua]list下标访问可能不正确
+        -- [ts2lua]list下标访问可能不正确
+        if list[key].whiteListPlatform == whitePlatform and list[key].type == type then
+          -- [ts2lua]list下标访问可能不正确
+          local element = list[key].whiteListNub
+          -- [ts2lua]self.whiteList下标访问可能不正确
+          table.insert(self.whiteList[type], String(element))
+        end
+      end
+    end
+  end
+  -- [ts2lua]self.whiteList下标访问可能不正确
+  return self.whiteList[type]
+end

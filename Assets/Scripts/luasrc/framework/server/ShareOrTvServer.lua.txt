@@ -1,0 +1,53 @@
+require("framework/common/kakura/Client")
+require("game/sys/model/UserModel")
+require("framework/server/SingleCommonServer")
+require("framework/manager/ShareOrTvManager")
+require("framework/model/UserGlobalModel")
+require("framework/server/CountsCommonServer")
+require("framework/model/CountsCommonModel")
+
+ShareOrTvServer = class('ShareOrTvServer')
+function ShareOrTvServer.shareOrTvSend(data, callBack, thisObj)
+  if callBack == nil then
+    callBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if ShareOrTvManager.leadTypeId then
+    local upData = {}
+    if data.type == ShareOrTvManager.TYPE_SHARE then
+      UserGlobalModel.instance:setShareNum(-1)
+    end
+    local turnId = CountsCommonModel.instance:turnShareTvId(ShareOrTvManager.leadTypeId)
+    local value = CountsCommonModel.instance:getShareTvCountById(ShareOrTvManager.leadTypeId) + 1
+    CountsCommonServer.updateDayCounts(turnId, value, true, callBack, thisObj)
+  else
+    callBack and callBack:call(thisObj)
+  end
+end
+
+function ShareOrTvServer.resetSharOrTvCounts(callBack, thisObj)
+  if callBack == nil then
+    callBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if not UserModel.instance:getData() then
+    callBack and callBack:call(thisObj)
+    return
+  end
+  local leadShareData = UserModel.instance:getData().leadShare
+  if not leadShareData then
+    callBack and callBack:call(thisObj)
+    return
+  end
+  local upData = {leadShare={}}
+  for i in pairs(leadShareData) do
+    upData.leadShare[i+1] = 0
+  end
+  local backData = Client.instance:doDummyServerBack(nil, upData, nil)
+  SingleCommonServer.startSaveClientData()
+  callBack and callBack:call(thisObj)
+end

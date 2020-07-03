@@ -1,0 +1,146 @@
+require("framework/func/TranslateFunc")
+require("framework/manager/LogsManager")
+require("game/sys/common/kakura/ErrorCode")
+require("framework/common/Message")
+require("game/sys/common/MsgCMD")
+require("framework/common/UserInfo")
+require("framework/common/kakura/Client")
+require("framework/manager/WindowManager")
+require("framework/common/kakura/KakuraClient")
+require("utils/Global")
+
+ErrCodeManager = class('ErrCodeManager')
+function ErrCodeManager:ctor(...)
+  self:superCall('ctor', unpack({...}))
+  self.ERROR_STATE_NOHANDLE = 0;
+  self.ERROR_STATE_HADNLE_SENDERROR = 1;
+  self.ERROR_STATE_HANDLE_NOSEND = 2;
+  self.popupErrs = {10053, 10054, 10071, 10072};
+  self._configData = {};
+end
+function ErrCodeManager:ctor() end
+function ErrCodeManager.__getters.ins()
+  if not ErrCodeManager._ins then
+    ErrCodeManager._ins = ErrCodeManager()
+  end
+  return ErrCodeManager._ins
+end
+
+function ErrCodeManager:initConfig()
+  TranslateFunc.instance:insertOneCfgs("TranslateError_json")
+  self:checkErrCode()
+end
+
+function ErrCodeManager:setErr(errCode)
+  local warningList = {}
+  local resendList = {}
+  local hasSendError = false
+  LogsManager.warn(">>>>>>>>>>>>errCode>>>>>>>>>>>>", errCode)
+  local errerMessage = TranslateFunc.instance:getTranslate("#error" .. errCode)
+  if errCode == ErrorCode.duplicate_login then
+    WindowManager.setPopupTip(1, errerMessage, self.sureCallback, self)
+  elseif errCode == ErrorCode.sys_error then
+    WindowManager.setPopupTip(1, errerMessage, self.sureCallback, self)
+  elseif self.popupErrs:find(parseInt(errCode)) > -1 then
+    WindowManager.setPopupTip(1, errerMessage, self.sureCallback, self)
+  elseif ((((errCode == ErrorCode.kakura_needClientUpdate or errCode == ErrorCode.kakura_server_error) or errCode == ErrorCode.sec_no_open) or self._currCode == ErrorCode.sec_maintain) or self._currCode == ErrorCode.kakura_needClientUpdate) or self._currCode == ErrorCode.kakura_server_error then
+    WindowManager.setPopupTip(1, errerMessage, self.sureCallback, self)
+  elseif errCode == ErrorCode.need_client_relogin then
+    WindowManager.setPopupTip(1, errerMessage, function()
+      Message.instance:send(MsgCMD.REQ_GLOBAL)
+    end
+    , self)
+  elseif errCode == ErrorCode.webOffline then
+    WindowManager.setPopupTip(1, errerMessage, self.reauthHandler, self)
+  elseif String(errCode) == ErrorCode.account_data_error then
+    WindowManager.setPopupTip(1, errerMessage, self.sureCallback, self)
+  else
+    local flag = true
+    for _tmpi, warning in pairs(warningList) do
+      if Number(errCode) == warning.errCode then
+        if warning.sendMethod then
+          if KakuraClient.instance._currentConn and Number(KakuraClient.instance._currentConn.method) == warning.sendMethod then
+            flag = false
+            LogsManager.echo("krma. _currentConn.method " .. Number(KakuraClient.instance._currentConn.method) .. " " .. warning.sendMethod)
+          end
+        else
+          flag = false
+        end
+        break
+      end
+    end
+    if errCode == ErrorCode.server_error_test_210101 and flag then
+      LogsManager.sendErrorToPlatform("210101_sign_login_step_error", LogsManager.errorTage_serverError)
+      hasSendError = true
+    end
+    if flag then
+      if Global.checkIsSingleMode() then
+        WindowManager.ShowTip(errerMessage)
+      end
+    end
+  end
+  for _tmpi, warning in pairs(resendList) do
+    if Number(errCode) == warning.errCode then
+      KakuraClient.instance:resendCurrentConnLater()
+    end
+  end
+  if not hasSendError then
+    local needError = self:checkNeedSendError(errCode)
+    LogsManager.echo("_错误码:", errCode, "是否需要发送错误:", needError)
+    if needError then
+      LogsManager.sendErrorToPlatform("code:" .. errCode .. "," .. errerMessage, LogsManager.errorTage_serverError, 200)
+    end
+  end
+  self._currCode = errCode
+end
+
+function ErrCodeManager:sureCallback()
+  UserInfo.platform:loginOut()
+end
+
+function ErrCodeManager:checkErrCode()
+  local config = TranslateFunc.instance:getAllCfgData("TranslateError_json")
+  for i in pairs(config) do
+    local msg = config[i+1].zh_CN
+    local state = config[i+1].state
+    local content = ""
+    if msg == undefined then
+      content = content .. "zh_CN"
+    end
+    if state == undefined or parseInt(state) == 0 then
+      content = content .. "  state"
+    end
+    if content ~= "" then
+      content = "<" .. config[i+1].hid .. "> " .. content
+      LogsManager.warn("ErrorCode Id :", content)
+    end
+  end
+end
+
+function ErrCodeManager:checkNeedSendError(errorCode)
+  local config = nil
+  local configArr = {"TranslateError", "localErrorCodeMap"}
+  local key = "#error" .. errorCode
+  local i = 0
+  repeat
+    config = TranslateFunc.instance:getAllCfgData(configArr[i+1], true)
+    -- [ts2lua]config下标访问可能不正确
+    local info = config[key]
+    if info then
+      local state = info.state
+      if state ~= self.ERROR_STATE_HANDLE_NOSEND then
+        return true
+      else
+        return false
+      end
+    end
+    i=i+1
+  until not(i < #configArr)
+  return true
+end
+
+function ErrCodeManager:reauthHandler()
+  Client.instance:checkConnect()
+end
+
+function ErrCodeManager:logoutHandler() end

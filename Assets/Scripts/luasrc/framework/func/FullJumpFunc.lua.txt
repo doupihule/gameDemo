@@ -1,0 +1,40 @@
+require("framework/func/BaseFunc")
+require("utils/GameUtils")
+require("framework/manager/LogsManager")
+
+FullJumpFunc = class('FullJumpFunc',BaseFunc)
+function FullJumpFunc:getCfgsPathArr()
+  return {{name="FullJump_json", ignoreNoExist=true}}
+end
+
+FullJumpFunc.ID_ONSHOW = "1";
+FullJumpFunc.ID_JUMP_FALSE = "2";
+FullJumpFunc.ID_COMMON_GAME = "3";
+FullJumpFunc.ID_WAR_GAME = "4";
+FullJumpFunc.ID_EXIT_LOTTERY = "5";
+FullJumpFunc.ID_EXIT_SEVEN_DAY = "6";
+FullJumpFunc.ID_EXIT_RANK = "7";
+FullJumpFunc.ID_EXIT_SHARE = "8";
+FullJumpFunc.ID_EXIT_UPDATE = "9";
+FullJumpFunc.ID_EXIT_FORMATE = "10";
+function FullJumpFunc.__getters.instance()
+  if not FullJumpFunc._instance then
+    FullJumpFunc._instance = FullJumpFunc()
+  end
+  return FullJumpFunc._instance
+end
+
+function FullJumpFunc:canShowFUllJump(id)
+  local jumpData = self:getCfgDatas("FullJump_json", id, true)
+  if not jumpData then
+    return false
+  end
+  local jumpProb = jumpData.probab
+  local randNum = GameUtils.getRandomInt(1, 10000)
+  LogsManager.echo("ycn full jump jumpProb:", jumpProb, ",randNum:", randNum)
+  if randNum <= jumpProb then
+    return true
+  else
+    return false
+  end
+end

@@ -1,0 +1,4 @@
+BannerEvent = class('BannerEvent')
+function BannerEvent:ctor() end
+BannerEvent.BANNER_EVENT_SHOWLEADBANNER = "BANNER_EVENT_SHOWLEADBANNER";
+BannerEvent.BANNER_EVENT_SHOWQUICKBANNER = "BANNER_EVENT_SHOWQUICKBANNER";

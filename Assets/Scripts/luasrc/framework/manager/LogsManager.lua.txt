@@ -1,0 +1,758 @@
+require("date")
+require("framework/common/GameSwitch")
+require("framework/manager/TimerManager")
+require("utils/Global")
+require("framework/manager/WindowManager")
+require("game/sys/manager/StatisticsManager")
+require("game/sys/model/UserModel")
+require("framework/manager/PackConfigManager")
+require("framework/common/HttpMessage")
+require("framework/common/UserInfo")
+require("framework/utils/DeviceTools")
+require("game/sys/consts/GameConsts")
+require("framework/server/SingleCommonServer")
+require("framework/consts/LogsErrorCode")
+require("framework/common/kakura/Client")
+LogsManager = class('LogsManager')
+LogsManager.logsArr = {};
+LogsManager.maxCancheLength = 1000;
+LogsManager._sendCache = {};
+LogsManager.updateFlag = false;
+LogsManager.autoDisableFlag = false;
+LogsManager.idTimeout = nil;
+LogsManager.autoFlag = true;
+LogsManager.statVis = false;
+LogsManager.sendMaxLength = 10000;
+LogsManager._aliyunLogsUrl = "https://client-error-log.cn-beijing.log.aliyuncs.com/logstores/client_error_log/track?APIVersion=0.6.0&";
+LogsManager._aliyunStaUrl = "https://client-business-log.cn-beijing.log.aliyuncs.com/logstores/client_event_log/track?APIVersion=0.6.0&";
+LogsManager._aliyunActiveUrl = "https://client-business-log.cn-beijing.log.aliyuncs.com/logstores/client_active_log/track?APIVersion=0.6.0&";
+LogsManager._aliyunLoadingUrl = "https://client-business-log.cn-beijing.log.aliyuncs.com/logstores/client_loading_log/track?APIVersion=0.6.0&";
+LogsManager.errorTag_sysError = "sys";
+LogsManager.errorTag_gameError = "game";
+LogsManager.errorTage_serverError = "server";
+LogsManager.errorTage_clientLog = "clientLog";
+LogsManager.errorTage_memoryWarning = "memoryWarning";
+LogsManager.ignoreLogs = {"1201", "1630", "1203", "arena_wordAppear", "arena_wordGuessRight"};
+LogsManager.prevX = 0;
+LogsManager.prevY = 0;
+LogsManager.isOpenLogsDebug = false;
+function LogsManager:ctor() end
+function LogsManager.initLogsManager()
+  LogsManager.logsArr = {}
+end
+
+function LogsManager.echo(message, ...)
+  local resultArr = LogsManager.turnStr("echo", message, optionalParams)
+  if not UserInfo.isSystemMini() then
+    print(resultArr:join(" "))
+  else
+    print:apply(nil, resultArr)
+  end
+end
+
+function LogsManager.warn(message, ...)
+  local resultArr = LogsManager.turnStr("warn", message, optionalParams)
+  if not UserInfo.isSystemMini() then
+    console:warn(resultArr:join(" "))
+  else
+    console.warn:apply(nil, resultArr)
+  end
+end
+
+function LogsManager.error(message, ...)
+  console:error("__禁止走到这里来")
+  if UserInfo.isTest() then
+    WindowManager.ShowTip("禁止使用error接口！改为errorTag")
+  end
+end
+
+function LogsManager.errorTag(errorId, message, ...)
+  if errorId == nil then
+    errorId=nil
+  end
+  local resultArr = LogsManager.turnStr("error", message, optionalParams, true)
+  local arr = resultArr:slice(1, #resultArr)
+  local concatStr = "" .. arr:join(",")
+  if UserInfo.isTest() then
+    WindowManager.ShowTip("有错误，去看日志！")
+  end
+  TimerManager.instance:add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, {concatStr, LogsManager.errorTag_gameError, 80, errorId})
+  LogsManager.insterOneLogs(concatStr)
+  if not UserInfo.isSystemMini() then
+    console:error(resultArr:join(" "))
+  else
+    if UserInfo.isWeb() then
+      console.error:apply(nil, resultArr)
+    else
+      console.warn:apply(nil, resultArr)
+    end
+  end
+end
+
+function LogsManager.systemError(message, ...)
+  local resultArr = LogsManager.turnStr("sysError", message, optionalParams, true)
+  local arr = resultArr:slice()
+  arr:splice(0, 1)
+  local concatStr = "" .. arr:join(",")
+  TimerManager.instance:add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, {concatStr, LogsManager.errorTag_sysError})
+  LogsManager.insterOneLogs(concatStr)
+  if UserInfo.isWeb() then
+    console.error:apply(nil, resultArr)
+  else
+    console.warn:apply(nil, resultArr)
+  end
+  if UserInfo.isWeb() then
+    WindowManager.ShowTip("有错误，去看日志！")
+  end
+end
+
+function LogsManager.sendErrorToPlatform(errorStr, tag, maxLength, errorId, logLength, startLine, pieceLength, sendCount)
+  if tag == nil then
+    tag=''
+  end
+  if maxLength == nil then
+    maxLength=1000
+  end
+  if errorId == nil then
+    errorId=nil
+  end
+  if logLength == nil then
+    logLength=80
+  end
+  if startLine == nil then
+    startLine=0
+  end
+  if pieceLength == nil then
+    pieceLength=60
+  end
+  if sendCount == nil then
+    sendCount=1
+  end
+  local id = 0
+  while(logLength > pieceLength)
+  do
+  LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorId, pieceLength, startLine, id + 1, sendCount)
+  logLength = logLength - pieceLength
+  startLine = startLine + pieceLength
+  id=id+1
+  end
+  if id then
+    LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorId, logLength, startLine, id + 1, sendCount)
+  else
+    LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorId, logLength, startLine, 0, sendCount)
+  end
+end
+
+function LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorId, logLength, startLine, id, sendCount)
+  if tag == nil then
+    tag=''
+  end
+  if maxLength == nil then
+    maxLength=1000
+  end
+  if errorId == nil then
+    errorId=nil
+  end
+  if logLength == nil then
+    logLength=80
+  end
+  if startLine == nil then
+    startLine=0
+  end
+  if id == nil then
+    id=0
+  end
+  if UserInfo.isWeb() then
+    return
+  end
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_SENDERRORLOG) then
+    return
+  end
+  errorStr = LogsManager.turnURIContent(errorStr)
+  -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+  errorStr = errorStr:gsub(/[\n\r]+/g, " ")
+  errorStr = errorStr:slice(0, Math:min(#errorStr, maxLength))
+  LogsManager.sendDataToAiCloud(errorStr, tag, logLength, errorId, startLine, id, sendCount)
+end
+
+function LogsManager.getMaxLogsLength()
+  local state = GameSwitch.getSwitchState(GameSwitch.SWITCH_TURNURL_PLAT)
+  if state and state:find(UserInfo.platformId) ~= -1 then
+    return LogsManager.sendMaxLength
+  end
+  return LogsManager.sendMaxLength / 3
+end
+
+function LogsManager.turnURIContent(str)
+  local state = GameSwitch.getSwitchState(GameSwitch.SWITCH_TURNURL_PLAT)
+  if state and state:find(UserInfo.platformId) ~= -1 then
+    return str
+  end
+  return encodeURIComponent(str)
+end
+
+function LogsManager.sendDataToAiCloud(errorStack, tag, logLength, errorId, startLine, messageId, sendCount)
+  if logLength == nil then
+    logLength=80
+  end
+  if errorId == nil then
+    errorId=nil
+  end
+  if startLine == nil then
+    startLine=0
+  end
+  if messageId == nil then
+    messageId=0
+  end
+  if sendCount == nil then
+    sendCount=1
+  end
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ALIYUN) then
+    return
+  end
+  local errorName = messageId .. "_" .. errorStack
+  -- [ts2lua]LogsManager._sendCache下标访问可能不正确
+  if LogsManager._sendCache[errorName] then
+    return
+  end
+  -- [ts2lua]LogsManager._sendCache下标访问可能不正确
+  LogsManager._sendCache[errorName] = true
+  local id = nil
+  if not errorId then
+    id = Md5:init(errorStack)
+  else
+    id = errorId
+  end
+  local errorTagGroup = GameSwitch.getSwitchState(GameSwitch.LOGS_ERRORTAG_GROP)
+  if errorTagGroup and errorTagGroup:find(errorId) ~= -1 then
+    LogsManager.echo("忽略报错日志", errorId)
+    return
+  end
+  local message = ""
+  if messageId then
+    message = messageId .. "_"
+  end
+  local params = {id=id, game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, time=Client.instance.serverTime, os=Global.getOs(), device=Global.deviceModel, cver=Global.client_version, ver=Global.version, rid=UserModel.instance:getUserRid(), error_message=message, error_stack=errorStack, error_type=tag, context="", deviceId=Global.deviceId}
+  local sdkInfo = Global.getSDKInfo()
+  if sdkInfo then
+    -- [ts2lua]params下标访问可能不正确
+    -- [ts2lua]params下标访问可能不正确
+    params["context"] = sdkInfo + params["context"]
+  end
+  local urlParams = HttpMessage.instance:objectToUrlParam(params)
+  local url = LogsManager._aliyunLogsUrl + urlParams
+  local onErrorCall = function()
+    print("__onerrorCall")
+    LogsManager.sendErrorToPlatform(errorStack, tag, 200, errorId, 60, 0, 30, 2)
+  end
+  
+  local webParams = {errorCall=onErrorCall, isOrigin=true, thisObj=LogsManager, sendCount=sendCount}
+  local allLength = LogsManager.getMaxLogsLength() - #url
+  -- [ts2lua]params下标访问可能不正确
+  -- [ts2lua]params下标访问可能不正确
+  params["context"] = LogsManager.turnURIContent(params["context"] + LogsManager.getNearestLogs(logLength, id, startLine, allLength))
+  local urlParams1 = HttpMessage.instance:objectToUrlParam(params)
+  local url1 = LogsManager._aliyunLogsUrl + urlParams1
+  HttpMessage.instance:sendOtherHttpRequest(url1, nil, nil, nil, "get", webParams, 1)
+end
+
+function LogsManager.sendStaticToAiCloud(eventId, eventData)
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ALIYUN) then
+    return
+  end
+  local params = {game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, cver=Global.client_version, deviceId=Global.deviceId, eventId=eventId, rid=UserModel.instance:getUserRid(), device=Global.deviceModel, circleId=LogsManager.getCircleId(), t=Laya.Browser:now()}
+  if eventData then
+    -- [ts2lua]eventData下标访问可能不正确
+    if eventData["sortId"] then
+      -- [ts2lua]params下标访问可能不正确
+      -- [ts2lua]eventData下标访问可能不正确
+      params["sortId"] = eventData["sortId"]
+      -- [ts2lua]eventData下标访问可能不正确
+      eventData["sortId"] = nil
+    end
+    -- [ts2lua]eventData下标访问可能不正确
+    if eventData["groupId"] then
+      -- [ts2lua]params下标访问可能不正确
+      -- [ts2lua]eventData下标访问可能不正确
+      params["groupId"] = eventData["groupId"]
+      -- [ts2lua]eventData下标访问可能不正确
+      eventData["groupId"] = nil
+    end
+    -- [ts2lua]eventData下标访问可能不正确
+    if eventData["comeFrom"] then
+      -- [ts2lua]params下标访问可能不正确
+      -- [ts2lua]eventData下标访问可能不正确
+      params["comeFrom"] = eventData["comeFrom"]
+      -- [ts2lua]eventData下标访问可能不正确
+      eventData["comeFrom"] = nil
+    end
+    -- [ts2lua]eventData下标访问可能不正确
+    if eventData["channelUserId"] then
+      -- [ts2lua]params下标访问可能不正确
+      -- [ts2lua]eventData下标访问可能不正确
+      params["channelUserId"] = eventData["channelUserId"]
+      -- [ts2lua]eventData下标访问可能不正确
+      eventData["channelUserId"] = nil
+    end
+    -- [ts2lua]eventData下标访问可能不正确
+    if eventData["sex"] then
+      -- [ts2lua]params下标访问可能不正确
+      -- [ts2lua]eventData下标访问可能不正确
+      params["sex"] = eventData["sex"]
+      -- [ts2lua]eventData下标访问可能不正确
+      eventData["sex"] = nil
+    end
+    -- [ts2lua]eventData下标访问可能不正确
+    if eventData["cver"] then
+      -- [ts2lua]params下标访问可能不正确
+      -- [ts2lua]eventData下标访问可能不正确
+      params["cver"] = eventData["cver"]
+      -- [ts2lua]eventData下标访问可能不正确
+      eventData["cver"] = nil
+    end
+  end
+  params.childChannelId = UserInfo.platform:getChildChannelKey()
+  if eventData and JSON:stringify(eventData) ~= "{}" then
+    -- [ts2lua]params下标访问可能不正确
+    params["value"] = JSON:stringify(eventData)
+  end
+  local urlParams = HttpMessage.instance:objectToUrlParam(params)
+  local url = LogsManager._aliyunStaUrl + urlParams
+  local onErrorCall = function()
+    print("__onerrorCall")
+  end
+  
+  local webParams = {errorCall=onErrorCall, isOrigin=true}
+  HttpMessage.instance:sendOtherHttpRequest(url, nil, nil, nil, "get", webParams)
+end
+
+function LogsManager.sendActiveToAiCloud(isNew)
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ALIYUN) then
+    return
+  end
+  local params = {game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, deviceId=Global.deviceId, device=Global.deviceModel, isNew=isNew}
+  local urlParams = HttpMessage.instance:objectToUrlParam(params)
+  local url = LogsManager._aliyunActiveUrl + urlParams
+  local onErrorCall = function()
+    print("__onerrorCall")
+  end
+  
+  local webParams = {errorCall=onErrorCall, isOrigin=true}
+  HttpMessage.instance:sendOtherHttpRequest(url, nil, nil, nil, "get", webParams)
+end
+
+function LogsManager.sendLoadingToAiCloud(time)
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ALIYUN) then
+    return
+  end
+  -- [ts2lua]lua中0和空字符串也是true，此处StatisticsManager.isNewPlayer需要确认
+  local params = {game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, deviceId=Global.deviceId, device=Global.deviceModel, isNew=(StatisticsManager.isNewPlayer and {1} or {0})[1], network=DeviceTools.network, time=time}
+  LogsManager.echo("yrc1111 sendLoadingToAiCloud", JSON:stringify(params))
+  local urlParams = HttpMessage.instance:objectToUrlParam(params)
+  local url = LogsManager._aliyunLoadingUrl + urlParams
+  local onErrorCall = function()
+    print("__onerrorCall")
+  end
+  
+  local webParams = {errorCall=onErrorCall, isOrigin=true}
+  HttpMessage.instance:sendOtherHttpRequest(url, nil, nil, nil, "get", webParams)
+end
+
+function LogsManager.insterOneLogs(str)
+  local rowLen = 50
+  table.insert(LogsManager.logsArr, {label=str})
+  if #LogsManager.logsArr > LogsManager.maxCancheLength then
+    LogsManager.logsArr:splice(0, 1)
+  end
+  if LogsManager.logPanel then
+    if not LogsManager.updateFlag and LogsManager.logPanel.visible then
+      Laya.timer:once(500, LogsManager, function()
+        if LogsManager.updateFlag and LogsManager.logPanel.visible then
+          LogsManager.refreshLog()
+        end
+        LogsManager.updateFlag = false
+      end
+      )
+      LogsManager.updateFlag = true
+    end
+  end
+end
+
+function LogsManager.getNearestLogs(line, id, startLine, allLength)
+  if id == nil then
+    id=nil
+  end
+  if startLine == nil then
+    startLine=0
+  end
+  if id == LogsErrorCode.ALIYUN_SENDERROR then
+    return ""
+  end
+  if line == 0 then
+    return LogsManager.logsArr
+  end
+  local len = #LogsManager.logsArr
+  if line + startLine > len then
+    line = Math:max(0, len - startLine)
+  end
+  local start = len - line - startLine
+  if start < 0 then
+    start = 0
+  end
+  local str = ""
+  local i = start
+  repeat
+    str = str .. LogsManager.logsArr[i+1].label .. "\n"
+    i=i+1
+  until not(i < start + line)
+  if not #str then
+    str = "all " .. len .. " start " .. startLine .. " ,log already end"
+  end
+  if allLength then
+    if #str > allLength then
+      str = str:slice(0, allLength)
+    end
+  end
+  return str
+end
+
+function LogsManager.getSureByte(str, allLength)
+  local lastStr = ""
+  local changeStr = ""
+  local s = ""
+  local enocdeLength = 0
+  local i = #str - 1
+  repeat
+    s = str:sub(i)
+    -- [ts2lua]修改数组长度需要手动处理。
+    enocdeLength = encodeURIComponent(s).length
+    if allLength - enocdeLength >= 30 then
+      lastStr = lastStr + s
+      allLength = allLength - enocdeLength
+    else
+      break
+    end
+    i=i-1
+  until not(i >= 0)
+  local i = #lastStr - 1
+  repeat
+    changeStr = changeStr + lastStr:sub(i)
+    i=i-1
+  until not(i >= 0)
+  return changeStr
+end
+
+function LogsManager.turnStr(title, message, optionalParams, isError)
+  if isError == nil then
+    isError=false
+  end
+  if type(message) ~= "string" then
+    message = message .. ""
+  end
+  local timeStr = LogsManager.getTimeStr(title)
+  local resultStr = nil
+  local length = #optionalParams
+  local arr = nil
+  if message:find("#") ~= -1 then
+    resultStr = message
+    local i = 0
+    repeat
+      resultStr = resultStr:gsub("#" .. i + 1, optionalParams[i+1])
+      i=i+1
+    until not(i < length)
+    arr = {resultStr}
+  else
+    if length > 0 then
+      resultStr = message .. " " .. optionalParams:join(" ")
+    else
+      resultStr = message
+    end
+    optionalParams:splice(0, 0, message)
+    arr = optionalParams
+  end
+  resultStr = timeStr .. " " .. resultStr
+  if not isError then
+    LogsManager.insterOneLogs(resultStr)
+  end
+  arr:splice(0, 0, timeStr)
+  return arr
+end
+
+function LogsManager.getTimeStr(title)
+  local time = Date()
+  return "[" .. title .. time:getHours() .. ":" .. time:getMinutes() .. ":" .. time:getSeconds() .. " ] "
+end
+
+function LogsManager.getFunctionName(func)
+  local name = nil
+  if type(func) == 'function' or type(func) == 'object' then
+    name = '' .. func
+    -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+    name = name:match(/function\s*([\w\$]*)\s*\(/)
+  end
+  return name and name[1+1]
+end
+
+function LogsManager.initLogPanel()
+  LogsManager.logGroup = Laya.Image()
+  LogsManager.logPanel = Laya.Image()
+  LogsManager.scroller = Laya.List()
+  local background = Laya.Sprite()
+  local logBtn = Laya.Label("Log")
+  LogsManager.autoBtn = Laya.Label("Auto")
+  LogsManager.disposeAccountBtn = Laya.Label("清除数据（慎点）")
+  LogsManager.disposeAccountSureBtn = Laya.Label("确认清除数据（慎点）")
+  LogsManager.disposeAccountCancelBtn = Laya.Label("不清除数据了")
+  LogsManager.statBtn = Laya.Label("stat")
+  LogsManager.infoLabel = Laya.Label("uid")
+  LogsManager.infoLabel.fontSize = 20
+  LogsManager.infoLabel.color = "#ffffff"
+  LogsManager.statBtn.fontSize = 20
+  LogsManager.autoBtn.fontSize = LogsManager.statBtn.fontSize
+  LogsManager.disposeAccountBtn.fontSize = LogsManager.autoBtn.fontSize
+  logBtn.fontSize = LogsManager.disposeAccountBtn.fontSize
+  LogsManager.statBtn.color = "#ffffff"
+  LogsManager.autoBtn.color = LogsManager.statBtn.color
+  LogsManager.disposeAccountBtn.color = LogsManager.autoBtn.color
+  logBtn.color = LogsManager.disposeAccountBtn.color
+  LogsManager.disposeAccountCancelBtn.fontSize = 60
+  LogsManager.disposeAccountSureBtn.fontSize = LogsManager.disposeAccountCancelBtn.fontSize
+  LogsManager.disposeAccountCancelBtn.bold = true
+  LogsManager.disposeAccountSureBtn.bold = LogsManager.disposeAccountCancelBtn.bold
+  LogsManager.disposeAccountCancelBtn.color = "#ff0000"
+  LogsManager.disposeAccountSureBtn.color = LogsManager.disposeAccountCancelBtn.color
+  LogsManager.txt = Laya.Text()
+  local logGroup = LogsManager.logGroup
+  local logPanel = LogsManager.logPanel
+  local txt = LogsManager.txt
+  local Text = Laya.Text
+  local Event = Laya.Event
+  txt.overflow = Text.SCROLL
+  txt.text = LogsManager.setLogTxt()
+  txt.wordWrap = true
+  txt:size(540, 540)
+  txt.fontSize = 20
+  txt.color = "#ffffff"
+  txt:on(Event.MOUSE_DOWN, LogsManager, startScrollText)
+  local thisObj = LogsManager
+  function startScrollText(e)
+    local Event = Laya.Event
+    LogsManager.prevX = txt.mouseX
+    LogsManager.prevY = txt.mouseY
+    Laya.stage:on(Event.MOUSE_MOVE, self, scrollText)
+    Laya.stage:on(Event.MOUSE_UP, self, finishScrollText)
+  end
+  
+  function finishScrollText(e)
+    local Event = Laya.Event
+    Laya.stage:off(Event.MOUSE_MOVE, self, scrollText)
+    Laya.stage:off(Event.MOUSE_UP, self, finishScrollText)
+  end
+  
+  function scrollText(e)
+    local Event = Laya.Event
+    local nowX = txt.mouseX
+    local nowY = txt.mouseY
+    txt.scrollX = txt.scrollX + LogsManager.prevX - nowX
+    txt.scrollY = txt.scrollY + LogsManager.prevY - nowY
+    LogsManager.prevX = nowX
+    LogsManager.prevY = nowY
+  end
+  
+  logPanel:addChild(background)
+  logPanel:addChild(txt)
+  logGroup:addChild(logPanel)
+  logGroup:addChild(logBtn)
+  logGroup:addChild(LogsManager.autoBtn)
+  logGroup:addChild(LogsManager.disposeAccountBtn)
+  logGroup:addChild(LogsManager.disposeAccountSureBtn)
+  logGroup:addChild(LogsManager.disposeAccountCancelBtn)
+  logGroup:addChild(LogsManager.statBtn)
+  logGroup:addChild(LogsManager.infoLabel)
+  WindowManager.debugLayer:addChild(logGroup)
+  logGroup.mouseThrough = true
+  background.graphics:drawRect(0, 30, 640, 540, 0)
+  local touchGroup = Laya.Sprite()
+  touchGroup.width = 150
+  touchGroup.height = 50
+  touchGroup.x = 490
+  touchGroup.y = 0
+  WindowManager.debugLayer:addChild(touchGroup)
+  touchGroup:on(Laya.Event.CLICK, self, self.touchHandler)
+  background.alpha = 0.8
+  logBtn.x = logBtn.x + 30
+  LogsManager.autoBtn.x = LogsManager.autoBtn.x + 100
+  LogsManager.disposeAccountBtn.x = LogsManager.disposeAccountBtn.x + 300
+  LogsManager.disposeAccountSureBtn.x = LogsManager.disposeAccountSureBtn.x + 60
+  LogsManager.disposeAccountSureBtn.y = LogsManager.disposeAccountSureBtn.y + 400
+  LogsManager.disposeAccountCancelBtn.x = LogsManager.disposeAccountCancelBtn.x + 60
+  LogsManager.disposeAccountCancelBtn.y = LogsManager.disposeAccountCancelBtn.y + 480
+  LogsManager.statBtn.x = LogsManager.statBtn.x + 100
+  LogsManager.statBtn.y = LogsManager.statBtn.y + 20
+  LogsManager.infoLabel.x = LogsManager.infoLabel.x + 180
+  txt.y = txt.y + 30
+  logPanel.y = logPanel.y + 15
+  logGroup.y = logGroup.y + 100
+  logPanel.visible = false
+  LogsManager.setLogGroupVisible(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
+  logBtn:on(Laya.Event.CLICK, self, self.showLogPanel)
+  LogsManager.autoBtn:on(Laya.Event.CLICK, self, self.autoSwitch)
+  LogsManager.disposeAccountBtn:on(Laya.Event.CLICK, self, self.sureDisposeAccount)
+  LogsManager.disposeAccountSureBtn:on(Laya.Event.CLICK, SingleCommonServer, SingleCommonServer.disposeAccount)
+  LogsManager.disposeAccountCancelBtn:on(Laya.Event.CLICK, self, self.cancelDisposeAccount)
+  LogsManager.statBtn:on(Laya.Event.CLICK, self, self.statSwitch)
+  self:cancelDisposeAccount()
+end
+
+function LogsManager.checkGM()
+  return
+end
+
+function LogsManager.setLogTxt()
+  local alltxt = ""
+  local i = 0
+  repeat
+    alltxt = alltxt .. LogsManager.logsArr[i+1].label .. "\n"
+    i=i+1
+  until not(i < #LogsManager.logsArr)
+  return alltxt
+end
+
+function LogsManager.showLogPanel()
+  if LogsManager.logPanel.visible then
+    LogsManager.logPanel.visible = false
+  else
+    LogsManager.logPanel.visible = true
+    LogsManager.autoDisableFlag = false
+    LogsManager.refreshLog()
+  end
+end
+
+function LogsManager.autoSwitch()
+  if LogsManager.autoBtn.text == "Auto" then
+    LogsManager.autoBtn.text = "Locked"
+  else
+    LogsManager.autoBtn.text = "Auto"
+  end
+  LogsManager.autoFlag = not LogsManager.autoFlag
+end
+
+function LogsManager.sureDisposeAccount()
+  LogsManager.disposeAccountSureBtn.visible = true
+  LogsManager.disposeAccountCancelBtn.visible = true
+end
+
+function LogsManager.cancelDisposeAccount()
+  LogsManager.disposeAccountSureBtn.visible = false
+  LogsManager.disposeAccountCancelBtn.visible = false
+end
+
+function LogsManager.statSwitch()
+  LogsManager.statVis = not LogsManager.statVis
+  if LogsManager.statVis then
+    Laya.Stat:show(0, 100)
+  else
+    Laya.Stat:hide()
+  end
+end
+
+function LogsManager.addTouchShow(target) end
+LogsManager._prevTime = 0;
+LogsManager._count = 0;
+function LogsManager.touchHandler(evt)
+  if LogsManager.logGroup.visible then
+    return
+  end
+  local time = Laya.Browser:now()
+  if time - LogsManager._prevTime < 200 then
+    LogsManager._prevTime = time
+    LogsManager._count=LogsManager._count+1
+    if LogsManager._count == 6 then
+      LogsManager.sendErrorToPlatform("发送客户端错误日志", LogsManager.errorTage_clientLog, 200, "sendClinetError")
+      LogsManager.isOpenLogsDebug = true
+    elseif LogsManager._count >= 10 then
+      LogsManager._count = 0
+      LogsManager.setLogGroupVisible(true)
+      WindowManager.ShowTip("请不要频繁点击")
+    end
+  else
+    LogsManager._count = 0
+  end
+  LogsManager._prevTime = time
+end
+
+function LogsManager.refreshLog()
+  local txt = LogsManager.txt
+  txt.text = LogsManager.setLogTxt()
+  if LogsManager.autoFlag then
+    Laya.timer:once(30, LogsManager, function()
+      txt.scrollY = txt.maxScrollY
+    end
+    )
+  end
+end
+
+function LogsManager.sendAndShowLog()
+  LogsManager.sendErrorToPlatform("发送客户端错误日志", LogsManager.errorTage_clientLog, 200, "sendClinetError")
+  LogsManager.setLogGroupVisible(true)
+end
+
+function LogsManager.setLogGroupVisible(visible)
+  if visible then
+    LogsManager.isOpenLogsDebug = true
+  end
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_LOG) then
+    if WindowManager.debugLayer.numChildren > 0 then
+      WindowManager.debugLayer:removeChildAt(0)
+      WindowManager.debugLayer.mouseEnabled = false
+      WindowManager.debugLayer.mouseThrough = true
+    end
+  end
+  if visible and not GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL_DISABLE) then
+    if LogsManager.logGroup.visible then
+      return
+    end
+    GameSwitch.setOnOff(GameSwitch.SWITCH_LOG_PANEL, 1)
+    LogsManager.infoLabel.text = "rid:" .. UserModel.instance:getUserRid() .. "\nGlobalVer:" .. Global.version
+    LogsManager.echo("console show")
+    LogsManager.logGroup.visible = true
+    LogsManager.autoDisableFlag = true
+    if LogsManager.idTimeout then
+      TimerManager.instance:remove(LogsManager.idTimeout)
+      LogsManager.idTimeout = nil
+    end
+    LogsManager.idTimeout = TimerManager.instance:add(function()
+      if LogsManager.autoDisableFlag then
+        LogsManager.setLogGroupVisible(false)
+      end
+    end
+    , LogsManager, 20000)
+  else
+    if not LogsManager.logGroup.visible then
+      return
+    end
+    LogsManager.autoDisableFlag = false
+    GameSwitch.setOnOff(GameSwitch.SWITCH_LOG_PANEL, 0)
+    LogsManager.echo("console hide")
+    LogsManager.logGroup.visible = false
+    LogsManager.idTimeout = nil
+  end
+end
+
+function LogsManager.getCircleId()
+  if not LogsManager._circleId then
+    LogsManager._circleId = Global.deviceId .. "_" .. Laya.Browser:now() .. Math:floor(Math:random() * 100000)
+  end
+  return LogsManager._circleId
+end
+
+local LabelRenderer = class('LabelRenderer',Laya.Box)
+
+function LabelRenderer:setLabel(txt)
+  self.label = Laya.Label()
+  self:size(50, 30)
+  self:addChild(self.label)
+  self.mouseThrough = false
+  self.label.text = txt
+  self.label.fontSize = 20
+end

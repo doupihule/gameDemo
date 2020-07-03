@@ -1,0 +1,17 @@
+require("framework/func/BaseFunc")
+
+PlaqueFunc = class('PlaqueFunc',BaseFunc)
+function PlaqueFunc:getCfgsPathArr()
+  return {{name="Plaque_json"}}
+end
+
+function PlaqueFunc.__getters.instance()
+  if not PlaqueFunc._instance then
+    PlaqueFunc._instance = PlaqueFunc()
+  end
+  return PlaqueFunc._instance
+end
+
+function PlaqueFunc:getPlaqueInfoById(skinId)
+  return self:getCfgDatas("Plaque_json", skinId)
+end

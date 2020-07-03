@@ -1,0 +1,363 @@
+require("stringutil")
+require("game/sys/consts/MusicConst")
+require("game/sys/consts/WindowCfgs")
+require("framework/platform/GamePlatform")
+require("utils/Global")
+require("framework/common/UserInfo")
+require("framework/manager/MainModule")
+require("framework/native/NativeBridge")
+require("framework/event/JSToNativeEvent")
+require("framework/event/NativeToJSEvent")
+require("game/sys/consts/GameConsts")
+require("game/sys/consts/ChannelConst")
+require("game/sys/manager/StatisticsManager")
+require("framework/consts/StatisticsCommonConst")
+require("framework/manager/WindowManager")
+require("framework/common/Message")
+require("framework/platform/WXGamePlatform")
+require("framework/utils/TableUtils")
+require("utils/GameUtils")
+require("framework/common/kakura/MethodCommon")
+require("framework/manager/SoundManager")
+require("framework/utils/ScreenAdapterTools")
+require("framework/manager/LogsManager")
+require("framework/func/TranslateFunc")
+require("game/sys/model/UserModel")
+require("framework/manager/TimerManager")
+require("framework/common/GameSwitch")
+require("framework/manager/PackConfigManager")
+require("framework/utils/StringUtils")
+
+AndroidGamePlatform = class('AndroidGamePlatform',GamePlatform)
+
+function AndroidGamePlatform:ctor()
+  self:superCall('ctor')
+  self._reloginCount = 0;
+  window.onerror = function(errorMessage, scriptURI, lineNumber, columnNumber, errorObj)
+    LogsManager.systemError(errorMessage, errorObj and errorObj.stack, "uri:", scriptURI)
+  end
+  
+  MainModule.showMainTask = MainModule.showMainTask + 1
+  self.loadAdvFailed = false
+  Message.instance:add(NativeToJSEvent.TTSDK_AD_EVENT, self)
+  Message.instance:add(NativeToJSEvent.SYSTEM_INFO_EVENT, self)
+  self:registFocusEvent()
+  -- [ts2lua]window下标访问可能不正确
+  local conch = window["conch"]
+  if conch and conch.setOnBackPressedFunction then
+    conch:setOnBackPressedFunction(function()
+      WindowManager.setPopupTip(2, TranslateFunc.instance:getTranslate("#tid_extiGame"), self.exitGame, self)
+    end
+    )
+  end
+end
+
+function AndroidGamePlatform:initTTADSdk()
+  local channelData = ChannelConst.getChannelConst(UserInfo.platformId)
+  local resultData = TableUtils.copyOneTable(channelData)
+  resultData.appName = GameConsts.gameName
+  resultData.isDebug = UserInfo.isTest()
+  resultData.userId = UserModel.instance:getUserRid()
+  NativeBridge.instance:callNative(JSToNativeEvent.TTADSDK_INIT, resultData)
+end
+
+function AndroidGamePlatform:onVideoComplete(videoResult)
+  WXGamePlatform.prototype.onVideoComplete:call(self, videoResult)
+end
+
+function AndroidGamePlatform:onDoVedioBack()
+  self.isPlayVideo = false
+  if WindowManager.isUIOpened(WindowCfgs.GameMainUI) then
+    SoundManager.playBGM(MusicConst.MUSIC_BGM)
+  end
+  WindowManager.SwitchMaskUI(false, 0.5)
+end
+
+function AndroidGamePlatform:getLoginResult()
+  self:initTTADSdk()
+  if Global.checkUserCloudStorage() then
+    return
+  end
+  self:changeLeftTask(-1, "getLoginResult")
+end
+
+function AndroidGamePlatform:checkSignSha1()
+  local sign = GameConsts.ENCODE_SHA1
+  local singArr = nil
+  if not sign then
+    LogsManager.errorTag("sha1Error", "Game Const.ts没有配置ENCODE_SHA1")
+    return
+  end
+  local decodeSign = StringUtils.decodeSign(sign)
+  if not UserInfo.isSystemAndroid() then
+    return
+  end
+  if not self._nativeSha1Arr or #self._nativeSha1Arr == 0 then
+    LogsManager.warn("native串还没初始化--")
+    return
+  end
+  local i = 0
+  repeat
+    local nativeSign = self._nativeSha1Arr[i+1]
+    if decodeSign:find(nativeSign) == -1 then
+      self.childChannelId = nativeSign
+      LogsManager.errorTag("wrongSha1", "这是套壳包.sha1:" .. nativeSign)
+      return
+    end
+    i=i+1
+  until not(i < #self._nativeSha1Arr)
+  LogsManager.echo("这个包是合法的")
+end
+
+function AndroidGamePlatform:createLoginButton(callBack, thisObject)
+  callBack and callBack:call(thisObject)
+end
+
+function AndroidGamePlatform:getWxInfo()
+  if self._reloginCount == 0 then
+    MainModule.instance:changeShowMainTask(-1, MainModule.task_updateListerner, "skip version check")
+    UserInfo.platform:initPhysics3D("skip physics3d subpackage check")
+  end
+end
+
+function AndroidGamePlatform:getGlobalMethod()
+  return MethodCommon.global_Account_loginAndroidMaster
+end
+
+function AndroidGamePlatform:sharePage() end
+function AndroidGamePlatform:share(id, extraData, callback, thisObj)
+  callback and callback:call(thisObj, true)
+end
+
+function AndroidGamePlatform:showVideoAd(successCallBack, closeCallBack, thisObj, extraData)
+  if successCallBack == nil then
+    successCallBack=nil
+  end
+  if closeCallBack == nil then
+    closeCallBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if extraData == nil then
+    extraData={}
+  end
+  if self:isCasingPackage() then
+    if closeCallBack then
+      closeCallBack:call(thisObj, false)
+    end
+    return
+  end
+  StatisticsManager.ins:onEvent(StatisticsCommonConst.NORMAL_VIDEO_AD)
+  self._videoSucCallback = successCallBack
+  self._videoFailCallback = closeCallBack
+  self._extraData = extraData
+  self._videoLoaded = true
+  self._videoThisObj = thisObj
+  WindowManager.SwitchMaskUI(true, 0.5)
+  self.isPlayVideo = true
+  SoundManager.stopMusic()
+  local vedioType = Number(GameSwitch.getSwitchState(GameSwitch.SWITCH_NATIVE_VEDIO_TYPE)) or 1
+  NativeBridge.instance:callNative(JSToNativeEvent.TTADSDK_SHOWVEDIO, {scene=WindowManager.getCurrentWindowName() or "main", type=vedioType})
+end
+
+function AndroidGamePlatform:loginOut()
+  window.location:reload()
+end
+
+function AndroidGamePlatform:setGameFrame()
+  if GameConsts.gameFrameRate == 30 then
+    self:superCall('setGameFrame')
+    -- [ts2lua]window下标访问可能不正确
+    window['conch'].config:setSlowFrame(true)
+  end
+end
+
+function AndroidGamePlatform:addUpdateListener()
+  -- [ts2lua]window下标访问可能不正确
+  local appCache = window["appcache"]
+  local targetVersion = Global.version
+  LogsManager.echo("version setVMSVersion:" .. targetVersion, "hotfixSwitch:", GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_HOTFIX))
+  if not GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_HOTFIX) then
+    if appCache then
+      local oldVersion = appCache:getResourceID(self:getCacheKey())
+      if not oldVersion or oldVersion == "" then
+        appCache:setResourceID(self:getCacheKey(), targetVersion)
+      else
+        if oldVersion ~= targetVersion then
+          appCache:setResourceID(self:getCacheKey(), targetVersion)
+          LogsManager.echo("versionUpdate:", "有新版本,vold:" .. oldVersion .. ",vnew:" .. targetVersion)
+          self:reloadGame()
+          return
+        end
+      end
+    end
+  end
+  -- [ts2lua]window下标访问可能不正确
+  if window["loadingView"] then
+    -- [ts2lua]window下标访问可能不正确
+    window["loadingView"]:hideLoadingView()
+  end
+  if self:isCasingPackage() then
+    local method = GameSwitch.getSwitchState(GameSwitch.SWITCH_SIGN_METHOD)
+    if not method or method == "0" then
+      WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#tid_casingPackage"), self.gotoPackageUrl, self)
+      return
+    end
+  end
+  self:superCall('addUpdateListener')
+end
+
+function AndroidGamePlatform:gotoPackageUrl()
+  local url = PackConfigManager.ins.platform.DOWNLOAD_URL
+  if url then
+    NativeBridge.instance:callNative(JSToNativeEvent.NATIVE_OPENURL, {url=url})
+  end
+  TimerManager.instance:add(self.exitGame, self, 1000)
+end
+
+function AndroidGamePlatform:reloadGame()
+  self:clearAllData()
+  TimerManager.instance:add(window.location.reload, window.location, 100, 1)
+end
+
+function AndroidGamePlatform:clearAllData()
+  local rootCtn = WindowManager.rootLayer
+  rootCtn:removeSelf()
+end
+
+function AndroidGamePlatform:doCoverVersion(serverVersion)
+  LogsManager.echo("serverVersion:" .. serverVersion)
+  if UserInfo.isTest() and Global.version == "1" then
+    return
+  end
+  local localNum = Number(Global.version)
+  local targetVersion = self:getAPPCacheVersion()
+  local serverNum = 0
+  if not serverVersion then
+    if targetVersion then
+      serverNum = Number(targetVersion)
+    end
+  else
+    serverNum = Number(serverVersion)
+  end
+  Global.version = String(Math:max(localNum, serverNum))
+  LogsManager.echo("GlobalVersion:" .. Global.version)
+end
+
+function AndroidGamePlatform:getAPPCacheVersion()
+  -- [ts2lua]window下标访问可能不正确
+  local appCache = window["appcache"]
+  local targetVersion = nil
+  if appCache then
+    targetVersion = appCache:getResourceID(self:getCacheKey())
+  end
+  return targetVersion
+end
+
+function AndroidGamePlatform:getCacheKey()
+  return "vmsVersion" .. PackConfigManager.ins.platform.platform
+end
+
+function AndroidGamePlatform:canAdv()
+  if not GameUtils.canVideo then
+    return false
+  end
+  if self:isCasingPackage() then
+    return false
+  end
+  return true
+end
+
+function AndroidGamePlatform:canShare()
+  return false
+end
+
+function AndroidGamePlatform:getVersionName()
+  -- [ts2lua]window下标访问可能不正确
+  local appCache = window["appcache"]
+  local targetVersion = Global.version
+  if appCache then
+    targetVersion = appCache:getResourceID(self:getCacheKey())
+    if not targetVersion then
+      targetVersion = Global.version
+    end
+  end
+  LogsManager.echo("getVersionName:" .. targetVersion)
+  return "version_" .. targetVersion .. ".json"
+end
+
+function AndroidGamePlatform:isCasingPackage()
+  if self.childChannelId then
+    return true
+  end
+  return false
+end
+
+function AndroidGamePlatform:exitGame()
+  -- [ts2lua]window下标访问可能不正确
+  if window["conch"].exit then
+    -- [ts2lua]window下标访问可能不正确
+    window["conch"]:exit()
+  end
+end
+
+function AndroidGamePlatform:onNativeInfoBack()
+  self:checkSignSha1()
+  local deviceId = Global.deviceId
+  local params = {method=self:getGlobalMethod(), params={passport=deviceId, password='', device=Global.deviceModel, childChannelId=self:getChildChannelKey()}}
+  UserInfo.platform:reqGlobal(params)
+end
+
+function AndroidGamePlatform:onTTSDKAdCallBack(params)
+  local thisObj = self
+  if params.status == 1 then
+    self:onDoVedioBack()
+    WXGamePlatform.prototype._doVedioCallBack:call(self, true)
+  elseif params.status == 2 then
+    WindowManager.SwitchMaskUI(false, 0.5)
+    WXGamePlatform.prototype.onTurnOffAdsEarly:call(self)
+    (thisObj._extraData and thisObj._extraData.callback) and thisObj._extraData.callback:call(thisObj._extraData.thisObj, false)
+  elseif params.status == 3 then
+    if not self.isPlayVideo then
+      return
+    end
+    WindowManager.ShowTip(TranslateFunc.instance:getTranslate("#tid_ad_initerror"))
+    self:onDoVedioBack()
+    WXGamePlatform.prototype._doVedioCallBack:call(self, false)
+  end
+end
+
+function AndroidGamePlatform:vibrate(isLong, callBack, thisObject)
+  if isLong == nil then
+    isLong=false
+  end
+  if callBack == nil then
+    callBack=nil
+  end
+  if thisObject == nil then
+    thisObject=nil
+  end
+  local time = 20
+  if isLong then
+    time = 60
+  end
+  NativeBridge.instance:callNative(JSToNativeEvent.NATIVE_VIBRATOR, {time=time, style=1})
+  if callBack then
+    TimerManager.instance:add(callBack, thisObject, time, 1)
+  end
+end
+
+function AndroidGamePlatform:recvMsg(cmd, data)
+  if cmd == NativeToJSEvent.TTSDK_AD_EVENT then
+    self:onTTSDKAdCallBack(data)
+  elseif cmd == NativeToJSEvent.SYSTEM_INFO_EVENT then
+    ScreenAdapterTools.checkNativeSystemInfo(data)
+    if data.sign then
+      self._nativeSha1Arr = data.sign:split(",")
+    end
+    self._nativeBackData = data
+    MainModule.instance:changeShowMainTask(-1, "getNativeSystemInfo", "获取native信息返回")
+    self:onNativeInfoBack()
+  end
+end

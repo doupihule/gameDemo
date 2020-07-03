@@ -1,0 +1,489 @@
+require("framework/platform/WXGamePlatform")
+require("framework/manager/LogsManager")
+require("framework/common/kakura/Client")
+require("framework/common/UserInfo")
+require("game/sys/common/kakura/Method")
+require("framework/common/Message")
+require("game/sys/model/UserModel")
+require("framework/manager/WindowManager")
+require("game/sys/common/MsgCMD")
+require("framework/func/TranslateFunc")
+require("framework/consts/ShareConst")
+require("game/sys/consts/GameConsts")
+require("framework/consts/ControlConst")
+require("game/sys/manager/StatisticsManager")
+require("framework/consts/StatisticsCommonConst")
+require("framework/func/JumpFunc")
+require("game/sys/func/ShareFunc")
+require("game/sys/func/GlobalParamsFunc")
+require("framework/event/RecordEvent")
+
+TTGamePlatform = class('TTGamePlatform',WXGamePlatform)
+
+function TTGamePlatform:ctor()
+  self:superCall('ctor')
+  self._recordType = self.RECORD_TYPE_AUTO;
+  self._hasInitMoreGame = false;
+  TTGamePlatform.instance = self
+end
+
+function TTGamePlatform:getWX()
+  -- [ts2lua]window下标访问可能不正确
+  return window['tt']
+end
+
+function TTGamePlatform:shareAldAppMsg(data)
+  self:getWX():shareAppMessage(data)
+end
+
+function TTGamePlatform:myOnShare(callback)
+  self:getWX():onShareAppMessage(callback)
+end
+
+function TTGamePlatform:createLoginButton(callBack, thisObject)
+  local myThis = self
+  self:getWX():authorize({scope="scope.userInfo", success=function(res)
+    LogsManager.echo("yrc authorize success", JSON:stringify(res))
+    if res and res.userInfo then
+      LogsManager.echo("yrc authorize userinfo suc", JSON:stringify(res.userInfo))
+      UserInfo.platform.userInfoData = res
+      local param = {name=res.userInfo.nickName, headImage=res.userInfo.avatarUrl, sex=res.userInfo.gender}
+      Client.instance:send(Method.User_setUserInfo, {userInfo=param}, function(result)
+        LogsManager.echo("yrc tt User_setUserInfo suc")
+        Message.instance:send(MsgCMD.USERINFO_AUTHORIZE)
+        callBack and callBack:call(thisObject)
+      end
+      , self)
+    else
+      myThis:getWX():getSetting({success=function(res)
+        LogsManager.echo("yrc getSetting success", JSON:stringify(res))
+        -- [ts2lua]res.authSetting下标访问可能不正确
+        if res.authSetting['scope.userInfo'] then
+          LogsManager.echo("yrc start getUserInfo")
+          myThis:getWX():getUserInfo({withCredentials=true, lang="", success=function(res)
+            LogsManager.echo("yrc getUserInfo success", JSON:stringify(res))
+            myThis.userInfoData = res
+            local userInfo = res.userInfo
+            local param = {name=res.userInfo.nickName, headImage=res.userInfo.avatarUrl, sex=res.userInfo.gender}
+            Client.instance:send(Method.User_setUserInfo, {userInfo=param}, function(result)
+              LogsManager.echo("yrc tt User_setUserInfo suc")
+              Message.instance:send(MsgCMD.USERINFO_AUTHORIZE)
+              -- [ts2lua]result下标访问可能不正确
+              if result and result["error"] then
+                LogsManager.echo("yrc 这里临时处理,后续删除")
+                UserModel.instance:setNameAndImg(userInfo)
+              end
+              callBack and callBack:call(thisObject)
+            end
+            , self)
+          end
+          , fail=function(err)
+            LogsManager.echo("yrc getUserInfo fail", JSON:stringify(err))
+            callBack and callBack:call(thisObject)
+          end
+          , complete=function(res)
+            LogsManager.echo("yrc getUserInfo complete", JSON:stringify(res))
+          end
+          })
+        end
+      end
+      , fail=function(err)
+        LogsManager.echo("==fail===", err)
+      end
+      , complete=function()
+        LogsManager.echo("==complete===")
+      end
+      })
+    end
+  end
+  , fail=function(res)
+    LogsManager.echo("yrc authorize fail", res)
+    callBack and callBack:call(thisObject)
+  end
+  , complete=function(res)
+    LogsManager.echo("yrc authorize complete", res)
+  end
+  })
+end
+
+function TTGamePlatform:registerRecord()
+  if UserInfo.isTT() then
+    self.recorder = self:getWX():getGameRecorderManager()
+  elseif UserInfo.isBaidu() then
+    self.recorder = self:getWX():getVideoRecorderManager()
+  end
+  LogsManager.echo("yrc registerRecord ", self.recorder)
+  self.recorder:onStart(function(res)
+    self:onStartRecord(res)
+  end
+  )
+  self.recorder:onStop(function(res)
+    self:onStopRecord(res)
+  end
+  )
+  self.recorder:onError(function(res)
+    LogsManager.echo("yrc 录屏 onError", JSON:stringify(res))
+  end
+  )
+end
+
+function TTGamePlatform:onStartRecord(res)
+  LogsManager.echo("yrc 开始录屏")
+  LogsManager.echo(res)
+  self._startCallback and self._startCallback:call(self._startThisObj)
+  self._startCallback = nil
+  self._recordStartT = Laya.Browser:now()
+  Message.instance:send(RecordEvent.TT_RECORD_EVENT_START, self._recordType)
+end
+
+function TTGamePlatform:onStopRecord(res)
+  LogsManager.echo("yrc 结束录屏")
+  LogsManager.echo(res)
+  local curT = Laya.Browser:now()
+  if curT - self._recordStartT < 4000 then
+    WindowManager.ShowTip("录屏时间不足，请重新录屏")
+    self._recordStartT = 0
+    self._endCallback and self._endCallback:call(self._startThisObj, false)
+    Message.instance:send(RecordEvent.TT_RECORD_EVENT_STOP, {false, self._recordType})
+    return
+  end
+  self._videoPath = res.videoPath
+  self._endCallback and self._endCallback:call(self._startThisObj, true)
+  if UserInfo.isTT() then
+    self:clipVideo()
+  end
+  Message.instance:send(RecordEvent.TT_RECORD_EVENT_STOP, {true, self._recordType})
+  self._recordStartT = 0
+end
+
+function TTGamePlatform:recordStart(callback, thisObj, endCallback, durT, recordTimeRange, recordType)
+  if callback == nil then
+    callback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if endCallback == nil then
+    endCallback=nil
+  end
+  if durT == nil then
+    durT=300
+  end
+  if recordTimeRange == nil then
+    recordTimeRange=nil
+  end
+  if recordType == nil then
+    recordType=self.RECORD_TYPE_AUTO
+  end
+  if UserInfo.isTT() then
+    durT = Math:min(durT, 300)
+  elseif UserInfo.isBaidu() then
+    durT = Math:min(durT, 120)
+  end
+  LogsManager.echo("yrc tt recordStart", durT, recordType)
+  if self:checkRecordStart() then
+    LogsManager.echo("yrc tt record 已经开始---------------")
+    return
+  end
+  self._recordType = recordType
+  self._startCallback = callback
+  self._startThisObj = thisObj
+  if endCallback then
+    self._endCallback = endCallback
+  end
+  if recordTimeRange then
+    self._recordTimeRange = recordTimeRange
+  else
+    local cutTime = GlobalParamsFunc.instance:getGlobalCfgDatas("cameraTvPublishCutTime").num
+    if not cutTime then
+      cutTime = 15
+    end
+    self._recordTimeRange = {cutTime, 0}
+    LogsManager.echo("clipObj_timeRange", cutTime)
+  end
+  self.recorder:start({duration=durT})
+end
+
+function TTGamePlatform:recordStop(recordType)
+  if recordType == nil then
+    recordType=self.RECORD_TYPE_AUTO
+  end
+  if self.recorder then
+    if not self:checkRecordStart() then
+      LogsManager.echo("whn tt record 已经结束----------------")
+      return
+    end
+    LogsManager.echo("whn tt record------------------", self._recordType, recordType)
+    LogsManager.echo("yrc tt recordStop")
+    self.recorder:stop()
+  end
+end
+
+function TTGamePlatform:checkRecordStart()
+  if not self._recordStartT then
+    return false
+  end
+  return true
+end
+
+function TTGamePlatform:recordPause()
+  self.recorder:pause()
+end
+
+function TTGamePlatform:recordResume()
+  self.recorder:resume()
+end
+
+function TTGamePlatform:clipVideo()
+  if not self.recorder then
+    return
+  end
+  if not self._videoPath then
+    return
+  end
+  local videoPath = self._videoPath
+  LogsManager.echo("yrc clipVideo path:", videoPath)
+  local thisObj = self
+  local clipObj = {path=videoPath, success=function(res)
+    LogsManager.echo("yrc clipvideo succ", JSON:stringify(res))
+    thisObj._videoPath = res.videoPath
+    UserInfo.platform.isHaveRecord = true
+  end
+  , fail=function(err)
+    LogsManager.echo('yrc clipvideo fail', JSON:stringify(err))
+  end
+  }
+  if self._recordTimeRange then
+    -- [ts2lua]clipObj下标访问可能不正确
+    clipObj['timeRange'] = self._recordTimeRange
+  end
+  self.recorder:clipVideo(clipObj)
+end
+
+function TTGamePlatform:shareVideo(callBack, thisObj)
+  if callBack == nil then
+    callBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  StatisticsManager.ins:onEvent(StatisticsCommonConst.SHARE_VIDEO_CLICK, {videoPath=self._videoPath, type=self._recordType})
+  LogsManager.echo(self._videoPath)
+  local myThis = self
+  -- [ts2lua]lua中0和空字符串也是true，此处Math:random() > 0.5需要确认
+  local title_num = (Math:random() > 0.5 and {'1'} or {'2'})[1]
+  local title = TranslateFunc.instance:getTranslate("#tid_shareVideoTitle_" .. title_num, 'TranslateGlobal')
+  if UserInfo.isBaidu() then
+    self:getWX():shareVideo({videoPath=self._videoPath, title=title, success=function()
+      StatisticsManager.ins:onEvent(StatisticsCommonConst.SHARE_VIDEO_SUCCESS, {videoPath=myThis._videoPath, type=myThis._recordType})
+      LogsManager.echo('shareVideo 分享成功！')
+      UserInfo.platform.isHaveRecord = false
+      myThis._videoPath = nil
+      callBack and callBack:call(thisObj, true)
+    end
+    , fail=function(e)
+      LogsManager.echo(JSON:stringify(e))
+      callBack and callBack:call(thisObj, false)
+    end
+    , complete=function(e)
+      LogsManager.echo("shareVideo complete", e)
+    end
+    })
+  elseif UserInfo.isTT() then
+    local extra = {videoPath=self._videoPath}
+    if UserInfo.platform:getSystemInfo().appName == "Douyin" then
+      -- [ts2lua]extra下标访问可能不正确
+      extra['videoTopics'] = ShareConst.DOUYIN_VIDEO_TOPICS
+      if GameConsts.gameName then
+        -- [ts2lua]extra下标访问可能不正确
+        extra['videoTopics']:unshift(GameConsts.gameName)
+      end
+    elseif UserInfo.platform:getSystemInfo().appName == "Toutiao" then
+      -- [ts2lua]extra下标访问可能不正确
+      extra['createChallenge'] = true
+    end
+    self:getWX():shareAppMessage({channel="video", title=title, desc=title, extra=extra, success=function()
+      StatisticsManager.ins:onEvent(StatisticsCommonConst.SHARE_VIDEO_SUCCESS, {videoPath=myThis._videoPath, type=myThis._recordType})
+      LogsManager.echo('shareVideo 分享成功！')
+      UserInfo.platform.isHaveRecord = false
+      callBack and callBack:call(thisObj, true)
+      Message.instance:send(ControlConst.TT_SHARE_SUCC, self)
+    end
+    , fail=function(e)
+      LogsManager.echo('shareVideo 分享失败！', JSON:stringify(e))
+      callBack and callBack:call(thisObj, false)
+      Message.instance:send(ControlConst.TT_SHARE_FAIL, self)
+    end
+    })
+  end
+end
+
+function TTGamePlatform:isCanShareVideo()
+  LogsManager.echo("yrc111 isCanShareVideo _videoPath:", self._videoPath)
+  if self._videoPath then
+    return true
+  end
+end
+
+function TTGamePlatform:getPhotoAuthorize(callBack, thisObject)
+  self:getWX():getSetting({success=function(res)
+    LogsManager.echo("yrc tt getPhotoAuthorize setting", res)
+    TTGamePlatform.instance:getWX():authorize({scope='scope.writePhotosAlbum', success=function(res)
+      LogsManager.echo("yrc tt authorize writePhotosAlbum suc", res)
+      callBack and callBack:call(thisObject, true)
+    end
+    , fail=function(err)
+      LogsManager.echo("yrc tt authorize writePhotosAlbum fail", err)
+      callBack and callBack:call(thisObject, false)
+    end
+    })
+  end
+  })
+end
+
+function TTGamePlatform:saveImg(filePath, callBack, thisObject)
+  local saveFunc = function()
+    self:getWX():saveImageToPhotosAlbum({filePath=filePath, success=function(res)
+      LogsManager.echo("yrc tt saveImgToAlbum suc", res)
+      callBack and callBack:call(thisObject, true)
+    end
+    , fail=function(err)
+      LogsManager.echo("yrc tt saveImgToAlbum err", err)
+      callBack and callBack:call(thisObject, false)
+    end
+    })
+  end
+  
+  if self._isPhotosAlbum then
+    saveFunc()
+  else
+    self:getPhotoAuthorize(function(isSuc)
+      if isSuc then
+        saveFunc()
+      else
+        callBack and callBack:call(thisObject, false)
+      end
+    end
+    , self)
+  end
+end
+
+function TTGamePlatform:loginOut()
+  self:superCall('loginOut')
+  local obj = {success=function()
+    LogsManager.echo("_loginOut success__")
+  end
+  , fail=function()
+    LogsManager.echo("_loginOut fail__")
+  end
+  , complete=function()
+    LogsManager.echo("_loginOut complete__")
+  end
+  }
+  self:getWX():exitMiniProgram(obj)
+end
+
+function TTGamePlatform:jumpToMiniProgram(data)
+  self:showMoreGamesModal(data)
+end
+
+function TTGamePlatform:showMoreGamesModal(data)
+  if not self:canUseJump() then
+    return
+  end
+  local tt = self:getWX()
+  if not self._hasInitMoreGame then
+    tt:onMoreGamesModalClose(function(res)
+      LogsManager.echo("hlx 头条互推 onMoreGamesModalClose ", res)
+    end
+    )
+    tt:onNavigateToMiniProgram(function(res)
+      if data then
+        StatisticsManager.ins:onEvent(StatisticsCommonConst.JUMP_TO_OTHER_GAME_SUCCESS, {gameName=data.jumpData and data.jumpData.GameName, from=data.extraData and data.extraData.from, toAppId=data and data.appId, position=data.jumpData.Position})
+      else
+        StatisticsManager.ins:onEvent(StatisticsCommonConst.JUMP_TO_OTHER_GAME_SUCCESS)
+      end
+      LogsManager.echo("hlx 头条互推 onNavigateToMiniProgram errCode:", res.errCode, "errMsg:", res.errMsg)
+    end
+    )
+  end
+  local appLaunchOptions = {}
+  local jumpList = JumpFunc.instance:getJumpList()
+  local i = 0
+  repeat
+    table.insert(appLaunchOptions, {appId=jumpList[i+1].GameAppId, query='op=jump&from=' .. GameConsts.gameCode, extraData={}})
+    i=i+1
+  until not(i < #jumpList)
+  tt:showMoreGamesModal({appLaunchOptions=appLaunchOptions, success=function(res)
+    LogsManager.echo("hlx 头条互推 showMoreGamesModal success", res.errMsg)
+  end
+  , fail=function(res)
+    LogsManager.echo("hlx 头条互推 showMoreGamesModal fail", res.errMsg)
+  end
+  })
+end
+
+function TTGamePlatform:sharePage()
+  LogsManager.echo("hlx 初始默认分享配置")
+  self:getWX():showShareMenu({withShareTicket=true, success=function()
+    print("hlx 初始默认分享配置成功")
+  end
+  , fail=function(e)
+    print("hlx 初始默认分享配置失败", e)
+  end
+  , complete=function(e)
+    print("hlx 初始默认分享配置complete", e)
+  end
+  })
+  local myThis = self
+  local callback = nil
+  if UserInfo.isTT() then
+    callback = function(res)
+      local shareData = ShareFunc.instance:getShareData("1", "wxgame")
+      -- [ts2lua]lua中0和空字符串也是true，此处UserModel.instance:getUserRid() == 'nologin'需要确认
+      local rid = (UserModel.instance:getUserRid() == 'nologin' and {''} or {UserModel.instance:getUserRid()})[1]
+      local obj = nil
+      if res.channel == 'video' then
+        local extra = {videoPath=myThis._videoPath}
+        if UserInfo.platform:getSystemInfo().appName == "Douyin" then
+          -- [ts2lua]extra下标访问可能不正确
+          extra['videoTopics'] = ShareConst.DOUYIN_VIDEO_TOPICS
+          if GameConsts.gameName then
+            -- [ts2lua]extra下标访问可能不正确
+            extra['videoTopics']:unshift(GameConsts.gameName)
+          end
+        elseif UserInfo.platform:getSystemInfo().appName == "Toutiao" then
+          -- [ts2lua]extra下标访问可能不正确
+          extra['createChallenge'] = true
+        end
+        obj = {channel="video", title="测试标题", extra=extra, success=function()
+          print("hlx 录屏分享成功")
+        end
+        , fail=function(e)
+          print("hlx 录屏分享失败", e)
+        end
+        }
+      else
+        obj = {title=shareData.des, imageUrl=shareData.imgUrl, query="inviterRid=" .. rid .. "&imgId=" .. shareData.imgId}
+      end
+      LogsManager.echo(">>>>>>>>sharePage>>>>>>>", obj)
+      myThis._lastShareImg = shareData.imgId
+      return obj
+    end
+    
+  
+  else
+    callback = function()
+      local shareData = ShareFunc.instance:getShareData("1", "wxgame")
+      -- [ts2lua]lua中0和空字符串也是true，此处UserModel.instance:getUserRid() == 'nologin'需要确认
+      local rid = (UserModel.instance:getUserRid() == 'nologin' and {''} or {UserModel.instance:getUserRid()})[1]
+      local obj = {title=shareData.des, imageUrl=shareData.imgUrl, query="inviterRid=" .. rid .. "&imgId=" .. shareData.imgId}
+      LogsManager.echo(">>>>>>>>sharePage>>>>>>>", obj)
+      myThis._lastShareImg = shareData.imgId
+      return obj
+    end
+    
+  
+  end
+  self:myOnShare(callback)
+end

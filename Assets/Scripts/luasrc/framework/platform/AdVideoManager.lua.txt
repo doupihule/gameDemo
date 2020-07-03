@@ -1,0 +1,331 @@
+require("framework/platform/comp/OriginalInterstitialAdComp")
+require("framework/utils/ButtonUtils")
+require("framework/common/UserInfo")
+require("framework/manager/LogsManager")
+require("framework/common/GameSwitch")
+require("framework/platform/comp/InterstitialAdComp")
+require("framework/platform/comp/RecommendationInterstitialComp")
+require("framework/manager/BannerAdManager")
+require("framework/utils/ScreenAdapterTools")
+require("utils/GameUtils")
+require("framework/consts/SceneReference")
+require("framework/platform/comp/OriginalIconAdComp")
+require("framework/manager/TimerManager")
+require("framework/model/CountsCommonModel")
+require("framework/server/CountsCommonServer")
+require("framework/common/kakura/Client")
+require("game/sys/func/GlobalParamsFunc")
+require("framework/func/PlaqueFunc")
+
+AdVideoManager = class('AdVideoManager')
+function AdVideoManager:ctor(...)
+  self:superCall('ctor', unpack({...}))
+  self.ttInterstitialAdLastShowTime = Client.instance.miniserverTime;
+  self._isInitAdv = true;
+end
+AdVideoManager.InterstitialAd_NONE = 1;
+AdVideoManager.InterstitialAd_TYPE_AD_ORIGINAL = 2;
+AdVideoManager.InterstitialAd_TYPE_ORIGINAL_AD = 3;
+AdVideoManager.InterstitialAd_TYPE_AD = 4;
+AdVideoManager.InterstitialAd_TYPE_ORIGINAL = 5;
+AdVideoManager.TYPE_ORIGINAL_INTERSTITIAL = 'INTERSTITIAL';
+AdVideoManager.TYPE_ORIGINAL_ICON = 'ICON';
+function AdVideoManager.__getters.instance()
+  if not AdVideoManager._instance then
+    AdVideoManager._instance = AdVideoManager()
+  end
+  return AdVideoManager._instance
+end
+
+function AdVideoManager:registerInterstitialAd()
+  InterstitialAdComp.register()
+  RecommendationInterstitialComp.register()
+end
+
+function AdVideoManager:showInterstitialAd(parent, onErrorCallback, onCloseCallback, callbackObj)
+  if onErrorCallback == nil then
+    onErrorCallback=nil
+  end
+  if onCloseCallback == nil then
+    onCloseCallback=nil
+  end
+  if callbackObj == nil then
+    callbackObj=nil
+  end
+  if UserInfo.isWX() then
+    local quickBannerType = Number(GameSwitch.getSwitchState(GameSwitch.SWITCH_INTERSTITIAL_TYPE))
+    local switch = {
+      [BannerAdManager.QUICK_BANNER_TYPE_AD] = function()
+        InterstitialAdComp.create(parent, onErrorCallback, onCloseCallback, callbackObj)
+      end,
+      [BannerAdManager.QUICK_BANNER_TYPE_AD_COMMEND] = function()
+        InterstitialAdComp.create(parent, function()
+          RecommendationInterstitialComp.create(parent, onErrorCallback, onCloseCallback, callbackObj)
+        end
+        , onCloseCallback, callbackObj)
+      end,
+      [BannerAdManager.QUICK_BANNER_TYPE_COMMEND] = function()
+        RecommendationInterstitialComp.create(parent, onErrorCallback, onCloseCallback, callbackObj)
+      end,
+      [BannerAdManager.QUICK_BANNER_TYPE_COMMEND_AD] = function()
+        RecommendationInterstitialComp.create(parent, function()
+          InterstitialAdComp.create(parent, onErrorCallback, onCloseCallback, callbackObj)
+        end
+        , onCloseCallback, callbackObj)
+      end
+    }
+    local casef = switch[quickBannerType]
+    if not casef then casef = switch["default"] end
+    if casef then casef() end
+  elseif UserInfo.isVivo() or UserInfo.isOppo() then
+    local quickBannerType = Number(GameSwitch.getSwitchState(GameSwitch.SWITCH_INTERSTITIAL_OPPO_TYPE))
+    local switch = {
+      [AdVideoManager.InterstitialAd_NONE] = function()
+       end,
+      [AdVideoManager.InterstitialAd_TYPE_AD_ORIGINAL] = function()
+        InterstitialAdComp.create(parent, function()
+          self:showOriginalAdView(onErrorCallback, callbackObj)
+        end
+        , onCloseCallback, callbackObj)
+      end,
+      [AdVideoManager.InterstitialAd_TYPE_AD] = function()
+        InterstitialAdComp.create(parent, onErrorCallback, onCloseCallback, callbackObj)
+      end,
+      [AdVideoManager.InterstitialAd_TYPE_ORIGINAL_AD] = function()
+        self:showOriginalAdView(onErrorCallback, callbackObj)
+      end
+    }
+    local casef = switch[quickBannerType]
+    if not casef then casef = switch["default"] end
+    if casef then casef() end
+  else
+    InterstitialAdComp.create(parent, onErrorCallback, onCloseCallback, callbackObj)
+  end
+end
+
+function AdVideoManager:showInterstitialAdById(id, parent, onErrorCallback, onCloseCallback, thisObj)
+  if onErrorCallback == nil then
+    onErrorCallback=nil
+  end
+  if onCloseCallback == nil then
+    onCloseCallback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if not InterstitialAdComp.canUse() then
+    return
+  end
+  local adInfo = PlaqueFunc.instance:getPlaqueInfoById(id)
+  local possibility = 10000 * Math:random()
+  LogsManager.echo("----possibility: " .. possibility)
+  if possibility <= adInfo.plaqueProbab then
+    self.interstitialAdTimeId = TimerManager.instance:setTimeout(function()
+      self:showInterstitialAd(parent, onErrorCallback, onCloseCallback, thisObj)
+    end
+    , self, adInfo.plaqueLaterTime)
+  end
+end
+
+function AdVideoManager:isInterstitialLimit()
+  if not ((UserInfo.isOppo() or UserInfo.isVivo()) or UserInfo.isTT()) then
+    return false
+  end
+  if UserInfo.isOppo() or UserInfo.isVivo() then
+    local intervalTime = 0
+    if Number(GameSwitch.getSwitchState(GameSwitch.INTERVAL_TIME)) > 0 then
+      intervalTime = Number(GameSwitch.getSwitchState(GameSwitch.INTERVAL_TIME))
+    else
+      local screenAdInterval = GlobalParamsFunc.instance:getCfgDatas("GlobalParams_json", "screenAdInterval", true)
+      if screenAdInterval and screenAdInterval.num then
+        intervalTime = screenAdInterval.num
+      end
+    end
+    if intervalTime > 0 then
+      local lastShowTime = Number(CountsCommonModel.instance:getCountById(CountsCommonModel.TYPE_INTERVALAD_LASTSHOWTIME))
+      local durT = Client.instance.miniserverTime - lastShowTime
+      if durT <= intervalTime then
+        LogsManager.echo("hlx InterstitialAd 插屏广告不显示：间隔小于", intervalTime, "间隔：", durT)
+        return true
+      end
+    end
+    local maxTime = 0
+    if Number(GameSwitch.getSwitchState(GameSwitch.MAX_TIME)) > 0 then
+      maxTime = Number(GameSwitch.getSwitchState(GameSwitch.MAX_TIME))
+    else
+      local screenAdMaxTimes = GlobalParamsFunc.instance:getCfgDatas("GlobalParams_json", "screenAdMaxTimes", true)
+      if screenAdMaxTimes and screenAdMaxTimes.num then
+        maxTime = screenAdMaxTimes.num
+      end
+    end
+    if maxTime > 0 then
+      local interstitialCount = Number(CountsCommonModel.instance:getCountById(CountsCommonModel.TYPE_INTERVALAD_COUNT))
+      if interstitialCount >= maxTime then
+        LogsManager.echo("hlx InterstitialAd 插屏广告不显示：当日次数用完", maxTime, "interstitialCount:", interstitialCount)
+        return true
+      end
+    end
+    return false
+  end
+  if UserInfo.isTT() then
+    local intervalTime = 35000
+    local lastShowTime = self.ttInterstitialAdLastShowTime
+    local durT = Client.instance.miniserverTime - lastShowTime
+    LogsManager.echo("whn------tt插屏显示时间--------", lastShowTime, durT)
+    if durT <= intervalTime then
+      LogsManager.echo("whn InterstitialAd 插屏广告不显示：间隔小于", intervalTime, "间隔：", durT)
+      return true
+    end
+    return false
+  end
+end
+
+function AdVideoManager:updateInterstitialLimit()
+  if not ((UserInfo.isOppo() or UserInfo.isVivo()) or UserInfo.isTT()) then
+    return
+  end
+  if UserInfo.isOppo() or UserInfo.isVivo() then
+    local interstitialCount = Number(CountsCommonModel.instance:getCountById(CountsCommonModel.TYPE_INTERVALAD_COUNT))
+    CountsCommonServer.updateDayCounts(CountsCommonModel.TYPE_INTERVALAD_COUNT, interstitialCount + 1, false)
+    CountsCommonServer.updateDayCounts(CountsCommonModel.TYPE_INTERVALAD_LASTSHOWTIME, Client.instance.miniserverTime)
+  else
+    self.ttInterstitialAdLastShowTime = Client.instance.miniserverTime
+  end
+end
+
+function AdVideoManager:removeDelayInterstitialAd()
+  TimerManager.instance:remove(self.interstitialAdTimeId)
+  self.interstitialAdTimeId = nil
+end
+
+function AdVideoManager:registerOrigionIconAdv(callBack, thisObj, params)
+  if callBack == nil then
+    callBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if params == nil then
+    params={}
+  end
+  OriginalIconAdComp.instance:registerOrigionAdv(callBack, thisObj, params)
+end
+
+function AdVideoManager:registerOrigionInterstitialAdv(callBack, thisObj, params)
+  if callBack == nil then
+    callBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if params == nil then
+    params={}
+  end
+  OriginalInterstitialAdComp.instance:registerOrigionAdv(callBack, thisObj, params)
+end
+
+function AdVideoManager:showOriginalAdView(onErrorCallback, callbackObj, params)
+  if onErrorCallback == nil then
+    onErrorCallback=nil
+  end
+  if callbackObj == nil then
+    callbackObj=nil
+  end
+  if params == nil then
+    params={pos=-79}
+  end
+  OriginalInterstitialAdComp.instance:showOriginalAdView(onErrorCallback, callbackObj, params)
+end
+
+function AdVideoManager:reportClickOriginal(type, id)
+  local switch = {
+    [AdVideoManager.TYPE_ORIGINAL_INTERSTITIAL] = function()
+      OriginalInterstitialAdComp.instance:reportClickOriginal(id)
+    end,
+    [AdVideoManager.TYPE_ORIGINAL_ICON] = function()
+      OriginalIconAdComp.instance:reportClickOriginal(id)
+    end,
+    ["default"] = function()
+      LogsManager.errorTag('reportClickOriginal_type_error', type)
+    end
+  }
+  local casef = switch[type]
+  if not casef then casef = switch["default"] end
+  if casef then casef() end
+end
+
+function AdVideoManager:reportShowOriginal(type, id)
+  local switch = {
+    [AdVideoManager.TYPE_ORIGINAL_INTERSTITIAL] = function()
+      OriginalInterstitialAdComp.instance:reportShowOriginal(id)
+    end,
+    [AdVideoManager.TYPE_ORIGINAL_ICON] = function()
+      OriginalIconAdComp.instance:reportShowOriginal(id)
+    end,
+    ["default"] = function()
+      LogsManager.errorTag('reportShowOriginal_type_error', type)
+    end
+  }
+  local casef = switch[type]
+  if not casef then casef = switch["default"] end
+  if casef then casef() end
+end
+
+function AdVideoManager:canBtnMove()
+  if not GameUtils.canQuickBanner then
+    LogsManager.echo("ycn MoveButtonOnClick 无banner")
+    return false
+  end
+  if not UserInfo.isWX() then
+    LogsManager.echo("ycn MoveButtonOnClick 非微信渠道")
+    return false
+  end
+  if not GameSwitch.checkOnOff(GameSwitch.SWITCH_BTN_MOVE) then
+    LogsManager.echo("ycn MoveButtonOnClick 开关未开启")
+    return false
+  end
+  if not SceneReference.isInBannerScene() then
+    LogsManager.echo("ycn MoveButtonOnClick sceneBlack")
+    return false
+  end
+  return true
+end
+
+function AdVideoManager:bindBtnMove(btnObj, btnCallBack, viewObj, moveX, moveY)
+  if moveX == nil then
+    moveX=0
+  end
+  if moveY == nil then
+    moveY=170
+  end
+  -- [ts2lua]btnObj下标访问可能不正确
+  if not btnObj['clickMoveInit'] then
+    -- [ts2lua]btnObj下标访问可能不正确
+    btnObj['clickMoveInit'] = true
+    -- [ts2lua]btnObj下标访问可能不正确
+    btnObj['targetClickNum'] = GameUtils.getRandomInt(2, 3)
+    -- [ts2lua]btnObj下标访问可能不正确
+    btnObj['currentClickNum'] = 0
+    ScreenAdapterTools.offsetView(btnObj, moveX, moveY)
+    return ButtonUtils(btnObj, function()
+      -- [ts2lua]btnObj下标访问可能不正确
+      -- [ts2lua]btnObj下标访问可能不正确
+      btnObj['currentClickNum'] = btnObj['currentClickNum'] or 0 + 1
+      -- [ts2lua]btnObj下标访问可能不正确
+      -- [ts2lua]btnObj下标访问可能不正确
+      if btnObj['currentClickNum'] < btnObj['targetClickNum'] then
+        return
+      -- [ts2lua]btnObj下标访问可能不正确
+      -- [ts2lua]btnObj下标访问可能不正确
+      elseif btnObj['currentClickNum'] == btnObj['targetClickNum'] then
+        ScreenAdapterTools.offsetView(btnObj, -moveX, -moveY)
+        -- [ts2lua]btnObj下标访问可能不正确
+        btnObj['clickMoveInit'] = false
+        BannerAdManager.addBannerQuick(viewObj)
+      else
+        btnCallBack:call(viewObj)
+      end
+    end
+    , viewObj)
+  end
+end

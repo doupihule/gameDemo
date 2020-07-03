@@ -1,0 +1,354 @@
+require("stringutil")
+require("trycatch")
+TableUtils = class('TableUtils')
+function TableUtils:ctor() end
+function TableUtils.deepMerge(receiveObj, fromObj)
+  if not fromObj then
+    return
+  end
+  if not receiveObj then
+    receiveObj = {}
+  end
+  for i in pairs(fromObj) do
+    local value = fromObj[i+1]
+    if type(value) == "object" then
+      if not receiveObj[i+1] then
+        receiveObj[i+1] = {}
+      end
+      if Array:isArray(value) then
+        if #value > 0 then
+          receiveObj[i+1] = TableUtils.deepCopy(value, {})
+        end
+      else
+        TableUtils.deepMerge(receiveObj[i+1], value)
+      end
+    else
+      receiveObj[i+1] = value
+    end
+  end
+end
+
+function TableUtils.deepDelete(t, keyData, deltitle)
+  if deltitle == nil then
+    deltitle=1
+  end
+  if not keyData then
+    return
+  end
+  for i in pairs(keyData) do
+    local value = keyData[i+1]
+    if i ~= "_id" then
+      if value == deltitle then
+        t[i+1] = nil
+      elseif type(value) == "object" then
+        if t[i+1] ~= nil then
+          TableUtils.deepDelete(t[i+1], value, deltitle)
+        end
+      else
+        -- [ts2lua]window下标访问可能不正确
+        window["LogsManager"]:warn("错误的删除码,key: " .. i .. "_value: " .. value)
+      end
+    end
+  end
+end
+
+function TableUtils.copyOneTable(tb)
+  local newTb = {}
+  for i in pairs(tb) do
+    newTb[i+1] = tb[i+1]
+  end
+  return newTb
+end
+
+function TableUtils.deepCopy(fromTb, toTb)
+  for i in pairs(fromTb) do
+    local tempT = fromTb[i+1]
+    if tempT ~= nil then
+      if type(tempT) == "object" then
+        if not Array:isArray(tempT) or #tempT == 0 then
+          toTb[i+1] = {}
+        else
+          toTb[i+1] = {}
+        end
+        TableUtils.deepCopy(tempT, toTb[i+1])
+      else
+        toTb[i+1] = tempT
+      end
+    end
+  end
+  return toTb
+end
+
+function TableUtils.copyOneArr(arr, outArr)
+  if outArr == nil then
+    outArr=nil
+  end
+  if not outArr then
+    outArr = {}
+  else
+    -- [ts2lua]修改数组长度需要手动处理。
+    outArr.length = 0
+  end
+  if arr then
+    local len = #arr
+    local i = 0
+    repeat
+      outArr[i+1] = arr[i+1]
+      i=i+1
+    until not(i < len)
+  end
+  return outArr
+end
+
+function TableUtils.findDelKey(t1, t2, resulTb, ignoreFristTb)
+  if ignoreFristTb == nil then
+    ignoreFristTb=true
+  end
+  for i in pairs(t1) do
+    local v = t1[i+1]
+    if v ~= nil then
+      if type(v) == "object" then
+        if t2[i+1] == nil then
+          if not ignoreFristTb then
+            resulTb[i+1] = 1
+          end
+        else
+          if TableUtils.isEmptyTable(t2[i+1]) and not ignoreFristTb then
+            resulTb[i+1] = 1
+          else
+            local tempT = resulTb[i+1]
+            if not tempT then
+              tempT = {}
+              resulTb[i+1] = tempT
+            end
+            TableUtils.findDelKey(v, t2[i+1], tempT, false)
+            if TableUtils.isEmptyTable(tempT) then
+              resulTb[i+1] = nil
+            end
+          end
+        end
+      else
+        if t2[i+1] == nil then
+          if i ~= "id" and i ~= "_id" then
+            resulTb[i+1] = 1
+          end
+        end
+      end
+    end
+  end
+end
+
+function TableUtils.findNullKey(fromTb, toTb)
+  if not fromTb then
+    return toTb
+  end
+  for i in pairs(fromTb) do
+    local value = fromTb[i+1]
+    if value == nil or value == undefined then
+      toTb[i+1] = 1
+    elseif type(value) == "object" then
+      local tempTb = {}
+      TableUtils.findNullKey(value, tempTb)
+      if not TableUtils.isEmptyTable(tempTb) then
+        toTb[i+1] = tempTb
+      end
+    end
+  end
+  return toTb
+end
+
+function TableUtils.compareTable(t1, t2, resulTb)
+  for k in pairs(t2) do
+    local v = t2[k+1]
+    if v ~= nil then
+      if type(v) ~= "object" then
+        if not t1 or not t2 then
+          -- [ts2lua]window下标访问可能不正确
+          window["LogsManager"]:echo("_____emyrt data")
+        end
+        if t1[k+1] == t2[k+1] then
+          
+        else
+          resulTb[k+1] = v
+        end
+      else
+        if not Array:isArray(v) or #v == 0 then
+          resulTb[k+1] = {}
+          if not t1[k+1] then
+            resulTb[k+1] = TableUtils.deepCopy(v, {})
+          else
+            TableUtils.compareTable(t1[k+1], v, resulTb[k+1])
+          end
+        else
+          -- [ts2lua]window下标访问可能不正确
+          window["LogsManager"]:errorTag("compareTableWarn", "has array Data,k:" .. k .. ",v:" .. TableUtils.safelyJsonStringfy(v):slice(0, 100))
+          resulTb[k+1] = TableUtils.deepCopy(v, {})
+        end
+        if TableUtils.isEmptyTable(resulTb[k+1]) then
+          resulTb[k+1] = nil
+        end
+      end
+    end
+  end
+end
+
+function TableUtils.getDelData(t1, t2, resulTb)
+  for k in pairs(t1) do
+    local v = t1[k+1]
+    if v ~= nil then
+      if type(v) ~= "object" then
+        if not t1 or not t2 then
+          -- [ts2lua]window下标访问可能不正确
+          window["LogsManager"]:echo("_____emyrt data")
+        end
+        if t1[k+1] and not t2[k+1] then
+          resulTb[k+1] = 1
+        end
+      else
+        if not Array:isArray(v) then
+          resulTb[k+1] = {}
+          if not t2[k+1] then
+            resulTb[k+1] = 1
+          else
+            TableUtils.getDelData(v, t2[k+1], resulTb[k+1])
+          end
+        end
+        if resulTb[k+1] ~= 1 and TableUtils.isEmptyTable(resulTb[k+1]) then
+          resulTb[k+1] = nil
+        end
+      end
+    end
+  end
+end
+
+function TableUtils.adjustEmptyArr(tb)
+  if not tb then
+    return
+  end
+  for i in pairs(tb) do
+    local v = tb[i+1]
+    if type(v) == "object" then
+      if Array:isArray(v) then
+        if #v == 0 then
+          -- [ts2lua]window下标访问可能不正确
+          window["LogsManager"]:warn("_____adjustEmptyArr,k:", i)
+          tb[i+1] = {}
+        end
+      else
+        TableUtils.adjustEmptyArr(v)
+      end
+    end
+  end
+end
+
+function TableUtils.isEmptyTable(tb)
+  for i in pairs(tb) do
+    if tb[i+1] ~= nil then
+      return false
+    end
+  end
+  return true
+end
+
+function TableUtils.removeValue(arr, value)
+  local index = arr:find(value)
+  if index ~= -1 then
+    arr:splice(index, 1)
+  end
+end
+
+function TableUtils.turnCsvArrToGameArr(fromArr, transtoNumber)
+  if transtoNumber == nil then
+    transtoNumber=false
+  end
+  local toArr = {}
+  if fromArr then
+    local i = 0
+    repeat
+      local str = fromArr[i+1]
+      toArr[i+1] = str:split(",")
+      if transtoNumber then
+        local tempArr = toArr[i+1]
+        local ii = 0
+        repeat
+          -- [ts2lua]tempArr下标访问可能不正确
+          local value = tempArr[ii]
+          local turnValue = Number(value)
+          if turnValue or turnValue == 0 then
+            -- [ts2lua]tempArr下标访问可能不正确
+            tempArr[ii] = turnValue
+          end
+          ii=ii+1
+        until not(ii < #tempArr)
+      end
+      i=i+1
+    until not(i < #fromArr)
+  end
+  return toArr
+end
+
+function TableUtils.turnCsvStrTogGameArr(fromStr, transtoNumber)
+  if transtoNumber == nil then
+    transtoNumber=false
+  end
+  local strLen = #fromStr
+  if fromStr:slice(strLen - 1, strLen) == ";" then
+    fromStr = fromStr:slice(0, strLen - 1)
+  end
+  local arr = fromStr:split(";")
+  return TableUtils.turnCsvArrToGameArr(arr)
+end
+
+function TableUtils.clearOneTable(targetTb)
+  for i in pairs(targetTb) do
+    targetTb[i+1] = nil
+  end
+end
+
+function TableUtils.safelyJsonStringfy(obj)
+  local rt = ''
+  try_catch{
+    main = function()
+      rt = JSON:stringify(obj)
+    end,
+    catch = function(e)
+      -- [ts2lua]window下标访问可能不正确
+      window["LogsManager"]:echo("jsonStringFyError")
+      rt = TableUtils.safelyToString(obj)
+    end
+  }
+  return rt
+end
+
+function TableUtils.safelyJsonParse(str)
+  local rt = nil
+  try_catch{
+    main = function()
+      rt = JSON:parse(str)
+    end,
+    catch = function(e)
+      -- [ts2lua]window下标访问可能不正确
+      window["LogsManager"]:echo("safelyJsonParseError")
+      rt = {}
+    end
+  }
+  return rt
+end
+
+function TableUtils.safelyToString(obj)
+  if obj == nil then
+    return obj
+  end
+  local rt = ''
+  try_catch{
+    main = function()
+      rt = obj:toString()
+    end,
+    catch = function(e)
+      -- [ts2lua]window下标访问可能不正确
+      window["LogsManager"]:errorTag("safelyToStringError", "safelyToStringError")
+      rt = ""
+    end
+  }
+  return rt
+end

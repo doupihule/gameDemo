@@ -1,0 +1,319 @@
+require("framework/manager/LogsManager")
+require("framework/manager/TimerManager")
+require("framework/common/Message")
+require("game/sys/common/MsgCMD")
+require("game/sys/consts/WindowCfgs")
+require("framework/func/TranslateFunc")
+require("framework/manager/WindowManager")
+require("framework/utils/TableUtils")
+require("framework/manager/VersionManager")
+require("framework/manager/LoadZipManager")
+require("framework/manager/SubPackageManager")
+require("framework/common/UserInfo")
+
+LoadManager = class('LoadManager')
+
+function LoadManager:ctor()
+  self._reloadCount = 0;
+  self._maxReloadcount = 1;
+  self._isTestError = false;
+  self._timeCode = 0;
+  self._timeCount = 0;
+  self._startLoadTime = 0;
+  self._loadCacheArr = {}
+  self._hasCacheMap = {}
+  Laya.loader:on(Laya.Event.ERROR, self, self.onLoadedError)
+  self._onLoadHandle = Laya.Handler:create(self, self.onLoadBack, nil, false)
+  self._onProgressHandle = Laya.Handler:create(self, self.onGroupProgress, nil, false)
+end
+
+function LoadManager.__getters.instance()
+  if not LoadManager._instance then
+    LoadManager._instance = LoadManager()
+  end
+  return LoadManager._instance
+end
+
+function LoadManager:loadPacgeAndRes(subPackageGroup, url, complete, progress, type, isInsert, isLoading, priority, cache, group, ignoreCache, useWorkerLoader)
+  if (not subPackageGroup or #subPackageGroup == 0) or UserInfo.isWeb() then
+    self:load(url, complete, progress, type, isInsert, isLoading, priority, cache, group, ignoreCache, useWorkerLoader)
+  else
+    local thisObj = self
+    local onSubBack = function()
+      thisObj:load(url, complete, progress, type, isInsert, isLoading, priority, cache, group, ignoreCache, useWorkerLoader)
+    end
+    
+    SubPackageManager.load(subPackageGroup, onSubBack, self)
+  end
+end
+
+function LoadManager:load(url, complete, progress, type, isInsert, isLoading, priority, cache, group, ignoreCache, useWorkerLoader)
+  if type(url) ~= "string" then
+    if not #url then
+      if complete then
+        complete:run()
+      end
+      return
+    end
+  end
+  local params = {url=url, complete=complete, progress=progress, type=type, priority=priority, cache=true, group=group, ignoreCache=ignoreCache, useWorkerLoader=useWorkerLoader, isInsert=isInsert, isLoading=isLoading, style="load", name=url, originUrl=url}
+  local arr = nil
+  if type(url) ~= "string" then
+    params.name = JSON:stringify(url)
+    params.originUrl = TableUtils.copyOneArr(url)
+  end
+  if self:checkHasCache(params.name) then
+    if complete then
+      complete:run()
+    end
+    return
+  end
+  if isInsert then
+    self._loadCacheArr:splice(0, 0, params)
+  else
+    table.insert(self._loadCacheArr, params)
+  end
+  self:checkLoad()
+end
+
+function LoadManager:create(url, complete, progress, type, isInsert, isLoading, constructParams, propertyParams, priority)
+  if type(url) ~= "string" then
+    if not #url then
+      if complete then
+        complete:run()
+      end
+      return
+    end
+  else
+    url = {url}
+  end
+  local params = {url=url, complete=complete, progress=progress, type=type, constructParams=constructParams, propertyParams=propertyParams, priority=priority, cache=true, isInsert=isInsert, isLoading=isLoading, style="create", name=url, originUrl=url}
+  if type(url) ~= "string" then
+    params.name = JSON:stringify(url)
+    params.originUrl = TableUtils.copyOneArr(url)
+  end
+  if self:checkHasCache(params.name) then
+    if complete then
+      complete:run()
+    end
+    return
+  end
+  if isInsert then
+    self._loadCacheArr:splice(0, 0, params)
+  else
+    table.insert(self._loadCacheArr, params)
+  end
+  self:checkLoad()
+end
+
+function LoadManager:createPackAndRes(subPackageGroup, url, complete, progress, type, isInsert, isLoading, constructParams, propertyParams, priority)
+  if (not subPackageGroup or #subPackageGroup == 0) or UserInfo.isWeb() then
+    self:create(url, complete, progress, type, isInsert, isLoading, constructParams, propertyParams, priority)
+  else
+    local thisObj = self
+    local onSubBack = function()
+      thisObj:create(url, complete, progress, type, isInsert, isLoading, constructParams, propertyParams, priority)
+    end
+    
+    SubPackageManager.load(subPackageGroup, onSubBack, self)
+  end
+end
+
+function LoadManager:checkLoad()
+  if self.currentLoadinfo then
+    return
+  end
+  if #self._loadCacheArr == 0 then
+    return
+  end
+  local info = self._loadCacheArr[0+1]
+  self._loadCacheArr:splice(0, 1)
+  self:sureLoad(info)
+end
+
+function LoadManager:sureLoad(info)
+  self.currentLoadinfo = info
+  if info.isLoading then
+    Message.instance:send(MsgCMD.MODULE_SHOW, WindowCfgs.LoadingUI)
+  end
+  self._timeCode = TimerManager.instance:add(self.timerHandler, self, 20000, 1)
+  self._startLoadTime = Laya.Browser:now()
+  if self.currentLoadinfo.style == "load" then
+    Laya.loader:load(info.url, self._onLoadHandle, self._onProgressHandle, info.type, info.priority, info.cache, info.group, info.ignoreCache, info.useWorkerLoader)
+  else
+    Laya.loader:create(info.url, self._onLoadHandle, self._onProgressHandle, info.type, info.constructParams, info.propertyParams, info.priority, info.cache)
+  end
+end
+
+function LoadManager:startLoadZips()
+  local urls = self.currentLoadinfo.url
+  local i = 0
+  repeat
+    local url = urls[i+1]
+    if type(url) ~= "string" then
+      url = url.url
+    end
+    local model = VersionManager.instance:get3dZipModelName(url)
+    local zipFileUurl = VersionManager.instance:get3dModelZipFileName(model)
+    LoadZipManager.instance:loadZip(zipFileUurl, model, Laya.Handler(self, self.oneZipComplete, {i, model}), Laya.Handler(self, self.oneZipError, {i, model}))
+    i=i+1
+  until not(i < #urls)
+end
+
+function LoadManager:oneZipComplete(index, model)
+  if self.currentLoadinfo.zipError then
+    return
+  end
+  TimerManager.instance:add(self.delayCheckZipFile, self, 10, 1, false, {model})
+end
+
+function LoadManager:delayCheckZipFile(model)
+  if self.currentLoadinfo.loadNums == nil then
+    self.currentLoadinfo.loadNums = 0
+  end
+  self.currentLoadinfo.loadNums=self.currentLoadinfo.loadNums+1
+  LogsManager.echo("zipModel:", model, "loadcomplete")
+  local info = self.currentLoadinfo
+  if self.currentLoadinfo.loadNums == #self.currentLoadinfo.url then
+    Laya.loader:create(info.url, self._onLoadHandle, self._onProgressHandle, info.type, info.constructParams, info.propertyParams, info.priority, info.cache)
+  end
+end
+
+function LoadManager:oneZipError(index, model)
+  self.currentLoadinfo.zipError = true
+  local info = self.currentLoadinfo
+  LogsManager.echo("_下载zip文件失败-,转用普通方式下载")
+  VersionManager.instance:deleteOneModel(model)
+  Laya.loader:create(info.url, self._onLoadHandle, self._onProgressHandle, info.type, info.constructParams, info.propertyParams, info.priority, info.cache)
+end
+
+function LoadManager:onLoadBack(info)
+  if self.currentLoadinfo and self.currentLoadinfo.isLoading then
+    Message.instance:send(MsgCMD.MODULE_CLOSE, WindowCfgs.LoadingUI)
+  end
+  TimerManager.instance:remove(self._timeCode)
+  if self.currentLoadinfo.style == "create" then
+    if self.currentLoadinfo.loadError then
+      self:onGroupLoadError()
+    else
+      self:onGroupComplete(info)
+    end
+  else
+    if not info then
+      self:onGroupLoadError()
+    else
+      self:onGroupComplete(info)
+    end
+  end
+end
+
+function LoadManager:timerHandler()
+  LogsManager.echo("xd_loadres 超时")
+end
+
+function LoadManager:onGroupComplete(info)
+  if self._isTestError then
+    LogsManager.echo("__强制测试加载失败重新加载--")
+    self:onGroupLoadError()
+    return
+  end
+  self:loadFinish(info)
+end
+
+function LoadManager:checkIsFirstGroup(info) end
+function LoadManager:checkIsFinalGroup(info) end
+function LoadManager:loadFinish(info)
+  if self.currentLoadinfo then
+    self:setOneCache(self.currentLoadinfo.name)
+    local info = self.currentLoadinfo
+    self.currentLoadinfo = nil
+    if info.style == "create" then
+      local url = info.url
+      if type(url) == "string" then
+        local effect = Laya.loader:getRes(url)
+        self:compileShader(effect)
+      elseif #url then
+        for index in pairs(url) do
+          -- [ts2lua]url下标访问可能不正确
+          local effect = Laya.loader:getRes(url[index].url)
+          self:compileShader(effect)
+        end
+      end
+    end
+    if info.isLoading then
+      Message.instance:send(MsgCMD.MODULE_CLOSE, WindowCfgs.LoadingUI)
+    end
+    if info.complete then
+      info.complete:runWith(info)
+    end
+  end
+  self._reloadCount = 0
+  self:checkLoad()
+end
+
+function LoadManager:onGroupProgress(value)
+  local progressInfo = {itemsLoaded=Math:floor(value * 100), itemsTotal=100}
+end
+
+function LoadManager:onLoadedError(info)
+  local compStr = "comp/"
+  if type(info) == "string" and info:slice(0, #compStr) ~= compStr then
+    LogsManager.warn("---onLoadedError:", info)
+    if self.currentLoadinfo then
+      self.currentLoadinfo.loadError = true
+    end
+  else
+    print("_系统资源加载失败", info)
+  end
+end
+
+function LoadManager:onGroupLoadError()
+  TimerManager.instance:remove(self._timeCode)
+  if self.currentLoadinfo then
+    LogsManager.warn("资源加载失败 , " .. "当前组:" .. self.currentLoadinfo.name)
+    WindowManager.ShowTip(TranslateFunc.instance:getTranslate("#loadResError"))
+    self.currentLoadinfo.loadError = false
+    self._reloadCount=self._reloadCount+1
+    if self._reloadCount == self._maxReloadcount then
+      LogsManager.errorTag("resError", "loadErrorGroupName:" .. self.currentLoadinfo.name)
+    end
+    if self._reloadCount <= self._maxReloadcount then
+      TimerManager.instance:setTimeout(self.reloadGroup, self, 10)
+    else
+      WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#error110"), self.reloadGroup, self)
+    end
+  end
+end
+
+function LoadManager:reloadGroup()
+  if self.currentLoadinfo then
+    if self._reloadCount >= 3 then
+      self._isTestError = false
+    end
+    if self.currentLoadinfo.originUrl then
+      self.currentLoadinfo.url = self.currentLoadinfo.originUrl
+    end
+    self:sureLoad(self.currentLoadinfo)
+  end
+end
+
+function LoadManager:setOneCache(url)
+  local key = url
+  if type(key) ~= "string" then
+    key = JSON:stringify(url)
+  end
+  -- [ts2lua]self._hasCacheMap下标访问可能不正确
+  self._hasCacheMap[key] = true
+end
+
+function LoadManager:checkHasCache(url)
+  local key = url
+  if type(key) ~= "string" then
+    key = JSON:stringify(url)
+  end
+  -- [ts2lua]self._hasCacheMap下标访问可能不正确
+  local result = self._hasCacheMap[key]
+  return result
+end
+
+function LoadManager:compileShader(model) end

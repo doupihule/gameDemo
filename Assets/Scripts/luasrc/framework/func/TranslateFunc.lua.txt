@@ -1,0 +1,389 @@
+require("framework/consts/LogsErrorCode")
+require("game/sys/consts/TranslateConst")
+require("framework/consts/TranslateCommonConst")
+require("framework/func/BaseFunc")
+require("framework/utils/TableUtils")
+
+TranslateFunc = class('TranslateFunc')
+function TranslateFunc:getCfgsPathArr()
+  return {}
+end
+
+TranslateFunc.localErrorCodeMap = {#error110={state=1, hid="#error110", en_US="Network connection failed", zh_CN="当前网络不稳定，稍后尝试"}, #error99999999={state=1, hid="#error99999999", en_US="System error", zh_CN="系统错误"}, #error34903={state=1, hid="#error34903", en_US="Data error", zh_CN="账号数据异常"}, #versionUpdateReady={state=1, hid="#versionUpdateReady", en_US="New version ready", zh_CN="你没玩过的全新版本出现了！请退出后重新进入游戏"}, #beforeVersionUpdate={state=1, hid="#versionUpdateReady", en_US="New version is loading", zh_CN="全新版本即将到来，请稍后再试"}, #versionForceUpdate={state=1, hid="#versionUpdateReady", en_US="New version is loading", zh_CN="发现新版本，正在更新"}, #loadResError={state=1, hid="#loadResError", en_US="load Res Error", zh_CN="网络异常"}, #error99999998={state=1, hid="#loadResError", en_US="System error", zh_CN="数据异常错误"}, #subPackageError={state=1, en_US="System error", zh_CN="分包资源下载异常,点击重试"}};
+TranslateFunc.shareTranslateArr = {"操作失败，换个群试试", "操作失败，需分享到30人以上群", "请勿分享到相同群，换个群试试"};
+TranslateFunc.shareLabTranslate = "去分享";
+TranslateFunc.videoTranslateArr = {"观看完视频即可领取奖励"};
+TranslateFunc.videoLabTranslate = "好的";
+function TranslateFunc:ctor()
+  self._allCfgs = {}
+  -- [ts2lua]self._allCfgs下标访问可能不正确
+  self._allCfgs["localErrorCodeMap"] = TranslateFunc.localErrorCodeMap
+  -- [ts2lua]self._allCfgs下标访问可能不正确
+  self._allCfgs["localTranslate"] = TranslateConst.localTranslate
+  -- [ts2lua]self._allCfgs下标访问可能不正确
+  self._allCfgs["localTranslateCommon"] = TranslateCommonConst.localTranslate
+end
+
+function TranslateFunc.__getters.instance()
+  if not TranslateFunc._instance then
+    TranslateFunc._instance = TranslateFunc()
+  end
+  return TranslateFunc._instance
+end
+
+function TranslateFunc:insertOneCfgs(path)
+  path = BaseFunc.turnPath(path)
+  -- [ts2lua]self._allCfgs下标访问可能不正确
+  self._allCfgs[path] = BaseFunc.getGlobalCfg(path)
+end
+
+function TranslateFunc:getAllCfgData(cfgsName, ignoreError)
+  if ignoreError == nil then
+    ignoreError=false
+  end
+  cfgsName = BaseFunc.turnPath(cfgsName)
+  -- [ts2lua]self._allCfgs下标访问可能不正确
+  local cfgs = self._allCfgs[cfgsName]
+  if not cfgs then
+    if not ignoreError then
+      -- [ts2lua]window下标访问可能不正确
+      window["LogsManager"]:errorTag(LogsErrorCode.CONFIG_ERROR, "对应的配表没找到,请检查配置:" .. cfgsName)
+    end
+    return {}
+  end
+  if BaseFunc.exportType == BaseFunc.exportType_New then
+    local itemData = cfgs.d
+    if not itemData then
+      -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+      BaseFunc._changeCfgs[cfgsName] = {}
+      -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+      if BaseFunc.hotCfg and BaseFunc.hotCfg[cfgsName] then
+        -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+        cfgs = BaseFunc.hotCfg and BaseFunc.hotCfg[cfgsName]
+        if cfgs then
+          -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+          BaseFunc._changeCfgs[cfgsName] = cfgs
+          return cfgs
+        end
+      end
+      return {}
+    end
+    for key in pairs(itemData) do
+      self:setOneChangeData(cfgsName, key)
+    end
+    -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+    cfgs = BaseFunc._changeCfgs[cfgsName]
+  end
+  return cfgs
+end
+
+function TranslateFunc:changeDataById(cfgsName, id, ignoreError)
+  if ignoreError == nil then
+    ignoreError=false
+  end
+  local data = nil
+  if BaseFunc.exportType == BaseFunc.exportType_Old then
+    -- [ts2lua]self._allCfgs下标访问可能不正确
+    -- [ts2lua]self._allCfgs[cfgsName]下标访问可能不正确
+    data = self._allCfgs[cfgsName][id]
+  else
+    -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+    -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+    -- [ts2lua]BaseFunc._changeCfgs[cfgsName]下标访问可能不正确
+    if BaseFunc._changeCfgs[cfgsName] and BaseFunc._changeCfgs[cfgsName][id] then
+      -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+      -- [ts2lua]BaseFunc._changeCfgs[cfgsName]下标访问可能不正确
+      data = BaseFunc._changeCfgs[cfgsName][id]
+    else
+      self:setOneChangeData(cfgsName, id, ignoreError)
+      -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+      -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+      -- [ts2lua]BaseFunc._changeCfgs[cfgsName]下标访问可能不正确
+      data = BaseFunc._changeCfgs[cfgsName] and BaseFunc._changeCfgs[cfgsName][id]
+    end
+  end
+  return data
+end
+
+function TranslateFunc:setOneChangeData(cfgsName, id, ignoreError)
+  if ignoreError == nil then
+    ignoreError=false
+  end
+  -- [ts2lua]self._allCfgs下标访问可能不正确
+  local cfgs = self._allCfgs[cfgsName]
+  local type = Number(cfgs.t)
+  local key = cfgs.m
+  local mkey = cfgs.k
+  local itemData = cfgs.d
+  -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+  if not BaseFunc._changeCfgs[cfgsName] then
+    -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+    BaseFunc._changeCfgs[cfgsName] = {}
+  end
+  -- [ts2lua]itemData下标访问可能不正确
+  local curInfo = itemData and itemData[id]
+  if not curInfo then
+    -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+    -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+    -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
+    if (BaseFunc.hotCfg and BaseFunc.hotCfg[cfgsName]) and BaseFunc.hotCfg[cfgsName][id] then
+      -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+      -- [ts2lua]BaseFunc._changeCfgs[cfgsName]下标访问可能不正确
+      -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+      -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
+      BaseFunc._changeCfgs[cfgsName][id] = BaseFunc.hotCfg[cfgsName][id]
+      return
+    end
+  end
+  if not curInfo and not ignoreError then
+    -- [ts2lua]window下标访问可能不正确
+    window["LogsManager"]:errorTag("configError", "请找策划,配表名字:" .. cfgsName .. "对应的id" .. id .. "没有配置")
+    return
+  end
+  if not curInfo then
+    return
+  end
+  local info = {}
+  local outInfo = {}
+  local mulKey = nil
+  local addNum = 1
+  if type == BaseFunc.streamType_DelHead then
+    if mkey then
+      for item in pairs(curInfo) do
+        local info2 = {}
+        -- [ts2lua]info2下标访问可能不正确
+        info2[key[0+1]] = id
+        -- [ts2lua]curInfo下标访问可能不正确
+        local itemInfo = curInfo[item]
+        mulKey = item
+        -- [ts2lua]info2下标访问可能不正确
+        info2[key[1+1]] = mulKey
+        addNum = 2
+        local i = 0
+        repeat
+          repeat
+            local value = itemInfo[i+1]
+            if type(value) == "string" and value == "" or value == undefined then
+              break
+            end
+            -- [ts2lua]key下标访问可能不正确
+            -- [ts2lua]info2下标访问可能不正确
+            info2[key[i + addNum]] = value
+          until true
+          i=i+1
+        until not(i < #itemInfo)
+        -- [ts2lua]outInfo下标访问可能不正确
+        outInfo[mulKey] = info2
+      end
+      -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+      -- [ts2lua]BaseFunc._changeCfgs[cfgsName]下标访问可能不正确
+      BaseFunc._changeCfgs[cfgsName][id] = outInfo
+    else
+      -- [ts2lua]info下标访问可能不正确
+      info[key[0+1]] = id
+      local i = 0
+      repeat
+        repeat
+          local value = curInfo[i+1]
+          if type(value) == "string" and value == "" or value == undefined then
+            break
+          end
+          -- [ts2lua]key下标访问可能不正确
+          -- [ts2lua]info下标访问可能不正确
+          info[key[i + addNum]] = value
+        until true
+        i=i+1
+      until not(i < #curInfo)
+      -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+      -- [ts2lua]BaseFunc._changeCfgs[cfgsName]下标访问可能不正确
+      BaseFunc._changeCfgs[cfgsName][id] = info
+    end
+  elseif type == BaseFunc.streamType_ShortHead then
+    if mkey then
+      for item in pairs(curInfo) do
+        local info2 = {}
+        -- [ts2lua]info2下标访问可能不正确
+        info2[key[0+1]] = id
+        -- [ts2lua]curInfo下标访问可能不正确
+        local itemInfo = curInfo[item]
+        mulKey = item
+        -- [ts2lua]info2下标访问可能不正确
+        info2[key[1+1]] = mulKey
+        addNum = 2
+        for index in pairs(itemInfo) do
+          if itemInfo:hasOwnProperty(index) then
+            -- [ts2lua]itemInfo下标访问可能不正确
+            local value = itemInfo[index]
+            -- [ts2lua]key下标访问可能不正确
+            -- [ts2lua]info2下标访问可能不正确
+            info2[key[Number(index) - 1]] = value
+          end
+        end
+        -- [ts2lua]outInfo下标访问可能不正确
+        outInfo[mulKey] = info2
+      end
+      -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+      -- [ts2lua]BaseFunc._changeCfgs[cfgsName]下标访问可能不正确
+      BaseFunc._changeCfgs[cfgsName][id] = outInfo
+    else
+      -- [ts2lua]info下标访问可能不正确
+      info[key[0+1]] = id
+      for index in pairs(curInfo) do
+        if curInfo:hasOwnProperty(index) then
+          -- [ts2lua]curInfo下标访问可能不正确
+          local value = curInfo[index]
+          -- [ts2lua]key下标访问可能不正确
+          -- [ts2lua]info下标访问可能不正确
+          info[key[Number(index) - 1]] = value
+        end
+      end
+      -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+      -- [ts2lua]BaseFunc._changeCfgs[cfgsName]下标访问可能不正确
+      BaseFunc._changeCfgs[cfgsName][id] = info
+    end
+  end
+  -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+  -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+  -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
+  if (BaseFunc.hotCfg and BaseFunc.hotCfg[cfgsName]) and BaseFunc.hotCfg[cfgsName][id] then
+    -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确
+    -- [ts2lua]BaseFunc._changeCfgs[cfgsName]下标访问可能不正确
+    -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+    -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
+    TableUtils.deepMerge(BaseFunc._changeCfgs[cfgsName][id], BaseFunc.hotCfg[cfgsName][id])
+  end
+end
+
+function TranslateFunc:getCfgDatas(cfgsName, id, ignoreError)
+  if ignoreError == nil then
+    ignoreError=false
+  end
+  cfgsName = BaseFunc.turnPath(cfgsName)
+  -- [ts2lua]self._allCfgs下标访问可能不正确
+  local cfgs = self._allCfgs[cfgsName]
+  if not cfgs then
+    if not ignoreError then
+      -- [ts2lua]window下标访问可能不正确
+      window["LogsManager"]:errorTag(LogsErrorCode.CONFIG_ERROR, "配表还没有加载成功:" .. cfgsName)
+    end
+    return {}
+  end
+  local data = self:changeDataById(cfgsName, id, ignoreError)
+  if not data then
+    if not ignoreError then
+      -- [ts2lua]window下标访问可能不正确
+      window["LogsManager"]:errorTag(LogsErrorCode.CONFIG_ERROR, "请找策划,配表名字:" .. cfgsName .. "对应的id找不到" .. id)
+    end
+    return {}
+  end
+  return data
+end
+
+function TranslateFunc:getTranslate(tid, cfgsName, ...)
+  if cfgsName == nil then
+    cfgsName=nil
+  end
+  local language = "zh_CN"
+  local key2 = "#" .. tid
+  local resultStr = nil
+  if cfgsName then
+    -- [ts2lua]self._allCfgs下标访问可能不正确
+    local data = self._allCfgs[cfgsName]
+    if not data then
+      -- [ts2lua]window下标访问可能不正确
+      window["LogsManager"]:errorTag(LogsErrorCode.CONFIG_ERROR, "多语言配置缺失1:", tid, "cfgsName:", cfgsName)
+      return ""
+    end
+    -- [ts2lua]data下标访问可能不正确
+    -- [ts2lua]data下标访问可能不正确
+    if data[tid] or data[key2] then
+      -- [ts2lua]data下标访问可能不正确
+      -- [ts2lua]data下标访问可能不正确
+      resultStr = data[tid] or data[key2]
+    elseif BaseFunc.exportType == BaseFunc.exportType_New then
+      if #Object:keys(BaseFunc.hotCfg) > 0 then
+        -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+        if BaseFunc.hotCfg[cfgsName] then
+          -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+          -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
+          -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+          -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
+          if BaseFunc.hotCfg[cfgsName][tid] or BaseFunc.hotCfg[cfgsName][key2] then
+            -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+            -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
+            -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
+            -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
+            resultStr = BaseFunc.hotCfg[cfgsName][tid] or BaseFunc.hotCfg[cfgsName][key2]
+          end
+        end
+      end
+      if not resultStr and data.d then
+        local info = data.d
+        -- [ts2lua]info下标访问可能不正确
+        -- [ts2lua]info下标访问可能不正确
+        if info[tid] or info[key2] then
+          -- [ts2lua]info下标访问可能不正确
+          -- [ts2lua]info下标访问可能不正确
+          resultStr = info[tid] or info[key2]
+          if resultStr then
+            resultStr = resultStr[0+1]
+          end
+        end
+      end
+    end
+  else
+    for i in pairs(self._allCfgs) do
+      local data = self._allCfgs[i+1]
+      -- [ts2lua]data下标访问可能不正确
+      -- [ts2lua]data下标访问可能不正确
+      resultStr = data[tid] or data[key2]
+      if resultStr then
+        break
+      elseif BaseFunc.exportType == BaseFunc.exportType_New then
+        if #Object:keys(BaseFunc.hotCfg) > 0 then
+          if BaseFunc.hotCfg[i+1] then
+            -- [ts2lua]BaseFunc.hotCfg[i+1]下标访问可能不正确
+            -- [ts2lua]BaseFunc.hotCfg[i+1]下标访问可能不正确
+            if BaseFunc.hotCfg[i+1][tid] or BaseFunc.hotCfg[i+1][key2] then
+              -- [ts2lua]BaseFunc.hotCfg[i+1]下标访问可能不正确
+              -- [ts2lua]BaseFunc.hotCfg[i+1]下标访问可能不正确
+              resultStr = BaseFunc.hotCfg[i+1][tid] or BaseFunc.hotCfg[i+1][key2]
+              break
+            end
+          end
+        end
+        if data.d then
+          local info = data.d
+          -- [ts2lua]info下标访问可能不正确
+          -- [ts2lua]info下标访问可能不正确
+          if info[tid] or info[key2] then
+            -- [ts2lua]info下标访问可能不正确
+            -- [ts2lua]info下标访问可能不正确
+            resultStr = info[tid] or info[key2]
+            if resultStr then
+              resultStr = resultStr[0+1]
+              break
+            end
+          end
+        end
+      end
+    end
+  end
+  if type(resultStr) == "object" then
+    -- [ts2lua]resultStr下标访问可能不正确
+    resultStr = resultStr[language]
+  end
+  if not resultStr then
+    -- [ts2lua]window下标访问可能不正确
+    window["LogsManager"]:errorTag(LogsErrorCode.CONFIG_ERROR, "多语言配置缺失:", tid, "cfgsName:", cfgsName)
+    return tid
+  end
+  if #replaceArr > 0 then
+    local m = 0
+    repeat
+      resultStr = resultStr:gsub("#" .. m + 1, replaceArr[m+1])
+      m=m+1
+    until not(m < #replaceArr)
+  end
+  return resultStr
+end

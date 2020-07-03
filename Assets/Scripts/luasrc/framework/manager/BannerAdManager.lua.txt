@@ -1,0 +1,231 @@
+require("utils/GameUtils")
+require("framework/manager/LogsManager")
+require("game/sys/func/GlobalParamsFunc")
+require("framework/consts/SceneReference")
+require("framework/common/GameSwitch")
+require("framework/platform/comp/BannerComp")
+require("framework/platform/comp/RecommendationBannerComp")
+require("framework/common/UserInfo")
+require("framework/server/BannerOrRecommendServer")
+require("game/sys/model/UserModel")
+require("framework/platform/comp/TopViewAutoComp")
+require("framework/event/CommonEvent")
+require("framework/common/Message")
+
+BannerAdManager = class('BannerAdManager')
+BannerAdManager.BANNER_TYPE_AD = 1;
+BannerAdManager.BANNER_TYPE_RECOMMEND = 2;
+BannerAdManager.QUICK_BANNER_TYPE_AD = 1;
+BannerAdManager.QUICK_BANNER_TYPE_AD_COMMEND = 2;
+BannerAdManager.QUICK_BANNER_TYPE_COMMEND = 3;
+BannerAdManager.QUICK_BANNER_TYPE_COMMEND_AD = 4;
+BannerAdManager.BANNER_ORDER_TYPE_AD = 1;
+BannerAdManager.BANNER_ORDER_TYPE_RECOMMEND = 2;
+BannerAdManager.BANNER_ORDER_TYPE_ORDER = 3;
+BannerAdManager.BANNER_ORDER_TYPE_JUST_BANNER = 4;
+function BannerAdManager.__getters.instance()
+  if not BannerAdManager._instance then
+    BannerAdManager._instance = BannerAdManager()
+  end
+  return BannerAdManager._instance
+end
+
+function BannerAdManager:recvMsg(cmd, data)
+  if cmd == CommonEvent.WHITE_LIST_CHANGE then
+    GameUtils.canGift = false
+    GameUtils.canLeadBanner = false
+  end
+end
+
+function BannerAdManager.setBannerSwitch()
+  if UserInfo.isWX() then
+    Message.instance:add(CommonEvent.WHITE_LIST_CHANGE, BannerAdManager.instance)
+  end
+  GameUtils.canQuickBanner = not GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_QUICKBANNER)
+  if not SceneReference.isInBannerScene() then
+    GameUtils.canGift = false
+    GameUtils.canLeadBanner = false
+    LogsManager.echo(" GameUtils.banner false")
+    return
+  else
+    GameUtils.canLeadBanner = not GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_LEADBANNER)
+    GameUtils.canGift = not GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_MYSTERIOUSGIFT)
+  end
+  if not BannerAdManager.isPlatformSupport() then
+    LogsManager.echo("平台不支持banner banner开关关闭")
+    GameUtils.canQuickBanner = false
+    GameUtils.canGift = false
+    GameUtils.canLeadBanner = false
+  end
+  LogsManager.echo(" GameUtils.canQuickBanner:", GameUtils.canQuickBanner)
+  LogsManager.echo(" GameUtils.canLeadBanner:", GameUtils.canLeadBanner)
+  LogsManager.echo(" GameUtils.canGift:", GameUtils.canGift)
+end
+
+function BannerAdManager.isPlatformSupport()
+  if UserInfo.isTT() then
+    LogsManager.echo("krma. UserInfo.platform.getSystemInfo().appName " .. UserInfo.platform:getSystemInfo().appName)
+    if UserInfo.platform:getSystemInfo().appName == "Douyin" or UserInfo.platform:getSystemInfo().appName == "PPX" then
+      LogsManager.echo("krma. 该渠道不支持banner", UserInfo.platform:getSystemInfo().appName)
+      return false
+    end
+  end
+  return true
+end
+
+function BannerAdManager.registerBanner()
+  BannerComp.register()
+  RecommendationBannerComp.register()
+end
+
+function BannerAdManager.addBannerQuick(parent, onErrorCallback, callbackObj, hideType, quickBannerType, style)
+  if onErrorCallback == nil then
+    onErrorCallback=nil
+  end
+  if callbackObj == nil then
+    callbackObj=nil
+  end
+  if hideType == nil then
+    hideType=TopViewAutoComp.HIDE_TYPE_DESTROY
+  end
+  if quickBannerType == nil then
+    quickBannerType=nil
+  end
+  if style == nil then
+    style=nil
+  end
+  if not parent.windowName then
+    LogsManager.errorTag("bannerParamsError", "传入的对象没有windowName")
+    return
+  end
+  LogsManager.echo("zm.addBannerParent-----------", parent.windowName)
+  if GameUtils.canQuickBanner then
+    if UserInfo.isWX() then
+      local thisObj = BannerAdManager
+      if not quickBannerType then
+        quickBannerType = Number(GameSwitch.getSwitchState(GameSwitch.SWITCH_QUICKBANNER_TYPE))
+      end
+      local switch = {
+        [BannerAdManager.QUICK_BANNER_TYPE_AD] = function()
+          BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style)
+        end,
+        [BannerAdManager.QUICK_BANNER_TYPE_AD_COMMEND] = function()
+          BannerComp.create(parent, function()
+            BannerComp.cancleOneView(parent.windowName)
+            RecommendationBannerComp.create(parent, onErrorCallback, callbackObj, hideType)
+          end
+          , thisObj, hideType, style)
+        end,
+        [BannerAdManager.QUICK_BANNER_TYPE_COMMEND] = function()
+          RecommendationBannerComp.create(parent, onErrorCallback, callbackObj, hideType)
+        end,
+        [BannerAdManager.QUICK_BANNER_TYPE_COMMEND_AD] = function()
+          BannerComp.cancleOneView(parent.windowName)
+          RecommendationBannerComp.create(parent, function()
+            BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style)
+          end
+          , thisObj, hideType)
+        end
+      }
+      local casef = switch[quickBannerType]
+      if not casef then casef = switch["default"] end
+      if casef then casef() end
+    else
+      BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style)
+    end
+  end
+  return nil
+end
+
+function BannerAdManager.hideQuickBanner()
+  if GameUtils.canQuickBanner then
+    
+  end
+end
+
+function BannerAdManager.addLeadBanner(obj, pos1, pos2) end
+function BannerAdManager.hideLeadBanner() end
+function BannerAdManager.addGiftBanner(parent, onErrorCallback, callbackObj, hideType, orderType, style)
+  if onErrorCallback == nil then
+    onErrorCallback=nil
+  end
+  if callbackObj == nil then
+    callbackObj=nil
+  end
+  if hideType == nil then
+    hideType=TopViewAutoComp.HIDE_TYPE_DESTROY
+  end
+  if orderType == nil then
+    orderType=nil
+  end
+  if style == nil then
+    style=nil
+  end
+  if GameUtils.canGift then
+    if UserInfo.isWX() then
+      local thisObj = BannerAdManager
+      if orderType == nil then
+        orderType = Number(GameSwitch.getSwitchState(GameSwitch.SWITCH_MYSTERIOUSGIFT_TYPE))
+      end
+      local switch = {
+        [BannerAdManager.BANNER_ORDER_TYPE_AD] = function()
+          BannerComp.create(parent, function()
+            RecommendationBannerComp.create(parent, onErrorCallback, callbackObj, hideType)
+          end
+          , thisObj, hideType, style)
+        end,
+        [BannerAdManager.BANNER_ORDER_TYPE_RECOMMEND] = function()
+          RecommendationBannerComp.create(parent, function()
+            BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style)
+          end
+          , thisObj, hideType)
+        end,
+        [BannerAdManager.BANNER_ORDER_TYPE_ORDER] = function()
+          local type = BannerAdManager.BANNER_TYPE_AD
+          local orderCfg = GlobalParamsFunc.instance:getDataArray("selectBannerList")
+          local bannerOrder = UserModel.instance:getBannerOrder()
+          if orderCfg then
+            bannerOrder = bannerOrder % #orderCfg
+            -- [ts2lua]orderCfg下标访问可能不正确
+            type = Number(orderCfg[bannerOrder])
+          end
+          if type == BannerAdManager.BANNER_TYPE_AD then
+            LogsManager.echo('banner order type: banner>推荐', type)
+            BannerComp.create(parent, function()
+              RecommendationBannerComp.create(parent, onErrorCallback, callbackObj, hideType)
+            end
+            , thisObj, hideType, style)
+          elseif type == BannerAdManager.BANNER_TYPE_RECOMMEND then
+            LogsManager.echo('banner order type: 推荐>banner', type)
+            RecommendationBannerComp.create(parent, function()
+              BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style)
+            end
+            , thisObj, hideType)
+          else
+            LogsManager.errorTag('banner_type_error', 'banner_type_error:' .. type)
+          end
+          BannerOrRecommendServer.BannerOrRecommendSend()
+        end,
+        [BannerAdManager.BANNER_ORDER_TYPE_JUST_BANNER] = function()
+          BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style)
+        end
+      }
+      local casef = switch[orderType]
+      if not casef then casef = switch["default"] end
+      if casef then casef() end
+    else
+      BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style)
+    end
+  end
+  return nil
+end
+
+function BannerAdManager.hideBanner(windowName)
+  BannerComp.cancleOneView(windowName)
+end
+
+function BannerAdManager.hideGiftBanner()
+  if GameUtils.canGift then
+    
+  end
+end

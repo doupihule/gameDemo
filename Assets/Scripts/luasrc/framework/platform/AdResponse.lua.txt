@@ -1,0 +1,91 @@
+AdResponse = class('AdResponse')
+
+AdResponse.kariquPos = 1;
+function AdResponse.changeStruct(data)
+  local datas = {}
+  local endData = data.endPage
+  local i = 0
+  repeat
+    local item = endData[i+1]
+    local param = {}
+    -- [ts2lua]param下标访问可能不正确
+    param["GameAppId"] = item.appid
+    -- [ts2lua]param下标访问可能不正确
+    param["GameName"] = item.app_title
+    -- [ts2lua]param下标访问可能不正确
+    param["Icon"] = item.app_icon
+    -- [ts2lua]param下标访问可能不正确
+    param["Position"] = item.position_type
+    -- [ts2lua]param下标访问可能不正确
+    param["MutualType"] = "1"
+    -- [ts2lua]param下标访问可能不正确
+    param["PromoteLink"] = item.link_path
+    -- [ts2lua]param下标访问可能不正确
+    param["app_id"] = item.app_id
+    table.insert(datas, param)
+    i=i+1
+  until not(i < #endData)
+  return datas
+end
+
+function AdResponse.changeDataToZhise(data)
+  local datas = {}
+  -- [ts2lua]datas下标访问可能不正确
+  datas["appid"] = data.appId
+  -- [ts2lua]datas下标访问可能不正确
+  datas["link_path"] = data.path
+  -- [ts2lua]datas下标访问可能不正确
+  datas["extraData"] = data.extraData and data.extraData.ext
+  -- [ts2lua]datas下标访问可能不正确
+  datas["app_id"] = data.jumpData.app_id
+  return datas
+end
+
+function AdResponse.changeKariquStruct(data, type, result, isSingle)
+  if isSingle then
+    local item = data
+    local param = {}
+    -- [ts2lua]param下标访问可能不正确
+    param["GameAppId"] = item.appid
+    -- [ts2lua]param下标访问可能不正确
+    param["GameName"] = item.name
+    -- [ts2lua]param下标访问可能不正确
+    param["Icon"] = item.icon
+    -- [ts2lua]param下标访问可能不正确
+    param["Position"] = AdResponse.kariquPos
+    -- [ts2lua]param下标访问可能不正确
+    param["MutualType"] = type .. ""
+    -- [ts2lua]param下标访问可能不正确
+    param["PromoteLink"] = item.path
+    table.insert(result, param)
+    AdResponse.kariquPos=AdResponse.kariquPos+1
+  else
+    local i = 0
+    repeat
+      local item = data[i+1]
+      local param = {}
+      if item.data then
+        -- [ts2lua]param下标访问可能不正确
+        param["MutualType"] = item.type .. ""
+        item = item.data
+      else
+        -- [ts2lua]param下标访问可能不正确
+        param["MutualType"] = type .. ""
+      end
+      -- [ts2lua]param下标访问可能不正确
+      param["GameAppId"] = item.appid
+      -- [ts2lua]param下标访问可能不正确
+      param["GameName"] = item.name
+      -- [ts2lua]param下标访问可能不正确
+      param["Icon"] = item.icon
+      -- [ts2lua]param下标访问可能不正确
+      param["Position"] = AdResponse.kariquPos
+      -- [ts2lua]param下标访问可能不正确
+      param["PromoteLink"] = item.path
+      table.insert(result, param)
+      AdResponse.kariquPos=AdResponse.kariquPos+1
+      i=i+1
+    until not(i < #Object:keys(data))
+  end
+  return param
+end

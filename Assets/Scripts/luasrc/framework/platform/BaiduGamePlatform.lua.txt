@@ -1,0 +1,253 @@
+require("trycatch")
+require("framework/platform/TTGamePlatform")
+require("framework/manager/LogsManager")
+require("framework/common/UserInfo")
+require("utils/Global")
+require("game/sys/manager/StatisticsManager")
+require("framework/consts/StatisticsCommonConst")
+require("framework/manager/WindowManager")
+require("framework/func/TranslateFunc")
+require("framework/manager/TimerManager")
+require("framework/common/kakura/MethodCommon")
+
+BaiduGamePlatform = class('BaiduGamePlatform',TTGamePlatform)
+
+function BaiduGamePlatform:ctor()
+  self:superCall('ctor')
+  self._swanid = nil;
+  self._swanid_signature = nil;
+  -- [ts2lua]window下标访问可能不正确
+  -- [ts2lua]window下标访问可能不正确
+  window["wx"] = window["swan"]
+  BaiduGamePlatform.instance = self
+end
+
+function BaiduGamePlatform:getWX()
+  -- [ts2lua]window下标访问可能不正确
+  return window['swan']
+end
+
+function BaiduGamePlatform:initPlatformData()
+  self:superCall('initPlatformData')
+  try_catch{
+    main = function()
+      self:initAntiAddiction()
+    end,
+    catch = function(e)
+      LogsManager.errorTag("baiduError", "防沉迷error", e:toString())
+    end
+  }
+  LogsManager.echo("平台登录就添加桌面 --------------------")
+  self:addToDesktop()
+end
+
+function BaiduGamePlatform:getSwanId(callback, thisObj)
+  if callback == nil then
+    callback=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  self:getWX():getSwanId({success=function(res)
+    LogsManager.echo("getSwanId swanId 加载成功", res)
+    if res.data.swanid and res.data.swanid_signature then
+      self._swanid = res.data.swanid
+      self._swanid_signature = res.data.swanid_signature
+      callback and callback:call(thisObj, true)
+    else
+      LogsManager.errorTag("getSwanId_swanId_error", "getSwanId swanId 加载成功,返回值异常")
+      callback and callback:call(thisObj, false)
+    end
+  end
+  , fail=function(err)
+    LogsManager.echo("getSwanId swanId 失败", err)
+    callback and callback:call(thisObj, false)
+  end
+  })
+end
+
+function BaiduGamePlatform:getWxInfo()
+  self:reCheckBar()
+  if self._swanid then
+    self:_login()
+  else
+    local myThis = self
+    LogsManager.echo("getWxInfo getSwanId not finish")
+    self:getSwanId(function(result)
+      LogsManager.echo("getWxInfo getSwanId error!!!")
+      if not result then
+        self:retryGetWxInfo()
+        return
+      end
+      myThis:_login()
+    end
+    )
+  end
+end
+
+function BaiduGamePlatform:_login()
+  local myThis = self
+  try_catch{
+    main = function()
+      local result = self:getWX():isLoginSync()
+      LogsManager.echo('isLoginSync sccess:', result.isLogin)
+      if result.isLogin then
+        self:getWX():login({success=function(res)
+          LogsManager.echo('>>login成功回调>>', JSON:stringify(res))
+          myThis:setLaunchOptions()
+          if res ~= undefined then
+            if not res.code then
+              myThis:retryGetWxInfo()
+              return
+            end
+            local gParams = {}
+            gParams = {method=MethodCommon.global_Account_loginBaidu, params={code=res.code, anonymous_code=myThis._swanid, device=Global.deviceModel, comeFrom=UserInfo.LoginSceneInfo, sceneId=String(Global.sceneId), swanid_signature=myThis._swanid_signature}}
+            myThis:reqGlobal(gParams)
+          end
+        end
+        , fail=function(err)
+          LogsManager.warn('>>login失败回调>>', err)
+          myThis:retryGetWxInfo()
+        end
+        , complete=function() end})
+      else
+        local gParams = {method=MethodCommon.global_Account_loginBaidu, params={code="", anonymous_code=self._swanid, device=Global.deviceModel, comeFrom=UserInfo.LoginSceneInfo, sceneId=String(Global.sceneId), swanid_signature=self._swanid_signature}}
+        myThis:reqGlobal(gParams)
+      end
+    end,
+    catch = function(e)
+      LogsManager.echo('isLoginSync error:', e)
+    end
+  }
+end
+
+function BaiduGamePlatform:jumpToMiniProgram(data)
+  if self:getWX().navigateToMiniProgram then
+    self:getWX():navigateToMiniProgram({appKey=data.appId, path=data.path, extraData=data.extraData and data.extraData.ext, success=function(res)
+      LogsManager.echo("yrc navigateToMiniProgram success", res)
+      local position = 0
+      if (data and data.jumpData) and data.jumpData.Position then
+        position = data.jumpData.Position
+      end
+      StatisticsManager.ins:onEvent(StatisticsCommonConst.JUMP_TO_OTHER_GAME_SUCCESS, {gameName=data.jumpData.GameName, from=data.extraData and data.extraData.from, toAppId=data.appId, position=position})
+    end
+    , fail=function(res)
+      LogsManager.echo("yrc navigateToMiniProgram fail", res)
+    end
+    , complete=function(res)
+      LogsManager.echo("yrc navigateToMiniProgram complete", res)
+    end
+    })
+  end
+end
+
+function BaiduGamePlatform:addToFavorite(thisObj, successCall, failCall, channelParams)
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if successCall == nil then
+    successCall=nil
+  end
+  if failCall == nil then
+    failCall=nil
+  end
+  if channelParams == nil then
+    channelParams={}
+  end
+  if not self:canAddToFavorite() then
+    failCall and failCall:call(thisObj)
+    return
+  end
+  -- [ts2lua]channelParams下标访问可能不正确
+  -- [ts2lua]channelParams下标访问可能不正确
+  -- [ts2lua]lua中0和空字符串也是true，此处channelParams['type']需要确认
+  self:getWX():showFavoriteGuide({type=(channelParams['type'] and {channelParams['type']} or {'bar'})[1], success=function(res)
+    LogsManager.echo("hlx 添加到我的小程序成功", JSON:stringify(res))
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.ADD_MYGAME_SUCCESS)
+    successCall and successCall:call(thisObj)
+  end
+  , fail=function(res)
+    LogsManager.echo("hlx 添加到我的小程序失败", JSON:stringify(res))
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.ADD_MYGAME_FAIL)
+    failCall and failCall:call(thisObj)
+  end
+  })
+end
+
+function BaiduGamePlatform:addToDesktop(thisObj, successCall, failCall, channelParams)
+  if thisObj == nil then
+    thisObj=nil
+  end
+  if successCall == nil then
+    successCall=nil
+  end
+  if failCall == nil then
+    failCall=nil
+  end
+  if channelParams == nil then
+    channelParams={}
+  end
+  if not self:canAddToDesktop() then
+    failCall and failCall:call(thisObj)
+    return
+  end
+  -- [ts2lua]channelParams下标访问可能不正确
+  -- [ts2lua]channelParams下标访问可能不正确
+  -- [ts2lua]lua中0和空字符串也是true，此处channelParams['type']需要确认
+  self:getWX():showAddToDesktopGuide({type=(channelParams['type'] and {channelParams['type']} or {'bar'})[1], success=function(res)
+    LogsManager.echo("hlx 添加到桌面成功", JSON:stringify(res))
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.ADD_DESKTOP_SUCCESS)
+    successCall and successCall:call(thisObj)
+  end
+  , fail=function(res)
+    LogsManager.echo("hlx 添加到桌面失败", JSON:stringify(res))
+    StatisticsManager.ins:onEvent(StatisticsCommonConst.ADD_DESKTOP_FAIL)
+    failCall and failCall:call(thisObj)
+  end
+  })
+end
+
+function BaiduGamePlatform:initAntiAddiction()
+  local api = nil
+  try_catch{
+    main = function()
+      api = self:getWX():getAntiAddiction()
+    end,
+    catch = function(e)
+      return false
+    end
+  }
+  if type(self:getWX().getAntiAddiction) ~= "function" then
+    return false
+  end
+  local mythis = self
+  api:onAntiAddiction(function()
+    if not mythis.antiAddtionInfo then
+      WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#tid_anti_indulge1", "TranslateGlobal"), nil, mythis)
+      TimerManager.instance:setTimeout(function()
+        WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#tid_anti_indulge2", "TranslateGlobal"), function()
+          mythis:getWX():exit()
+        end
+        , mythis)
+      end
+      , mythis, 3000)
+    end
+    mythis.antiAddtionInfo = {status=state, msg=msg}
+  end
+  )
+end
+
+function BaiduGamePlatform:showAntiAddtionView()
+  if self.antiAddtionInfo and (self.antiAddtionInfo.status == '10001' or self.antiAddtionInfo.status == '10002') then
+    WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#tid_anti_indulge2", "TranslateGlobal"), self:getWX().exit, self)
+    return true
+  end
+  return false
+end
+
+function BaiduGamePlatform:isFromFavourite()
+  if Global.currentSceneId ~= "1201001000000000" then
+    return false
+  end
+  return true
+end

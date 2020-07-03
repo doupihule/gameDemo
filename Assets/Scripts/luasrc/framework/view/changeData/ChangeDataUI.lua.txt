@@ -1,0 +1,107 @@
+require("trycatch")
+require("ui/layaMaxUI")
+require("game/sys/model/UserModel")
+require("framework/utils/ButtonUtils")
+require("framework/manager/WindowManager")
+require("framework/consts/WindowCommonCfgs")
+require("framework/utils/TableUtils")
+require("framework/common/kakura/Client")
+require("framework/server/SingleCommonServer")
+
+ChangeDataUI = class('ChangeDataUI',ui.gameui.changeData.ChangeDataUI)
+
+function ChangeDataUI:ctor()
+  self:superCall('ctor')
+  ButtonUtils(self.returnBtn, self.close, self)
+  ButtonUtils(self.sureBtn, self.onClickSure, self)
+end
+
+function ChangeDataUI:setData(data)
+  self.tipTxt.text = ""
+  self.firstData = UserModel.instance:getData()
+  local datas = TableUtils.safelyJsonStringfy(self.firstData)
+  self.dataTxt.text = ChangeDataUI:stringToJSON(datas)
+end
+
+function ChangeDataUI:close()
+  WindowManager.CloseUI(WindowCommonCfgs.ChangeDataView)
+end
+
+function ChangeDataUI:onClickSure()
+  local data = nil
+  try_catch{
+    main = function()
+      data = JSON:parse(self.dataTxt.text)
+    end,
+    catch = function(error)
+      self.tipTxt.text = "json数据结构错误" .. JSON:stringify(error)
+      return
+    end
+  }
+  local uData = {}
+  TableUtils.compareTable(self.firstData, data, uData)
+  local deData = {}
+  TableUtils.getDelData(self.firstData, data, deData)
+  local backData = Client.instance:doDummyServerBack(nil, uData, deData)
+  SingleCommonServer.startSaveClientData()
+  self.firstData = UserModel.instance:getData()
+  self.tipTxt.text = "数据修改成功"
+end
+
+function ChangeDataUI.stringToJSON(strJson)
+  local tabNum = 0
+  local length = #strJson
+  local result = ""
+  local last = ""
+  local i = 0
+  repeat
+    local c = strJson[i+1]
+    if c == '{' then
+      tabNum=tabNum+1
+      result = result .. c .. "\n"
+      result = result + ChangeDataUI.getSpaceOrTab(tabNum)
+    elseif c == '}' then
+      tabNum=tabNum-1
+      result = result .. "\n"
+      result = result + ChangeDataUI.getSpaceOrTab(tabNum)
+      result = result + c
+    elseif c == ',' then
+      result = result .. c .. "\n"
+      result = result + ChangeDataUI.getSpaceOrTab(tabNum)
+    elseif c == ':' then
+      result = result .. c .. " "
+    elseif c == '[' then
+      tabNum=tabNum+1
+      -- [ts2lua]strJson下标访问可能不正确
+      local next = strJson[i + 1]
+      if next == ']' then
+        result = result + c
+      else
+        result = result .. c .. "\n"
+        result = result + ChangeDataUI.getSpaceOrTab(tabNum)
+      end
+    elseif c == ']' then
+      tabNum=tabNum-1
+      if last == '[' then
+        result = result + c
+      else
+        result = result .. "\n" .. ChangeDataUI.getSpaceOrTab(tabNum) .. c
+      end
+    else
+      result = result + c
+    end
+    last = c
+    i=i+1
+  until not(i < length)
+  return result
+end
+
+function ChangeDataUI.getSpaceOrTab(tabNum)
+  local str = ""
+  local i = 0
+  repeat
+    str = str .. '\t'
+    i=i+1
+  until not(i < tabNum)
+  return str
+end

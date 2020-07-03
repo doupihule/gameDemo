@@ -1,0 +1,477 @@
+require("stringutil")
+require("framework/manager/LogsManager")
+
+BigNumUtils = class('BigNumUtils')
+function BigNumUtils.sum(a, b)
+  a = a .. ""
+  b = b .. ""
+  local indexa = a:find(".")
+  local indexb = b:find(".")
+  if indexa ~= -1 then
+    LogsManager.errorTag("BigNumUtils", "大数运算加法a出现小数", a)
+    a = a:substr(0, indexa)
+  end
+  if indexb ~= -1 then
+    LogsManager.errorTag("BigNumUtils", "大数运算加法b出现小数", b)
+    b = b:substr(0, indexb)
+  end
+  local result = ""
+  local waya = a:slice(0, 1) == "-"
+  local wayb = b:slice(0, 1) == "-"
+  if waya and wayb then
+    local symbol = "-"
+    result = symbol + BigNumUtils.sumIn(a, b)
+  elseif not waya and wayb then
+    result = BigNumUtils.substractIn(a, b)
+  elseif waya and not wayb then
+    result = BigNumUtils.substractIn(b, a)
+  else
+    result = BigNumUtils.sumIn(a, b)
+  end
+  return result
+end
+
+function BigNumUtils.sumIn(a, b)
+  local result = ""
+  local flag = 0
+  if a:slice(0, 1) == "-" then
+    a = a:substr(1)
+  end
+  if b:slice(0, 1) == "-" then
+    b = b:substr(1)
+  end
+  a = a:split("")
+  b = b:split("")
+  while((#a or #b) or flag)
+  do
+  flag = ~(~a:pop()) + ~(~b:pop()) + flag
+  result = flag % 10 + result
+  -- [ts2lua]lua中0和空字符串也是true，此处flag > 9需要确认
+  flag = (flag > 9 and {1} or {0})[1]
+  end
+  -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+  result = result:gsub(/^0+/, '')
+  if not result then
+    result = 0 .. ""
+  end
+  return result
+end
+
+function BigNumUtils.substract(a, b)
+  a = a .. ""
+  b = b .. ""
+  local indexa = a:find(".")
+  local indexb = b:find(".")
+  if indexa ~= -1 then
+    LogsManager.errorTag("BigNumUtils", "大数运算减法a出现小数", a)
+    a = a:substr(0, indexa)
+  end
+  if indexb ~= -1 then
+    LogsManager.errorTag("BigNumUtils", "大数运算减法b出现小数", b)
+    b = b:substr(0, indexb)
+  end
+  local result = ""
+  local waya = a:slice(0, 1) == "-"
+  local wayb = b:slice(0, 1) == "-"
+  if waya and wayb then
+    result = BigNumUtils.substractIn(b, a)
+  elseif not waya and wayb then
+    result = BigNumUtils.sumIn(a, b)
+  elseif waya and not wayb then
+    local symbol = "-"
+    result = symbol + BigNumUtils.sumIn(b, a)
+  else
+    result = BigNumUtils.substractIn(a, b)
+  end
+  return result
+end
+
+function BigNumUtils.substractIn(a, b)
+  local result = ""
+  if a:slice(0, 1) == "-" then
+    a = a:substr(1)
+  end
+  if b:slice(0, 1) == "-" then
+    b = b:substr(1)
+  end
+  if not BigNumUtils.compare(a, b) then
+    local symbol = "-"
+    local temp = a
+    a = b
+    b = temp
+  end
+  a = a:split("")
+  b = b:split("")
+  local flag = 0
+  local cha = 0
+  while(#a or #b)
+  do
+  cha = ~(~a:pop()) - ~(~b:pop()) - flag
+  flag = 0
+  if cha < 0 then
+    cha = cha + 10
+    flag = 1
+  end
+  result = cha % 10 + result
+  end
+  -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+  result = result:gsub(/^0+/, '')
+  if result then
+    if symbol and symbol == "-" then
+      result = symbol + result
+    end
+  else
+    result = 0 .. ""
+  end
+  return result
+end
+
+function BigNumUtils.muitlfy(a, b)
+  a = a .. ""
+  b = b .. ""
+  local indexa = a:find(".")
+  local indexb = b:find(".")
+  if indexa ~= -1 then
+    LogsManager.errorTag("BigNumUtils", "大数运算乘法a出现小数", a)
+    a = a:substr(0, indexa)
+  end
+  if indexb ~= -1 then
+    LogsManager.errorTag("BigNumUtils", "大数运算乘法b出现小数", b)
+    b = b:substr(0, indexb)
+  end
+  local waya = a:slice(0, 1) == "-"
+  local wayb = b:slice(0, 1) == "-"
+  if not waya and wayb or waya and not wayb then
+    local symbol = "-"
+  end
+  if a:slice(0, 1) == "-" then
+    a = a:substr(1)
+  end
+  if b:slice(0, 1) == "-" then
+    b = b:substr(1)
+  end
+  local result = ""
+  if not BigNumUtils.compare(a, b) then
+    local temp = a
+    a = b
+    b = temp
+  end
+  a = a:split("")
+  b = b:split("")
+  local fenRes = {}
+  local j = #b - 1
+  repeat
+    local ji = 0
+    local flag = 0
+    local res = ""
+    local jialing = ""
+    local i = #a - 1
+    repeat
+      ji = Number(a[i+1]) * Number(b[j+1]) + flag
+      res = ji % 10 + res
+      flag = Math:floor(ji / 10)
+      if i == 0 and not (flag == 0) then
+        res = flag + res
+      end
+      i=i-1
+    until not(i >= 0)
+    local index = #b - 1 - j
+    if index > 0 then
+      while(index)
+      do
+      res = res .. "0"
+      index=index-1
+      end
+    end
+    fenRes[j+1] = res
+    j=j-1
+  until not(j >= 0)
+  local k = 0
+  repeat
+    result = BigNumUtils.sum(result, fenRes[k+1])
+    k=k+1
+  until not(k < #fenRes)
+  -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+  result = result:gsub(/^0+/, '')
+  if not result then
+    result = 0 .. ""
+  end
+  if symbol and result ~= "0" then
+    result = symbol + result
+  end
+  return result
+end
+
+function BigNumUtils.pow(a, b)
+  a = a .. ""
+  local result = "1"
+  if b == 0 then
+    result = "1"
+  elseif b == 1 then
+    result = a
+  elseif b > 1 then
+    local tempResult = ""
+    local j = 0
+    repeat
+      result = BigNumUtils.muitlfy(result, a)
+      j=j+1
+    until not(j < b)
+  end
+  return result
+end
+
+function BigNumUtils.round(a)
+  a = a .. ""
+  local indexa = a:find(".")
+  if indexa ~= -1 then
+    a = a:substr(0, indexa)
+  end
+  return a
+end
+
+function BigNumUtils.devide(a, b, round)
+  if round == nil then
+    round=0
+  end
+  a = a .. ""
+  b = b .. ""
+  if b == "0" then
+    LogsManager.errorTag("BigNumUtils", "大数运算除法除数为0", b)
+    return 0
+  end
+  local indexa = a:find(".")
+  local indexb = b:find(".")
+  if indexa ~= -1 then
+    LogsManager.errorTag("BigNumUtils", "大数运算除法a出现小数", a)
+    a = a:substr(0, indexa)
+  end
+  if indexb ~= -1 then
+    LogsManager.errorTag("BigNumUtils", "大数运算除法b出现小数", b)
+    b = b:substr(0, indexb)
+    if b == "0" then
+      return 0
+    end
+  end
+  local waya = a:slice(0, 1) == "-"
+  local wayb = b:slice(0, 1) == "-"
+  if not waya and wayb or waya and not wayb then
+    local symbol = "-"
+  end
+  if a:slice(0, 1) == "-" then
+    a = a:substr(1)
+  end
+  if b:slice(0, 1) == "-" then
+    b = b:substr(1)
+  end
+  a = a:split("")
+  local result = ""
+  local q = 0
+  local r = 0
+  local temp = 0
+  local i = 0
+  repeat
+    temp = r * 10 + Number(a[i+1])
+    if BigNumUtils.compare(b, temp) then
+      r = temp
+      result = result .. "0"
+    else
+      q = parseInt(String(temp / Number(b)))
+      r = temp % Number(b)
+      result = result + q
+    end
+    i=i+1
+  until not(i < #a)
+  -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+  result = result:gsub(/^0+/, '')
+  if not result then
+    result = 0 .. ""
+  end
+  if round then
+    if r then
+      local pow = Math:pow(10, round)
+      r = Math:round(r / Number(b) * pow) / pow
+    end
+    result = Number(result) + r .. ""
+  end
+  if symbol and result ~= "0" then
+    result = symbol + result
+  end
+  return result
+end
+
+function BigNumUtils.getMax(a, b)
+  if BigNumUtils.compare(a, b) then
+    return a
+  else
+    return b
+  end
+end
+
+function BigNumUtils.getMin(a, b)
+  if BigNumUtils.compare(a, b) then
+    return b
+  else
+    return a
+  end
+end
+
+function BigNumUtils.compare(a, b, equal)
+  if equal == nil then
+    equal=false
+  end
+  a = a .. ""
+  b = b .. ""
+  if equal and a == b then
+    return true
+  end
+  local waya = a:slice(0, 1) == "-"
+  local wayb = b:slice(0, 1) == "-"
+  if waya and wayb then
+    return BigNumUtils.compareIn(b, a)
+  elseif not waya and not wayb then
+    return BigNumUtils.compareIn(a, b)
+  elseif not waya and wayb then
+    return true
+  elseif waya and not wayb then
+    return false
+  end
+end
+
+function BigNumUtils.compareIn(a, b)
+  a = a:split("")
+  b = b:split("")
+  if #a > #b then
+    return true
+  elseif #a < #b then
+    return false
+  else
+    local i = 0
+    repeat
+      if Number(a[i+1]) > Number(b[i+1]) then
+        return true
+      elseif Number(a[i+1]) < Number(b[i+1]) then
+        return false
+      end
+      if i == #a - 1 then
+        return false
+      end
+      i=i+1
+    until not(i <= #a - 1)
+  end
+end
+
+function BigNumUtils.floatPow(a, b)
+  a = a .. ""
+  local result = "1"
+  if b == 0 then
+    result = "1"
+  elseif b == 1 then
+    result = a
+  elseif b > 1 then
+    local tempResult = ""
+    local j = 0
+    repeat
+      result = BigNumUtils.floatMuitlfy(result, a)
+      j=j+1
+    until not(j < b)
+  end
+  return result
+end
+
+function BigNumUtils.floatMuitlfy(a, b)
+  a = a .. ""
+  b = b .. ""
+  local indexa = a:find(".")
+  local indexb = b:find(".")
+  local index0 = 0
+  if indexa ~= -1 then
+    index0 = index0 + #a - 1 - indexa
+    a = a:gsub('.', '')
+  end
+  if indexb ~= -1 then
+    index0 = index0 + #b - 1 - indexb
+    b = b:gsub('.', '')
+  end
+  local waya = a:slice(0, 1) == "-"
+  local wayb = b:slice(0, 1) == "-"
+  if not waya and wayb or waya and not wayb then
+    local symbol = "-"
+  end
+  if a:slice(0, 1) == "-" then
+    a = a:substr(1)
+  end
+  if b:slice(0, 1) == "-" then
+    b = b:substr(1)
+  end
+  local result = ""
+  if not BigNumUtils.compare(a, b) then
+    local temp = a
+    a = b
+    b = temp
+  end
+  a = a:split("")
+  b = b:split("")
+  local fenRes = {}
+  local j = #b - 1
+  repeat
+    local ji = 0
+    local flag = 0
+    local res = ""
+    local jialing = ""
+    local i = #a - 1
+    repeat
+      ji = Number(a[i+1]) * Number(b[j+1]) + flag
+      res = ji % 10 + res
+      flag = Math:floor(ji / 10)
+      if i == 0 and not (flag == 0) then
+        res = flag + res
+      end
+      i=i-1
+    until not(i >= 0)
+    local index = #b - 1 - j
+    if index > 0 then
+      while(index)
+      do
+      res = res .. "0"
+      index=index-1
+      end
+    end
+    fenRes[j+1] = res
+    j=j-1
+  until not(j >= 0)
+  local k = 0
+  repeat
+    result = BigNumUtils.sum(result, fenRes[k+1])
+    k=k+1
+  until not(k < #fenRes)
+  -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
+  result = result:gsub(/^0+/, '')
+  if index0 then
+    if #result > index0 then
+      result = BigNumUtils.insertStr(result, #result - index0, '.')
+    else
+      local tempStr = ""
+      local i = 1
+      repeat
+        if i == 1 then
+          tempStr = tempStr .. "0."
+        else
+          tempStr = tempStr .. "0"
+        end
+        i=i+1
+      until not(i <= index0 - #result + 1)
+      result = tempStr + result
+    end
+  end
+  if not result then
+    result = 0 .. ""
+  end
+  if symbol and result ~= "0" then
+    result = symbol + result
+  end
+  return result
+end
+
+function BigNumUtils.insertStr(soure, start, newStr)
+  return soure:slice(0, start) + newStr + soure:slice(start)
+end

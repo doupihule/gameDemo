@@ -1,0 +1,766 @@
+require("framework/common/Message")
+require("game/sys/view/loading/LoadingUI")
+require("framework/utils/ScreenAdapterTools")
+require("framework/manager/LogsManager")
+require("utils/Global")
+require("framework/manager/LoadManager")
+require("game/sys/consts/WindowCfgs")
+require("framework/event/WindowEvent")
+require("framework/consts/LogsErrorCode")
+require("game/sys/manager/GuideManager")
+require("framework/common/UserInfo")
+require("framework/view/tip/AlertNewLocalUI")
+require("framework/utils/PoolTools")
+
+WindowManager = class('WindowManager')
+
+WindowManager.tipsContent = {};
+WindowManager.tipsObject = {};
+WindowManager.expandTipsContent = {};
+WindowManager.expandTipsObject = {};
+WindowManager.tipsCount = 0;
+WindowManager.updateTipsContent = {};
+WindowManager.updateTipsObject = {};
+WindowManager.updateTipsCount = 0;
+WindowManager.maskCount = 0;
+WindowManager.maskAlpha = 0;
+WindowManager.isShowUpdateTip = false;
+WindowManager._currentWindowName = "";
+WindowManager._allWindowMap = {};
+WindowManager.UIInstance = {};
+function WindowManager.OpenUI(UIName, params)
+  if params == nil then
+    params=nil
+  end
+  WindowManager.SwitchUIAPI(UIName, nil, nil, params)
+end
+
+function WindowManager.SwitchUI(openUINames, closeUINames, ...)
+  WindowManager.SwitchUIAPI(openUINames, nil, closeUINames, ...)
+end
+
+function WindowManager.SwitchUIAPI(openUINames, rootNodes, closeUINames, ...)
+  WindowManager.SwitchMaskUI(true)
+  if openUINames then
+    if type(openUINames) == "string" then
+      openUINames = {openUINames}
+    end
+  else
+    openUINames = {}
+  end
+  if rootNodes then
+    if type(rootNodes) == "object" and #rootNodes == nil then
+      rootNodes = {rootNodes}
+    end
+  else
+    rootNodes = {}
+  end
+  if closeUINames then
+    if type(closeUINames) == "string" then
+      closeUINames = {closeUINames}
+    end
+  else
+    closeUINames = {}
+  end
+  local resAll = {}
+  local packArr = {}
+  local res3DAll = {}
+  for _tmpi, openUIName in pairs(openUINames) do
+    local uiCfgs = WindowManager.getWindowCfgs(openUIName)
+    local res = uiCfgs.group or {}
+    for _tmpi, url in pairs(res) do
+      table.insert(resAll, url)
+    end
+    local subPackage = WindowManager.getUIPackage(openUIName)
+    if subPackage then
+      for _tmpi, url in pairs(subPackage) do
+        table.insert(packArr, url)
+      end
+    end
+    local res3D = uiCfgs.group3d or {}
+    for _tmpi, url in pairs(res3D) do
+      table.insert(res3DAll, url)
+    end
+  end
+  for _tmpi, closeUIName in pairs(closeUINames) do
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    local uiView = WindowManager.UIInstance[closeUIName]
+    if uiView then
+      uiView.mouseEnabled = false
+    end
+  end
+  LoadManager.instance:loadPacgeAndRes(packArr, resAll, Laya.Handler:create(WindowManager, function(openUINames, rootNodes, closeUINames, params)
+    LoadManager.instance:create(res3DAll, Laya.Handler:create(WindowManager, WindowManager.SwitchUIComplete, {openUINames, rootNodes, closeUINames, args}))
+  end
+  , {openUINames, rootNodes, closeUINames, args}))
+end
+
+function WindowManager.SwitchUIComplete(openUINames, rootNodes, closeUINames, args)
+  WindowManager.SwitchMaskUI(false)
+  Message.instance:send(WindowEvent.WINDOW_EVENT_SWITCHUISTART, {openUINames=openUINames, closeUINames=closeUINames})
+  for index in pairs(openUINames) do
+    -- [ts2lua]openUINames下标访问可能不正确
+    local uiname = openUINames[index]
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    local targetUI = WindowManager.UIInstance[uiname]
+    local uiCfgs = WindowManager.getWindowCfgs(uiname)
+    if targetUI == nil then
+      local classIntance = uiCfgs.path
+      targetUI = classIntance()
+      if not rootNodes or #rootNodes == 0 then
+        targetUI.width = ScreenAdapterTools.width
+        targetUI.height = ScreenAdapterTools.height
+      end
+      -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+      WindowManager.UIInstance[uiname] = targetUI
+    end
+    -- [ts2lua]rootNodes下标访问可能不正确
+    if rootNodes[index] then
+      -- [ts2lua]rootNodes下标访问可能不正确
+      rootNodes[index]:addChild(targetUI)
+    else
+      -- [ts2lua]openUINames下标访问可能不正确
+      local ctn = WindowManager.getWindowCtn(openUINames[index])
+      ctn.mouseEnabled = true
+      ctn:addChild(targetUI)
+    end
+    targetUI.windowName = uiname
+    if uiCfgs.modal == 1 and not uiCfgs.full then
+      if not targetUI.__modalView then
+        targetUI.__modalView = WindowManager.createModalView(targetUI, uiCfgs.modalAlpha)
+      end
+    end
+    WindowManager._currentWindow = targetUI
+    WindowManager._currentWindowName = uiname
+    WindowManager._insertWindow(targetUI)
+    LogsManager.echo("WindowManager  OpenUI Complete:", uiname, "currentWindow:", WindowManager.getCurrentWindowName())
+    targetUI.mouseEnabled = true
+    -- [ts2lua]args下标访问可能不正确
+    targetUI:setData(args[index])
+    -- [ts2lua]openUINames下标访问可能不正确
+    targetUI.name = openUINames[index]
+  end
+  for _tmpi, closeUIName in pairs(closeUINames) do
+    if closeUIName == WindowCfgs.LoadingUI then
+      WindowManager.CloseLoadingUI()
+    else
+      WindowManager.CloseUIAPI(closeUIName)
+    end
+    WindowManager._removeOneWindow(closeUIName)
+    LogsManager.echo("WindowManager close  Complete:", closeUIName, "currentWindow:", WindowManager.getCurrentWindowName())
+  end
+  WindowManager.updateUiVisible()
+  Message.instance:send(WindowEvent.WINDOW_EVENT_SWITCHUIFIN, {openUINames=openUINames, closeUINames=closeUINames})
+end
+
+function WindowManager.createModalView(ctn, alpha)
+  if alpha == nil then
+    alpha=1
+  end
+  if alpha == nil then
+    alpha = 0.3
+  end
+  local modalView = Laya.Sprite()
+  modalView.graphics:drawRect(0, 0, ScreenAdapterTools.width, ScreenAdapterTools.height, "#000000", nil, 0)
+  modalView.width = ScreenAdapterTools.width
+  modalView.height = ScreenAdapterTools.height
+  modalView.mouseEnabled = true
+  modalView.mouseThrough = false
+  modalView.alpha = alpha
+  ctn:addChildAt(modalView, 0)
+  return modalView
+end
+
+function WindowManager:adjustUI(view)
+  view.width = ScreenAdapterTools.width
+  view.height = ScreenAdapterTools.height
+  view.mouseEnabled = true
+end
+
+function WindowManager.setPopupTip(type, content, callBack, thisObj, titleName, closeBack)
+  if titleName == nil then
+    titleName=nil
+  end
+  if closeBack == nil then
+    closeBack=nil
+  end
+  if Global.isGameDestory then
+    return
+  end
+  local data = {type=type, title=titleName, msg=content, callBack=callBack, thisObj=thisObj, closeBack=closeBack}
+  local ui = PoolTools.getItem("AlertNewLocalUI", "sys")
+  LogsManager.echo("-----------setPopupTip---------", ui == nil)
+  if not ui then
+    ui = AlertNewLocalUI()
+  end
+  WindowManager.highLayer:addChild(ui)
+  ui:setData(data)
+end
+
+function WindowManager.ShowExpandTip(data, timeout)
+  if timeout == nil then
+    timeout=1500
+  end
+  WindowManager.expandTipComplete({data=data, timeout=timeout})
+end
+
+function WindowManager.expandTipComplete(args)
+  if WindowManager.tipsCount >= 3 then
+    table.insert(WindowManager.expandTipsContent, args)
+  else
+    local tip = nil
+    if #WindowManager.expandTipsObject > 0 then
+      tip = WindowManager.expandTipsObject:pop()
+    else
+      tip = WindowManager.getUIClass(WindowCfgs.ExpandTipsUI)
+      tip.width = ScreenAdapterTools.width
+      tip.height = ScreenAdapterTools.height
+    end
+    WindowManager.tipsCount=WindowManager.tipsCount+1
+    tip:setData(args.data)
+    WindowManager.tipsLayer:addChild(tip)
+    Laya.timer:once(args.timeout, WindowManager, function()
+      WindowManager.tipsCount=WindowManager.tipsCount-1
+      table.insert(WindowManager.expandTipsObject, tip)
+      WindowManager.tipsLayer:removeChild(tip)
+      if #WindowManager.expandTipsContent > 0 then
+        WindowManager.expandTipComplete(WindowManager.expandTipsContent:shift())
+      end
+    end
+    )
+  end
+end
+
+function WindowManager.ShowTip(text, timeout)
+  if timeout == nil then
+    timeout=1500
+  end
+  WindowManager.TipComplete({text=text, timeout=timeout})
+end
+
+function WindowManager.TipComplete(args)
+  if WindowManager.tipsCount >= 3 then
+    table.insert(WindowManager.tipsContent, args)
+  else
+    local tip = nil
+    if #WindowManager.tipsObject > 0 then
+      tip = WindowManager.tipsObject:pop()
+    else
+      tip = WindowManager.getUIClass(WindowCfgs.TipsUI)
+      tip.width = ScreenAdapterTools.width
+      tip.height = ScreenAdapterTools.height
+    end
+    WindowManager.tipsCount=WindowManager.tipsCount+1
+    tip:setData(args.text)
+    WindowManager.tipsLayer:addChild(tip)
+    Laya.timer:once(args.timeout, WindowManager, function()
+      WindowManager.tipsCount=WindowManager.tipsCount-1
+      table.insert(WindowManager.tipsObject, tip)
+      WindowManager.tipsLayer:removeChild(tip)
+      if #WindowManager.tipsContent > 0 then
+        WindowManager.TipComplete(WindowManager.tipsContent:shift())
+      end
+    end
+    )
+  end
+end
+
+function WindowManager.ShowUpdateTip(text, timeout)
+  if timeout == nil then
+    timeout=1500
+  end
+  if WindowManager.isShowUpdateTip then
+    LoadManager.instance:load(WindowManager.getUILoadGroup(WindowCfgs.TipsUI), Laya.Handler:create(WindowManager, WindowManager.UpdateTipComplete, {{text=text, timeout=timeout}}))
+  end
+end
+
+function WindowManager.UpdateTipComplete(args)
+  if WindowManager.updateTipsCount >= 1 then
+    table.insert(WindowManager.updateTipsContent, args)
+  else
+    local tip = nil
+    if #WindowManager.updateTipsObject > 0 then
+      tip = WindowManager.updateTipsObject:pop()
+    else
+      tip = WindowManager.getUIClass(WindowCfgs.TipsUI)
+      tip.width = ScreenAdapterTools.width
+      tip.height = ScreenAdapterTools.height
+    end
+    WindowManager.updateTipsCount=WindowManager.updateTipsCount+1
+    tip:setData(args.text)
+    WindowManager.commonUILayer:addChild(tip)
+    Laya.timer:once(args.timeout, WindowManager, function()
+      WindowManager.updateTipsCount=WindowManager.updateTipsCount-1
+      table.insert(WindowManager.updateTipsObject, tip)
+      WindowManager.commonUILayer:removeChild(tip)
+      if #WindowManager.updateTipsContent > 0 then
+        WindowManager.TipComplete(WindowManager.updateTipsContent:shift())
+      end
+    end
+    )
+  end
+end
+
+function WindowManager.CloseUIAPI(UIName)
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  if WindowManager.UIInstance[UIName] ~= nil then
+    LogsManager.echo("WindowManager CloseUI:", UIName)
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    local uiView = WindowManager.UIInstance[UIName]
+    uiView.onClose and uiView:onClose()
+    local parent = uiView.parent
+    if parent then
+      parent:removeChild(uiView)
+      if parent.numChildren == 0 then
+        parent.mouseEnabled = false
+      end
+    end
+  end
+end
+
+function WindowManager.CloseUI(UIName)
+  WindowManager.SwitchUIAPI(nil, nil, UIName)
+end
+
+function WindowManager.isUIOpened(UIName)
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  if WindowManager.UIInstance[UIName] ~= nil then
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    return WindowManager.UIInstance[UIName].activeInHierarchy
+  end
+  return false
+end
+
+function WindowManager.getUIByName(UIName)
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  return WindowManager.UIInstance[UIName]
+end
+
+function WindowManager.OpenGuideUI(UIName, params)
+  WindowManager.guideLayer.visible = true
+  local loadRes = WindowManager.getUILoadGroup(UIName)
+  if loadRes and #loadRes > 0 then
+    local subPackage = WindowManager.getUIPackage(UIName)
+    LoadManager.instance:loadPacgeAndRes(subPackage, loadRes, Laya.Handler:create(WindowManager, function(UIName, params)
+      local res3D = WindowManager.getWindowCfgs(UIName).group3d
+      if res3D == nil then
+        WindowManager.GuideUIComplete(UIName, params)
+      else
+        Laya.loader:create(res3D, Laya.Handler:create(WindowManager, WindowManager.GuideUIComplete, {UIName, params}))
+      end
+    end
+    , {UIName, params}))
+  else
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    if WindowManager.UIInstance[UIName] == nil then
+      -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+      WindowManager.UIInstance[UIName] = WindowManager.getUIClass(UIName)
+      -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+      WindowManager.UIInstance[UIName].width = ScreenAdapterTools.width
+      -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+      WindowManager.UIInstance[UIName].height = ScreenAdapterTools.height
+    end
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].mouseEnabled = true
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName]:setData(params)
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.guideLayer:addChild(WindowManager.UIInstance[UIName])
+  end
+end
+
+function WindowManager.GuideUIComplete(UIName, params)
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  if WindowManager.UIInstance[UIName] == nil then
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName] = WindowManager.getUIClass(UIName)
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].width = ScreenAdapterTools.width
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].height = ScreenAdapterTools.height
+  end
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  WindowManager.UIInstance[UIName].mouseEnabled = true
+  Laya.timer:callLater(WindowManager, function()
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName]:setData(params)
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.guideLayer:addChild(WindowManager.UIInstance[UIName])
+  end
+  )
+end
+
+function WindowManager.CloseGuideUI(UIName)
+  GuideManager.ins.nowGuideId = nil
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  if WindowManager.UIInstance[UIName] ~= nil then
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.guideLayer:removeChild(WindowManager.UIInstance[UIName])
+  end
+  if not WindowManager.guideLayer.numChildren then
+    WindowManager.guideLayer.visible = false
+  end
+end
+
+function WindowManager.OpenSubGuideUI(node, UIName, params)
+  local loadGroup = WindowManager.getUILoadGroup(UIName)
+  if loadGroup and #loadGroup > 0 then
+    local subPackage = WindowManager.getUIPackage(UIName)
+    LoadManager.instance:loadPacgeAndRes(subPackage, loadGroup, Laya.Handler:create(WindowManager, function(node, UIName, params)
+      local res3D = WindowManager.getWindowCfgs(UIName).group3d
+      if res3D == nil then
+        WindowManager.SubGuideUIComplete(node, UIName, params)
+      else
+        LoadManager.instance:create(res3D, Laya.Handler:create(WindowManager, WindowManager.SubGuideUIComplete, {node, UIName, params}))
+      end
+    end
+    , {node, UIName, params}))
+  else
+    WindowManager.SubGuideUIComplete(node, UIName, params)
+  end
+end
+
+function WindowManager.SubGuideUIComplete(node, UIName, params)
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  if WindowManager.UIInstance[UIName] == nil then
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName] = WindowManager.getUIClass(UIName)
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].width = ScreenAdapterTools.width
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].height = ScreenAdapterTools.height
+  end
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  WindowManager.UIInstance[UIName].mouseEnabled = true
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  WindowManager.UIInstance[UIName]:setData(params)
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  node:addChild(WindowManager.UIInstance[UIName])
+end
+
+function WindowManager.CloseSubGuideUI(node, UIName)
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  if WindowManager.UIInstance[UIName] ~= nil then
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    node:removeChild(WindowManager.UIInstance[UIName])
+  end
+end
+
+function WindowManager.OpenSubUI(UIName, rootNode, params)
+  if params == nil then
+    params=nil
+  end
+  WindowManager.SwitchUIAPI(UIName, rootNode, nil, params)
+end
+
+function WindowManager.CloseSubUI(UIName, rootNode)
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  if WindowManager.UIInstance[UIName] ~= nil then
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    rootNode:removeChild(WindowManager.UIInstance[UIName])
+  end
+end
+
+WindowManager.uiMaker = LoadingUI;
+function WindowManager.ShowLoadingUI(args)
+  WindowManager.loadingHandler = args
+  WindowManager.LoadingUIAtlasComplete()
+end
+
+function WindowManager.LoadingUIAtlasComplete()
+  if WindowManager.loadingUI == nil then
+    WindowManager.loadingUI = LoadingUI()
+  end
+  UserInfo.platform:setLoadingProgress(100)
+  UserInfo.platform:hideLoadingProgress()
+  WindowManager.loadingUI:showLoading()
+  WindowManager.loadingUI:setData()
+  if WindowManager.loadingHandler ~= nil then
+    WindowManager.loadingHandler:run()
+  end
+end
+
+function WindowManager.CloseLoadingUI()
+  if WindowManager.loadingUI ~= nil then
+    LogsManager.echo("WindowManager CloseLoadingUI")
+    WindowManager.loadingUI:hideLoading()
+  end
+end
+
+function WindowManager.SwitchUIFromLoading(openUIName, params)
+  if LoadingUI.instance then
+    LoadingUI.instance:addProgress(100)
+  end
+  Laya.timer:once(100, WindowManager, function()
+    WindowManager.SwitchUI(openUIName, WindowCfgs.LoadingUI, params)
+  end
+  )
+end
+
+function WindowManager.SwitchMaskUI(isOpen, alpha)
+  if alpha == nil then
+    alpha=0
+  end
+  local UIName = "maskUI"
+  if isOpen then
+    WindowManager.maskCount=WindowManager.maskCount+1
+    WindowManager.maskLayer.visible = true
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    if WindowManager.UIInstance[UIName] == nil then
+      -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+      WindowManager.UIInstance[UIName] = WindowManager.initMaskUI()
+      -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+      WindowManager.UIInstance[UIName].width = ScreenAdapterTools.width
+      -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+      WindowManager.UIInstance[UIName].height = ScreenAdapterTools.height
+    end
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].mouseEnabled = true
+    if alpha > WindowManager.maskAlpha then
+      WindowManager.maskAlpha = alpha
+    end
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].alpha = WindowManager.maskAlpha
+    WindowManager.maskLayer.mouseEnabled = true
+    WindowManager.maskLayer.mouseThrough = false
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.maskLayer:addChild(WindowManager.UIInstance[UIName])
+  else
+    WindowManager.maskCount=WindowManager.maskCount-1
+    if WindowManager.maskCount <= 0 then
+      WindowManager.maskCount = 0
+      -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+      if WindowManager.UIInstance[UIName] ~= nil then
+        -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+        -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+        WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
+        -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+        WindowManager.maskLayer:removeChild(WindowManager.UIInstance[UIName])
+      end
+      if not WindowManager.maskLayer.numChildren then
+        WindowManager.maskLayer.visible = false
+      end
+      WindowManager.maskAlpha = 0
+    end
+  end
+  Laya.timer:clear(WindowManager, WindowManager.CloseMaskUI)
+  if WindowManager.maskCount > 0 then
+    Laya.timer:once(5000, WindowManager, WindowManager.CloseMaskUI)
+  end
+end
+
+function WindowManager.CloseMaskUI()
+  local UIName = "maskUI"
+  WindowManager.maskCount = 0
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  if WindowManager.UIInstance[UIName] ~= nil then
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.maskLayer:removeChild(WindowManager.UIInstance[UIName])
+  end
+  if not WindowManager.maskLayer.numChildren then
+    WindowManager.maskLayer.visible = false
+  end
+  WindowManager.maskAlpha = 0
+end
+
+function WindowManager.initMaskUI()
+  local mask = Laya.Image()
+  local background = Laya.Sprite()
+  mask:addChild(background)
+  background.graphics:drawRect(0, 0, ScreenAdapterTools.width, ScreenAdapterTools.height, 0)
+  background.alpha = 1
+  return mask
+end
+
+function WindowManager.getWindowCtn(winName)
+  local cfgs = WindowManager.getWindowCfgs(winName)
+  local ctn = nil
+  if not cfgs.parent then
+    return WindowManager.commonUILayer
+  elseif cfgs.parent == WindowCfgs.UILAYER then
+    return WindowManager.commonUILayer
+  elseif cfgs.parent == WindowCfgs.HIGHLAYER then
+    return WindowManager.highLayer
+  elseif cfgs.parent == WindowCfgs.DEBUGLAYER then
+    return WindowManager.debugLayer
+  else
+    LogsManager.echo("打开toplayer", winName)
+    return WindowManager.topUILayer
+  end
+end
+
+function WindowManager.checkCacheWindow(winName)
+  local cfg = WindowManager.getWindowCfgs(winName)
+  if cfg.cache then
+    return true
+  end
+  return false
+end
+
+function WindowManager.getWindowCfgs(winName)
+  -- [ts2lua]WindowCfgs.windowcfgs下标访问可能不正确
+  local obj = WindowCfgs.windowcfgs[winName]
+  if not obj then
+    return WindowCfgs.commonCfgs
+  end
+  if obj.modal == nil then
+    obj.modal = 1
+  end
+  if obj.modalAlpha == undefined or obj.modalAlpha == nil then
+    obj.modalAlpha = 0.6
+  end
+  if not obj.parent then
+    obj.parent = WindowCfgs.UILAYER
+  end
+  if obj.showType == nil then
+    obj.showType = 0
+  end
+  return obj
+end
+
+function WindowManager.getUILoadGroup(winName)
+  local cfgs = WindowManager.getWindowCfgs(winName)
+  return cfgs.group
+end
+
+function WindowManager.getUIClass(winName)
+  local cfgs = WindowManager.getWindowCfgs(winName)
+  local path = cfgs.path
+  if not path then
+    LogsManager.errorTag(LogsErrorCode.WINDOW_ERROR, "_没有给这个窗口配置类对象:", winName)
+    return nil
+  end
+  return path()
+end
+
+function WindowManager.getUIPackage(winName)
+  local cfgs = WindowManager.getWindowCfgs(winName)
+  return cfgs.subPackage
+end
+
+function WindowManager.openAdvMask()
+  local UIName = "advMaskUI"
+  LogsManager.echo("zm 打开蒙版--------------------------")
+  WindowManager.maskLayer.visible = true
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  if WindowManager.UIInstance[UIName] == nil then
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName] = WindowManager.initMaskUI()
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].width = ScreenAdapterTools.width
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].height = ScreenAdapterTools.height
+  end
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  WindowManager.UIInstance[UIName].mouseEnabled = true
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  WindowManager.UIInstance[UIName].alpha = 0.5
+  WindowManager.maskLayer.mouseEnabled = true
+  WindowManager.maskLayer.mouseThrough = false
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  WindowManager.maskLayer:addChild(WindowManager.UIInstance[UIName])
+end
+
+function WindowManager.closeAdvMask()
+  LogsManager.echo("zm 关闭蒙版--------------------------")
+  local UIName = "advMaskUI"
+  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+  if WindowManager.UIInstance[UIName] ~= nil then
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
+    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
+    WindowManager.maskLayer:removeChild(WindowManager.UIInstance[UIName])
+  end
+  if not WindowManager.maskLayer.numChildren then
+    WindowManager.maskLayer.visible = false
+  end
+end
+
+function WindowManager._insertWindow(view)
+  local index = WindowManager._allWindowMap:find(view)
+  if index ~= -1 then
+    WindowManager._allWindowMap:splice(index, 1)
+  end
+  table.insert(WindowManager._allWindowMap, view)
+end
+
+function WindowManager.updateUiVisible()
+  local len = #WindowManager._allWindowMap
+  local i = len - 1
+  repeat
+    local win = WindowManager._allWindowMap[i+1]
+    win.visible = true
+    local cfg = WindowManager.getWindowCfgs(win.windowName)
+    if cfg.full then
+      local ii = i - 1
+      repeat
+        -- [ts2lua]WindowManager._allWindowMap下标访问可能不正确
+        local childWindow = WindowManager._allWindowMap[ii]
+        if (childWindow.parent and win.parent) and childWindow.parent == win.parent then
+          childWindow.visible = false
+        end
+        ii=ii-1
+      until not(ii >= 0)
+      break
+    end
+    i=i-1
+  until not(i >= 0)
+  -- [ts2lua]WindowManager._allWindowMap下标访问可能不正确
+  local win = WindowManager._allWindowMap[len - 1]
+end
+
+function WindowManager._removeOneWindow(windowName)
+  local i = #WindowManager._allWindowMap - 1
+  repeat
+    local window = WindowManager._allWindowMap[i+1]
+    if window.windowName == windowName then
+      WindowManager._allWindowMap:splice(i, 1)
+    end
+    i=i-1
+  until not(i >= 0)
+end
+
+function WindowManager.isUICached(windowName)
+  local index = 0
+  repeat
+    -- [ts2lua]WindowManager._allWindowMap下标访问可能不正确
+    if WindowManager._allWindowMap[index].windowName == windowName then
+      return true
+    end
+    index=index+1
+  until not(index < #WindowManager._allWindowMap)
+  return false
+end
+
+function WindowManager.getCurrentWindowName()
+  if #WindowManager._allWindowMap == 0 then
+    return nil
+  end
+  -- [ts2lua]WindowManager._allWindowMap下标访问可能不正确
+  return WindowManager._allWindowMap[#WindowManager._allWindowMap - 1].windowName
+end
+
+function WindowManager.getCurrentWindow()
+  if #WindowManager._allWindowMap == 0 then
+    return nil
+  end
+  -- [ts2lua]WindowManager._allWindowMap下标访问可能不正确
+  return WindowManager._allWindowMap[#WindowManager._allWindowMap - 1]
+end
+
+function WindowManager.getallWindowMap()
+  return WindowManager._allWindowMap
+end

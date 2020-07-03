@@ -1,0 +1,376 @@
+require("trycatch")
+require("framework/manager/LogsManager")
+require("framework/platform/comp/TopViewAutoComp")
+require("game/sys/consts/ChannelConst")
+require("framework/common/UserInfo")
+require("framework/common/GameSwitch")
+require("framework/common/Message")
+require("framework/platform/AdVideoManager")
+require("framework/event/WindowEvent")
+require("utils/GameUtils")
+
+InterstitialAdComp = class('InterstitialAdComp',TopViewAutoComp)
+
+InterstitialAdComp._interstitialCallBackCache = {};
+function InterstitialAdComp.__getters.interstitialId()
+  if not InterstitialAdComp._interstitialId then
+    if ChannelConst.getChannelConst(UserInfo.platformId).adInterstitialId then
+      InterstitialAdComp._interstitialId = ChannelConst.getChannelConst(UserInfo.platformId).adInterstitialId
+    end
+    if GameSwitch.getSwitchState(GameSwitch.SCREEN_ID) then
+      InterstitialAdComp._interstitialId = GameSwitch.getSwitchState(GameSwitch.SCREEN_ID)
+    end
+  end
+  return InterstitialAdComp._interstitialId
+end
+
+function InterstitialAdComp.register()
+  LogsManager.echo("hlx InterstitialAd 预加载")
+  if not InterstitialAdComp.canUse() then
+    return
+  end
+  if not InterstitialAdComp._instance then
+    InterstitialAdComp._instance = InterstitialAdComp(nil)
+  end
+  if not InterstitialAdComp._instance._interstitialAd then
+    InterstitialAdComp._instance:registerInterstitialAd()
+  end
+end
+
+function InterstitialAdComp.create(parent, onErrorCallback, onCloseCallback, callbackObj)
+  if onErrorCallback == nil then
+    onErrorCallback=nil
+  end
+  if onCloseCallback == nil then
+    onCloseCallback=nil
+  end
+  if callbackObj == nil then
+    callbackObj=nil
+  end
+  -- [ts2lua]lua中0和空字符串也是true，此处parent and parent.windowName需要确认
+  LogsManager.echo("hlx InterstitialAdComp create start:", (parent and parent.windowName and {GameUtils.decryptStr(parent.windowName)} or {nil})[1])
+  if not InterstitialAdComp.canUse() then
+    onErrorCallback and onErrorCallback:call(InterstitialAdComp)
+    return
+  end
+  if not InterstitialAdComp._instance then
+    InterstitialAdComp._instance = InterstitialAdComp(parent, onErrorCallback, onCloseCallback, callbackObj)
+  else
+    InterstitialAdComp._instance:updateInfo(parent, onErrorCallback, onCloseCallback, callbackObj)
+    Message.instance:add(WindowEvent.WINDOW_EVENT_SWITCHUIFIN, InterstitialAdComp._instance)
+  end
+end
+
+function InterstitialAdComp:ctor(parent, onErrorCallback, onCloseCallback, callbackObj)
+  if onErrorCallback == nil then
+    onErrorCallback=nil
+  end
+  if onCloseCallback == nil then
+    onCloseCallback=nil
+  end
+  if callbackObj == nil then
+    callbackObj=nil
+  end
+  self:superCall('ctor')
+  self._loadSuccess = false;
+  self._hasError = false;
+  self:updateInfo(parent, onErrorCallback, onCloseCallback, callbackObj)
+end
+
+function InterstitialAdComp:updateInfo(parent, onErrorCallback, onCloseCallback, callbackObj)
+  if onErrorCallback == nil then
+    onErrorCallback=nil
+  end
+  if onCloseCallback == nil then
+    onCloseCallback=nil
+  end
+  if callbackObj == nil then
+    callbackObj=nil
+  end
+  self._onErrorCallback = onErrorCallback
+  self._onCloseCallback = onCloseCallback
+  -- [ts2lua]lua中0和空字符串也是true，此处parent and parent.windowName需要确认
+  self._parentName = (parent and parent.windowName and {parent.windowName} or {nil})[1]
+  self._callbackObj = callbackObj
+  self._hideType = TopViewAutoComp.HIDE_TYPE_DESTROY
+  self:_checkUIState(true)
+end
+
+function InterstitialAdComp:registerInterstitialAd()
+  LogsManager.echo('hlx InterstitialAd registerInterstitialAd')
+  self._loadSuccess = false
+  self._hasError = false
+  local thisObj = self
+  if not InterstitialAdComp.canUse() then
+    return
+  end
+  local wx = UserInfo.platform:getWX()
+  if UserInfo.isOppo() then
+    self._interstitialAd = wx:createInsertAd({posId=InterstitialAdComp.interstitialId})
+  elseif UserInfo.isVivo() then
+    self._interstitialAd = wx:createInterstitialAd({posId=InterstitialAdComp.interstitialId})
+  else
+    self._interstitialAd = wx:createInterstitialAd({adUnitId=InterstitialAdComp.interstitialId})
+  end
+  local onErrorBack = function(err)
+    LogsManager.echo('hlx InterstitialAd: onError', JSON:stringify(err))
+    thisObj._loadSuccess = false
+    thisObj._hasError = true
+    thisObj:_checkUIState(true)
+  end
+  
+  local onLoadBack = function(err)
+    LogsManager.echo('whn InterstitialAd: onLoad success')
+    thisObj._loadSuccess = true
+    thisObj._hasError = false
+    thisObj:_checkUIState(true)
+  end
+  
+  local onCloseBack = function(err)
+    LogsManager.echo("whn InterstitialAd 插屏广告 onClose")
+    thisObj._onCloseCallback and thisObj._onCloseCallback:call(thisObj._callbackObj)
+    thisObj:destroy()
+  end
+  
+  LogsManager.echo("hlx InterstitialAd instance:", self._interstitialAd)
+  if self._interstitialAd then
+    local interstitialAd = self._interstitialAd
+    self._interstitialAd.__isDestoryed = false
+    self._hasShow = false
+    if UserInfo.isTT() then
+      table.insert(InterstitialAdComp._interstitialCallBackCache, {instance=self._interstitialAd, onLoad=onLoadBack, onError=onErrorBack, onClose=onCloseBack})
+      interstitialAd:onError(onErrorBack)
+      interstitialAd:onLoad(onLoadBack)
+      interstitialAd:onClose(onCloseBack)
+    else
+      interstitialAd:onError(function(err)
+        LogsManager.echo('hlx InterstitialAd: onError', JSON:stringify(err))
+        thisObj._loadSuccess = false
+        thisObj._hasError = true
+        thisObj:_checkUIState(true)
+      end
+      )
+      interstitialAd:onLoad(function()
+        LogsManager.echo('hlx InterstitialAd: onLoad success')
+        thisObj._loadSuccess = true
+        thisObj._hasError = false
+        thisObj:_checkUIState(true)
+      end
+      )
+      if UserInfo.isOppo() then
+        interstitialAd:onShow(function()
+          LogsManager.echo("hlx InterstitialAd 插屏广告展示成功")
+        end
+        )
+      else
+        interstitialAd:onClose(function()
+          LogsManager.echo("hlx InterstitialAd 插屏广告 onClose")
+          thisObj._onCloseCallback and thisObj._onCloseCallback:call(thisObj._callbackObj)
+          thisObj:destroy()
+        end
+        )
+      end
+    end
+  else
+    self._hasError = true
+  end
+end
+
+function InterstitialAdComp:_doCallBack()
+  LogsManager.echo('hlx InterstitialAd: _doErrorCallBack')
+  local tempFunc = self._onErrorCallback
+  local tempObj = self._callbackObj
+  self._onErrorCallback = nil
+  self._onCloseCallback = nil
+  self._callbackObj = nil
+  self._hasShow = true
+  tempFunc and tempFunc:call(tempObj)
+end
+
+function InterstitialAdComp.canUse()
+  if not ((((UserInfo.isWX() or UserInfo.isOppo()) or UserInfo.isVivo()) or UserInfo.isTT()) or UserInfo.isQQGame()) then
+    LogsManager.warn("hlx InterstitialAd canNotUse:该平台不支持插屏广告")
+    return false
+  end
+  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_INTERSTITIALAD) then
+    LogsManager.warn("hlx InterstitialAd canNotUse:开关关闭 SWITCH_DISABLE_INTERSTITIALAD")
+    return false
+  end
+  if not AdVideoManager.instance._isInitAdv then
+    LogsManager.warn("hlx InterstitialAd canNotUse:广告组件未加载完毕")
+    return false
+  end
+  if not InterstitialAdComp.interstitialId then
+    LogsManager.warn("hlx InterstitialAd canNotUse:不初始化InterstitialAd")
+    return false
+  end
+  if UserInfo.isOppo() then
+    if GameSwitch.checkOnOff(GameSwitch.SWITCH_OPPO_REVIEW) then
+      LogsManager.echo('hlx InterstitialAd canNotUse:review模式不显示插屏')
+      return false
+    end
+    if not UserInfo.platform:getWX().createInsertAd then
+      LogsManager.echo('hlx InterstitialAd canNotUse:该设备不支持 createInsertAd 函数')
+      return false
+    end
+  else
+    if UserInfo.isTT() then
+      if UserInfo.platform:getSystemInfo().appName ~= "Toutiao" then
+        LogsManager.echo('whn InterstitialAd canNotUse: 插屏广告仅今日头条支持')
+        return false
+      end
+      if UserInfo.platform:getSystemInfo().platform == "ios" then
+        LogsManager.echo('whn InterstitialAd canNotUse: IOS不支持头条插屏广告')
+        return false
+      end
+    end
+    if not UserInfo.platform:getWX().createInterstitialAd then
+      LogsManager.echo('hlx InterstitialAd canNotUse:该设备不支持 createInterstitialAd 函数')
+      return false
+    end
+  end
+  return true
+end
+
+function InterstitialAdComp:destroy()
+  LogsManager.echo("hlx InterstitialAd destroy:", GameUtils.decryptStr(self._parentName))
+  self:superCall('destroy')
+  self._onErrorCallback = nil
+  self._onCloseCallback = nil
+  self._callbackObj = nil
+  if self._interstitialAd then
+    self:reloadInter()
+  end
+end
+
+function InterstitialAdComp:reloadInter()
+  if (UserInfo.isVivo() or UserInfo.isTT()) or UserInfo.isQQGame() then
+    LogsManager.echo('hlx InterstitialAd reloadInter:vivo/tt/qq 只销毁实例，不重新拉取')
+    if self._interstitialAd then
+      if UserInfo.isVivo() or UserInfo.isQQGame() then
+        if type(self._interstitialAd.destroy) == "function" then
+          self._interstitialAd:destroy()
+        end
+      else
+        LogsManager.echo('whn InterstitialAd reloadInter tt: 删除')
+        self:_ttDestroyInterstitialAd(self._interstitialAd)
+      end
+      self._interstitialAd = nil
+    end
+    return
+  end
+  if self._hasError then
+    if type(self._interstitialAd.destroy) == "function" then
+      self._interstitialAd:destroy()
+    end
+    self._interstitialAd = nil
+    self:registerInterstitialAd()
+  elseif UserInfo.isOppo() and self._hasShow then
+    if not self._interstitialAd then
+      self:registerInterstitialAd()
+    else
+      self._hasShow = false
+      self._interstitialAd:load()
+    end
+  end
+end
+
+function InterstitialAdComp:_ttDestroyInterstitialAd(instance)
+  LogsManager.echo("whn 销毁一个插屏------------", instance)
+  self:_offTTInterstitialAdCallBack(instance)
+  if instance.__isDestoryed then
+    LogsManager.warn("这个插屏已经执行过销毁了 为什么会重复执行--")
+    return
+  end
+  if type(instance.destroy) == "function" then
+    instance.__isDestoryed = true
+    instance:destroy()
+  end
+end
+
+function InterstitialAdComp:_offTTInterstitialAdCallBack(instance)
+  local i = #InterstitialAdComp._interstitialCallBackCache - 1
+  repeat
+    local info = InterstitialAdComp._interstitialCallBackCache[i+1]
+    if info.instance == instance then
+      if type(instance.offClose) == "function" then
+        instance:offClose(info.onClose)
+      end
+      if type(instance.offLoad) == "function" then
+        instance:offLoad(info.onLoad)
+      end
+      if type(instance.offError) == "function" then
+        instance:offError(info.onError)
+      end
+      InterstitialAdComp._interstitialCallBackCache:splice(i, 1)
+    end
+    i=i-1
+  until not(i >= 0)
+end
+
+function InterstitialAdComp:show(force)
+  if force == nil then
+    force=false
+  end
+  LogsManager.echo("hlx InterstitialAd show _lastParentName:", self._lastParentName, " _parentName:", self._parentName, " force:", force)
+  if self._lastParentName ~= self._parentName then
+    if self._status == TopViewAutoComp.STATUS_SHOW then
+      self:reloadInter()
+    end
+  else
+    if not force and self._status == TopViewAutoComp.STATUS_SHOW then
+      return
+    end
+  end
+  self._status = TopViewAutoComp.STATUS_SHOW
+  self._lastParentName = self._parentName
+  self:_changeStatus()
+end
+
+function InterstitialAdComp:_compShow()
+  LogsManager.echo("hlx InterstitialAd _compShow", Laya.timer.currTimer)
+  if AdVideoManager.instance:isInterstitialLimit() then
+    LogsManager.echo("hlx InterstitialAd _compShow：插屏广告isInterstitialLimit")
+    self:_doCallBack()
+    return
+  end
+  if not self._interstitialAd then
+    self:registerInterstitialAd()
+  end
+  if self._hasError then
+    LogsManager.echo("hlx InterstitialAd _compShow：InterstitialAd加载存在error直接执行失败回调")
+    self:_doCallBack()
+    return
+  end
+  if self._interstitialAd and self._loadSuccess then
+    self._hasShow = true
+    LogsManager.echo("hlx InterstitialAd show", Laya.timer.currTimer)
+    if type(self._interstitialAd.show) == "function" then
+      try_catch{
+        main = function()
+          local promise = self._interstitialAd:show()
+          if UserInfo.isWX() or UserInfo.isTT() then
+            promise and promise:tsvar_then(function()
+              LogsManager.echo("hlx InterstitialAd广告组件show success", Laya.timer.currTimer)
+            end
+            ):catch(function(err)
+              LogsManager.echo("hlx InterstitialAd广告组件show error", JSON:stringify(err))
+              self:_doCallBack()
+            end
+            )
+          end
+          AdVideoManager.instance:updateInterstitialLimit()
+        end,
+        catch = function(e)
+          if e then
+            LogsManager.errorTag('InterstitialAd_show_error', e:toString())
+          else
+            LogsManager.errorTag('InterstitialAd_show_error', "InterstitialAd_show_error")
+          end
+        end
+      }
+    else
+      LogsManager.errorTag("hlx _interstitialAd.show 方法不存在")
+    end
+  end
+end

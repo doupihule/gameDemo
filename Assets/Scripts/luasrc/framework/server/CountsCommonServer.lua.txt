@@ -1,0 +1,38 @@
+require("utils/GameUtils")
+require("framework/common/kakura/Client")
+require("framework/server/SingleCommonServer")
+
+CountsCommonServer = class('CountsCommonServer')
+CountsCommonServer.upData = {};
+function CountsCommonServer.updateDayCounts(type, value, isSend, callBack, thisObj)
+  if isSend == nil then
+    isSend=true
+  end
+  if callBack == nil then
+    callBack=nil
+  end
+  if thisObj == nil then
+    thisObj=nil
+  end
+  local countData = {}
+  -- [ts2lua]countData下标访问可能不正确
+  countData["expireTime"] = GameUtils.getNextRefreshTByTime(4)
+  -- [ts2lua]countData下标访问可能不正确
+  countData["id"] = type
+  -- [ts2lua]countData下标访问可能不正确
+  countData["count"] = value
+  -- [ts2lua]CountsCommonServer.upData下标访问可能不正确
+  if not CountsCommonServer.upData["countsCommon"] then
+    -- [ts2lua]CountsCommonServer.upData下标访问可能不正确
+    CountsCommonServer.upData["countsCommon"] = {}
+  end
+  -- [ts2lua]CountsCommonServer.upData下标访问可能不正确
+  -- [ts2lua]CountsCommonServer.upData["countsCommon"]下标访问可能不正确
+  CountsCommonServer.upData["countsCommon"][type] = countData
+  if isSend == true then
+    Client.instance:doDummyServerBack(nil, CountsCommonServer.upData, nil)
+    CountsCommonServer.upData = {}
+    SingleCommonServer.startSaveClientData()
+  end
+  callBack and callBack:call(thisObj)
+end
