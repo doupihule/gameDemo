@@ -1,2 +1,0 @@
-ShareBtnName = class('ShareBtnName')
-ShareBtnName.FightShareBtn = "FightResultUI.sharebtn";

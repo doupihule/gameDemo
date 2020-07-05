@@ -1,18 +1,4 @@
-require("trycatch")
-require("date")
-require("framework/common/kakura/KakuraClient/ConnectObj")
-require("framework/manager/LogsManager")
-require("framework/common/kakura/Client")
-require("game/sys/model/UserModel")
-require("framework/manager/WaitManager")
-require("game/sys/common/MsgCMD")
-require("framework/common/HttpMessage")
-require("framework/manager/WindowManager")
-require("framework/func/TranslateFunc")
-require("framework/common/UserInfo")
-require("framework/manager/PackConfigManager")
-require("utils/Global")
-require("framework/utils/TableUtils")
+
 
 GameHttpControler = class('GameHttpControler')
 

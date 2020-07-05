@@ -1,0 +1,24 @@
+--
+-- Author: XD
+-- Date: 2020-04-11 16:47:35
+--
+local packageName = "framework.utils."
+require(packageName.."BigNumUtils")
+require(packageName.."ButtonUtils")
+require(packageName.."DeviceTools")
+require(packageName.."DisplayUtils")
+require(packageName.."EaseUtils")
+require(packageName.."Equation")
+require(packageName.."Equation3d")
+require(packageName.."FileUtils")
+require(packageName.."HashMap")
+require(packageName.."MathUtils")
+require(packageName.."PoolTools")
+require(packageName.."RandomUtis")
+require(packageName.."ScreenAdapterTools")
+require(packageName.."StringUtils")
+require(packageName.."TableUtils")
+require(packageName.."VectorTools")
+require(packageName.."StringUtils")
+
+

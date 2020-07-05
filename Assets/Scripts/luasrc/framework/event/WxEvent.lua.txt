@@ -1,5 +1,0 @@
-WxEvent = class('WxEvent')
-function WxEvent:ctor() end
-WxEvent.WX_EVENT_JUMPSUC = "WX_EVENT_JUMPSUC";
-WxEvent.WX_EVENT_JUMPFAIL = "WX_EVENT_JUMPFAIL";
-WxEvent.WX_EVENT_JUMPCOMPLETE = "WX_EVENT_JUMPCOMPLETE";

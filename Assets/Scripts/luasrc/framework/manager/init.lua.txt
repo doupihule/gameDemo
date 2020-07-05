@@ -1,0 +1,24 @@
+--
+-- Author: XD
+-- Date: 2020-04-11 16:47:35
+--
+local packageName = "framework.manager."
+require(packageName.."CacheManager")
+require(packageName.."ErrCodeManager")
+require(packageName.."FuncManager")
+require(packageName.."LoadManager")
+require(packageName.."LocalStorageManager")
+require(packageName.."LogsManager")
+require(packageName.."MainModule")
+require(packageName.."NotifyManager")
+require(packageName.."PackConfigManager")
+require(packageName.."ResourceManager.")
+require(packageName.."SoundManager")
+require(packageName.."StatisticsExtendManager")
+require(packageName.."SubPackageManager")
+require(packageName.."TimerManager")
+require(packageName.."VersionManager")
+require(packageName.."WaitManager")
+require(packageName.."WindowManager")
+
+

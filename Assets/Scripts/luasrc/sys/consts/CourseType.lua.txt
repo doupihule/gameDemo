@@ -1,6 +1,0 @@
-CourseType = class('CourseType')
-CourseType.NO_COURSE = 0;
-CourseType.COURSETYPE_1 = 10;
-CourseType.COURSETYPE_2 = 11;
-CourseType.COURSETYPE_3 = 12;
-CourseType.COURSETYPE_4 = 13;

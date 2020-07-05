@@ -1,17 +1,3 @@
-require("trycatch")
-require("framework/manager/WaitManager")
-require("framework/manager/ErrCodeManager")
-require("framework/manager/LogsManager")
-require("framework/manager/TimerManager")
-require("framework/func/TranslateFunc")
-require("framework/manager/WindowManager")
-require("game/sys/common/kakura/ErrorCode")
-require("utils/Global")
-require("framework/common/UserInfo")
-require("framework/consts/LogsErrorCode")
-require("framework/common/kakura/Client")
-require("framework/manager/PackConfigManager")
-
 HttpMessage = class('HttpMessage')
 
 HttpMessage.URLLoaderDataFormat = {TEXT="text", TEXTURE="texture", BINARY="binary"};

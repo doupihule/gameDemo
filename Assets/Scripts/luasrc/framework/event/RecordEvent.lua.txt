@@ -1,4 +1,0 @@
-RecordEvent = class('RecordEvent')
-function RecordEvent:ctor() end
-RecordEvent.TT_RECORD_EVENT_START = "TT_RECORD_EVENT_START";
-RecordEvent.TT_RECORD_EVENT_STOP = "TT_RECORD_EVENT_STOP";

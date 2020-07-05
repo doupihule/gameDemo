@@ -1,4 +1,0 @@
-VideoAdvEvent = class('VideoAdvEvent')
-function VideoAdvEvent:ctor() end
-VideoAdvEvent.VIDEOADV_EVENT_VICTORYBOX = "VIDEOADV_EVENT_VICTORYBOX";
-VideoAdvEvent.VIDEOADV_EVENT_ADV_SUCCESS = "VIDEOADV_EVENT_ADV_SUCCESS";

@@ -1,14 +1,3 @@
-require("stringutil")
-require("framework/manager/LogsManager")
-require("utils/Global")
-require("framework/utils/DeviceTools")
-require("utils/GameUtils")
-require("framework/utils/TableUtils")
-require("game/sys/consts/GameSwitchConst")
-require("framework/manager/BannerAdManager")
-require("game/sys/consts/ChannelConst")
-require("framework/common/UserInfo")
-
 GameSwitch = class('GameSwitch')
 GameSwitch.SWITCH_GM_DEBUG = "SWITCH_GM_DEBUG";
 GameSwitch.SWITCH_CD_DEBUG = "SWITCH_CD_DEBUG";

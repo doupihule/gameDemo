@@ -1,3 +1,6 @@
-require("utils/init")
+require("utils.init")
+require("components.init")
+require("framework.init")
+require("battle.init")
 require("sys.views.init")
 
