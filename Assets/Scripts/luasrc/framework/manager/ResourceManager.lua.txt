@@ -1,7 +1,7 @@
-require("framework/manager/LoadManager")
-require("framework/manager/SubPackageManager")
-require("framework/manager/LogsManager")
-require("game/sys/consts/SubPackageConst")
+
+
+
+
 
 ResourceManager = class('ResourceManager')
 function ResourceManager:ctor() end

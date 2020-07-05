@@ -1,7 +1,7 @@
-require("framework/manager/CacheManager")
-require("game/sys/consts/GameConsts")
-require("framework/manager/PackConfigManager")
-require("framework/common/UserInfo")
+
+
+
+
 
 StorageCode = class('StorageCode')
 StorageCode.storage_vmsversion = "storage_vmsversion";

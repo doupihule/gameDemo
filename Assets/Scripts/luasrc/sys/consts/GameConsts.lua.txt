@@ -1,4 +1,4 @@
-require("framework/common/UserInfo")
+
 
 GameConsts = class('GameConsts')
 GameConsts.defaultPhysicsMemory = 16;

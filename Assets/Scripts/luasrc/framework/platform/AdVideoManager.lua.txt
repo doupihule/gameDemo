@@ -1,21 +1,21 @@
-require("framework/platform/comp/OriginalInterstitialAdComp")
-require("framework/utils/ButtonUtils")
-require("framework/common/UserInfo")
-require("framework/manager/LogsManager")
-require("framework/common/GameSwitch")
-require("framework/platform/comp/InterstitialAdComp")
-require("framework/platform/comp/RecommendationInterstitialComp")
-require("framework/manager/BannerAdManager")
-require("framework/utils/ScreenAdapterTools")
-require("utils/GameUtils")
-require("framework/consts/SceneReference")
-require("framework/platform/comp/OriginalIconAdComp")
-require("framework/manager/TimerManager")
-require("framework/model/CountsCommonModel")
-require("framework/server/CountsCommonServer")
-require("framework/common/kakura/Client")
-require("game/sys/func/GlobalParamsFunc")
-require("framework/func/PlaqueFunc")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 AdVideoManager = class('AdVideoManager')
 function AdVideoManager:ctor(...)

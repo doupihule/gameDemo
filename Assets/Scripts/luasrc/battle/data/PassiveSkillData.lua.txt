@@ -1,5 +1,5 @@
-require("game/battle/data/BattleSkillData")
-require("game/sys/func/BattleFunc")
+
+
 
 PassiveSkillData = class('PassiveSkillData',BattleSkillData)
 

@@ -1,8 +1,8 @@
-require("framework/utils/FileUtils")
-require("framework/manager/VersionManager")
-require("framework/manager/LogsManager")
-require("game/sys/consts/SubPackageConst")
-require("game/sys/consts/GameConsts")
+
+
+
+
+
 
 EngineExpand = class('EngineExpand')
 EngineExpand.localResArr = {"MainScene.json", "static/", "version.json", "fileconfig.json", "layaNativeDir", "wxlocal"};

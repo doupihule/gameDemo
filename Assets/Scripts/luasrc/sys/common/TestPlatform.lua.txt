@@ -1,5 +1,5 @@
-require("utils/Global")
-require("framework/common/UserInfo")
+
+
 
 TestPlatform = class('TestPlatform')
 TestPlatform.dev = {platform="dev", upgrade_path="web_cn", vms_url="https://overtake-dev.fantasyfancy.com:8443", vms_version=1};

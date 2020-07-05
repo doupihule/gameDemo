@@ -1,4 +1,4 @@
-require("framework/common/UserInfo")
+
 
 CloudPlatformData = class('CloudPlatformData')
 CloudPlatformData.dev = {platform="dev", upgrade_path="web_cn", cloud_url="https://cloud-dev-out.fantasyfancy.com:8544/index.php?mod=jsonrpc", vms_version=1, backend_url="https://cloud-dev.fantasyfancy.com:8601/?mod=jsonrpc"};

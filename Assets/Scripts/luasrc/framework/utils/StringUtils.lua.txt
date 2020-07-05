@@ -1,7 +1,7 @@
-require("stringutil")
-require("game/sys/func/GlobalParamsFunc")
-require("framework/utils/BigNumUtils")
-require("game/sys/consts/GameConsts")
+
+
+
+
 
 StringUtils = class('StringUtils')
 function StringUtils.ScoreRange(score)

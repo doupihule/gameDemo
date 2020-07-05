@@ -1,6 +1,6 @@
-require("utils/Global")
-require("framework/manager/LogsManager")
-require("framework/common/GameSwitch")
+
+
+
 
 DeviceTools = class('DeviceTools')
 function DeviceTools:ctor() end

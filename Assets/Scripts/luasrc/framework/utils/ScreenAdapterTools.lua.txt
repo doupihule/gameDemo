@@ -1,5 +1,5 @@
-require("framework/manager/LogsManager")
-require("utils/Global")
+
+
 
 ScreenAdapterTools = class('ScreenAdapterTools')
 ScreenAdapterTools.Align_Left = 1;

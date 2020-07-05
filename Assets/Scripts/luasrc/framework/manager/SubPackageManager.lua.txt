@@ -1,7 +1,7 @@
-require("framework/common/UserInfo")
-require("framework/manager/LogsManager")
-require("game/sys/consts/SubPackageConst")
-require("framework/utils/FileUtils")
+
+
+
+
 
 SubPackageManager = class('SubPackageManager')
 SubPackageManager.subPackLoadData = {};

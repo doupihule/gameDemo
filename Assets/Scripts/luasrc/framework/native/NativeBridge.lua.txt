@@ -1,8 +1,8 @@
-require("framework/common/UserInfo")
-require("framework/manager/LogsManager")
-require("framework/common/Message")
-require("framework/utils/TableUtils")
-require("framework/event/NativeToJSEvent")
+
+
+
+
+
 
 NativeBridge = class('NativeBridge')
 

@@ -1,10 +1,10 @@
-require("framework/manager/LogsManager")
-require("game/sys/func/BattleFunc")
-require("game/sys/manager/BattleLogsManager")
-require("framework/common/UserInfo")
-require("framework/utils/RandomUtis")
-require("framework/utils/TableUtils")
-require("game/sys/model/SwitchModel")
+
+
+
+
+
+
+
 
 SkillExpandTrigger = class('SkillExpandTrigger')
 SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT = "1";

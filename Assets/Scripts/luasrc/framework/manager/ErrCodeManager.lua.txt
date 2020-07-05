@@ -1,13 +1,13 @@
-require("framework/func/TranslateFunc")
-require("framework/manager/LogsManager")
-require("game/sys/common/kakura/ErrorCode")
-require("framework/common/Message")
-require("game/sys/common/MsgCMD")
-require("framework/common/UserInfo")
-require("framework/common/kakura/Client")
-require("framework/manager/WindowManager")
-require("framework/common/kakura/KakuraClient")
-require("utils/Global")
+
+
+
+
+
+
+
+
+
+
 
 ErrCodeManager = class('ErrCodeManager')
 function ErrCodeManager:ctor(...)

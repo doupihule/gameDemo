@@ -1,20 +1,20 @@
-require("game/sys/model/UserModel")
-require("framework/common/UserInfo")
-require("game/sys/manager/StatisticsManager")
-require("framework/consts/StatisticsCommonConst")
-require("framework/model/UserGlobalModel")
-require("game/sys/func/GlobalParamsFunc")
-require("framework/manager/WindowManager")
-require("game/sys/consts/WindowCfgs")
-require("framework/common/Message")
-require("framework/event/FrameWorkEvent")
-require("framework/func/TranslateFunc")
-require("framework/manager/LogsManager")
-require("utils/GameUtils")
-require("game/sys/func/BattleFunc")
-require("game/sys/consts/BattleConst")
-require("framework/manager/SoundManager")
-require("game/sys/model/SwitchModel")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 FrameWorkHandle = class('FrameWorkHandle')
 

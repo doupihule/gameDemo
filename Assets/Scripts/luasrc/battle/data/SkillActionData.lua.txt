@@ -1,5 +1,5 @@
-require("game/sys/func/BattleFunc")
-require("framework/manager/LogsManager")
+
+
 
 SkillActionData = class('SkillActionData')
 

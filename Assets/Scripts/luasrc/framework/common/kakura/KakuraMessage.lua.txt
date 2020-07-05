@@ -1,8 +1,8 @@
-require("trycatch")
-require("stringutil")
-require("framework/common/kakura/KakuraPackage")
-require("framework/manager/LogsManager")
-require("game/sys/common/kakura/ErrorCode")
+
+
+
+
+
 
 KakuraMessage = class('KakuraMessage')
 function KakuraMessage:ctor(...)

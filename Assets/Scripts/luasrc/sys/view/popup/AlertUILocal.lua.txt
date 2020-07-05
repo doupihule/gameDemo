@@ -1,8 +1,8 @@
-require("framework/utils/ScreenAdapterTools")
-require("utils/Global")
-require("framework/manager/WindowManager")
-require("game/sys/consts/WindowCfgs")
-require("framework/utils/TableUtils")
+
+
+
+
+
 
 AlertUILocal = class('AlertUILocal',Laya.View)
 AlertUILocal.res = nil;

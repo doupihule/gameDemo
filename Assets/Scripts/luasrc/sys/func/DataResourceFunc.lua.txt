@@ -1,8 +1,8 @@
-require("framework/func/BaseFunc")
-require("game/sys/consts/ResourceConst")
-require("framework/manager/WindowManager")
-require("game/sys/func/RolesFunc")
-require("game/sys/func/DataResourceFunc/DataResourceType")
+
+
+
+
+
 
 DataResourceFunc = class('DataResourceFunc',BaseFunc)
 

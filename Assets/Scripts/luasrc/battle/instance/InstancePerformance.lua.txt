@@ -1,14 +1,14 @@
-require("game/battle/instance/InstanceMove")
-require("framework/utils/DisplayUtils")
-require("game/sys/consts/GameConsts")
-require("game/sys/consts/BattleConst")
-require("game/sys/func/BattleFunc")
-require("framework/manager/LogsManager")
-require("framework/utils/PoolTools")
-require("game/sys/consts/PoolCode")
-require("game/sys/manager/BattleLogsManager")
-require("game/battle/view/BattleRoleView")
-require("framework/utils/TableUtils")
+
+
+
+
+
+
+
+
+
+
+
 
 InstancePerformance = class('InstancePerformance',InstanceMove)
 

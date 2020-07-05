@@ -1,5 +1,5 @@
-require("framework/utils/TableUtils")
-require("game/sys/func/BattleFunc")
+
+
 
 AttributeEntity = class('AttributeEntity')
 

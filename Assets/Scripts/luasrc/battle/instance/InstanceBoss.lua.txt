@@ -1,4 +1,4 @@
-require("game/battle/instance/InstanceMonster")
+
 
 InstanceBoss = class('InstanceBoss',InstanceMonster)
 function InstanceBoss:ctor(controler)

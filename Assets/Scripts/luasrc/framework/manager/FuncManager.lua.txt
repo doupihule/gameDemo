@@ -1,13 +1,13 @@
-require("framework/func/BaseFunc")
-require("framework/manager/ErrCodeManager")
-require("framework/manager/LoadManager")
-require("framework/manager/LoadZipManager")
-require("framework/manager/LogsManager")
-require("framework/utils/FileUtils")
-require("framework/manager/VersionManager")
-require("framework/manager/SubPackageManager")
-require("game/sys/consts/SubPackageConst")
-require("utils/GameUtils")
+
+
+
+
+
+
+
+
+
+
 
 FuncManager = class('FuncManager')
 function FuncManager.init(callback, thisobj)

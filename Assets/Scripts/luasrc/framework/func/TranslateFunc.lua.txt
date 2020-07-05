@@ -1,8 +1,8 @@
-require("framework/consts/LogsErrorCode")
-require("game/sys/consts/TranslateConst")
-require("framework/consts/TranslateCommonConst")
-require("framework/func/BaseFunc")
-require("framework/utils/TableUtils")
+
+
+
+
+
 
 TranslateFunc = class('TranslateFunc')
 function TranslateFunc:getCfgsPathArr()

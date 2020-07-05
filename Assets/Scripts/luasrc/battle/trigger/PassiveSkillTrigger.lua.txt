@@ -1,9 +1,9 @@
-require("framework/manager/LogsManager")
-require("game/sys/func/BattleFunc")
-require("game/battle/data/SkillActionData")
-require("game/sys/consts/BattleConst")
-require("game/battle/trigger/ChooseTrigger")
-require("framework/utils/TableUtils")
+
+
+
+
+
+
 
 PassiveSkillTrigger = class('PassiveSkillTrigger')
 function PassiveSkillTrigger.runOnePassiveGlobalAttr(passive, attrMap, targtRole, way)

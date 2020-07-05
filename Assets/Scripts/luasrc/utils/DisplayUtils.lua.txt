@@ -1,4 +1,4 @@
-require("components.SpineGraphicExpand")
+
 DisplayUtils = {}
 local spinePath = "Assets/Animation/spine/"
 

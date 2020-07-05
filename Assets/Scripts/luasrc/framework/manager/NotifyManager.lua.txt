@@ -1,5 +1,5 @@
-require("framework/common/Message")
-require("framework/event/NotifyEvent")
+
+
 
 NotifyManager = class('NotifyManager')
 NotifyManager.notifyFlag = false;

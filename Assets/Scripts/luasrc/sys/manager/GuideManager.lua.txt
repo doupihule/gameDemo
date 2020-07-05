@@ -1,11 +1,11 @@
-require("framework/manager/WindowManager")
-require("game/sys/manager/StatisticsManager")
-require("framework/manager/LogsManager")
-require("game/sys/model/UserModel")
-require("game/sys/func/GuideFunc")
-require("game/sys/consts/WindowCfgs")
-require("game/sys/server/GuideServer")
-require("game/sys/consts/GuideConst")
+
+
+
+
+
+
+
+
 
 GuideManager = class('GuideManager')
 function GuideManager:ctor(...)

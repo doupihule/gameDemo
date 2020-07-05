@@ -1,11 +1,11 @@
-require("game/battle/instance/InstanceMoveEntity")
-require("game/battle/instance/InstanceMoveMultyEntity")
-require("game/sys/func/BattleFunc")
-require("framework/manager/LogsManager")
-require("game/sys/consts/BattleConst")
-require("game/battle/instance/InstanceBasic")
-require("game/sys/consts/PoolCode")
-require("game/battle/trigger/SkillExpandTrigger")
+
+
+
+
+
+
+
+
 
 InstanceMove = class('InstanceMove',InstanceBasic)
 InstanceMove.moveType_none = 0;

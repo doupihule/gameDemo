@@ -1,5 +1,5 @@
-require("framework/utils/Equation")
-require("framework/utils/ScreenAdapterTools")
+
+
 
 CameraControler = class('CameraControler')
 

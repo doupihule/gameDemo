@@ -1,18 +1,18 @@
-require("framework/manager/WindowManager")
-require("game/sys/consts/WindowCfgs")
-require("framework/utils/ButtonUtils")
-require("framework/consts/ButtonConst")
-require("framework/manager/ShareOrTvManager")
-require("game/sys/func/ShareTvOrderFunc")
-require("framework/common/UserInfo")
-require("game/sys/consts/ResourceConst")
-require("game/sys/func/LevelFunc")
-require("game/sys/func/GlobalParamsFunc")
-require("framework/manager/TimerManager")
-require("framework/func/TranslateFunc")
-require("game/sys/manager/StatisticsManager")
-require("framework/manager/BannerAdManager")
-require("ui/layaMaxUI")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 BattleFullEnergyUI = class('BattleFullEnergyUI',ui.gameui.battle.BattleFullEnergyUI)
 

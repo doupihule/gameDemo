@@ -1,9 +1,9 @@
-require("game/sys/func/BattleFunc")
-require("framework/func/TranslateFunc")
-require("game/sys/manager/BattleLogsManager")
-require("framework/common/GameSwitch")
-require("game/sys/consts/GameSwitchConst")
-require("framework/utils/TableUtils")
+
+
+
+
+
+
 
 BattleDebugTool = class('BattleDebugTool')
 

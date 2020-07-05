@@ -1,18 +1,18 @@
-require("stringutil")
-require("framework/platform/WXGamePlatform")
-require("framework/platform/EgretPlatform")
-require("framework/platform/QQGamePlatform")
-require("framework/platform/TTGamePlatform")
-require("framework/platform/OppoGamePlatform")
-require("utils/Global")
-require("framework/consts/SceneReference")
-require("framework/platform/BaiduGamePlatform")
-require("framework/platform/VivoGamePlatform")
-require("framework/platform/UCGamePlatform")
-require("framework/platform/AndroidGamePlatform")
-require("framework/manager/IosGamePlatform")
-require("framework/manager/PackConfigManager")
-require("framework/common/UserInfo/PlatformIdType")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 UserInfo = class('UserInfo')
 UserInfo.paramStr = "";

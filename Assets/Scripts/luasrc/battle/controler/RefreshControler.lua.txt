@@ -1,20 +1,20 @@
-require("stringutil")
-require("game/sys/func/BattleFunc")
-require("game/sys/consts/BattleConst")
-require("framework/common/Message")
-require("framework/manager/WindowManager")
-require("game/sys/manager/BattleLogsManager")
-require("game/sys/consts/WindowCfgs")
-require("game/sys/func/GlobalParamsFunc")
-require("game/sys/model/RolesModel")
-require("game/battle/trigger/ConditionTrigger")
-require("game/sys/func/FogFunc")
-require("game/sys/consts/FogConst")
-require("game/sys/model/FogModel")
-require("game/sys/func/RolesFunc")
-require("game/fog/trigger/FogPropTrigger")
-require("framework/utils/TableUtils")
-require("game/sys/manager/StatisticsManager")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 RefreshControler = class('RefreshControler')
 

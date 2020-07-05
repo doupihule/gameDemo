@@ -1,4 +1,4 @@
-require("game/sys/consts/PoolCode")
+
 
 PoolTools = class('PoolTools')
 PoolTools._pools = {battle={}, sys={}, scene={}};

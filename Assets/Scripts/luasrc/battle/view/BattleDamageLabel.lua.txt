@@ -1,6 +1,6 @@
-require("game/sys/consts/BattleConst")
-require("framework/utils/BigNumUtils")
-require("game/sys/func/BattleFunc")
+
+
+
 
 BattleDamageLabel = class('BattleDamageLabel',Laya.Sprite)
 function BattleDamageLabel:ctor()

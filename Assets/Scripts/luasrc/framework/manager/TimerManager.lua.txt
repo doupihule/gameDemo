@@ -1,7 +1,7 @@
-require("framework/entity/TimeEntity")
-require("game/sys/consts/GameConsts")
-require("framework/common/kakura/Client")
-require("framework/manager/LogsManager")
+
+
+
+
 
 TimerManager = class('TimerManager')
 

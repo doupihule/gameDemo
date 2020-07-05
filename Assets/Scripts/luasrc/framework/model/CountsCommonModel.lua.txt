@@ -1,5 +1,5 @@
-require("game/sys/model/BaseModel")
-require("framework/common/kakura/Client")
+
+
 
 CountsCommonModel = class('CountsCommonModel',BaseModel)
 function CountsCommonModel:ctor()

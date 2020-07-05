@@ -1,4 +1,4 @@
-require("game/sys/consts/ResourceConst")
+
 
 RoleHealthBar = class('RoleHealthBar',Laya.Sprite)
 

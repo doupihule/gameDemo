@@ -1,16 +1,16 @@
-require("framework/common/Message")
-require("game/sys/view/loading/LoadingUI")
-require("framework/utils/ScreenAdapterTools")
-require("framework/manager/LogsManager")
-require("utils/Global")
-require("framework/manager/LoadManager")
-require("game/sys/consts/WindowCfgs")
-require("framework/event/WindowEvent")
-require("framework/consts/LogsErrorCode")
-require("game/sys/manager/GuideManager")
-require("framework/common/UserInfo")
-require("framework/view/tip/AlertNewLocalUI")
-require("framework/utils/PoolTools")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 WindowManager = class('WindowManager')
 

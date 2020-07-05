@@ -1,14 +1,14 @@
-require("framework/common/kakura/Client")
-require("utils/Global")
-require("framework/common/UserInfo")
-require("framework/platform/GamePlatform")
-require("game/sys/view/login/LoginUI")
-require("framework/manager/MainModule")
-require("framework/manager/WindowManager")
-require("game/sys/consts/WindowCfgs")
-require("framework/manager/CacheManager")
-require("game/sys/common/kakura/Method")
-require("game/sys/consts/StorageCode")
+
+
+
+
+
+
+
+
+
+
+
 
 EgretPlatform = class('EgretPlatform',GamePlatform)
 function EgretPlatform:ctor()

@@ -1,6 +1,6 @@
-require("game/sys/func/BattleFunc")
-require("framework/manager/LogsManager")
-require("game/sys/consts/BattleConst")
+
+
+
 
 InstanceBasic = class('InstanceBasic')
 

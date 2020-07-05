@@ -1,17 +1,17 @@
-require("framework/manager/LogsManager")
-require("game/sys/func/BattleFunc")
-require("game/battle/trigger/BattleFormulaTrigger")
-require("game/battle/data/BattleBuffData")
-require("framework/utils/PoolTools")
-require("game/sys/consts/PoolCode")
-require("game/battle/trigger/BuffTrigger")
-require("game/battle/trigger/ConditionTrigger")
-require("game/sys/consts/BattleConst")
-require("game/battle/data/BattleAoeData")
-require("game/sys/manager/BattleLogsManager")
-require("game/battle/trigger/ChooseTrigger")
-require("game/battle/trigger/SkillExpandTrigger")
-require("framework/utils/TableUtils")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 SkillActionTrigger = class('SkillActionTrigger')
 SkillActionTrigger.action_dmage = 1;

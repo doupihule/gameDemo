@@ -7,7 +7,6 @@ local packageName = "utils."
 require(packageName.."Functions")
 if not DEBUG_SERVICES then
 	
-	--require("tools.AnimateTools")
 	require(packageName.."ColorMatrixFilterPlugin")
 	require(packageName.."ScreenAdapterTools")
 end

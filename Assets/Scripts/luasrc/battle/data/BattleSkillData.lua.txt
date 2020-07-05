@@ -1,9 +1,9 @@
-require("game/sys/func/BattleFunc")
-require("framework/utils/TableUtils")
-require("game/battle/data/SkillActionData")
-require("game/sys/consts/BattleConst")
-require("game/battle/controler/BattleDebugTool")
-require("game/sys/func/FogFunc")
+
+
+
+
+
+
 
 BattleSkillData = class('BattleSkillData')
 

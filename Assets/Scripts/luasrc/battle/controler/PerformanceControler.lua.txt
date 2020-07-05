@@ -1,15 +1,15 @@
-require("game/sys/consts/ResourceConst")
-require("framework/utils/ScreenAdapterTools")
-require("game/sys/func/BattleFunc")
-require("game/sys/consts/BattleConst")
-require("framework/utils/TableUtils")
-require("framework/utils/PoolTools")
-require("game/battle/view/BattleDamageLabel")
-require("game/sys/func/DataResourceFunc")
-require("game/sys/func/DataResourceFunc/DataResourceType")
-require("framework/manager/TimerManager")
-require("game/sys/manager/BattleLogsManager")
-require("framework/viewcomp/SkeletonExpand")
+
+
+
+
+
+
+
+
+
+
+
+
 
 PerformanceControler = class('PerformanceControler')
 

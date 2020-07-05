@@ -1,13 +1,13 @@
-require("game/battle/instance/InstanceLogical")
-require("game/sys/consts/BattleConst")
-require("game/sys/func/BattleFunc")
-require("game/sys/manager/BattleLogsManager")
-require("game/battle/trigger/PassiveSkillTrigger")
-require("game/battle/trigger/ChooseTrigger")
-require("game/battle/controler/BattleDebugTool")
-require("game/battle/trigger/BuffTrigger")
-require("framework/manager/WindowManager")
-require("framework/func/TranslateFunc")
+
+
+
+
+
+
+
+
+
+
 
 InstanceHero = class('InstanceHero',InstanceLogical)
 

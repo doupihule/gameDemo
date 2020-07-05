@@ -1,4 +1,4 @@
-require("framework/utils/TableUtils")
+
 BaseModel = class('BaseModel')
 
 function BaseModel:initData(data)

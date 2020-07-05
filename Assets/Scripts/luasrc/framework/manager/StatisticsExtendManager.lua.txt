@@ -1,7 +1,7 @@
-require("stringutil")
-require("framework/manager/LogsManager")
-require("framework/common/UserInfo")
-require("framework/common/GameSwitch")
+
+
+
+
 
 StatisticsExtendManager = class('StatisticsExtendManager')
 function StatisticsExtendManager.onEvent(event, eventData)

@@ -1,5 +1,5 @@
-require("game/battle/instance/InstanceLogical")
-require("game/sys/consts/BattleConst")
+
+
 
 InstanceMonster = class('InstanceMonster',InstanceLogical)
 

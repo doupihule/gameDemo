@@ -1,6 +1,6 @@
-require("game/sys/consts/BattleConst")
-require("game/sys/func/BattleFunc")
-require("game/sys/func/RolesFunc")
+
+
+
 
 AttributeExtendData = class('AttributeExtendData')
 

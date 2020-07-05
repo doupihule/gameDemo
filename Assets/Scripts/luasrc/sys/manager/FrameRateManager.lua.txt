@@ -1,4 +1,4 @@
-require("framework/common/UserInfo")
+
 
 FrameRateManager = class('FrameRateManager')
 function FrameRateManager:ctor(...)

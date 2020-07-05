@@ -1,8 +1,8 @@
-require("framework/model/JumpCommonModel")
-require("framework/model/UserExtCommonModel")
-require("framework/model/CountsCommonModel")
-require("game/sys/consts/ModelToServerMap")
-require("game/sys/model/UserModel")
+
+
+
+
+
 
 ModelToServerMapCommon = class('ModelToServerMapCommon')
 function ModelToServerMapCommon:ctor() end

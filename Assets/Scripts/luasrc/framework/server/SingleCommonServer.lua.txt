@@ -1,14 +1,14 @@
-require("framework/common/kakura/Client")
-require("utils/Global")
-require("game/sys/model/UserModel")
-require("framework/utils/TableUtils")
-require("framework/manager/CacheManager")
-require("game/sys/consts/StorageCode")
-require("framework/manager/LogsManager")
-require("framework/common/kakura/KakuraClient")
-require("framework/manager/WindowManager")
-require("framework/manager/TimerManager")
-require("framework/common/GameSwitch")
+
+
+
+
+
+
+
+
+
+
+
 
 SingleCommonServer = class('SingleCommonServer')
 SingleCommonServer._lastCacheClientDirtyList = {};

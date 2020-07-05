@@ -1,7 +1,7 @@
-require("framework/entity/WaitEntity")
-require("framework/manager/WindowManager")
-require("game/sys/view/loading/ReqLoadingUI")
-require("framework/utils/ScreenAdapterTools")
+
+
+
+
 
 WaitManager = class('WaitManager')
 

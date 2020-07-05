@@ -1,5 +1,5 @@
-require("framework/manager/LogsManager")
-require("framework/utils/TableUtils")
+
+
 
 RandomUtis = class('RandomUtis')
 function RandomUtis:ctor() end

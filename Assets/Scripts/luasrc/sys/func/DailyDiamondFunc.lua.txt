@@ -1,4 +1,4 @@
-require("framework/func/BaseFunc")
+
 
 DailyDiamondFunc = class('DailyDiamondFunc',BaseFunc)
 

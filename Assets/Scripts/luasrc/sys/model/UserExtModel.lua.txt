@@ -1,18 +1,18 @@
-require("stringutil")
-require("game/sys/model/BaseModel")
-require("framework/common/kakura/Client")
-require("game/sys/func/GlobalParamsFunc")
-require("framework/common/Message")
-require("game/sys/event/UserEvent")
-require("game/sys/common/MsgCMD")
-require("game/sys/server/UserExtServer")
-require("utils/GameUtils")
-require("game/sys/event/GameMainEvent")
-require("framework/manager/ShareOrTvManager")
-require("game/sys/func/ShareTvOrderFunc")
-require("game/sys/func/LevelFunc")
-require("game/sys/model/TalentSkillsModel")
-require("game/sys/model/UserModel")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 UserExtModel = class('UserExtModel',BaseModel)
 

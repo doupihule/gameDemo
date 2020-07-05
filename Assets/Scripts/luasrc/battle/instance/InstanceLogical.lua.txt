@@ -1,14 +1,14 @@
-require("game/battle/instance/InstanceMove")
-require("game/battle/instance/InstanceLife")
-require("game/sys/consts/BattleConst")
-require("game/sys/func/BattleFunc")
-require("game/battle/trigger/ChooseTrigger")
-require("game/battle/trigger/SkillActionTrigger")
-require("game/battle/trigger/BuffTrigger")
-require("game/sys/consts/GameConsts")
-require("game/battle/trigger/ConditionTrigger")
-require("game/sys/manager/BattleLogsManager")
-require("game/battle/trigger/SkillExpandTrigger")
+
+
+
+
+
+
+
+
+
+
+
 
 InstanceLogical = class('InstanceLogical',InstanceLife)
 function InstanceLogical:ctor(...)

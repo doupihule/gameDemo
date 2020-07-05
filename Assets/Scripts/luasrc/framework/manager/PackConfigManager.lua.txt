@@ -1,10 +1,10 @@
-require("game/sys/config/PackageConfig")
-require("game/sys/common/TestPlatform")
-require("utils/Global")
-require("framework/common/UserInfo")
-require("framework/manager/LogsManager")
-require("game/sys/common/CloudPlatformData")
-require("game/sys/consts/GameConsts")
+
+
+
+
+
+
+
 
 PackConfigManager = class('PackConfigManager')
 

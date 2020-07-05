@@ -1,16 +1,16 @@
-require("game/sys/model/UserModel")
-require("game/sys/model/SwitchModel")
-require("game/sys/model/UserExtModel")
-require("game/sys/model/RolesModel")
-require("framework/manager/LogsManager")
-require("framework/common/kakura/Client")
-require("game/sys/func/GlobalParamsFunc")
-require("game/sys/model/CountsModel")
-require("game/sys/model/TalentSkillsModel")
-require("game/sys/model/SevenDayModel")
-require("game/sys/model/DailyGoldModel")
-require("game/sys/model/PiecesModel")
-require("game/sys/model/FogModel")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ModelToServerMap = class('ModelToServerMap')
 function ModelToServerMap:ctor() end

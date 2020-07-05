@@ -1,9 +1,9 @@
-require("stringutil")
-require("trycatch")
-require("framework/manager/LocalStorageManager")
-require("framework/utils/FileUtils")
-require("framework/manager/LogsManager")
-require("framework/common/UserInfo")
+
+
+
+
+
+
 
 CacheManager = class('CacheManager')
 

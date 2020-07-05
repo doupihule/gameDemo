@@ -1,16 +1,16 @@
-require("framework/manager/LogsManager")
-require("framework/utils/FileUtils")
-require("framework/common/UserInfo")
-require("framework/manager/SoundChannel")
-require("framework/manager/SubPackageManager")
-require("game/sys/consts/SubPackageConst")
-require("framework/manager/TimerManager")
-require("game/sys/consts/MusicConst")
-require("framework/utils/PoolTools")
-require("game/sys/consts/PoolCode")
-require("framework/common/Message")
-require("game/sys/common/MsgCMD")
-require("game/sys/model/SwitchModel")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 SoundManager = class('SoundManager')
 

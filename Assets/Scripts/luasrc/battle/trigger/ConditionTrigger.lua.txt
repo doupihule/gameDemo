@@ -1,10 +1,10 @@
-require("game/battle/data/BattleConditionData")
-require("game/sys/func/BattleFunc")
-require("framework/utils/RandomUtis")
-require("game/sys/consts/BattleConst")
-require("framework/manager/LogsManager")
-require("game/battle/trigger/PassiveSkillTrigger")
-require("game/sys/manager/BattleLogsManager")
+
+
+
+
+
+
+
 
 ConditionTrigger = class('ConditionTrigger')
 ConditionTrigger.opportunity_refreshMonster = 1;

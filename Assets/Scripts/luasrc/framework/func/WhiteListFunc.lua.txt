@@ -1,5 +1,5 @@
-require("framework/func/BaseFunc")
-require("framework/common/UserInfo")
+
+
 
 WhiteListFunc = class('WhiteListFunc',BaseFunc)
 function WhiteListFunc:ctor(...)

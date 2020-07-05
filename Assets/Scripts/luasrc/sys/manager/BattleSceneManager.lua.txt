@@ -1,4 +1,4 @@
-require("game/battle/controler/BattleLogicalControler")
+
 
 BattleSceneManager = class('BattleSceneManager')
 function BattleSceneManager:ctor(...)

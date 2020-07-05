@@ -1,5 +1,5 @@
-require("framework/utils/PoolTools")
-require("game/sys/consts/PoolCode")
+
+
 
 RoleBuffBar = class('RoleBuffBar',Laya.Sprite)
 

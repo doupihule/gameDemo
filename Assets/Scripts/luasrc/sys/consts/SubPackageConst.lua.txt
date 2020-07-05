@@ -1,4 +1,4 @@
-require("framework/common/UserInfo")
+
 
 SubPackageConst = class('SubPackageConst')
 SubPackageConst.packName_share = "share";

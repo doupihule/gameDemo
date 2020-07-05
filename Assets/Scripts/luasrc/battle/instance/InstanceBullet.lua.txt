@@ -1,14 +1,14 @@
-require("game/battle/instance/InstanceMove")
-require("game/sys/func/BattleFunc")
-require("game/sys/consts/BattleConst")
-require("game/battle/data/SkillActionData")
-require("framework/manager/LogsManager")
-require("game/battle/trigger/ChooseTrigger")
-require("game/battle/trigger/SkillActionTrigger")
-require("framework/utils/RandomUtis")
-require("framework/utils/PoolTools")
-require("game/battle/data/BattleAoeData")
-require("game/sys/consts/PoolCode")
+
+
+
+
+
+
+
+
+
+
+
 
 InstanceBullet = class('InstanceBullet',InstanceMove)
 

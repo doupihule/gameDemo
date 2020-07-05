@@ -1,13 +1,13 @@
-require("stringutil")
-require("framework/func/BaseFunc")
-require("framework/manager/LogsManager")
-require("game/sys/consts/GameConsts")
-require("game/sys/consts/BattleConst")
-require("game/sys/func/GlobalParamsFunc")
-require("game/battle/data/AttributeExtendData")
-require("framework/common/GameSwitch")
-require("framework/common/UserInfo")
-require("game/battle/view/BattleRoleView")
+
+
+
+
+
+
+
+
+
+
 
 BattleFunc = class('BattleFunc',BaseFunc)
 BattleFunc.debugValue = "0";

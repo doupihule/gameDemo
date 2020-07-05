@@ -1,22 +1,22 @@
-require("game/sys/consts/BattleConst")
-require("game/sys/func/BattleFunc")
-require("framework/manager/LogsManager")
-require("game/sys/consts/PoolCode")
-require("framework/utils/PoolTools")
-require("game/battle/data/PassiveSkillData")
-require("game/battle/instance/InstancePerformance")
-require("game/battle/trigger/BuffTrigger")
-require("framework/utils/TableUtils")
-require("game/battle/trigger/ConditionTrigger")
-require("game/sys/manager/BattleLogsManager")
-require("game/battle/data/AttributeExtendData")
-require("game/sys/model/UserModel")
-require("game/battle/controler/BattleDebugTool")
-require("game/battle/trigger/SkillExpandTrigger")
-require("game/sys/consts/GameConsts")
-require("game/sys/consts/ResourceConst")
-require("game/sys/func/RolesFunc")
-require("game/battle/instance/InstanceMove")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 InstanceLife = class('InstanceLife',InstancePerformance)
 

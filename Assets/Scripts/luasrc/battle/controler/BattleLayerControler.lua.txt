@@ -1,6 +1,6 @@
-require("framework/utils/ScreenAdapterTools")
-require("game/sys/func/BattleFunc")
-require("game/sys/consts/BattleConst")
+
+
+
 
 BattleLayerControler = class('BattleLayerControler')
 

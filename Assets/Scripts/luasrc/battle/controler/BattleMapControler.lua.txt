@@ -1,9 +1,9 @@
-require("framework/utils/ScreenAdapterTools")
-require("framework/manager/LogsManager")
-require("framework/manager/SubPackageManager")
-require("game/sys/consts/SubPackageConst")
-require("game/sys/func/BattleFunc")
-require("framework/common/UserInfo")
+
+
+
+
+
+
 
 BattleMapControler = class('BattleMapControler')
 

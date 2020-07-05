@@ -1,11 +1,11 @@
-require("game/battle/controler/CameraControler")
-require("game/sys/consts/BattleConst")
-require("game/sys/consts/GameConsts")
-require("game/battle/controler/BattleTweenControler")
-require("framework/manager/LogsManager")
-require("game/battle/controler/PerformanceControler")
-require("game/sys/manager/BattleLogsManager")
-require("game/battle/controler/BattleDebugTool")
+
+
+
+
+
+
+
+
 
 BattleControler = class('BattleControler')
 function BattleControler:ctor(ctn)

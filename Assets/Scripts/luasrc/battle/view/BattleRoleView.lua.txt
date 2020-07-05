@@ -1,6 +1,6 @@
-require("framework/utils/DisplayUtils")
-require("framework/manager/ResourceManager")
-require("game/sys/consts/ResourceConst")
+
+
+
 
 BattleRoleView = class('BattleRoleView',Laya.Sprite)
 

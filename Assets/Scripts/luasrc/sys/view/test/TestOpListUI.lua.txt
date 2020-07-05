@@ -1,15 +1,15 @@
-require("stringutil")
-require("ui/layaMaxUI")
-require("framework/manager/WindowManager")
-require("game/sys/consts/WindowCfgs")
-require("game/sys/model/UserModel")
-require("framework/common/kakura/Client")
-require("game/sys/common/kakura/Method")
-require("framework/manager/CacheManager")
-require("framework/func/TranslateFunc")
-require("utils/Global")
-require("game/sys/consts/GMConst")
-require("framework/server/SingleCommonServer")
+
+
+
+
+
+
+
+
+
+
+
+
 
 TestOpListUI = class('TestOpListUI',ui.gameui.test.TestOpListUI)
 TestOpListUI.res = {"gameui/TestOpList.scene"};

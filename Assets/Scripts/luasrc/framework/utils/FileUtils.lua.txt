@@ -1,9 +1,9 @@
-require("trycatch")
-require("stringutil")
-require("framework/manager/LogsManager")
-require("framework/common/UserInfo")
-require("framework/common/GameSwitch")
-require("framework/consts/LogsErrorCode")
+
+
+
+
+
+
 
 FileUtils = class('FileUtils')
 function FileUtils:ctor() end

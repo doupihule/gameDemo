@@ -1,6 +1,6 @@
-require("framework/manager/TimerManager")
-require("framework/utils/StringUtils")
-require("framework/utils/BigNumUtils")
+
+
+
 
 TweenAniManager = class('TweenAniManager')
 

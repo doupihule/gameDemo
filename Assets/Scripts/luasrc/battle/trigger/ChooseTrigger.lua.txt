@@ -1,9 +1,9 @@
-require("framework/manager/LogsManager")
-require("framework/utils/RandomUtis")
-require("game/sys/func/BattleFunc")
-require("game/sys/consts/BattleConst")
-require("game/battle/trigger/BuffTrigger")
-require("game/sys/manager/BattleLogsManager")
+
+
+
+
+
+
 
 ChooseTrigger = class('ChooseTrigger')
 function ChooseTrigger.chooseNearRole(targetRole, instanceArr)

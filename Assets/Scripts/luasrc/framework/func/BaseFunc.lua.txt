@@ -1,11 +1,11 @@
-require("trycatch")
-require("framework/func/TranslateFunc")
-require("framework/common/Message")
-require("game/sys/common/MsgCMD")
-require("framework/consts/LogsErrorCode")
-require("framework/common/GameSwitch")
-require("framework/utils/TableUtils")
-require("utils/GameUtils")
+
+
+
+
+
+
+
+
 BaseFunc = class('BaseFunc')
 BaseFunc.isMergeConfig = true;
 BaseFunc._globalConfigsName = "json/globalCfgs.json";

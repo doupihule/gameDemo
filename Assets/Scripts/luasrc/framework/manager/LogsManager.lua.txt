@@ -1,18 +1,18 @@
-require("date")
-require("framework/common/GameSwitch")
-require("framework/manager/TimerManager")
-require("utils/Global")
-require("framework/manager/WindowManager")
-require("game/sys/manager/StatisticsManager")
-require("game/sys/model/UserModel")
-require("framework/manager/PackConfigManager")
-require("framework/common/HttpMessage")
-require("framework/common/UserInfo")
-require("framework/utils/DeviceTools")
-require("game/sys/consts/GameConsts")
-require("framework/server/SingleCommonServer")
-require("framework/consts/LogsErrorCode")
-require("framework/common/kakura/Client")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 LogsManager = class('LogsManager')
 LogsManager.logsArr = {};
 LogsManager.maxCancheLength = 1000;

@@ -1,4 +1,4 @@
-require("framework/utils/ScreenAdapterTools")
+
 
 TipsUI = class('TipsUI',Laya.Sprite)
 

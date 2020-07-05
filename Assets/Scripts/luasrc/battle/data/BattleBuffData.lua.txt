@@ -1,4 +1,4 @@
-require("game/sys/func/BattleFunc")
+
 
 BattleBuffData = class('BattleBuffData')
 

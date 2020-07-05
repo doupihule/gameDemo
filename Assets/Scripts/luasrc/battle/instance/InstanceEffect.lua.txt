@@ -1,7 +1,7 @@
-require("game/battle/instance/InstanceBasic")
-require("game/sys/consts/BattleConst")
-require("game/sys/func/BattleFunc")
-require("game/battle/trigger/SkillExpandTrigger")
+
+
+
+
 
 InstanceEffect = class('InstanceEffect',InstanceBasic)
 function InstanceEffect:ctor(controler)

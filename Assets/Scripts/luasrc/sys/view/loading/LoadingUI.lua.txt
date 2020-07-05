@@ -1,7 +1,7 @@
-require("framework/manager/WindowManager")
-require("utils/Global")
-require("framework/utils/ScreenAdapterTools")
-require("game/battle/view/BattleRoleView")
+
+
+
+
 
 LoadingUI = class('LoadingUI')
 

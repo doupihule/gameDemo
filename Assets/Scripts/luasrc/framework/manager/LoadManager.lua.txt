@@ -1,15 +1,15 @@
-require("framework/manager/LogsManager")
-require("framework/manager/TimerManager")
-require("framework/common/Message")
-require("game/sys/common/MsgCMD")
-require("game/sys/consts/WindowCfgs")
-require("framework/func/TranslateFunc")
-require("framework/manager/WindowManager")
-require("framework/utils/TableUtils")
-require("framework/manager/VersionManager")
-require("framework/manager/LoadZipManager")
-require("framework/manager/SubPackageManager")
-require("framework/common/UserInfo")
+
+
+
+
+
+
+
+
+
+
+
+
 
 LoadManager = class('LoadManager')
 

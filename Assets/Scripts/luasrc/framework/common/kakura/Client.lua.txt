@@ -1,20 +1,20 @@
-require("date")
-require("framework/common/kakura/KakuraClient")
-require("framework/utils/HashMap")
-require("framework/manager/PackConfigManager")
-require("utils/Global")
-require("framework/manager/ErrCodeManager")
-require("game/sys/model/UserModel")
-require("framework/manager/NotifyManager")
-require("game/sys/consts/ModelToServerMap")
-require("framework/common/GameSwitch")
-require("framework/manager/LogsManager")
-require("framework/server/SingleCommonServer")
-require("framework/common/HttpMessage")
-require("game/sys/common/kakura/ErrorCode")
-require("framework/common/UserInfo")
-require("framework/common/kakura/MethodCommon")
-require("framework/common/GameHttpControler")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Client = class('Client')
 

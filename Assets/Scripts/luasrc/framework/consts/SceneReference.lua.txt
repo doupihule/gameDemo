@@ -1,18 +1,18 @@
-require("stringutil")
-require("utils/Global")
-require("framework/manager/LogsManager")
-require("framework/func/WhiteListFunc")
-require("framework/common/UserInfo")
-require("game/sys/model/UserModel")
-require("framework/event/CommonEvent")
-require("framework/common/Message")
-require("framework/common/GameSwitch")
-require("game/sys/manager/StatisticsManager")
-require("framework/consts/StatisticsCommonConst")
-require("framework/common/kakura/Client")
-require("framework/server/SingleCommonServer")
-require("game/sys/func/GlobalParamsFunc")
-require("framework/model/UserExtCommonModel")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 SceneReference = class('SceneReference')
 

@@ -1,17 +1,17 @@
-require("date")
-require("framework/common/kakura/KakuraMessage")
-require("framework/common/kakura/Client")
-require("framework/manager/LogsManager")
-require("framework/manager/WaitManager")
-require("game/sys/common/MsgCMD")
-require("framework/manager/TimerManager")
-require("framework/manager/ErrCodeManager")
-require("game/sys/common/kakura/ErrorCode")
-require("framework/manager/WindowManager")
-require("utils/Global")
-require("framework/func/TranslateFunc")
-require("framework/common/kakura/MethodCommon")
-require("framework/common/kakura/KakuraClient/ConnectObj")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 KakuraClient = class('KakuraClient')
 

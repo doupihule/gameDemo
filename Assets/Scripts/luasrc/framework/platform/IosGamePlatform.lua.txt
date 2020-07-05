@@ -1,6 +1,6 @@
-require("framework/platform/AndroidGamePlatform")
-require("framework/common/kakura/MethodCommon")
-require("framework/manager/LogsManager")
+
+
+
 
 IosGamePlatform = class('IosGamePlatform',AndroidGamePlatform)
 function IosGamePlatform:ctor()

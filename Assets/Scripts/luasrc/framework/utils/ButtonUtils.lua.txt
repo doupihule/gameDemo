@@ -1,10 +1,10 @@
-require("framework/manager/LogsManager")
-require("framework/manager/SoundManager")
-require("framework/consts/ButtonConst")
-require("framework/manager/TimerManager")
-require("game/sys/consts/ResourceConst")
-require("framework/common/Message")
-require("framework/event/FrameWorkEvent")
+
+
+
+
+
+
+
 
 ButtonUtils = class('ButtonUtils')
 

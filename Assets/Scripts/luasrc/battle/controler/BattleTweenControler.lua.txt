@@ -1,4 +1,4 @@
-require("game/sys/consts/BattleConst")
+
 
 BattleTweenControler = class('BattleTweenControler')
 

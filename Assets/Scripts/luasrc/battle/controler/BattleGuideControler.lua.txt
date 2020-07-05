@@ -1,11 +1,11 @@
-require("game/sys/model/UserModel")
-require("game/sys/manager/GuideManager")
-require("game/sys/consts/GuideConst")
-require("framework/manager/WindowManager")
-require("game/sys/consts/WindowCfgs")
-require("game/sys/func/GlobalParamsFunc")
-require("game/sys/func/BattleFunc")
-require("game/sys/manager/StatisticsManager")
+
+
+
+
+
+
+
+
 
 BattleGuideControler = class('BattleGuideControler')
 

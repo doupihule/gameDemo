@@ -1,12 +1,12 @@
-require("game/sys/consts/BattleConst")
-require("game/battle/trigger/ConditionTrigger")
-require("framework/utils/RandomUtis")
-require("game/sys/func/BattleFunc")
-require("framework/manager/LogsManager")
-require("framework/common/GameSwitch")
-require("game/sys/consts/GameSwitchConst")
-require("game/sys/manager/BattleLogsManager")
-require("framework/common/UserInfo")
+
+
+
+
+
+
+
+
+
 
 BattleFormulaTrigger = class('BattleFormulaTrigger')
 BattleFormulaTrigger._cacheLogsMap = {};
