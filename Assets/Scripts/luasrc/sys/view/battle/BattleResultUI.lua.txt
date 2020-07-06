@@ -192,7 +192,7 @@ function BattleResultUI:setWarReward()
   local reward = enemy.enemyData.reward
   -- [ts2lua]DataResourceFunc.instance:getDataResourceInfo(reward)下标访问可能不正确
   self.rewardImg.skin = DataResourceFunc.instance:getDataResourceInfo(reward)["img"]
-  self.rewardTxt.text = Math:floor(reward[1+1] + reward[2+1] * FogModel.instance:getCurLayer() * self.addPercent) .. ""
+  self.rewardTxt.text = math.floor(reward[1+1] + reward[2+1] * FogModel.instance:getCurLayer() * self.addPercent) .. ""
 end
 
 function BattleResultUI:setReward()

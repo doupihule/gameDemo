@@ -142,7 +142,7 @@ function GamePlatform:checkVMSBack(result)
   local version = result.online_version
   LogsManager.echo("online_version:", version, "local vms_version", PackConfigManager.ins.platform.vms_version)
   LogsManager.echo("client_version:", Global.client_version)
-  version = Math:max(version, PackConfigManager.ins.platform.vms_version)
+  version = math.max(version, PackConfigManager.ins.platform.vms_version)
   PackConfigManager.ins.platform.vms_version = version
   self:checkVersion()
 end
@@ -819,7 +819,7 @@ end
 function GamePlatform:compareVersion(v1, v2)
   v1 = v1:split('.')
   v2 = v2:split('.')
-  local len = Math:max(#v1, #v2)
+  local len = math.max(#v1, #v2)
   while(#v1 < len)
   do
   table.insert(v1, '0')
@@ -1140,7 +1140,7 @@ end
 
 function GamePlatform:requestSubscribeMessage(tmpIds, successCall, failCall, completeCall) end
 function GamePlatform:registFocusEvent()
-  self.hideT = Laya.Browser:now()
+  self.hideT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   self.showT = self.hideT
   Laya.stage:on(Laya.Event.FOCUS, self, self.onGetFocus)
   Laya.stage:on(Laya.Event.BLUR, self, self.onLoseFocus)
@@ -1149,7 +1149,7 @@ end
 function GamePlatform:onGetFocus()
   LogsManager.echo("获取焦点")
   self.isHide = false
-  self.showT = Laya.Browser:now()
+  self.showT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   Message.instance:send(MsgCMD.GAME_ONSHOW)
   StatisticsManager.ins:onEvent(StatisticsCommonConst.ON_SHOW)
   StatisticsManager.addLoadingOutTime(self.showT - self.hideT)
@@ -1157,7 +1157,7 @@ end
 
 function GamePlatform:onLoseFocus()
   self.isHide = true
-  self.hideT = Laya.Browser:now()
+  self.hideT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   LogsManager.echo('>>OnHide成功回调', self.hideT)
   Message.instance:send(MsgCMD.GAME_ONHIDE)
   StatisticsManager.ins:onEvent(StatisticsCommonConst.ON_HIDE, {onlineTime=self.hideT - self.showT, hideView=GameUtils.decryptStr(WindowManager.getCurrentWindowName())})

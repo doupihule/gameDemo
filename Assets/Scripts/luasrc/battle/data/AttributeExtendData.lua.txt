@@ -175,7 +175,7 @@ function AttributeExtendData:countOneProp(attrId)
   else
     resultValue = baseValue + fixValue
   end
-  resultValue = Math:floor(resultValue)
+  resultValue = math.floor(resultValue)
   -- [ts2lua]self.finalAttr下标访问可能不正确
   self.finalAttr[attrId] = resultValue
 end

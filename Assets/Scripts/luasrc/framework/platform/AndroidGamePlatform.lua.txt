@@ -241,7 +241,7 @@ function AndroidGamePlatform:doCoverVersion(serverVersion)
   else
     serverNum = Number(serverVersion)
   end
-  Global.version = tostring(Math:max(localNum, serverNum))
+  Global.version = tostring(math.max(localNum, serverNum))
   LogsManager.echo("GlobalVersion:" .. Global.version)
 end
 

@@ -31,11 +31,12 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 6, 1, 0);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 7, 1, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "GetPlatformString", _m_GetPlatformString_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "EncodingToMd5", _m_EncodingToMd5_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "ReverseBytes", _m_ReverseBytes_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "GetTimeStamp", _m_GetTimeStamp_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "GetTimeMiniStamp", _m_GetTimeMiniStamp_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "DebugLogByteArrayContent", _m_DebugLogByteArrayContent_xlua_st_);
             
 			
@@ -163,6 +164,30 @@ namespace XLua.CSObjectWrap
                     
                         string gen_ret = GameUtils.CommonUtil.GetTimeStamp(  );
                         LuaAPI.lua_pushstring(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_GetTimeMiniStamp_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+            
+            
+                
+                {
+                    
+                        long gen_ret = GameUtils.CommonUtil.GetTimeMiniStamp(  );
+                        LuaAPI.lua_pushint64(L, gen_ret);
                     
                     
                     

@@ -179,7 +179,7 @@ function InstanceLogical:onBeHit(attacker, skill, skillAction, dmgResult, isFans
     local fanshangValue = self.attrData:getOneAttr(BattleConst.attr_fanshang)
     if fanshangValue > 0 then
       BattleLogsManager.debugByRole(self.dataId, "造成反伤,反伤率", fanshangValue, "受到的伤害:", dmgValue)
-      attacker:onBeFanshang(Math:ceil(fanshangValue * dmgValue / 10000), self)
+      attacker:onBeFanshang(math.ceil(fanshangValue * dmgValue / 10000), self)
     end
   end
   self:changeHp(-leftDmg)
@@ -273,7 +273,7 @@ function InstanceLogical:checkAttack()
         if #tempArr > 0 then
           local nearHero = tempArr[0+1]
           local disx = nearHero.pos.x - self.pos.x
-          local absDis = Math:abs(disx)
+          local absDis = math.abs(disx)
           if absDis > self.battleKeepDis then
             if self._myState ~= BattleConst.state_jump then
               self:initMove(self.walkSpeed * absDis / disx)
@@ -334,7 +334,7 @@ function InstanceLogical:giveOutSkill(skill)
   local i = 0
   repeat
     local skillact = skillActions[i+1]
-    self.controler:setLastCallBack(Math:round(skillact.delay / skillSpeedValue), Math:round(skillact.interval / skillSpeedValue), skillact.trigTimes, self.checkSkillEffect, self, skillact)
+    self.controler:setLastCallBack(math.round(skillact.delay / skillSpeedValue), math.round(skillact.interval / skillSpeedValue), skillact.trigTimes, self.checkSkillEffect, self, skillact)
     i=i+1
   until not(i < #skillActions)
 end
@@ -371,9 +371,9 @@ function InstanceLogical:moveFollowNearRole(targetRole)
     self:playAction(BattleConst.LABEL_IDLE, true)
     return
   end
-  local ang = Math:atan2(dz, dx)
-  local spdx = self.walkSpeed * Math:cos(ang)
-  local spdz = self.walkSpeed * Math:sin(ang)
+  local ang = math.atan2(dz, dx)
+  local spdx = self.walkSpeed * math.cos(ang)
+  local spdz = self.walkSpeed * math.sin(ang)
   self:initMove(spdx, 0, spdz)
   self:playAction(BattleConst.LABEL_WALK, true)
 end
@@ -384,7 +384,7 @@ function InstanceLogical:checkIsInAttackDis()
     return false
   end
   local disx = nearHero.pos.x - self.pos.x
-  local absDis = Math:abs(disx)
+  local absDis = math.abs(disx)
   if absDis > self.battleKeepDis then
     return false
   end

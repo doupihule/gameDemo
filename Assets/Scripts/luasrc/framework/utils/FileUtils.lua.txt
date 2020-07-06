@@ -269,7 +269,7 @@ function FileUtils.unZipFile(zipName, zipurl, sucessCallBack, errorBack, tryTime
   end
   local fileManager = wx:getFileSystemManager()
   local saveFilePath = FileUtils.getFilePathByUrl(zipName)
-  local t1 = Laya.Browser:now()
+  local t1 = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   LogsManager.echo("xd _start unZipFile:", zipName)
   local unzipFail = function(e)
     local str = nil
@@ -293,7 +293,7 @@ function FileUtils.unZipFile(zipName, zipurl, sucessCallBack, errorBack, tryTime
   end
   
   local unZipSucess = function()
-    LogsManager.echo("xd unzipFile,name:", zipName, "  CostTime:", Laya.Browser:now() - t1)
+    LogsManager.echo("xd unzipFile,name:", zipName, "  CostTime:", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - t1)
     FileUtils.deleteFileByLocalFullPath(zipName)
     if sucessCallBack then
       sucessCallBack:run()

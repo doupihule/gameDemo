@@ -171,7 +171,7 @@ function LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorI
   errorStr = LogsManager.turnURIContent(errorStr)
   -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
   errorStr = errorStr:gsub(/[\n\r]+/g, " ")
-  errorStr = errorStr:slice(0, Math:min(#errorStr, maxLength))
+  errorStr = errorStr:slice(0, math.min(#errorStr, maxLength))
   LogsManager.sendDataToAiCloud(errorStr, tag, logLength, errorId, startLine, id, sendCount)
 end
 
@@ -260,7 +260,7 @@ function LogsManager.sendStaticToAiCloud(eventId, eventData)
   if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ALIYUN) then
     return
   end
-  local params = {game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, cver=Global.client_version, deviceId=Global.deviceId, eventId=eventId, rid=UserModel.instance:getUserRid(), device=Global.deviceModel, circleId=LogsManager.getCircleId(), t=Laya.Browser:now()}
+  local params = {game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, cver=Global.client_version, deviceId=Global.deviceId, eventId=eventId, rid=UserModel.instance:getUserRid(), device=Global.deviceModel, circleId=LogsManager.getCircleId(), t=cs.GameUtils.CommonUtil.GetTimeMiniStamp()}
   if eventData then
     -- [ts2lua]eventData下标访问可能不正确
     if eventData["sortId"] then
@@ -393,7 +393,7 @@ function LogsManager.getNearestLogs(line, id, startLine, allLength)
   end
   local len = #LogsManager.logsArr
   if line + startLine > len then
-    line = Math:max(0, len - startLine)
+    line = math.max(0, len - startLine)
   end
   local start = len - line - startLine
   if start < 0 then
@@ -663,7 +663,7 @@ function LogsManager.touchHandler(evt)
   if LogsManager.logGroup.visible then
     return
   end
-  local time = Laya.Browser:now()
+  local time = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   if time - LogsManager._prevTime < 200 then
     LogsManager._prevTime = time
     LogsManager._count=LogsManager._count+1
@@ -741,7 +741,7 @@ end
 
 function LogsManager.getCircleId()
   if not LogsManager._circleId then
-    LogsManager._circleId = Global.deviceId .. "_" .. Laya.Browser:now() .. Math:floor(Math:random() * 100000)
+    LogsManager._circleId = Global.deviceId .. "_" .. cs.GameUtils.CommonUtil.GetTimeMiniStamp() .. math.floor(math.random() * 100000)
   end
   return LogsManager._circleId
 end

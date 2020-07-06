@@ -94,10 +94,10 @@ function BattleSkillData:updateLevel(level)
     -- [ts2lua]FogFunc.warHomeSkillCd下标访问可能不正确
     if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR and FogFunc.warHomeSkillCd[self._skillId] then
       -- [ts2lua]FogFunc.warHomeSkillCd下标访问可能不正确
-      self._cfgSkillCd = Math:ceil(FogFunc.warHomeSkillCd[self._skillId] * BattleFunc.miniSecondToFrame)
+      self._cfgSkillCd = math.ceil(FogFunc.warHomeSkillCd[self._skillId] * BattleFunc.miniSecondToFrame)
     else
       if self.cfgData.cdTime then
-        self._cfgSkillCd = Math:ceil(self.cfgData.cdTime * BattleFunc.miniSecondToFrame)
+        self._cfgSkillCd = math.ceil(self.cfgData.cdTime * BattleFunc.miniSecondToFrame)
       end
     end
   end
@@ -120,7 +120,7 @@ function BattleSkillData:resetData()
 end
 
 function BattleSkillData.__getters:skillInitCd()
-  return Math:ceil(self._cfgSkillCd * self.owner.attrData:getSkillCdAdded(self._skillId) / 10000)
+  return math.ceil(self._cfgSkillCd * self.owner.attrData:getSkillCdAdded(self._skillId) / 10000)
 end
 
 function BattleSkillData:getSkillValue(key, tag)

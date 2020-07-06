@@ -200,7 +200,7 @@ function GameSwitch.countVersionToNumber(version)
     local len = #tempArr
     local i = len - 1
     repeat
-      resultNum = resultNum + Math:pow(1000, len - i - 1) * Number(tempArr[i+1])
+      resultNum = resultNum + math.pow(1000, len - i - 1) * Number(tempArr[i+1])
       i=i-1
     until not(i >= 0)
     return resultNum

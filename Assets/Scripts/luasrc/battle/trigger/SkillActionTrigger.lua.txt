@@ -260,7 +260,7 @@ function SkillActionTrigger.runSkillAction_9(attacker, skill, skillAction, useAr
   local i = 0
   repeat
     local targetIns = useArr[i+1]
-    targetIns:doRelive(Math:floor(targetIns.maxHp * ratio), skillAction)
+    targetIns:doRelive(math.floor(targetIns.maxHp * ratio), skillAction)
     i=i+1
   until not(i < #useArr)
 end
@@ -275,7 +275,7 @@ function SkillActionTrigger.runSkillAction_10(attacker, skill, skillAction, useA
   if not dmgValue then
     return
   end
-  local fanshangValue = Math:floor(dmgValue * value / 10000)
+  local fanshangValue = math.floor(dmgValue * value / 10000)
   local tempArr = BattleFunc.getOneTempArr()
   local i = 0
   repeat

@@ -171,7 +171,7 @@ function UserExtModel:calcSp()
   local recoveTime = GlobalParamsFunc.instance:getDataNum('spRestoreTime')
   local max = GlobalParamsFunc.instance:getDataNum('maxSp')
   if self.curSp < max then
-    local times = Math:floor(Client.instance.serverTime - self.upSpTime / recoveTime)
+    local times = math.floor(Client.instance.serverTime - self.upSpTime / recoveTime)
     if times <= 0 then
       return
     end
@@ -196,12 +196,12 @@ function UserExtModel:getUpTime()
 end
 
 function UserExtModel:getNextPowerRestoreTime()
-  return GlobalParamsFunc.instance:getDataNum('spRestoreTime') - Math:floor(Client.instance.serverTime - UserExtModel.instance:getLastPowerFreshTime() % GlobalParamsFunc.instance:getDataNum('spRestoreTime'))
+  return GlobalParamsFunc.instance:getDataNum('spRestoreTime') - math.floor(Client.instance.serverTime - UserExtModel.instance:getLastPowerFreshTime() % GlobalParamsFunc.instance:getDataNum('spRestoreTime'))
 end
 
 function UserExtModel:getCurrentSp()
   local maxSp = GlobalParamsFunc.instance:getDataNum('maxSp')
-  local nowPower = UserExtModel.instance:getLastFreshPower() + Math:floor(Client.instance.serverTime - UserExtModel.instance:getLastPowerFreshTime() / GlobalParamsFunc.instance:getDataNum('spRestoreTime'))
+  local nowPower = UserExtModel.instance:getLastFreshPower() + math.floor(Client.instance.serverTime - UserExtModel.instance:getLastPowerFreshTime() / GlobalParamsFunc.instance:getDataNum('spRestoreTime'))
   if UserExtModel.instance:getLastFreshPower() > maxSp then
     nowPower = UserExtModel.instance:getLastFreshPower()
   elseif nowPower > maxSp then
@@ -247,10 +247,10 @@ function UserExtModel:calcuOfflineReward()
   local levelInfo = LevelFunc.instance:getLevelInfoById(UserExtModel.instance:getMaxLevel()).offLineGiveGold[0+1]
   local talentBuff = TalentSkillsModel.instance:getBuff()
   local offlineTime = UserExtModel.instance:getOfflineTime()
-  offlineTime = Math:min(GlobalParamsFunc.instance:getDataNum('offLineMaxTime'), offlineTime)
-  local goldTime = Math:ceil(offlineTime / GlobalParamsFunc.instance:getDataNum('offLineMinutesNub'))
+  offlineTime = math.min(GlobalParamsFunc.instance:getDataNum('offLineMaxTime'), offlineTime)
+  local goldTime = math.ceil(offlineTime / GlobalParamsFunc.instance:getDataNum('offLineMinutesNub'))
   local reward = levelInfo:split(',')
-  return {reward[0+1], Math:round(reward[1+1] * goldTime * 10000 / 10000)}
+  return {reward[0+1], math.round(reward[1+1] * goldTime * 10000 / 10000)}
 end
 
 function UserExtModel:getEverydayInvite()

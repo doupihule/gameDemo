@@ -66,9 +66,9 @@ function VersionManager:initVersionData()
     end
     return
   end
-  local t1 = Laya.Browser:now()
+  local t1 = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   local model = nil
-  LogsManager.echo("initVersionCost:", Laya.Browser:now() - t1)
+  LogsManager.echo("initVersionCost:", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - t1)
   local cfgModelName = VersionManager.ZIP_MODEL_KEY_CONFIG
   self:initOneZipModel(VersionManager.ZIP_MODEL_KEY_CONFIG, "", {VersionManager.ZIP_MODEL_KEY_CONFIG .. "/globalCfgs.json"})
   local fileList = {VersionManager.ZIP_MODEL_KEY_MERGEFILES .. "/mergeJson.bin", VersionManager.ZIP_MODEL_KEY_MERGEFILES .. "/mergeBin.bin"}
@@ -316,7 +316,7 @@ function VersionManager:checkModelFilesIsRight(modelName, stopByNoFile)
   end
   local fileList = modelInfo.fileList
   local isRight = true
-  local t1 = Laya.Browser:now()
+  local t1 = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   local i = 0
   repeat
     local sourceName = fileList[i+1]
@@ -341,7 +341,7 @@ function VersionManager:checkModelFilesIsRight(modelName, stopByNoFile)
     end
     i=i+1
   until not(i < #fileList)
-  LogsManager.echo("xd zip完整性校验,model:", modelName, "文件数量:", #fileList, ",_耗时:", Laya.Browser:now() - t1)
+  LogsManager.echo("xd zip完整性校验,model:", modelName, "文件数量:", #fileList, ",_耗时:", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - t1)
   return isRight
 end
 
@@ -349,7 +349,7 @@ function VersionManager:initUnZipFilePath(model)
   local modelInfo = self:getZipModel(model)
   local fileList = modelInfo.fileList
   local isRight = true
-  local t1 = Laya.Browser:now()
+  local t1 = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   local i = 0
   repeat
     local sourceName = fileList[i+1]

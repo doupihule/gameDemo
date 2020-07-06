@@ -70,16 +70,16 @@ function HttpMessage:sureSend(data)
     end
     if params then
       if params.reqId then
-        params.reqId = "req_repeat_" .. Global.deviceId .. "_" .. Client.instance.miniserverTime .. "_" .. Math:floor(Math:random() * 100000)
+        params.reqId = "req_repeat_" .. Global.deviceId .. "_" .. Client.instance.miniserverTime .. "_" .. math.floor(math.random() * 100000)
       else
-        params.reqId = "req" .. Global.deviceId .. "_" .. Client.instance.miniserverTime .. "_" .. Math:floor(Math:random() * 100000)
+        params.reqId = "req" .. Global.deviceId .. "_" .. Client.instance.miniserverTime .. "_" .. math.floor(math.random() * 100000)
       end
     end
     targetStrData = JSON:stringify(params)
   end
   local shortSendData = self:turnShortLogs(targetStrData)
-  LogsManager.echo("http send url is :" .. url:slice(0, Math:min(200, #url)) .. "   method :" .. sendMethod .. "  data is : " .. shortSendData)
-  self.reqTime = Laya.Browser:now()
+  LogsManager.echo("http send url is :" .. url:slice(0, math.min(200, #url)) .. "   method :" .. sendMethod .. "  data is : " .. shortSendData)
+  self.reqTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   local head = nil
   if UserInfo.isSystemNative() then
     head = {"Content-Type", "application/json;charset=utf-8"}
@@ -120,9 +120,9 @@ function HttpMessage:sendOtherHttpRequest(url, params, callBack, thisObject, met
   end
   local hr = Laya.HttpRequest()
   hr.http.time = 60000
-  local startTime = Laya.Browser:now()
+  local startTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   local onComplete = function(data)
-    LogsManager.echo("sendOtherHttpRequest cost time:", Laya.Browser:now() - startTime, "url:", url:slice(0, Math:min(100, #url)))
+    LogsManager.echo("sendOtherHttpRequest cost time:", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - startTime, "url:", url:slice(0, math.min(100, #url)))
     if callBack then
       callBack:call(thisObject, data, addParams)
     end
@@ -213,7 +213,7 @@ function HttpMessage:onHttpSuccess(data)
   self._currentConn = nil
   self._reconnectCount = 0
   local shortLogs = self:turnShortLogs(originData)
-  LogsManager.echo("http callback,url:" .. url:slice(0, Math:min(200, #url)) .. " cosTime:" .. Laya.Browser:now() - self.reqTime, "len:", #originData, "backData:", shortLogs)
+  LogsManager.echo("http callback,url:" .. url:slice(0, math.min(200, #url)) .. " cosTime:" .. cs.GameUtils.CommonUtil.GetTimeMiniStamp() - self.reqTime, "len:", #originData, "backData:", shortLogs)
   if callBack then
     callBack:call(thisObj, data)
   end

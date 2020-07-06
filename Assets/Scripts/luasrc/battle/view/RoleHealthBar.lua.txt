@@ -78,7 +78,7 @@ function RoleHealthBar:onHpChange()
     if percent2 > 0.7 then
       percent2 = 0.7
     end
-    local wid2 = Math:round(self._initWidth * percent2)
+    local wid2 = math.round(self._initWidth * percent2)
     self.shieldImage.width = wid2
     if percent + percent2 > 1 then
       self.shieldImage.x = self._initWidth / 2 - wid2

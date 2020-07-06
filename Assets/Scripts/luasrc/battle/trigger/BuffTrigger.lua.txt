@@ -261,7 +261,7 @@ function BuffTrigger.getValueByFrom(attacker, defer, percentValue, fromType, att
   elseif fromType == 4 then
     value = percentValue / 10000 * defer.attrData:getOneAttr(attrId)
   end
-  return Math:floor(value)
+  return math.floor(value)
 end
 
 function BuffTrigger.onClearBuff(defer, buff, removeChance)

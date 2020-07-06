@@ -49,7 +49,7 @@ function WXGamePlatform:ctor()
   self._subPackErrorCount = 0;
   WXGamePlatform.instance = self
   self._isSubPackage = true
-  self.listenTime = Laya.Browser:now()
+  self.listenTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   LogsManager.echo('构造platform')
 end
 
@@ -726,7 +726,7 @@ function WXGamePlatform:onTurnOffAdsEarly()
   elseif failHandleType == 2 then
     thisObj.videoState = 1
     -- [ts2lua]TranslateFunc.videoTranslateArr下标访问可能不正确
-    self:showPopTip("提示", TranslateFunc.videoTranslateArr[Math:floor(Math:random() * #TranslateFunc.videoTranslateArr)], {confirmText=TranslateFunc.videoLabTranslate, success=function(res)
+    self:showPopTip("提示", TranslateFunc.videoTranslateArr[math.floor(math.random() * #TranslateFunc.videoTranslateArr)], {confirmText=TranslateFunc.videoLabTranslate, success=function(res)
       if res.confirm then
         LogsManager.echo('用户点击确定,再次拉起视频')
         thisObj:showVideoAd(thisObj._videoSucCallback, thisObj._videoFailCallback, thisObj._videoThisObj, thisObj._extraData)
@@ -993,11 +993,11 @@ end
 
 function WXGamePlatform:addOnShowListener()
   local myThis = self
-  self.showT = Laya.Browser:now()
+  self.showT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   LogsManager.echo('wx_listener 初始化onShow showT：', self.showT)
   if not (UserInfo.isOppo() or UserInfo.isVivo()) then
     self:getWX():onShow(function(res)
-      local nowTime = Laya.Browser:now()
+      local nowTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
       LogsManager.echo('>>OnShow成功回调', nowTime, JSON:stringify(res))
       if not self.isHide or not myThis.hideT then
         if self.listenTime then

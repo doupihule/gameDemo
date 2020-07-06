@@ -15,17 +15,10 @@ PerformanceControler = class('PerformanceControler')
 
 function PerformanceControler:ctor(controler)
   self._effectCacheMap = {};
-  self.effectMaxNumsMap = {testEffect=1, POOL_EFFECTeffect_foxi_attack_self0=30};
+  self.effectMaxNumsMap = {};
   self.controler = controler
   self._effectCacheMap = {}
-  self.blackScreen = Laya.Image(ResourceConst.COMMON_IMAGE_HEIDI)
-  self.blackScreen.alpha = 1
-  self.blackScreen.width = ScreenAdapterTools.maxWidth * 2
-  self.blackScreen.height = ScreenAdapterTools.maxHeight * 2
-  self.blackScreen.x = -ScreenAdapterTools.UIOffsetX - 300
-  self.blackScreen.y = -ScreenAdapterTools.UIOffsetY - 300
-  self.blackScreen.zOrder = BattleFunc.zorder_blackScreen
-  self.blackScreen.visible = false
+  
 end
 
 function PerformanceControler:getCacheEffect(cacheId)

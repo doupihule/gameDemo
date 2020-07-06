@@ -20,8 +20,8 @@ function StringUtils.formatTime(time)
 end
 
 function StringUtils.reprTime(time)
-  local h = Math:floor(time / 3600)
-  local m = Math:floor(time - 3600 * h / 60)
+  local h = math.floor(time / 3600)
+  local m = math.floor(time - 3600 * h / 60)
   local s = time - 3600 * h - 60 * m
   -- [ts2lua]lua中0和空字符串也是true，此处h > 10需要确认
   local sh = (h > 10 and {h} or {"0" .. h})[1]

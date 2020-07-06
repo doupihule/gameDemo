@@ -48,7 +48,7 @@ function InstancePlayer:updateSkillCd()
         if not self.skillGroup[i+1]:getChildByName("mask").visible then
           self.skillGroup[i+1]:getChildByName("mask").visible = true
         end
-        self.skillGroup[i+1]:getChildByName("timeTxt").text = Math:ceil(skill.leftSkillCd / GameConsts.gameFrameRate)
+        self.skillGroup[i+1]:getChildByName("timeTxt").text = math.ceil(skill.leftSkillCd / GameConsts.gameFrameRate)
       else
         if self.skillGroup[i+1]:getChildByName("mask").visible then
           self.skillGroup[i+1]:getChildByName("mask").visible = false
@@ -100,7 +100,7 @@ function InstancePlayer:addSkillIcon()
     timeTxt.align = "center"
     timeTxt.name = "timeTxt"
     timeTxt.color = "#ffffff"
-    timeTxt.text = Math:ceil(self.normalSkills[i+1].leftSkillCd / GameConsts.gameFrameRate) .. ""
+    timeTxt.text = math.ceil(self.normalSkills[i+1].leftSkillCd / GameConsts.gameFrameRate) .. ""
     img:addChild(mask)
     img:addChild(timeTxt)
     table.insert(self.skillGroup, img)

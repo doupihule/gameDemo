@@ -127,7 +127,7 @@ function CameraControler:updateShakeParams(shakeParams)
   shakeParams.frame=shakeParams.frame-1
   local style = shakeParams.style
   local shakeWay = nil
-  local index = Math:ceil(frame / shakeParams.intervel)
+  local index = math.ceil(frame / shakeParams.intervel)
   local yushu = frame % shakeParams.intervel
   if yushu ~= 0 and frame > 1 then
     return

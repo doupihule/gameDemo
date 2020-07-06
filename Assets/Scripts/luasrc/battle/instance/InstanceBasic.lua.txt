@@ -209,9 +209,9 @@ function InstanceBasic:updateViewZorder()
   if not self._myView then
     return
   end
-  self._myView.zOrder = Math:round(self.pos.z) * 10 + self.zorderOffset
+  self._myView.zOrder = math.round(self.pos.z) * 10 + self.zorderOffset
   if self._myView2 then
-    self._myView2.zOrder = Math:round(self.pos.z) * 10 + self.zorderOffset + 4
+    self._myView2.zOrder = math.round(self.pos.z) * 10 + self.zorderOffset + 4
   end
 end
 
@@ -311,8 +311,8 @@ function InstanceBasic:playSpecialSysAction(actionName, sysTime, startTime, endT
   local frame = BattleFunc.instance:turnMinisecondToframe(startTime)
   local sysFrame = BattleFunc.instance:turnMinisecondToframe(sysTime)
   local endFrame = BattleFunc.instance:turnMinisecondToframe(endTime)
-  self.controler:setCallBack(Math:round(frame / aniSpeed), self.onStartActionComp, self)
-  self.controler:setCallBack(Math:round(frame + sysFrame / aniSpeed), self.onSysActionComp, self)
+  self.controler:setCallBack(math.round(frame / aniSpeed), self.onStartActionComp, self)
+  self.controler:setCallBack(math.round(frame + sysFrame / aniSpeed), self.onSysActionComp, self)
   return actionLength + sysFrame + frame - endFrame
 end
 

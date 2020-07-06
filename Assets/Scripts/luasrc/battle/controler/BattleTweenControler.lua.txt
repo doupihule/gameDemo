@@ -166,7 +166,7 @@ function BattleTweenControler:checkHasType(bit, type)
 end
 
 function BattleTweenControler:adjustNumber(value)
-  if Math:abs(value) < 0.001 then
+  if math.abs(value) < 0.001 then
     return 0
   end
   return value

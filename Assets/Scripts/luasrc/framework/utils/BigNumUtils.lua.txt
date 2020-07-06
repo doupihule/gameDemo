@@ -169,7 +169,7 @@ function BigNumUtils.muitlfy(a, b)
     repeat
       ji = Number(a[i+1]) * Number(b[j+1]) + flag
       res = ji % 10 + res
-      flag = Math:floor(ji / 10)
+      flag = math.floor(ji / 10)
       if i == 0 and not (flag == 0) then
         res = flag + res
       end
@@ -288,8 +288,8 @@ function BigNumUtils.devide(a, b, round)
   end
   if round then
     if r then
-      local pow = Math:pow(10, round)
-      r = Math:round(r / Number(b) * pow) / pow
+      local pow = math.pow(10, round)
+      r = math.round(r / Number(b) * pow) / pow
     end
     result = Number(result) + r .. ""
   end
@@ -422,7 +422,7 @@ function BigNumUtils.floatMuitlfy(a, b)
     repeat
       ji = Number(a[i+1]) * Number(b[j+1]) + flag
       res = ji % 10 + res
-      flag = Math:floor(ji / 10)
+      flag = math.floor(ji / 10)
       if i == 0 and not (flag == 0) then
         res = flag + res
       end

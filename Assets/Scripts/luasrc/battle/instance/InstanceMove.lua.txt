@@ -177,7 +177,7 @@ function InstanceMove:countMoveSpeed()
   Laya.Vector3:scale(self.unitVector, speed, self._moveParams.initSpeed)
   if self._moveParams.totalFrame == 0 then
     local distance = Laya.Vector3:scalarLength(temp)
-    self._moveParams.totalFrame = Math:round(distance / speed)
+    self._moveParams.totalFrame = math.round(distance / speed)
   end
   self:initMove(self._moveParams.initSpeed.x, self._moveParams.initSpeed.y, self._moveParams.initSpeed.z)
 end
@@ -297,9 +297,9 @@ end
 function InstanceMove:moveToTargetRole(spd, targetRole)
   local dx = targetRole.pos.x - self.pos.x
   local dz = targetRole.pos.z - self.pos.z
-  local ang = Math:atan2(dz, dx)
-  local spdx = spd * Math:cos(ang)
-  local spdz = spd * Math:sin(ang)
+  local ang = math.atan2(dz, dx)
+  local spdx = spd * math.cos(ang)
+  local spdz = spd * math.sin(ang)
   self:initMove(spdx, 0, spdz)
 end
 

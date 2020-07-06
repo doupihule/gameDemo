@@ -138,14 +138,14 @@ function MainModule:loadMergeFiles()
   else
     LogsManager.echo("xd----使用文件合并功能,注意开发模式下 可以禁掉文件合并功能.防止版本使用冲突")
     local zipList = {{url="mergefiles/mergeBin.bin", type="arraybuffer"}, {url="mergefiles/mergeJson.bin", type="arraybuffer"}}
-    local times = Laya.Browser:now()
+    local times = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
     local onZipLoad = function()
       LogsManager.echo("krma. onZipLoad onZipLoad onZipLoad onZipLoad onZipLoad")
       LoadManager.instance:load(zipList, Laya.Handler:create(self, function()
         self:changeByte("mergefiles/mergeBin.bin")
         self:changeByte("mergefiles/mergeJson.bin")
         self:onMergeFileBack()
-        LogsManager.echo("xd  合并文件下载解析总耗时-----------", Laya.Browser:now() - times)
+        LogsManager.echo("xd  合并文件下载解析总耗时-----------", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - times)
       end
       ))
     end

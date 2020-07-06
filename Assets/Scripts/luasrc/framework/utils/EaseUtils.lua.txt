@@ -74,7 +74,7 @@ function EaseUtils:touchMoveHandler(event)
     return
   end
   if not self._moveStart then
-    if Math:pow(event.stageX - self._originX, 2) + Math:pow(event.stageY - self._originY, 2) >= 900 then
+    if math.pow(event.stageX - self._originX, 2) + math.pow(event.stageY - self._originY, 2) >= 900 then
       self._moveStart = true
     end
   end
@@ -127,7 +127,7 @@ end
 function EaseUtils:onEase()
   self._speedX = self._speedX * self._easeNum
   self._speedY = self._speedY * self._easeNum
-  if Math:abs(self._speedX) <= 1 and Math:abs(self._speedY) <= 1 then
+  if math.abs(self._speedX) <= 1 and math.abs(self._speedY) <= 1 then
     self._speedX = 0
     self._speedY = 0
     self:stopEase()

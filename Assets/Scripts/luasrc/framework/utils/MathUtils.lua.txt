@@ -6,19 +6,19 @@ MathUtils.tempVector3_3 = Laya.Vector3();
 function MathUtils.countAngle(p1, p2)
   local dx = p1.x - p2.x
   local dy = p1.y - p2.y
-  return Math:atan2(dy, dx)
+  return math.atan2(dy, dx)
 end
 
 function MathUtils.countDistance(p1, p2)
   local dx = p1.x - p2.x
   local dy = p1.y - p2.y
-  return Math:sqrt(dx * dx + dy * dy)
+  return math.sqrt(dx * dx + dy * dy)
 end
 
 function MathUtils.countDistanceByNums(x1, y1, x2, y2)
   local dx = x2 - x1
   local dy = y2 - y1
-  return Math:sqrt(dx * dx + dy * dy)
+  return math.sqrt(dx * dx + dy * dy)
 end
 
 function MathUtils.countDistanceSquart(p1, p2)
@@ -28,7 +28,7 @@ function MathUtils.countDistanceSquart(p1, p2)
 end
 
 function MathUtils.countPointLenth(p)
-  return Math:sqrt(p.x * p.x + p.y * p.y)
+  return math.sqrt(p.x * p.x + p.y * p.y)
 end
 
 function MathUtils.checkInRect(x, y, rx, ry, rw, rh)

@@ -110,7 +110,7 @@ function BattleFunc:getRoleInfoData(id, level)
 end
 
 function BattleFunc:turnMinisecondToframe(minisecond)
-  return Math:floor(Number(minisecond) * BattleFunc.miniSecondToFrame)
+  return math.floor(Number(minisecond) * BattleFunc.miniSecondToFrame)
 end
 
 function BattleFunc:turnSpeedToFrame(secondSpeed)

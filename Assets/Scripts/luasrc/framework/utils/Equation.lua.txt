@@ -7,7 +7,7 @@ function Equation.transToSmallRadian(num)
   if num > 0 and num < Math.PI / 2 then
     result = num
   elseif num > -Math.PI and num < -Math.PI / 2 then
-    result = Math.PI - Math:abs(num)
+    result = Math.PI - math.abs(num)
   elseif num > -Math.PI / 2 and num < 0 then
     result = num
   elseif num > Math.PI / 2 and num < Math.PI then
@@ -22,9 +22,9 @@ function Equation.transToSmallVerticalRadian(num)
   if result > 0 and result < Math.PI / 2 then
     result = -(Math.PI / 2 - result)
   elseif result > -Math.PI and result < -Math.PI / 2 then
-    result = -(Math.PI / 2 - Math.PI - Math:abs(result))
+    result = -(Math.PI / 2 - Math.PI - math.abs(result))
   elseif result > -Math.PI / 2 and result < 0 then
-    result = Math.PI / 2 - Math:abs(result)
+    result = Math.PI / 2 - math.abs(result)
   elseif result > Math.PI / 2 and result < Math.PI then
     result = Math.PI / 2 - Math.PI - result
   end
@@ -33,7 +33,7 @@ end
 
 function Equation.triangleLength(tan, a)
   local c = nil
-  c = a * Math:sqrt(tan * tan + 1) / tan
+  c = a * math.sqrt(tan * tan + 1) / tan
   return c
 end
 
@@ -53,7 +53,7 @@ function Equation.creat_1_1_a(startX, startY, radian)
     eqObj.c = -startY
   else
     eqObj.b = 1
-    eqObj.a = -Math:tan(radian)
+    eqObj.a = -math.tan(radian)
     eqObj.c = -eqObj.a * startX - startY
   end
   return eqObj
@@ -165,7 +165,7 @@ function Equation.pointOf(eqObj1, eqObj2)
 end
 
 function Equation.pointDistance(p1, p2)
-  local dis = Math:sqrt(p1.x - p2.x * p1.x - p2.x + p1.y - p2.y * p1.y - p2.y)
+  local dis = math.sqrt(p1.x - p2.x * p1.x - p2.x + p1.y - p2.y * p1.y - p2.y)
   return dis
 end
 
@@ -190,20 +190,20 @@ function Equation.pointLineDistance(x, y, eqobj, tpy)
   end
   local distance = nil
   if tpy == 0 then
-    distance = Math:abs(eqobj.a * x + eqobj.b * y + eqobj.c) / Math:sqrt(eqobj.a * eqobj.a + eqobj.b * eqobj.b)
+    distance = math.abs(eqobj.a * x + eqobj.b * y + eqobj.c) / math.sqrt(eqobj.a * eqobj.a + eqobj.b * eqobj.b)
   elseif tpy == 1 then
-    distance = eqobj.a * x + eqobj.b * y + eqobj.c / Math:sqrt(eqobj.a * eqobj.a + eqobj.b * eqobj.b)
+    distance = eqobj.a * x + eqobj.b * y + eqobj.c / math.sqrt(eqobj.a * eqobj.a + eqobj.b * eqobj.b)
   elseif tpy == 2 then
-    distance = -(eqobj.a * x + eqobj.b * y + eqobj.c) / Math:sqrt(eqobj.a * eqobj.a + eqobj.b * eqobj.b)
+    distance = -(eqobj.a * x + eqobj.b * y + eqobj.c) / math.sqrt(eqobj.a * eqobj.a + eqobj.b * eqobj.b)
   end
   return distance
 end
 
 function Equation.adjustPosByLine(p, dis, r, ang, eq)
   local angDis = ang - eq.angle
-  local length = r - dis * eq.type / Math:abs(Math:sin(angDis))
-  p.x = p.x - length * Math:cos(ang)
-  p.y = p.y - length * Math:sin(ang)
+  local length = r - dis * eq.type / math.abs(math.sin(angDis))
+  p.x = p.x - length * math.cos(ang)
+  p.y = p.y - length * math.sin(ang)
   return p
 end
 
@@ -233,8 +233,8 @@ function Equation.pointLineDistance2(x, y, lineP1, lineP2)
   else
     local dis1 = lineP1.x - x * lineP1.x - x + lineP1.y - y * lineP1.y - y
     local dis2 = lineP2.x - x * lineP2.x - x + lineP2.y - y * lineP2.y - y
-    local dis = Math:min(dis1, dis2)
-    return Math:sqrt(dis)
+    local dis = math.min(dis1, dis2)
+    return math.sqrt(dis)
   end
 end
 
@@ -255,12 +255,12 @@ end
 
 function Equation.roundLinePointof(centrePoint, r, eq, ang, type)
   local dis = Equation.pointLineDistance(centrePoint.x, centrePoint.y, eq)
-  local length = Math:sqrt(r * r - dis * dis)
+  local length = math.sqrt(r * r - dis * dis)
   local plumb = Equation.plumbLine(centrePoint.x, centrePoint.y, eq)
   local point1 = Equation.pointOf(eq, plumb)
   local pointoff = Laya.Vector3()
-  pointoff.x = point1.x + length * type * Math:cos(ang)
-  pointoff.y = point1.y + length * type * Math:sin(ang)
+  pointoff.x = point1.x + length * type * math.cos(ang)
+  pointoff.y = point1.y + length * type * math.sin(ang)
   return pointoff
 end
 
@@ -318,11 +318,11 @@ function Equation.creat_2_2(pa, pb, pc, g)
   eqObj.pa = pa
   eqObj.pb = pb
   eqObj.pc = pc
-  if Math:abs(pa.x - pb.x) <= 2 then
+  if math.abs(pa.x - pb.x) <= 2 then
     pb.x = pb.x + 3
     eqObj.pb.x = eqObj.pb.x + 3
   end
-  eqObj.b = pb.x * Math:sqrt(pa.y - pc.y / pb.y - pc.y) + pa.x / 1 + Math:sqrt(pa.y - pc.y / pb.y - pc.y)
+  eqObj.b = pb.x * math.sqrt(pa.y - pc.y / pb.y - pc.y) + pa.x / 1 + math.sqrt(pa.y - pc.y / pb.y - pc.y)
   eqObj.a = pa.y - pc.y / pa.x - eqObj.b / pa.x - eqObj.b
   eqObj.c = pc.y
   eqObj.pc.x = eqObj.b
@@ -330,14 +330,14 @@ function Equation.creat_2_2(pa, pb, pc, g)
     return eqObj.a * xCd - eqObj.b * xCd - eqObj.b + eqObj.c
   end
   
-  eqObj.radian = Math:atan(2 * eqObj.a * pa.x - 2 * eqObj.a * eqObj.b)
+  eqObj.radian = math.atan(2 * eqObj.a * pa.x - 2 * eqObj.a * eqObj.b)
   eqObj.currentRad = function(xCd)
-    return Math:atan(2 * eqObj.a * xCd - 2 * eqObj.a * eqObj.b)
+    return math.atan(2 * eqObj.a * xCd - 2 * eqObj.a * eqObj.b)
   end
   
-  eqObj.t1 = Math:sqrt(2 * pc.y - pa.y / -g)
-  eqObj.t2 = Math:sqrt(2 * pc.y - pb.y / -g)
-  eqObj.speed = -g * eqObj.t1 / Math:sin(eqObj.radian)
+  eqObj.t1 = math.sqrt(2 * pc.y - pa.y / -g)
+  eqObj.t2 = math.sqrt(2 * pc.y - pb.y / -g)
+  eqObj.speed = -g * eqObj.t1 / math.sin(eqObj.radian)
   return eqObj
 end
 
@@ -345,10 +345,10 @@ function Equation.getNumByDecimalAnalyserNode(num, index)
   if index == nil then
     index=0
   end
-  local result = Math:round(num / pow) * pow
+  local result = math.round(num / pow) * pow
   if index >= 0 then
-    local pow = Math:pow(10, index)
-    result = Math:round(num / pow) * pow
+    local pow = math.pow(10, index)
+    result = math.round(num / pow) * pow
   else
     local str = tostring(num)
     local dianIndex = str:find(".")
@@ -362,15 +362,15 @@ function Equation.getNumByDecimalAnalyserNode(num, index)
 end
 
 function Equation.countPlumbSpeedBySVG(sx, vx, g)
-  local t = Math:abs(sx / vx)
+  local t = math.abs(sx / vx)
   local vy = -g * t / 2
   local sy = -g * t * t / 4
   return {vy, sy}
 end
 
 function Equation.countPlumbSpeedBySVS(sx, vx, sy)
-  local t = Math:abs(sx / vx)
-  local g = Math:abs(sy) * 2 / t * t
+  local t = math.abs(sx / vx)
+  local g = math.abs(sy) * 2 / t * t
   return {-g * t / 2, g}
 end
 
@@ -378,8 +378,8 @@ function Equation.ratoteFormulation(nx, ny, ang, boo)
   if boo == nil then
     boo=true
   end
-  local cos = Math:cos(ang)
-  local sin = Math:sin(ang)
+  local cos = math.cos(ang)
+  local sin = math.sin(ang)
   local p = nil
   local newX = cos * nx - sin * ny
   local newY = cos * ny + sin * nx
@@ -397,17 +397,17 @@ function Equation.countSpeedByTime(dx, dy, g, time)
   local obj = {}
   obj.xSpeed = dx / time
   obj.ySpeed = dy - 0.5 * g * time * time / time
-  obj.angle = Math:atan2(obj.ySpeed, obj.xSpeed)
+  obj.angle = math.atan2(obj.ySpeed, obj.xSpeed)
   return obj
 end
 
 function Equation.countSpeedByHeight(dx, dy, g)
   local obj = {}
-  local time = Math:sqrt(-2 * dy / g)
+  local time = math.sqrt(-2 * dy / g)
   obj.ySpeed = -g * time
   obj.xSpeed = dx / time * 2
   obj.time = time
-  obj.angle = Math:atan2(obj.ySpeed, obj.xSpeed)
+  obj.angle = math.atan2(obj.ySpeed, obj.xSpeed)
   return obj
 end
 
@@ -416,7 +416,7 @@ function Equation.getRadomFromMinMax(start, tsvar_end, decimal)
     decimal=0
   end
   local dis = tsvar_end - start
-  local radom = Math:random()
+  local radom = math.random()
   local k = tsvar_end - start / 1 - 0
   local result = k * radom - 0 + start
   return Equation.getNumByDecimal(result, decimal)
@@ -434,9 +434,9 @@ function Equation.getSpeedBySEGH(s, e, g, h)
   end
   local dz = e[2+1] - s[2+1]
   local halfT = nil
-  halfT = Math:sqrt(2 * h / g)
+  halfT = math.sqrt(2 * h / g)
   zSpeed = -g * halfT
-  t = halfT + Math:sqrt(dz + h * 2 / g)
+  t = halfT + math.sqrt(dz + h * 2 / g)
   xSpeed = dx / t
   ySpeed = dy / t
   return {xSpeed, ySpeed, zSpeed}
@@ -446,7 +446,7 @@ function Equation.log(base, logarithm)
   if base == 1 then
     return 1
   end
-  return Math:log(logarithm) / Math:log(base)
+  return math.log(logarithm) / math.log(base)
 end
 
 function Equation.averageByNums(numsArr)
@@ -487,8 +487,8 @@ function Equation.getRadomPointByRadius(r, r2, a, a2)
   end
   local radomR = Equation.getRadomFromMinMax(r, r2)
   local ang = Equation.getRadomFromMinMax(a, a2, -2)
-  local xPos = radomR * Math:cos(ang)
-  local ypos = radomR * Math:sin(ang)
+  local xPos = radomR * math.cos(ang)
+  local ypos = radomR * math.sin(ang)
   return Laya.Vector3(xPos, ypos)
 end
 
@@ -496,10 +496,10 @@ function Equation.getNumByDecimal(num, index)
   if index == nil then
     index=0
   end
-  local pow = Math:pow(10, index)
-  local result = Math:round(num / pow) * pow
+  local pow = math.pow(10, index)
+  local result = math.round(num / pow) * pow
   if index >= 0 then
-    result = Math:round(num / pow) * pow
+    result = math.round(num / pow) * pow
   else
     local str = tostring(num)
     local dianIndex = str:find(".")
@@ -520,7 +520,7 @@ function Equation.easyToTargetPos(tovalue, fromvalue, f, min)
     min=1
   end
   local dis = tovalue - fromvalue
-  local absDistance = Math:abs(dis)
+  local absDistance = math.abs(dis)
   if absDistance < min then
     return dis
   end
@@ -592,9 +592,9 @@ end
 function Equation.ballBallCollision(b1posx, b1posy, b1spdx, b1spdy, b2posx, b2posy, b2spdx, b2spdy)
   local lenX = b2posx - b1posx
   local lenY = b2posy - b1posy
-  local angle = Math:atan2(lenY, lenX)
-  local cos = Math:cos(angle)
-  local sin = Math:sin(angle)
+  local angle = math.atan2(lenY, lenX)
+  local cos = math.cos(angle)
+  local sin = math.sin(angle)
   local vel0 = Equation.rotateCalculate(b1spdx, b1spdy, sin, cos, true)
   local vel1 = Equation.rotateCalculate(b2spdx, b2spdy, sin, cos, true)
   local vxTotal = vel0.x - vel1.x
@@ -606,11 +606,11 @@ function Equation.ballBallCollision(b1posx, b1posy, b1spdx, b1spdy, b2posx, b2po
 end
 
 function Equation.convertToVector(value, angle)
-  return Laya.Vector3(value * Math:cos(angle), value * Math:sin(angle))
+  return Laya.Vector3(value * math.cos(angle), value * math.sin(angle))
 end
 
 function Equation.convertToValueAndAngle(vector)
-  return {Math:sqrt(vector.x * vector.x + vector.y * vector.y), Math:atan2(vector.y, vector.x)}
+  return {math.sqrt(vector.x * vector.x + vector.y * vector.y), math.atan2(vector.y, vector.x)}
 end
 
 function Equation.rotateCalculate(xpos, ypos, sin, cos, reverse)
@@ -634,8 +634,8 @@ function Equation.rectangularCollisionDetection(p1, p2, p3, p4, p5, p6, p7, p8)
   local centerPointy2 = p5.y + p6.y + p7.y + p8.y / 4
   local width2 = Equation.pointDistance(p5, p6)
   local height2 = Equation.pointDistance(p6, p7)
-  local short1 = Math:min(height1, width1)
-  local short2 = Math:min(width2, height2)
+  local short1 = math.min(height1, width1)
+  local short2 = math.min(width2, height2)
   local distanceSqrt = centerPointx1 - centerPointx2 * centerPointx1 - centerPointx2 + centerPointy1 - centerPointy2 * centerPointy1 - centerPointy2
   if distanceSqrt > width1 + width2 * width1 + width2 / 4 + height1 + height2 * height1 + height2 / 4 then
     return nil
@@ -720,16 +720,16 @@ function Equation.lineOverlap(pStart1, pEnd1, pStart2, pEnd2)
   local pDis1 = Equation.pointDistance(pStart1, pEnd1)
   local pDis2 = Equation.pointDistance(pStart2, pEnd2)
   local maxLen = pDis1 + pDis2
-  local l1 = Math:sqrt(pxs1 - pxs2 * pxs1 - pxs2 + pys1 - pys2 * pys1 - pys2)
-  local l2 = Math:sqrt(pxs1 - pxe2 * pxs1 - pxe2 + pys1 - pye2 * pys1 - pye2)
-  local l3 = Math:sqrt(pxe1 - pxs2 * pxe1 - pxs2 + pye1 - pys2 * pye1 - pys2)
-  local l4 = Math:sqrt(pxe1 - pxe2 * pxe1 - pxe2 + pye1 - pye2 * pye1 - pye2)
+  local l1 = math.sqrt(pxs1 - pxs2 * pxs1 - pxs2 + pys1 - pys2 * pys1 - pys2)
+  local l2 = math.sqrt(pxs1 - pxe2 * pxs1 - pxe2 + pys1 - pye2 * pys1 - pye2)
+  local l3 = math.sqrt(pxe1 - pxs2 * pxe1 - pxs2 + pye1 - pys2 * pye1 - pys2)
+  local l4 = math.sqrt(pxe1 - pxe2 * pxe1 - pxe2 + pye1 - pye2 * pye1 - pye2)
   if ((l1 > maxLen or l2 > maxLen) or l3 > maxLen) or l4 > maxLen then
     return -1
   else
-    local len = l1 + l2 + l3 + l4 - 2 * Math:max(l1, l2, l3, l4, pDis1, pDis2)
+    local len = l1 + l2 + l3 + l4 - 2 * math.max(l1, l2, l3, l4, pDis1, pDis2)
     if len == 0 then
-      len = Math:min(pDis1, pDis2)
+      len = math.min(pDis1, pDis2)
     end
     return len
   end
@@ -759,11 +759,11 @@ function Equation.countReflectSegment(angle, lineAngle, value, yDamp, xDamp)
   local rsAngle = Equation.getAngDis(angle, lineAngle)
   local reAngle = angle + 2 * rsAngle
   if value ~= 0 then
-    local dx = value * Math:cos(rsAngle) * 1 - xDamp
-    local dy = value * Math:sin(rsAngle) * 1 - yDamp
-    local len = Math:sqrt(dx * dx + dy * dy)
+    local dx = value * math.cos(rsAngle) * 1 - xDamp
+    local dy = value * math.sin(rsAngle) * 1 - yDamp
+    local len = math.sqrt(dx * dx + dy * dy)
     table.insert(arr, len)
-    local reAngleValue = Math:atan2(dy, dx)
+    local reAngleValue = math.atan2(dy, dx)
     reAngle = angle + rsAngle + reAngleValue
   else
     table.insert(arr, 0)

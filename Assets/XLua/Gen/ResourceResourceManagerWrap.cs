@@ -341,7 +341,7 @@ namespace XLua.CSObjectWrap
                     string _assetName = LuaAPI.lua_tostring(L, 2);
                     string _path = LuaAPI.lua_tostring(L, 3);
                     
-                        UnityEngine.Object gen_ret = gen_to_be_invoked.luaLoadAsset( _assetName, _path );
+                        UnityEngine.GameObject gen_ret = gen_to_be_invoked.luaLoadAsset( _assetName, _path );
                         translator.Push(L, gen_ret);
                     
                     
@@ -352,7 +352,7 @@ namespace XLua.CSObjectWrap
                 {
                     string _assetName = LuaAPI.lua_tostring(L, 2);
                     
-                        UnityEngine.Object gen_ret = gen_to_be_invoked.luaLoadAsset( _assetName );
+                        UnityEngine.GameObject gen_ret = gen_to_be_invoked.luaLoadAsset( _assetName );
                         translator.Push(L, gen_ret);
                     
                     

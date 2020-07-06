@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
-
+using XLua;
 namespace GameUtils
 {
+    [LuaCallCSharp]
     public class CommonUtil
     {
         public static string GetPlatformString()
@@ -60,6 +61,11 @@ namespace GameUtils
         {
             TimeSpan ts = DateTime.UtcNow - new DateTime( 1970, 1, 1, 0, 0, 0, 0 );
             return Convert.ToInt64( ts.TotalSeconds ).ToString();
+        }
+        public static long GetTimeMiniStamp()
+        {
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return Convert.ToInt64(ts.TotalMilliseconds);
         }
 
 #if UNITY_EDITOR

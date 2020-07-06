@@ -96,7 +96,7 @@ function TimerManager:tickHandler(time)
   for i in pairs(self._timeMap) do
     timeEntity = self._timeMap[i+1]
     local isRemove = false
-    num = Math:floor(curTime - timeEntity.oldTime / timeEntity.delay)
+    num = math.floor(curTime - timeEntity.oldTime / timeEntity.delay)
     if num > 0 then
       timeEntity.maxCount = timeEntity.maxCount - num
       timeEntity.oldTime = timeEntity.oldTime + num * timeEntity.delay
@@ -128,7 +128,7 @@ function TimerManager:onceUpdateFrame()
   end
   self._lastFrameTime = currentT
   self._leftFrameDt = self._leftFrameDt + dt
-  local nums = Math:floor(self._leftFrameDt / self._oneFrameDt)
+  local nums = math.floor(self._leftFrameDt / self._oneFrameDt)
   self._leftFrameDt = self._leftFrameDt - nums * self._oneFrameDt
   local i = 0
   repeat
@@ -200,10 +200,12 @@ end
 
 function TimerManager:checkOverDay(targetTime)
   local daySecond = 3600000 * 24
-  local day1 = Math:floor(targetTime - TimerManager.timeOurOffset * 3600000 / daySecond)
-  local day2 = Math:floor(Client.instance.miniserverTime - TimerManager.timeOurOffset * 3600000 / daySecond)
+  local day1 = math.floor(targetTime - TimerManager.timeOurOffset * 3600000 / daySecond)
+  local day2 = math.floor(Client.instance.miniserverTime - TimerManager.timeOurOffset * 3600000 / daySecond)
   if day1 ~= day2 then
     return true
   end
   return false
 end
+
+

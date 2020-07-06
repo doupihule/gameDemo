@@ -44,7 +44,7 @@ function BattleMapControler:setData(sceneId)
 end
 
 function BattleMapControler:setMapSize()
-  self._pickNums = Math:ceil(self._maxSceneWidth / self._areaWidth / 2) + 1
+  self._pickNums = math.ceil(self._maxSceneWidth / self._areaWidth / 2) + 1
   self.controler.layerControler:setSceneInfo()
 end
 

@@ -126,7 +126,7 @@ function BattleDetailUI:setWarReward()
   local reward = enemy.enemyData.reward
   -- [ts2lua]DataResourceFunc.instance:getDataResourceInfo(reward)下标访问可能不正确
   self.levelRewardImg.skin = DataResourceFunc.instance:getDataResourceInfo(reward)["img"]
-  self.levelReward.text = Math:floor(reward[1+1] + reward[2+1] * FogModel.instance:getCurLayer() * self.addPercent) .. ""
+  self.levelReward.text = math.floor(reward[1+1] + reward[2+1] * FogModel.instance:getCurLayer() * self.addPercent) .. ""
 end
 
 function BattleDetailUI:setReward()
@@ -238,14 +238,14 @@ function BattleDetailUI:showRole()
   self:setShowRole()
   local i = 0
   repeat
-    local x = ScreenAdapterTools.width / 2 + 160 + 120 * Math:floor(i / 3)
+    local x = ScreenAdapterTools.width / 2 + 160 + 120 * math.floor(i / 3)
     local y = 600 + 150 * i % 3
     self:setRoleAni(i, x, y, -1, self.enemyArr, self.enemyTxtArr, true)
     i=i+1
   until not(i < #self.enemyArr)
   local i = 0
   repeat
-    local x = ScreenAdapterTools.width / 2 - 50 - 120 * Math:floor(i / 3)
+    local x = ScreenAdapterTools.width / 2 - 50 - 120 * math.floor(i / 3)
     local y = 600 + 150 * i % 3
     self:setRoleAni(i, x, y, 1, self.heroArr, self.roleTxtArr)
     i=i+1

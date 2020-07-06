@@ -75,7 +75,7 @@ function FrameWorkHandle:onCheckShareSucess(distime, shareExtraData)
       UserInfo.platform:onShareComplete(false)
     elseif failHandleType == 2 then
       -- [ts2lua]TranslateFunc.shareTranslateArr下标访问可能不正确
-      UserInfo.platform:showPopTip("提示", TranslateFunc.shareTranslateArr[Math:floor(Math:random() * #TranslateFunc.shareTranslateArr)], {confirmText=TranslateFunc.shareLabTranslate, success=function(res)
+      UserInfo.platform:showPopTip("提示", TranslateFunc.shareTranslateArr[math.floor(math.random() * #TranslateFunc.shareTranslateArr)], {confirmText=TranslateFunc.shareLabTranslate, success=function(res)
         if res.confirm then
           LogsManager.echo('用户点击确定,再次拉起分享')
           UserInfo.platform:share(UserInfo.platform._shareId, UserInfo.platform._shareExtraData, UserInfo.platform._shareCallback, UserInfo.platform._shareThisObj)

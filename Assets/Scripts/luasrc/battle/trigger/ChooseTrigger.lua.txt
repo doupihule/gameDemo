@@ -12,7 +12,7 @@ function ChooseTrigger.chooseNearRole(targetRole, instanceArr)
   local i = 0
   repeat
     local role2 = instanceArr[i+1]
-    local dis = Math:abs(role2.pos.x - targetRole.pos.x)
+    local dis = math.abs(role2.pos.x - targetRole.pos.x)
     if not resultRole then
       resultRole = role2
       targetDis = dis
@@ -404,7 +404,7 @@ function ChooseTrigger.chooseRoleByCircle(instance, r, x, z, targetArr, chooseNu
     spdz = 0
   end
   local radArea = nil
-  local spdAbs = Math:sqrt(spdx * spdx + spdy * spdy + spdz * spdz)
+  local spdAbs = math.sqrt(spdx * spdx + spdy * spdy + spdz * spdz)
   local powr = r + spdAbs * r + spdAbs
   if ang < 360 then
     radArea = ang * BattleFunc.angletoRad / 2
@@ -421,8 +421,8 @@ function ChooseTrigger.chooseRoleByCircle(instance, r, x, z, targetArr, chooseNu
       local disz = targetInstance.pos.z - z
       if disx * disx + disz * disz + disy * disy <= powr then
         if ang < 360 then
-          local disAng = Math:atan2(disz, disx)
-          if Math:abs(disAng) > radArea then
+          local disAng = math.atan2(disz, disx)
+          if math.abs(disAng) > radArea then
             break
           end
         end
@@ -477,12 +477,12 @@ function ChooseTrigger.chooseRoleByRect(instance, w, h, x, z, targetArr, chooseN
       if excludeArr and excludeArr:find(targetInstance) ~= -1 then
         break
       end
-      local disSpdx = Math:abs(targetInstance.speed.x - spdx)
-      local disSpdz = Math:abs(targetInstance.speed.z - spdz)
-      local disSpdy = Math:abs(targetInstance.speed.y - spdy)
-      local disx = Math:abs(targetInstance.pos.x - x)
-      local disz = Math:abs(targetInstance.pos.z - z)
-      local disy = Math:abs(targetInstance.pos.y - y)
+      local disSpdx = math.abs(targetInstance.speed.x - spdx)
+      local disSpdz = math.abs(targetInstance.speed.z - spdz)
+      local disSpdy = math.abs(targetInstance.speed.y - spdy)
+      local disx = math.abs(targetInstance.pos.x - x)
+      local disz = math.abs(targetInstance.pos.z - z)
+      local disy = math.abs(targetInstance.pos.y - y)
       if (disx <= halfw + disSpdx and disz <= halfh + disSpdz) and disy <= h + disSpdy then
         table.insert(out, targetInstance)
         if #out == chooseNums then

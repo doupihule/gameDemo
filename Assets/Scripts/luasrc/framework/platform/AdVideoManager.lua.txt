@@ -116,7 +116,7 @@ function AdVideoManager:showInterstitialAdById(id, parent, onErrorCallback, onCl
     return
   end
   local adInfo = PlaqueFunc.instance:getPlaqueInfoById(id)
-  local possibility = 10000 * Math:random()
+  local possibility = 10000 * math.random()
   LogsManager.echo("----possibility: " .. possibility)
   if possibility <= adInfo.plaqueProbab then
     self.interstitialAdTimeId = TimerManager.instance:setTimeout(function()

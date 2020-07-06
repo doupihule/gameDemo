@@ -116,7 +116,7 @@ function InstanceBullet:adjustInitPos(targetRole)
   if not offset then
     return
   end
-  local spdAbs = Math:sqrt(self.speed.x * self.speed.x + self.speed.y * self.speed.y + self.speed.z * self.speed.z)
+  local spdAbs = math.sqrt(self.speed.x * self.speed.x + self.speed.y * self.speed.y + self.speed.z * self.speed.z)
   if spdAbs == 0 then
     return
   end
@@ -175,7 +175,7 @@ function InstanceBullet:checkAdjustAngle()
   if self.updateCount % 2 == 0 then
     return
   end
-  local ang = Math:atan2(self.speed.z + self.speed.y, self.speed.x)
+  local ang = math.atan2(self.speed.z + self.speed.y, self.speed.x)
   self:setRotationRad(ang)
 end
 
@@ -302,7 +302,7 @@ function InstanceBullet:resetMoveAct(targetRole)
   local dy = targetRole.pos.y - self.pos.y + self.initOffsetY
   local dx = targetRole.pos.x - self.pos.x
   local dz = targetRole.pos.z - self.pos.z
-  local absDy = Math:abs(dy)
+  local absDy = math.abs(dy)
   local dis = nil
   local pathParams = self.cfgData.pathParams
   local tempArr = nil
@@ -317,18 +317,18 @@ function InstanceBullet:resetMoveAct(targetRole)
     self.gravityAble = false
     if rotation == -1 then
       if absDy > 10 then
-        dis = Math:sqrt(dx * dx + dz * dz + dy * dy)
+        dis = math.sqrt(dx * dx + dz * dz + dy * dy)
         local spdperDis = spdValue / dis
         yspd = dy * spdperDis
         xspd = dx * spdperDis
         zspd = dz * spdperDis
       else
-        dis = Math:sqrt(dx * dx + dz * dz)
+        dis = math.sqrt(dx * dx + dz * dz)
         local spdperDis = spdValue / dis
         xspd = dx * spdperDis
         zspd = dz * spdperDis
       end
-      local r = Math:atan2(yspd + zspd, xspd)
+      local r = math.atan2(yspd + zspd, xspd)
       ang = r
       rotation = r * BattleFunc.radtoAngle
     else
@@ -336,12 +336,12 @@ function InstanceBullet:resetMoveAct(targetRole)
         rotation = 180 - rotation
       end
       ang = rotation * BattleFunc.angletoRad
-      xspd = Math:cos(ang) * spdValue
-      zspd = Math:sin(ang) * spdValue
+      xspd = math.cos(ang) * spdValue
+      zspd = math.sin(ang) * spdValue
     end
     self:setRotation(rotation)
     if not self._followRole or self._followRole ~= targetRole then
-      self.moveFrame = Math:floor(pathParams[1+1] / spdValue)
+      self.moveFrame = math.floor(pathParams[1+1] / spdValue)
     end
     self:initMove(xspd, yspd, zspd, true)
     if self._collisionParams[0+1] == BattleConst.bullet_hit_bounce then
@@ -349,16 +349,16 @@ function InstanceBullet:resetMoveAct(targetRole)
     end
   elseif moveType == BattleConst.BULLET_MOVE_CURVE then
     self.gravityAble = true
-    dis = Math:sqrt(dx * dx + dz * dz)
+    dis = math.sqrt(dx * dx + dz * dz)
     local flyDisTance = pathParams[1+1] / 10000 * dis
     local maxFlyDis = pathParams[2+1]
     if flyDisTance > maxFlyDis then
       flyDisTance = maxFlyDis
     end
-    self.moveFrame = Math:ceil(dis / spdValue)
-    local ang = Math:atan2(dz, dx)
-    xspd = Math:cos(ang) * spdValue
-    zspd = Math:sin(ang) * spdValue
+    self.moveFrame = math.ceil(dis / spdValue)
+    local ang = math.atan2(dz, dx)
+    xspd = math.cos(ang) * spdValue
+    zspd = math.sin(ang) * spdValue
     self:initMove(xspd, 0, zspd, true)
     local halft = self.moveFrame / 2
     self.addSpeed.y = flyDisTance * 2 / halft * halft

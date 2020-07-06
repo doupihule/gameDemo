@@ -32,10 +32,10 @@ function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue
     shanbiRatio = 0
   else
     local basRatio = skillAction.skillLogicalParams[0+1][2+1] / 10000
-    shanbiRatio = Math:max(1 - basRatio - attackerAttr:getOneAttr(BattleConst.attr_hit) - deferAttr:getOneAttr(BattleConst.attr_dodge) / 10000, 0)
+    shanbiRatio = math.max(1 - basRatio - attackerAttr:getOneAttr(BattleConst.attr_hit) - deferAttr:getOneAttr(BattleConst.attr_dodge) / 10000, 0)
   end
-  local baojiRatio = Math:max(attackerAttr:getOneAttr(BattleConst.attr_crit) - deferAttr:getOneAttr(BattleConst.attr_toughness) / 10000, 0)
-  local realCrit = Math:max(Math:min(1 - shanbiRatio, baojiRatio), 0)
+  local baojiRatio = math.max(attackerAttr:getOneAttr(BattleConst.attr_crit) - deferAttr:getOneAttr(BattleConst.attr_toughness) / 10000, 0)
+  local realCrit = math.max(math.min(1 - shanbiRatio, baojiRatio), 0)
   local random = RandomUtis.getOneRandom(BattleFunc.battleRandomIndex)
   local baoshang = 1
   local isMiss = nil
@@ -56,9 +56,9 @@ function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue
     local dmgratio = BattleFormulaTrigger.countDmgRatio(attackerAttr, deferAttr)
     local atk = attackerAttr:getOneAttr(BattleConst.attr_attack)
     local def = deferAttr:getOneAttr(BattleConst.attr_def)
-    local minDmg = Math:round(atk * BattleFunc.minDamageRatio)
-    local targetDmg = Math:round(Math:ceil(atk - def) * skillPercentValue / 10000 + skillFixValue * baoshang * dmgratio)
-    local dmg = Math:max(minDmg, targetDmg) * buffNums
+    local minDmg = math.round(atk * BattleFunc.minDamageRatio)
+    local targetDmg = math.round(math.ceil(atk - def) * skillPercentValue / 10000 + skillFixValue * baoshang * dmgratio)
+    local dmg = math.max(minDmg, targetDmg) * buffNums
     if GameSwitch.checkOnOff(GameSwitchConst.SWITCH_BATTLE_INFO) then
       local key = attacker.dataId .. "_" .. skillAction.skillEffectId
       -- [ts2lua]BattleFormulaTrigger._cacheLogsMap下标访问可能不正确
@@ -114,7 +114,7 @@ function BattleFormulaTrigger.dmgByAttr(attacker, defer, skillAction, skillFixVa
     local dmgratio = BattleFormulaTrigger.countDmgRatio(attacker.attrData, defer.attrData)
     targetValue = targetValue * dmgratio
   end
-  targetValue = Math:floor(targetValue)
+  targetValue = math.floor(targetValue)
   BattleFormulaTrigger.doDmgResult(attacker, defer, dmg, BattleConst.damage_normal, skillAction, buff)
 end
 
@@ -139,7 +139,7 @@ function BattleFormulaTrigger.doDmgResult(attacker, defer, dmg, type, skillActio
     if not buff then
       local xixueValue = attacker.attrData:getOneAttr(BattleConst.attr_xixue)
       if xixueValue > 0 then
-        local value = Math:floor(xixueValue / 10000 * dmg)
+        local value = math.floor(xixueValue / 10000 * dmg)
         attacker:onXixue(value)
       end
     end
@@ -178,7 +178,7 @@ function BattleFormulaTrigger.trit(attacker, defer, skill, skillAction, buffNums
   out.length = 0
   local attackerAttr = attacker.attrData
   local deferAttr = defer.attrData
-  local critRatio = Math:max(attackerAttr:getOneAttr(BattleConst.attr_crit) / 10000, 0)
+  local critRatio = math.max(attackerAttr:getOneAttr(BattleConst.attr_crit) / 10000, 0)
   local random = RandomUtis.getOneRandom(BattleFunc.battleRandomIndex)
   local critdmage = nil
   if random < critRatio then
@@ -190,10 +190,10 @@ function BattleFormulaTrigger.trit(attacker, defer, skill, skillAction, buffNums
   end
   local extraAdded = 1 + deferAttr:getOneAttr(BattleConst.attr_betreated) / 10000 * 1 + attackerAttr:getOneAttr(BattleConst.attr_treate) / 10000
   local skillParam = skillAction.skillLogicalParams[0+1]
-  local treatValue = Math:max(1, Math:ceil(attackerAttr:getOneAttr(BattleConst.attr_attack) * skillParam[1+1] / 10000 + skillParam[0+1]) * critdmage * extraAdded)
+  local treatValue = math.max(1, math.ceil(attackerAttr:getOneAttr(BattleConst.attr_attack) * skillParam[1+1] / 10000 + skillParam[0+1]) * critdmage * extraAdded)
   local finalDmg = attackerAttr:getOneAttr(BattleConst.attr_final_treate) / 10000 + 1
   local finalReliet = 1 + deferAttr:getOneAttr(BattleConst.attr_final_betreated) / 10000
-  treatValue = Math:floor(treatValue * finalDmg * finalReliet)
+  treatValue = math.floor(treatValue * finalDmg * finalReliet)
   treatValue = treatValue * buffNums
   out[1+1] = treatValue
   out[2+1] = attacker

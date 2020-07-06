@@ -31,7 +31,7 @@ end
 function InstanceEffect:setLastFrame(frame)
   self.controler:clearCallBack(self, self.delayClearSelf)
   if frame > 0 then
-    self.controler:setCallBack(Math:round(frame / self._aniPlaySpeed), self.delayClearSelf, self)
+    self.controler:setCallBack(math.round(frame / self._aniPlaySpeed), self.delayClearSelf, self)
   end
 end
 
@@ -143,8 +143,8 @@ function InstanceEffect:checkLineFollowTarget()
   local targety = self.expandParams.sourceY
   local disx = targetx - self.pos.x
   local disz = targety + targetz - self.pos.z + self.pos.y + self._followOffset.y
-  local ang = Math:atan2(disz, disx)
-  local targetWid = Math:sqrt(disx * disx + disz * disz)
+  local ang = math.atan2(disz, disx)
+  local targetWid = math.sqrt(disx * disx + disz * disz)
   local scale = targetWid / sourceWid
   if scale < 0.3 then
     scale = 0.3

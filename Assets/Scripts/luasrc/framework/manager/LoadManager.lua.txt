@@ -137,7 +137,7 @@ function LoadManager:sureLoad(info)
     Message.instance:send(MsgCMD.MODULE_SHOW, WindowCfgs.LoadingUI)
   end
   self._timeCode = TimerManager.instance:add(self.timerHandler, self, 20000, 1)
-  self._startLoadTime = Laya.Browser:now()
+  self._startLoadTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   if self.currentLoadinfo.style == "load" then
     Laya.loader:load(info.url, self._onLoadHandle, self._onProgressHandle, info.type, info.priority, info.cache, info.group, info.ignoreCache, info.useWorkerLoader)
   else
@@ -252,7 +252,7 @@ function LoadManager:loadFinish(info)
 end
 
 function LoadManager:onGroupProgress(value)
-  local progressInfo = {itemsLoaded=Math:floor(value * 100), itemsTotal=100}
+  local progressInfo = {itemsLoaded=math.floor(value * 100), itemsTotal=100}
 end
 
 function LoadManager:onLoadedError(info)

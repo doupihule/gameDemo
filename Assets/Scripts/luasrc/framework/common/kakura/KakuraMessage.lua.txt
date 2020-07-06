@@ -28,7 +28,7 @@ function KakuraMessage:getOneRandomAeskey(num)
   local resultStr = ""
   local i = 0
   repeat
-    local index = Math:floor(Math:random() * len)
+    local index = math.floor(math.random() * len)
     resultStr = resultStr + self.defaultAesKey:substr(index, 1)
     i=i+1
   until not(i < num)
@@ -52,7 +52,7 @@ function KakuraMessage:addPackage(opcode, requestId, uniqueReqId, sendData, call
 end
 
 function KakuraMessage:encode(requestBuffer, aesKey, pack)
-  self._lastSendTime = Laya.Browser:now()
+  self._lastSendTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   LogsManager.echo(#requestBuffer, "_requestBufferlength")
   local byte = Laya.Byte()
   LogsManager.echo("-------------------------------------------MessageType" .. self._messageType)
@@ -131,9 +131,9 @@ function KakuraMessage:decode(aesKey, byte)
   pack.len = len
   pack.sendData = data
   if LogsManager.ignoreLogs:find(pack.opcode .. '') == -1 then
-    LogsManager.echo("kakura,收到数据：", pack.sendData, pack.requestId, "costTime:", Laya.Browser:now() - self._lastSendTime)
+    LogsManager.echo("kakura,收到数据：", pack.sendData, pack.requestId, "costTime:", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - self._lastSendTime)
   else
-    LogsManager.echo("kakura,pack.opcode:", pack.opcode, pack.requestId, "costTime:", Laya.Browser:now() - self._lastSendTime)
+    LogsManager.echo("kakura,pack.opcode:", pack.opcode, pack.requestId, "costTime:", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - self._lastSendTime)
   end
   local jsonData = nil
   try_catch{

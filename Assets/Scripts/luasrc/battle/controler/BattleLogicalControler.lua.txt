@@ -61,7 +61,7 @@ function BattleLogicalControler:ctor(ctn, ui, gameMode)
   self.diedArr_2 = {}
   self.battleUI = ui
   self.globalPassiveAttrMap = {}
-  local time = Laya.Browser:now()
+  local time = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   BattleLogsManager.battleEcho("battle 设置随机种子:", time, "用来做复盘用")
   RandomUtis.setOneRandomYinzi(time, BattleFunc.battleRandomIndex)
   self.refreshControler = RefreshControler(self)
@@ -659,7 +659,7 @@ function BattleLogicalControler:getPosByTypeAndCamp(camp, type, outpos, offestX,
         -- [ts2lua]BattleFunc.warRoleXoffest下标访问可能不正确
         posX = Number(BattleFunc.warRoleXoffest[xIndex - 1])
       end
-      offestX = Math:random() * BattleFunc.pylonTwoLocation
+      offestX = math.random() * BattleFunc.pylonTwoLocation
       if camp == BattleConst.ROLEGROUP_ENEMY then
         targetX = self.mapControler._maxSceneWidth - posX + offestX
       else

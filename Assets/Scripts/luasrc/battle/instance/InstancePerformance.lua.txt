@@ -276,7 +276,7 @@ function InstancePerformance:onBeHitFly(params, attacker)
     flyDisTance = maxFlyDis
   end
   local spdValue = BattleFunc.instance:turnSpeedToFrame(params[0+1])
-  local moveFrame = Math:ceil(dis / spdValue)
+  local moveFrame = math.ceil(dis / spdValue)
   self:initMove(spdValue * way, 0, 0, true)
   local halft = moveFrame / 2
   self.addSpeed.y = flyDisTance * 2 / halft * halft
@@ -289,7 +289,7 @@ end
 function InstancePerformance:onStartSlide(speedValue, addSpeed)
   self.pos.y = 0
   self.gravityAble = false
-  local frame = Math:floor(Math:abs(speedValue / addSpeed))
+  local frame = math.floor(math.abs(speedValue / addSpeed))
   self:initMove(speedValue, 0, 0, true)
   self.addSpeed.x = addSpeed
   self.controler:setCallBack(frame, self.resumeHitedBody, self)
@@ -332,7 +332,7 @@ function InstancePerformance:playSpecialSysAction(actionName, sysTime, startTime
   local totalframe = InstancePerformance.super.playSpecialSysAction(self,actionName, sysTime, startTime, endTime, actionLength, self._aniPlaySpeed)
   self._viewPasuseValue = 0
   self.label = actionName
-  self.controler:setCallBack(Math:round(totalframe / self._aniPlaySpeed), self.resumeIdleAction, self)
+  self.controler:setCallBack(math.round(totalframe / self._aniPlaySpeed), self.resumeIdleAction, self)
   return totalframe
 end
 
@@ -394,7 +394,7 @@ end
 
 function InstancePerformance:adjustToTargetZpos()
   local disZ = self.targetZPos - self.pos.z
-  local absDisz = Math:abs(disZ)
+  local absDisz = math.abs(disZ)
   if absDisz > 2 then
     self.speed.z = absDisz / disZ
   end

@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 BattleControler = class('BattleControler')
 function BattleControler:ctor(ctn)
   self._isGamePause = false;
@@ -19,17 +10,18 @@ function BattleControler:ctor(ctn)
   self.updateScale = 1;
   self._leftScaleFrame = 0;
   self._leftCatchTime = 0;
-  self.performanceControler = PerformanceControler(self)
+  self.performanceControler = PerformanceControler.new(self)
   self._allInstanceArr = {}
   self.battleState = BattleConst.battleState_out
-  self.cameraControler = CameraControler(self)
+  self.cameraControler = CameraControler.new(self)
   self._timeList = {}
   self._cacheTimeArr = {}
   self.updateCallFuncGroup = {}
-  self._oneFrameDt = Math:round(1000 / GameConsts.gameFrameRate)
+  
+  self._oneFrameDt = math.round(1000 / GameConsts.gameFrameRate)
   self._maxFrameDt = 5 * self._oneFrameDt
-  self.tweenControler = BattleTweenControler(self)
-  self.battleDebugTool = BattleDebugTool(self)
+  self.tweenControler = BattleTweenControler.new(self)
+  self.battleDebugTool = BattleDebugTool.new(self)
   self.updateScale = BattleDebugTool.getBattleAddSped()
   if not self.updateScale then
     self.updateScale = 1
@@ -37,14 +29,14 @@ function BattleControler:ctor(ctn)
 end
 
 function BattleControler:onceUpdateFrame()
-  local currentT = Laya.Browser:now()
+  local currentT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   local dt = currentT - self._lastFrameTime
   if dt > self._maxFrameDt then
     dt = self._maxFrameDt
   end
   self._lastFrameTime = currentT
   self._leftFrameDt = self._leftFrameDt + dt
-  local nums = Math:floor(self._leftFrameDt / self._oneFrameDt)
+  local nums = math.floor(self._leftFrameDt / self._oneFrameDt)
   self._leftFrameDt = self._leftFrameDt - nums * self._oneFrameDt
   local i = 0
   repeat
@@ -72,36 +64,18 @@ function BattleControler:updateFrame()
   self.tweenControler:updateFrame()
   self:doDelayCallFunc()
   for i in pairs(self.updateCallFuncGroup) do
-    local info = self.updateCallFuncGroup[i+1]
+    local info = self.updateCallFuncGroup[i]
     info.callBack:call(info.thisObj, info.params)
     if info.frame > 0 then
       info.frame=info.frame-1
       if info.frame == 0 then
-        self.updateCallFuncGroup[i+1] = nil
+        self.updateCallFuncGroup[i] = nil
       end
     end
   end
   self:sortChildren()
 end
 
-function BattleControler:checkHasSameInstance()
-  if self.updateCount % 100 ~= 0 then
-    return
-  end
-  local i = 0
-  repeat
-    local instance1 = self._allInstanceArr[i+1]
-    local j = i + 1
-    repeat
-      local instance2 = self._allInstanceArr[j+1]
-      if instance1 == instance2 then
-        LogsManager.errorTag("instanceError", "对象重复了--", instance1)
-      end
-      j=j+1
-    until not(j < #self._allInstanceArr)
-    i=i+1
-  until not(i < #self._allInstanceArr - 1)
-end
 
 function BattleControler:sortChildren(isForce)
   if isForce == nil then
@@ -115,22 +89,19 @@ end
 
 function BattleControler:sortOneArr(campArr)
   local i = 0
-  repeat
-    local role = campArr[i+1]
-    role:updateViewZorder()
-    i=i+1
-  until not(i < #campArr)
+  for i,v in ipairs(campArr) do
+    v:updateViewZorder()
+  end
 end
 
 function BattleControler:doDelayCallFunc()
   if #self._timeList == 0 then
     return
   end
+  local i
   if not self.isSkillPause then
-    local i = #self._timeList - 1
-    repeat
-      repeat
-        local info = self._timeList[i+1]
+    for i=#self._timeList,1,-1 do
+      local info = self._timeList[i]
         if not info then
           BattleLogsManager.battleEcho("_在延迟回调里面做了清理延迟回调事情,导致序列变了")
           break
@@ -142,34 +113,28 @@ function BattleControler:doDelayCallFunc()
         else
           info.frame = info.frame - 1
         end
-      until true
-      i=i-1
-    until not(i >= 0)
+    end
   else
-    local i = #self._timeList - 1
-    repeat
-      repeat
-        local info = self._timeList[i+1]
-        if not info then
-          BattleLogsManager.battleEcho("_在延迟回调里面做了清理延迟回调事情,导致序列变了")
-          break
+    for i=#self._timeList,1,-1 do
+      local info = self._timeList[i]
+      if not info then
+        BattleLogsManager.battleEcho("_在延迟回调里面做了清理延迟回调事情,导致序列变了")
+        break
+      end
+      local thisObj = info.thisObj
+      local isRunWithSkillPause = true
+      if (thisObj and thisObj.isRunWithSkillPause) and not thisObj:isRunWithSkillPause() then
+        isRunWithSkillPause = false
+      end
+      if isRunWithSkillPause then
+        self:doOneCallInfo(info, i)
+        if thisObj and thisObj.upTimeScale then
+          info.frame = info.frame - thisObj.upTimeScale
+        else
+          info.frame = info.frame - 1
         end
-        local thisObj = info.thisObj
-        local isRunWithSkillPause = true
-        if (thisObj and thisObj.isRunWithSkillPause) and not thisObj:isRunWithSkillPause() then
-          isRunWithSkillPause = false
-        end
-        if isRunWithSkillPause then
-          self:doOneCallInfo(info, i)
-          if thisObj and thisObj.upTimeScale then
-            info.frame = info.frame - thisObj.upTimeScale
-          else
-            info.frame = info.frame - 1
-          end
-        end
-      until true
-      i=i-1
-    until not(i >= 0)
+      end
+    end
   end
 end
 

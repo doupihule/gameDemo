@@ -59,7 +59,7 @@ function InstanceMoveMultyEntity:getNextpos()
 end
 
 function InstanceMoveMultyEntity:getLoopPos()
-  local roundNum = Math:floor(self.currentStep / self.totalStep)
+  local roundNum = math.floor(self.currentStep / self.totalStep)
   local pos = self.currentStep % self.totalStep
   if roundNum % 2 == 0 then
     -- [ts2lua]self.pointArr下标访问可能不正确

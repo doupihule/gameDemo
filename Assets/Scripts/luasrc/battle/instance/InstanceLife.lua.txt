@@ -139,7 +139,7 @@ function InstanceLife:initSkillData()
     self.energySkill = self.controler:createSkillData(self.cfgData.energySkill, level, thisObj, BattleConst.skill_kind_energy)
     self.maxEnergy = self.cfgData.energyParams[1+1]
     self.energyResumeValue = self.cfgData.energyParams[0+1]
-    self.blackFrame = Math:floor(self.cfgData.energyParams[2+1] * BattleFunc.miniSecondToFrame)
+    self.blackFrame = math.floor(self.cfgData.energyParams[2+1] * BattleFunc.miniSecondToFrame)
     self.killResumeEnergy = self.cfgData.energyParams[3+1] or 0
   end
 end
@@ -183,7 +183,7 @@ end
 
 function InstanceLife:getSkillLeftCd(skill)
   local skillSpeedValue = self:getSkillSpeedUpValue(skill._skillId)
-  return Math:round(skill.skillInitCd / skillSpeedValue)
+  return math.round(skill.skillInitCd / skillSpeedValue)
 end
 
 function InstanceLife:getNormalSkills()
@@ -485,7 +485,7 @@ end
 
 function InstanceLife:resumeIdleAction()
   if self.currentSkill then
-    self.skillWaitFrame = Math:round(self.currentSkill.skillWaitFrame / self._aniPlaySpeed)
+    self.skillWaitFrame = math.round(self.currentSkill.skillWaitFrame / self._aniPlaySpeed)
   end
   InstanceLife.super.resumeIdleAction(self)
 end

@@ -175,7 +175,7 @@ function Client:onResult(result, isPush)
   end
   if result.serverInfo then
     self._reqBackTime = result.serverInfo.serverTime
-    self._serverTime = parseInt(result.serverInfo.serverTime) - Math:floor(Laya.Browser:now())
+    self._serverTime = parseInt(result.serverInfo.serverTime) - math.floor(cs.GameUtils.CommonUtil.GetTimeMiniStamp())
   end
 end
 
@@ -315,15 +315,15 @@ function Client:reloginBack(result)
 end
 
 function Client.__getters:serverTime()
-  return Math:floor(self._serverTime + Math:floor(Laya.Browser:now()) * 0.001)
+  return math.floor(self._serverTime + math.floor(cs.GameUtils.CommonUtil.GetTimeMiniStamp()) * 0.001)
 end
 
 function Client.__getters:miniserverTime()
-  return self._serverTime + Laya.Browser:now()
+  return self._serverTime + cs.GameUtils.CommonUtil.GetTimeMiniStamp()
 end
 
 function Client.__getters:serverTimeMicro()
-  return self._serverTime + Laya.Browser:now()
+  return self._serverTime + cs.GameUtils.CommonUtil.GetTimeMiniStamp()
 end
 
 function Client.__getters:reqBackTime()
@@ -495,7 +495,7 @@ function Client:startRequestCloud(method, params, callback, thisObj, addParam, e
     end
     if (backData.result and backData.result.serverInfo) and backData.result.serverInfo.serverTime then
       thisValue._reqBackTime = backData.result.serverInfo.serverTime
-      thisValue._serverTime = thisValue._reqBackTime - Laya.Browser:now()
+      thisValue._serverTime = thisValue._reqBackTime - cs.GameUtils.CommonUtil.GetTimeMiniStamp()
     end
     if backData.error then
       onErrorBack(backData.error)

@@ -96,7 +96,7 @@ function RefreshControler:initWarData()
     i=i+1
   until not(i < #result)
   result:sort(self.sortYouxianji)
-  local energy = Math:floor(enemyInfo.energy[0+1] + FogModel.instance:getCurLayer() * enemyInfo.energy[1+1] / 10000)
+  local energy = math.floor(enemyInfo.energy[0+1] + FogModel.instance:getCurLayer() * enemyInfo.energy[1+1] / 10000)
   local level = nil
   local starLevel = nil
   local equip = nil

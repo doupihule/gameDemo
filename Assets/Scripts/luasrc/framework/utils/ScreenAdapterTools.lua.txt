@@ -55,7 +55,7 @@ function ScreenAdapterTools.checkScreenFixMode(browWidth, browHeight)
     minScale = ScreenAdapterTools.designHeight / ScreenAdapterTools.maxWidth
     if targetScale < borderScale then
       ScreenAdapterTools.width = ScreenAdapterTools.designWidth
-      local targetHei = Math:round(ScreenAdapterTools.width / targetScale)
+      local targetHei = math.round(ScreenAdapterTools.width / targetScale)
       if targetHei > ScreenAdapterTools.maxHeight then
         ScreenAdapterTools.sceneOffsetY = targetHei - ScreenAdapterTools.maxHeight / 2
         ScreenAdapterTools.height = ScreenAdapterTools.maxHeight
@@ -65,13 +65,13 @@ function ScreenAdapterTools.checkScreenFixMode(browWidth, browHeight)
       scaleMode = "fixedwidth"
     else
       ScreenAdapterTools.height = ScreenAdapterTools.designHeight
-      ScreenAdapterTools.width = Math:round(ScreenAdapterTools.designHeight * targetScale)
+      ScreenAdapterTools.width = math.round(ScreenAdapterTools.designHeight * targetScale)
       scaleMode = "fixedheight"
     end
   else
     if targetScale > borderScale then
       ScreenAdapterTools.height = ScreenAdapterTools.designHeight
-      local targetWid = Math:round(ScreenAdapterTools.designHeight * targetScale)
+      local targetWid = math.round(ScreenAdapterTools.designHeight * targetScale)
       if targetWid > ScreenAdapterTools.maxWidth then
         ScreenAdapterTools.sceneOffsetX = targetWid - ScreenAdapterTools.maxWidth / 2
         ScreenAdapterTools.width = ScreenAdapterTools.maxWidth
@@ -81,7 +81,7 @@ function ScreenAdapterTools.checkScreenFixMode(browWidth, browHeight)
       scaleMode = "fixedheight"
     else
       ScreenAdapterTools.width = ScreenAdapterTools.designWidth
-      ScreenAdapterTools.height = Math:round(ScreenAdapterTools.designWidth / targetScale)
+      ScreenAdapterTools.height = math.round(ScreenAdapterTools.designWidth / targetScale)
       scaleMode = "fixedwidth"
     end
   end
