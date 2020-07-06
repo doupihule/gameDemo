@@ -258,7 +258,7 @@ end
 
 function RefreshControler:initLevelData(level)
   self.level = Number(level)
-  local levelInfo = BattleFunc.instance:getCfgDatas("Level", String(level))
+  local levelInfo = BattleFunc.instance:getCfgDatas("Level", tostring(level))
   self._waveIdArr = levelInfo.levelWave
   -- [ts2lua]修改数组长度需要手动处理。
   self.maxWave = self._waveIdArr.length

@@ -122,7 +122,7 @@ function PassiveSkillTrigger.runPassiveSkill_6(attacker, skill, useArr, targetSk
     local type = info[0+1]
     local params = info[1+1]
     if type == 1 then
-      if buffData._id == String(params) then
+      if buffData._id == tostring(params) then
         addValue = addValue + info[2+1]
         break
       end

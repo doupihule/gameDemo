@@ -130,7 +130,7 @@ end
 function UserModel:costGold(num)
   local giftGold = self._data.giftGold or "0"
   local chargeGold = self._data.gold or "0"
-  if not BigNumUtils.compare(BigNumUtils.sum(giftGold, chargeGold), String(num), true) then
+  if not BigNumUtils.compare(BigNumUtils.sum(giftGold, chargeGold), tostring(num), true) then
     return {"0", "0"}
   end
   giftGold = BigNumUtils.substract(giftGold, num)

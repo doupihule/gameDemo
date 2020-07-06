@@ -275,7 +275,7 @@ function BigNumUtils.devide(a, b, round)
       r = temp
       result = result .. "0"
     else
-      q = parseInt(String(temp / Number(b)))
+      q = parseInt(tostring(temp / Number(b)))
       r = temp % Number(b)
       result = result + q
     end

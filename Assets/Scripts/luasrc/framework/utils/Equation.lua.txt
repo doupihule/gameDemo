@@ -350,7 +350,7 @@ function Equation.getNumByDecimalAnalyserNode(num, index)
     local pow = Math:pow(10, index)
     result = Math:round(num / pow) * pow
   else
-    local str = String(num)
+    local str = tostring(num)
     local dianIndex = str:find(".")
     if dianIndex == -1 then
       return num
@@ -501,7 +501,7 @@ function Equation.getNumByDecimal(num, index)
   if index >= 0 then
     result = Math:round(num / pow) * pow
   else
-    local str = String(num)
+    local str = tostring(num)
     local dianIndex = str:find(".")
     if dianIndex == -1 then
       return num

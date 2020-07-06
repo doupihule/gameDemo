@@ -94,7 +94,7 @@ function StringUtils.getPaddingStr(str, len, padding, pos)
   if pos == nil then
     pos=true
   end
-  str = String(str)
+  str = tostring(str)
   if #str >= len then
     return str
   end

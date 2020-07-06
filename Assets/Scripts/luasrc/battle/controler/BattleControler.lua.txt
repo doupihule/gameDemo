@@ -347,7 +347,7 @@ function BattleControler:registObjUpdate(callFunc, callThisObj, params, frame)
   end
   self.callFuncNums=self.callFuncNums+1
   -- [ts2lua]self.updateCallFuncGroup下标访问可能不正确
-  self.updateCallFuncGroup[String(self.callFuncNums)] = {callBack=callFunc, thisObj=callThisObj, params=params, frame=frame}
+  self.updateCallFuncGroup[tostring(self.callFuncNums)] = {callBack=callFunc, thisObj=callThisObj, params=params, frame=frame}
   return self.callFuncNums
 end
 

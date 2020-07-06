@@ -51,7 +51,7 @@ function ErrCodeManager:setErr(errCode)
     , self)
   elseif errCode == ErrorCode.webOffline then
     WindowManager.setPopupTip(1, errerMessage, self.reauthHandler, self)
-  elseif String(errCode) == ErrorCode.account_data_error then
+  elseif tostring(errCode) == ErrorCode.account_data_error then
     WindowManager.setPopupTip(1, errerMessage, self.sureCallback, self)
   else
     local flag = true

@@ -28,7 +28,7 @@ function BattleDamageLabel:setValue(kind, value)
       value = 1
     end
     local headWid = cfg.head or 0
-    local strValue = String(value)
+    local strValue = tostring(value)
     local tempStr = strValue
     local perWid = cfg.w
     local fuhaoWid = cfg.fuhao and perWid or 0

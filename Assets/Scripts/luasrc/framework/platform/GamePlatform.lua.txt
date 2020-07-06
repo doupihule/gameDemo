@@ -490,7 +490,7 @@ function GamePlatform:doCoverVersion(serverVersion)
   if not serverVersion then
     return
   end
-  Global.version = String(serverVersion)
+  Global.version = tostring(serverVersion)
 end
 
 function GamePlatform:getVersionName()

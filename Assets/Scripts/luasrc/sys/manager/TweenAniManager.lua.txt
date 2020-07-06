@@ -305,7 +305,7 @@ function TweenAniManager:numberChangeCallBack(oldNum, newNum, lable, group, isBi
   lable.__currentNum = BigNumUtils.sum(lable.__currentNum, deltaNum)
   if deltaNum > "0" and BigNumUtils.compare(lable.__currentNum, newNum) or deltaNum < "0" and not BigNumUtils.compare(lable.__currentNum, newNum) then
     -- [ts2lua]lua中0和空字符串也是true，此处isBigInt需要确认
-    lable:changeText((isBigInt and {StringUtils.getCoinStr(newNum)} or {String(newNum)})[1])
+    lable:changeText((isBigInt and {StringUtils.getCoinStr(newNum)} or {tostring(newNum)})[1])
     lable.__currentNum = nil
     TimerManager.instance:removeByCallBack(lable, TweenAniManager.instance.numberChangeCallBack)
     if callBack then
@@ -317,7 +317,7 @@ function TweenAniManager:numberChangeCallBack(oldNum, newNum, lable, group, isBi
     end
     ))
     -- [ts2lua]lua中0和空字符串也是true，此处isBigInt需要确认
-    lable:changeText((isBigInt and {StringUtils.getCoinStr(BigNumUtils.round(lable.__currentNum))} or {String(BigNumUtils.round(lable.__currentNum))})[1])
+    lable:changeText((isBigInt and {StringUtils.getCoinStr(BigNumUtils.round(lable.__currentNum))} or {tostring(BigNumUtils.round(lable.__currentNum))})[1])
   end
 end
 

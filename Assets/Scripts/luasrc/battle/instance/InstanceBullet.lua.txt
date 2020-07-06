@@ -94,7 +94,7 @@ function InstanceBullet:setOwner(owner, skillAction, rotation, targetRole)
     local i = 0
     repeat
       if not self.skillActionArr[i+1] then
-        local skillAction = SkillActionData(String(skillEff[i+1]), owner, skillAction.skill, 0, 0, 0, 0, 0)
+        local skillAction = SkillActionData(tostring(skillEff[i+1]), owner, skillAction.skill, 0, 0, 0, 0, 0)
         self.skillActionArr[i+1] = skillAction
       else
         self.skillActionArr[i+1]:updateData(owner, skillAction.skill)

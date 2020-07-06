@@ -40,14 +40,14 @@ function SkillActionData:updateData(owner, skill, relyonSkill)
   if not self.cfgData.target then
     self.chooseTartgetCfg = nil
   else
-    self.chooseTartgetCfg = BattleFunc.instance:getCfgDatas("Target", String(self.cfgData.target))
+    self.chooseTartgetCfg = BattleFunc.instance:getCfgDatas("Target", tostring(self.cfgData.target))
   end
   local tempArr = self.cfgData.logicParams
   if tempArr then
     if not self.skillLogicalParams then
       self.skillLogicalParams = {}
     end
-    local targetSkillId = String(self.cfgData.numId)
+    local targetSkillId = tostring(self.cfgData.numId)
     local tagStr = "SkillEffect:" .. self.skillEffectId
     if targetSkillId == self.skill._skillId then
       local i = 0

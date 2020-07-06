@@ -49,7 +49,7 @@ function WhiteListFunc:getWhiteList(type)
           -- [ts2lua]list下标访问可能不正确
           local element = list[key].whiteListNub
           -- [ts2lua]self.whiteList下标访问可能不正确
-          table.insert(self.whiteList[type], String(element))
+          table.insert(self.whiteList[type], tostring(element))
         end
       end
     end

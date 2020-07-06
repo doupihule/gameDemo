@@ -114,7 +114,7 @@ function AttributeExtendData:countPassiveAttr(roleData)
       local s = 0
       repeat
         local arr = effectParams[s+1]
-        local skillId = String(arr[0+1])
+        local skillId = tostring(arr[0+1])
         local value = Number(arr[1+1])
         local skillValue = 10000 + value
         if skillValue < 0 then

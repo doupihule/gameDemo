@@ -8,6 +8,6 @@ function NotifyManager.onServerNotify(serverInfo)
   print("=================get server push info ==========================", serverInfo)
   local method = serverInfo.method
   -- [ts2lua]NotifyEvent.methodToEventMap下标访问可能不正确
-  Message.instance:send(NotifyEvent.methodToEventMap[String(method)], serverInfo)
+  Message.instance:send(NotifyEvent.methodToEventMap[tostring(method)], serverInfo)
   NotifyManager.notifyFlag = false
 end

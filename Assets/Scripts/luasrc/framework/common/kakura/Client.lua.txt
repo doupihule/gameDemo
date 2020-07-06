@@ -477,7 +477,7 @@ function Client:startRequestCloud(method, params, callback, thisObj, addParam, e
   local thisValue = self
   local onErrorBack = function(error)
     if type(error) == "object" and error.code then
-      local errorCode = String(error.code)
+      local errorCode = tostring(error.code)
       if errorCode == "10038" or errorCode == "10003" then
         thisValue:startRelogin()
       end

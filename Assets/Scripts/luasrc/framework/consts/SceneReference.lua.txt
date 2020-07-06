@@ -215,7 +215,7 @@ function SceneReference.checkWhiteSceneId(sceneId, type)
   else
     LogsManager.echo("krma. bannerScene:", #sceneWhiteList)
     if sceneId then
-      if sceneWhiteList:find(String(Number(sceneId))) ~= -1 then
+      if sceneWhiteList:find(tostring(Number(sceneId))) ~= -1 then
         LogsManager.echo("zm find sceneId:", sceneId)
         return true
       end

@@ -256,7 +256,7 @@ function TestOpListUI:onParamsListRender(cell, index)
           endParams = Number(params)
           isRight = not isNaN(endParams)
         end,
-        ["String"] = function()
+        ["tostring"] = function()
           isRight = type(params) == "string"
           endParams = params
         end,

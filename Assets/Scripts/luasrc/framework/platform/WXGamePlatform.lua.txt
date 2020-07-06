@@ -147,7 +147,7 @@ function WXGamePlatform:getWxInfo()
         return
       end
       if UserInfo.isWX() then
-        gParams = {method=MethodCommon.global_Account_loginWx, params={js_code=res.code, device=Global.deviceModel, comeFrom=UserInfo.LoginSceneInfo, sceneId=String(Global.sceneId)}}
+        gParams = {method=MethodCommon.global_Account_loginWx, params={js_code=res.code, device=Global.deviceModel, comeFrom=UserInfo.LoginSceneInfo, sceneId=tostring(Global.sceneId)}}
       elseif UserInfo.isQQGame() then
         gParams = {method=MethodCommon.global_Account_loginQQ, params={js_code=res.code, device=Global.deviceModel, comeFrom=UserInfo.LoginSceneInfo}}
       elseif UserInfo.isTT() then

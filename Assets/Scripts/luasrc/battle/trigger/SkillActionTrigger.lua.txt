@@ -227,7 +227,7 @@ function SkillActionTrigger.checkBuffKind(buff, kind, value)
   elseif kind == BattleConst.buff_kind_type then
     return buff.logicType == value
   elseif kind == BattleConst.buff_kind_id then
-    return buff._id == String(value)
+    return buff._id == tostring(value)
   end
   return false
 end
@@ -295,7 +295,7 @@ function SkillActionTrigger.runSkillAction_11(attacker, skill, skillAction, useA
       local targetRole = useArr[s+1]
       local x = info[0+1] / attacker._viewWay + targetRole.pos.x
       local z = -info[1+1] + attacker.pos.z
-      local id = String(info[2+1])
+      local id = tostring(info[2+1])
       local lifeFrame = BattleFunc.instance:turnMinisecondToframe(info[3+1])
       attacker.controler:createSummoned(id, {level=attacker:getData().level, id=id, starLevel=attacker:getData().starLevel}, x, z, attacker, lifeFrame)
       i=i+1
@@ -310,7 +310,7 @@ function SkillActionTrigger.runSkillAction_12(attacker, skill, skillAction, useA
   repeat
     local s = 0
     repeat
-      local aoeId = String(aoeIdArr[s+1])
+      local aoeId = tostring(aoeIdArr[s+1])
       local aoeData = PoolTools.getItem(PoolCode.POOL_AOEDATA + aoeId)
       if not aoeData then
         aoeData = BattleAoeData(aoeId)
@@ -328,7 +328,7 @@ function SkillActionTrigger.runSkillAction_13(attacker, skill, skillAction, useA
   local i = 0
   repeat
     local info = paramsArr[i+1]
-    local bulletId = String(info[0+1])
+    local bulletId = tostring(info[0+1])
     local x = info[1+1] * attacker.cfgScale * attacker._viewWay
     local y = -info[2+1] * attacker.cfgScale
     local rotation = info[3+1]

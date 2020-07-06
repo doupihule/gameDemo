@@ -242,7 +242,7 @@ function BattleFunc:getCacheRebornAttr(rebornTimes)
   -- [ts2lua]self._cacheCfgMap.rebornAttr下标访问可能不正确
   if not self._cacheCfgMap.rebornAttr[key] then
     -- [ts2lua]self._cacheCfgMap.rebornAttr下标访问可能不正确
-    self._cacheCfgMap.rebornAttr[key] = self:turnPropArrToTable(self:getCfgDatasByKey("RebornAttribute", String(rebornTimes), "attribute"))
+    self._cacheCfgMap.rebornAttr[key] = self:turnPropArrToTable(self:getCfgDatasByKey("RebornAttribute", tostring(rebornTimes), "attribute"))
   end
   -- [ts2lua]self._cacheCfgMap.rebornAttr下标访问可能不正确
   return self._cacheCfgMap.rebornAttr[key]
@@ -257,7 +257,7 @@ function BattleFunc:getSkillValueByParams(key, _skillId, level, skillParams, tag
     return Number(key)
   end
   if not skillParams then
-    skillParams = self:getCfgDatasByMultyKey("SkillUpdate", _skillId, String(level), "params", true)
+    skillParams = self:getCfgDatasByMultyKey("SkillUpdate", _skillId, tostring(level), "params", true)
     if not skillParams then
       return Number(key)
     end

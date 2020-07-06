@@ -50,9 +50,9 @@ function BattleSkillData:updateLevel(level)
   end
   self.level = level
   if self.relyonSkill then
-    self.skillPropParams = BattleFunc.instance:getCfgDatasByMultyKey("SkillUpdate", self.relyonSkill._skillId, String(self.relyonSkill.level), "params", true)
+    self.skillPropParams = BattleFunc.instance:getCfgDatasByMultyKey("SkillUpdate", self.relyonSkill._skillId, tostring(self.relyonSkill.level), "params", true)
   else
-    self.skillPropParams = BattleFunc.instance:getCfgDatasByMultyKey("SkillUpdate", self._skillId, String(level), "params", true)
+    self.skillPropParams = BattleFunc.instance:getCfgDatasByMultyKey("SkillUpdate", self._skillId, tostring(level), "params", true)
   end
   if self.skillType ~= BattleConst.skill_kind_passive then
     self.cfgData = BattleFunc.instance:getCfgDatas("Skill", self._skillId)
@@ -60,7 +60,7 @@ function BattleSkillData:updateLevel(level)
     if value then
       self.skillWaitFrame = BattleFunc.instance:turnMinisecondToframe(Number(value))
     end
-    self.chooseTartgetCfg = BattleFunc.instance:getCfgDatas("Target", String(self.cfgData.target))
+    self.chooseTartgetCfg = BattleFunc.instance:getCfgDatas("Target", tostring(self.cfgData.target))
     if not self.skillLabel then
       if self.cfgData.action then
         self.skillLabel = TableUtils.copyOneArr(self.cfgData.action)

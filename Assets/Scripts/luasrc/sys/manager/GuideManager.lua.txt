@@ -139,7 +139,7 @@ end
 
 function GuideManager:isGuideFin(guideId)
   -- [ts2lua]UserModel.instance:getSubGuide()下标访问可能不正确
-  local flag = UserModel.instance:getSubGuide()[String(guideId)]
+  local flag = UserModel.instance:getSubGuide()[tostring(guideId)]
   if flag then
     return true
   end

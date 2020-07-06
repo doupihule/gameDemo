@@ -9,7 +9,7 @@ function BattleBuffData:ctor(id)
   self.type = 1;
   self.group = 1;
   self.layerNums = 1;
-  self._id = String(id)
+  self._id = tostring(id)
   self.cfgData = BattleFunc.instance:getCfgDatas("Buff", id)
   self.type = self.cfgData.type
   self.logicType = self.cfgData.logicType
