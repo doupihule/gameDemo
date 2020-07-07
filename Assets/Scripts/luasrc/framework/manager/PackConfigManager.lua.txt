@@ -57,20 +57,14 @@ function PackConfigManager.__getters:platform()
     platform = CloudPlatformData.platform
   end
   if config ~= nil then
-    -- [ts2lua]self._platform下标访问可能不正确
     self._platform["platform"] = config.APP_DEPLOYMENT
-    -- [ts2lua]self._platform下标访问可能不正确
     self._platform["vms_version"] = config.APP_BUILD_NUM
-    -- [ts2lua]self._platform下标访问可能不正确
     self._platform["upgrade_path"] = config.UPGRADE_PATH
-    -- [ts2lua]self._platform下标访问可能不正确
     self._platform["vms_url"] = config.VMS_URL
     if config.CLOUD_URL then
-      -- [ts2lua]self._platform下标访问可能不正确
       self._platform["cloud_url"] = config.CLOUD_URL
     end
     if config.BACKEND_URL then
-      -- [ts2lua]self._platform下标访问可能不正确
       self._platform["backend_url"] = config.BACKEND_URL
     end
     if config.DOWNLOAD_URL then
@@ -86,8 +80,6 @@ function PackConfigManager.__getters:platform()
 end
 
 function PackConfigManager.__setters:platform(val)
-  -- [ts2lua]self._platform下标访问可能不正确
   self._platform["kakura_url"] = val.link
-  -- [ts2lua]self._platform下标访问可能不正确
   self._platform["sec"] = val._id
 end

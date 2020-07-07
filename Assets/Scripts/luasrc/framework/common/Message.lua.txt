@@ -45,7 +45,7 @@ function Message:send(cmd, data)
     local len = #list
     local i = len - 1
     repeat
-      list[i+1].recvMsg:call(list[i+1], cmd, data)
+      doJsCallFunc(list[i+1].recvMsg,list[i+1], cmd, data)
       i=i-1
     until not(i >= 0)
     if len <= 0 then

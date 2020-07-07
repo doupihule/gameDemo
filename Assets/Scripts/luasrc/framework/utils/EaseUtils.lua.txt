@@ -51,7 +51,7 @@ end
 
 function EaseUtils:onTouchTap(event)
   if self._onClickFunc then
-    self._onClickFunc:call(self._easeObject, event.stageX, event.stageY)
+    doJsCallFunc(self._onClickFunc,self._easeObject, event.stageX, event.stageY)
   end
 end
 
@@ -64,7 +64,7 @@ function EaseUtils:touchBeginHandler(event)
   self._isDragMoved = false
   self:stopEase()
   if self._onTouchDownFunc then
-    self._onTouchDownFunc:call(self._easeObject, event.stageX, event.stageY)
+    doJsCallFunc(self._onTouchDownFunc,self._easeObject, event.stageX, event.stageY)
   end
   self._touchObject:off(Laya.Event.MOUSE_DOWN, self, self.touchBeginHandler)
 end
@@ -85,11 +85,11 @@ function EaseUtils:touchMoveHandler(event)
   local disY = event.stageY - self._startY
   self._speedX = disX
   self._speedY = disY
-  self._onPosChangeFunc:call(self._easeObject, disX, disY, event.stageX, event.stageY)
+  doJsCallFunc(self._onPosChangeFunc,self._easeObject, disX, disY, event.stageX, event.stageY)
   self._startX = event.stageX
   self._startY = event.stageY
   if self._onMovedFunc then
-    self._onMovedFunc:call(self._easeObject, event.stageX, event.stageY)
+    doJsCallFunc(self._onMovedFunc,self._easeObject, event.stageX, event.stageY)
   end
   self._isDragMoved = true
 end
@@ -97,7 +97,7 @@ end
 function EaseUtils:touchEndHandler(event)
   if self._onClickFunc then
     if not self._moveStart then
-      self._onClickFunc:call(self._easeObject, event.stageX, event.stageY)
+      doJsCallFunc(self._onClickFunc,self._easeObject, event.stageX, event.stageY)
     end
   end
   self._isDragDown = false
@@ -110,10 +110,10 @@ function EaseUtils:touchEndHandler(event)
   if self._isDragMoved then
     self:startEase(self._speedX, self._speedY)
   elseif self._onEaseEndFunc then
-    self._onEaseEndFunc:call(self._easeObject, 0, 0)
+    doJsCallFunc(self._onEaseEndFunc,self._easeObject, 0, 0)
   end
   if self._onGloablEndFunc then
-    self._onGloablEndFunc:call(self._easeObject, event.stageX, event.stageY)
+    doJsCallFunc(self._onGloablEndFunc,self._easeObject, event.stageX, event.stageY)
   end
   self._isDragMoved = false
   print(event.type)
@@ -132,11 +132,11 @@ function EaseUtils:onEase()
     self._speedY = 0
     self:stopEase()
     if self._onEaseEndFunc then
-      self._onEaseEndFunc:call(self._easeObject, 0, 0)
+      doJsCallFunc(self._onEaseEndFunc,self._easeObject, 0, 0)
     end
   end
   local func = nil
-  self._onPosChangeFunc:call(self._easeObject, self._speedX, self._speedY)
+  doJsCallFunc(self._onPosChangeFunc,self._easeObject, self._speedX, self._speedY)
   return false
 end
 

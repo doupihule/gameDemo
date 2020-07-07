@@ -1,160 +1,16 @@
-
-
-
-
-
-
-
-
 LocalStorageManager = class('LocalStorageManager')
 function LocalStorageManager.setItem(key, value)
-  if UserInfo.isSystemNative() then
-    LocalStorageManager.nativeSetItem(key, value)
-    return
-  end
-  if FileUtils.isUserWXSource() then
-    try_catch{
-      main = function()
-        -- [ts2lua]window下标访问可能不正确
-        window["wx"]:setStorageSync(key, value)
-      end,
-      catch = function(e)
-        
-      
-      end
-    }
-    return
-  else
-    localStorage:setItem(key, value)
-  end
+  
 end
 
 function LocalStorageManager.getItem(key)
-  if UserInfo.isSystemNative() then
-    return LocalStorageManager.nativeGetItem(key)
-  end
-  if FileUtils.isUserWXSource() then
-    try_catch{
-      main = function()
-        -- [ts2lua]window下标访问可能不正确
-        local value1 = window["wx"]:getStorageSync(key)
-        if value1 then
-          return value1
-        else
-          return "0"
-        end
-      end,
-      catch = function(e)
-        return "0"
-      end
-    }
-  else
-    local value = localStorage:getItem(key)
-    if value then
-      return value
-    end
-    return "0"
-  end
+  
 end
 
 function LocalStorageManager.removeItem(key)
-  if UserInfo.isSystemNative() then
-    LocalStorageManager.nativeRemoveItem(key)
-    return
-  end
-  if UserInfo.isWX() then
-    try_catch{
-      main = function()
-        -- [ts2lua]window下标访问可能不正确
-        window["wx"]:removeStorageSync(key)
-      end,
-      catch = function(e)
-        
-      
-      end
-    }
-    return
-  else
-    localStorage:removeItem(key)
-  end
+  
 end
 
 function LocalStorageManager.clearStorage()
-  if UserInfo.isWX() then
-    try_catch{
-      main = function()
-        -- [ts2lua]window下标访问可能不正确
-        window["wx"]:clearStorageSync()
-      end,
-      catch = function(e)
-        
-      
-      end
-    }
-    return
-  else
-    localStorage:clear()
-  end
-end
-
-function LocalStorageManager.initNativeStorageMap()
-  if LocalStorageManager._localStorageMap ~= nil then
-    return
-  end
-  -- [ts2lua]window下标访问可能不正确
-  if not window["conchConfig"] then
-    return
-  end
-  -- [ts2lua]window下标访问可能不正确
-  local path = window["conchConfig"]:getStoragePath()
-  LocalStorageManager._localStorageUrl = path .. "/" .. GameConsts.gameCode .. "_" .. UserInfo.platformId
-  -- [ts2lua]window下标访问可能不正确
-  local localStr = window["readFileSync"](LocalStorageManager._localStorageUrl, 'utf8') or '{}'
-  LocalStorageManager._localStorageMap = TableUtils.safelyJsonParse(localStr)
-end
-
-function LocalStorageManager.saveNativeCacheMap()
-  -- [ts2lua]window下标访问可能不正确
-  window["writeStrFileSync"](LocalStorageManager._localStorageUrl, JSON:stringify(LocalStorageManager._localStorageMap))
-end
-
-function LocalStorageManager.nativeSetItem(key, value)
-  LocalStorageManager.initNativeStorageMap()
-  if not LocalStorageManager._localStorageMap then
-    localStorage:setItem(key, value)
-    return
-  end
-  -- [ts2lua]LocalStorageManager._localStorageMap下标访问可能不正确
-  LocalStorageManager._localStorageMap[key] = value
-  LocalStorageManager.saveNativeCacheMap()
-end
-
-function LocalStorageManager.nativeRemoveItem(key)
-  LocalStorageManager.initNativeStorageMap()
-  if not LocalStorageManager._localStorageMap then
-    localStorage:removeItem(key)
-    return
-  end
-  -- [ts2lua]LocalStorageManager._localStorageMap下标访问可能不正确
-  LocalStorageManager._localStorageMap[key] = nil
-  LocalStorageManager.saveNativeCacheMap()
-end
-
-function LocalStorageManager.nativeGetItem(key)
-  LocalStorageManager.initNativeStorageMap()
-  if not LocalStorageManager._localStorageMap then
-    return localStorage:getItem(key)
-  end
-  -- [ts2lua]LocalStorageManager._localStorageMap下标访问可能不正确
-  local rt = LocalStorageManager._localStorageMap[key]
-  LogsManager.echo("nativeGetItem:" .. key, rt)
-  if not rt then
-    rt = localStorage:getItem(key)
-    LogsManager.echo("localStorage.getItem:" .. key, rt)
-    if rt then
-      -- [ts2lua]LocalStorageManager._localStorageMap下标访问可能不正确
-      LocalStorageManager._localStorageMap[key] = rt
-    end
-  end
-  return rt or "0"
+  
 end

@@ -29,7 +29,7 @@ function WaitManager:add(cmd)
     wait = WaitEntity()
   end
   wait.cmd = cmd
-  wait.time = Laya.timer.currTimer
+  wait.time = Client.instance.miniserverTime
   table.insert(self.waitList, wait)
   self:showOrHideWaitView(true)
   Laya.timer:loop(1000, self, self.timeCallBack)
@@ -65,7 +65,7 @@ end
 
 function WaitManager:timeCallBack()
   local len = #self.waitList
-  local nowTime = Laya.timer.currTimer
+  local nowTime = Client.instance.miniserverTime
   local i = 0
   repeat
     repeat

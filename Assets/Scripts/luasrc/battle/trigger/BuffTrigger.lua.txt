@@ -98,7 +98,7 @@ function BuffTrigger.runOneBuffEffect(attacker, defer, skillAction, buff)
   if not func then
     LogsManager.errorTag("buffError", "没有对应的buff效果类型:", logicType)
   else
-    func:call(BuffTrigger, attacker, defer, skillAction, buff)
+    doJsCallFunc(func,BuffTrigger, attacker, defer, skillAction, buff)
   end
 end
 
@@ -274,7 +274,7 @@ function BuffTrigger.onClearBuff(defer, buff, removeChance)
   if not func then
     return
   end
-  func:call(BuffTrigger, buff.onwer, defer, buff.skillAction, buff)
+  doJsCallFunc(func,BuffTrigger, buff.onwer, defer, buff.skillAction, buff)
 end
 
 function BuffTrigger.clearBuff_1(attacker, defer, skillAction, buff, removeChance)

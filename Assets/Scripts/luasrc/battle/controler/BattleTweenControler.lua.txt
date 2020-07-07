@@ -81,7 +81,7 @@ function BattleTweenControler:updateOneTween(tweenInfo)
   end
   if tweenInfo.frame == tweenInfo.totalFrame then
     if tweenInfo.callBack then
-      tweenInfo.callBack:call(tweenInfo.thisObj, tweenInfo.callParams)
+      doJsCallFunc(tweenInfo.callBack,tweenInfo.thisObj, tweenInfo.callParams)
     end
     return true
   end
@@ -177,7 +177,7 @@ function BattleTweenControler:dispose()
   repeat
     local info = self._tweenInfoMap[i+1]
     if info.callBack then
-      info.callBack:call(info.thisObj, info.callParams)
+      doJsCallFunc(info.callBack,info.thisObj, info.callParams)
     end
     i=i-1
   until not(i >= 0)

@@ -122,7 +122,7 @@ function SkillActionTrigger.runOneSkillAction(attacker, skill, skillAction, useA
     LogsManager.errorTag("skillactionError", "没有对应的效果类型:", logicType)
     return 0
   else
-    local rt = func:call(SkillActionTrigger, attacker, skill, skillAction, useArr)
+    local rt = doJsCallFunc(func,SkillActionTrigger, attacker, skill, skillAction, useArr)
     ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_action_usedAfter, attacker, useArr, skillAction)
     SkillExpandTrigger.onCheckExpand(attacker, skill, skillAction.cfgData.expand, useArr)
     -- [ts2lua]修改数组长度需要手动处理。

@@ -216,7 +216,7 @@ function GuideManager:guideFin(guideId, callBack, thisObj, needSync)
     GuideServer.setMainGuide(guideId, callBack, thisObj)
   else
     if callBack then
-      callBack:call(thisObj)
+      doJsCallFunc(callBack,thisObj)
     end
   end
 end

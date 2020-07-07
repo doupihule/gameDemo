@@ -181,7 +181,7 @@ function GameHttpControler:onHttpCallBack(backData)
   self._currentConn = nil
   self:doRequest()
   if temp.callback then
-    temp.callback:call(temp.thisObj, data.result or data, temp.addParams)
+    doJsCallFunc(temp.callback,temp.thisObj, data.result or data, temp.addParams)
   end
 end
 

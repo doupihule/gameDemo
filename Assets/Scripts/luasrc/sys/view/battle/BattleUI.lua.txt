@@ -612,7 +612,7 @@ function BattleUI:skillTipHideTween(data)
   local times = ScreenAdapterTools.width - self.skillTipGroup.x * rate
   Laya.Tween:to(self.skillTipGroup, {x=ScreenAdapterTools.width, alpha=0}, times, nil, Laya.Handler:create(self, function()
     self.skillTipGroup.visible = false
-    callBack and callBack:call(self, name)
+    callBack and doJsCallFunc(callBack,self, name)
   end
   ))
 end

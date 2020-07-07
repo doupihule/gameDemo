@@ -22,7 +22,7 @@ function FuncManager.init(callback, thisobj)
       BaseFunc.onTranslateGroupLoadComplete()
       ErrCodeManager.ins:initConfig()
       if callback then
-        callback:call(thisobj)
+        doJsCallFunc(callback,thisobj)
       end
       LogsManager.echo("xd__下载加解析配表总耗时", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - t1)
     end

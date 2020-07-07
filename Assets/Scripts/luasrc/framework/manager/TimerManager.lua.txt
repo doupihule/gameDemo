@@ -41,60 +41,54 @@ function TimerManager:add(callBack, thisObject, delay, maxCount, immediate, args
   local timeEntity = nil
   self.timeCount=self.timeCount+1
   if immediate then
-    timeEntity = TimeEntity(delay, callBack, thisObject, maxCount - 1, args)
+    timeEntity = TimeEntity.new(delay, callBack, thisObject, maxCount - 1, args)
     if #args > 0 then
       callBack:apply(thisObject, args)
     else
       callBack:apply(thisObject, {1})
     end
   else
-    timeEntity = TimeEntity(delay, callBack, thisObject, maxCount, args)
+    timeEntity = TimeEntity.new(delay, callBack, thisObject, maxCount, args)
   end
   timeEntity.code = self.timeCount
-  -- [ts2lua]self._timeMap下标访问可能不正确
   self._timeMap[tostring(self.timeCount)] = timeEntity
   return timeEntity.code
 end
 
 function TimerManager:remove(code)
   if code > 0 then
-    -- [ts2lua]self._timeMap下标访问可能不正确
     self._timeMap[tostring(code)] = nil
   end
 end
 
 function TimerManager:removeByCallBack(thisObject, callBack)
   for i in pairs(self._timeMap) do
-    local time = self._timeMap[i+1]
+    local time = self._timeMap[i]
     if time.thisObject == thisObject and time.callBack == callBack then
       time.isRemove = true
-      self._timeMap[i+1] = nil
+      self._timeMap[i] = nil
     end
   end
 end
 
 function TimerManager:removeByObject(obj)
   for i in pairs(self._timeMap) do
-    local time = self._timeMap[i+1]
+    local time = self._timeMap[i]
     if time.thisObject == obj then
       time.isRemove = true
-      self._timeMap[i+1] = nil
+      self._timeMap[i] = nil
     end
   end
 end
 
-function TimerManager:removeAll()
-  LogsManager.errorTag("timeError", "移除了所有计时器--禁止调用")
-  self._timeMap = {}
-end
 
 function TimerManager:tickHandler(time)
   self:onceUpdateFrame()
   local timeEntity = nil
-  local curTime = Laya.timer.currTimer
+  local curTime = Client.instance.miniserverTime
   local num = 0
   for i in pairs(self._timeMap) do
-    timeEntity = self._timeMap[i+1]
+    timeEntity = self._timeMap[i]
     local isRemove = false
     num = math.floor(curTime - timeEntity.oldTime / timeEntity.delay)
     if num > 0 then
@@ -118,7 +112,7 @@ function TimerManager:tickHandler(time)
 end
 
 function TimerManager:onceUpdateFrame()
-  local currentT = Laya.timer.currTimer
+  local currentT = Client.instance.miniserverTime
   local dt = currentT - self._lastFrameTime
   if dt > self._maxFrameDt then
     dt = self._maxFrameDt
@@ -147,7 +141,7 @@ function TimerManager:_updateFrame()
           self.updateCallFuncGroup[i+1] = nil
         end
       end
-      info.callBack:call(info.thisObj, info.params)
+      doJsCallFunc(info.callBack,info.thisObj, info.params)
     end
   end
 end

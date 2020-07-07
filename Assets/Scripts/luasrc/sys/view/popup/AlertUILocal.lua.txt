@@ -147,7 +147,7 @@ function AlertUILocal:touchHandler(target)
       local callBack = data.callBack
       local thisObj = data.thisObj
       if callBack then
-        callBack:call(thisObj)
+        doJsCallFunc(callBack,thisObj)
       end
     end
     i=i+1
@@ -156,7 +156,7 @@ end
 
 function AlertUILocal:reConnect()
   if self._callback then
-    self._callback:call(self._thisObj)
+    doJsCallFunc(self._callback,self._thisObj)
   end
   WindowManager.CloseUI(WindowCfgs.AlertUILocal)
 end

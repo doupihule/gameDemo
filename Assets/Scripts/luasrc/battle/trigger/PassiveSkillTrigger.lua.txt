@@ -86,7 +86,7 @@ function PassiveSkillTrigger.runOnePassiveSkill(attacker, skill, p1, p2, p3, p4)
     LogsManager.errorTag("PassiveSkillCfgError", "错误的被动技能效果类型,id:", skill._skillId, "effecttype:", type)
     return 0
   else
-    return func:call(PassiveSkillTrigger, attacker, skill, p1, p2, p3, p4)
+    return doJsCallFunc(func,PassiveSkillTrigger, attacker, skill, p1, p2, p3, p4)
   end
 end
 

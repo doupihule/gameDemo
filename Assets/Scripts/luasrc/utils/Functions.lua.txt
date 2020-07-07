@@ -267,100 +267,29 @@ end
 
 
 
-
-
-
---矩形工具
-rectEx= rectEx or {}
---是否包含一个点rect格式 x,y,w,h r = {x= x,y=y,w =w,h = h},    border 检测边界
-function rectEx.contain(r,x,y ,border)
-	border = border  and border or 0
-	r.w = r.w or r.width
-	r.h = r.h or r.height
-	if x <r.x - border or x >r.x+r.w + border or y < r.y -border or y > r.y + r.h +border then
-		return false
+--执行类似js的回调
+function doJsCallFunc( callFunc,thisObj,params )
+	if not callFunc then 
+		return
 	end
-	return true
-
-end
-
-function rectEx.mergeRect(rect1,rect2)
-	-- rect1宽高为0，直接返回rect2
-	if not rect1 or rect1.width<=0 or rect1.height<=0 then
-		return rect2
+	if( thisObj) then
+		callFunc(thisObj,params)
+	else
+		callFunc(params)
 	end
-	-- rect2宽高为0，直接返回rect1
-	if not rect2 or rect2.width<=0 or rect2.height<=0 then
-		return rect1
+end
+
+--执行类似js allpy的回调
+function doJsApplyFunc( callFunc,thisObj,paramsArr )
+	if not callFunc then 
+		return
 	end
-	-- 都有宽高，合并之
-	local _minx = math.min(rect1.x,rect2.x)
-	local _maxx = math.max(rect1.x+rect1.width,rect2.x + rect2.width)
-	local _miny = math.min(rect1.y,rect2.y)
-	local _maxy = math.max(rect1.y + rect1.height,rect2.y + rect2.height)
-	return cc.rect(_minx,_miny,_maxx-_minx, _maxy-_miny)
+	if( thisObj) then
+		callFunc(thisObj,unpack(paramsArr))
+	else
+		callFunc(unpack(paramsArr))
+	end
 end
-
---圆
-circleEx= circleEx or {}
---判断一个点是否在圆内 圆的格式 {x=,y=,r=},border 检测留多少边界
-function circleEx.contain(c,x,y,border )
-	border = border  or 0
-	local r = number.numBorder(c.r - border,0)
-	local dx = x-c.x
-	local dy = y -c.y
-	if dx*dx+dy*dy>r*r then
-	 	return false
-	end 
-	return true
-end
-
-
---点工具
-pointEx = pointEx or {}
-
---跟点赋予 transFrom 形变
-function pointEx.pointApplyTransform(point,t )
-	local p = {}
-	p.x = t.a * point.x + t.c * point.y + t.tx;
-	p.y = t.b * point.x + t.d * point.y + t.ty;
-	return p
-end
-
-
---给矩阵赋予 transFrom matrix 形变
---transfrom ,a,b,c,d,tx, ty
-function rectEx.rectApplyTransform(rect,transfrom )
-
-
-
-	local top = rect.y + rect.height
-	local left = rect.x
-	local right =rect.x + rect.width
-	local bottom =rect.y
-
-	local topLeft =pointEx.pointApplyTransform(cc.p(left,top),transfrom)
-	local topRight =pointEx.pointApplyTransform(cc.p(right, top),transfrom)
-	local bottomLeft =pointEx.pointApplyTransform(cc.p(left, bottom),transfrom)
-	local bottomRight =pointEx.pointApplyTransform(cc.p(right, bottom),transfrom)
-
-
-	--存储max min函数
-	local min = math.min
-	local max = math.max
-
-	local minX = min(min(topLeft.x, topRight.x), min(bottomLeft.x, bottomRight.x));
-    local maxX = max(max(topLeft.x, topRight.x), max(bottomLeft.x, bottomRight.x));
-    local minY = min(min(topLeft.y, topRight.y), min(bottomLeft.y, bottomRight.y));
-    local maxY = max(max(topLeft.y, topRight.y), max(bottomLeft.y, bottomRight.y));
-
-    local result = cc.rect(minX,minY,(maxX-minX),(maxY- minY))
-    return result
-
-end
-
-
--- dump(rectEx.rectApplyTransform(cc.rect(0,0,960,54) ,{a=0.7070770263671875, b=-0.7070770263671875, c=-0.70709228515625, d=-0.70709228515625, tx=-0.3, ty=-1.3}   ) 		)
 
 
 

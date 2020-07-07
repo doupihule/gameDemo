@@ -65,7 +65,7 @@ function BattleControler:updateFrame()
   self:doDelayCallFunc()
   for i in pairs(self.updateCallFuncGroup) do
     local info = self.updateCallFuncGroup[i]
-    info.callBack:call(info.thisObj, info.params)
+    doJsCallFunc(info.callBack,info.thisObj, info.params)
     if info.frame > 0 then
       info.frame=info.frame-1
       if info.frame == 0 then
@@ -161,7 +161,7 @@ function BattleControler:doOneCallInfo(info, i)
         if doApplyOrCall then
           endCallBack:apply(thisObj, endParams)
         else
-          endCallBack:call(thisObj, endParams)
+          doJsCallFunc(endCallBack,thisObj, endParams)
         end
       end
     else
@@ -171,7 +171,7 @@ function BattleControler:doOneCallInfo(info, i)
       if doApplyOrCall then
         callBack:apply(thisObj, params)
       else
-        callBack:call(thisObj, params)
+        doJsCallFunc(callBack,thisObj, params)
       end
     end
   end
@@ -229,7 +229,7 @@ function BattleControler:setCallBack(frame, callBack, thisObj, params, doApplyOr
     if doApplyOrCall then
       callBack:apply(thisObj, params)
     else
-      callBack:call(thisObj, params)
+      doJsCallFunc(callBack,thisObj, params)
     end
     return
   end

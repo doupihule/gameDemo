@@ -1,15 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
 SingleCommonServer = class('SingleCommonServer')
 SingleCommonServer._lastCacheClientDirtyList = {};
 SingleCommonServer.user_updateData_349 = "349";
@@ -65,7 +53,7 @@ function SingleCommonServer.startSaveClientData(isDelaySave, callBack, thisObj, 
   if SingleCommonServer._saveLock then
     SingleCommonServer._hasDataChange = true
     LogsManager.echo("server 当前保存数据cd没到")
-    callBack and callBack:call(thisObj, dummyBackData)
+    callBack and doJsCallFunc(callBack,thisObj, dummyBackData)
     return
   end
   SingleCommonServer._saveLock = true
@@ -121,7 +109,7 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
       end
       SingleCommonServer.sendNoAliCloudData({clientDirty=param})
     end
-    callBack and callBack:call(thisObj, dummyBackData)
+    callBack and doJsCallFunc(callBack,thisObj, dummyBackData)
     return
   end
   local params = nil
@@ -137,7 +125,7 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
   else
     params = {clientDirty=SingleCommonServer.getClientDirtyList()}
     if TableUtils.isEmptyTable(params.clientDirty) then
-      callBack and callBack:call(thisObj, dummyBackData)
+      callBack and doJsCallFunc(callBack,thisObj, dummyBackData)
       return
     end
   end
@@ -167,7 +155,7 @@ end
 function SingleCommonServer.doSureDoSaveDataBack(serverInfo, addParams)
   if serverInfo.error then
     if addParams.callBack then
-      addParams.callBack:call(addParams.thisObj, addParams.params)
+      doJsCallFunc(addParams.callBack,addParams.thisObj, addParams.params)
     end
     return
   end
@@ -175,7 +163,7 @@ function SingleCommonServer.doSureDoSaveDataBack(serverInfo, addParams)
   LogsManager.echo("__客户端同步数据成功")
   SingleCommonServer._lastBackUpData = addParams.backData
   if addParams.callBack then
-    addParams.callBack:call(addParams.thisObj, addParams.params)
+    doJsCallFunc(addParams.callBack,addParams.thisObj, addParams.params)
   end
 end
 

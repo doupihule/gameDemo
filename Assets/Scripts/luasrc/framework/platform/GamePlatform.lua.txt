@@ -118,7 +118,7 @@ function GamePlatform:reqServerList(callBack, thisObject)
       i=i+1
     until not(i < len)
     PackConfigManager.ins.platform = pData
-    callBack and callBack:call(thisObject, data[0+1].result.data)
+    callBack and doJsCallFunc(callBack,thisObject, data[0+1].result.data)
   end
   , self, "post")
 end
@@ -299,7 +299,7 @@ function GamePlatform:onReLoginBack(data)
   LogsManager.echo("data.loginToken", data.loginToken)
   local params = self._reLoginBackParams
   self._reLoginBackParams = nil
-  params.callBack:call(params.thisObj, data)
+  doJsCallFunc(params.callBack,params.thisObj, data)
 end
 
 function GamePlatform:onGlobalError()
@@ -506,7 +506,7 @@ function GamePlatform:removeLoginBtn() end
 function GamePlatform:createSpeLoginBtn(posX, posY, btnW, btnH, callBack, thisObject)
   local tempFunc = function()
     if callBack then
-      callBack:call(thisObject, {userInfo={nickName=UserInfo.channelUserId}})
+      doJsCallFunc(callBack,thisObject, {userInfo={nickName=UserInfo.channelUserId}})
     end
   end
   
@@ -517,7 +517,7 @@ end
 function GamePlatform:setSystemInfo() end
 function GamePlatform:getSystemInfo() end
 function GamePlatform:getLaunchOptionsSync(callback, thisObj)
-  callback:call(thisObj)
+  doJsCallFunc(callback,thisObj)
 end
 
 function GamePlatform:getWxInfo() end
@@ -544,7 +544,7 @@ end
 function GamePlatform:loadVideoAd() end
 function GamePlatform:setUserComeFrom() end
 function GamePlatform:createLoginButton(callBack, thisObject)
-  callBack and callBack:call(thisObject)
+  callBack and doJsCallFunc(callBack,thisObject)
 end
 
 function GamePlatform:login(type) end
@@ -676,7 +676,7 @@ function GamePlatform:vibrate(isLong, callBack, thisObject)
   if thisObject == nil then
     thisObject=nil
   end
-  callBack and callBack:call(thisObject, true)
+  callBack and doJsCallFunc(callBack,thisObject, true)
 end
 
 function GamePlatform:vibrateByCount(count)
@@ -746,11 +746,11 @@ function GamePlatform:showPopTip(title, content, extraData)
     extraData=nil
   end
   local onSureBack = function(rt)
-    extraData.success:call(nil, rt)
+    doJsCallFunc(extraData.success,nil, rt)
   end
   
   local onCancleBack = function(rt)
-    extraData.success:call(nil, rt)
+    doJsCallFunc(extraData.success,nil, rt)
   end
   
   WindowManager.setPopupTip(2, content, onSureBack, self, title, onCancleBack)

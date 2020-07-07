@@ -124,7 +124,7 @@ function HttpMessage:sendOtherHttpRequest(url, params, callBack, thisObject, met
   local onComplete = function(data)
     LogsManager.echo("sendOtherHttpRequest cost time:", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - startTime, "url:", url:slice(0, math.min(100, #url)))
     if callBack then
-      callBack:call(thisObject, data, addParams)
+      doJsCallFunc(callBack,thisObject, data, addParams)
     end
   end
   
@@ -135,7 +135,7 @@ function HttpMessage:sendOtherHttpRequest(url, params, callBack, thisObject, met
     else
       if webParams then
         local callback = webParams.errorCall
-        callback and callback:call(webParams.thisObj)
+        callback and doJsCallFunc(callback,webParams.thisObj)
       end
     end
   end
@@ -215,7 +215,7 @@ function HttpMessage:onHttpSuccess(data)
   local shortLogs = self:turnShortLogs(originData)
   LogsManager.echo("http callback,url:" .. url:slice(0, math.min(200, #url)) .. " cosTime:" .. cs.GameUtils.CommonUtil.GetTimeMiniStamp() - self.reqTime, "len:", #originData, "backData:", shortLogs)
   if callBack then
-    callBack:call(thisObj, data)
+    doJsCallFunc(callBack,thisObj, data)
   end
   self:doRequest()
 end
@@ -234,7 +234,7 @@ function HttpMessage:onHttpError(err)
     if self._currentConn.webParams.errorCall then
       local coninfo = self._currentConn
       self._currentConn = nil
-      coninfo.webParams.errorCall:call(coninfo.thisObj, err)
+      doJsCallFunc(coninfo.webParams.errorCall,coninfo.thisObj, err)
       self:doRequest()
       return
     end

@@ -273,7 +273,7 @@ function InstanceMove:overFinalPoint()
     thisObj = self._moveParams.thisObj
     self._moveParams:reset()
     if callBack then
-      callBack:call(thisObj)
+      doJsCallFunc(callBack,thisObj)
     end
   end
   if self._multyparams then
@@ -282,7 +282,7 @@ function InstanceMove:overFinalPoint()
     self._multyparams:dispose()
     self._multyparams = nil
     if callBack then
-      callBack:call(thisObj)
+      doJsCallFunc(callBack,thisObj)
     end
   end
 end

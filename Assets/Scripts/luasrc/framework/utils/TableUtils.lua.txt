@@ -1,6 +1,9 @@
 
 
 TableUtils = class('TableUtils')
+
+local json = require("rapidJson")
+
 function TableUtils:ctor() end
 function TableUtils.deepMerge(receiveObj, fromObj)
   if not fromObj then
@@ -307,48 +310,50 @@ end
 
 function TableUtils.safelyJsonStringfy(obj)
   local rt = ''
-  try_catch{
-    main = function()
-      rt = JSON:stringify(obj)
-    end,
-    catch = function(e)
-      -- [ts2lua]window下标访问可能不正确
-      window["LogsManager"]:echo("jsonStringFyError")
-      rt = TableUtils.safelyToString(obj)
-    end
-  }
+  rt = json.encode(obj)
   return rt
 end
 
 function TableUtils.safelyJsonParse(str)
   local rt = nil
-  try_catch{
-    main = function()
-      rt = JSON:parse(str)
-    end,
-    catch = function(e)
-      -- [ts2lua]window下标访问可能不正确
-      window["LogsManager"]:echo("safelyJsonParseError")
-      rt = {}
-    end
-  }
+  rt = json.decode(str)
   return rt
 end
 
 function TableUtils.safelyToString(obj)
-  if obj == nil then
-    return obj
-  end
-  local rt = ''
-  try_catch{
-    main = function()
-      rt = obj:toString()
-    end,
-    catch = function(e)
-      -- [ts2lua]window下标访问可能不正确
-      window["LogsManager"]:errorTag("safelyToStringError", "safelyToStringError")
-      rt = ""
-    end
-  }
-  return rt
+  return tostring(obj)
 end
+
+
+--矩形工具
+rectEx= rectEx or {}
+--是否包含一个点rect格式 x,y,w,h r = {x= x,y=y,w =w,h = h},    border 检测边界
+function rectEx.contain(r,x,y ,border)
+  border = border  and border or 0
+  r.w = r.w or r.width
+  r.h = r.h or r.height
+  if x <r.x - border or x >r.x+r.w + border or y < r.y -border or y > r.y + r.h +border then
+    return false
+  end
+  return true
+
+end
+
+function rectEx.mergeRect(rect1,rect2)
+  -- rect1宽高为0，直接返回rect2
+  if not rect1 or rect1.width<=0 or rect1.height<=0 then
+    return rect2
+  end
+  -- rect2宽高为0，直接返回rect1
+  if not rect2 or rect2.width<=0 or rect2.height<=0 then
+    return rect1
+  end
+  -- 都有宽高，合并之
+  local _minx = math.min(rect1.x,rect2.x)
+  local _maxx = math.max(rect1.x+rect1.width,rect2.x + rect2.width)
+  local _miny = math.min(rect1.y,rect2.y)
+  local _maxy = math.max(rect1.y + rect1.height,rect2.y + rect2.height)
+  return cc.rect(_minx,_miny,_maxx-_minx, _maxy-_miny)
+end
+
+

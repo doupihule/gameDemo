@@ -171,11 +171,11 @@ function ButtonUtils:touchHandler(e)
         self._button.skin = self._defUrl
       end
       if self._isTouch and self._callBack ~= nil then
-        self._callBack:call(self._thisObj, self._callBackParam)
+        doJsCallFunc(self._callBack,self._thisObj, self._callBackParam)
       end
       self._isTouch = false
       if self._endCallBack then
-        self._endCallBack:call(self._thisObj)
+        doJsCallFunc(self._endCallBack,self._thisObj)
       end
       if self._longPress then
         self:closeLongPress()
@@ -224,7 +224,7 @@ function ButtonUtils:touchHandler(e)
           end
           ))
           if self._callBack ~= nil then
-            self._callBack:call(self._thisObj, self._callBackParam)
+            doJsCallFunc(self._callBack,self._thisObj, self._callBackParam)
           end
         end
       }
@@ -235,7 +235,7 @@ function ButtonUtils:touchHandler(e)
         self._button.skin = self._defUrl
       end
       if self._endCallBack then
-        self._endCallBack:call(self._thisObj)
+        doJsCallFunc(self._endCallBack,self._thisObj)
       end
       if self._longPress then
         self:closeLongPress()
@@ -357,7 +357,7 @@ end
 
 function ButtonUtils:onHold()
   if self._isTouch and self._callBack ~= nil then
-    self._callBack:call(self._thisObj, self._button, self._callBackParam)
+    doJsCallFunc(self._callBack,self._thisObj, self._button, self._callBackParam)
   end
 end
 

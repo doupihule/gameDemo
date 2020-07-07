@@ -4,10 +4,6 @@
 --
 local packageName = "framework.platform."
 require(packageName.."GamePlatform")
-require(packageName.."WXGamePlatform")
-require(packageName.."AndroidGamePlatform")
-require(packageName.."EgretPlatform")
-require(packageName.."IosGamePlatform")
 require(packageName.."AdVideoManager")
 
 

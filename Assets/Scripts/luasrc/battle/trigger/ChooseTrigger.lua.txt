@@ -316,7 +316,7 @@ function ChooseTrigger.getSkillTargetRole(instance, skill, targetData, out, used
         if not func then
           LogsManager.errorTag("cfgerror", "battle 没有对应的选择类型,targetId:", targetData.id, "targetChoose:", i)
         else
-          func:call(ChooseTrigger, instance, out)
+          doJsCallFunc(func,ChooseTrigger, instance, out)
         end
         i=i+1
       until not(i < #chooseCondArr)

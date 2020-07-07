@@ -1,35 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 MainModule = class('MainModule')
 
 MainModule.task_sceneComplete = "task_sceneComplete";
@@ -43,10 +11,6 @@ function MainModule:ctor()
   self.timeLock = 0;
   self._taskCompMap = {};
   MainModule.instance = self
-  GameConfig.startScene and Laya.Scene:open(GameConfig.startScene)
-  Laya.SoundManager.useAudioMusic = false
-  Laya.MouseManager.multiTouchEnabled = false
-  SoundManager.init()
   self:initLayer()
   self:onLoadingUIComplete()
   Message.instance:add(MsgCMD.GAME_ONSHOW, self)
@@ -55,7 +19,7 @@ function MainModule:ctor()
 end
 
 function MainModule:onLoadingUIComplete()
-  self.timeLock = Laya.timer.currTimer
+  self.timeLock = Client.instance.miniserverTime
   self:reqVMS()
 end
 
@@ -115,7 +79,7 @@ function MainModule:onConfigLoaded()
 end
 
 function MainModule:sysCallback()
-  LogsManager.echo(" ======--VMSTIME--======== " .. Laya.timer.currTimer - self.timeLock)
+  LogsManager.echo(" ======--VMSTIME--======== " .. Client.instance.miniserverTime - self.timeLock)
   if not Global.checkUserCloudStorage() then
     UserInfo.platform:getWxInfo()
   end
@@ -167,7 +131,7 @@ function MainModule:onMergeFileBack()
 end
 
 function MainModule:loginResult()
-  LogsManager.echo(" ======--GlobalTIME--======== " .. Laya.timer.currTimer - self.timeLock)
+  LogsManager.echo(" ======--GlobalTIME--======== " .. Client.instance.miniserverTime - self.timeLock)
   if Global.isNotGuide() then
     
   end
@@ -252,25 +216,6 @@ function MainModule:showGameMain()
   Message.instance:send(FrameWorkEvent.FRAMEWORKEVENT_STARTENTERMAIN)
 end
 
-function MainModule:showInviteTip(shareStatus)
-  if not shareStatus then
-    return
-  end
-  local switch = {
-    [2] = function()
-      WindowManager.ShowTip("房间已解散")
-    end,
-    [3] = function()
-      WindowManager.ShowTip("比赛已经开始")
-    end,
-    [4] = function()
-      WindowManager.ShowTip("参赛人数已满")
-    end
-  }
-  local casef = switch[Number(shareStatus)]
-  if not casef then casef = switch["default"] end
-  if casef then casef() end
-end
 
 function MainModule:reStartGame() end
 function MainModule:initLayer()
@@ -360,21 +305,4 @@ function MainModule:stopBGM()
 end
 
 function MainModule:recvMsg(cmd, data)
-  local switch = {
-    [MsgCMD.GAME_ONSHOW] = function()
-      self:onTTShow()
-    end,
-    [MsgCMD.VIDEO_PLAY] = function()
-      self:playBGM()
-    end,
-    [MsgCMD.VIDEO_STOP] = function()
-      self:stopBGM()
-    end,
-    [MsgCMD.CLIENT_SEND_LOG] = function()
-      LogsManager.sendAndShowLog()
-    end
-  }
-  local casef = switch[cmd]
-  if not casef then casef = switch["default"] end
-  if casef then casef() end
 end

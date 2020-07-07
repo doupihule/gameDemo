@@ -43,28 +43,15 @@ end
 
 function LogsManager.echo(message, ...)
   local resultArr = LogsManager.turnStr("echo", message, optionalParams)
-  if not UserInfo.isSystemMini() then
-    print(resultArr:join(" "))
-  else
-    print:apply(nil, resultArr)
-  end
+  print(unpack(resultArr))
 end
 
 function LogsManager.warn(message, ...)
   local resultArr = LogsManager.turnStr("warn", message, optionalParams)
-  if not UserInfo.isSystemMini() then
-    console:warn(resultArr:join(" "))
-  else
-    console.warn:apply(nil, resultArr)
-  end
+  print(unpack(resultArr))
 end
 
-function LogsManager.error(message, ...)
-  console:error("__禁止走到这里来")
-  if UserInfo.isTest() then
-    WindowManager.ShowTip("禁止使用error接口！改为errorTag")
-  end
-end
+
 
 function LogsManager.errorTag(errorId, message, ...)
   if errorId == nil then
@@ -78,15 +65,7 @@ function LogsManager.errorTag(errorId, message, ...)
   end
   TimerManager.instance:add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, {concatStr, LogsManager.errorTag_gameError, 80, errorId})
   LogsManager.insterOneLogs(concatStr)
-  if not UserInfo.isSystemMini() then
-    console:error(resultArr:join(" "))
-  else
-    if UserInfo.isWeb() then
-      console.error:apply(nil, resultArr)
-    else
-      console.warn:apply(nil, resultArr)
-    end
-  end
+  print(unpack(resultArr))
 end
 
 function LogsManager.systemError(message, ...)
@@ -96,11 +75,7 @@ function LogsManager.systemError(message, ...)
   local concatStr = "" .. arr:join(",")
   TimerManager.instance:add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, {concatStr, LogsManager.errorTag_sysError})
   LogsManager.insterOneLogs(concatStr)
-  if UserInfo.isWeb() then
-    console.error:apply(nil, resultArr)
-  else
-    console.warn:apply(nil, resultArr)
-  end
+  print(unpack(resultArr))
   if UserInfo.isWeb() then
     WindowManager.ShowTip("有错误，去看日志！")
   end
@@ -131,10 +106,10 @@ function LogsManager.sendErrorToPlatform(errorStr, tag, maxLength, errorId, logL
   local id = 0
   while(logLength > pieceLength)
   do
-  LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorId, pieceLength, startLine, id + 1, sendCount)
-  logLength = logLength - pieceLength
-  startLine = startLine + pieceLength
-  id=id+1
+    LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorId, pieceLength, startLine, id + 1, sendCount)
+    logLength = logLength - pieceLength
+    startLine = startLine + pieceLength
+    id=id+1
   end
   if id then
     LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorId, logLength, startLine, id + 1, sendCount)
@@ -232,12 +207,21 @@ function LogsManager.sendDataToAiCloud(errorStack, tag, logLength, errorId, star
   if messageId then
     message = messageId .. "_"
   end
-  local params = {id=id, game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, time=Client.instance.serverTime, os=Global.getOs(), device=Global.deviceModel, cver=Global.client_version, ver=Global.version, rid=UserModel.instance:getUserRid(), error_message=message, error_stack=errorStack, error_type=tag, context="", deviceId=Global.deviceId}
+  local params = {id=id, game=GameConsts.gameCode, 
+        platform=PackConfigManager.ins.platform.platform, 
+        time=Client.instance.serverTime, 
+        os=Global.getOs(), 
+        device=Global.deviceModel, 
+        cver=Global.client_version, 
+        ver=Global.version, 
+        rid=UserModel.instance:getUserRid(), 
+        error_message=message, 
+        error_stack=errorStack, 
+        error_type=tag, context="", 
+        deviceId=Global.deviceId}
   local sdkInfo = Global.getSDKInfo()
   if sdkInfo then
-    -- [ts2lua]params下标访问可能不正确
-    -- [ts2lua]params下标访问可能不正确
-    params["context"] = sdkInfo + params["context"]
+    params["context"] = sdkInfo .. params["context"]
   end
   local urlParams = HttpMessage.instance:objectToUrlParam(params)
   local url = LogsManager._aliyunLogsUrl + urlParams
@@ -250,9 +234,9 @@ function LogsManager.sendDataToAiCloud(errorStack, tag, logLength, errorId, star
   local allLength = LogsManager.getMaxLogsLength() - #url
   -- [ts2lua]params下标访问可能不正确
   -- [ts2lua]params下标访问可能不正确
-  params["context"] = LogsManager.turnURIContent(params["context"] + LogsManager.getNearestLogs(logLength, id, startLine, allLength))
+  params["context"] = LogsManager.turnURIContent(params["context"] .. LogsManager.getNearestLogs(logLength, id, startLine, allLength))
   local urlParams1 = HttpMessage.instance:objectToUrlParam(params)
-  local url1 = LogsManager._aliyunLogsUrl + urlParams1
+  local url1 = LogsManager._aliyunLogsUrl .. urlParams1
   HttpMessage.instance:sendOtherHttpRequest(url1, nil, nil, nil, "get", webParams, 1)
 end
 
