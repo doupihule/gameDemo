@@ -11,7 +11,7 @@ function SingleCommonServer.initData(autoUpdate)
   end
   local delayValue = GameSwitch.getSwitchState(GameSwitch.SWITCH_UPDATE_USERDATA_CD)
   if delayValue then
-    delayValue = Number(delayValue)
+    delayValue = tonumber(delayValue)
     if delayValue > 0 then
       Global.updateUserDataDelay = delayValue
     end
@@ -120,7 +120,7 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
     local tempData = {}
     TableUtils.deepCopy(tempUserData, tempData)
     params = {clientDirty={u=tempData}}
-    CacheManager.instance:setGlobalCache(StorageCode.storage_userinfo, JSON:stringify(tempUserData))
+    CacheManager.instance:setGlobalCache(StorageCode.storage_userinfo, TableUtils.safelyJsonStringfy(tempUserData))
     LogsManager.echo("_还没有完整的同步过数据,需要先整体同步")
   else
     params = {clientDirty=SingleCommonServer.getClientDirtyList()}
@@ -139,7 +139,7 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
     params.clientDirty.u = {}
   end
   params.clientDirty.u.sendTime = tempUserData.sendTime
-  local userDataStr = JSON:stringify(tempUserData)
+  local userDataStr = TableUtils.safelyJsonStringfy(tempUserData)
   CacheManager.instance:setGlobalCache(StorageCode.storage_userinfo, userDataStr)
   TableUtils.deepCopy(tempUserData, lastBackData)
   LogsManager.echo("开始同步数据,length:" .. #userDataStr)
@@ -208,7 +208,7 @@ end
 
 function SingleCommonServer.setUpdateDataFlag(thisObj, data)
   LogsManager.echo("krma. 确认同步，存入本地")
-  CacheManager.instance:setGlobalCache(StorageCode.storage_userinfo, JSON:stringify(data))
+  CacheManager.instance:setGlobalCache(StorageCode.storage_userinfo, TableUtils.safelyJsonStringfy(data))
 end
 
 function SingleCommonServer.disposeAccount()

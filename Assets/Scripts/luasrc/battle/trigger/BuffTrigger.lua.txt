@@ -141,7 +141,7 @@ end
 
 function BuffTrigger.runBuff_6(attacker, defer, skillAction, buff)
   local localParams = buff.skillLogicalParams
-  local frame = Number(localParams[0+1][1+1])
+  local frame = tonumber(localParams[0+1][1+1])
   frame = BattleFunc.instance:turnMinisecondToframe(frame)
   defer:interruptSkill(attacker)
   defer:onHitedBack(attacker, localParams[0+1][0+1], localParams[0+1][2+1] or 0, frame)
@@ -246,7 +246,7 @@ function BuffTrigger.getValueByFrom(attacker, defer, percentValue, fromType, att
   elseif fromType == 3 then
     if defer.tempUseValue then
       if defer.tempUseValue[1+1] then
-        value = Number(defer.tempUseValue[1+1])
+        value = tonumber(defer.tempUseValue[1+1])
         if not value then
           value = 0
         else

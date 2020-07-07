@@ -55,12 +55,12 @@ function InstanceBullet:setOwner(owner, skillAction, rotation, targetRole)
   local tagStr = "Bullet:" .. self.dataId
   if collisionParams then
     self._collisionParams = {}
-    self._collisionParams[0+1] = Number(collisionParams[0+1])
+    self._collisionParams[0+1] = tonumber(collisionParams[0+1])
     self._collisionParams[1+1] = self.skillAction.skill:getSkillValue(collisionParams[1+1], tagStr)
     if self._collisionParams[0+1] == BattleConst.bullet_hit_bounce then
       self._repeatCheckFrame = 60
     else
-      self._repeatCheckFrame = Number(collisionParams[2+1])
+      self._repeatCheckFrame = tonumber(collisionParams[2+1])
       if self._repeatCheckFrame > 0 then
         self._repeatCheckFrame = BattleFunc.instance:turnMinisecondToframe(self._repeatCheckFrame)
       end
@@ -74,7 +74,7 @@ function InstanceBullet:setOwner(owner, skillAction, rotation, targetRole)
     self._myView:setSpace(owner._myView._xSpace, owner._myView._ySpace)
     self._myView:changeViewNums(owner._myView.currentViewNums)
   end
-  self.leftCollisionTimes = Number(self.cfgData.collisionTimes)
+  self.leftCollisionTimes = tonumber(self.cfgData.collisionTimes)
   self._hasHitNums = 0
   local targetType = self.cfgData.targetType
   if targetType == 1 then

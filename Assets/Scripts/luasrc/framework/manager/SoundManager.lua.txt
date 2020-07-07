@@ -127,7 +127,7 @@ function SoundManager.loadSound(url, callBack, thisObj, callParams)
   end
   if not FileUtils.isUserWXSource() then
     if callBack then
-      callBack:apply(thisObj, callParams)
+      doJsApplyFunc(callBack,thisObj, callParams)
     end
     return
   end
@@ -135,13 +135,13 @@ function SoundManager.loadSound(url, callBack, thisObj, callParams)
   local fileInfo = Laya.MiniFileMgr:getFileInfo(formatPath)
   if fileInfo then
     if callBack then
-      callBack:apply(thisObj, callParams)
+      doJsApplyFunc(callBack,thisObj, callParams)
     end
     return
   end
   local onSoundLoadBack = function(issucess)
     if callBack then
-      callBack:apply(thisObj, callParams)
+      doJsApplyFunc(callBack,thisObj, callParams)
     end
   end
   

@@ -9,7 +9,7 @@ function InstanceEffect:ctor(controler)
   self.layerIndex = 2;
   self.withTargetWay = 0;
   self.classModel = BattleConst.model_effect
-  self._followOffset = Laya.Vector3()
+  self._followOffset = VectorTools.createVector3()
 end
 
 function InstanceEffect:setData(data)

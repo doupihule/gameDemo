@@ -13,7 +13,7 @@ function StatisticsExtendManager.onEvent(event, eventData)
   if not event then
     local errStr = "没有写eventId"
     if eventData then
-      errStr = errStr .. "eventData" .. JSON:stringify(eventData)
+      errStr = errStr .. "eventData" .. TableUtils.safelyJsonStringfy(eventData)
     end
     LogsManager.errorTag(nil, errStr)
     return
@@ -30,7 +30,7 @@ function StatisticsExtendManager.onEvent(event, eventData)
       end
     else
       -- [ts2lua]sendData下标访问可能不正确
-      sendData["extra"] = JSON:stringify(eventData)
+      sendData["extra"] = TableUtils.safelyJsonStringfy(eventData)
     end
   end
   local isAld = false

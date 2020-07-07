@@ -138,7 +138,7 @@ function KakuraMessage:decode(aesKey, byte)
   local jsonData = nil
   try_catch{
     main = function()
-      jsonData = JSON:parse(pack.sendData)
+      jsonData = TableUtils.safelyJsonParse(pack.sendData)
     end,
     catch = function(e)
       local backStr = "opcode:" .. pack.opcode .. ",len:" .. pack.len .. "reqId:" .. pack.requestId .. ",ureqId:" .. pack.uniqueReqId .. ",body:" .. aesBody .. ",data:" .. pack.sendData

@@ -1,6 +1,6 @@
 VectorTools = class('VectorTools')
-VectorTools.originPoint = Laya.Vector3();
-VectorTools.unitPoint = Laya.Vector3(1, 1, 1);
+VectorTools.originPoint = VectorTools.createVector3();
+VectorTools.unitPoint = VectorTools.createVector3(1, 1, 1);
 function VectorTools.multyByNumToSelf(vec, mul)
   vec.x = vec.x * mul
   vec.y = vec.y * mul
@@ -11,7 +11,7 @@ function VectorTools.multyByNum(vec, mul)
   vec.x = vec.x * mul
   vec.y = vec.y * mul
   vec.z = vec.z * mul
-  return Laya.Vector3(vec.x * mul, vec.y * mul, vec.z * mul)
+  return VectorTools.createVector3(vec.x * mul, vec.y * mul, vec.z * mul)
 end
 
 function VectorTools.addToSelf(vec, vec2)
@@ -21,7 +21,7 @@ function VectorTools.addToSelf(vec, vec2)
 end
 
 function VectorTools.added(vec, vec2)
-  local newVec = Laya.Vector3(vec.x + vec2.x, vec.y + vec2.y, vec.z + vec2.z)
+  local newVec = VectorTools.createVector3(vec.x + vec2.x, vec.y + vec2.y, vec.z + vec2.z)
   return newVec
 end
 
@@ -32,5 +32,14 @@ function VectorTools.reduceToSelf(vec, vec2)
 end
 
 function VectorTools.copyVector(vec)
-  return Laya.Vector3(vec.x, vec.y, vec.z)
+  return VectorTools.createVector3(vec.x, vec.y, vec.z)
+end
+
+
+function VectorTools.createVector2(x,y)
+  return {x=x or 0,y=y or 0}
+end
+
+function VectorTools.createVector3(x,y,z)
+  return {x=x or 0,y=y or 0,z = z or 0}
 end

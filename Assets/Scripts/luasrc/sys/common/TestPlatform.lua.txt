@@ -2,27 +2,22 @@
 
 
 TestPlatform = class('TestPlatform')
-TestPlatform.dev = {platform="dev", upgrade_path="web_cn", vms_url="https://overtake-dev.fantasyfancy.com:8443", vms_version=1};
-TestPlatform.test = {platform="test", upgrade_path="web_cn", vms_url="https://gunner-test-vms.fantasyfancy.com:8604/", vms_version=1};
-TestPlatform.testWEB = {platform="test", upgrade_path="web_cn", vms_url="https://football-test.fantasyfancy.com:8443/", vms_version=1};
-TestPlatform.testWX = {platform="test", upgrade_path="wx_cn", vms_url="https://overtake-test-vms.fantasyfancy.com:8606/", vms_version=1};
-TestPlatform.testTT = {platform="test", upgrade_path="toutiao_cn", vms_url="https://football-test.fantasyfancy.com:8443/", vms_version=1};
-TestPlatform.testBricks = {platform="test", upgrade_path="qq_cn", vms_url="https://football-test.fantasyfancy.com:8443/", vms_version=1};
-TestPlatform.qq = {platform="qq", upgrade_path="qq_cn", vms_url="https://football-qq.fantasyfancy.com:8443/", vms_version=1};
-TestPlatform.testBaidu = {platform="test", upgrade_path="baidu_cn", vms_url="https://cloud-test.fantasyfancy.com:8608/", vms_version=1};
+TestPlatform.dev = {platform="dev", 
+  upgrade_path="web_cn", 
+  vms_url="https://overtake-dev.fantasyfancy.com:8443", vms_version=1};
+TestPlatform.test = {platform="test", 
+  upgrade_path="web_cn", 
+  vms_url="https://gunner-test-vms.fantasyfancy.com:8604/", 
+  vms_version=1};
 function TestPlatform.__getters.platform()
   Global.isCDN = true
-  if UserInfo.isQQGame() then
-    return TestPlatform.testBricks
+  if(UserInfo.isWeb()) then
+    Global.isCDN = false
+    return TestPlatform.dev
   end
-  if UserInfo.isTT() then
-    return TestPlatform.testTT
-  end
-  if UserInfo.isWX() then
-    return TestPlatform.testWX
-  end
-  Global.isCDN = false
-  return TestPlatform.dev
+  return TestPlatform.test
+  
+  
 end
 
 function TestPlatform.getPlatform(plat)

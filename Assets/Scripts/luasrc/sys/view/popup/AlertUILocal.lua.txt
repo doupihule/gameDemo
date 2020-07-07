@@ -1,9 +1,3 @@
-
-
-
-
-
-
 AlertUILocal = class('AlertUILocal',Laya.View)
 AlertUILocal.res = nil;
 AlertUILocal.instance = nil;

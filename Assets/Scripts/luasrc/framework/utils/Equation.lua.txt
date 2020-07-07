@@ -1,17 +1,17 @@
 Equation = class('Equation')
-Equation.MATH2PI = Math.PI * 2;
-Equation.ANGLETORADIAN = 180 / Math.PI;
-Equation.RADIANTOANGLE = Math.PI / 180;
+Equation.math.pi = math.pi * 2;
+Equation.ANGLETORADIAN = 180 / math.pi;
+Equation.RADIANTOANGLE = math.pi / 180;
 function Equation.transToSmallRadian(num)
   local result = nil
-  if num > 0 and num < Math.PI / 2 then
+  if num > 0 and num < math.pi / 2 then
     result = num
-  elseif num > -Math.PI and num < -Math.PI / 2 then
-    result = Math.PI - math.abs(num)
-  elseif num > -Math.PI / 2 and num < 0 then
+  elseif num > -math.pi and num < -math.pi / 2 then
+    result = math.pi - math.abs(num)
+  elseif num > -math.pi / 2 and num < 0 then
     result = num
-  elseif num > Math.PI / 2 and num < Math.PI then
-    result = -(Math.PI - num)
+  elseif num > math.pi / 2 and num < math.pi then
+    result = -(math.pi - num)
   end
   return result
 end
@@ -19,14 +19,14 @@ end
 function Equation.transToSmallVerticalRadian(num)
   local result = nil
   result = Equation.transToSmallRadian(num)
-  if result > 0 and result < Math.PI / 2 then
-    result = -(Math.PI / 2 - result)
-  elseif result > -Math.PI and result < -Math.PI / 2 then
-    result = -(Math.PI / 2 - Math.PI - math.abs(result))
-  elseif result > -Math.PI / 2 and result < 0 then
-    result = Math.PI / 2 - math.abs(result)
-  elseif result > Math.PI / 2 and result < Math.PI then
-    result = Math.PI / 2 - Math.PI - result
+  if result > 0 and result < math.pi / 2 then
+    result = -(math.pi / 2 - result)
+  elseif result > -math.pi and result < -math.pi / 2 then
+    result = -(math.pi / 2 - math.pi - math.abs(result))
+  elseif result > -math.pi / 2 and result < 0 then
+    result = math.pi / 2 - math.abs(result)
+  elseif result > math.pi / 2 and result < math.pi then
+    result = math.pi / 2 - math.pi - result
   end
   return result
 end
@@ -43,7 +43,7 @@ end
 
 function Equation.creat_1_1_a(startX, startY, radian)
   local eqObj = {}
-  if radian == Math.PI / 2 then
+  if radian == math.pi / 2 then
     eqObj.a = 1
     eqObj.b = 0
     eqObj.c = -startX
@@ -132,15 +132,15 @@ function Equation.pointOf(eqObj1, eqObj2)
   if eqObj1.a == 0 and eqObj2.a == 0 then
     return nil
   elseif eqObj1.a == 0 then
-    p = Laya.Vector3()
+    p = VectorTools.createVector3()
     p.y = -eqObj1.c
     p.x = -eqObj2.c - eqObj2.b * p.y / eqObj2.a
   elseif eqObj2.a == 0 then
-    p = Laya.Vector3()
+    p = VectorTools.createVector3()
     p.y = -eqObj2.c
     p.x = -eqObj1.c - eqObj1.b * p.y / eqObj1.a
   elseif eqObj1.a ~= 0 and eqObj2.a ~= 0 then
-    p = Laya.Vector3()
+    p = VectorTools.createVector3()
     if eqObj1.b == 0 then
       p.x = -eqObj1.c
       p.y = -eqObj2.c - eqObj2.a * p.x / eqObj2.b
@@ -172,7 +172,7 @@ end
 function Equation.plumbLine(x, y, eqobj)
   local eq = nil
   if eqobj.a == 0 then
-    eq = Equation.creat_1_1_a(x, y, Math.PI / 2)
+    eq = Equation.creat_1_1_a(x, y, math.pi / 2)
   elseif eqobj.b == 0 then
     eq = Equation.creat_1_1_a(x, y, 0)
   else
@@ -258,7 +258,7 @@ function Equation.roundLinePointof(centrePoint, r, eq, ang, type)
   local length = math.sqrt(r * r - dis * dis)
   local plumb = Equation.plumbLine(centrePoint.x, centrePoint.y, eq)
   local point1 = Equation.pointOf(eq, plumb)
-  local pointoff = Laya.Vector3()
+  local pointoff = VectorTools.createVector3()
   pointoff.x = point1.x + length * type * math.cos(ang)
   pointoff.y = point1.y + length * type * math.sin(ang)
   return pointoff
@@ -356,7 +356,7 @@ function Equation.getNumByDecimalAnalyserNode(num, index)
       return num
     end
     str = str:slice(0, dianIndex - index + 1)
-    result = Number(str)
+    result = tonumber(str)
   end
   return result
 end
@@ -386,9 +386,9 @@ function Equation.ratoteFormulation(nx, ny, ang, boo)
   local backX = cos * nx + sin * ny
   local backY = cos * ny - sin * nx
   if boo then
-    p = Laya.Vector3(newX, newY)
+    p = VectorTools.createVector3(newX, newY)
   else
-    p = Laya.Vector3(backX, backY)
+    p = VectorTools.createVector3(backX, backY)
   end
   return p
 end
@@ -483,13 +483,13 @@ function Equation.getRadomPointByRadius(r, r2, a, a2)
     a=0
   end
   if a2 == nil then
-    a2=Math.PI * 2
+    a2=math.pi * 2
   end
   local radomR = Equation.getRadomFromMinMax(r, r2)
   local ang = Equation.getRadomFromMinMax(a, a2, -2)
   local xPos = radomR * math.cos(ang)
   local ypos = radomR * math.sin(ang)
-  return Laya.Vector3(xPos, ypos)
+  return VectorTools.createVector3(xPos, ypos)
 end
 
 function Equation.getNumByDecimal(num, index)
@@ -507,7 +507,7 @@ function Equation.getNumByDecimal(num, index)
       return num
     end
     str = str:slice(0, dianIndex - index + 1)
-    result = Number(str)
+    result = tonumber(str)
   end
   return result
 end
@@ -544,10 +544,10 @@ function Equation.easyToTargetAngle(tovalue, fromvalue, f, min, t)
   end
   local disang = tovalue - fromvalue
   if t == 0 then
-    if disang > Math.PI then
-      tovalue = tovalue - Math.PI * 2
-    elseif disang < -Math.PI then
-      tovalue = tovalue + Math.PI * 2
+    if disang > math.pi then
+      tovalue = tovalue - math.pi * 2
+    elseif disang < -math.pi then
+      tovalue = tovalue + math.pi * 2
     end
   else
     if disang > 180 then
@@ -565,10 +565,10 @@ function Equation.getAngDis(ang1, ang2, t)
   end
   local disAng = ang2 - ang1
   if t == 0 then
-    if disAng > Math.PI then
-      disAng = disAng - Equation.MATH2PI
-    elseif disAng < -Math.PI then
-      disAng = disAng + Equation.MATH2PI
+    if disAng > math.pi then
+      disAng = disAng - Equation.math.pi
+    elseif disAng < -math.pi then
+      disAng = disAng + Equation.math.pi
     end
   else
     if disAng > 180 then
@@ -581,10 +581,10 @@ function Equation.getAngDis(ang1, ang2, t)
 end
 
 function Equation.adjustAngle(ang)
-  if ang > Math.PI then
-    return ang - Equation.MATH2PI
-  elseif ang < -Math.PI then
-    return ang + Equation.MATH2PI
+  if ang > math.pi then
+    return ang - Equation.math.pi
+  elseif ang < -math.pi then
+    return ang + Equation.math.pi
   end
   return ang
 end
@@ -602,11 +602,11 @@ function Equation.ballBallCollision(b1posx, b1posy, b1spdx, b1spdy, b2posx, b2po
   vel1.x = vxTotal + vel0.x
   local vel0F = Equation.rotateCalculate(vel0.x, vel0.y, sin, cos, false)
   local vel1F = Equation.rotateCalculate(vel1.x, vel1.y, sin, cos, false)
-  return {Equation.convertToValueAndAngle(Laya.Vector3(vel0F.x, vel0F.y)), Equation.convertToValueAndAngle(Laya.Vector3(vel1F.x, vel1F.y))}
+  return {Equation.convertToValueAndAngle(VectorTools.createVector3(vel0F.x, vel0F.y)), Equation.convertToValueAndAngle(VectorTools.createVector3(vel1F.x, vel1F.y))}
 end
 
 function Equation.convertToVector(value, angle)
-  return Laya.Vector3(value * math.cos(angle), value * math.sin(angle))
+  return VectorTools.createVector3(value * math.cos(angle), value * math.sin(angle))
 end
 
 function Equation.convertToValueAndAngle(vector)
@@ -614,7 +614,7 @@ function Equation.convertToValueAndAngle(vector)
 end
 
 function Equation.rotateCalculate(xpos, ypos, sin, cos, reverse)
-  local resultPoint = Laya.Vector3()
+  local resultPoint = VectorTools.createVector3()
   if reverse then
     resultPoint.x = xpos * cos + ypos * sin
     resultPoint.y = ypos * cos - xpos * sin

@@ -276,7 +276,7 @@ function TableUtils.turnCsvArrToGameArr(fromArr, transtoNumber)
         repeat
           -- [ts2lua]tempArr下标访问可能不正确
           local value = tempArr[ii]
-          local turnValue = Number(value)
+          local turnValue = tonumber(value)
           if turnValue or turnValue == 0 then
             -- [ts2lua]tempArr下标访问可能不正确
             tempArr[ii] = turnValue

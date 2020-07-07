@@ -25,7 +25,7 @@ function RandomUtis.crc32(str, crc)
   local iTop = #str
   repeat
     n = crc ^ str:charCodeAt(i) & 0xFF
-    x = Number("0x" .. RandomUtis.TABLE:substr(n * 9, 8))
+    x = tonumber("0x" .. RandomUtis.TABLE:substr(n * 9, 8))
     crc = crc >>> 8 ^ x
     i=i+1
   until not(i < iTop)

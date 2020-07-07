@@ -173,7 +173,7 @@ end
 
 function LoadingUI:setProgress(progress)
   print("Loading Progress is : " .. progress)
-  self.progress = Number((progress * 100):toFixed(2))
+  self.progress = tonumber((progress * 100):toFixed(2))
   self:onLoop()
 end
 

@@ -165,7 +165,7 @@ function UserModel:getMaxLevel(id)
   -- [ts2lua]self._data.userExt.goodsMaxLevel下标访问可能不正确
   if (self._data.userExt and self._data.userExt.goodsMaxLevel) and self._data.userExt.goodsMaxLevel[id] then
     -- [ts2lua]self._data.userExt.goodsMaxLevel下标访问可能不正确
-    return Number(self._data.userExt.goodsMaxLevel[id])
+    return tonumber(self._data.userExt.goodsMaxLevel[id])
   end
   return 0
 end
@@ -189,7 +189,7 @@ function UserModel:getRoleBuyInfo(type, roleId)
       -- [ts2lua]info下标访问可能不正确
       if info and info[type .. "PurchaseTime"] then
         -- [ts2lua]info下标访问可能不正确
-        time = time + Number(info[type .. "PurchaseTime"])
+        time = time + tonumber(info[type .. "PurchaseTime"])
       end
     else
       for id in pairs(self._data.market) do
@@ -198,7 +198,7 @@ function UserModel:getRoleBuyInfo(type, roleId)
         -- [ts2lua]info下标访问可能不正确
         if info and info[type .. "PurchaseTime"] then
           -- [ts2lua]info下标访问可能不正确
-          time = time + Number(info[type .. "PurchaseTime"])
+          time = time + tonumber(info[type .. "PurchaseTime"])
         end
       end
     end
@@ -271,7 +271,7 @@ function UserModel:checkIsOld()
 end
 
 function UserModel:getMainGuide()
-  local guide = Number(((self._data and self._data.userExt) and self._data.userExt.newGuide) and Number(self._data.userExt.newGuide)) or 0
+  local guide = tonumber(((self._data and self._data.userExt) and self._data.userExt.newGuide) and tonumber(self._data.userExt.newGuide)) or 0
   if UserExtModel.instance:getEnterFogFlag() and guide < 9 then
     return 17
   end
@@ -337,7 +337,7 @@ function UserModel:getSimulateLand()
   local num = 0
   for index in pairs(simulateUnlock) do
     -- [ts2lua]simulateUnlock下标访问可能不正确
-    if Number(UserModel.instance:getLevel()) >= Number(simulateUnlock[index]) then
+    if tonumber(UserModel.instance:getLevel()) >= tonumber(simulateUnlock[index]) then
       num=num+1
     end
   end
@@ -366,10 +366,10 @@ function UserModel:login()
   -- [ts2lua]upUserExtData下标访问可能不正确
   upUserExtData["loginTime"] = Date:parse((Date()):toString())
   if self:getGoodsAccumuStartTime() then
-    if (self._data and self._data.sendTime) and Number(self._data.sendTime) * 1000 > self:getGoodsAccumuStartTime() then
+    if (self._data and self._data.sendTime) and tonumber(self._data.sendTime) * 1000 > self:getGoodsAccumuStartTime() then
       LogsManager.echo("登陆修改宝箱累计时间，原累计时间：" .. self:getGoodsAccumuStartTime())
       LogsManager.echo("最后一次同步数据时间：" .. self._data.sendTime)
-      local newGoodsAccumuStartTime = Client.instance.serverTimeMicro - Number(self._data.sendTime) * 1000 - self:getGoodsAccumuStartTime()
+      local newGoodsAccumuStartTime = Client.instance.serverTimeMicro - tonumber(self._data.sendTime) * 1000 - self:getGoodsAccumuStartTime()
       LogsManager.echo("新宝箱累计时间：" .. newGoodsAccumuStartTime)
       -- [ts2lua]upUserExtData下标访问可能不正确
       upUserExtData["goodsAccumuStartTime"] = newGoodsAccumuStartTime
@@ -417,7 +417,7 @@ end
 
 function UserModel:getRecycleTime()
   -- [ts2lua]lua中0和空字符串也是true，此处self._data.getRecycleTime需要确认
-  return (self._data.getRecycleTime and {Number(self._data.getRecycleTime)} or {0})[1]
+  return (self._data.getRecycleTime and {tonumber(self._data.getRecycleTime)} or {0})[1]
 end
 
 function UserModel:getLand()
@@ -427,7 +427,7 @@ function UserModel:getLand()
     local maxLevel = UserModel.instance:getMaxLevel(id)
     -- [ts2lua]roleInfo下标访问可能不正确
     for level in pairs(roleInfo[id]) do
-      if Number(level) <= Number(maxLevel) then
+      if tonumber(level) <= tonumber(maxLevel) then
         -- [ts2lua]roleInfo下标访问可能不正确
         -- [ts2lua]roleInfo[id]下标访问可能不正确
         if roleInfo[id][level].land then
@@ -458,7 +458,7 @@ function UserModel:getFirstNoGetInviteReward()
   for i in pairs(data) do
     gainStatus = UserModel.instance:getInviteRewardStatus(i)
     if not gainStatus then
-      return Number(i)
+      return tonumber(i)
     end
   end
   return 0
@@ -471,7 +471,7 @@ function UserModel:checkNoGetInviteReward()
   local info = nil
   for i in pairs(data) do
     info = InviteFunc.instance:getInviteInfo(i)
-    if Number(info.count) <= Number(shareNum) then
+    if tonumber(info.count) <= tonumber(shareNum) then
       gainStatus = UserModel.instance:getInviteRewardStatus(i)
       if not gainStatus then
         return true
@@ -540,5 +540,5 @@ end
 
 function UserModel:getFogCoinNum()
   local data = self:getData()
-  return Number(data and data.fogCoin) or 0
+  return tonumber(data and data.fogCoin) or 0
 end

@@ -6,27 +6,22 @@ function HashMap:ctor()
 end
 
 function HashMap:put(key, value)
-  -- [ts2lua]self下标访问可能不正确
   self[key] = value
 end
 
 function HashMap:get(key)
-  -- [ts2lua]self下标访问可能不正确
   return self[key]
 end
 
 function HashMap:remove(key)
-  -- [ts2lua]self下标访问可能不正确
   local value = self[key]
   if value ~= nil then
-    -- [ts2lua]self下标访问可能不正确
     self[key] = nil
   end
   return value
 end
 
 function HashMap:contains(key)
-  -- [ts2lua]self下标访问可能不正确
   return self[key] ~= nil
 end
 

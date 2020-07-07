@@ -22,8 +22,8 @@ function InstanceMoveEntity:ctor(target, spd, callFunc, thisObj, expandParams)
   self.callFunc = callFunc
   self.thisObj = thisObj
   self.expandParams = expandParams
-  self.offsetPos = Laya.Vector3()
-  self.initSpeed = Laya.Vector3()
+  self.offsetPos = VectorTools.createVector3()
+  self.initSpeed = VectorTools.createVector3()
 end
 
 function InstanceMoveEntity:initData() end

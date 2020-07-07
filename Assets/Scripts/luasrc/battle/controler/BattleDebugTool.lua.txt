@@ -38,7 +38,7 @@ function BattleDebugTool:exportOneRoleInfo(role)
   local index = 3
   for i in pairs(self._attrCfgs) do
     local info = self._attrCfgs[i+1]
-    if Number(i) < 100 then
+    if tonumber(i) < 100 then
       index=index+1
       local keyName = TranslateFunc.instance:getTranslate(info.AttributeName)
       local value = role.attrData:getOneAttr(i)
@@ -105,7 +105,7 @@ function BattleDebugTool.getBattleAddSped()
   if not rt then
     return 1
   end
-  return Number(rt[0+1]) or 1
+  return tonumber(rt[0+1]) or 1
 end
 
 function BattleDebugTool.getDebugRoleId()

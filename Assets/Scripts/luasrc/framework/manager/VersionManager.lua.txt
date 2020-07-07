@@ -103,7 +103,7 @@ function VersionManager:checkClearCacheZip()
   if not str or str == "0" then
     cacheObj = {}
   else
-    cacheObj = JSON:parse(str)
+    cacheObj = TableUtils.safelyJsonParse(str)
   end
   local newCacheObj = {}
   local hasVersionChange = false
@@ -125,7 +125,7 @@ function VersionManager:checkClearCacheZip()
     end
   end
   if hasVersionChange then
-    str = JSON:stringify(newCacheObj)
+    str = TableUtils.safelyJsonStringfy(newCacheObj)
     CacheManager.instance:setGlobalCache(StorageCode.storage_zip_file, str)
   else
     LogsManager.echo("_zip文件没有发生变化不需要清理")
@@ -147,7 +147,7 @@ function VersionManager:tryDeleteTargetFile(targetZipFolder, index)
           local errorStr = nil
           try_catch{
             main = function()
-              errorStr = JSON:stringify(ee)
+              errorStr = TableUtils.safelyJsonStringfy(ee)
             end,
             catch = function(e)
               errorStr = ee:toString()

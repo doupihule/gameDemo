@@ -190,7 +190,7 @@ function SceneReference.checkQueryBlack()
     LogsManager.warn('hlx 检查Query白名单，通过：launchOptions.query 未获取到')
     return false
   end
-  LogsManager.echo("ycn scene query:", JSON:stringify(launchOptions.query), ' whiteListString：', blackenStr.string)
+  LogsManager.echo("ycn scene query:", TableUtils.safelyJsonStringfy(launchOptions.query), ' whiteListString：', blackenStr.string)
   for keyword in pairs(launchOptions.query) do
     if keyword:search(blackenStr.string) ~= -1 then
       LogsManager.echo("hlx 检查Query白名单，通过, query:", keyword)
@@ -215,7 +215,7 @@ function SceneReference.checkWhiteSceneId(sceneId, type)
   else
     LogsManager.echo("krma. bannerScene:", #sceneWhiteList)
     if sceneId then
-      if sceneWhiteList:find(tostring(Number(sceneId))) ~= -1 then
+      if sceneWhiteList:find(tostring(tonumber(sceneId))) ~= -1 then
         LogsManager.echo("zm find sceneId:", sceneId)
         return true
       end

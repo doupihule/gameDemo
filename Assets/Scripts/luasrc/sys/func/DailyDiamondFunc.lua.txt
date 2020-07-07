@@ -23,16 +23,16 @@ function DailyDiamondFunc:getMaxId()
   local maxId = "0"
   local i = 0
   repeat
-    if Number(dataKeys[i+1]) >= Number(maxId) then
+    if tonumber(dataKeys[i+1]) >= tonumber(maxId) then
       maxId = dataKeys[i+1]
     end
     i=i+1
   until not(i < #dataKeys)
-  return Number(maxId)
+  return tonumber(maxId)
 end
 
 function DailyDiamondFunc:getNextShowTime(currentStep)
-  currentStep = Number(currentStep)
+  currentStep = tonumber(currentStep)
   local i = 0
   repeat
     if self:getDataById(currentStep).showDiamond == 1 then

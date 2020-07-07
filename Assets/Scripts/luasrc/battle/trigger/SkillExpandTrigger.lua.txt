@@ -36,21 +36,21 @@ function SkillExpandTrigger.skillExpand_1(instance, skill, params, useArr, isFol
     return
   end
   -- [ts2lua]params下标访问可能不正确
-  local sourceLenth = Number(params[13])
+  local sourceLenth = tonumber(params[13])
   -- [ts2lua]params下标访问可能不正确
-  local tweenTime = Number(params[14])
+  local tweenTime = tonumber(params[14])
   local i = 0
   repeat
     local targetRole = useArr[i+1]
     local tempArr = params:slice(1, 13)
-    local expandPams = {type=params[0+1], length=Number(sourceLenth), frame=math.floor(tweenTime * BattleFunc.miniSecondToFrame), role=targetRole}
+    local expandPams = {type=params[0+1], length=tonumber(sourceLenth), frame=math.floor(tweenTime * BattleFunc.miniSecondToFrame), role=targetRole}
     instance:createOneEffByParam(tempArr, isFollow, false, expandPams)
     i=i+1
   until not(i < #useArr)
 end
 
 function SkillExpandTrigger.skillExpand_2(instance, skill, params, useArr)
-  local delayTime = Number(params[1+1])
+  local delayTime = tonumber(params[1+1])
   if delayTime > 0 then
     delayTime = BattleFunc.instance:turnMinisecondToframe(delayTime)
     instance.controler:setCallBack(delayTime, instance.controler.cameraControler.shakeCameraByParams, instance.controler.cameraControler, params)
@@ -61,7 +61,7 @@ end
 
 function SkillExpandTrigger.skillExpand_3(instance, skill, params, useArr)
   local sound = params[3+1]
-  local delayTime = Number(params[1+1])
+  local delayTime = tonumber(params[1+1])
   if delayTime > 0 then
     delayTime = BattleFunc.instance:turnMinisecondToframe(delayTime)
   end
@@ -80,8 +80,8 @@ end
 
 function SkillExpandTrigger.skillExpand_5(instance, skill, params, useArr)
   local name = params[1+1]
-  local continueTime = Number(params[2+1])
-  local scaleRate = Number(params[3+1]) / 10000
+  local continueTime = tonumber(params[2+1])
+  local scaleRate = tonumber(params[3+1]) / 10000
   instance.controler.battleUI:freshSkillTipGroup(name, continueTime, scaleRate)
 end
 
@@ -89,7 +89,7 @@ function SkillExpandTrigger.skillExpand_6(instance, skill, params, useArr)
   if SwitchModel.instance:getSwitchByType(SwitchModel.shake_switch) then
     return
   end
-  local shakeNums = Number(params[1+1])
+  local shakeNums = tonumber(params[1+1])
   UserInfo.platform:vibrateByCount(shakeNums)
 end
 
@@ -100,9 +100,9 @@ function SkillExpandTrigger.skillExpand_7(instance, skill, params, useArr)
   local i = 0
   repeat
     local targetInstance = useArr[i+1]
-    local frame = Number(params[3+1])
-    local delayTime = Number(params[1+1])
-    local ratio = Number(params[6+1])
+    local frame = tonumber(params[3+1])
+    local delayTime = tonumber(params[1+1])
+    local ratio = tonumber(params[6+1])
     if #params < 7 then
       LogsManager.errorTag("battleCfgsError", "受击抖动配置长度错误,skillId:" .. skill._skillId)
     end
@@ -111,7 +111,7 @@ function SkillExpandTrigger.skillExpand_7(instance, skill, params, useArr)
       local dx = targetInstance.pos.x - instance.pos.x
       if dx < 0 then
         tempParams = TableUtils.copyOneArr(params)
-        tempParams[4+1] = -Number(tempParams[4+1])
+        tempParams[4+1] = -tonumber(tempParams[4+1])
       end
       if delayTime > 0 then
         delayTime = BattleFunc.instance:turnMinisecondToframe(delayTime)
@@ -120,7 +120,7 @@ function SkillExpandTrigger.skillExpand_7(instance, skill, params, useArr)
         targetInstance:shakeCameraByParams(tempParams)
       end
     end
-    targetInstance:setShakeParams(frame, Number(params[2+1]), Number(params[4+1]), Number(params[5+1]))
+    targetInstance:setShakeParams(frame, tonumber(params[2+1]), tonumber(params[4+1]), tonumber(params[5+1]))
     i=i+1
   until not(i < #useArr)
 end

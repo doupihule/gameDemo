@@ -316,14 +316,14 @@ function InstanceLogical:giveOutSkill(skill)
   local skillLabel = skill.skillLabel
   self:initStand()
   if skillLabel then
-    local sysTime = Number(skillLabel[1+1])
+    local sysTime = tonumber(skillLabel[1+1])
     self.controler:clearCallBack(self, self.resumeIdleAction)
     if sysTime == -1 then
       self:playAction(skillLabel[0+1], false)
       self:setAniPlaySpeed(skillSpeedValue)
     else
       self:setAniPlaySpeed(skillSpeedValue)
-      self:playSpecialSysAction(skillLabel[0+1], sysTime, Number(skillLabel[2+1]), Number(skillLabel[3+1]), self:getActionFrame(skillLabel[0+1]))
+      self:playSpecialSysAction(skillLabel[0+1], sysTime, tonumber(skillLabel[2+1]), tonumber(skillLabel[3+1]), self:getActionFrame(skillLabel[0+1]))
     end
   end
   local expandParams = {follow=BattleFunc.EFFECT_NOALLOW, ignoreScale=self.ignoreTimeScale}

@@ -1,5 +1,4 @@
 
-
 SubPackageConst = class('SubPackageConst')
 SubPackageConst.packName_share = "share";
 SubPackageConst.packName_json = "json";
@@ -21,7 +20,6 @@ SubPackageConst._subPackData = {}
 function SubPackageConst.__getters.subPackData()
   if not SubPackageConst._hasCoverSubpack then
     SubPackageConst._hasCoverSubpack = true
-    -- [ts2lua]SubPackageConst._platSubpackData下标访问可能不正确
     local data = SubPackageConst._platSubpackData[UserInfo.platformId]
     if data then
       for i in pairs(data) do

@@ -111,7 +111,7 @@ function TranslateFunc:setOneChangeData(cfgsName, id, ignoreError)
   end
   -- [ts2lua]self._allCfgs下标访问可能不正确
   local cfgs = self._allCfgs[cfgsName]
-  local type = Number(cfgs.t)
+  local type = tonumber(cfgs.t)
   local key = cfgs.m
   local mkey = cfgs.k
   local itemData = cfgs.d
@@ -216,7 +216,7 @@ function TranslateFunc:setOneChangeData(cfgsName, id, ignoreError)
             local value = itemInfo[index]
             -- [ts2lua]key下标访问可能不正确
             -- [ts2lua]info2下标访问可能不正确
-            info2[key[Number(index) - 1]] = value
+            info2[key[tonumber(index) - 1]] = value
           end
         end
         -- [ts2lua]outInfo下标访问可能不正确
@@ -234,7 +234,7 @@ function TranslateFunc:setOneChangeData(cfgsName, id, ignoreError)
           local value = curInfo[index]
           -- [ts2lua]key下标访问可能不正确
           -- [ts2lua]info下标访问可能不正确
-          info[key[Number(index) - 1]] = value
+          info[key[tonumber(index) - 1]] = value
         end
       end
       -- [ts2lua]BaseFunc._changeCfgs下标访问可能不正确

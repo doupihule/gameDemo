@@ -88,10 +88,10 @@ function RefreshControler:initWarData()
   result:sort(self.sortPaixu)
   local i = 0
   repeat
-    result[i+1][2+1] = Number(result[i+1][2+1])
+    result[i+1][2+1] = tonumber(result[i+1][2+1])
     if i ~= 0 then
       -- [ts2lua]result下标访问可能不正确
-      result[i+1][2+1] = result[i+1][2+1] + Number(result[i - 1][2+1])
+      result[i+1][2+1] = result[i+1][2+1] + tonumber(result[i - 1][2+1])
     end
     i=i+1
   until not(i < #result)
@@ -141,7 +141,7 @@ function RefreshControler:initWarData()
     self.controler:createRole(id, {level=level, starLevel=starLevel, equip=equip, passivSkill=enemyInfo.passivSkill}, roleInfo.kind, BattleConst.ROLEGROUP_ENEMY, offestX)
     j=j+1
   until not(j < num)
-  result[0+1][2+1] = result[0+1][2+1] - Number(result[0+1][3+1])
+  result[0+1][2+1] = result[0+1][2+1] - tonumber(result[0+1][3+1])
   result:sort(self.sortYouxianji)
   end
   self:addHelpRole()
@@ -210,9 +210,9 @@ function RefreshControler:enterWave(waveId)
   repeat
     local info = monsterArr[i+1]:split(",")
     local id = info[0+1]
-    showTime = showTime + Number(info[1+1])
-    local level = Number(info[2+1])
-    local starLevel = Number(info[3+1]) or 0
+    showTime = showTime + tonumber(info[1+1])
+    local level = tonumber(info[2+1])
+    local starLevel = tonumber(info[3+1]) or 0
     local roleInfo = BattleFunc.instance:getCfgDatas("Role", id)
     local num = roleInfo.heroNub or 1
     local datas = {waveAllEnemy=#monsterArr - 1, index=i, id=id, data={level=level, starLevel=starLevel}, lifeType=roleInfo.kind, camp=BattleConst.ROLEGROUP_ENEMY}
@@ -257,13 +257,13 @@ function RefreshControler:initWaveEnemy(info)
 end
 
 function RefreshControler:initLevelData(level)
-  self.level = Number(level)
+  self.level = tonumber(level)
   local levelInfo = BattleFunc.instance:getCfgDatas("Level", tostring(level))
   self._waveIdArr = levelInfo.levelWave
   -- [ts2lua]修改数组长度需要手动处理。
   self.maxWave = self._waveIdArr.length
   local enemyInfo = levelInfo.enemyHomeId
-  self.controler.enemyHome = self.controler:createHome(enemyInfo[0+1], {level=Number(enemyInfo[1+1])}, BattleConst.LIFE_JIDI, BattleConst.ROLEGROUP_ENEMY)
+  self.controler.enemyHome = self.controler:createHome(enemyInfo[0+1], {level=tonumber(enemyInfo[1+1])}, BattleConst.LIFE_JIDI, BattleConst.ROLEGROUP_ENEMY)
 end
 
 function RefreshControler:onMonsterAllDied(monster)

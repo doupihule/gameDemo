@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 DisplayUtils = class('DisplayUtils')
 function DisplayUtils.swapChildrenAt(parent, index1, index2)
   local child1 = parent:getChildAt(index1)
@@ -37,88 +30,6 @@ function DisplayUtils.getModelByUrl(url, parentObj, isClone)
   return goal
 end
 
-function DisplayUtils.adjustLabelPos() end
-function DisplayUtils.createCamera(clearFlag)
-  if clearFlag == nil then
-    clearFlag=2
-  end
-  local camera = Laya.Camera()
-  local sx = Laya.stage.clientScaleX
-  local sy = Laya.stage.clientScaleY
-  camera.viewport = Laya.Viewport(ScreenAdapterTools.UIOffsetX + ScreenAdapterTools.sceneOffsetX * sx, ScreenAdapterTools.UIOffsetY * sy, ScreenAdapterTools.designWidth * sx, ScreenAdapterTools.designHeight * sy)
-  camera.clearFlag = clearFlag
-  return camera
-end
-
-function DisplayUtils.createScene3D(usePhysics)
-  if usePhysics == nil then
-    usePhysics=false
-  end
-  local scene = nil
-  if not usePhysics and GameConsts.isUsePhysics then
-    -- [ts2lua]Laya3D下标访问可能不正确
-    Laya3D["_enbalePhysics"] = false
-    scene = Laya.Scene3D()
-    -- [ts2lua]Laya3D下标访问可能不正确
-    Laya3D["_enbalePhysics"] = true
-  else
-    scene = Laya.Scene3D()
-  end
-  return scene
-end
-
-function DisplayUtils.setViewRenderQuene(view, value)
-  local a = view
-  local b = view
-  if a.meshRenderer and a.meshRenderer.material then
-    a.meshRenderer.material.renderQueue = value
-  end
-  if b.skinnedMeshRenderer and b.skinnedMeshRenderer.material then
-    b.skinnedMeshRenderer.material.renderQueue = value
-  end
-  local i = 0
-  repeat
-    local child = view:getChildAt(i)
-    DisplayUtils.setViewRenderQuene(child, value)
-    i=i+1
-  until not(i < view.numChildren)
-end
-
-function DisplayUtils.createSpriteExpand(modelName, showViewArr, callBack, thisObj, args)
-  if showViewArr == nil then
-    showViewArr=nil
-  end
-  if callBack == nil then
-    callBack=nil
-  end
-  if thisObj == nil then
-    thisObj=nil
-  end
-  if args == nil then
-    args=nil
-  end
-  local sp = Sprite3DExpand(modelName)
-  sp:startLoadModel(modelName, callBack, thisObj, args)
-  sp:setShowViewArr(showViewArr)
-  return sp
-end
-
-function DisplayUtils.createEffectExpand(modelName, showViewArr, callBack, thisObj, args)
-  if showViewArr == nil then
-    showViewArr=nil
-  end
-  if callBack == nil then
-    callBack=nil
-  end
-  if thisObj == nil then
-    thisObj=nil
-  end
-  if args == nil then
-    args=nil
-  end
-  
-
-end
 
 function DisplayUtils.createSkeletonExpand(aniName, aniMode, completeFunc, thisObj, expandParams)
   if aniMode == nil then

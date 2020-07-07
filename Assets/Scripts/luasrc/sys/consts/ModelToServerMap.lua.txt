@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ModelToServerMap = class('ModelToServerMap')
 function ModelToServerMap:ctor() end
 ModelToServerMap.modelToServerMap = {};
@@ -30,7 +16,6 @@ function ModelToServerMap.initBuildUserData()
   if GlobalParamsFunc.instance:getDataNum("initialShock") ~= 1 then
     data.switches[5+1] = 1
   end
-  -- [ts2lua]data.roles下标访问可能不正确
   data.roles[homeId] = baseHome
   return data
 end

@@ -35,16 +35,10 @@ end
 
 function CountsModel:getCountsById(id)
   local counts = self._data or {}
-  -- [ts2lua]counts下标访问可能不正确
-  -- [ts2lua]counts下标访问可能不正确
-  -- [ts2lua]counts[id]下标访问可能不正确
   local count = counts[id] and counts[id]["count"] or 0
   if count == 0 then
     return 0
   else
-    -- [ts2lua]counts下标访问可能不正确
-    -- [ts2lua]counts下标访问可能不正确
-    -- [ts2lua]counts[id]下标访问可能不正确
     local time = counts[id] and counts[id]["expireTime"] or 0
     local curT = Client.instance.serverTime
     time = time - curT

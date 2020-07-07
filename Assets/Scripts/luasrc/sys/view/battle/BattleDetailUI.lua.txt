@@ -71,7 +71,7 @@ function BattleDetailUI:setData(data)
     BattleFunc.curBattleType = BattleConst.BATTLETYPE_WAR
   end
   FogFunc.enemyCell = data and data.cell
-  local nextLevel = Number(UserModel.instance:getMaxBattleLevel()) + 1
+  local nextLevel = tonumber(UserModel.instance:getMaxBattleLevel()) + 1
   if nextLevel > LevelFunc.instance:getMaxLevel() then
     nextLevel = LevelFunc.instance:getMaxLevel()
   end
@@ -138,13 +138,13 @@ function BattleDetailUI:setReward()
     local reward = rewardList[index]:split(",")
     local switch = {
       [DataResourceType.COIN] = function()
-        coin = coin + Number(reward[1+1])
+        coin = coin + tonumber(reward[1+1])
       end,
       [DataResourceType.GOLD] = function()
-        gold = gold + Number(reward[1+1])
+        gold = gold + tonumber(reward[1+1])
       end
     }
-    local casef = switch[Number(reward[0+1])]
+    local casef = switch[tonumber(reward[0+1])]
     if not casef then casef = switch["default"] end
     if casef then casef() end
   end
@@ -186,8 +186,8 @@ function BattleDetailUI:showMap()
   local backInfo = sceneInfo.background
   local mapName = backInfo[0+1]
   self.mapName = mapName
-  local mapStartIndex = Number(backInfo[1+1])
-  local startOffest = Number(backInfo[2+1])
+  local mapStartIndex = tonumber(backInfo[1+1])
+  local startOffest = tonumber(backInfo[2+1])
   self.mapInfo = {ctn=self.bgCtn, infoArr={}}
   self.bgCtn.x = -ScreenAdapterTools.sceneOffsetX - ScreenAdapterTools.UIOffsetX - startOffest
   local i = 1

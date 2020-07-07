@@ -114,7 +114,7 @@ function BattleUI:initTopShow(isShowTalk)
     self.autoGroup.visible = true
     self.smallMapGroup.visible = true
     self.bottomImg.height = 335
-    local nextLevel = Number(UserModel.instance:getMaxBattleLevel()) + 1
+    local nextLevel = tonumber(UserModel.instance:getMaxBattleLevel()) + 1
     if nextLevel > LevelFunc.instance:getMaxLevel() then
       nextLevel = LevelFunc.instance:getMaxLevel()
     end
@@ -219,7 +219,7 @@ function BattleUI:initHomeSkill()
   local i = 0
   repeat
     local info = homeSkill[i+1]:split(",")
-    if Number(info[0+1]) <= homeLevel then
+    if tonumber(info[0+1]) <= homeLevel then
       table.insert(unlockSkill, info[1+1])
     end
     i=i+1
@@ -278,13 +278,13 @@ function BattleUI:freshReward()
     local reward = rewardList[index]:split(",")
     local switch = {
       [DataResourceType.COIN] = function()
-        coin = coin + Number(reward[1+1])
+        coin = coin + tonumber(reward[1+1])
       end,
       [DataResourceType.GOLD] = function()
-        gold = gold + Number(reward[1+1])
+        gold = gold + tonumber(reward[1+1])
       end
     }
-    local casef = switch[Number(reward[0+1])]
+    local casef = switch[tonumber(reward[0+1])]
     if not casef then casef = switch["default"] end
     if casef then casef() end
   end

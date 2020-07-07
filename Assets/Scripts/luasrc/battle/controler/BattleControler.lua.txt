@@ -10,7 +10,7 @@ function BattleControler:ctor(ctn)
   self.updateScale = 1;
   self._leftScaleFrame = 0;
   self._leftCatchTime = 0;
-  self.performanceControler = PerformanceControler.new(self)
+  self.performanceControler = PerformanceControler(self)
   self._allInstanceArr = {}
   self.battleState = BattleConst.battleState_out
   self.cameraControler = CameraControler.new(self)
@@ -159,7 +159,7 @@ function BattleControler:doOneCallInfo(info, i)
       end
       if endCallBack then
         if doApplyOrCall then
-          endCallBack:apply(thisObj, endParams)
+          doJsApplyFunc(endCallBack,thisObj, endParams)
         else
           doJsCallFunc(endCallBack,thisObj, endParams)
         end
@@ -169,7 +169,7 @@ function BattleControler:doOneCallInfo(info, i)
     end
     if callBack then
       if doApplyOrCall then
-        callBack:apply(thisObj, params)
+        doJsApplyFunc(callBack,thisObj, params)
       else
         doJsCallFunc(callBack,thisObj, params)
       end
@@ -227,7 +227,7 @@ function BattleControler:setCallBack(frame, callBack, thisObj, params, doApplyOr
   local obj = self:getOneCacheTimeObj()
   if not frame then
     if doApplyOrCall then
-      callBack:apply(thisObj, params)
+      doJsApplyFunc(callBack,thisObj, params)
     else
       doJsCallFunc(callBack,thisObj, params)
     end

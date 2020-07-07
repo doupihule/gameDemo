@@ -348,8 +348,8 @@ function ChooseTrigger.chooseByTargetType(useArr, targetType)
     local s = 0
     repeat
       local tempInfo = targetType[s+1]
-      if role.lifeType == Number(tempInfo[0+1]) then
-        local tempPri = Number(tempInfo[1+1])
+      if role.lifeType == tonumber(tempInfo[0+1]) then
+        local tempPri = tonumber(tempInfo[1+1])
         if tempPri == -1 then
           useArr:splice(i, 1)
         else

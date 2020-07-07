@@ -33,7 +33,7 @@ end
 
 function InstancePerformance:setData(data)
   if not self.lastPos then
-    self.lastPos = Laya.Vector3()
+    self.lastPos = VectorTools.createVector3()
   end
   self._sKillSppedUpMap = {}
   InstancePerformance.super.setData(self,data)
@@ -119,7 +119,7 @@ function InstancePerformance:setViewName(value)
   repeat
     local info = frameCfg[i+1]
     -- [ts2lua]self._frameDatas下标访问可能不正确
-    self._frameDatas[info[0+1]] = Number(info[1+1])
+    self._frameDatas[info[0+1]] = tonumber(info[1+1])
     i=i+1
   until not(i < #frameCfg)
 end
@@ -444,7 +444,7 @@ function InstancePerformance:createSoundByParams(soundCfgs)
   repeat
     local cfgs = soundCfgs[i+1]
     local delayFrame = BattleFunc.instance:turnMinisecondToframe(cfgs[1+1])
-    local times = Number(cfgs[2+1])
+    local times = tonumber(cfgs[2+1])
     local inteval = BattleFunc.instance:turnMinisecondToframe(cfgs[3+1])
     self.controler:setLastCallBack(delayFrame, inteval, times, self.playSound, self, cfgs[0+1])
     i=i+1
@@ -475,9 +475,9 @@ function InstancePerformance:setShakeParams(shakeFrame, style, strength, interve
 end
 
 function InstancePerformance:shakeCameraByParams(params)
-  local frame = Number(params[3+1])
+  local frame = tonumber(params[3+1])
   BattleLogsManager.battleEcho("battle,被硬直了", TableUtils.safelyJsonStringfy(params))
-  self:setShakeParams(frame, Number(params[2+1]), Number(params[4+1]), Number(params[5+1]))
+  self:setShakeParams(frame, tonumber(params[2+1]), tonumber(params[4+1]), tonumber(params[5+1]))
 end
 
 function InstancePerformance:setSkillSpeedUpValue(skillId, value)

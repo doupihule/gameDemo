@@ -19,5 +19,5 @@ function ConnectObj:ctor(opcode, method, params, cb, tobj, isWait, addParams, ex
 end
 
 function ConnectObj:toSendString()
-  return JSON:stringify({method=self.method, id=self.id, uniqueId=self.uniqueId, params=self.params, wait=self.isWait})
+  return TableUtils.safelyJsonStringfy({method=self.method, id=self.id, uniqueId=self.uniqueId, params=self.params, wait=self.isWait})
 end

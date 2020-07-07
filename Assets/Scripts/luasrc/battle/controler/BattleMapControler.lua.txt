@@ -24,9 +24,9 @@ function BattleMapControler:setData(sceneId)
   local backInfo = sceneInfo.background
   local mapName = backInfo[0+1]
   self.mapName = mapName
-  local mapStartIndex = Number(backInfo[1+1])
+  local mapStartIndex = tonumber(backInfo[1+1])
   self.startMapIndex = mapStartIndex
-  local startOffest = Number(backInfo[2+1])
+  local startOffest = tonumber(backInfo[2+1])
   self._maxSceneWidth = sceneInfo.long
   self:setMapSize()
   local ctn1 = Laya.Sprite()
@@ -66,15 +66,15 @@ function BattleMapControler:createDecoration(arr, firstName, ctn)
     table.insert(self._mapInfo.decorateArr, {view=image})
     if self.startMapIndex ~= 1 then
       local missWidth = self.startMapIndex - 1 * 256 * 2
-      if Number(item[1+1]) - missWidth < 0 then
-        image.x = 256 * 9 - missWidth + Number(item[1+1])
+      if tonumber(item[1+1]) - missWidth < 0 then
+        image.x = 256 * 9 - missWidth + tonumber(item[1+1])
       else
-        image.x = Number(item[1+1]) - missWidth
+        image.x = tonumber(item[1+1]) - missWidth
       end
     else
-      image.x = Number(item[1+1])
+      image.x = tonumber(item[1+1])
     end
-    image.y = -Number(item[2+1])
+    image.y = -tonumber(item[2+1])
     local onMapComplete = function()
       image.skin = imageUrl1
     end

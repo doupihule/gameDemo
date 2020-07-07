@@ -45,7 +45,7 @@ function RoleBuffBar:onBuffChange(buff)
             buffIconList = self.buffIconListDown
           end
         }
-        local casef = switch[Number(buffInfo.icon[0+1])]
+        local casef = switch[tonumber(buffInfo.icon[0+1])]
         if not casef then casef = switch["default"] end
         if casef then casef() end
         for index3 in pairs(buffIconList) do
@@ -80,11 +80,11 @@ end
 function RoleBuffBar:removeAll()
   for index in pairs(self.buffIconListUp) do
     -- [ts2lua]self.buffIconListUp下标访问可能不正确
-    PoolTools.cacheItem(PoolCode.POOL_BUFFICON + self.buffIconListUp[index], self:getChildAt(Number(index)))
+    PoolTools.cacheItem(PoolCode.POOL_BUFFICON + self.buffIconListUp[index], self:getChildAt(tonumber(index)))
   end
   for index in pairs(self.buffIconListDown) do
     -- [ts2lua]self.buffIconListDown下标访问可能不正确
-    PoolTools.cacheItem(PoolCode.POOL_BUFFICON + self.buffIconListDown[index], self:getChildAt(Number(index)))
+    PoolTools.cacheItem(PoolCode.POOL_BUFFICON + self.buffIconListDown[index], self:getChildAt(tonumber(index)))
   end
   self.buffIconListUp = {}
   self.buffIconListDown = {}

@@ -134,7 +134,7 @@ function CacheManager:setFileStorageCache(key, value)
   end
   -- [ts2lua]self._fileStorage下标访问可能不正确
   self._fileStorage[key] = value
-  local jsStr = JSON:stringify(self._fileStorage)
+  local jsStr = TableUtils.safelyJsonStringfy(self._fileStorage)
   FileUtils.saveFileData(self._fileCacheName, self._fileCachePath, jsStr)
 end
 
@@ -162,7 +162,7 @@ function CacheManager:initFileStorageCahce()
     LogsManager.echo("fileCachestr:", fileInfo)
     try_catch{
       main = function()
-        self._fileStorage = JSON:parse(fileInfo)
+        self._fileStorage = TableUtils.safelyJsonParse(fileInfo)
       end,
       catch = function(e)
         self._fileStorage = {}

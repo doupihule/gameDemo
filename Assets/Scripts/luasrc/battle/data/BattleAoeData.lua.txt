@@ -23,8 +23,8 @@ function BattleAoeData:ctor(id)
   if self.cfgData.target then
     self.chooseTartgetCfg = BattleFunc.instance:getCfgDatas("Target", tostring(self.cfgData.target))
   end
-  self.effectiveTimes = Number(self.cfgData.effectiveTimes)
-  self._initTargtPos = Laya.Vector3()
+  self.effectiveTimes = tonumber(self.cfgData.effectiveTimes)
+  self._initTargtPos = VectorTools.createVector3()
 end
 
 function BattleAoeData:setData(skillAction, attacker)

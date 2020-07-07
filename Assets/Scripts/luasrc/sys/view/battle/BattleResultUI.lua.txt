@@ -106,7 +106,7 @@ function BattleResultUI:showFogResultReward()
     end
     local settlementDouble = GlobalParamsFunc.instance:getDataArray('fogBattleDouble')
     -- [ts2lua]settlementDouble下标访问可能不正确
-    self.battleResultRetio = Number(settlementDouble[self.battleResultCount % #settlementDouble])
+    self.battleResultRetio = tonumber(settlementDouble[self.battleResultCount % #settlementDouble])
     StatisticsManager.ins:onEvent(StatisticsManager.FOG_BATTLE_VICTORY, {enemyId=enemy.enemyData.id})
     StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_FOG_BATTLE_SHOW, {doubleRate=self.battleResultRetio, enemyId=enemy.enemyData.id})
     FogServer.delFogCount({type=FogConst.fog_battle_defeat})
@@ -127,7 +127,7 @@ function BattleResultUI:showNormalBattleReward()
     end
     local settlementDouble = GlobalParamsFunc.instance:getDataArray('settlementDouble')
     -- [ts2lua]settlementDouble下标访问可能不正确
-    self.battleResultRetio = Number(settlementDouble[self.battleResultCount % #settlementDouble])
+    self.battleResultRetio = tonumber(settlementDouble[self.battleResultCount % #settlementDouble])
     StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_VICTORY, {levelId=self.levelId, time=Client.instance.serverTime - self.controler.startTime})
     StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEVICTORY_SHOW, {doubleRate=self.battleResultRetio})
     self:showGuide_201()
@@ -156,7 +156,7 @@ end
 
 function BattleResultUI:showGuide_401()
   local unlock = GlobalParamsFunc.instance:getDataNum("equipUnlock")
-  if Number(self.levelId) < unlock then
+  if tonumber(self.levelId) < unlock then
     return
   end
   if UserModel.instance:getMainGuide() <= 5 then
@@ -212,17 +212,17 @@ function BattleResultUI:setReward()
     local reward = rewardList[index]:split(",")
     local switch = {
       [DataResourceType.COIN] = function()
-        coin = coin + Number(reward[1+1])
+        coin = coin + tonumber(reward[1+1])
       end,
       [DataResourceType.GOLD] = function()
-        gold = gold + Number(reward[1+1])
+        gold = gold + tonumber(reward[1+1])
       end,
       [DataResourceType.PIECE] = function()
         pieceId = reward[1+1]
-        piece = piece + Number(reward[2+1])
+        piece = piece + tonumber(reward[2+1])
       end
     }
-    local casef = switch[Number(reward[0+1])]
+    local casef = switch[tonumber(reward[0+1])]
     if not casef then casef = switch["default"] end
     if casef then casef() end
   end
@@ -311,7 +311,7 @@ end
 function BattleResultUI:onClickAgain()
   if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
     local userActNum = FogModel.instance:getActNum()
-    if userActNum < Number(FogFunc.enemyCell.eventData.mobilityCost) then
+    if userActNum < tonumber(FogFunc.enemyCell.eventData.mobilityCost) then
       FogModel.instance:checkFreeAct()
       return
     end

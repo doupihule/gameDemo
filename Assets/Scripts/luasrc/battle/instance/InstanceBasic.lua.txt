@@ -20,11 +20,11 @@ function InstanceBasic:ctor(controler)
   self.leftFrameTime = 0;
   self.laterFrameTime = 0;
   self.controler = controler
-  self.pos = Laya.Vector3()
+  self.pos = VectorTools.createVector3()
   InstanceBasic._instanceCount=InstanceBasic._instanceCount+1
   self.instanceId = InstanceBasic._instanceCount
-  self.rotation = Laya.Vector3()
-  self.rotationRad = Laya.Vector3()
+  self.rotation = VectorTools.createVector3()
+  self.rotationRad = VectorTools.createVector3()
 end
 
 function InstanceBasic:setData(data)

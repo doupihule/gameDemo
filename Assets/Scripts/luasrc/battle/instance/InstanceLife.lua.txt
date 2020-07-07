@@ -123,7 +123,7 @@ function InstanceLife:initSkillData()
       skillId = tostring(info)
       local debugPassiveSkillData = BattleDebugTool.getDebugPassiveSkill()
       if debugPassiveSkillData then
-        local passive = PassiveSkillData(debugPassiveSkillData[0+1], Number(debugPassiveSkillData[1+1]) or 1, thisObj, BattleConst.skill_kind_passive)
+        local passive = PassiveSkillData(debugPassiveSkillData[0+1], tonumber(debugPassiveSkillData[1+1]) or 1, thisObj, BattleConst.skill_kind_passive)
         table.insert(self.passiveSkills, passive)
         break
       end
@@ -160,7 +160,7 @@ function InstanceLife:initNormalSkill(thisObj, lifeType)
     local skill = nil
     skillId = tostring(info)
     if debugSkillData then
-      skill = self.controler:createSkillData(debugSkillData[0+1], Number(debugSkillData[1+1]) or 1, thisObj, BattleConst.skill_kind_noraml, lifeType)
+      skill = self.controler:createSkillData(debugSkillData[0+1], tonumber(debugSkillData[1+1]) or 1, thisObj, BattleConst.skill_kind_noraml, lifeType)
       table.insert(self.normalSkills, skill)
       break
     else
@@ -247,9 +247,9 @@ function InstanceLife:getLastNormalAndPassSkill()
       local j = 0
       repeat
         changeSkill = eff[j+1]
-        firstID = Number(changeSkill[0+1])
-        secondID = Number(changeSkill[1+1])
-        skillType = Number(changeSkill[2+1])
+        firstID = tonumber(changeSkill[0+1])
+        secondID = tonumber(changeSkill[1+1])
+        skillType = tonumber(changeSkill[2+1])
         if skillType == BattleConst.skillType_passive then
           local passIndex = self.passSkillArr:find(firstID)
           if passIndex ~= -1 then
@@ -328,7 +328,7 @@ function InstanceLife:changeHp(value)
   if value < 0 then
     local debugVale = BattleDebugTool.isInfiniteHp()
     if debugVale then
-      local debugCamp = Number(debugVale[0+1]) or 0
+      local debugCamp = tonumber(debugVale[0+1]) or 0
       if (debugCamp == 0 or debugCamp == 3) or self.camp == debugCamp then
         value = 1
       end
@@ -597,7 +597,7 @@ function InstanceLife:clearControlBuff()
     local arr = self.buffInfo[i+1]
     if arr and #arr > 0 then
       -- [ts2lua]BuffTrigger.buffTypeToBit下标访问可能不正确
-      if BuffTrigger.buffTypeToBit[Number(i)] then
+      if BuffTrigger.buffTypeToBit[tonumber(i)] then
         local s = #arr - 1
         repeat
           local buff = arr[s+1]

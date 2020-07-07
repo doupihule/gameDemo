@@ -376,7 +376,7 @@ function Client:saveDataToCloud(params, callback, thisObj, addParam, expandParam
   if not params.token then
     params.token = token
   end
-  LogsManager.echo("krma. cloud authenticate token=" .. token .. "body=" .. JSON:stringify(params.clientDirty) .. "sendTime=" .. params.sendTime)
+  LogsManager.echo("krma. cloud authenticate token=" .. token .. "body=" .. TableUtils.safelyJsonStringfy(params.clientDirty) .. "sendTime=" .. params.sendTime)
   self:startRequestCloud(MethodCommon.cloudStorage_setByUser, params, callback, thisObj, addParam, expandParams)
 end
 

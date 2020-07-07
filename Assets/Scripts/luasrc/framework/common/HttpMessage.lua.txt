@@ -75,7 +75,7 @@ function HttpMessage:sureSend(data)
         params.reqId = "req" .. Global.deviceId .. "_" .. Client.instance.miniserverTime .. "_" .. math.floor(math.random() * 100000)
       end
     end
-    targetStrData = JSON:stringify(params)
+    targetStrData = TableUtils.safelyJsonStringfy(params)
   end
   local shortSendData = self:turnShortLogs(targetStrData)
   LogsManager.echo("http send url is :" .. url:slice(0, math.min(200, #url)) .. "   method :" .. sendMethod .. "  data is : " .. shortSendData)
@@ -186,7 +186,7 @@ function HttpMessage:onHttpSuccess(data)
   if not isOrigin then
     try_catch{
       main = function()
-        data = JSON:parse(data)
+        data = TableUtils.safelyJsonParse(data)
       end,
       catch = function(e)
         LogsManager.errorTag(nil, "httpError,url:", url, "backData:")
@@ -257,7 +257,7 @@ function HttpMessage:objectToUrlParam(data)
     local value = data[key]
     if value ~= nil and value ~= undefined then
       if value.constructor == Array or value.constructor == Object then
-        retStr = retStr .. key .. "=" .. JSON:stringify(value) .. "&"
+        retStr = retStr .. key .. "=" .. TableUtils.safelyJsonStringfy(value) .. "&"
       else
         retStr = retStr .. key .. "=" .. value .. "&"
       end

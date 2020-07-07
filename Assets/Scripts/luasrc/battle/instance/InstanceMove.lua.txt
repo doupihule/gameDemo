@@ -23,15 +23,15 @@ function InstanceMove:ctor(controler)
   self.landPos = BattleFunc.defaultRoleYpos;
   self.isViewShow = true;
   self.cfgScale = 1;
-  self.gridPos = Laya.Vector3()
-  self.speed = Laya.Vector3()
-  self.rotateSpeed = Laya.Vector3()
-  self.addSpeed = Laya.Vector3()
-  self.unitVector = Laya.Vector3()
-  self.dragForce = Laya.Vector3(1, 1, 1)
-  self.blookSpeed = Laya.Vector3(0, 0, 0)
+  self.gridPos = VectorTools.createVector3()
+  self.speed = VectorTools.createVector3()
+  self.rotateSpeed = VectorTools.createVector3()
+  self.addSpeed = VectorTools.createVector3()
+  self.unitVector = VectorTools.createVector3()
+  self.dragForce = VectorTools.createVector3(1, 1, 1)
+  self.blookSpeed = VectorTools.createVector3(0, 0, 0)
   self.isViewShow = true
-  self.initRotateCtnPos = Laya.Vector3()
+  self.initRotateCtnPos = VectorTools.createVector3()
   self._followEffGroup = {}
 end
 
@@ -131,7 +131,7 @@ function InstanceMove:moveToOnePoint(x, y, z, spd, callFunc, thisObj, callParams
     movePointType=1
   end
   if not self._moveParams then
-    self._moveParams = InstanceMoveEntity(Laya.Vector3(x, y, z))
+    self._moveParams = InstanceMoveEntity(VectorTools.createVector3(x, y, z))
   end
   self._moveParams.expandParams = expandParams
   self._moveParams.followTarget = nil
@@ -152,8 +152,8 @@ function InstanceMove:moveToOnePoint(x, y, z, spd, callFunc, thisObj, callParams
     end
   end
   local temp = BattleFunc.tempPoint
-  Laya.Vector3:subtract(self._moveParams.target, self.pos, temp)
-  local distance = Laya.Vector3:scalarLength(temp)
+  VectorTools.createVector3:subtract(self._moveParams.target, self.pos, temp)
+  local distance = VectorTools.createVector3:scalarLength(temp)
   if self._moveParams.totalFrame > 0 and spd == 0 then
     spd = distance / self._moveParams.totalFrame
   else
@@ -171,12 +171,12 @@ end
 
 function InstanceMove:countMoveSpeed()
   local temp = BattleFunc.tempPoint
-  Laya.Vector3:subtract(self._moveParams.target, self.pos, temp)
+  VectorTools.createVector3:subtract(self._moveParams.target, self.pos, temp)
   local speed = self._moveParams.spd
-  Laya.Vector3:normalize(temp, self.unitVector)
-  Laya.Vector3:scale(self.unitVector, speed, self._moveParams.initSpeed)
+  VectorTools.createVector3:normalize(temp, self.unitVector)
+  VectorTools.createVector3:scale(self.unitVector, speed, self._moveParams.initSpeed)
   if self._moveParams.totalFrame == 0 then
-    local distance = Laya.Vector3:scalarLength(temp)
+    local distance = VectorTools.createVector3:scalarLength(temp)
     self._moveParams.totalFrame = math.round(distance / speed)
   end
   self:initMove(self._moveParams.initSpeed.x, self._moveParams.initSpeed.y, self._moveParams.initSpeed.z)
@@ -344,7 +344,7 @@ function InstanceMove:createOneEffByParam(params, isFollow, isLoop, expandParams
   if aniSpeed == nil then
     aniSpeed=1
   end
-  local delayTime = Number(params[7+1]) or 0
+  local delayTime = tonumber(params[7+1]) or 0
   params.isFollow = isFollow
   params.isLoop = isLoop
   params.expandParams = expandParams
@@ -360,11 +360,11 @@ InstanceMove._defaultViewSize = {0, 0};
 function InstanceMove:delayCreateEffByParams(params)
   local isFollow = params.isFollow
   local isLoop = params.isLoop
-  local offsetType = Number(params[2+1])
-  local offsetX = Number(params[3+1])
-  local offsetY = Number(params[4+1])
+  local offsetType = tonumber(params[2+1])
+  local offsetX = tonumber(params[3+1])
+  local offsetY = tonumber(params[4+1])
   local effectName = params[0+1]
-  local aniIndex = Number(params[1+1])
+  local aniIndex = tonumber(params[1+1])
   local aniSpeed = params.aniSpeed or 1
   if offsetType == 2 then
     if not self.cfgData then
@@ -386,13 +386,13 @@ function InstanceMove:delayCreateEffByParams(params)
   if not isLoop then
     frame = self.controler.performanceControler:getEffectLength(effectName, aniIndex - 1)
   end
-  local layerIndex = Number(params[5+1])
-  local ani = self:createEfect(effectName, aniIndex - 1, isLoop, offsetX, offsetY, 0, isFollow, layerIndex, Number(params[6+1]), frame, aniSpeed)
-  local sysFrame = Number(params[8+1])
+  local layerIndex = tonumber(params[5+1])
+  local ani = self:createEfect(effectName, aniIndex - 1, isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[6+1]), frame, aniSpeed)
+  local sysFrame = tonumber(params[8+1])
   if (sysFrame and sysFrame > 0) and #params > 10 then
     -- [ts2lua]params下标访问可能不正确
     -- [ts2lua]params下标访问可能不正确
-    ani:playSpecialSysAction(aniIndex - 1, sysFrame, Number(params[9+1]), Number(params[10]), Number(params[11]) * BattleFunc.battleViewFrameScale, aniSpeed)
+    ani:playSpecialSysAction(aniIndex - 1, sysFrame, tonumber(params[9+1]), tonumber(params[10]), tonumber(params[11]) * BattleFunc.battleViewFrameScale, aniSpeed)
   end
   if params.expandParams then
     ani:setExpandParams(params.expandParams)
@@ -413,7 +413,7 @@ function InstanceMove:clearEffByParams(effectParams)
   end
   local i = 0
   repeat
-    self:clearEffByName(PoolCode.POOL_EFFECT + effectParams[i+1][0+1] + Number(effectParams[i+1][1+1] - 1))
+    self:clearEffByName(PoolCode.POOL_EFFECT + effectParams[i+1][0+1] + tonumber(effectParams[i+1][1+1] - 1))
     i=i+1
   until not(i < #effectParams)
 end

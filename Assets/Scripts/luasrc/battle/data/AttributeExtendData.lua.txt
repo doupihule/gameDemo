@@ -106,7 +106,7 @@ function AttributeExtendData:countPassiveAttr(roleData)
       local s = 0
       repeat
         tempArr = effectParams[s+1]
-        self:updateOneAttr(tempArr[0+1], Number(tempArr[1+1]), Number(tempArr[2+1]), self.extraAttr, true)
+        self:updateOneAttr(tempArr[0+1], tonumber(tempArr[1+1]), tonumber(tempArr[2+1]), self.extraAttr, true)
         s=s+1
       until not(s < #effectParams)
     elseif effectType == BattleConst.passive_effect_skillcd then
@@ -115,7 +115,7 @@ function AttributeExtendData:countPassiveAttr(roleData)
       repeat
         local arr = effectParams[s+1]
         local skillId = tostring(arr[0+1])
-        local value = Number(arr[1+1])
+        local value = tonumber(arr[1+1])
         local skillValue = 10000 + value
         if skillValue < 0 then
           skillValue = 0

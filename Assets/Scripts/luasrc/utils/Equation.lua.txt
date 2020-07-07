@@ -21,7 +21,7 @@ end
 -- 弧度转化为 垂线的角
 function Equation.transToSmallVerticalRadian(num)
 	local result
-	result=transToSmallRadian(num)
+	result=Equation.transToSmallRadian(num)
 	if (result>0 and result<math.pi/2) then
 		result=-(math.pi/2-result)
 	elseif (result>-math.pi and result<-math.pi/2) then
@@ -806,14 +806,6 @@ function Equation.getLinePosByLength( p1,p2,length,xiaoshu )
 end
 
 
---计算2个 xyzw向量 按照百分比计算
-function Equation.countVec4percent( v1,v2,percent )
-	local x = (v2.x- v1.x) * percent + v1.x
-	local y = (v2.y- v1.y) * percent + v1.y
-	local z = (v2.z- v1.z) * percent + v1.z
-	local w = (v2.w- v1.w) * percent + v1.w
-	return {x=x,y=y,z=z,w=w}
-end
 
 --计算2个矩阵的百分比
 function Equation.countMatrixPercent(m1,m2,percent )
@@ -828,35 +820,6 @@ function Equation.countMatrixPercent(m1,m2,percent )
 
 end
 
-
---计算2个向量的和
-function Equation.vectorAdd( vec1,vec2 )
-	--如果是有z向量的
-	local vecResult = {x = vec1.x+vec2.x,y = vec1.y+ vec2.y}
-	if vec1.z then
-		vecResult.z = vec1.z + vec2.z
-	end
-	return vecResult
-end
-
---向量乘法
-function Equation.vectorMul( vec,nums )
-	local vecResult = {x = vec.x*nums,y = vec.y* nums}
-	if vecResult.z then
-		vecResult.z = vec1.z * nums
-	end
-	return vecResult
-end
-
---向量减法
-function Equation.vectorReduce( vec1,vec2 )
-	--如果是有z向量的
-	local vecResult = {x = vec1.x-vec2.x,y = vec1.y-vec2.y}
-	if vec1.z then
-		vecResult.z = vec1.z - vec2.z
-	end
-	return vecResult
-end
 
 
 --判断一个点是否在多边形内
@@ -895,75 +858,3 @@ function Equation.checkPosInPolygon( pos,polygonPointArr )
 
 end
 
-
-local turnPosParams = nil
-
---[[
-	透视坐标模拟转换偏移
-	等腰梯形  BCDE , 梯形俩边延长线交点为A
-	梯形中轴线是 没有任何偏移的 ,我们需要以A为起点 ,目标点world.x所在的直线. 然后求出真实的x,y
-	
-]]
-function Equation._init3DParams(  )
-	if turnPosParams then
-		return
-	end
-	turnPosParams ={}
-	turnPosParams.width = GameVars.width
-	turnPosParams.maxOffset = 215
-	turnPosParams.maxYOffset = 50	
-	turnPosParams.secondYOffest = 50
-	turnPosParams.mapRect = {
-		ld={ x=GameVars.UIOffsetX+-turnPosParams.maxOffset,y = GameVars.UIOffsetY -turnPosParams.maxYOffset },  		--左下 leftDown点E坐标
-		lu={ x= GameVars.UIOffsetX,y = GameVars.UIOffsetY+GameVars.gameResHeight  },		--左上  B
-		rd={x= GameVars.UIOffsetX+GameVars.gameResWidth  + turnPosParams.maxOffset ,y=GameVars.UIOffsetY- turnPosParams.maxYOffset},			--右下  D
-		ru={x= GameVars.UIOffsetX+GameVars.gameResWidth,y= GameVars.UIOffsetY+GameVars.gameResHeight} 			--右上  C
-	}
-
-	turnPosParams.pointB = turnPosParams.mapRect.lu
-	turnPosParams.pointC = turnPosParams.mapRect.ru
-	turnPosParams.pointE = turnPosParams.mapRect.ld
-	turnPosParams.pointD = turnPosParams.mapRect.rd
-
-
-	--计算 线条方程 B(lu),C(ru),E(ld),D(rd) ,BE和DC的交点为A 
-	turnPosParams.lineBE = Equation.creat_1_1_b(turnPosParams.pointB,turnPosParams.pointE,false)
-	turnPosParams.lineCD = Equation.creat_1_1_b(turnPosParams.pointC,turnPosParams.pointD,false)
-
-	turnPosParams.lineYObj = Equation.creat_1_1_b({x=GameVars.gameResHeight,y=GameVars.gameResHeight},{x=0,y = -turnPosParams.maxYOffset},false)
-
-	turnPosParams.pointA = Equation.pointOf(turnPosParams.lineBE,turnPosParams.lineCD)
-	turnPosParams.cosAngle = 1--math.cos(math.pi/9)
-	
-end
-
---修正3D坐标 worldPos 是相对屏幕的坐标  返回一个坐标偏移 
-function Equation.adjust3Dpos( worldPos )
-	Equation._init3DParams()
-	local x,y = worldPos.x,worldPos.y
-	local targetLine = Equation.creat_1_1_b(turnPosParams.pointA,{x=x,y = turnPosParams.pointB.y})
-	local targetY = turnPosParams.lineYObj:getY(worldPos.y)
-	local targetPosX = targetLine:getX(worldPos.y)
-	local resultPos = {} --self.charNode:convertToNodeSpaceAR(worldPos)
-
-	--y坐标偏移是很复杂的折线   
-
-
-	resultPos.x =  - (targetPosX - worldPos.x)
-	resultPos.y =  - (targetY - y)
-
-	local dy = worldPos.y - GameVars.cy 
-	local offsetY =0
-	if dy > 0 then
-		offsetY = -turnPosParams.secondYOffest * (1-dy/ GameVars.halfResHeight )
-	else
-		offsetY = -turnPosParams.secondYOffest * (1+dy/ GameVars.halfResHeight )
-	end
-
-	resultPos.y = resultPos.y + offsetY
-
-
-	-- resultPos.x =0
-	-- resultPos.y =0
-	return resultPos
-end

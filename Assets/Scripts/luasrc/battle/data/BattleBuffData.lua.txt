@@ -14,7 +14,7 @@ function BattleBuffData:ctor(id)
   self.type = self.cfgData.type
   self.logicType = self.cfgData.logicType
   self.group = self.cfgData.group
-  self.interval = Number(self.cfgData.interval)
+  self.interval = tonumber(self.cfgData.interval)
   if self.interval > 0 then
     self.interval = BattleFunc.instance:turnMinisecondToframe(self.interval)
   end
@@ -38,7 +38,7 @@ function BattleBuffData:setData(owner, targetSkillAction, repeatNum)
   self.skillAction = targetSkillAction
   local skillDataId = self.skillAction.cfgData.numId
   local targetLevel = owner:getCfgSkillLevel(skillDataId)
-  self.leftTimes = Number(self.cfgData.effectiveTimes)
+  self.leftTimes = tonumber(self.cfgData.effectiveTimes)
   local tempArr = self.cfgData.logicParams
   local tagStr = "Buff:" .. self._id
   if tempArr then

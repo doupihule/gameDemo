@@ -370,7 +370,7 @@ function SkillActionTrigger.runSkillAction_14(attacker, skill, skillAction, useA
       x = info[1+1] * attacker._viewWay + targetRole.pos.x
       z = info[2+1] + targetRole.pos.z
     end
-    table.insert(pointArr, Laya.Vector3(x, 0, z))
+    table.insert(pointArr, VectorTools.createVector3(x, 0, z))
     table.insert(expandArr, expandParams)
     i=i+1
   until not(i < #paramsArr)

@@ -1,21 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 FrameWorkHandle = class('FrameWorkHandle')
 
 function FrameWorkHandle.__getters.instance()
@@ -27,7 +9,7 @@ end
 
 function FrameWorkHandle.init()
   if not FrameWorkHandle._instance then
-    FrameWorkHandle._instance = FrameWorkHandle()
+    FrameWorkHandle._instance = FrameWorkHandle.new()
   end
 end
 

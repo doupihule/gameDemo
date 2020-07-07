@@ -33,52 +33,9 @@ function StringUtils.reprTime(time)
 end
 
 function StringUtils.getCoinStr(coin)
-  local coinStr = ""
-  local tempCoin = coin
-  if BigNumUtils.compare(coin, 10000) then
-    local index = 1
-    while(BigNumUtils.compare(BigNumUtils.devide(tempCoin, 1000), 1000))
-    do
-    index=index+1
-    tempCoin = BigNumUtils.devide(tempCoin, 1000) .. ""
-    end
-    if not StringUtils._reducedUnitArr then
-      local reducedUnit = GlobalParamsFunc.instance:getGlobalCfgDatas("reducedUnit").string
-      StringUtils._reducedUnitArr = reducedUnit:split(",")
-    end
-    local reducedUnitArr = StringUtils._reducedUnitArr
-    if #reducedUnitArr < index - 1 then
-      -- [ts2lua]reducedUnitArr下标访问可能不正确
-      coinStr = BigNumUtils.devide(coin, BigNumUtils.pow(1000, #reducedUnitArr)) + reducedUnitArr[#reducedUnitArr - 1]
-    else
-      -- [ts2lua]reducedUnitArr下标访问可能不正确
-      local unit = reducedUnitArr[index - 1]
-      coinStr = BigNumUtils.devide(coin, BigNumUtils.pow(1000, index), 1) + unit
-    end
-  else
-    coinStr = coin
-  end
   return coinStr
 end
 
-function StringUtils.getRGBbyHex(hex)
-  local index = "0123456789abcdef"
-  if hex:substr(0, 1) == "#" then
-    hex = hex:substring(1)
-  end
-  hex = hex:toLowerCase()
-  local rgb = {}
-  local i = 0
-  repeat
-    local colorHex = hex:substr(i * 2, 2)
-    local colorHigh = colorHex:substr(0, 1)
-    local colorLow = colorHex:substr(1, 1)
-    local color = index:find(colorHigh) * 16 + index:find(colorLow) / 255
-    table.insert(rgb, color)
-    i=i+1
-  until not(i < 3)
-  return rgb
-end
 
 function StringUtils.repeatStr(target, n)
   local s = ""
@@ -90,25 +47,11 @@ function StringUtils.repeatStr(target, n)
   return s
 end
 
-function StringUtils.getPaddingStr(str, len, padding, pos)
-  if pos == nil then
-    pos=true
-  end
-  str = tostring(str)
-  if #str >= len then
-    return str
-  end
-  if pos then
-    return StringUtils.repeatStr(padding, len - #str) + str
-  else
-    return str + StringUtils.repeatStr(padding, len - #str)
-  end
-end
 
 function StringUtils.chekHasChinese(str)
   -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
-  local req = /.*[\u4e00-\u9fa5]+.*$/
-  if req:test(str) then
+  local req = '.*[%u4e00-%u9fa5]+.*$/'
+  if(string.find(str,req)) then
     return true
   end
   return false

@@ -30,7 +30,7 @@ function TimerManager:add(callBack, thisObject, delay, maxCount, immediate, args
     delay=1000
   end
   if maxCount == nil then
-    maxCount=Number.MAX_VALUE
+    maxCount=tonumber.MAX_VALUE
   end
   if immediate == nil then
     immediate=false
@@ -43,9 +43,9 @@ function TimerManager:add(callBack, thisObject, delay, maxCount, immediate, args
   if immediate then
     timeEntity = TimeEntity.new(delay, callBack, thisObject, maxCount - 1, args)
     if #args > 0 then
-      callBack:apply(thisObject, args)
+      doJsApplyFunc(callBack,thisObject, args)
     else
-      callBack:apply(thisObject, {1})
+      doJsApplyFunc(callBack,thisObject, {1})
     end
   else
     timeEntity = TimeEntity.new(delay, callBack, thisObject, maxCount, args)
@@ -102,9 +102,9 @@ function TimerManager:tickHandler(time)
         isRemove = true
       end
       if #args > 0 then
-        callBack:apply(thisObject, args)
+        doJsApplyFunc(callBack,thisObject, args)
       else
-        callBack:apply(thisObject, {num})
+        doJsApplyFunc(callBack,thisObject, {num})
       end
     end
   end

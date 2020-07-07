@@ -137,7 +137,7 @@ function BattleLogicalControler:playSound(soundName, lastTime)
 end
 
 function BattleLogicalControler:playSoundByParams(params)
-  self:playSound(params[2+1], Number(params[3+1]))
+  self:playSound(params[2+1], tonumber(params[3+1]))
 end
 
 function BattleLogicalControler:stopSound(soundName)
@@ -640,7 +640,7 @@ function BattleLogicalControler:getPosByTypeAndCamp(camp, type, outpos, offestX,
     local posX = BattleFunc.airArmyStartXLocation
     if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
       -- [ts2lua]BattleFunc.warRoleXoffest下标访问可能不正确
-      posX = Number(BattleFunc.warRoleXoffest[xIndex - 1])
+      posX = tonumber(BattleFunc.warRoleXoffest[xIndex - 1])
     end
     if camp == BattleConst.ROLEGROUP_ENEMY then
       targetX = self.mapControler._maxSceneWidth - posX
@@ -651,13 +651,13 @@ function BattleLogicalControler:getPosByTypeAndCamp(camp, type, outpos, offestX,
     -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
     local index = BattleFunc.CreateRoleIndex[BattleConst.LIFE_AIRHERO] or 0
     -- [ts2lua]BattleFunc.landArmyStartYLocation下标访问可能不正确
-    targetY = BattleFunc.battleCenterY + Number(BattleFunc.landArmyStartYLocation[index]) + offestY
+    targetY = BattleFunc.battleCenterY + tonumber(BattleFunc.landArmyStartYLocation[index]) + offestY
   else
     if type == BattleConst.LIFE_LANDBUILD then
       local posX = BattleFunc.pylonStartXLocation
       if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
         -- [ts2lua]BattleFunc.warRoleXoffest下标访问可能不正确
-        posX = Number(BattleFunc.warRoleXoffest[xIndex - 1])
+        posX = tonumber(BattleFunc.warRoleXoffest[xIndex - 1])
       end
       offestX = math.random() * BattleFunc.pylonTwoLocation
       if camp == BattleConst.ROLEGROUP_ENEMY then
@@ -669,7 +669,7 @@ function BattleLogicalControler:getPosByTypeAndCamp(camp, type, outpos, offestX,
       local posX = BattleFunc.landArmyStartXLocation
       if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
         -- [ts2lua]BattleFunc.warRoleXoffest下标访问可能不正确
-        posX = Number(BattleFunc.warRoleXoffest[xIndex - 1])
+        posX = tonumber(BattleFunc.warRoleXoffest[xIndex - 1])
       end
       if camp == BattleConst.ROLEGROUP_ENEMY then
         targetX = self.mapControler._maxSceneWidth - posX
@@ -681,7 +681,7 @@ function BattleLogicalControler:getPosByTypeAndCamp(camp, type, outpos, offestX,
     -- [ts2lua]BattleFunc.CreateRoleIndex下标访问可能不正确
     local index1 = BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] or 0
     -- [ts2lua]BattleFunc.landArmyStartYLocation下标访问可能不正确
-    targetY = BattleFunc.battleCenterY + Number(BattleFunc.landArmyStartYLocation[index1]) + offestY
+    targetY = BattleFunc.battleCenterY + tonumber(BattleFunc.landArmyStartYLocation[index1]) + offestY
   end
   if isNaN(targetY) then
     LogsManager.errorTag("无效的z坐标", "无效的z坐标")

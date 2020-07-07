@@ -44,17 +44,17 @@ end
 
 BattleFunc.moveSpeed = 1;
 BattleFunc.battleRandomIndex = 3;
-BattleFunc.angletoRad = Math.PI / 180;
-BattleFunc.radtoAngle = 180 / Math.PI;
+BattleFunc.angletoRad = math.pi / 180;
+BattleFunc.radtoAngle = 180 / math.pi;
 BattleFunc.miToPixel = 640 / 18;
 BattleFunc.pixelToMi = 18 / 640;
-BattleFunc.twopi = Math.PI * 2;
-BattleFunc.halfpi = Math.PI / 2;
+BattleFunc.twopi = math.pi * 2;
+BattleFunc.halfpi = math.pi / 2;
 BattleFunc.defaultRoleYpos = 0;
 BattleFunc.battleViewFrameScale = 2;
 BattleFunc.miniSecondToFrame = 60 / 1000;
 BattleFunc.frameToMiniSecode = 1000 / 60;
-BattleFunc.originPoint = Laya.Vector3();
+BattleFunc.originPoint = VectorTools.createVector3();
 BattleFunc.tempObject = {};
 BattleFunc.tempObject2 = {};
 BattleFunc.tempObject3 = {};
@@ -62,10 +62,10 @@ BattleFunc.tempObject4 = {};
 BattleFunc.tempRect = {x=0, y=0, width=0, height=0};
 BattleFunc.tempRect2 = {x=0, y=0, width=0, height=0};
 BattleFunc.tempCircle = {r=0, x=0, y=0};
-BattleFunc.tempPoint = Laya.Vector3(0, 0, 0);
-BattleFunc.tempPoint2 = Laya.Vector3(0, 0, 0);
-BattleFunc.tempPoint3 = Laya.Vector3(0, 0, 0);
-BattleFunc.tempPoint4 = Laya.Vector3(0, 0, 0);
+BattleFunc.tempPoint = VectorTools.createVector3(0, 0, 0);
+BattleFunc.tempPoint2 = VectorTools.createVector3(0, 0, 0);
+BattleFunc.tempPoint3 = VectorTools.createVector3(0, 0, 0);
+BattleFunc.tempPoint4 = VectorTools.createVector3(0, 0, 0);
 BattleFunc.tempClickPoint = Laya.Point(0, 0);
 BattleFunc.EFFECT_NOALLOW = 1;
 BattleFunc.emptyArr = {};
@@ -110,7 +110,7 @@ function BattleFunc:getRoleInfoData(id, level)
 end
 
 function BattleFunc:turnMinisecondToframe(minisecond)
-  return math.floor(Number(minisecond) * BattleFunc.miniSecondToFrame)
+  return math.floor(tonumber(minisecond) * BattleFunc.miniSecondToFrame)
 end
 
 function BattleFunc:turnSpeedToFrame(secondSpeed)
@@ -152,7 +152,7 @@ function BattleFunc:createRoleSpine(roleId, level, type, targetScale, isShowShad
   local sp = BattleRoleView(spineName, targetScale, index)
   if isShowShade then
     local size = roleUpdateInfo.size
-    local width = Number(size[1+1])
+    local width = tonumber(size[1+1])
     local shadeScale = self:getShadeScale(width)
     sp:setShade(shadeScale)
   end
@@ -197,10 +197,10 @@ function BattleFunc:turnPropArrToTable(propArr, outTable)
     end
     -- [ts2lua]outTable下标访问可能不正确
     -- [ts2lua]outTable下标访问可能不正确
-    outTable[id][0+1] = outTable[id][0+1] + Number(info[1+1]) or 0
+    outTable[id][0+1] = outTable[id][0+1] + tonumber(info[1+1]) or 0
     -- [ts2lua]outTable下标访问可能不正确
     -- [ts2lua]outTable下标访问可能不正确
-    outTable[id][1+1] = outTable[id][1+1] + Number(info[2+1]) or 0
+    outTable[id][1+1] = outTable[id][1+1] + tonumber(info[2+1]) or 0
     i=i+1
   until not(i < #propArr)
   return outTable
@@ -254,28 +254,28 @@ end
 
 function BattleFunc:getSkillValueByParams(key, _skillId, level, skillParams, tag)
   if key:find("_") == -1 then
-    return Number(key)
+    return tonumber(key)
   end
   if not skillParams then
     skillParams = self:getCfgDatasByMultyKey("SkillUpdate", _skillId, tostring(level), "params", true)
     if not skillParams then
-      return Number(key)
+      return tonumber(key)
     end
   end
   local tempArr = key:split("_")
   -- [ts2lua]skillParams下标访问可能不正确
-  local arr1 = skillParams[Number(tempArr[0+1]) - 1]
+  local arr1 = skillParams[tonumber(tempArr[0+1]) - 1]
   if not arr1 then
     LogsManager.errorTag("SkillCfgsError", "参数配置错误,skillId:", _skillId, "skilllv:", level, "key:", key, tag)
     return 0
   end
   -- [ts2lua]arr1下标访问可能不正确
-  local rt = arr1[Number(tempArr[1+1]) - 1]
+  local rt = arr1[tonumber(tempArr[1+1]) - 1]
   if rt == nil then
     LogsManager.errorTag("SkillCfgsError", "参数配置错误,skillId:", _skillId, "skilllv:", level, "key:", key, tag)
     return 0
   end
-  rt = Number(rt)
+  rt = tonumber(rt)
   if isNaN(rt) then
     LogsManager.errorTag("battleError", "错误的技能参数数据,skillId:", _skillId, "skilllv:", level, tag)
   end
@@ -299,9 +299,9 @@ function BattleFunc.initGlobalParams()
   BattleFunc.diedShockCount = GlobalParamsFunc.instance:getDataNum("deadShock")
   local buildAutoHp = GlobalParamsFunc.instance:getDataArray("buildingAutoReduceHp")
   BattleFunc.warRoleXoffest = GlobalParamsFunc.instance:getDataArray("fogBattleColumns")
-  BattleFunc.buildAutoFrame = BattleFunc.instance:turnMinisecondToframe(Number(buildAutoHp[0+1]))
+  BattleFunc.buildAutoFrame = BattleFunc.instance:turnMinisecondToframe(tonumber(buildAutoHp[0+1]))
   BattleFunc.deadLastFrame = BattleFunc.instance:turnMinisecondToframe(GlobalParamsFunc.instance:getDataNum("pylonStartXLocation"))
-  BattleFunc.buildingAutoReduceHp = Number(buildAutoHp[1+1])
+  BattleFunc.buildingAutoReduceHp = tonumber(buildAutoHp[1+1])
   BattleFunc.idToShowMap = cfg
   BattleFunc.initFrameDates()
   if UserInfo.isWeb() then

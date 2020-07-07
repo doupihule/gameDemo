@@ -80,7 +80,7 @@ function PassiveSkillTrigger.runOnePassiveSkill(attacker, skill, p1, p2, p3, p4)
   -- [ts2lua]PassiveSkillTrigger下标访问可能不正确
   local func = PassiveSkillTrigger["runPassiveSkill_" .. type]
   if skill.cfgData.cdTime then
-    skill.leftSkillCd = BattleFunc.instance:turnMinisecondToframe(Number(skill.cfgData.cdTime))
+    skill.leftSkillCd = BattleFunc.instance:turnMinisecondToframe(tonumber(skill.cfgData.cdTime))
   end
   if not func then
     LogsManager.errorTag("PassiveSkillCfgError", "错误的被动技能效果类型,id:", skill._skillId, "effecttype:", type)

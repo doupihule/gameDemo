@@ -52,7 +52,7 @@ function DataResourceFunc:getDataResourceInfo(dataArr)
         result = {img=RolesFunc.instance:getEquipIcon(RolesFunc.instance:getCfgDatasByKey("EquipMaterial", dataArr[1+1], "icon")), id=dataArr[1+1], num=dataArr[2+1]}
       end
     }
-    local casef = switch[Number(dataArr[0+1])]
+    local casef = switch[tonumber(dataArr[0+1])]
     if not casef then casef = switch["default"] end
     if casef then casef() end
   end
@@ -60,9 +60,9 @@ function DataResourceFunc:getDataResourceInfo(dataArr)
 end
 
 function DataResourceFunc:showTip(reward)
-  if Number(reward[0+1]) == DataResourceType.COIN then
+  if tonumber(reward[0+1]) == DataResourceType.COIN then
     WindowManager.ShowTip("获得金币 x" .. reward[1+1])
-  elseif Number(reward[0+1]) == DataResourceType.GOLD then
+  elseif tonumber(reward[0+1]) == DataResourceType.GOLD then
     WindowManager.ShowTip("获得钻石 x" .. reward[1+1])
   end
 end

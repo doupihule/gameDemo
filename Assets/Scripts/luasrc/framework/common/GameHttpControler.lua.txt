@@ -147,7 +147,7 @@ function GameHttpControler:onHttpCallBack(backData)
   local data = nil
   try_catch{
     main = function()
-      data = JSON:parse(backData)
+      data = TableUtils.safelyJsonParse(backData)
     end,
     catch = function(e)
       LogsManager.echo("gamehttp 返回的数据不是json,走重新登入", backData)

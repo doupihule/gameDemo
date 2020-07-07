@@ -1,19 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 UserExtModel = class('UserExtModel',BaseModel)
 
 function UserExtModel:ctor()
@@ -62,7 +46,7 @@ function UserExtModel:checkIsGotKefuAward()
 end
 
 function UserExtModel:getMaxLevel()
-  return Number(self._data.maxStage) or 0
+  return tonumber(self._data.maxStage) or 0
 end
 
 function UserExtModel:getBoxGetCount(index)
@@ -99,7 +83,7 @@ function UserExtModel:getIsShowGiftInGame()
   if winTimes == 0 then
     return false
   end
-  if winTimes <= Number(num[1+1]) then
+  if winTimes <= tonumber(num[1+1]) then
     return true
   end
   return false
@@ -225,7 +209,7 @@ function UserExtModel:getIsFreeUpgradeTalentInGame()
   end
   local rate = GlobalParamsFunc.instance:getDataByTwoId("talentVideoLevelUpShowInterval", "arr")[0+1]:split(",")
   local freeUpgradeCount = self:getTalentFreeUpgradeCount()
-  if freeUpgradeCount <= Number(rate[1+1]) then
+  if freeUpgradeCount <= tonumber(rate[1+1]) then
     return true
   end
   return false
@@ -262,7 +246,7 @@ function UserExtModel:getEnterFogFlag()
 end
 
 function UserExtModel:getRoleForce()
-  return Number(self._data.force) or 0
+  return tonumber(self._data.force) or 0
 end
 
 function UserExtModel:checkFirstEnterFog()
@@ -273,7 +257,7 @@ function UserExtModel:checkIsTurnableShow()
   local isShow = false
   local luckyPlateLevel = GlobalParamsFunc.instance:getDataNum("luckyPlateLevel")
   local curMaxLevel = UserExtModel.instance:getMaxLevel()
-  if Number(curMaxLevel) + 1 >= luckyPlateLevel then
+  if tonumber(curMaxLevel) + 1 >= luckyPlateLevel then
     local freeType = ShareOrTvManager.instance:getShareOrTvType(ShareTvOrderFunc.SHARELINE_TURNABLE)
     if freeType ~= ShareOrTvManager.TYPE_QUICKRECEIVE then
       isShow = true

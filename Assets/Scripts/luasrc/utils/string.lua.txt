@@ -435,7 +435,10 @@ function string.stripAndLower(str)
 	return string.lower(ret);
 end
 
-
+--模拟js的正则表达式 test
+function string.rejstest( re, str, )
+	
+end
 
 
 

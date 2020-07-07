@@ -165,7 +165,7 @@ end
 
 function ConditionTrigger.checkCondition_2(selfInstance, condition, skill)
   local hpRatio = selfInstance.hp / selfInstance.maxHp * 10000
-  local rt = ConditionTrigger.compareValue(hpRatio, Number(condition.conditionLogicalParams[0+1][1+1]), Number(condition.conditionLogicalParams[0+1][0+1]))
+  local rt = ConditionTrigger.compareValue(hpRatio, tonumber(condition.conditionLogicalParams[0+1][1+1]), tonumber(condition.conditionLogicalParams[0+1][0+1]))
   return rt
 end
 
@@ -178,7 +178,7 @@ function ConditionTrigger.checkCondition_3(selfInstance, condition, skill, useAr
   repeat
     local targetInstance = useArr[i+1]
     local hpRatio = targetInstance.hp / targetInstance.maxHp * 10000
-    local rt = ConditionTrigger.compareValue(hpRatio, Number(condition.conditionLogicalParams[0+1][1+1]), Number(condition.conditionLogicalParams[0+1][0+1]))
+    local rt = ConditionTrigger.compareValue(hpRatio, tonumber(condition.conditionLogicalParams[0+1][1+1]), tonumber(condition.conditionLogicalParams[0+1][0+1]))
     if rt then
       return true
     end
@@ -522,7 +522,7 @@ function ConditionTrigger.checkCondition_21(selfInstance, condition, skill, useA
   local s = 0
   repeat
     local rid = tostring(paramsArr[s+1][1+1])
-    local lifeType = Number(paramsArr[s+1][0+1])
+    local lifeType = tonumber(paramsArr[s+1][0+1])
     local i = 0
     repeat
       local targetRole = useArr[i+1]

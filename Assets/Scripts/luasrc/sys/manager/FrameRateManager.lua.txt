@@ -13,7 +13,7 @@ end
 function FrameRateManager:ctor() end
 function FrameRateManager.__getters.instance()
   if not FrameRateManager._instance then
-    FrameRateManager._instance = FrameRateManager()
+    FrameRateManager._instance = FrameRateManager.new()
   end
   return FrameRateManager._instance
 end

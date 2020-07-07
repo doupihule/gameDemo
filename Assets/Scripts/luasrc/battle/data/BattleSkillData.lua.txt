@@ -58,7 +58,7 @@ function BattleSkillData:updateLevel(level)
     self.cfgData = BattleFunc.instance:getCfgDatas("Skill", self._skillId)
     local value = self.cfgData.action and self.cfgData.action[4+1]
     if value then
-      self.skillWaitFrame = BattleFunc.instance:turnMinisecondToframe(Number(value))
+      self.skillWaitFrame = BattleFunc.instance:turnMinisecondToframe(tonumber(value))
     end
     self.chooseTartgetCfg = BattleFunc.instance:getCfgDatas("Target", tostring(self.cfgData.target))
     if not self.skillLabel then
@@ -66,7 +66,7 @@ function BattleSkillData:updateLevel(level)
         self.skillLabel = TableUtils.copyOneArr(self.cfgData.action)
         local i = 1
         repeat
-          self.skillLabel[i+1] = Number(self.skillLabel[i+1])
+          self.skillLabel[i+1] = tonumber(self.skillLabel[i+1])
           i=i+1
         until not(i < #self.skillLabel)
       end
@@ -78,7 +78,7 @@ function BattleSkillData:updateLevel(level)
         local i = 0
         repeat
           local info = skillEffect[i+1]
-          local actionData = SkillActionData(info[0+1], self.owner, self, Number(info[1+1]), Number(info[2+1]), Number(info[3+1]), Number(info[4+1]), 0)
+          local actionData = SkillActionData(info[0+1], self.owner, self, tonumber(info[1+1]), tonumber(info[2+1]), tonumber(info[3+1]), tonumber(info[4+1]), 0)
           table.insert(self.skillActionArr, actionData)
           i=i+1
         until not(i < #skillEffect)
@@ -128,7 +128,7 @@ function BattleSkillData:getSkillValue(key, tag)
     tag=nil
   end
   if not self.skillPropParams then
-    return Number(key)
+    return tonumber(key)
   end
   return BattleFunc.instance:getSkillValueByParams(key, self.relyonSkill and self.relyonSkill._skillId or self._skillId, self.level, self.skillPropParams, tag)
 end
