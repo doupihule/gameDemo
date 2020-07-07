@@ -277,26 +277,27 @@ function BattleControler:clearCallBack(thisObj, callBack, params)
   if params == nil then
     params=nil
   end
+  local len =#self._timeList
   local i = #self._timeList - 1
-  repeat
-    local obj = self._timeList[i+1]
+  for i=len,1,-1 do
+    local obj = self._timeList[i]
     if thisObj == obj.thisObj then
       if not callBack then
-        self._timeList:splice(i, 1)
-      else
+        table.remove(this._timeList,i)
+      else 
         if callBack == obj.callBack then
           if params == nil then
-            self._timeList:splice(i, 1)
+            table.remove(this._timeList,i)
           else
             if params == obj.params then
-              self._timeList:splice(i, 1)
+              table.remove(this._timeList,i)
             end
           end
         end
       end
     end
-    i=i-1
-  until not(i >= 0)
+  end
+  
 end
 
 function BattleControler:registObjUpdate(callFunc, callThisObj, params, frame)
@@ -308,7 +309,7 @@ function BattleControler:registObjUpdate(callFunc, callThisObj, params, frame)
   end
   self.callFuncNums=self.callFuncNums+1
   -- [ts2lua]self.updateCallFuncGroup下标访问可能不正确
-  self.updateCallFuncGroup[tostring(self.callFuncNums)] = {callBack=callFunc, thisObj=callThisObj, params=params, frame=frame}
+  self.updateCallFuncGroup[self.callFuncNums] = {callBack=callFunc, thisObj=callThisObj, params=params, frame=frame}
   return self.callFuncNums
 end
 
