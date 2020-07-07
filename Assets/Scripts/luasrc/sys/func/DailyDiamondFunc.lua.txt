@@ -4,7 +4,7 @@ DailyDiamondFunc = class('DailyDiamondFunc',BaseFunc)
 
 function DailyDiamondFunc.__getters.instance()
   if not DailyDiamondFunc._instance then
-    DailyDiamondFunc._instance = DailyDiamondFunc()
+    DailyDiamondFunc._instance = DailyDiamondFunc.new()
   end
   return DailyDiamondFunc._instance
 end

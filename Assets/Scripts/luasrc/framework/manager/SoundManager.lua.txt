@@ -244,7 +244,7 @@ SoundManager._bgvolume = 1;
 SoundManager._channelNum = 0;
 function SoundManager.playNewBGM(url, loops, complete, startTime)
   if not SoundManager._bgmSoundChannel then
-    SoundManager._bgmSoundChannel = SoundChannel()
+    SoundManager._bgmSoundChannel = SoundChannel.new()
   end
   SoundManager._bgmSoundChannel:offAll()
   SoundManager._bgmSoundChannel:setData(url, loops)
@@ -396,7 +396,7 @@ function SoundManager.getChannelIns(url)
   if not SoundManager._soundChannelCache[url] then
     local sc = PoolTools.getItem("soundChannel", PoolCode.pool_model_sys)
     if not sc then
-      sc = SoundChannel()
+      sc = SoundChannel.new()
     end
     -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
     SoundManager._soundChannelCache[url] = sc

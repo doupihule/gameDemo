@@ -168,7 +168,7 @@ function SkillActionTrigger.runSkillAction_5(attacker, skill, skillAction, useAr
     local cengshu = logicalParams[i+1][1+1]
     local cacheBuff = PoolTools.getItem("buff_" .. buffId)
     if not cacheBuff then
-      cacheBuff = BattleBuffData(buffId)
+      cacheBuff = BattleBuffData.new(buffId)
     end
     cacheBuff:setData(attacker, skillAction, cengshu)
     local s = 0
@@ -313,7 +313,7 @@ function SkillActionTrigger.runSkillAction_12(attacker, skill, skillAction, useA
       local aoeId = tostring(aoeIdArr[s+1])
       local aoeData = PoolTools.getItem(PoolCode.POOL_AOEDATA + aoeId)
       if not aoeData then
-        aoeData = BattleAoeData(aoeId)
+        aoeData = BattleAoeData.new(aoeId)
       end
       aoeData:setData(skillAction, attacker)
       aoeData:doAoeAction(useArr[i+1])

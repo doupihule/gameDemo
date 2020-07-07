@@ -8,7 +8,7 @@ end
 
 function WhiteListFunc.__getters.instance()
   if not WhiteListFunc._instance then
-    WhiteListFunc._instance = WhiteListFunc()
+    WhiteListFunc._instance = WhiteListFunc.new()
   end
   return WhiteListFunc._instance
 end

@@ -8,7 +8,7 @@ WaitManager = class('WaitManager')
 function WaitManager:ctor()
   self.waitList = {}
   self.waitPool = {}
-  self._waitView = ReqLoadingUI()
+  self._waitView = ReqLoadingUI.new()
   self._waitView.width = ScreenAdapterTools.width
   self._waitView.height = ScreenAdapterTools.height
   Laya.timer:loop(1000, self, self.timeCallBack)
@@ -16,7 +16,7 @@ end
 
 function WaitManager.__getters.instance()
   if not WaitManager._instance then
-    WaitManager._instance = WaitManager()
+    WaitManager._instance = WaitManager.new()
   end
   return WaitManager._instance
 end
@@ -26,7 +26,7 @@ function WaitManager:add(cmd)
   if #self.waitPool > 0 then
     wait = self.waitPool:shift()
   else
-    wait = WaitEntity()
+    wait = WaitEntity.new()
   end
   wait.cmd = cmd
   wait.time = Client.instance.miniserverTime

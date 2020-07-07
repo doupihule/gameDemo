@@ -131,7 +131,7 @@ function InstanceMove:moveToOnePoint(x, y, z, spd, callFunc, thisObj, callParams
     movePointType=1
   end
   if not self._moveParams then
-    self._moveParams = InstanceMoveEntity(VectorTools.createVector3(x, y, z))
+    self._moveParams = InstanceMoveEntity.new(VectorTools.createVector3(x, y, z))
   end
   self._moveParams.expandParams = expandParams
   self._moveParams.followTarget = nil
@@ -212,7 +212,7 @@ function InstanceMove:moveToGroupPoints(pointArr, speed, callFunc, thisObj, expa
     loopParams=nil
   end
   if not self._multyparams then
-    self._multyparams = InstanceMoveMultyEntity()
+    self._multyparams = InstanceMoveMultyEntity.new()
   end
   self._multyparams:initData(pointArr, speed, callFunc, thisObj, loopParams, false)
   self._multyparams.expandParams = expandParams

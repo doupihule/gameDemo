@@ -26,7 +26,7 @@ end
 
 function TranslateFunc.__getters.instance()
   if not TranslateFunc._instance then
-    TranslateFunc._instance = TranslateFunc()
+    TranslateFunc._instance = TranslateFunc.new()
   end
   return TranslateFunc._instance
 end

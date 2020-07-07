@@ -98,28 +98,28 @@ function UserInfo.init()
   UserInfo.urlParams = UserInfo.parseUrl() or {}
   UserInfo.initSystemId()
   if UserInfo.isSystemAndroid() then
-    UserInfo.platform = AndroidGamePlatform()
+    UserInfo.platform = AndroidGamePlatform.new()
   elseif UserInfo.isSystemIos() then
-    UserInfo.platform = IosGamePlatform()
+    UserInfo.platform = IosGamePlatform.new()
   else
     if UserInfo.isTT() then
-      UserInfo.platform = TTGamePlatform()
+      UserInfo.platform = TTGamePlatform.new()
     elseif UserInfo.isWX() then
-      UserInfo.platform = WXGamePlatform()
+      UserInfo.platform = WXGamePlatform.new()
     elseif UserInfo.isQQGame() then
-      UserInfo.platform = QQGamePlatform()
+      UserInfo.platform = QQGamePlatform.new()
     elseif UserInfo.isWeb() then
-      UserInfo.platform = EgretPlatform()
+      UserInfo.platform = EgretPlatform.new()
     elseif UserInfo.isOppo() then
-      UserInfo.platform = OppoGamePlatform()
+      UserInfo.platform = OppoGamePlatform.new()
     elseif UserInfo.isBaidu() then
-      UserInfo.platform = BaiduGamePlatform()
+      UserInfo.platform = BaiduGamePlatform.new()
     elseif UserInfo.isVivo() then
-      UserInfo.platform = VivoGamePlatform()
+      UserInfo.platform = VivoGamePlatform.new()
     elseif UserInfo.isUC() then
-      UserInfo.platform = UCGamePlatform()
+      UserInfo.platform = UCGamePlatform.new()
     else
-      UserInfo.platform = EgretPlatform()
+      UserInfo.platform = EgretPlatform.new()
     end
   end
   UserInfo.platform:initPlatform()

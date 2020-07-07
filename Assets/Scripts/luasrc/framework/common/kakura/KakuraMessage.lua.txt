@@ -18,7 +18,7 @@ KakuraMessage.MESSAGE_HAS_ENC = 1;
 function KakuraMessage:ctor() end
 function KakuraMessage.__getters.instance()
   if not KakuraMessage._instance then
-    KakuraMessage._instance = KakuraMessage()
+    KakuraMessage._instance = KakuraMessage.new()
   end
   return KakuraMessage._instance
 end
@@ -40,7 +40,7 @@ function KakuraMessage:setMessageType(type)
 end
 
 function KakuraMessage:addPackage(opcode, requestId, uniqueReqId, sendData, callback, thisObj)
-  local pack = KakuraPackage()
+  local pack = KakuraPackage.new()
   pack.opcode = opcode
   pack.requestId = requestId
   pack.len = #sendData * 3
@@ -104,7 +104,7 @@ function KakuraMessage:decode(aesKey, byte)
   else
     headBody = byte
   end
-  local pack = KakuraPackage()
+  local pack = KakuraPackage.new()
   pack.opcode = headBody:readUint32()
   local len = headBody:readUint32()
   pack.requestId = headBody:readUint32()
@@ -172,8 +172,8 @@ function KakuraMessage:decryptAesStr(input, aesKey)
 end
 
 function KakuraMessage:countBufferLen(str)
-  local buf = ArrayBuffer(#str * 2)
-  local bufView = Uint8Array(buf)
+  local buf = ArrayBuffer.new(#str * 2)
+  local bufView = Uint8Array.new(buf)
   local i = 0
   local strLen = #str
   repeat

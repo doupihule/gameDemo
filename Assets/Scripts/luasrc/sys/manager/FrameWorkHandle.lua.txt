@@ -2,7 +2,7 @@ FrameWorkHandle = class('FrameWorkHandle')
 
 function FrameWorkHandle.__getters.instance()
   if not FrameWorkHandle._instance then
-    FrameWorkHandle._instance = FrameWorkHandle()
+    FrameWorkHandle._instance = FrameWorkHandle.new()
   end
   return FrameWorkHandle._instance
 end

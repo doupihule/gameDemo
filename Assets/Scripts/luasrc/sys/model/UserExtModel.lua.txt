@@ -10,7 +10,7 @@ end
 
 function UserExtModel.__getters.instance()
   if not UserExtModel._instance then
-    UserExtModel._instance = UserExtModel()
+    UserExtModel._instance = UserExtModel.new()
   end
   return UserExtModel._instance
 end

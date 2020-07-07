@@ -110,7 +110,7 @@ function PerformanceControler:setTxtShowBack(data)
     targetItem = viewArr:shift()
     self.controler.tweenControler:clearOneTween(targetItem)
   else
-    targetItem = BattleDamageLabel()
+    targetItem = BattleDamageLabel.new()
     -- [ts2lua]targetItem下标访问可能不正确
     targetItem["__tempParams"] = {}
   end

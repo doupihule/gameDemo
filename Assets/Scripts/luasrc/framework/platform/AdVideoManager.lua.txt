@@ -31,7 +31,7 @@ AdVideoManager.TYPE_ORIGINAL_INTERSTITIAL = 'INTERSTITIAL';
 AdVideoManager.TYPE_ORIGINAL_ICON = 'ICON';
 function AdVideoManager.__getters.instance()
   if not AdVideoManager._instance then
-    AdVideoManager._instance = AdVideoManager()
+    AdVideoManager._instance = AdVideoManager.new()
   end
   return AdVideoManager._instance
 end

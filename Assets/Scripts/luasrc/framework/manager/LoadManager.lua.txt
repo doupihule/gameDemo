@@ -27,7 +27,7 @@ end
 
 function LoadManager.__getters.instance()
   if not LoadManager._instance then
-    LoadManager._instance = LoadManager()
+    LoadManager._instance = LoadManager.new()
   end
   return LoadManager._instance
 end

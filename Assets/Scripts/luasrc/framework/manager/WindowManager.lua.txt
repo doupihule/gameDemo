@@ -191,7 +191,7 @@ function WindowManager.setPopupTip(type, content, callBack, thisObj, titleName, 
   local ui = PoolTools.getItem("AlertNewLocalUI", "sys")
   LogsManager.echo("-----------setPopupTip---------", ui == nil)
   if not ui then
-    ui = AlertNewLocalUI()
+    ui = AlertNewLocalUI.new()
   end
   WindowManager.highLayer:addChild(ui)
   ui:setData(data)
@@ -478,7 +478,7 @@ end
 
 function WindowManager.LoadingUIAtlasComplete()
   if WindowManager.loadingUI == nil then
-    WindowManager.loadingUI = LoadingUI()
+    WindowManager.loadingUI = LoadingUI.new()
   end
   UserInfo.platform:setLoadingProgress(100)
   UserInfo.platform:hideLoadingProgress()

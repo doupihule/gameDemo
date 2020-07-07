@@ -16,7 +16,7 @@ StatisticsManager.isNewPlayer = false;
 function StatisticsManager:ctor() end
 function StatisticsManager.__getters.ins()
   if not StatisticsManager._ins then
-    StatisticsManager._ins = StatisticsManager()
+    StatisticsManager._ins = StatisticsManager.new()
   end
   return StatisticsManager._ins
 end

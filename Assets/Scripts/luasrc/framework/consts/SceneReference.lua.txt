@@ -18,7 +18,7 @@ SceneReference = class('SceneReference')
 
 function SceneReference.__getters.instance()
   if not SceneReference._instance then
-    SceneReference._instance = SceneReference()
+    SceneReference._instance = SceneReference.new()
   end
   return SceneReference._instance
 end

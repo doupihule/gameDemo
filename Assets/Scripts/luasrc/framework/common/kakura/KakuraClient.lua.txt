@@ -43,7 +43,7 @@ end
 
 function KakuraClient.__getters.instance()
   if not KakuraClient._instance then
-    KakuraClient._instance = KakuraClient()
+    KakuraClient._instance = KakuraClient.new()
   end
   return KakuraClient._instance
 end

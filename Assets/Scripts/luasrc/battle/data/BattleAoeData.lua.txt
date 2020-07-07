@@ -36,7 +36,7 @@ function BattleAoeData:setData(skillAction, attacker)
     self.skillActionArr = {}
     local i = 0
     repeat
-      local actionData = SkillActionData(actArr[i+1], skillAction.owner, skillAction.skill, 0, 1, 0, 0, 0)
+      local actionData = SkillActionData.new(actArr[i+1], skillAction.owner, skillAction.skill, 0, 1, 0, 0, 0)
       table.insert(self.skillActionArr, actionData)
       i=i+1
     until not(i < #actArr)

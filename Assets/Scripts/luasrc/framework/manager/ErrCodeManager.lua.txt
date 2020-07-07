@@ -20,7 +20,7 @@ end
 function ErrCodeManager:ctor() end
 function ErrCodeManager.__getters.ins()
   if not ErrCodeManager._ins then
-    ErrCodeManager._ins = ErrCodeManager()
+    ErrCodeManager._ins = ErrCodeManager.new()
   end
   return ErrCodeManager._ins
 end

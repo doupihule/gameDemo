@@ -575,7 +575,7 @@ function ConditionTrigger.getCacheConditionData(id, skill)
   local condition = ConditionTrigger._conditionDataCache[id]
   if not condition then
     -- [ts2lua]ConditionTrigger._conditionDataCache下标访问可能不正确
-    ConditionTrigger._conditionDataCache[id] = BattleConditionData(id)
+    ConditionTrigger._conditionDataCache[id] = BattleConditionData.new(id)
     -- [ts2lua]ConditionTrigger._conditionDataCache下标访问可能不正确
     condition = ConditionTrigger._conditionDataCache[id]
   end

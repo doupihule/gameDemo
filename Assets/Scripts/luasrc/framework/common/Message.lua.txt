@@ -1,12 +1,12 @@
 Message = class('Message')
 
 function Message:ctor()
-  self.msgMap = HashMap()
+  self.msgMap = HashMap.new()
 end
 
 function Message.__getters.instance()
   if not Message._instance then
-    Message._instance = Message()
+    Message._instance = Message.new()
   end
   return Message._instance
 end

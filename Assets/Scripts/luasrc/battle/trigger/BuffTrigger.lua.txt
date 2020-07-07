@@ -214,7 +214,7 @@ function BuffTrigger.runBuff_17(attacker, defer, skillAction, buff)
     local id = tempInfo[0+1]
     local act = skill:getActionById(id)
     local useSkill = skill
-    act = SkillActionData(id, skill.owner, useSkill, 0, 1, 1, 0, 0, skillAction.relyonSkill)
+    act = SkillActionData.new(id, skill.owner, useSkill, 0, 1, 1, 0, 0, skillAction.relyonSkill)
     defer:checkSkillEffect(act)
     i=i+1
   until not(i < #tempArr)

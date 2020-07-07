@@ -442,7 +442,7 @@ function LogsManager.turnStr(title, message, optionalParams, isError)
 end
 
 function LogsManager.getTimeStr(title)
-  local time = Date()
+  local time = Date.new()
   return "[" .. title .. time:getHours() .. ":" .. time:getMinutes() .. ":" .. time:getSeconds() .. " ] "
 end
 

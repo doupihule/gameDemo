@@ -11,7 +11,7 @@ CountsCommonModel.TYPE_INTERVALAD_LASTSHOWTIME = "2";
 CountsCommonModel.TYPE_INTERVAL_ORIGINAL_CLICK_COUNT = "3";
 function CountsCommonModel.__getters.instance()
   if not CountsCommonModel._instance then
-    CountsCommonModel._instance = CountsCommonModel()
+    CountsCommonModel._instance = CountsCommonModel.new()
   end
   return CountsCommonModel._instance
 end

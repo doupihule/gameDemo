@@ -16,7 +16,7 @@ end
 
 function HttpMessage.__getters.instance()
   if not HttpMessage._instance then
-    HttpMessage._instance = HttpMessage()
+    HttpMessage._instance = HttpMessage.new()
   end
   return HttpMessage._instance
 end

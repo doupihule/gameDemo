@@ -183,7 +183,7 @@ function PassiveSkillTrigger.runPassiveSkill_11(attacker, skill, useArr, skillAc
     local delayFrame = BattleFunc.instance:turnMinisecondToframe(tempInfo[1+1])
     local act = skill:getActionById(id)
     if not act then
-      act = SkillActionData(id, skill.owner, skillAction.skill, delayFrame, 1, 1, 0, 0, skill)
+      act = SkillActionData.new(id, skill.owner, skillAction.skill, delayFrame, 1, 1, 0, 0, skill)
     end
     table.insert(outArr, act)
     i=i+1
@@ -205,9 +205,9 @@ function PassiveSkillTrigger.useSkillActions(attacker, skill, targetSkillAction)
     local useSkill = attacker.currentSkill and attacker.currentSkill or skill
     if not act then
       if targetSkillAction then
-        act = SkillActionData(id, skill.owner, targetSkillAction.skill, delayFrame, 1, 1, 0, 0, skill)
+        act = SkillActionData.new(id, skill.owner, targetSkillAction.skill, delayFrame, 1, 1, 0, 0, skill)
       else
-        act = SkillActionData(id, skill.owner, useSkill, delayFrame, 1, 1, 0, 0, skill)
+        act = SkillActionData.new(id, skill.owner, useSkill, delayFrame, 1, 1, 0, 0, skill)
       end
     end
     if targetSkillAction ~= nil then

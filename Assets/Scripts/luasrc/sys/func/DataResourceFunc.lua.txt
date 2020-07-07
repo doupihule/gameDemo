@@ -8,7 +8,7 @@ DataResourceFunc = class('DataResourceFunc',BaseFunc)
 
 function DataResourceFunc.__getters.instance()
   if not DataResourceFunc._instance then
-    DataResourceFunc._instance = DataResourceFunc()
+    DataResourceFunc._instance = DataResourceFunc.new()
   end
   return DataResourceFunc._instance
 end

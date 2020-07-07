@@ -33,7 +33,7 @@ end
 
 function UserModel.__getters.instance()
   if not UserModel._instance then
-    UserModel._instance = UserModel()
+    UserModel._instance = UserModel.new()
   end
   return UserModel._instance
 end

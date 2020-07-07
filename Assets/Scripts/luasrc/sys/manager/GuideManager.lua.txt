@@ -19,7 +19,7 @@ function GuideManager:ctor() end
 GuideManager.maxGuide = 10;
 function GuideManager.__getters.ins()
   if not GuideManager._ins then
-    GuideManager._ins = GuideManager()
+    GuideManager._ins = GuideManager.new()
   end
   return GuideManager._ins
 end

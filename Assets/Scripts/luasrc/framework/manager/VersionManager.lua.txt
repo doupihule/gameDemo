@@ -28,7 +28,7 @@ VersionManager.ZIP_MODEL_KEY_UICFGS = "uiCfgs";
 VersionManager.ZIP_MODEL_KEY_MERGEFILES = "mergefiles";
 function VersionManager.__getters.instance()
   if not VersionManager._instance then
-    VersionManager._instance = VersionManager()
+    VersionManager._instance = VersionManager.new()
   end
   return VersionManager._instance
 end

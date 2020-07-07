@@ -90,7 +90,7 @@ BattleFunc.CreateRoleIndex = {};
 BattleFunc.curBattleType = 1;
 function BattleFunc.__getters.instance()
   if not BattleFunc._instance then
-    BattleFunc._instance = BattleFunc()
+    BattleFunc._instance = BattleFunc.new()
     BattleFunc.initGlobalParams()
   end
   return BattleFunc._instance
@@ -149,7 +149,7 @@ function BattleFunc:createRoleSpine(roleId, level, type, targetScale, isShowShad
     index = 9
   end
   local animode = index == 0 and 0 or 1
-  local sp = BattleRoleView(spineName, targetScale, index)
+  local sp = BattleRoleView.new(spineName, targetScale, index)
   if isShowShade then
     local size = roleUpdateInfo.size
     local width = tonumber(size[1+1])
@@ -162,7 +162,7 @@ end
 
 function BattleFunc:countPlayerAttr(outMap, heroId, heroInfo, userData)
   if not self._cacheAttrData then
-    self._cacheAttrData = AttributeExtendData(heroId, heroInfo, BattleConst.LIFE_PLAYER, userData)
+    self._cacheAttrData = AttributeExtendData.new(heroId, heroInfo, BattleConst.LIFE_PLAYER, userData)
   else
     self._cacheAttrData:resetData(heroId, heroInfo, BattleConst.LIFE_PLAYER, userData)
   end

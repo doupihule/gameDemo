@@ -64,11 +64,11 @@ function BattleLogicalControler:ctor(ctn, ui, gameMode)
   local time = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   BattleLogsManager.battleEcho("battle 设置随机种子:", time, "用来做复盘用")
   RandomUtis.setOneRandomYinzi(time, BattleFunc.battleRandomIndex)
-  self.refreshControler = RefreshControler(self)
-  self.mapControler = BattleMapControler(self)
-  self.statistControler = BattleStatisticsControler(self)
-  self.layerControler = BattleLayerControler(self, ctn)
-  self.guideControler = BattleGuideControler(self)
+  self.refreshControler = RefreshControler.new(self)
+  self.mapControler = BattleMapControler.new(self)
+  self.statistControler = BattleStatisticsControler.new(self)
+  self.layerControler = BattleLayerControler.new(self, ctn)
+  self.guideControler = BattleGuideControler.new(self)
   self.passive = nil
   self.globalAttrMap = {}
 end
@@ -167,12 +167,12 @@ function BattleLogicalControler:createInstance(data, cacheId, model, classModel,
       local expandView = nil
       local viewName = resName
       if type(resName) == "string" then
-        view = BattleRoleView(resName, viewScale, viewIndex)
+        view = BattleRoleView.new(resName, viewScale, viewIndex)
       else
-        view = BattleRoleView(resName[0+1], viewScale, viewIndex)
+        view = BattleRoleView.new(resName[0+1], viewScale, viewIndex)
         viewName = resName[0+1]
         if #resName > 1 then
-          expandView = BattleRoleView(resName[1+1], viewScale, viewIndex)
+          expandView = BattleRoleView.new(resName[1+1], viewScale, viewIndex)
           instance:setView2(expandView)
         end
       end
@@ -310,7 +310,7 @@ function BattleLogicalControler:createRole(id, data, lifeType, camp, offestX, of
     if self.battleUI.battleAdditionId and (self.battleUI.battleAdditionId == BattleConst.battle_start_attack_add or self.battleUI.battleAdditionId == BattleConst.battle_start_life_add) then
       local battleAdditionId = self.battleUI.battleAdditionId
       local skillId = LevelFunc.instance:getBattleAddtionoByTwoId(battleAdditionId, "addtionNub")
-      local passive = PassiveSkillData(skillId, 1, cacheItem, BattleConst.skill_kind_passive)
+      local passive = PassiveSkillData.new(skillId, 1, cacheItem, BattleConst.skill_kind_passive)
       self:insterGlobalPassive(passive)
       self.passive = passive
     end
@@ -322,7 +322,7 @@ function BattleLogicalControler:createRole(id, data, lifeType, camp, offestX, of
       local passiveData = nil
       local i = 0
       repeat
-        passiveData = PassiveSkillData(passivSkill[i+1], level, cacheItem, BattleConst.skill_kind_passive)
+        passiveData = PassiveSkillData.new(passivSkill[i+1], level, cacheItem, BattleConst.skill_kind_passive)
         self:insterGlobalPassive(passiveData)
         i=i+1
       until not(i < #passivSkill)
@@ -403,7 +403,7 @@ function BattleLogicalControler:createHome(id, data, lifeType, camp, offestX, of
     if self.battleUI.battleAdditionId and self.battleUI.battleAdditionId == BattleConst.battle_start_homeCd then
       local battleAdditionId = self.battleUI.battleAdditionId
       local skillId = LevelFunc.instance:getBattleAddtionoByTwoId(battleAdditionId, "addtionNub")
-      local passive = PassiveSkillData(skillId, 1, cacheItem, BattleConst.skill_kind_passive)
+      local passive = PassiveSkillData.new(skillId, 1, cacheItem, BattleConst.skill_kind_passive)
       self:insterGlobalPassive(passive)
       self.passive = passive
     end
@@ -411,11 +411,11 @@ function BattleLogicalControler:createHome(id, data, lifeType, camp, offestX, of
       local level = FogModel.instance:getBusLevel()
       local passiveSkillId = FogFunc.instance:getCfgDatasByKey("BusUpGrade_json", level, "passiveSkill")
       if passiveSkillId then
-        local passive = PassiveSkillData(passiveSkillId, level, cacheItem, BattleConst.skill_kind_passive)
+        local passive = PassiveSkillData.new(passiveSkillId, level, cacheItem, BattleConst.skill_kind_passive)
         self:insterGlobalPassive(passive)
       end
       if BattleFunc.fog_battleStart_passive then
-        local passive1 = PassiveSkillData(BattleFunc.fog_battleStart_passive, 1, cacheItem, BattleConst.skill_kind_passive)
+        local passive1 = PassiveSkillData.new(BattleFunc.fog_battleStart_passive, 1, cacheItem, BattleConst.skill_kind_passive)
         self:insterGlobalPassive(passive1)
         BattleFunc.fog_battleStart_passive = nil
       end
@@ -471,7 +471,7 @@ end
 function BattleLogicalControler:createBuffBar(camp, instance)
   local cacheItem = PoolTools.getItem(PoolCode.POOL_BUFFBAR + camp)
   if not cacheItem then
-    cacheItem = RoleBuffBar()
+    cacheItem = RoleBuffBar.new()
   end
   cacheItem:setData(instance, self.layerControler.a23)
   return cacheItem
@@ -480,14 +480,14 @@ end
 function BattleLogicalControler:createHealthBar(camp, instance)
   local cacheItem = PoolTools.getItem(PoolCode.POOL_HPBAR + camp)
   if not cacheItem then
-    cacheItem = RoleHealthBar()
+    cacheItem = RoleHealthBar.new()
   end
   cacheItem:setData(instance, self.layerControler.a23)
   return cacheItem
 end
 
 function BattleLogicalControler:createSkillContent(skillArr, parent)
-  local item = InstancePlayer(self)
+  local item = InstancePlayer.new(self)
   local data = TableUtils.copyOneTable(self.myHome.cfgData)
   item:setData(data)
   item:setSkillInfo(skillArr, parent)

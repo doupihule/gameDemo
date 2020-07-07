@@ -4,7 +4,7 @@ GameHttpControler = class('GameHttpControler')
 
 function GameHttpControler.__getters.instance()
   if not GameHttpControler._instance then
-    GameHttpControler._instance = GameHttpControler()
+    GameHttpControler._instance = GameHttpControler.new()
   end
   return GameHttpControler._instance
 end
@@ -62,7 +62,7 @@ function GameHttpControler:sendRequest(method, params, callback, thisObj, isWait
   if not expandParams then
     expandParams = self.defaultExpandParams
   end
-  local coninfo = ConnectObj(1, method, params, callback, thisObj, isWait, addParams, expandParams)
+  local coninfo = ConnectObj.new(1, method, params, callback, thisObj, isWait, addParams, expandParams)
   if isInsert then
     self._connectCacheArr:splice(0, 0, coninfo)
   else

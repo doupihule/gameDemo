@@ -94,7 +94,7 @@ function InstanceBullet:setOwner(owner, skillAction, rotation, targetRole)
     local i = 0
     repeat
       if not self.skillActionArr[i+1] then
-        local skillAction = SkillActionData(tostring(skillEff[i+1]), owner, skillAction.skill, 0, 0, 0, 0, 0)
+        local skillAction = SkillActionData.new(tostring(skillEff[i+1]), owner, skillAction.skill, 0, 0, 0, 0, 0)
         self.skillActionArr[i+1] = skillAction
       else
         self.skillActionArr[i+1]:updateData(owner, skillAction.skill)
@@ -158,7 +158,7 @@ function InstanceBullet:checkHitLandAction()
       local aoeId = fallEffect[i+1]
       local aoeData = PoolTools.getItem(PoolCode.POOL_AOEDATA + aoeId)
       if not aoeData then
-        aoeData = BattleAoeData(aoeId)
+        aoeData = BattleAoeData.new(aoeId)
       end
       aoeData:setData(self.skillActionArr[0+1], self.owner)
       aoeData:doAoeAction(self.owner, self.pos, self)

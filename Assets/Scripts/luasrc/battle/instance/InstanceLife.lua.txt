@@ -83,7 +83,7 @@ function InstanceLife:setData(data)
     self:initSkillData()
     if not self.attrData then
       data.passiveSkills = self.passSkillArr
-      self.attrData = AttributeExtendData(self.dataId, data, self.lifeType, UserModel.instance:getData(), self.controler.globalAttrMap)
+      self.attrData = AttributeExtendData.new(self.dataId, data, self.lifeType, UserModel.instance:getData(), self.controler.globalAttrMap)
     else
       self._data.passiveSkills = self.passSkillArr
       self.attrData:resetData(self.dataId, self._data, self.lifeType, UserModel.instance:getData(), self.controler.globalAttrMap)
@@ -123,11 +123,11 @@ function InstanceLife:initSkillData()
       skillId = tostring(info)
       local debugPassiveSkillData = BattleDebugTool.getDebugPassiveSkill()
       if debugPassiveSkillData then
-        local passive = PassiveSkillData(debugPassiveSkillData[0+1], tonumber(debugPassiveSkillData[1+1]) or 1, thisObj, BattleConst.skill_kind_passive)
+        local passive = PassiveSkillData.new(debugPassiveSkillData[0+1], tonumber(debugPassiveSkillData[1+1]) or 1, thisObj, BattleConst.skill_kind_passive)
         table.insert(self.passiveSkills, passive)
         break
       end
-      local passive = PassiveSkillData(skillId, level, thisObj, BattleConst.skill_kind_passive)
+      local passive = PassiveSkillData.new(skillId, level, thisObj, BattleConst.skill_kind_passive)
       table.insert(self.passiveSkills, passive)
       i=i+1
     until not(i < #passCfg)

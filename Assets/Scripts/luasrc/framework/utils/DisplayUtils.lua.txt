@@ -44,7 +44,7 @@ function DisplayUtils.createSkeletonExpand(aniName, aniMode, completeFunc, thisO
   if expandParams == nil then
     expandParams=nil
   end
-  local ske = SkeletonExpand(nil, aniMode)
+  local ske = SkeletonExpand.new(nil, aniMode)
   ske.completeBackFunc = completeFunc
   ske.completeThisObj = thisObj
   ske.completeExpandParams = expandParams
@@ -125,7 +125,7 @@ function DisplayUtils.createSpriteFrame(imagePath, imageHead, labelsArr, anchorX
   if anchorY == nil then
     anchorY=0.5
   end
-  local spriteFrame = SpriteFrameExpand()
+  local spriteFrame = SpriteFrameExpand.new()
   spriteFrame:setFrameData(imagePath, imageHead, labelsArr, anchorX, anchorY, 1)
   return spriteFrame
 end
@@ -137,7 +137,7 @@ function DisplayUtils.createSpriteFrameByShort(imagePath, imageHead, labelsArr, 
   if anchorY == nil then
     anchorY=0.5
   end
-  local spriteFrame = SpriteFrameExpand()
+  local spriteFrame = SpriteFrameExpand.new()
   spriteFrame:setFrameData(imagePath, imageHead, labelsArr, anchorX, anchorY, 2)
   return spriteFrame
 end

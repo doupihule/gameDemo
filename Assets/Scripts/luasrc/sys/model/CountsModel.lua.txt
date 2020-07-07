@@ -16,7 +16,7 @@ CountsModel.fogStreetCount = "7";
 CountsModel.fogStreetVideoCount = "8";
 function CountsModel.__getters.instance()
   if not CountsModel._instance then
-    CountsModel._instance = CountsModel()
+    CountsModel._instance = CountsModel.new()
   end
   return CountsModel._instance
 end

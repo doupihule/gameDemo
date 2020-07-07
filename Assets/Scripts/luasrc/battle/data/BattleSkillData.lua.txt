@@ -78,7 +78,7 @@ function BattleSkillData:updateLevel(level)
         local i = 0
         repeat
           local info = skillEffect[i+1]
-          local actionData = SkillActionData(info[0+1], self.owner, self, tonumber(info[1+1]), tonumber(info[2+1]), tonumber(info[3+1]), tonumber(info[4+1]), 0)
+          local actionData = SkillActionData.new(info[0+1], self.owner, self, tonumber(info[1+1]), tonumber(info[2+1]), tonumber(info[3+1]), tonumber(info[4+1]), 0)
           table.insert(self.skillActionArr, actionData)
           i=i+1
         until not(i < #skillEffect)

@@ -29,7 +29,7 @@ end
 
 function NativeBridge.__getters.instance()
   if not NativeBridge._instance then
-    NativeBridge._instance = NativeBridge()
+    NativeBridge._instance = NativeBridge.new()
   end
   return NativeBridge._instance
 end

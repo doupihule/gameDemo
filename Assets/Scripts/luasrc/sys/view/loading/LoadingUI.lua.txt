@@ -121,7 +121,7 @@ function LoadingUI:initView()
     self.aniGroup:addChild(bg)
   end
   if not self.roleAni then
-    self.roleAni = BattleRoleView("role_16", 0.5, 0)
+    self.roleAni = BattleRoleView.new("role_16", 0.5, 0)
     self.aniGroup:addChild(self.roleAni)
     self.roleAni:play("idle", true)
   end

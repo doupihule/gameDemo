@@ -10,7 +10,7 @@ function BattleControler:ctor(ctn)
   self.updateScale = 1;
   self._leftScaleFrame = 0;
   self._leftCatchTime = 0;
-  self.performanceControler = PerformanceControler(self)
+  self.performanceControler = PerformanceControler.new(self)
   self._allInstanceArr = {}
   self.battleState = BattleConst.battleState_out
   self.cameraControler = CameraControler.new(self)

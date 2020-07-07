@@ -11,7 +11,7 @@ PackConfigManager = class('PackConfigManager')
 function PackConfigManager:ctor() end
 function PackConfigManager.__getters.ins()
   if not PackConfigManager._ins then
-    PackConfigManager._ins = PackConfigManager()
+    PackConfigManager._ins = PackConfigManager.new()
   end
   return PackConfigManager._ins
 end

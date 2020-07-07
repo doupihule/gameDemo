@@ -18,7 +18,7 @@ end
 
 function CacheManager.__getters.instance()
   if not CacheManager._instance then
-    CacheManager._instance = CacheManager()
+    CacheManager._instance = CacheManager.new()
   end
   return CacheManager._instance
 end

@@ -20,7 +20,7 @@ end
 
 function TimerManager.__getters.instance()
   if not TimerManager._instance then
-    TimerManager._instance = TimerManager()
+    TimerManager._instance = TimerManager.new()
   end
   return TimerManager._instance
 end

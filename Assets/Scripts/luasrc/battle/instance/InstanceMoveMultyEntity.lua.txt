@@ -31,7 +31,7 @@ function InstanceMoveMultyEntity:initData(pointArr, speed, callFunc, thisObj, lo
   self.thisObj = thisObj
   -- [ts2lua]修改数组长度需要手动处理。
   self.totalStep = self.pointArr.length
-  self.currentEntity = InstanceMoveEntity(pointArr[1+1], speed)
+  self.currentEntity = InstanceMoveEntity.new(pointArr[1+1], speed)
   self.loopParams = loopParams
   self.isGrid = isGrid
   self.currentStep = 0
