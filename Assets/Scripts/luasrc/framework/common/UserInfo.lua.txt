@@ -176,7 +176,7 @@ function UserInfo.parseUrl()
     local i = 0
     repeat
       -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
-      local value = params[i+1]:gsub(/#.*$/g, ''):split('=')
+      local value = string.gsub(params[i+1],'#.*$/g', ''):split('=')
       if not value[1+1] then
         value[1+1] = ''
       end

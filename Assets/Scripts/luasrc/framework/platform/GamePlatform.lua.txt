@@ -1015,54 +1015,10 @@ function GamePlatform:initCityName()
 end
 
 function GamePlatform:initCityNameCallBack(data)
-  try_catch{
-    main = function()
-      local isSuc = false
-      if data then
-        -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
-        local matchResult = data:match(/{.*}/)
-        if matchResult[0+1] then
-          local jsonArray = TableUtils.safelyJsonParse(matchResult[0+1])
-          if jsonArray.cname then
-            UserInfo.platform.cityName = jsonArray.cname
-            isSuc = true
-            Message.instance:send(CommonEvent.GET_IPINFO_SUCCESS)
-          end
-        end
-      end
-      if not isSuc then
-        UserInfo.platform.clientInfoReqCount=UserInfo.platform.clientInfoReqCount+1
-        if UserInfo.platform.clientInfoReqCount >= 5 then
-          LogsManager.echo("hlx 获取IP所在城市5次重试错误，跳过", data)
-        else
-          LogsManager.echo("hlx 获取IP所在城市格式有误，重试", UserInfo.platform.clientInfoReqCount, data)
-          UserInfo.platform:initCityName()
-        end
-      end
-    end,
-    catch = function(e)
-      LogsManager.errorTag("get_cityname_error", e:toString())
-    end
-  }
+  
 end
 
 function GamePlatform:initCityNameErrorCallBack(error)
-  try_catch{
-    main = function()
-      UserInfo.platform.clientInfoReqCount=UserInfo.platform.clientInfoReqCount+1
-      if UserInfo.platform.clientInfoReqCount >= 5 then
-        LogsManager.echo("hlx 获取IP所在城市5次重试错误，跳过", UserInfo.platform.clientInfoReqCount, error:toString())
-        Message.instance:send(CommonEvent.GET_IPINFO_FAIL)
-        return
-      else
-        UserInfo.platform:initCityName()
-      end
-    end,
-    catch = function(e)
-      LogsManager.errorTag("get_cityname_error", e:toString())
-    end
-  }
-  return
 end
 
 function GamePlatform:isAuthorized()

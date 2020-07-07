@@ -375,7 +375,7 @@ function VersionManager:turnFilePathByModel(filePath, modelName)
   if filePath:find(modelName) == -1 then
     filePath = modelInfo.unZipFolderName .. "/" .. modelName .. "/" .. filePath
   else
-    filePath = filePath:gsub(modelName, modelInfo.unZipFolderName .. "/" .. modelName)
+    filePath = string.gsub(filePath,modelName, modelInfo.unZipFolderName .. "/" .. modelName)
   end
   return FileUtils.getLocalZipCacheFullPath() + filePath
 end

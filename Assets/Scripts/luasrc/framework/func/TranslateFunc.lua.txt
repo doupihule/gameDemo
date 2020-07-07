@@ -381,7 +381,7 @@ function TranslateFunc:getTranslate(tid, cfgsName, ...)
   if #replaceArr > 0 then
     local m = 0
     repeat
-      resultStr = resultStr:gsub("#" .. m + 1, replaceArr[m+1])
+      resultStr = string.gsub(resultStr,"#" .. m + 1, replaceArr[m+1])
       m=m+1
     until not(m < #replaceArr)
   end

@@ -38,22 +38,18 @@ function BattleControler:onceUpdateFrame()
   self._leftFrameDt = self._leftFrameDt + dt
   local nums = math.floor(self._leftFrameDt / self._oneFrameDt)
   self._leftFrameDt = self._leftFrameDt - nums * self._oneFrameDt
-  local i = 0
-  repeat
+  for i=1,nums do
     if self.updateScale == 1 then
       self:updateFrame()
     else
       self._leftScaleFrame = self._leftScaleFrame + self.updateScale
       local s = 0
-      s = 0
-      repeat
+      for s=0,self._leftScaleFrame-1 do
         self:updateFrame()
-        s=s+1
-      until not(s < self._leftScaleFrame)
+      end
       self._leftScaleFrame = self._leftScaleFrame - s
     end
-    i=i+1
-  until not(i < nums)
+  end
 end
 
 function BattleControler:updateFrame()
@@ -155,7 +151,7 @@ function BattleControler:doOneCallInfo(info, i)
     if info.times == 0 then
       table.insert(self._cacheTimeArr, info)
       if i ~= -1 then
-        self._timeList:splice(i, 1)
+        table.remove(self._timeList,i)
       end
       if endCallBack then
         if doApplyOrCall then
@@ -271,7 +267,7 @@ function BattleControler:setLastCallBack(delay, interval, times, callBack, thisO
   obj.endCallBack = endCallBack
   obj.endParams = endParams
   table.insert(self._timeList, obj)
-  self:doOneCallInfo(obj, #self._timeList - 1)
+  self:doOneCallInfo(obj, #self._timeList )
 end
 
 function BattleControler:clearCallBack(thisObj, callBack, params)

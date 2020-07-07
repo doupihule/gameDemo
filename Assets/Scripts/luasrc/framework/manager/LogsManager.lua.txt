@@ -144,8 +144,7 @@ function LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorI
     return
   end
   errorStr = LogsManager.turnURIContent(errorStr)
-  -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
-  errorStr = errorStr:gsub(/[\n\r]+/g, " ")
+  errorStr = string.gsub(errorStr,'[%n%r]+/g', " ")
   errorStr = errorStr:slice(0, math.min(#errorStr, maxLength))
   LogsManager.sendDataToAiCloud(errorStr, tag, logLength, errorId, startLine, id, sendCount)
 end
@@ -420,7 +419,7 @@ function LogsManager.turnStr(title, message, optionalParams, isError)
     resultStr = message
     local i = 0
     repeat
-      resultStr = resultStr:gsub("#" .. i + 1, optionalParams[i+1])
+      resultStr = string.gsub(resultStr,"#" .. i + 1, optionalParams[i+1])
       i=i+1
     until not(i < length)
     arr = {resultStr}
