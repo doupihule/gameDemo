@@ -352,7 +352,7 @@ function Client:getRid()
 end
 
 function Client:getWebSocketConnet()
-  return KakuraClient.getInstance().getWebSocketConnet()
+  return KakuraClient.getInstance():getWebSocketConnet()
 end
 
 function Client:testClose()

@@ -218,7 +218,7 @@ function GamePlatform:reqGlobal(params, isInit)
       WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.onGlobalError, self)
       return
     end
-    PackConfigManager.getInstance():getPlatform() = pData
+    PackConfigManager.getInstance():setPlatform(pData) 
     self:getLoginResult()
   end
   

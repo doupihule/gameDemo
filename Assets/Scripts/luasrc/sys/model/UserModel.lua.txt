@@ -366,7 +366,7 @@ function UserModel:login()
     if (self._data and self._data.sendTime) and tonumber(self._data.sendTime) * 1000 > self:getGoodsAccumuStartTime() then
       LogsManager.echo("登陆修改宝箱累计时间，原累计时间：" .. self:getGoodsAccumuStartTime())
       LogsManager.echo("最后一次同步数据时间：" .. self._data.sendTime)
-      local newGoodsAccumuStartTime = Client.getInstance():getServerTime()Micro - tonumber(self._data.sendTime) * 1000 - self:getGoodsAccumuStartTime()
+      local newGoodsAccumuStartTime = Client.getInstance():getMiniServerTime()- tonumber(self._data.sendTime) * 1000 - self:getGoodsAccumuStartTime()
       LogsManager.echo("新宝箱累计时间：" .. newGoodsAccumuStartTime)
       -- [ts2lua]upUserExtData下标访问可能不正确
       upUserExtData["goodsAccumuStartTime"] = newGoodsAccumuStartTime
