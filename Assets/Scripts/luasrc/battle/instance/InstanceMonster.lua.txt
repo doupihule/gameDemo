@@ -3,7 +3,6 @@
 
 InstanceMonster = class('InstanceMonster',InstanceLogical)
 
-InstanceMonster._tempPos = Laya.Point();
 function InstanceMonster:ctor(controler)
   InstanceMonster.super.ctor(self,controler)
   self._changeTrackCd = 0;

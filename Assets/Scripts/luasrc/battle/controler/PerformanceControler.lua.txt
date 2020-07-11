@@ -180,64 +180,14 @@ function PerformanceControler:hideBlackScreen()
   self.controler:sortChildren(true)
 end
 
-PerformanceControler._resourcePointCache = {DataResourceType.COIN=Laya.Point(90, 10), DataResourceType.GOLD=Laya.Point(254, 10), DataResourceType.SP=Laya.Point(35, 35)};
-PerformanceControler._tempPos = Laya.Point();
+PerformanceControler._tempPos = nil
 function PerformanceControler:onBattleWin(fromx, fromy) end
-function PerformanceControler:flyResourceAnimation(resId, fromx, fromy, value, delayFrame, fromCtn)
-  if delayFrame == nil then
-    delayFrame=0
-  end
-  if fromCtn == nil then
-    fromCtn=nil
-  end
-  BattleLogsManager.battleEcho("获得资源:", resId, "value:", value)
-  local iconPath = DataResourceFunc.getInstance():getIconById(resId)
-  local cacheItem = PoolTools.getItem(iconPath)
-  if not cacheItem then
-    cacheItem = Laya.Image(iconPath)
-    -- [ts2lua]cacheItem下标访问可能不正确
-    cacheItem["_cacheParams"] = {}
-  end
-  -- [ts2lua]PerformanceControler._resourcePointCache下标访问可能不正确
-  local resPos = PerformanceControler._resourcePointCache[resId]
-  if not resPos then
-    resPos = Laya.Point(35, 35)
-    -- [ts2lua]PerformanceControler._resourcePointCache下标访问可能不正确
-    PerformanceControler._resourcePointCache[resId] = resPos
-  end
-  local group = self.controler.battleUI.ui.group_player
-  local tempPos = PerformanceControler._tempPos
-  tempPos.x = fromx
-  tempPos.y = fromy
-  if not fromCtn then
-    fromCtn = self.controler.layerControler.a22
-  end
-  fromCtn:localToGlobal(tempPos)
-  cacheItem.name = iconPath
-  group:globalToLocal(tempPos)
-  cacheItem:pos(tempPos.x, tempPos.y, true)
-  group:addChild(cacheItem)
-  -- [ts2lua]cacheItem下标访问可能不正确
-  local tweenParams = cacheItem["_cacheParams"]
-  tweenParams.x = resPos.x
-  tweenParams.y = resPos.y
-  tweenParams._tempValue = value
-  tweenParams._tempType = resId
-  if delayFrame then
-    TimerManager.getInstance():add(self.delayFlyItem, self, delayFrame * 1000 / 60, 1, false, {cacheItem})
-  else
-    TimerManager.getInstance():add(self.delayFlyItem, self, 10, 1, false, {cacheItem})
-  end
-end
+function PerformanceControler:flyResourceAnimation(resId, fromx, fromy, value, delayFrame, fromCtn) end
+  
 
-function PerformanceControler:delayFlyItem(cacheItem)
-  -- [ts2lua]cacheItem下标访问可能不正确
-  self.controler.tweenControler:setTweenByView(45, cacheItem, cacheItem["_cacheParams"], BattleConst.TWEEN_MOVE, self.onItemTweenEnd, self, cacheItem)
-end
 
 function PerformanceControler:onItemTweenEnd(targetItem)
   targetItem:removeSelf()
-  -- [ts2lua]targetItem下标访问可能不正确
   local params = targetItem["_cacheParams"]
   local id = params._tempType
   local value = params._tempValue

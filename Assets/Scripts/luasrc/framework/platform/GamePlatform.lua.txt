@@ -60,7 +60,7 @@ function GamePlatform:reqServerList(callBack, thisObject)
       i=i+1
     until not(i < len)
     PackConfigManager.getInstance():setPlatform(pData)
-    callBack and doJsCallFunc(callBack,thisObject, data[0+1].result.data)
+    if callBack then doJsCallFunc(callBack,thisObject, data[0+1].result.data) end
   end
   , self, "post")
 end
@@ -486,7 +486,7 @@ end
 function GamePlatform:loadVideoAd() end
 function GamePlatform:setUserComeFrom() end
 function GamePlatform:createLoginButton(callBack, thisObject)
-  callBack and doJsCallFunc(callBack,thisObject)
+  if callBack then doJsCallFunc(callBack,thisObject) end
 end
 
 function GamePlatform:login(type) end
@@ -618,7 +618,7 @@ function GamePlatform:vibrate(isLong, callBack, thisObject)
   if thisObject == nil then
     thisObject=nil
   end
-  callBack and doJsCallFunc(callBack,thisObject, true)
+  if callBack then doJsCallFunc(callBack,thisObject, true) end
 end
 
 function GamePlatform:vibrateByCount(count)

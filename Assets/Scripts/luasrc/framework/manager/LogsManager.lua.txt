@@ -333,7 +333,7 @@ function LogsManager.sendLoadingToAiCloud(time)
     platform=PackConfigManager.getInstance():getPlatform().platform, 
     deviceId=Global.deviceId, 
     device=Global.deviceModel, 
-    isNew=(StatisticsManager.isNewPlayer and 1 or 0}), 
+    isNew=(StatisticsManager.isNewPlayer and 1 or 0), 
     network=DeviceTools.network, time=time}
   LogsManager.echo("yrc1111 sendLoadingToAiCloud", TableUtils.safelyJsonStringfy(params))
   local urlParams = HttpMessage.getInstance():objectToUrlParam(params)

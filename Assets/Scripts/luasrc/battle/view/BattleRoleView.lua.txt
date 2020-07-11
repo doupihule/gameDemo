@@ -2,7 +2,7 @@
 
 
 
-BattleRoleView = class('BattleRoleView',Laya.Sprite)
+BattleRoleView = class('BattleRoleView')
 
 function BattleRoleView:ctor(viewName, scale, viewIndex)
   if scale == nil then

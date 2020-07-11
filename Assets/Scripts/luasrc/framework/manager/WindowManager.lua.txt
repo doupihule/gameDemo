@@ -306,8 +306,8 @@ function WindowManager.CloseUIAPI(UIName)
   if WindowManager.UIInstance[UIName] ~= nil then
     LogsManager.echo("WindowManager CloseUI:", UIName)
     -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    local uiView = WindowManager.UIInstance[UIName]
-    uiView.onClose and uiView:onClose()
+    local uiView = WindowManager.UIInstance[UIName];
+    if uiView.onClose then uiView:onClose() end
     local parent = uiView.parent
     if parent then
       parent:removeChild(uiView)
@@ -392,13 +392,10 @@ end
 
 function WindowManager.CloseGuideUI(UIName)
   GuideManager.getInstance().nowGuideId = nil
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  if WindowManager.UIInstance[UIName] ~= nil then
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.guideLayer:removeChild(WindowManager.UIInstance[UIName])
+  local uiInstance = WindowManager.UIInstance[UIName]
+  if uiInstance ~= nil  then
+     if uiInstance.onClose then uiInstance:onClose() end
+    WindowManager.guideLayer:removeChild(uiInstance)
   end
   if not WindowManager.guideLayer.numChildren then
     WindowManager.guideLayer.visible = false
@@ -424,31 +421,22 @@ function WindowManager.OpenSubGuideUI(node, UIName, params)
 end
 
 function WindowManager.SubGuideUIComplete(node, UIName, params)
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  if WindowManager.UIInstance[UIName] == nil then
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName] = WindowManager.getUIClass(UIName)
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName].width = ScreenAdapterTools.width
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName].height = ScreenAdapterTools.height
+  local uiInstance =WindowManager.UIInstance[UIName]
+  if uiInstance == nil then
+    uiInstance = WindowManager.getUIClass(UIName)
+    uiInstance.width = ScreenAdapterTools.width
+    uiInstance.height = ScreenAdapterTools.height
   end
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  WindowManager.UIInstance[UIName].mouseEnabled = true
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  WindowManager.UIInstance[UIName]:setData(params)
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  node:addChild(WindowManager.UIInstance[UIName])
+  uiInstance.mouseEnabled = true
+  uiInstance:setData(params)
+  node:addChild(uiInstance)
 end
 
 function WindowManager.CloseSubGuideUI(node, UIName)
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  if WindowManager.UIInstance[UIName] ~= nil then
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    node:removeChild(WindowManager.UIInstance[UIName])
+  local uiInstance =WindowManager.UIInstance[UIName]
+  if uiInstance ~= nil then
+    if uiInstance.onClose then uiInstance:onClose() end
+    node:removeChild(uiInstance)
   end
 end
 
@@ -460,13 +448,10 @@ function WindowManager.OpenSubUI(UIName, rootNode, params)
 end
 
 function WindowManager.CloseSubUI(UIName, rootNode)
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  if WindowManager.UIInstance[UIName] ~= nil then
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    rootNode:removeChild(WindowManager.UIInstance[UIName])
+  local uiInstance =WindowManager.UIInstance[UIName]
+  if uiInstance ~= nil then
+    if uiInstance.onClose then uiInstance:onClose() end
+    rootNode:removeChild(uiInstance)
   end
 end
 
@@ -511,40 +496,43 @@ function WindowManager.SwitchMaskUI(isOpen, alpha)
     alpha=0
   end
   local UIName = "maskUI"
+  local uiInstance =WindowManager.UIInstance[UIName]
   if isOpen then
     WindowManager.maskCount=WindowManager.maskCount+1
     WindowManager.maskLayer.visible = true
+    
     -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    if WindowManager.UIInstance[UIName] == nil then
+    if uiInstance == nil then
       -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-      WindowManager.UIInstance[UIName] = WindowManager.initMaskUI()
+      uiInstance = WindowManager.initMaskUI()
       -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-      WindowManager.UIInstance[UIName].width = ScreenAdapterTools.width
+      uiInstance.width = ScreenAdapterTools.width
       -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-      WindowManager.UIInstance[UIName].height = ScreenAdapterTools.height
+      uiInstance.height = ScreenAdapterTools.height
+      WindowManager.UIInstance[UIName] = uiInstance
     end
     -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName].mouseEnabled = true
+    uiInstance.mouseEnabled = true
     if alpha > WindowManager.maskAlpha then
       WindowManager.maskAlpha = alpha
     end
     -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName].alpha = WindowManager.maskAlpha
+    uiInstance.alpha = WindowManager.maskAlpha
     WindowManager.maskLayer.mouseEnabled = true
     WindowManager.maskLayer.mouseThrough = false
     -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.maskLayer:addChild(WindowManager.UIInstance[UIName])
+    WindowManager.maskLayer:addChild(uiInstance)
   else
     WindowManager.maskCount=WindowManager.maskCount-1
     if WindowManager.maskCount <= 0 then
       WindowManager.maskCount = 0
       -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-      if WindowManager.UIInstance[UIName] ~= nil then
+      if uiInstance ~= nil then
         -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
         -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-        WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
+        if uiInstance.onClose then uiInstance:onClose() end
         -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-        WindowManager.maskLayer:removeChild(WindowManager.UIInstance[UIName])
+        WindowManager.maskLayer:removeChild(uiInstance)
       end
       if not WindowManager.maskLayer.numChildren then
         WindowManager.maskLayer.visible = false
@@ -559,20 +547,6 @@ function WindowManager.SwitchMaskUI(isOpen, alpha)
 end
 
 function WindowManager.CloseMaskUI()
-  local UIName = "maskUI"
-  WindowManager.maskCount = 0
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  if WindowManager.UIInstance[UIName] ~= nil then
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.maskLayer:removeChild(WindowManager.UIInstance[UIName])
-  end
-  if not WindowManager.maskLayer.numChildren then
-    WindowManager.maskLayer.visible = false
-  end
-  WindowManager.maskAlpha = 0
 end
 
 function WindowManager.initMaskUI()
@@ -651,42 +625,10 @@ function WindowManager.getUIPackage(winName)
 end
 
 function WindowManager.openAdvMask()
-  local UIName = "advMaskUI"
-  LogsManager.echo("zm 打开蒙版--------------------------")
-  WindowManager.maskLayer.visible = true
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  if WindowManager.UIInstance[UIName] == nil then
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName] = WindowManager.initMaskUI()
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName].width = ScreenAdapterTools.width
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName].height = ScreenAdapterTools.height
-  end
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  WindowManager.UIInstance[UIName].mouseEnabled = true
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  WindowManager.UIInstance[UIName].alpha = 0.5
-  WindowManager.maskLayer.mouseEnabled = true
-  WindowManager.maskLayer.mouseThrough = false
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  WindowManager.maskLayer:addChild(WindowManager.UIInstance[UIName])
+  
 end
 
 function WindowManager.closeAdvMask()
-  LogsManager.echo("zm 关闭蒙版--------------------------")
-  local UIName = "advMaskUI"
-  -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-  if WindowManager.UIInstance[UIName] ~= nil then
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.UIInstance[UIName].onClose and WindowManager.UIInstance[UIName]:onClose()
-    -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
-    WindowManager.maskLayer:removeChild(WindowManager.UIInstance[UIName])
-  end
-  if not WindowManager.maskLayer.numChildren then
-    WindowManager.maskLayer.visible = false
-  end
 end
 
 function WindowManager._insertWindow(view)

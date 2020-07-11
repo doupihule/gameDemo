@@ -2,13 +2,19 @@
 
 
 
-BattleDamageLabel = class('BattleDamageLabel',Laya.Sprite)
+BattleDamageLabel = class('BattleDamageLabel')
 function BattleDamageLabel:ctor()
   BattleDamageLabel.super.ctor(self)
   self._childLabels = {}
 end
 
-BattleDamageLabel._labelCfgs = {BattleConst.effect_label_dmg={w=13, sw=30, sh=20, fuhao="jian", name="putong", scale=1.5}, BattleConst.effect_label_crit={w=15, head=35, sw=30, sh=18, fuhao="jian", name="baoji", scale=1.5}, BattleConst.effect_label_trit={w=13, sw=30, sh=20, fuhao="jia", name="zhiliao", scale=1.5}, BattleConst.effect_label_tritCrit={w=13, sw=30, sh=20, fuhao="jia", name="zhiliao", scale=1.8}, BattleConst.effect_label_hudun={w=13, sw=30, sh=20, fuhao="jian", name="putong", scale=1}, BattleConst.effect_label_miss={name="miss"}};
+BattleDamageLabel._labelCfgs = {
+  ["normal"]={w=13, sw=30, sh=20, fuhao="jian", name="putong", scale=1.5}, 
+  ["crit"]={w=15, head=35, sw=30, sh=18, fuhao="jian", name="baoji", scale=1.5}, 
+  ["trit"]={w=13, sw=30, sh=20, fuhao="jia", name="zhiliao", scale=1.5}, 
+  ["tritCrit"]={w=13, sw=30, sh=20, fuhao="jia", name="zhiliao", scale=1.8}, 
+  ["hudun"]={w=13, sw=30, sh=20, fuhao="jian", name="putong", scale=1}, 
+  ["miss"]={name="miss"}};
 function BattleDamageLabel:setValue(kind, value)
   if self._currentValue == value then
     return

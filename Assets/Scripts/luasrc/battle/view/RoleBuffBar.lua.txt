@@ -1,7 +1,7 @@
 
 
 
-RoleBuffBar = class('RoleBuffBar',Laya.Sprite)
+RoleBuffBar = class('RoleBuffBar')
 
 function RoleBuffBar:ctor()
   RoleBuffBar.super.ctor(self)

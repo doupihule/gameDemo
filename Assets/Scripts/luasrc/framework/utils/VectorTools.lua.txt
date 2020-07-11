@@ -1,6 +1,5 @@
 VectorTools = class('VectorTools')
-VectorTools.originPoint = VectorTools.createVector3();
-VectorTools.unitPoint = VectorTools.createVector3(1, 1, 1);
+
 function VectorTools.multyByNumToSelf(vec, mul)
   vec.x = vec.x * mul
   vec.y = vec.y * mul
@@ -43,3 +42,5 @@ end
 function VectorTools.createVector3(x,y,z)
   return {x=x or 0,y=y or 0,z = z or 0}
 end
+VectorTools.originPoint = VectorTools.createVector3();
+VectorTools.unitPoint = VectorTools.createVector3(1, 1, 1);

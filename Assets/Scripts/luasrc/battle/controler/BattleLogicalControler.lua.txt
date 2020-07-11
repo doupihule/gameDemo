@@ -835,7 +835,7 @@ function BattleLogicalControler:dispose()
   self._allInstanceArr.length = 0
   self.tweenControler:dispose()
   self.cameraControler = nil
-  self.refreshControler and self.refreshControler:dispose()
+  if self.refreshControler then self.refreshControler:dispose() end
   self.layerControler:dispose()
   self.layerControler = nil
   self.mapControler:dispose()

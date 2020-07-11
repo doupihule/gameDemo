@@ -281,7 +281,7 @@ function KakuraClient:onReceiveMessage(evt)
     self:excuetOneResponce(jsonData)
   elseif jsonData.params then
     Client.getInstance():onResult(jsonData.params, true)
-    that._pushCallback and doJsCallFunc(that._pushCallback,that._pushThisObj, jsonData)
+    if that._pushCallback then doJsCallFunc(that._pushCallback,that._pushThisObj, jsonData) end
   end
   self:doRequest()
 end
@@ -309,9 +309,9 @@ function KakuraClient:onSocketOpen()
   print("socket connet success!!!")
   self._webSocketConnet = true
   if self.hasGetUserInfo then
-    self._callback and doJsCallFunc(self._callback,self._thisObj, false)
+    if self._callback then  doJsCallFunc(self._callback,self._thisObj, false) end
   else
-    self._callback and doJsCallFunc(self._callback,self._thisObj, true)
+    if self._callback then  doJsCallFunc(self._callback,self._thisObj, true) end
   end
   self:doRequest()
 end

@@ -71,7 +71,7 @@ function Client:initResult(result)
   self._requestId = result.initRequestId
   self._token = result.token
   self._rid = result.rid
-  self._callback and doJsCallFunc(self._callback,self._thisObj)
+  if self._callback then  doJsCallFunc(self._callback,self._thisObj) end
 end
 
 function Client:sendHeart(method, param, callback, thisObj, addParam)
@@ -385,12 +385,12 @@ function Client:getCloudGlobalData(params, callback, thisObj, addParam)
     addParam=nil
   end
   if not self.hasLoginComplete then
-    callback and doJsCallFunc(callback,thisObj, {error={code=ErrorCode.nologin}}, addParam)
+    if callback then doJsCallFunc(callback,thisObj, {error={code=ErrorCode.nologin}}, addParam) end
     return
   end
   local token = self.globalLoginBackData.loginToken
   if not token then
-    callback and doJsCallFunc(callback,thisObj, {error={code=ErrorCode.nologin}}, addParam)
+    if callback then doJsCallFunc(callback,thisObj, {error={code=ErrorCode.nologin}}, addParam) end
     return
   end
   if not params.token then
@@ -444,7 +444,7 @@ function Client:startRequestCloud(method, params, callback, thisObj, addParam, e
   end
   if not self.hasLoginComplete then
     self:startRelogin()
-    callback and doJsCallFunc(callback,thisObj, {error={code=ErrorCode.nologin}}, addParam)
+    if callback then doJsCallFunc(callback,thisObj, {error={code=ErrorCode.nologin}}, addParam) end
     return
   end
   expandParams = expandParams or self._defaultExpandParams

@@ -1,7 +1,7 @@
 UITools = {};
 local tempVec2 = CS.UnityEngine.Vector2(0,0) 
 --设置 视图坐标obj是 GameObject对象
-function UITools:setUIViewPos( instance,x,y )
+function UITools.setUIViewPos( instance,x,y )
 	local gameobj = instance.__cobject or instance
 	local tansform = gameobj:GetComponent("RectTransform");
 	-- tansform.TransformPoint(x,y,0);

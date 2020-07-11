@@ -696,7 +696,7 @@ function InstanceLife:doRelive(hp, skillAct)
   self.hp = hp
   self.diedState = BattleConst.DIED_STATE_NONE
   self._myView.alpha = 1
-  self._myView2 and (self._myView2.alpha = 1)
+  if self._myView2 then self._myView2.alpha = 1 end
   TableUtils.removeValue(self.diedArr, self)
   if self.campArr:find(self) == -1 then
     table.insert(self.campArr, self)
@@ -811,7 +811,7 @@ function InstanceLife:destroyPoint()
       PoolTools.cacheItem(PoolCode.ENEMY_MAP_POINT_POOL, self.mapPoint)
     end
   end
-  (self.mapPoint and self.mapPoint.parent) and self.mapPoint.parent:removeChild(self.mapPoint)
+  if (self.mapPoint and self.mapPoint.parent) then self.mapPoint.parent:removeChild(self.mapPoint) end
   self.mapPoint = nil
 end
 

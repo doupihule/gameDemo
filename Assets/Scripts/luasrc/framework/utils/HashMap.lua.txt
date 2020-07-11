@@ -2,7 +2,8 @@ HashMap = class('HashMap')
 HashMap.HASH_COUNT = 0;
 function HashMap:ctor()
   self.hashCode = 0;
-  self.hashCode = HashMap.HASH_COUNT=HashMap.HASH_COUNT+1
+  HashMap.HASH_COUNT=HashMap.HASH_COUNT+1
+  self.hashCode = HashMap.HASH_COUNT
 end
 
 function HashMap:put(key, value)

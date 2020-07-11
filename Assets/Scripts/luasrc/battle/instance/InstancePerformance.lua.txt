@@ -184,13 +184,13 @@ function InstancePerformance:hitedflash(frame)
     frame=4
   end
   DisplayUtils.setViewLittleRed(self._myView)
-  self._myView2 and DisplayUtils.setViewLittleRed(self._myView2)
+  if self._myView2 then DisplayUtils.setViewLittleRed(self._myView2) end
   self.controler:setCallBack(frame, self.clearFlash, self)
 end
 
 function InstancePerformance:clearFlash()
   DisplayUtils.clearViewFilter(self._myView)
-  self._myView2 and DisplayUtils.clearViewFilter(self._myView2)
+  if self._myView2 then  DisplayUtils.clearViewFilter(self._myView2) end
 end
 
 function InstancePerformance:onHitedFly(attacker, impulse, lastFrame)
@@ -317,7 +317,7 @@ function InstancePerformance:playAction(label, loop, resumeIdle, force, start, t
     return
   end
   self._myView:play(label, loop, force, start, tsvar_end)
-  self._myView2 and self._myView2:play(label, loop, force, start, tsvar_end)
+  if self._myView2 then self._myView2:play(label, loop, force, start, tsvar_end) end
   if not loop then
     if resumeIdle then
       self.controler:setCallBack(self:getActionFrame(label), self.resumeIdleAction, self)
@@ -360,13 +360,13 @@ function InstancePerformance:resumeAction()
     return
   end
   self._myView:resume()
-  self._myView2 and self._myView:resume()
+  if self._myView2 then self._myView:resume() end
   self:playAction(BattleConst.LABEL_IDLE, true, false, true)
 end
 
 function InstancePerformance:stopAction()
   self._myView:stop()
-  self._myView2 and self._myView:stop()
+  if self._myView2 then self._myView:stop() end
 end
 
 function InstancePerformance:changeViewPauseValue(value)

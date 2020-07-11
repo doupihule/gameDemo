@@ -37,18 +37,16 @@ function BattleTweenControler:updateOneTween(tweenInfo)
     local targety = nil
     local targetz = nil
     if mode == 1 then
-      -- [ts2lua]lua中0和空字符串也是true，此处disParams.x == 0需要确认
-      (disParams.x == 0 and {targetx = instance.pos.x} or {targetx = startParams.x + disParams.x * ratio})[1]
-      -- [ts2lua]lua中0和空字符串也是true，此处disParams.y == 0需要确认
-      (disParams.y == 0 and {targety = instance.pos.y} or {targety = startParams.y + disParams.y * ratio})[1]
-      -- [ts2lua]lua中0和空字符串也是true，此处disParams.z == 0需要确认
-      (disParams.z == 0 and {targetz = instance.pos.z} or {targetz = startParams.z + disParams.z * ratio})[1]
+      if disParams.x == 0 then  targetx = instance.pos.x else targetx = startParams.x + disParams.x * ratio end
+      if disParams.y == 0 then 
+          targety =  startParams.y + disParams.y * ratio 
+          instance.pos.ytargety = targety
+      end
+      if disParams.z == 0 then targetz = instance.pos.z else targetz = startParams.z + disParams.z * ratio end
       instance:setPos(targetx, targety, targetz)
     else
-      -- [ts2lua]lua中0和空字符串也是true，此处disParams.x == 0需要确认
-      (disParams.x == 0 and {targetx = instance.x} or {instance.x = startParams.x + disParams.x * ratio})[1]
-      -- [ts2lua]lua中0和空字符串也是true，此处disParams.y == 0需要确认
-      (disParams.y == 0 and {targety = instance.y} or {instance.y = startParams.y + disParams.y * ratio})[1]
+      if disParams.x == 0 then targetx = instance.x else instance.x = startParams.x + disParams.x * ratio end
+      if disParams.y == 0 then targety = instance.y else instance.y = startParams.y + disParams.y * ratio end
     end
   end
   if self:checkHasType(type, BattleConst.TWEEN_ROTATE) then
@@ -56,11 +54,13 @@ function BattleTweenControler:updateOneTween(tweenInfo)
     local ry = nil
     local rz = nil
     if mode == 1 then
-      -- [ts2lua]lua中0和空字符串也是true，此处disParams.r == 0需要确认
-      (disParams.r == 0 and {false} or {instance:setRotation(startParams.r + disParams.r * ratio)})[1]
+      if(disParams.r ~=0) then
+        instance:setRotation(startParams.r + disParams.r * ratio)
+      end
     else
-      -- [ts2lua]lua中0和空字符串也是true，此处disParams.r == 0需要确认
-      (disParams.r == 0 and {false} or {instance.rotation = startParams.r + disParams.r * ratio})[1]
+      if(disParams.r ~=0) then
+        instance.rotation = startParams.r + disParams.r * ratio
+      end
     end
   end
   if self:checkHasType(type, BattleConst.TWEEN_SCALE) then

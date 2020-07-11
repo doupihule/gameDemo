@@ -86,7 +86,7 @@ function BattleLayerControler:getTweenEndPos(tempPos)
 end
 
 function BattleLayerControler:dispose()
-  self.a and self.a:removeChildren()
+  if self.a then self.a:removeChildren() end
   self.a = nil
   self.a1 = nil
   self.a2 = nil

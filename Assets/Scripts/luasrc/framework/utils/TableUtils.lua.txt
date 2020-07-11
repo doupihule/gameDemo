@@ -2,7 +2,7 @@
 
 TableUtils = class('TableUtils')
 
-local json = require("rapidJson")
+local json = require("rapidjson")
 
 function TableUtils:ctor() end
 function TableUtils.deepMerge(receiveObj, fromObj)

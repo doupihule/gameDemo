@@ -27,7 +27,7 @@ BuffTrigger.buff_logical_add_skill = 15;
 BuffTrigger.buff_logical_chaofeng = 16;
 BuffTrigger.buff_logical_safe = 19;
 BuffTrigger.buff_logical_safe_all = 20;
-BuffTrigger.buffTypeToBit = {4=1, 5=2, 6=4, 7=8, 8=16, 19=512, 20=1024};
+BuffTrigger.buffTypeToBit = {[4]=1, [5]=2, [6]=4, [7]=8, [8]=16, [19]=512, [20]=1024};
 BuffTrigger._hasInit = false;
 function BuffTrigger.init()
   if BuffTrigger._hasInit then

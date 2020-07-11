@@ -485,7 +485,7 @@ function ConditionTrigger.checkCondition_20(selfInstance, condition, skill, useA
     local propId = tostring(params[1+1])
     local compareType = params[0+1]
     if not propId then
-      LogsManager.errorTag("conditionError", "condtion配置错误,id:", condition._id); "没有属性id"
+      LogsManager.errorTag("conditionError", "condtion配置错误,id:", condition._id); 
       return false
     end
     if not useArr or #useArr == 0 then

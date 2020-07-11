@@ -1,7 +1,11 @@
  Equation=class("Equation")
 
+
+
 function Equation:ctor()
-	
+
+
+
 end
 --转化弧度转化为 数学里面的 小的角
 function Equation.transToSmallRadian(num)

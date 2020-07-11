@@ -1,6 +1,6 @@
 
 
-RoleHealthBar = class('RoleHealthBar',Laya.Sprite)
+RoleHealthBar = class('RoleHealthBar')
 
 function RoleHealthBar:ctor()
   RoleHealthBar.super.ctor(self)

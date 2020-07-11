@@ -53,7 +53,7 @@ function SingleCommonServer.startSaveClientData(isDelaySave, callBack, thisObj, 
   if SingleCommonServer._saveLock then
     SingleCommonServer._hasDataChange = true
     LogsManager.echo("server 当前保存数据cd没到")
-    callBack and doJsCallFunc(callBack,thisObj, dummyBackData)
+    if callBack then doJsCallFunc(callBack,thisObj, dummyBackData) end
     return
   end
   SingleCommonServer._saveLock = true
@@ -109,7 +109,7 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
       end
       SingleCommonServer.sendNoAliCloudData({clientDirty=param})
     end
-    callBack and doJsCallFunc(callBack,thisObj, dummyBackData)
+    if callBack then doJsCallFunc(callBack,thisObj, dummyBackData) end
     return
   end
   local params = nil
@@ -125,7 +125,7 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
   else
     params = {clientDirty=SingleCommonServer.getClientDirtyList()}
     if TableUtils.isEmptyTable(params.clientDirty) then
-      callBack and doJsCallFunc(callBack,thisObj, dummyBackData)
+      if callBack then doJsCallFunc(callBack,thisObj, dummyBackData) end
       return
     end
   end

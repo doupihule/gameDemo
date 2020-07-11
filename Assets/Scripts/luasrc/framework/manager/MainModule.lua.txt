@@ -7,10 +7,15 @@ MainModule.task_configsloaded = "task_configsloaded";
 MainModule.task_onloginResult = "task_onloginResult";
 MainModule.task_mergeFileBack = "task_mergeFileBack";
 MainModule.task_kariquLogin = "task_kariquLogin";
+
+function MainModule.getInstance(  )
+  return MainModule._instance
+end
+
 function MainModule:ctor()
   self.timeLock = 0;
   self._taskCompMap = {};
-  MainModule.getInstance() = self
+  MainModule._instance = self;
   self:initLayer()
   self:onLoadingUIComplete()
   Message.getInstance():add(MsgCMD.GAME_ONSHOW, self)

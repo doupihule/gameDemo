@@ -1,6 +1,6 @@
 
 
-TipsUI = class('TipsUI',Laya.Sprite)
+TipsUI = class('TipsUI')
 
 TipsUI.res = {};
 function TipsUI:ctor()

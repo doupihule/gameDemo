@@ -21,7 +21,7 @@ function BigNumUtils.substractIn(a, b)
 end
 
 function BigNumUtils.muitlfy(a, b)
-  a*b
+  return a*b
 end
 
 function BigNumUtils.pow(a, b)

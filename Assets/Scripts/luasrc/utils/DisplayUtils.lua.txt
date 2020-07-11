@@ -1,9 +1,0 @@
-
-DisplayUtils = {}
-local spinePath = "Assets/Animation/spine/"
-
-
-function DisplayUtils:createSpine( name )
-	local spani = SpineGraphicExpand.new(spinePath..name..".prefab");
-	return spani
-end
