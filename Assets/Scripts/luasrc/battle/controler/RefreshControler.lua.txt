@@ -145,7 +145,7 @@ function RefreshControler:initWarData()
   result:sort(self.sortYouxianji)
   end
   self:addHelpRole()
-  StatisticsManager.ins:onEvent(StatisticsManager.FOG_BATTLE_START, {enemyId=event.enemyData.id})
+  StatisticsManager.getInstance():onEvent(StatisticsManager.FOG_BATTLE_START, {enemyId=event.enemyData.id})
 end
 
 function RefreshControler:sortPaixu(a, b)

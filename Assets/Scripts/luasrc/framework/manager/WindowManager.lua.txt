@@ -391,7 +391,7 @@ function WindowManager.GuideUIComplete(UIName, params)
 end
 
 function WindowManager.CloseGuideUI(UIName)
-  GuideManager.ins.nowGuideId = nil
+  GuideManager.getInstance().nowGuideId = nil
   -- [ts2lua]WindowManager.UIInstance下标访问可能不正确
   if WindowManager.UIInstance[UIName] ~= nil then
     -- [ts2lua]WindowManager.UIInstance下标访问可能不正确

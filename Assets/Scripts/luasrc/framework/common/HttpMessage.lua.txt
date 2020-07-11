@@ -37,7 +37,7 @@ function HttpMessage:turnShortLogs(targetStr)
   if LogsManager.isOpenLogsDebug then
     return targetStr
   end
-  if PackConfigManager.ins.platform.platform == "dev" or PackConfigManager.ins.platform.platform == "test" then
+  if PackConfigManager.getInstance().platform.platform == "dev" or PackConfigManager.getInstance().platform.platform == "test" then
     return targetStr
   end
   if #targetStr < 1000 then

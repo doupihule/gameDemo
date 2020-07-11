@@ -102,7 +102,7 @@ function SceneReference:recvMsg(cmd, data)
     end
   elseif cmd == CommonEvent.GET_IPINFO_FAIL then
     if not UserModel.getInstance():isSceneBlack() and GameSwitch.checkOnOff(GameSwitch.SWITCH_BLACK_IP_FAIL_TYPE) then
-      StatisticsManager.ins:onEvent(StatisticsCommonConst.WHITE_LIST_LOAD_IP_FAIL, {openId=UserInfo.channelUserId, rid=UserModel.getInstance():getUserRid()})
+      StatisticsManager.getInstance():onEvent(StatisticsCommonConst.WHITE_LIST_LOAD_IP_FAIL, {openId=UserInfo.channelUserId, rid=UserModel.getInstance():getUserRid()})
       SceneReference.setSceneBlack()
       Message.getInstance():send(CommonEvent.WHITE_LIST_CHANGE)
     end

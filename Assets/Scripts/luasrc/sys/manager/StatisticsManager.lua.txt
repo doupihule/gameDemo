@@ -14,7 +14,7 @@ StatisticsManager.isLoadingLog = false;
 StatisticsManager.loadingOutT = 0;
 StatisticsManager.isNewPlayer = false;
 function StatisticsManager:ctor() end
-function StatisticsManager.__getters.ins()
+function StatisticsManager.getInstance()
   if not StatisticsManager._ins then
     StatisticsManager._ins = StatisticsManager.new()
   end

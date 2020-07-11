@@ -207,7 +207,7 @@ function LogsManager.sendDataToAiCloud(errorStack, tag, logLength, errorId, star
     message = messageId .. "_"
   end
   local params = {id=id, game=GameConsts.gameCode, 
-        platform=PackConfigManager.ins.platform.platform, 
+        platform=PackConfigManager.getInstance().platform.platform, 
         time=Client.getInstance().serverTime, 
         os=Global.getOs(), 
         device=Global.deviceModel, 
@@ -243,7 +243,7 @@ function LogsManager.sendStaticToAiCloud(eventId, eventData)
   if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ALIYUN) then
     return
   end
-  local params = {game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, cver=Global.client_version, deviceId=Global.deviceId, eventId=eventId, rid=UserModel.getInstance():getUserRid(), device=Global.deviceModel, circleId=LogsManager.getCircleId(), t=cs.GameUtils.CommonUtil.GetTimeMiniStamp()}
+  local params = {game=GameConsts.gameCode, platform=PackConfigManager.getInstance().platform.platform, cver=Global.client_version, deviceId=Global.deviceId, eventId=eventId, rid=UserModel.getInstance():getUserRid(), device=Global.deviceModel, circleId=LogsManager.getCircleId(), t=cs.GameUtils.CommonUtil.GetTimeMiniStamp()}
   if eventData then
     -- [ts2lua]eventData下标访问可能不正确
     if eventData["sortId"] then
@@ -313,7 +313,7 @@ function LogsManager.sendActiveToAiCloud(isNew)
   if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ALIYUN) then
     return
   end
-  local params = {game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, deviceId=Global.deviceId, device=Global.deviceModel, isNew=isNew}
+  local params = {game=GameConsts.gameCode, platform=PackConfigManager.getInstance().platform.platform, deviceId=Global.deviceId, device=Global.deviceModel, isNew=isNew}
   local urlParams = HttpMessage.getInstance():objectToUrlParam(params)
   local url = LogsManager._aliyunActiveUrl + urlParams
   local onErrorCall = function()
@@ -330,7 +330,7 @@ function LogsManager.sendLoadingToAiCloud(time)
   end
   -- [ts2lua]lua中0和空字符串也是true，此处StatisticsManager.isNewPlayer需要确认
   local params = {game=GameConsts.gameCode, 
-    platform=PackConfigManager.ins.platform.platform, 
+    platform=PackConfigManager.getInstance().platform.platform, 
     deviceId=Global.deviceId, 
     device=Global.deviceModel, 
     isNew=(StatisticsManager.isNewPlayer and 1 or 0}), 

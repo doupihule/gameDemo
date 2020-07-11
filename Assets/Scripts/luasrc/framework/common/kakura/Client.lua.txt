@@ -55,10 +55,10 @@ function Client:sendInit(token, userInfo, callback, thisObj, invitedBy, shareInf
   self._gs_token = token
   self._callback = callback
   self._thisObj = thisObj
-  self._url = PackConfigManager.ins.platform.kakura_url
+  self._url = PackConfigManager.getInstance().platform.kakura_url
   self._version = Global.version
-  self._upgrade = PackConfigManager.ins.platform.upgrade_path
-  self._sec = PackConfigManager.ins.platform.sec
+  self._upgrade = PackConfigManager.getInstance().platform.upgrade_path
+  self._sec = PackConfigManager.getInstance().platform.sec
   self._kakuraInitParams = self:getKakuraInitMsg(userInfo, invitedBy, shareInfo)
   KakuraClient.getInstance():init(self._url, self._version, "", self.pushResult, self, self.onConnectBack, self)
 end
@@ -153,7 +153,7 @@ function Client:onResult(result, isPush)
     end
   elseif result.error then
     local err = result.error
-    ErrCodeManager.ins:setErr(err.code)
+    ErrCodeManager.getInstance():setErr(err.code)
   end
   if result.serverInfo then
     self._reqBackTime = result.serverInfo.serverTime

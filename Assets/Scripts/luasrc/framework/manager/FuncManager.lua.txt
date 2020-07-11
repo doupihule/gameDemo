@@ -20,7 +20,7 @@ function FuncManager.init(callback, thisobj)
     LoadManager.getInstance():load({congfigName}, Laya.Handler:create(FuncManager, function()
       BaseFunc.onConfigGroupLoadComplete()
       BaseFunc.onTranslateGroupLoadComplete()
-      ErrCodeManager.ins:initConfig()
+      ErrCodeManager.getInstance():initConfig()
       if callback then
         doJsCallFunc(callback,thisobj)
       end

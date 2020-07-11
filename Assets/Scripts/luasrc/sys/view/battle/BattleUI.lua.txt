@@ -124,7 +124,7 @@ function BattleUI:initTopShow(isShowTalk)
     self:freshReward()
     self:setNormalLevelEnergy()
     BattleSceneManager.getInstance():enterBattle({levelId=nextLevel}, self.battleCtn, self)
-    StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_START, {levelId=self.levelId, entrance="main"})
+    StatisticsManager.getInstance():onEvent(StatisticsManager.LEVEL_START, {levelId=self.levelId, entrance="main"})
     self.controler = BattleSceneManager.getInstance().autoBattleControler
     if not self.controler.guideControler:checkGuide_101() then
       if isShowTalk ~= 2 then
@@ -384,7 +384,7 @@ function BattleUI:touchMoveMap(event)
   end
   self:moveNowArea(event.stageX - self._sMapStartTouchX)
   self._sMapStartTouchX = event.stageX
-  if GuideManager.ins.recentGuideId == GuideConst.GUIDE_1_103 then
+  if GuideManager.getInstance().recentGuideId == GuideConst.GUIDE_1_103 then
     self.controler.guideControler:checkGuide_104_finish()
   end
 end
@@ -468,7 +468,7 @@ function BattleUI:onReplayGame()
   Message.getInstance():send(BattleEvent.BATTLEEVENT_REVIEW_RESET_REVIVECOUNT)
   self.pauseGroup.visible = false
   BattleSceneManager.getInstance():replayBattle()
-  StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_START, {levelId=self.levelId, entrance="replay"})
+  StatisticsManager.getInstance():onEvent(StatisticsManager.LEVEL_START, {levelId=self.levelId, entrance="replay"})
   self:resetStatus()
 end
 

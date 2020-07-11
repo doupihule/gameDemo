@@ -209,7 +209,7 @@ function KakuraClient:timerHandler()
     LogsManager.echo("_初始化请求失败", self._currentConn.method)
     self:destorySocket()
     WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
-    ErrCodeManager.ins:setErr(ErrorCode.webOffline)
+    ErrCodeManager.getInstance():setErr(ErrorCode.webOffline)
     return
   end
   self._timeCount=self._timeCount+1
@@ -347,7 +347,7 @@ function KakuraClient:onSocketClose(e, isFromError)
   else
     if Global.gameMode == Global.gameMode_network or not self.hasGetUserInfo then
       WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
-      ErrCodeManager.ins:setErr(ErrorCode.webOffline)
+      ErrCodeManager.getInstance():setErr(ErrorCode.webOffline)
     else
       WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
       self._connectCacheArr = {}

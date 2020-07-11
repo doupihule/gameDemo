@@ -59,7 +59,7 @@ function GamePlatform:reqServerList(callBack, thisObject)
       end
       i=i+1
     until not(i < len)
-    PackConfigManager.ins.platform = pData
+    PackConfigManager.getInstance().platform = pData
     callBack and doJsCallFunc(callBack,thisObject, data[0+1].result.data)
   end
   , self, "post")
@@ -67,30 +67,30 @@ end
 
 function GamePlatform:reqVMS()
   if Global.checkUserCloudStorage() then
-    Global.global_url = PackConfigManager.ins.platform.cloud_url
-    Global.version = PackConfigManager.ins.platform.vms_version
+    Global.global_url = PackConfigManager.getInstance().platform.cloud_url
+    Global.version = PackConfigManager.getInstance().platform.vms_version
     self:getWxInfo()
     return
   end
   if PackageConfig.configData then
     self:checkVersion()
   else
-    local url = PackConfigManager.ins.platform.vms_url .. '?mod=vms&r=gameApi/getOnlineVersion&upgrade_path=' .. PackConfigManager.ins.platform.upgrade_path
+    local url = PackConfigManager.getInstance().platform.vms_url .. '?mod=vms&r=gameApi/getOnlineVersion&upgrade_path=' .. PackConfigManager.getInstance().platform.upgrade_path
     HttpMessage.getInstance():send(url, nil, self.checkVMSBack, self)
   end
 end
 
 function GamePlatform:checkVMSBack(result)
   local version = result.online_version
-  LogsManager.echo("online_version:", version, "local vms_version", PackConfigManager.ins.platform.vms_version)
+  LogsManager.echo("online_version:", version, "local vms_version", PackConfigManager.getInstance().platform.vms_version)
   LogsManager.echo("client_version:", Global.client_version)
-  version = math.max(version, PackConfigManager.ins.platform.vms_version)
-  PackConfigManager.ins.platform.vms_version = version
+  version = math.max(version, PackConfigManager.getInstance().platform.vms_version)
+  PackConfigManager.getInstance().platform.vms_version = version
   self:checkVersion()
 end
 
 function GamePlatform:checkVersion()
-  local url = PackConfigManager.ins.platform.vms_url .. '?mod=vms&r=gameApi/checkVersion&ver=' .. PackConfigManager.ins.platform.vms_version
+  local url = PackConfigManager.getInstance().platform.vms_url .. '?mod=vms&r=gameApi/checkVersion&ver=' .. PackConfigManager.getInstance().platform.vms_version
   HttpMessage.getInstance():send(url, nil, self.checkVersionCallback, self)
 end
 
@@ -98,7 +98,7 @@ function GamePlatform:checkVersionCallback(result)
   LogsManager.echo(nil == undefined, "___null undefined")
   if (result.s == nil or not result.global_server_url) or not result.v.version then
     LogsManager.errorTag(nil, TableUtils.safelyJsonStringfy(result))
-    ErrCodeManager.ins:setErr(ErrorCode.sys_error)
+    ErrCodeManager.getInstance():setErr(ErrorCode.sys_error)
     return
   end
   if result.global_server_url:find("http://") > -1 or result.global_server_url:find("https://") > -1 then
@@ -116,9 +116,9 @@ function GamePlatform:checkVersionCallback(result)
   if result.s == VersionManager.VERSION_STATUS_FORCE_UPDATE then
     Global.version = result.v.version
   else
-    Global.version = PackConfigManager.ins.platform.vms_version
+    Global.version = PackConfigManager.getInstance().platform.vms_version
   end
-  LogsManager.echo("Global.version:", Global.version, "localVersion:", PackConfigManager.ins.platform.vms_version, "updateSatus:", result.s)
+  LogsManager.echo("Global.version:", Global.version, "localVersion:", PackConfigManager.getInstance().platform.vms_version, "updateSatus:", result.s)
   self:addUpdateListener()
   KariqiShareManager.kariquLogin()
 end
@@ -148,7 +148,7 @@ function GamePlatform:reqGlobal(params, isInit)
         self:doSingleErrorBack()
       end
     else
-      ErrCodeManager.ins:setErr(ErrorCode.sys_error)
+      ErrCodeManager.getInstance():setErr(ErrorCode.sys_error)
     end
   end
   
@@ -218,7 +218,7 @@ function GamePlatform:reqGlobal(params, isInit)
       WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.onGlobalError, self)
       return
     end
-    PackConfigManager.ins.platform = pData
+    PackConfigManager.getInstance().platform = pData
     self:getLoginResult()
   end
   
@@ -226,7 +226,7 @@ function GamePlatform:reqGlobal(params, isInit)
   if Global.checkUserCloudStorage() then
     url = Global.global_url
     params.params.game = GameConsts.gameCode
-    params.params.platform = PackConfigManager.ins.platform.platform
+    params.params.platform = PackConfigManager.getInstance().platform.platform
     params.params.version = Global.version
     webParams.errorCall = onHttpErrorBack
   end
@@ -984,7 +984,7 @@ function GamePlatform:getLaunchOptions()
     if 'function' == type(self:getWX().getLaunchOptionsSync) then
       self._launchOptions = self:getWX():getLaunchOptionsSync()
       if self._launchOptions.scene == "1014" then
-        StatisticsManager.ins:onEvent(StatisticsCommonConst.SUBSCRIBE_JOIN_GAME, {msgId=self._launchOptions.query.msgId})
+        StatisticsManager.getInstance():onEvent(StatisticsCommonConst.SUBSCRIBE_JOIN_GAME, {msgId=self._launchOptions.query.msgId})
       end
       LogsManager.echo('_launchOptions', TableUtils.safelyJsonStringfy(self._launchOptions))
     else
@@ -1049,7 +1049,7 @@ function GamePlatform:onGetFocus()
   self.isHide = false
   self.showT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   Message.getInstance():send(MsgCMD.GAME_ONSHOW)
-  StatisticsManager.ins:onEvent(StatisticsCommonConst.ON_SHOW)
+  StatisticsManager.getInstance():onEvent(StatisticsCommonConst.ON_SHOW)
   StatisticsManager.addLoadingOutTime(self.showT - self.hideT)
 end
 
@@ -1058,7 +1058,7 @@ function GamePlatform:onLoseFocus()
   self.hideT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   LogsManager.echo('>>OnHide成功回调', self.hideT)
   Message.getInstance():send(MsgCMD.GAME_ONHIDE)
-  StatisticsManager.ins:onEvent(StatisticsCommonConst.ON_HIDE, {onlineTime=self.hideT - self.showT, hideView=GameUtils.decryptStr(WindowManager.getCurrentWindowName())})
+  StatisticsManager.getInstance():onEvent(StatisticsCommonConst.ON_HIDE, {onlineTime=self.hideT - self.showT, hideView=GameUtils.decryptStr(WindowManager.getCurrentWindowName())})
 end
 
 function GamePlatform:isCasingPackage()

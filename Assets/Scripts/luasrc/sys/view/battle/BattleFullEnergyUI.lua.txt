@@ -34,13 +34,13 @@ function BattleFullEnergyUI:setData(data)
   if self.freeType == ShareOrTvManager.TYPE_SHARE then
     if UserInfo.isWX() then
       self.freeImg.skin = ResourceConst.ADV_PNG
-      StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_SHOW, {battleAddtionId=self.battleAddtionId})
+      StatisticsManager.getInstance():onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_SHOW, {battleAddtionId=self.battleAddtionId})
     else
       self.freeImg.skin = ResourceConst.SHARE_PNG
     end
   elseif self.freeType == ShareOrTvManager.TYPE_ADV then
     self.freeImg.skin = ResourceConst.ADV_PNG
-    StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_SHOW, {battleAddtionId=self.battleAddtionId})
+    StatisticsManager.getInstance():onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_SHOW, {battleAddtionId=self.battleAddtionId})
   end
   self.battleAddtionId = data.battleAddtionId
   local battleAddtionInfo = LevelFunc.getInstance():getBattleAddtionById(self.battleAddtionId)
@@ -65,16 +65,16 @@ end
 
 function BattleFullEnergyUI:onClickFullStart()
   if self.freeType == ShareOrTvManager.TYPE_ADV then
-    StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_CLICK, {battleAddtionId=self.battleAddtionId})
+    StatisticsManager.getInstance():onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_CLICK, {battleAddtionId=self.battleAddtionId})
   end
   ShareOrTvManager.getInstance():shareOrTv(ShareTvOrderFunc.SHARELINE_BATTLE_START, ShareOrTvManager.TYPE_ADV, {id="1", extraData={}}, self.fullStart, self.closeCall, self)
 end
 
 function BattleFullEnergyUI:fullStart()
   if self.freeType == ShareOrTvManager.TYPE_ADV then
-    StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_FINISH, {battleAddtionId=self.battleAddtionId})
+    StatisticsManager.getInstance():onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_FINISH, {battleAddtionId=self.battleAddtionId})
   elseif self.freeType == ShareOrTvManager.TYPE_SHARE then
-    StatisticsManager.ins:onEvent(StatisticsManager.SHARE_BATTLEADDTION_FINISH, {battleAddtionId=self.battleAddtionId})
+    StatisticsManager.getInstance():onEvent(StatisticsManager.SHARE_BATTLEADDTION_FINISH, {battleAddtionId=self.battleAddtionId})
   end
   if self.isEnterBattle then
     return

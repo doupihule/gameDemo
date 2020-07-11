@@ -9,7 +9,7 @@
 PackConfigManager = class('PackConfigManager')
 
 function PackConfigManager:ctor() end
-function PackConfigManager.__getters.ins()
+function PackConfigManager.getInstance()
   if not PackConfigManager._ins then
     PackConfigManager._ins = PackConfigManager.new()
   end

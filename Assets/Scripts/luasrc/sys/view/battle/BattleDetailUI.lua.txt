@@ -107,9 +107,9 @@ function BattleDetailUI:setData(data)
   else
     self:setReward()
   end
-  if GuideManager.ins.nowGuideId == GuideConst.GUIDE_7_702 then
+  if GuideManager.getInstance().nowGuideId == GuideConst.GUIDE_7_702 then
     self.returnBtn.visible = false
-    GuideManager.ins:guideFin(GuideConst.GUIDE_7_702, function()
+    GuideManager.getInstance():guideFin(GuideConst.GUIDE_7_702, function()
       WindowManager.CloseGuideUI(WindowCfgs.GuideUI)
     end
     , self)

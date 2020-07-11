@@ -18,7 +18,7 @@ function ErrCodeManager:ctor(...)
   self._configData = {};
 end
 function ErrCodeManager:ctor() end
-function ErrCodeManager.__getters.ins()
+function ErrCodeManager.getInstance()
   if not ErrCodeManager._ins then
     ErrCodeManager._ins = ErrCodeManager.new()
   end

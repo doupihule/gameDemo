@@ -158,7 +158,7 @@ function UserInfo.isUC()
 end
 
 function UserInfo.isTest()
-  if UserInfo.isWeb() or PackConfigManager.ins.platform.platform == "test" then
+  if UserInfo.isWeb() or PackConfigManager.getInstance().platform.platform == "test" then
     return true
   end
   return false

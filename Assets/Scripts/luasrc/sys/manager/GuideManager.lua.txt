@@ -17,7 +17,7 @@ end
 GuideManager.GuideType = {Auto=1, Static=2, None=3};
 function GuideManager:ctor() end
 GuideManager.maxGuide = 10;
-function GuideManager.__getters.ins()
+function GuideManager.getInstance()
   if not GuideManager._ins then
     GuideManager._ins = GuideManager.new()
   end
@@ -185,13 +185,13 @@ function GuideManager:openGuideUI(id, callBack, thisObj, skipCall)
   local type = 7
   local position = nil
   local guideId = id
-  position = GuideManager.ins:getGuideData(guideId)
+  position = GuideManager.getInstance():getGuideData(guideId)
   if position then
     if position.statisticsIndex then
-      StatisticsManager.ins:onEvent(position.statisticsIndex)
+      StatisticsManager.getInstance():onEvent(position.statisticsIndex)
     end
     if position.statisticsIndexExtra then
-      StatisticsManager.ins:onEvent(position.statisticsIndexExtra)
+      StatisticsManager.getInstance():onEvent(position.statisticsIndexExtra)
     end
     self.nowGuideSkip = position.guideSkip
     type = position.type
