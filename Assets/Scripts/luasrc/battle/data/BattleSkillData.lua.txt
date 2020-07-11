@@ -119,7 +119,7 @@ function BattleSkillData:resetData()
   self.leftSkillCd = 0
 end
 
-function BattleSkillData.__getters:skillInitCd()
+function BattleSkillData:getSkillInitCd()
   return math.ceil(self._cfgSkillCd * self.owner.attrData:getSkillCdAdded(self._skillId) / 10000)
 end
 

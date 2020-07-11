@@ -342,13 +342,13 @@ function RefreshControler:reliveAllHeros()
   local i = 0
   repeat
     local role = campArr[i+1]
-    role:changeHp(role.maxHp - role.hp)
+    role:changeHp(role:getMaxHp() - role.hp)
     i=i+1
   until not(i < #campArr)
   local i = #diedArr - 1
   repeat
     local role = diedArr[i+1]
-    role:doRelive(role.maxHp, nil)
+    role:doRelive(role:getMaxHp(), nil)
     i=i-1
   until not(i >= 0)
 end

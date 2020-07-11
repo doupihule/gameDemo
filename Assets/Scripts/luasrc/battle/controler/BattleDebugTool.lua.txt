@@ -9,7 +9,7 @@ BattleDebugTool = class('BattleDebugTool')
 
 function BattleDebugTool:ctor(controler)
   self.controler = controler
-  self._attrCfgs = BattleFunc.instance:getAllCfgData("AttributeList")
+  self._attrCfgs = {}
   BattleDebugTool.initDebugValue()
 end
 
@@ -80,27 +80,22 @@ function BattleDebugTool.initDebugValue()
 end
 
 function BattleDebugTool.isNoHeroCd()
-  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
   return BattleDebugTool._debugMap["1"]
 end
 
 function BattleDebugTool.getDebugSkill()
-  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
   return BattleDebugTool._debugMap["2"]
 end
 
 function BattleDebugTool.getDebugPassiveSkill()
-  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
   return BattleDebugTool._debugMap["3"]
 end
 
 function BattleDebugTool.isInfiniteHp()
-  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
   return BattleDebugTool._debugMap["4"]
 end
 
 function BattleDebugTool.getBattleAddSped()
-  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
   local rt = BattleDebugTool._debugMap["6"]
   if not rt then
     return 1
@@ -109,6 +104,5 @@ function BattleDebugTool.getBattleAddSped()
 end
 
 function BattleDebugTool.getDebugRoleId()
-  -- [ts2lua]BattleDebugTool._debugMap下标访问可能不正确
   return BattleDebugTool._debugMap["9"]
 end

@@ -276,7 +276,7 @@ function InstanceLogical:checkAttack()
           local absDis = math.abs(disx)
           if absDis > self.battleKeepDis then
             if self._myState ~= BattleConst.state_jump then
-              self:initMove(self.walkSpeed * absDis / disx)
+              self:initMove(self:getWalkSpeed() * absDis / disx)
               self:playAction(BattleConst.LABEL_WALK, true)
             end
             return
@@ -372,8 +372,8 @@ function InstanceLogical:moveFollowNearRole(targetRole)
     return
   end
   local ang = math.atan2(dz, dx)
-  local spdx = self.walkSpeed * math.cos(ang)
-  local spdz = self.walkSpeed * math.sin(ang)
+  local spdx = self:getWalkSpeed() * math.cos(ang)
+  local spdz = self:getWalkSpeed() * math.sin(ang)
   self:initMove(spdx, 0, spdz)
   self:playAction(BattleConst.LABEL_WALK, true)
 end

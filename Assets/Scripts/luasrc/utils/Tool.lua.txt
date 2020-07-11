@@ -43,7 +43,7 @@ Tool = Tool or {}
 
 
 --比较_G里面的所有变量
-function Tool:compareKey( keyArr1,keyArr2 )
+function Tool.compareKey( keyArr1,keyArr2 )
     local addKey = {}
     for i,v in ipairs(keyArr2) do
         local hasFind =false
@@ -64,7 +64,7 @@ function Tool:compareKey( keyArr1,keyArr2 )
 end
 
 -- 转换含有nil value的有序数组
-function Tool:getTableNoNil(t)
+function Tool.getTableNoNil(t)
     local temp = {unpack(t)}
     local maxNums = 0
     for k,v in pairs(temp) do
@@ -81,7 +81,7 @@ function Tool:getTableNoNil(t)
 end
 
 -- 监控一个表里变量的变化
-function Tool:monitorTableVaue(t)
+function Tool.monitorTableVaue(t)
     local newT = {}
     local realT = {}
     for k,v in pairs(t) do
@@ -104,7 +104,7 @@ function Tool:monitorTableVaue(t)
 end
 
 -- 深度比较两个表
-function Tool:deepCompareT(t1,t2,key)
+function Tool.deepCompareT(t1,t2,key)
     if not t1 or not t2 then
         return
     end
@@ -117,7 +117,7 @@ function Tool:deepCompareT(t1,t2,key)
                 echo("有值变化",des,"t1",t1[k],"t2",t2[k])
             end
         else
-            self:deepCompareT(t1[k],t2[k],des)
+            Tool.deepCompareT(t1[k],t2[k],des)
         end
     end
 end
@@ -177,7 +177,7 @@ local battleIgnoreMap = {
 
 
 --配表reuqire
-function Tool:configRequire( path )
+function Tool.configRequire( path )
     -- if battleIgnoreMap[path] then
     if DEBUG_SERVICES   and  battleIgnoreMap[path] then
         return {}
@@ -188,7 +188,7 @@ end
 
 -- 将阿拉伯数字转化成中文 一 二 三...
 -- isComplex 是否中文繁体,默认不传,为简体
-function Tool:transformNumToChineseWord( num,isComplex )
+function Tool.transformNumToChineseWord( num,isComplex )
     -- 阿拉伯数字到中文数字的映射表
     local arabMap = {
         [0] = "十",
@@ -263,7 +263,7 @@ end
 --[[
     将剩余秒数转为天/时/分/秒格式
 ]]
-function Tool:formatLeftTime(sec)
+function Tool.formatLeftTime(sec)
     local day = nil
     if sec == 86400 then
         day = 0
@@ -312,7 +312,7 @@ end
 
 --记录当前_G里面的所有变量  
 --返回格式{ {key = key1,value = value1},...    }
-function Tool:getGlobalKey( )
+function Tool.getGlobalKey( )
     local resultArr = {}
     local keyArr = {}
     
@@ -332,7 +332,7 @@ end
 local globalCheckKey = nil
 
 
-function Tool:initGlobalGetAndSet(tb)
+function Tool.initGlobalGetAndSet(tb)
     if conditions then
         --todo
     end
@@ -358,7 +358,7 @@ end
 --必须是IS_CHECK_GLOBALKEY打开的时候 才做global检查
 -- 如果IS_CHECK_GLOBALKEY 打开了 .那么for pair 是遍历不到设置的属性的
 if IS_CHECK_GLOBALKEY then
-    Tool:initGlobalGetAndSet(_G)
+    Tool.initGlobalGetAndSet(_G)
 end
 
 

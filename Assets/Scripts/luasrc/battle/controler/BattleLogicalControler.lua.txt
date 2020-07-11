@@ -441,7 +441,7 @@ function BattleLogicalControler:createSummoned(id, data, x, z, fromRole, liveFra
   local viewIndex = BattleFunc.instance:getCfgDatasByKey("RoleUpdate", id, data.level).body or 0
   local cacheItem = self:createInstance(data, cacheId, BattleConst.model_role, InstanceMonster, resname, x, 0, z, BattleFunc.defaultScale * scale, viewIndex)
   cacheItem.attrData:countSummonedAttr(data.level, fromRole.attrData)
-  cacheItem.hp = cacheItem.maxHp
+  cacheItem.hp = cacheItem:getMaxHp()
   table.insert(self._allInstanceArr, cacheItem)
   self.layerControler.a22:addChild(cacheItem:getView())
   if cacheItem._myView2 then

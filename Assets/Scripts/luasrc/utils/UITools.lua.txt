@@ -16,7 +16,7 @@ end
 local tempScaleVec3 = CS.UnityEngine.Vector3(1,1,1) 
 
 --设置obj缩放
-function UITools:setUIViewScale( instance,sx,sy )
+function UITools.setUIViewScale( instance,sx,sy )
 	local gameobj = instance.__cobject or instance
 	local tansform = gameobj:GetComponent("RectTransform");
 	tempScaleVec3.x = sx;
@@ -27,7 +27,7 @@ end
 
 local tempRotateVec3 = CS.UnityEngine.Vector3(0,0,1) 
 --设置obj旋转 角度
-function UITools:setUIViewRotation( instance,r )
+function UITools.setUIViewRotation( instance,r )
 	local gameobj = instance.__cobject or instance
 	local tansform = gameobj:GetComponent("RectTransform");
 	tempRotateVec3.z = r;
@@ -35,7 +35,7 @@ function UITools:setUIViewRotation( instance,r )
 end
 
 
-function UITools:addChildComponent( parent,child )
+function UITools.addChildComponent( parent,child )
 	
 end
 
@@ -91,7 +91,7 @@ end
 
 
 --给一个对象注入通用函数
-function UITools:bindUIFunc( luaInstance )
+function UITools.bindUIFunc( luaInstance )
 	--如果没有绑定__cobject return
 	if(not luaInstance.__cobject) then
 		return
@@ -99,6 +99,20 @@ function UITools:bindUIFunc( luaInstance )
 	luaInstance.addChild = tempAddChildFunc
 	luaInstance.removeChild = tempRemoveChild
 	luaInstance.removeSelf = tempRemoveSelf
+
+end
+
+
+
+
+
+local uiCtn = class("UI2DCtn");
+
+
+--创建一个2dui 容器
+function UITools.createUICtn(  )
+	local ui = uiCtn.new();
+	
 
 end
 

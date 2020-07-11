@@ -20,7 +20,7 @@
 
 InstanceLife = class('InstanceLife',InstancePerformance)
 
-function InstanceLife.__getters:maxHp()
+function InstanceLife:getMaxHp()
   return self.attrData:getOneAttr(BattleConst.attr_maxHp)
 end
 
@@ -88,7 +88,7 @@ function InstanceLife:setData(data)
       self._data.passiveSkills = self.passSkillArr
       self.attrData:resetData(self.dataId, self._data, self.lifeType, UserModel.instance:getData(), self.controler.globalAttrMap)
     end
-    self.hp = self.maxHp
+    self.hp = self:getMaxHp()
     local baseData = BattleFunc.instance:getCfgDatas("Role", self.dataId)
     if baseData.scale then
       self.cfgScale = baseData.scale / 10000
@@ -106,7 +106,7 @@ function InstanceLife:setData(data)
   end
 end
 
-function InstanceLife.__getters:walkSpeed()
+function InstanceLife:getWalkSpeed()
   return self.attrData:getOneAttr(BattleConst.attr_speed) / GameConsts.gameFrameRate
 end
 
@@ -183,7 +183,7 @@ end
 
 function InstanceLife:getSkillLeftCd(skill)
   local skillSpeedValue = self:getSkillSpeedUpValue(skill._skillId)
-  return math.round(skill.skillInitCd / skillSpeedValue)
+  return math.round(skill:getSkillInitCd() / skillSpeedValue)
 end
 
 function InstanceLife:getNormalSkills()
@@ -280,7 +280,7 @@ function InstanceLife:setLifeType(type)
   self.lifeType = type
   if self.lifeType == BattleConst.LIFE_LANDBUILD then
     self.buildCheckFrame = BattleFunc.buildAutoFrame
-    self.reduceBlood = self.maxHp * BattleFunc.buildingAutoReduceHp / 10000
+    self.reduceBlood = self:getMaxHp() * BattleFunc.buildingAutoReduceHp / 10000
   end
   self:initPointOnSmallMap()
   if self.camp == BattleConst.ROLEGROUP_MYSELF and (self.lifeType == BattleConst.LIFE_LANDHERO or self.lifeType == BattleConst.LIFE_LANDBUILD) then
@@ -343,9 +343,9 @@ function InstanceLife:changeHp(value)
     value = value - self.hp
     self.hp = 0
     self:doDiedLogical()
-  elseif self.hp > self.maxHp then
-    value = value - self.hp - self.maxHp
-    self.hp = self.maxHp
+  elseif self.hp > self:getMaxHp() then
+    value = value - self.hp - self:getMaxHp()
+    self.hp = self:getMaxHp()
   end
   if not self.hpBar then
     LogsManager.errorTag("instanceError", "血条没了----")

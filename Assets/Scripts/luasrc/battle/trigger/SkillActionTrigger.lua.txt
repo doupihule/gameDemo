@@ -260,7 +260,7 @@ function SkillActionTrigger.runSkillAction_9(attacker, skill, skillAction, useAr
   local i = 0
   repeat
     local targetIns = useArr[i+1]
-    targetIns:doRelive(math.floor(targetIns.maxHp * ratio), skillAction)
+    targetIns:doRelive(math.floor(targetIns:getMaxHp() * ratio), skillAction)
     i=i+1
   until not(i < #useArr)
 end

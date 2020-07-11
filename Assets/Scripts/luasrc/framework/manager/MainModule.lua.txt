@@ -258,8 +258,8 @@ function MainModule:initLayer()
   if UserInfo.isWeb() then
     local urlParam = window.location.href:find('test=1') > 0
     LogsManager.echo(">>>>urlParam>>>>>>", urlParam)
-    GameSwitch.switchMap.SWITCH_GM_DEBUG = 1
-    GameSwitch.switchMap.SWITCH_CD_DEBUG = 1
+    GameSwitch.getSwitchMap().SWITCH_GM_DEBUG = 1
+    GameSwitch.getSwitchMap().SWITCH_CD_DEBUG = 1
   end
   local delayShowLoading = function()
     WindowManager.ShowLoadingUI(nil)

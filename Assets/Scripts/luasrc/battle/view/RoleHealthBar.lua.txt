@@ -62,7 +62,7 @@ function RoleHealthBar:onHpChange()
   self.nameText.text = ""
   local hp = self.owner.hp
   local shieldValue = self.owner:getSheildValue()
-  local percent = self.owner.hp / self.owner.maxHp
+  local percent = self.owner.hp / self.owner:getMaxHp()
   self.owner.hpPercent = percent
   local width = self._initWidth * percent
   if width < 0 then
@@ -74,7 +74,7 @@ function RoleHealthBar:onHpChange()
   self.srollImage.width = width
   if shieldValue > 0 then
     self.shieldImage.visible = true
-    local percent2 = shieldValue / self.owner.maxHp
+    local percent2 = shieldValue / self.owner:getMaxHp()
     if percent2 > 0.7 then
       percent2 = 0.7
     end

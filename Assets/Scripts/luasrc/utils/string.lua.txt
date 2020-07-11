@@ -436,7 +436,7 @@ function string.stripAndLower(str)
 end
 
 --模拟js的正则表达式 test
-function string.rejstest( re, str, )
+function string.rejstest( re, str )
 	
 end
 

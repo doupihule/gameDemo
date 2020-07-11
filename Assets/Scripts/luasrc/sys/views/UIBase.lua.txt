@@ -1,8 +1,8 @@
 UIBase = class("UIBase")
 
 
---所有的ui的_rootView指向 对应ui的gameObject
-UIBase._rootView = nil
+--所有的ui的__cobject指向 对应ui的gameObject
+UIBase.__cobject = nil
 --对应的window配置
 UIBase.windowCfgs = nil
 

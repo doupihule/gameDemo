@@ -320,7 +320,6 @@ function BattleControler:deleteObjUpdate(callFuncNums, callFunc, callThisObj)
   local index = 0
   repeat
     if callFuncNums == index then
-      -- [ts2lua]self.updateCallFuncGroup下标访问可能不正确
       self.updateCallFuncGroup[index] = nil
       break
     end

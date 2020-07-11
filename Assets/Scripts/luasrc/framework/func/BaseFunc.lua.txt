@@ -35,7 +35,7 @@ function BaseFunc.onConfigGroupLoadComplete()
   end
   BaseFunc._globalConfigMap = Laya.loader:getRes(congfigName)
   -- [ts2lua]GameSwitch.switchMap下标访问可能不正确
-  local hotCfg = GameSwitch.switchMap[BaseFunc.SWITCH_CONFIG_HOT]
+  local hotCfg = GameSwitch.getSwitchMap()[BaseFunc.SWITCH_CONFIG_HOT]
   if hotCfg and hotCfg ~= "" then
     try_catch{
       main = function()

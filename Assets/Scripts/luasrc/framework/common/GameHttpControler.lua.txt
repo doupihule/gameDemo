@@ -2,7 +2,7 @@
 
 GameHttpControler = class('GameHttpControler')
 
-function GameHttpControler.__getters.instance()
+function GameHttpControler.getInstance()
   if not GameHttpControler._instance then
     GameHttpControler._instance = GameHttpControler.new()
   end

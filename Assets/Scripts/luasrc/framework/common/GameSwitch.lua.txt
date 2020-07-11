@@ -71,19 +71,14 @@ GameSwitch.SWITCH_SIGN_METHOD = "SWITCH_SIGN_METHOD";
 GameSwitch._switchMap = {}
 GameSwitch._hasInitSwitch = false;
 GameSwitch._switchCondition = {};
-function GameSwitch.__getters.switchMap()
+function GameSwitch.getSwitchMap()
   if not GameSwitch._hasInitSwitch then
     GameSwitch.initSwitch()
   end
   return GameSwitch._switchMap
 end
 
-function GameSwitch.__setters.switchMap(data)
-  if not GameSwitch._hasInitSwitch then
-    GameSwitch.initSwitch()
-  end
-  GameSwitch._switchMap = data
-end
+
 
 function GameSwitch.initSwitch()
   TableUtils.deepMerge(GameSwitch._switchMap, GameSwitchConst._switchMap)
@@ -92,12 +87,8 @@ end
 
 function GameSwitch:ctor() end
 function GameSwitch.checkOnOff(key)
-  local resultValue = nil
-  -- [ts2lua]GameSwitch._switchCondition下标访问可能不正确
   if GameSwitch.checkCondition(GameSwitch._switchCondition[key]) then
-    -- [ts2lua]GameSwitch.switchMap下标访问可能不正确
-    -- [ts2lua]GameSwitch.switchMap下标访问可能不正确
-    if tonumber(GameSwitch.switchMap[key]) == 1 or GameSwitch.switchMap[key] == true then
+    if tonumber(GameSwitch.getSwitchMap()[key]) == 1 or GameSwitch.getSwitchMap()[key] == true then
       resultValue = true
     else
       resultValue = false
@@ -109,19 +100,15 @@ end
 
 function GameSwitch.coverServerSwitchMap(map)
   for i in pairs(map) do
-    GameSwitch._switchMap[i+1] = map[i+1]
+    GameSwitch._switchMap[i] = map[i]
   end
   LogsManager.setLogGroupVisible(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
   DeviceTools.checkBySwitch()
   local channelData = ChannelConst.getChannelConst(UserInfo.platformId)
-  -- [ts2lua]map下标访问可能不正确
   if map[GameSwitch.VIDEO_ID] then
-    -- [ts2lua]map下标访问可能不正确
     channelData.adVideoId = map[GameSwitch.VIDEO_ID]
   end
-  -- [ts2lua]map下标访问可能不正确
   if map[GameSwitch.BANNER_ID] then
-    -- [ts2lua]map下标访问可能不正确
     channelData.adBannerId = map[GameSwitch.BANNER_ID]
   end
   if map.TTADSDK_ID then
@@ -144,18 +131,16 @@ function GameSwitch.coverServerSwitchConditionMap(map)
     return
   end
   for i in pairs(map) do
-    GameSwitch._switchCondition[i+1] = map[i+1]
+    GameSwitch._switchCondition[i] = map[i]
   end
 end
 
 function GameSwitch.setOnOff(key, value)
-  -- [ts2lua]GameSwitch.switchMap下标访问可能不正确
-  GameSwitch.switchMap[key] = value
+  GameSwitch.getSwitchMap()[key] = value
 end
 
 function GameSwitch.getSwitchState(key)
-  -- [ts2lua]GameSwitch.switchMap下标访问可能不正确
-  return GameSwitch.switchMap[key]
+  return GameSwitch.getSwitchMap()[key]
 end
 
 function GameSwitch.checkCondition(value)

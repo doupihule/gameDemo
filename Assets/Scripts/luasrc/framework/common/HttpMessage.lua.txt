@@ -22,74 +22,15 @@ function HttpMessage.__getters.instance()
 end
 
 function HttpMessage:send(url, params, callBack, thisObject, method, webParams)
-  if method == nil then
-    method="get"
-  end
-  if webParams == nil then
-    webParams=nil
-  end
-  url = url
-  if not webParams then
-    webParams = {dataFormat=HttpMessage.URLLoaderDataFormat.TEXT}
-  end
-  local connectData = {url=url, params=params, callBack=callBack, thisObj=thisObject, method=method, webParams=webParams}
-  table.insert(self._connectCacheArr, connectData)
-  self:doRequest()
+  
 end
 
 function HttpMessage:doRequest()
-  if self._currentConn then
-    return
-  end
-  if #self._connectCacheArr == 0 then
-    return
-  end
-  local con = self._connectCacheArr[0+1]
-  self._connectCacheArr:splice(0, 1)
-  self._currentConn = con
-  self:sureSend(con)
+  
 end
 
 function HttpMessage:sureSend(data)
-  local url = data.url
-  local params = data.params or {}
-  local callBack = data.callBack
-  local thisObject = data.thisObj
-  local method = data.method
-  local format = data.webParams.dataFormat
-  local hr = Laya.HttpRequest()
-  hr.http.time = 60000
-  hr:once(Laya.Event.COMPLETE, self, self.onHttpSuccess)
-  hr:once(Laya.Event.ERROR, self, self.onHttpError)
-  self._currentHp = hr
-  local targetStrData = params
-  local sendMethod = ""
-  if type(targetStrData) ~= "string" then
-    if params.method then
-      sendMethod = params.method
-    end
-    if params then
-      if params.reqId then
-        params.reqId = "req_repeat_" .. Global.deviceId .. "_" .. Client.instance.miniserverTime .. "_" .. math.floor(math.random() * 100000)
-      else
-        params.reqId = "req" .. Global.deviceId .. "_" .. Client.instance.miniserverTime .. "_" .. math.floor(math.random() * 100000)
-      end
-    end
-    targetStrData = TableUtils.safelyJsonStringfy(params)
-  end
-  local shortSendData = self:turnShortLogs(targetStrData)
-  LogsManager.echo("http send url is :" .. url:slice(0, math.min(200, #url)) .. "   method :" .. sendMethod .. "  data is : " .. shortSendData)
-  self.reqTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
-  local head = nil
-  if UserInfo.isSystemNative() then
-    head = {"Content-Type", "application/json;charset=utf-8"}
-  end
-  if method:find("get") > -1 then
-    local dataStr = self:objectToUrlParam(params)
-    hr:send(url, dataStr, method, "text", head)
-  elseif method:find("post") > -1 then
-    hr:send(url, targetStrData, method, "text", head)
-  end
+  
 end
 
 function HttpMessage:turnShortLogs(targetStr)
@@ -106,141 +47,14 @@ function HttpMessage:turnShortLogs(targetStr)
 end
 
 function HttpMessage:sendOtherHttpRequest(url, params, callBack, thisObject, method, webParams, sendCount, addParams)
-  if method == nil then
-    method="get"
-  end
-  if webParams == nil then
-    webParams=nil
-  end
-  if sendCount == nil then
-    sendCount=1
-  end
-  if addParams == nil then
-    addParams=nil
-  end
-  local hr = Laya.HttpRequest()
-  hr.http.time = 60000
-  local startTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
-  local onComplete = function(data)
-    LogsManager.echo("sendOtherHttpRequest cost time:", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - startTime, "url:", url:slice(0, math.min(100, #url)))
-    if callBack then
-      doJsCallFunc(callBack,thisObject, data, addParams)
-    end
-  end
   
-  local onError = function(error)
-    if sendCount > 1 then
-      error = error:slice(0, 100)
-      LogsManager.errorTag(LogsErrorCode.ALIYUN_SENDERROR, error)
-    else
-      if webParams then
-        local callback = webParams.errorCall
-        callback and doJsCallFunc(callback,webParams.thisObj)
-      end
-    end
-  end
-  
-  hr:once(Laya.Event.COMPLETE, self, onComplete)
-  hr:once(Laya.Event.ERROR, self, onError)
-  self._currentOtherHttp = hr
-  local head = nil
-  if (not UserInfo.isWeb() and webParams) and webParams.contentType then
-    head = {"Content-Type", webParams.contentType}
-  else
-    if UserInfo.isSystemNative() then
-      head = {"Content-Type", "application/json;charset=UTF-8"}
-    end
-  end
-  if method:find("get") > -1 then
-    local dataStr = self:objectToUrlParam(params)
-    hr:send(url, dataStr, method, "text", head)
-  elseif method:find("post") > -1 then
-    hr:send(url, params, method, "text", head)
-  end
 end
 
 function HttpMessage:onHttpSuccess(data)
-  if data == nil then
-    data=nil
-  end
-  local url = self._currentConn.url
-  WaitManager.instance:remove(url)
-  if (data and type(data) == "string") and data:find("!DOCTYPE HTML") ~= -1 then
-    LogsManager.echo("url is off," .. url)
-    HttpMessage.instance:onHttpError({error={code=ErrorCode.webOffline}})
-    return
-  end
-  if not data then
-    HttpMessage.instance:onHttpError({error={code=ErrorCode.webOffline}})
-    return
-  end
-  if not data then
-    LogsManager.echo("没有返回数据")
-    HttpMessage.instance:onHttpError({error={code=ErrorCode.webOffline}})
-    return
-  end
-  local callBack = self._currentConn.callBack
-  local thisObj = self._currentConn.thisObj
-  local isOrigin = self._currentConn.webParams.isOrigin
-  local originData = data
-  if not isOrigin then
-    try_catch{
-      main = function()
-        data = TableUtils.safelyJsonParse(data)
-      end,
-      catch = function(e)
-        LogsManager.errorTag(nil, "httpError,url:", url, "backData:")
-        HttpMessage.instance:onHttpError({error={code=ErrorCode.webOffline}})
-        return
-      end
-    }
-    local platforms = data
-    local len = #platforms
-    local i = 0
-    repeat
-      if not platforms[i+1].result or platforms[i+1].error then
-        local errs = platforms[i+1].error or {code=ErrorCode.webOffline}
-        if Global.checkUserCloudStorage() then
-          self:onHttpError({error=errs})
-          return
-        end
-        ErrCodeManager.ins:setErr(errs.code)
-        return
-      end
-      i=i+1
-    until not(i < len)
-  end
-  self._currentConn = nil
-  self._reconnectCount = 0
-  local shortLogs = self:turnShortLogs(originData)
-  LogsManager.echo("http callback,url:" .. url:slice(0, math.min(200, #url)) .. " cosTime:" .. cs.GameUtils.CommonUtil.GetTimeMiniStamp() - self.reqTime, "len:", #originData, "backData:", shortLogs)
-  if callBack then
-    doJsCallFunc(callBack,thisObj, data)
-  end
-  self:doRequest()
+  
 end
 
 function HttpMessage:onHttpError(err)
-  if not self._currentConn then
-    return
-  end
-  local url = self._currentConn.url
-  WaitManager.instance:remove(url)
-  LogsManager.warn("error>>>>>", url, err.type, err)
-  self._reconnectCount=self._reconnectCount+1
-  if self._reconnectCount <= self.autoConnectCount then
-    TimerManager.instance:setTimeout(self.reSendRequest, self, 1000)
-  else
-    if self._currentConn.webParams.errorCall then
-      local coninfo = self._currentConn
-      self._currentConn = nil
-      doJsCallFunc(coninfo.webParams.errorCall,coninfo.thisObj, err)
-      self:doRequest()
-      return
-    end
-    local errorMessage = TranslateFunc.instance:getTranslate("#error110")
-    WindowManager.setPopupTip(1, errorMessage, self.reSendRequest, self)
-  end
 end
 
 function HttpMessage:reSendRequest()
