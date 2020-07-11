@@ -25,7 +25,7 @@ function LoadManager:ctor()
  
 end
 
-function LoadManager.__getters.instance()
+function LoadManager.getInstance()
   if not LoadManager._instance then
     LoadManager._instance = LoadManager.new()
   end

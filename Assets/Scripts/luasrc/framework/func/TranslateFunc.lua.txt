@@ -24,7 +24,7 @@ function TranslateFunc:ctor()
   self._allCfgs["localTranslateCommon"] = TranslateCommonConst.localTranslate
 end
 
-function TranslateFunc.__getters.instance()
+function TranslateFunc.getInstance()
   if not TranslateFunc._instance then
     TranslateFunc._instance = TranslateFunc.new()
   end

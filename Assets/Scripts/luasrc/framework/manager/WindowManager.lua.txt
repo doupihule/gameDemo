@@ -89,15 +89,15 @@ function WindowManager.SwitchUIAPI(openUINames, rootNodes, closeUINames, ...)
       uiView.mouseEnabled = false
     end
   end
-  LoadManager.instance:loadPacgeAndRes(packArr, resAll, Laya.Handler:create(WindowManager, function(openUINames, rootNodes, closeUINames, params)
-    LoadManager.instance:create(res3DAll, Laya.Handler:create(WindowManager, WindowManager.SwitchUIComplete, {openUINames, rootNodes, closeUINames, args}))
+  LoadManager.getInstance():loadPacgeAndRes(packArr, resAll, Laya.Handler:create(WindowManager, function(openUINames, rootNodes, closeUINames, params)
+    LoadManager.getInstance():create(res3DAll, Laya.Handler:create(WindowManager, WindowManager.SwitchUIComplete, {openUINames, rootNodes, closeUINames, args}))
   end
   , {openUINames, rootNodes, closeUINames, args}))
 end
 
 function WindowManager.SwitchUIComplete(openUINames, rootNodes, closeUINames, args)
   WindowManager.SwitchMaskUI(false)
-  Message.instance:send(WindowEvent.WINDOW_EVENT_SWITCHUISTART, {openUINames=openUINames, closeUINames=closeUINames})
+  Message.getInstance():send(WindowEvent.WINDOW_EVENT_SWITCHUISTART, {openUINames=openUINames, closeUINames=closeUINames})
   for index in pairs(openUINames) do
     -- [ts2lua]openUINames下标访问可能不正确
     local uiname = openUINames[index]
@@ -150,7 +150,7 @@ function WindowManager.SwitchUIComplete(openUINames, rootNodes, closeUINames, ar
     LogsManager.echo("WindowManager close  Complete:", closeUIName, "currentWindow:", WindowManager.getCurrentWindowName())
   end
   WindowManager.updateUiVisible()
-  Message.instance:send(WindowEvent.WINDOW_EVENT_SWITCHUIFIN, {openUINames=openUINames, closeUINames=closeUINames})
+  Message.getInstance():send(WindowEvent.WINDOW_EVENT_SWITCHUIFIN, {openUINames=openUINames, closeUINames=closeUINames})
 end
 
 function WindowManager.createModalView(ctn, alpha)
@@ -270,7 +270,7 @@ function WindowManager.ShowUpdateTip(text, timeout)
     timeout=1500
   end
   if WindowManager.isShowUpdateTip then
-    LoadManager.instance:load(WindowManager.getUILoadGroup(WindowCfgs.TipsUI), Laya.Handler:create(WindowManager, WindowManager.UpdateTipComplete, {{text=text, timeout=timeout}}))
+    LoadManager.getInstance():load(WindowManager.getUILoadGroup(WindowCfgs.TipsUI), Laya.Handler:create(WindowManager, WindowManager.UpdateTipComplete, {{text=text, timeout=timeout}}))
   end
 end
 
@@ -341,7 +341,7 @@ function WindowManager.OpenGuideUI(UIName, params)
   local loadRes = WindowManager.getUILoadGroup(UIName)
   if loadRes and #loadRes > 0 then
     local subPackage = WindowManager.getUIPackage(UIName)
-    LoadManager.instance:loadPacgeAndRes(subPackage, loadRes, Laya.Handler:create(WindowManager, function(UIName, params)
+    LoadManager.getInstance():loadPacgeAndRes(subPackage, loadRes, Laya.Handler:create(WindowManager, function(UIName, params)
       local res3D = WindowManager.getWindowCfgs(UIName).group3d
       if res3D == nil then
         WindowManager.GuideUIComplete(UIName, params)
@@ -409,12 +409,12 @@ function WindowManager.OpenSubGuideUI(node, UIName, params)
   local loadGroup = WindowManager.getUILoadGroup(UIName)
   if loadGroup and #loadGroup > 0 then
     local subPackage = WindowManager.getUIPackage(UIName)
-    LoadManager.instance:loadPacgeAndRes(subPackage, loadGroup, Laya.Handler:create(WindowManager, function(node, UIName, params)
+    LoadManager.getInstance():loadPacgeAndRes(subPackage, loadGroup, Laya.Handler:create(WindowManager, function(node, UIName, params)
       local res3D = WindowManager.getWindowCfgs(UIName).group3d
       if res3D == nil then
         WindowManager.SubGuideUIComplete(node, UIName, params)
       else
-        LoadManager.instance:create(res3D, Laya.Handler:create(WindowManager, WindowManager.SubGuideUIComplete, {node, UIName, params}))
+        LoadManager.getInstance():create(res3D, Laya.Handler:create(WindowManager, WindowManager.SubGuideUIComplete, {node, UIName, params}))
       end
     end
     , {node, UIName, params}))
@@ -497,8 +497,8 @@ function WindowManager.CloseLoadingUI()
 end
 
 function WindowManager.SwitchUIFromLoading(openUIName, params)
-  if LoadingUI.instance then
-    LoadingUI.instance:addProgress(100)
+  if LoadingUI.getInstance() then
+    LoadingUI.getInstance():addProgress(100)
   end
   Laya.timer:once(100, WindowManager, function()
     WindowManager.SwitchUI(openUIName, WindowCfgs.LoadingUI, params)

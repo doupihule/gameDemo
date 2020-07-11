@@ -63,7 +63,7 @@ function LogsManager.errorTag(errorId, message, ...)
   if UserInfo.isTest() then
     WindowManager.ShowTip("有错误，去看日志！")
   end
-  TimerManager.instance:add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, {concatStr, LogsManager.errorTag_gameError, 80, errorId})
+  TimerManager.getInstance():add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, {concatStr, LogsManager.errorTag_gameError, 80, errorId})
   LogsManager.insterOneLogs(concatStr)
   print(unpack(resultArr))
 end
@@ -73,7 +73,7 @@ function LogsManager.systemError(message, ...)
   local arr = resultArr:slice()
   arr:splice(0, 1)
   local concatStr = "" .. arr:join(",")
-  TimerManager.instance:add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, {concatStr, LogsManager.errorTag_sysError})
+  TimerManager.getInstance():add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, {concatStr, LogsManager.errorTag_sysError})
   LogsManager.insterOneLogs(concatStr)
   print(unpack(resultArr))
   if UserInfo.isWeb() then
@@ -208,12 +208,12 @@ function LogsManager.sendDataToAiCloud(errorStack, tag, logLength, errorId, star
   end
   local params = {id=id, game=GameConsts.gameCode, 
         platform=PackConfigManager.ins.platform.platform, 
-        time=Client.instance.serverTime, 
+        time=Client.getInstance().serverTime, 
         os=Global.getOs(), 
         device=Global.deviceModel, 
         cver=Global.client_version, 
         ver=Global.version, 
-        rid=UserModel.instance:getUserRid(), 
+        rid=UserModel.getInstance():getUserRid(), 
         error_message=message, 
         error_stack=errorStack, 
         error_type=tag, context="", 
@@ -222,7 +222,7 @@ function LogsManager.sendDataToAiCloud(errorStack, tag, logLength, errorId, star
   if sdkInfo then
     params["context"] = sdkInfo .. params["context"]
   end
-  local urlParams = HttpMessage.instance:objectToUrlParam(params)
+  local urlParams = HttpMessage.getInstance():objectToUrlParam(params)
   local url = LogsManager._aliyunLogsUrl + urlParams
   local onErrorCall = function()
     print("__onerrorCall")
@@ -234,16 +234,16 @@ function LogsManager.sendDataToAiCloud(errorStack, tag, logLength, errorId, star
   -- [ts2lua]params下标访问可能不正确
   -- [ts2lua]params下标访问可能不正确
   params["context"] = LogsManager.turnURIContent(params["context"] .. LogsManager.getNearestLogs(logLength, id, startLine, allLength))
-  local urlParams1 = HttpMessage.instance:objectToUrlParam(params)
+  local urlParams1 = HttpMessage.getInstance():objectToUrlParam(params)
   local url1 = LogsManager._aliyunLogsUrl .. urlParams1
-  HttpMessage.instance:sendOtherHttpRequest(url1, nil, nil, nil, "get", webParams, 1)
+  HttpMessage.getInstance():sendOtherHttpRequest(url1, nil, nil, nil, "get", webParams, 1)
 end
 
 function LogsManager.sendStaticToAiCloud(eventId, eventData)
   if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ALIYUN) then
     return
   end
-  local params = {game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, cver=Global.client_version, deviceId=Global.deviceId, eventId=eventId, rid=UserModel.instance:getUserRid(), device=Global.deviceModel, circleId=LogsManager.getCircleId(), t=cs.GameUtils.CommonUtil.GetTimeMiniStamp()}
+  local params = {game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, cver=Global.client_version, deviceId=Global.deviceId, eventId=eventId, rid=UserModel.getInstance():getUserRid(), device=Global.deviceModel, circleId=LogsManager.getCircleId(), t=cs.GameUtils.CommonUtil.GetTimeMiniStamp()}
   if eventData then
     -- [ts2lua]eventData下标访问可能不正确
     if eventData["sortId"] then
@@ -299,14 +299,14 @@ function LogsManager.sendStaticToAiCloud(eventId, eventData)
     -- [ts2lua]params下标访问可能不正确
     params["value"] = TableUtils.safelyJsonStringfy(eventData)
   end
-  local urlParams = HttpMessage.instance:objectToUrlParam(params)
+  local urlParams = HttpMessage.getInstance():objectToUrlParam(params)
   local url = LogsManager._aliyunStaUrl + urlParams
   local onErrorCall = function()
     print("__onerrorCall")
   end
   
   local webParams = {errorCall=onErrorCall, isOrigin=true}
-  HttpMessage.instance:sendOtherHttpRequest(url, nil, nil, nil, "get", webParams)
+  HttpMessage.getInstance():sendOtherHttpRequest(url, nil, nil, nil, "get", webParams)
 end
 
 function LogsManager.sendActiveToAiCloud(isNew)
@@ -314,14 +314,14 @@ function LogsManager.sendActiveToAiCloud(isNew)
     return
   end
   local params = {game=GameConsts.gameCode, platform=PackConfigManager.ins.platform.platform, deviceId=Global.deviceId, device=Global.deviceModel, isNew=isNew}
-  local urlParams = HttpMessage.instance:objectToUrlParam(params)
+  local urlParams = HttpMessage.getInstance():objectToUrlParam(params)
   local url = LogsManager._aliyunActiveUrl + urlParams
   local onErrorCall = function()
     print("__onerrorCall")
   end
   
   local webParams = {errorCall=onErrorCall, isOrigin=true}
-  HttpMessage.instance:sendOtherHttpRequest(url, nil, nil, nil, "get", webParams)
+  HttpMessage.getInstance():sendOtherHttpRequest(url, nil, nil, nil, "get", webParams)
 end
 
 function LogsManager.sendLoadingToAiCloud(time)
@@ -336,14 +336,14 @@ function LogsManager.sendLoadingToAiCloud(time)
     isNew=(StatisticsManager.isNewPlayer and 1 or 0}), 
     network=DeviceTools.network, time=time}
   LogsManager.echo("yrc1111 sendLoadingToAiCloud", TableUtils.safelyJsonStringfy(params))
-  local urlParams = HttpMessage.instance:objectToUrlParam(params)
+  local urlParams = HttpMessage.getInstance():objectToUrlParam(params)
   local url = LogsManager._aliyunLoadingUrl + urlParams
   local onErrorCall = function()
     print("__onerrorCall")
   end
   
   local webParams = {errorCall=onErrorCall, isOrigin=true}
-  HttpMessage.instance:sendOtherHttpRequest(url, nil, nil, nil, "get", webParams)
+  HttpMessage.getInstance():sendOtherHttpRequest(url, nil, nil, nil, "get", webParams)
 end
 
 function LogsManager.insterOneLogs(str)

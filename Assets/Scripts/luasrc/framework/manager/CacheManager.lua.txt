@@ -16,7 +16,7 @@ function CacheManager:ctor()
   self._globalCache = {}
 end
 
-function CacheManager.__getters.instance()
+function CacheManager.getInstance()
   if not CacheManager._instance then
     CacheManager._instance = CacheManager.new()
   end

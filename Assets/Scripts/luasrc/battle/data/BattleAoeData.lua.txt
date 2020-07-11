@@ -16,12 +16,12 @@ function BattleAoeData:ctor(id)
   self.intervalFrame = 0;
   self.existFrame = 0;
   self.aoeId = id
-  self.cfgData = BattleFunc.instance:getCfgDatas("AoeEffect", id)
-  self.delayFrame = BattleFunc.instance:turnMinisecondToframe(self.cfgData.delayTime)
-  self.intervalFrame = BattleFunc.instance:turnMinisecondToframe(self.cfgData.interval)
-  self.existFrame = BattleFunc.instance:turnMinisecondToframe(self.cfgData.existTime)
+  self.cfgData = BattleFunc.getInstance():getCfgDatas("AoeEffect", id)
+  self.delayFrame = BattleFunc.getInstance():turnMinisecondToframe(self.cfgData.delayTime)
+  self.intervalFrame = BattleFunc.getInstance():turnMinisecondToframe(self.cfgData.interval)
+  self.existFrame = BattleFunc.getInstance():turnMinisecondToframe(self.cfgData.existTime)
   if self.cfgData.target then
-    self.chooseTartgetCfg = BattleFunc.instance:getCfgDatas("Target", tostring(self.cfgData.target))
+    self.chooseTartgetCfg = BattleFunc.getInstance():getCfgDatas("Target", tostring(self.cfgData.target))
   end
   self.effectiveTimes = tonumber(self.cfgData.effectiveTimes)
   self._initTargtPos = VectorTools.createVector3()

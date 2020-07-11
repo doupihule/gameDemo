@@ -51,7 +51,7 @@ function BaseFunc.onConfigGroupLoadComplete()
       end
     }
   end
-  Message.instance:send(MsgCMD.LOAD_JSONCOMPLETE)
+  Message.getInstance():send(MsgCMD.LOAD_JSONCOMPLETE)
 end
 
 function BaseFunc.setCfgExportType(type)
@@ -68,7 +68,7 @@ function BaseFunc.onTranslateGroupLoadComplete()
   local translatekeyLen = #translateKey
   for path in pairs(cfgsArr) do
     if path:slice(0, translatekeyLen) == translateKey then
-      TranslateFunc.instance:insertOneCfgs(path)
+      TranslateFunc.getInstance():insertOneCfgs(path)
     end
   end
 end
@@ -121,7 +121,7 @@ function BaseFunc:ctor()
   self.hasInit = false;
   self._allCfgs = {}
   self:startLoadCfg()
-  Message.instance:add(MsgCMD.LOAD_JSONCOMPLETE, self)
+  Message.getInstance():add(MsgCMD.LOAD_JSONCOMPLETE, self)
 end
 
 function BaseFunc:startLoadCfg()
@@ -153,7 +153,7 @@ function BaseFunc:onGloablCfgLoadComplete()
       path = pathInfo.path .. "/" .. name
     end
     if pathInfo.translate or path:slice(0, translatekeyLen) == translateKey then
-      local ins = TranslateFunc.instance
+      local ins = TranslateFunc.getInstance()
       ins:insertOneCfgs(BaseFunc.turnPath(name))
       ins:insertOneCfgs(name)
     end

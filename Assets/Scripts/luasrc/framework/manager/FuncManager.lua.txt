@@ -17,7 +17,7 @@ function FuncManager.init(callback, thisobj)
     if GameUtils.isReview then
       congfigName = BaseFunc._globalConfigsReviewName
     end
-    LoadManager.instance:load({congfigName}, Laya.Handler:create(FuncManager, function()
+    LoadManager.getInstance():load({congfigName}, Laya.Handler:create(FuncManager, function()
       BaseFunc.onConfigGroupLoadComplete()
       BaseFunc.onTranslateGroupLoadComplete()
       ErrCodeManager.ins:initConfig()
@@ -30,7 +30,7 @@ function FuncManager.init(callback, thisobj)
   end
   
   if FileUtils.checkIsUseZip() then
-    LoadZipManager.instance:loadZip("json.zip", VersionManager.ZIP_MODEL_KEY_CONFIG, Laya.Handler(FuncManager, onZipComeplete), nil)
+    LoadZipManager.getInstance():loadZip("json.zip", VersionManager.ZIP_MODEL_KEY_CONFIG, Laya.Handler(FuncManager, onZipComeplete), nil)
   else
     local packName_json = SubPackageConst.packName_json
     if GameUtils.isReview then

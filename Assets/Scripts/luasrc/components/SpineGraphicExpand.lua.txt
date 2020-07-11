@@ -7,7 +7,7 @@ SpineGraphicExpand.__spineAni = nil
 --构造器函数
 function SpineGraphicExpand:ctor( url,boundlePath )
 	-- body
-	local obj =  CS.Resource.ResourceManager.Instance:luaLoadAsset(url,url,boundlePath or "animation")
+	local obj =  CS.Resource.ResourceManager.getInstance():luaLoadAsset(url,url,boundlePath or "animation")
 	self.__cobject = CS.UnityEngine.Object.Instantiate(obj)
 	self.__spineAni = self.__cobject:GetComponent("SkeletonGraphic")
 end

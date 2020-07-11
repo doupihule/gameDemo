@@ -35,7 +35,7 @@ function InstanceBullet:setData(data)
   self._followRole = nil
   self:setViewWay(1)
   self:setRotation(0)
-  self.cfgData = BattleFunc.instance:getCfgDatas("Bullet", data.id)
+  self.cfgData = BattleFunc.getInstance():getCfgDatas("Bullet", data.id)
   self.collisionType = self.cfgData.collisionRange
   self.collisionParams = self.cfgData.rangeParams
   if not self.skillActionArr then
@@ -62,7 +62,7 @@ function InstanceBullet:setOwner(owner, skillAction, rotation, targetRole)
     else
       self._repeatCheckFrame = tonumber(collisionParams[2+1])
       if self._repeatCheckFrame > 0 then
-        self._repeatCheckFrame = BattleFunc.instance:turnMinisecondToframe(self._repeatCheckFrame)
+        self._repeatCheckFrame = BattleFunc.getInstance():turnMinisecondToframe(self._repeatCheckFrame)
       end
     end
   end
@@ -298,7 +298,7 @@ function InstanceBullet:resetMoveAct(targetRole)
   local yspd = 0
   local zspd = nil
   local ang = nil
-  local spdValue = BattleFunc.instance:turnSpeedToFrame(self.cfgData.pathParams[0+1])
+  local spdValue = BattleFunc.getInstance():turnSpeedToFrame(self.cfgData.pathParams[0+1])
   local dy = targetRole.pos.y - self.pos.y + self.initOffsetY
   local dx = targetRole.pos.x - self.pos.x
   local dz = targetRole.pos.z - self.pos.z

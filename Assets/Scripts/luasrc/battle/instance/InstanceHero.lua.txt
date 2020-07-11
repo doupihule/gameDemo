@@ -106,7 +106,7 @@ function InstanceHero:onCheckGiveEnergySkill(isAuto)
     local tempArr = energySkill.tempChooseArr
     ChooseTrigger.getSkillTargetRole(self, energySkill, energySkill.chooseTartgetCfg, tempArr)
     if #tempArr == 0 then
-      WindowManager.ShowTip(TranslateFunc.instance:getTranslate("#tid_battle_emptyskill"))
+      WindowManager.ShowTip(TranslateFunc.getInstance():getTranslate("#tid_battle_emptyskill"))
       return false
     end
     if energySkill.leftSkillCd > 0 then

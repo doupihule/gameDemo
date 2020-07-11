@@ -6,7 +6,7 @@ function WhiteListFunc:ctor(...)
   self.whiteList = {};
 end
 
-function WhiteListFunc.__getters.instance()
+function WhiteListFunc.getInstance()
   if not WhiteListFunc._instance then
     WhiteListFunc._instance = WhiteListFunc.new()
   end

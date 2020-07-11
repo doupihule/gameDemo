@@ -308,9 +308,9 @@ function InstanceBasic:playSpecialSysAction(actionName, sysTime, startTime, endT
   if self._myView then
     self._myView:play(self._tempAnimObj.actionName, false, true)
   end
-  local frame = BattleFunc.instance:turnMinisecondToframe(startTime)
-  local sysFrame = BattleFunc.instance:turnMinisecondToframe(sysTime)
-  local endFrame = BattleFunc.instance:turnMinisecondToframe(endTime)
+  local frame = BattleFunc.getInstance():turnMinisecondToframe(startTime)
+  local sysFrame = BattleFunc.getInstance():turnMinisecondToframe(sysTime)
+  local endFrame = BattleFunc.getInstance():turnMinisecondToframe(endTime)
   self.controler:setCallBack(math.round(frame / aniSpeed), self.onStartActionComp, self)
   self.controler:setCallBack(math.round(frame + sysFrame / aniSpeed), self.onSysActionComp, self)
   return actionLength + sysFrame + frame - endFrame

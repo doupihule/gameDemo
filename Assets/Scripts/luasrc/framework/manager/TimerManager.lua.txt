@@ -18,7 +18,7 @@ function TimerManager:ctor()
   Laya.timer:frameLoop(1, self, self.tickHandler)
 end
 
-function TimerManager.__getters.instance()
+function TimerManager.getInstance()
   if not TimerManager._instance then
     TimerManager._instance = TimerManager.new()
   end
@@ -85,7 +85,7 @@ end
 function TimerManager:tickHandler(time)
   self:onceUpdateFrame()
   local timeEntity = nil
-  local curTime = Client.instance.miniserverTime
+  local curTime = Client.getInstance().miniserverTime
   local num = 0
   for i in pairs(self._timeMap) do
     timeEntity = self._timeMap[i]
@@ -112,7 +112,7 @@ function TimerManager:tickHandler(time)
 end
 
 function TimerManager:onceUpdateFrame()
-  local currentT = Client.instance.miniserverTime
+  local currentT = Client.getInstance().miniserverTime
   local dt = currentT - self._lastFrameTime
   if dt > self._maxFrameDt then
     dt = self._maxFrameDt
@@ -195,7 +195,7 @@ end
 function TimerManager:checkOverDay(targetTime)
   local daySecond = 3600000 * 24
   local day1 = math.floor(targetTime - TimerManager.timeOurOffset * 3600000 / daySecond)
-  local day2 = math.floor(Client.instance.miniserverTime - TimerManager.timeOurOffset * 3600000 / daySecond)
+  local day2 = math.floor(Client.getInstance().miniserverTime - TimerManager.timeOurOffset * 3600000 / daySecond)
   if day1 ~= day2 then
     return true
   end

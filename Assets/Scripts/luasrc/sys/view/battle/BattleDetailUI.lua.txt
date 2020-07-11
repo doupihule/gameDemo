@@ -71,20 +71,20 @@ function BattleDetailUI:setData(data)
     BattleFunc.curBattleType = BattleConst.BATTLETYPE_WAR
   end
   FogFunc.enemyCell = data and data.cell
-  local nextLevel = tonumber(UserModel.instance:getMaxBattleLevel()) + 1
-  if nextLevel > LevelFunc.instance:getMaxLevel() then
-    nextLevel = LevelFunc.instance:getMaxLevel()
+  local nextLevel = tonumber(UserModel.getInstance():getMaxBattleLevel()) + 1
+  if nextLevel > LevelFunc.getInstance():getMaxLevel() then
+    nextLevel = LevelFunc.getInstance():getMaxLevel()
   end
-  self.equipUnlock = GlobalParamsFunc.instance:getDataNum("equipUnlock") or 20
+  self.equipUnlock = GlobalParamsFunc.getInstance():getDataNum("equipUnlock") or 20
   self._smallMapCount = 0
   self.levelId = nextLevel
   if self.viewType == FogConst.VIEW_TYPE_BATTLE_DETAIL then
     self.levelTxt.text = "第" .. self.levelId .. "关"
-    self.desTxt.text = TranslateFunc.instance:getTranslate(BattleFunc.instance:getCfgDatasByKey("Level", self.levelId, "levelLoading"))
+    self.desTxt.text = TranslateFunc.getInstance():getTranslate(BattleFunc.getInstance():getCfgDatasByKey("Level", self.levelId, "levelLoading"))
     self.actCostGroup.visible = false
   elseif self.viewType == FogConst.VIEW_TYPE_FOG_ENEMY then
     self.levelTxt.text = FogFunc.enemyCell.eventData.enemyName
-    self.desTxt.text = TranslateFunc.instance:getTranslate(self.eventInfo.desc, "TranslateEvent")
+    self.desTxt.text = TranslateFunc.getInstance():getTranslate(self.eventInfo.desc, "TranslateEvent")
     -- [ts2lua]lua中0和空字符串也是true，此处event.mobilityCost需要确认
     self.actCost = (event.mobilityCost and {event.mobilityCost} or {0})[1]
     if self.actCost then
@@ -92,7 +92,7 @@ function BattleDetailUI:setData(data)
       self.costNum.text = "-" .. self.actCost
     end
   end
-  self.extraScale = GlobalParamsFunc.instance:getDataNum("roleSizeInPreUi") / 10000
+  self.extraScale = GlobalParamsFunc.getInstance():getDataNum("roleSizeInPreUi") / 10000
   self.heroArr = {}
   self.enemyArr = {}
   self.roleTxtArr = {}
@@ -124,13 +124,13 @@ function BattleDetailUI:setWarReward()
   FogPropTrigger.checkPropTriggerOnInstance(FogPropTrigger.Prop_type_AddMoneyPer, self)
   local enemy = FogFunc.enemyCell.eventData
   local reward = enemy.enemyData.reward
-  -- [ts2lua]DataResourceFunc.instance:getDataResourceInfo(reward)下标访问可能不正确
-  self.levelRewardImg.skin = DataResourceFunc.instance:getDataResourceInfo(reward)["img"]
-  self.levelReward.text = math.floor(reward[1+1] + reward[2+1] * FogModel.instance:getCurLayer() * self.addPercent) .. ""
+  -- [ts2lua]DataResourceFunc.getInstance():getDataResourceInfo(reward)下标访问可能不正确
+  self.levelRewardImg.skin = DataResourceFunc.getInstance():getDataResourceInfo(reward)["img"]
+  self.levelReward.text = math.floor(reward[1+1] + reward[2+1] * FogModel.getInstance():getCurLayer() * self.addPercent) .. ""
 end
 
 function BattleDetailUI:setReward()
-  local rewardList = LevelFunc.instance:getLevelInfoById(self.levelId).victoryReward
+  local rewardList = LevelFunc.getInstance():getLevelInfoById(self.levelId).victoryReward
   local coin = 0
   local gold = 0
   for index in pairs(rewardList) do
@@ -160,9 +160,9 @@ end
 function BattleDetailUI:setFogFullBtnShow()
   self.fogFullStartBtn.visible = false
   if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
-    local info = GlobalParamsFunc.instance:getDataArray("fogBattleAddtion")
-    local itemCount = FogModel.instance:getPropNum(info[0+1])
-    if itemCount > 0 or ShareOrTvManager.instance:getShareOrTvType(ShareTvOrderFunc.SHARELINE_BATTLE_START) ~= ShareOrTvManager.TYPE_QUICKRECEIVE then
+    local info = GlobalParamsFunc.getInstance():getDataArray("fogBattleAddtion")
+    local itemCount = FogModel.getInstance():getPropNum(info[0+1])
+    if itemCount > 0 or ShareOrTvManager.getInstance():getShareOrTvType(ShareTvOrderFunc.SHARELINE_BATTLE_START) ~= ShareOrTvManager.TYPE_QUICKRECEIVE then
       self.fogFullStartBtn.visible = true
     end
   end
@@ -174,15 +174,15 @@ function BattleDetailUI:showMap()
   if self.viewType == FogConst.VIEW_TYPE_FOG_ENEMY then
     if FogFunc.enemyCell then
       local event = FogFunc.enemyCell.eventData
-      mapId = FogFunc.instance:getCfgDatasByKey("Enemy", event.params[0+1], "sceneId")
+      mapId = FogFunc.getInstance():getCfgDatasByKey("Enemy", event.params[0+1], "sceneId")
     else
       LogsManager.errorTag("", "没有当前的敌人事件格子")
     end
     mapId = "1"
   else
-    mapId = BattleFunc.instance:getCfgDatasByKey("Level", self.levelId, "sceneId") or 1
+    mapId = BattleFunc.getInstance():getCfgDatasByKey("Level", self.levelId, "sceneId") or 1
   end
-  local sceneInfo = BattleFunc.instance:getCfgDatas("Scene", mapId)
+  local sceneInfo = BattleFunc.getInstance():getCfgDatas("Scene", mapId)
   local backInfo = sceneInfo.background
   local mapName = backInfo[0+1]
   self.mapName = mapName
@@ -251,7 +251,7 @@ function BattleDetailUI:showRole()
     i=i+1
   until not(i < #self.heroArr)
   self:freshSpeakInfo()
-  self.timeCode = TimerManager.instance:add(self.freshSpeakInfo, self, GlobalParamsFunc.instance:getDataNum("preSpeakInterval"))
+  self.timeCode = TimerManager.getInstance():add(self.freshSpeakInfo, self, GlobalParamsFunc.getInstance():getDataNum("preSpeakInterval"))
 end
 
 function BattleDetailUI:setRoleAni(i, x, y, viewWay, arr, txtArr, isForce)
@@ -264,18 +264,18 @@ function BattleDetailUI:setRoleAni(i, x, y, viewWay, arr, txtArr, isForce)
   self.roleCtn:addChild(role)
   local item = arr[i+1]
   local cacheItem = PoolTools.getItem(PoolCode.POOL_ROLE + item.id .. "_" .. viewWay)
-  local scale = BattleFunc.instance:getCfgDatasByKey("Role", item.id, "scale") / 10000 or 1
+  local scale = BattleFunc.getInstance():getCfgDatasByKey("Role", item.id, "scale") / 10000 or 1
   local showScale = scale * BattleFunc.defaultScale * self.extraScale
   if not cacheItem then
     if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
       isForce = false
     end
-    cacheItem = BattleFunc.instance:createRoleSpine(item.id, item.level, 2, showScale, true, isForce)
+    cacheItem = BattleFunc.getInstance():createRoleSpine(item.id, item.level, 2, showScale, true, isForce)
   else
     cacheItem:setItemViewScale(showScale)
   end
   cacheItem.scaleX = viewWay
-  local size = BattleFunc.instance:getCfgDatasByMultyKey("RoleUpdate", item.id, item.level, "size")
+  local size = BattleFunc.getInstance():getCfgDatasByMultyKey("RoleUpdate", item.id, item.level, "size")
   role:addChild(cacheItem)
   local halfWidth = size[0+1] * scale * self.extraScale / 2
   local height = size[1+1] * scale * self.extraScale
@@ -287,14 +287,14 @@ function BattleDetailUI:setRoleAni(i, x, y, viewWay, arr, txtArr, isForce)
   ctn.x = x + halfWidth * viewWay
   ctn.y = y - height
   ctn.visible = false
-  table.insert(txtArr, {ctn=ctn, speak=BattleFunc.instance:getCfgDatasByKey("Role", item.id, "preSpeak")})
+  table.insert(txtArr, {ctn=ctn, speak=BattleFunc.getInstance():getCfgDatasByKey("Role", item.id, "preSpeak")})
   table.insert(self.roleAniArr, {item=cacheItem, id=item.id, viewway=viewWay})
   if self.levelId >= self.equipUnlock then
     local star = Laya.Image()
     star.x = x - halfWidth
     star.y = y - height - 20
     self.txtCtn:addChild(star)
-    RolesFunc.instance:addStarImg(star, item.id, 20, 20, item.starLevel)
+    RolesFunc.getInstance():addStarImg(star, item.id, 20, 20, item.starLevel)
   end
 end
 
@@ -344,11 +344,11 @@ end
 
 function BattleDetailUI:setShowRole()
   if self.viewType == FogConst.VIEW_TYPE_BATTLE_DETAIL then
-    self.enemyArr = RolesFunc.instance:getLevelMonsterArr(self.levelId)
-    self.heroArr = RolesModel.instance:getInLineRole()
+    self.enemyArr = RolesFunc.getInstance():getLevelMonsterArr(self.levelId)
+    self.heroArr = RolesModel.getInstance():getInLineRole()
   elseif self.viewType == FogConst.VIEW_TYPE_FOG_ENEMY then
-    self.enemyArr = FogFunc.instance:getEnemyLine(self.enemyId, self.enemyType)
-    self.heroArr = RolesModel.instance:getFogRole()
+    self.enemyArr = FogFunc.getInstance():getEnemyLine(self.enemyId, self.enemyType)
+    self.heroArr = RolesModel.getInstance():getFogRole()
   end
   self.heroArr:splice(6, #self.heroArr - 6)
 end
@@ -368,7 +368,7 @@ function BattleDetailUI:freshSpeakInfo()
       if i == index then
         item.ctn.visible = true
         local txt = item.ctn:getChildByName("txt")
-        txt.text = TranslateFunc.instance:getTranslate(GameUtils.getRandomInArr(item.speak).result)
+        txt.text = TranslateFunc.getInstance():getTranslate(GameUtils.getRandomInArr(item.speak).result)
       else
         item.ctn.visible = false
       end
@@ -389,7 +389,7 @@ function BattleDetailUI:freshSpeakInfo()
       if i == index then
         item.ctn.visible = true
         local txt = item.ctn:getChildByName("txt")
-        txt.text = TranslateFunc.instance:getTranslate(GameUtils.getRandomInArr(item.speak).result)
+        txt.text = TranslateFunc.getInstance():getTranslate(GameUtils.getRandomInArr(item.speak).result)
       else
         item.ctn.visible = false
       end
@@ -420,8 +420,8 @@ end
 
 function BattleDetailUI:onClickStartGame()
   if self.viewType == FogConst.VIEW_TYPE_FOG_ENEMY then
-    if self.actCost > FogModel.instance:getActNum() then
-      FogModel.instance:checkFreeAct()
+    if self.actCost > FogModel.getInstance():getActNum() then
+      FogModel.getInstance():checkFreeAct()
       return
     end
     self:enterBattle()
@@ -431,7 +431,7 @@ function BattleDetailUI:onClickStartGame()
 end
 
 function BattleDetailUI:enterBattle()
-  local result = LevelFunc.instance:checkIsBattleAddtionInGame()
+  local result = LevelFunc.getInstance():checkIsBattleAddtionInGame()
   if not result[0+1] or BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
     self:dispose()
     WindowManager.SwitchUI(WindowCfgs.BattleUI, WindowCfgs.BattleDetailUI)
@@ -468,7 +468,7 @@ function BattleDetailUI:dispose()
   self:cacheRole()
   self:destoryOneLayer(self.mapInfo)
   self.mapInfo = nil
-  TimerManager.instance:remove(self.timeCode)
+  TimerManager.getInstance():remove(self.timeCode)
 end
 
 function BattleDetailUI:recvMsg(cmd, data)

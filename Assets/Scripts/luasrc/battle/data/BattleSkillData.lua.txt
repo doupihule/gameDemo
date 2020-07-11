@@ -50,17 +50,17 @@ function BattleSkillData:updateLevel(level)
   end
   self.level = level
   if self.relyonSkill then
-    self.skillPropParams = BattleFunc.instance:getCfgDatasByMultyKey("SkillUpdate", self.relyonSkill._skillId, tostring(self.relyonSkill.level), "params", true)
+    self.skillPropParams = BattleFunc.getInstance():getCfgDatasByMultyKey("SkillUpdate", self.relyonSkill._skillId, tostring(self.relyonSkill.level), "params", true)
   else
-    self.skillPropParams = BattleFunc.instance:getCfgDatasByMultyKey("SkillUpdate", self._skillId, tostring(level), "params", true)
+    self.skillPropParams = BattleFunc.getInstance():getCfgDatasByMultyKey("SkillUpdate", self._skillId, tostring(level), "params", true)
   end
   if self.skillType ~= BattleConst.skill_kind_passive then
-    self.cfgData = BattleFunc.instance:getCfgDatas("Skill", self._skillId)
+    self.cfgData = BattleFunc.getInstance():getCfgDatas("Skill", self._skillId)
     local value = self.cfgData.action and self.cfgData.action[4+1]
     if value then
-      self.skillWaitFrame = BattleFunc.instance:turnMinisecondToframe(tonumber(value))
+      self.skillWaitFrame = BattleFunc.getInstance():turnMinisecondToframe(tonumber(value))
     end
-    self.chooseTartgetCfg = BattleFunc.instance:getCfgDatas("Target", tostring(self.cfgData.target))
+    self.chooseTartgetCfg = BattleFunc.getInstance():getCfgDatas("Target", tostring(self.cfgData.target))
     if not self.skillLabel then
       if self.cfgData.action then
         self.skillLabel = TableUtils.copyOneArr(self.cfgData.action)
@@ -130,7 +130,7 @@ function BattleSkillData:getSkillValue(key, tag)
   if not self.skillPropParams then
     return tonumber(key)
   end
-  return BattleFunc.instance:getSkillValueByParams(key, self.relyonSkill and self.relyonSkill._skillId or self._skillId, self.level, self.skillPropParams, tag)
+  return BattleFunc.getInstance():getSkillValueByParams(key, self.relyonSkill and self.relyonSkill._skillId or self._skillId, self.level, self.skillPropParams, tag)
 end
 
 function BattleSkillData:dispose()

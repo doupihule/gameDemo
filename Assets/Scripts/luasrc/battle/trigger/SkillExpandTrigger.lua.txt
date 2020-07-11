@@ -52,7 +52,7 @@ end
 function SkillExpandTrigger.skillExpand_2(instance, skill, params, useArr)
   local delayTime = tonumber(params[1+1])
   if delayTime > 0 then
-    delayTime = BattleFunc.instance:turnMinisecondToframe(delayTime)
+    delayTime = BattleFunc.getInstance():turnMinisecondToframe(delayTime)
     instance.controler:setCallBack(delayTime, instance.controler.cameraControler.shakeCameraByParams, instance.controler.cameraControler, params)
   else
     instance.controler.cameraControler:shakeCameraByParams(params)
@@ -63,7 +63,7 @@ function SkillExpandTrigger.skillExpand_3(instance, skill, params, useArr)
   local sound = params[3+1]
   local delayTime = tonumber(params[1+1])
   if delayTime > 0 then
-    delayTime = BattleFunc.instance:turnMinisecondToframe(delayTime)
+    delayTime = BattleFunc.getInstance():turnMinisecondToframe(delayTime)
   end
   instance.controler:setCallBack(delayTime, instance.controler.playSoundByParams, instance.controler, params)
 end
@@ -86,7 +86,7 @@ function SkillExpandTrigger.skillExpand_5(instance, skill, params, useArr)
 end
 
 function SkillExpandTrigger.skillExpand_6(instance, skill, params, useArr)
-  if SwitchModel.instance:getSwitchByType(SwitchModel.shake_switch) then
+  if SwitchModel.getInstance():getSwitchByType(SwitchModel.shake_switch) then
     return
   end
   local shakeNums = tonumber(params[1+1])
@@ -114,7 +114,7 @@ function SkillExpandTrigger.skillExpand_7(instance, skill, params, useArr)
         tempParams[4+1] = -tonumber(tempParams[4+1])
       end
       if delayTime > 0 then
-        delayTime = BattleFunc.instance:turnMinisecondToframe(delayTime)
+        delayTime = BattleFunc.getInstance():turnMinisecondToframe(delayTime)
         targetInstance.controler:setCallBack(delayTime, instance.shakeCameraByParams, targetInstance, tempParams)
       else
         targetInstance:shakeCameraByParams(tempParams)

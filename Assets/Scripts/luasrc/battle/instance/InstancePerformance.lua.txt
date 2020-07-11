@@ -85,7 +85,7 @@ end
 
 function InstancePerformance:createShade()
   self._shade = Laya.Image()
-  local scale = BattleFunc.instance:getShadeScale(self.cfgData.size[1+1] * self.cfgScale)
+  local scale = BattleFunc.getInstance():getShadeScale(self.cfgData.size[1+1] * self.cfgScale)
   local formation = BattleRoleView.getPosArrByViewNums(self.childViewNums)
   local i = 0
   repeat
@@ -106,7 +106,7 @@ end
 
 function InstancePerformance:setViewName(value)
   self.viewName = value
-  local frameCfg = BattleFunc.instance:getCfgDatasByKey("RoleAct", value, "act")
+  local frameCfg = BattleFunc.getInstance():getCfgDatasByKey("RoleAct", value, "act")
   if not frameCfg then
     self._frameDatas = {}
     return
@@ -275,14 +275,14 @@ function InstancePerformance:onBeHitFly(params, attacker)
   if flyDisTance > maxFlyDis then
     flyDisTance = maxFlyDis
   end
-  local spdValue = BattleFunc.instance:turnSpeedToFrame(params[0+1])
+  local spdValue = BattleFunc.getInstance():turnSpeedToFrame(params[0+1])
   local moveFrame = math.ceil(dis / spdValue)
   self:initMove(spdValue * way, 0, 0, true)
   local halft = moveFrame / 2
   self.addSpeed.y = flyDisTance * 2 / halft * halft
   self:initJump(-self.addSpeed.y * halft)
-  local slideSpeed = BattleFunc.instance:turnSpeedToFrame(params[4+1]) * way
-  local addSpeed = BattleFunc.instance:turnAddSpeedToFrame(params[5+1]) * way
+  local slideSpeed = BattleFunc.getInstance():turnSpeedToFrame(params[4+1]) * way
+  local addSpeed = BattleFunc.getInstance():turnAddSpeedToFrame(params[5+1]) * way
   self.controler:setCallBack(moveFrame, self.onStartSlide, self, {slideSpeed, addSpeed}, true)
 end
 
@@ -443,9 +443,9 @@ function InstancePerformance:createSoundByParams(soundCfgs)
   local i = 0
   repeat
     local cfgs = soundCfgs[i+1]
-    local delayFrame = BattleFunc.instance:turnMinisecondToframe(cfgs[1+1])
+    local delayFrame = BattleFunc.getInstance():turnMinisecondToframe(cfgs[1+1])
     local times = tonumber(cfgs[2+1])
-    local inteval = BattleFunc.instance:turnMinisecondToframe(cfgs[3+1])
+    local inteval = BattleFunc.getInstance():turnMinisecondToframe(cfgs[3+1])
     self.controler:setLastCallBack(delayFrame, inteval, times, self.playSound, self, cfgs[0+1])
     i=i+1
   until not(i < #soundCfgs)

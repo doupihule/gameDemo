@@ -59,25 +59,25 @@ end
 
 function BattleResultUI:setData(data)
   self.addPercent = 1
-  self.type = ShareOrTvManager.instance:getShareOrTvType(ShareTvOrderFunc.SHARELINE_BATTLEWIN)
+  self.type = ShareOrTvManager.getInstance():getShareOrTvType(ShareTvOrderFunc.SHARELINE_BATTLEWIN)
   self.isWin = data.isWin
   self.levelId = data.levelId
   self.controler = data.controler
   if self.isWin then
     self.win.visible = true
     self.lose.visible = false
-    if self.type == ShareOrTvManager.TYPE_QUICKRECEIVE or UserModel.instance:getMainGuide() == 1 and UserModel.instance:getMaxBattleLevel() == 0 then
+    if self.type == ShareOrTvManager.TYPE_QUICKRECEIVE or UserModel.getInstance():getMainGuide() == 1 and UserModel.getInstance():getMaxBattleLevel() == 0 then
       self.multiReceiveBtn.visible = false
       self.receiveBtn.x = 300
     else
       self.multiReceiveBtn.visible = true
       self.receiveBtn.x = 133
-      self.receiveImg.skin = ShareOrTvManager.instance:setShareOrTvImg(ShareTvOrderFunc.SHARELINE_BATTLEWIN, ShareOrTvManager.TYPE_SHARE)
+      self.receiveImg.skin = ShareOrTvManager.getInstance():setShareOrTvImg(ShareTvOrderFunc.SHARELINE_BATTLEWIN, ShareOrTvManager.TYPE_SHARE)
     end
   else
     self.win.visible = false
     self.lose.visible = true
-    StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_FAIL, {levelId=data.levelId, time=Client.instance.serverTime - self.controler.startTime})
+    StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_FAIL, {levelId=data.levelId, time=Client.getInstance().serverTime - self.controler.startTime})
   end
   self:showWinReward()
   self:showRole()
@@ -100,11 +100,11 @@ function BattleResultUI:showFogResultReward()
     FogServer.updateFogCount({type=FogConst.FOG_COUNT_FIGHTENEMY})
     self.rewardImg.visible = true
     self:setWarReward()
-    self.battleResultCount = CacheManager.instance:getLocalCache(StorageCode.storage_fogBattleResultCount)
+    self.battleResultCount = CacheManager.getInstance():getLocalCache(StorageCode.storage_fogBattleResultCount)
     if (not self.battleResultCount or self.battleResultCount == nil) or isNaN(self.battleResultCount) then
       self.battleResultCount = 0
     end
-    local settlementDouble = GlobalParamsFunc.instance:getDataArray('fogBattleDouble')
+    local settlementDouble = GlobalParamsFunc.getInstance():getDataArray('fogBattleDouble')
     -- [ts2lua]settlementDouble下标访问可能不正确
     self.battleResultRetio = tonumber(settlementDouble[self.battleResultCount % #settlementDouble])
     StatisticsManager.ins:onEvent(StatisticsManager.FOG_BATTLE_VICTORY, {enemyId=enemy.enemyData.id})
@@ -121,25 +121,25 @@ end
 function BattleResultUI:showNormalBattleReward()
   self:setReward()
   if self.isWin then
-    self.battleResultCount = CacheManager.instance:getLocalCache(StorageCode.storage_battleResultCount)
+    self.battleResultCount = CacheManager.getInstance():getLocalCache(StorageCode.storage_battleResultCount)
     if (not self.battleResultCount or self.battleResultCount == nil) or isNaN(self.battleResultCount) then
       self.battleResultCount = 0
     end
-    local settlementDouble = GlobalParamsFunc.instance:getDataArray('settlementDouble')
+    local settlementDouble = GlobalParamsFunc.getInstance():getDataArray('settlementDouble')
     -- [ts2lua]settlementDouble下标访问可能不正确
     self.battleResultRetio = tonumber(settlementDouble[self.battleResultCount % #settlementDouble])
-    StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_VICTORY, {levelId=self.levelId, time=Client.instance.serverTime - self.controler.startTime})
+    StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_VICTORY, {levelId=self.levelId, time=Client.getInstance().serverTime - self.controler.startTime})
     StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEVICTORY_SHOW, {doubleRate=self.battleResultRetio})
     self:showGuide_201()
   else
     self.win.visible = false
     self.lose.visible = true
-    StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_FAIL, {levelId=self.levelId, time=Client.instance.serverTime - self.controler.startTime})
+    StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_FAIL, {levelId=self.levelId, time=Client.getInstance().serverTime - self.controler.startTime})
   end
 end
 
 function BattleResultUI:showGuide_201()
-  if UserModel.instance:getMainGuide() == 1 and UserModel.instance:getMaxBattleLevel() == 0 then
+  if UserModel.getInstance():getMainGuide() == 1 and UserModel.getInstance():getMaxBattleLevel() == 0 then
     GuideManager.ins:setGuideData(GuideConst.GUIDE_2_201, GuideManager.GuideType.Static, self.receiveBtn, self)
     GuideManager.ins:openGuideUI(GuideConst.GUIDE_2_201, nil, self, self.onCloseBtnClick)
     return true
@@ -155,11 +155,11 @@ function BattleResultUI:showGuide_201_finish()
 end
 
 function BattleResultUI:showGuide_401()
-  local unlock = GlobalParamsFunc.instance:getDataNum("equipUnlock")
+  local unlock = GlobalParamsFunc.getInstance():getDataNum("equipUnlock")
   if tonumber(self.levelId) < unlock then
     return
   end
-  if UserModel.instance:getMainGuide() <= 5 then
+  if UserModel.getInstance():getMainGuide() <= 5 then
     GuideManager.ins:setGuideData(GuideConst.GUIDE_4_401, GuideManager.GuideType.Static, self.pieceGroup, self)
     GuideManager.ins:openGuideUI(GuideConst.GUIDE_4_401, self.showGuide_401_finish, self, self.onCloseBtnClick)
   end
@@ -190,13 +190,13 @@ function BattleResultUI:setWarReward()
   FogPropTrigger.checkPropTriggerOnInstance(FogPropTrigger.Prop_type_AddMoneyPer, self)
   local enemy = FogFunc.enemyCell.eventData
   local reward = enemy.enemyData.reward
-  -- [ts2lua]DataResourceFunc.instance:getDataResourceInfo(reward)下标访问可能不正确
-  self.rewardImg.skin = DataResourceFunc.instance:getDataResourceInfo(reward)["img"]
-  self.rewardTxt.text = math.floor(reward[1+1] + reward[2+1] * FogModel.instance:getCurLayer() * self.addPercent) .. ""
+  -- [ts2lua]DataResourceFunc.getInstance():getDataResourceInfo(reward)下标访问可能不正确
+  self.rewardImg.skin = DataResourceFunc.getInstance():getDataResourceInfo(reward)["img"]
+  self.rewardTxt.text = math.floor(reward[1+1] + reward[2+1] * FogModel.getInstance():getCurLayer() * self.addPercent) .. ""
 end
 
 function BattleResultUI:setReward()
-  local reward = LevelFunc.instance:getLevelInfoById(self.levelId)
+  local reward = LevelFunc.getInstance():getLevelInfoById(self.levelId)
   local rewardList = nil
   if self.isWin then
     rewardList = reward.victoryReward
@@ -237,7 +237,7 @@ function BattleResultUI:setReward()
     self.rewardTxt.text = StringUtils.getCoinStr(coin .. "")
   end
   if piece then
-    self.pieceIcon.skin = RolesFunc.instance:getEquipIcon(RolesFunc.instance:getCfgDatasByKey("EquipMaterial", pieceId, "icon"))
+    self.pieceIcon.skin = RolesFunc.getInstance():getEquipIcon(RolesFunc.getInstance():getCfgDatasByKey("EquipMaterial", pieceId, "icon"))
     self.pieceCount.text = piece .. ""
     self.rewardImg.x = 219
     self.pieceGroup.visible = true
@@ -251,19 +251,19 @@ function BattleResultUI:showRole()
   local txt = nil
   if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
     if self.isWin then
-      randomArr = RolesModel.instance:getInLineRole()
+      randomArr = RolesModel.getInstance():getInLineRole()
       txt = self.heroTxt
     else
-      randomArr = RolesFunc.instance:getLevelMonsterArr(self.levelId)
+      randomArr = RolesFunc.getInstance():getLevelMonsterArr(self.levelId)
       txt = self.enemyTxt
     end
   elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
     if self.isWin then
-      randomArr = RolesModel.instance:getFogRole()
+      randomArr = RolesModel.getInstance():getFogRole()
       txt = self.heroTxt
     else
       local events = FogFunc.enemyCell.eventData
-      randomArr = FogFunc.instance:getEnemyLine(events.enemyId, events.enemyType)
+      randomArr = FogFunc.getInstance():getEnemyLine(events.enemyId, events.enemyType)
       txt = self.enemyTxt
     end
   end
@@ -285,15 +285,15 @@ function BattleResultUI:showRole()
     PoolTools.cacheItem(PoolCode.POOL_ROLE + self._lastRoleId, self.roleAnim)
   end
   local cacheItem = PoolTools.getItem(PoolCode.POOL_ROLE + id)
-  local scale = GlobalParamsFunc.instance:getDataNum("roleSizeInSettlementUi") / 10000 or 1 * BattleFunc.defaultScale
+  local scale = GlobalParamsFunc.getInstance():getDataNum("roleSizeInSettlementUi") / 10000 or 1 * BattleFunc.defaultScale
   if not cacheItem then
-    cacheItem = BattleFunc.instance:createRoleSpine(id, level, 2, scale, true, not self.win)
+    cacheItem = BattleFunc.getInstance():createRoleSpine(id, level, 2, scale, true, not self.win)
   else
     cacheItem:setItemViewScale(scale)
   end
   if not self.isWin then
     cacheItem.scaleX = -1
-    self.failTxt.text = TranslateFunc.instance:getTranslate(BattleFunc.instance:getCfgDatasByKey("Role", id, "buttonWords"))
+    self.failTxt.text = TranslateFunc.getInstance():getTranslate(BattleFunc.getInstance():getCfgDatasByKey("Role", id, "buttonWords"))
   else
     cacheItem.scaleX = 1
   end
@@ -301,7 +301,7 @@ function BattleResultUI:showRole()
   self.aniGroup:addChild(self.roleAnim)
   self.roleAnim:play("idle", true)
   self._lastRoleId = id
-  self.timeCode = RolesFunc.instance:setRoleSpeak(self._lastRoleId, RolesFunc.ROLE_SPEAK_RESULT, txt, self)
+  self.timeCode = RolesFunc.getInstance():setRoleSpeak(self._lastRoleId, RolesFunc.ROLE_SPEAK_RESULT, txt, self)
 end
 
 function BattleResultUI:onClickReturn()
@@ -310,9 +310,9 @@ end
 
 function BattleResultUI:onClickAgain()
   if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
-    local userActNum = FogModel.instance:getActNum()
+    local userActNum = FogModel.getInstance():getActNum()
     if userActNum < tonumber(FogFunc.enemyCell.eventData.mobilityCost) then
-      FogModel.instance:checkFreeAct()
+      FogModel.getInstance():checkFreeAct()
       return
     end
   elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
@@ -322,19 +322,19 @@ function BattleResultUI:onClickAgain()
     StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_START, {levelId=self.levelId, entrance="resultUI"})
   end
   BattleServer.battleResult({levelId=self.levelId, doubleRate=1}, function()
-    BattleSceneManager.instance:replayBattle()
+    BattleSceneManager.getInstance():replayBattle()
     WindowManager.CloseUI(WindowCfgs.BattleResultUI)
-    TimerManager.instance:remove(self.timeCode)
+    TimerManager.getInstance():remove(self.timeCode)
   end
   , self)
 end
 
 function BattleResultUI:showGetPower()
-  local power = UserExtModel.instance:getCurrentSp()
-  if power < GlobalParamsFunc.instance:getDataNum('levelSpCost') then
-    local freeType = ShareOrTvManager.instance:getShareOrTvType(ShareTvOrderFunc.SHARELINE_FREE_SP)
+  local power = UserExtModel.getInstance():getCurrentSp()
+  if power < GlobalParamsFunc.getInstance():getDataNum('levelSpCost') then
+    local freeType = ShareOrTvManager.getInstance():getShareOrTvType(ShareTvOrderFunc.SHARELINE_FREE_SP)
     if freeType == ShareOrTvManager.TYPE_QUICKRECEIVE then
-      WindowManager.ShowTip(TranslateFunc.instance:getTranslate("#tid_battle_noenoughsp"))
+      WindowManager.ShowTip(TranslateFunc.getInstance():getTranslate("#tid_battle_noenoughsp"))
     else
       WindowManager.OpenUI(WindowCfgs.FreeResourceUI, {type=DataResourceType.SP})
     end
@@ -344,7 +344,7 @@ function BattleResultUI:showGetPower()
 end
 
 function BattleResultUI:onCloseBtnClick()
-  if UserModel.instance:getMainGuide() == 1 and UserModel.instance:getMaxBattleLevel() == 0 then
+  if UserModel.getInstance():getMainGuide() == 1 and UserModel.getInstance():getMaxBattleLevel() == 0 then
     self:showGuide_201_finish()
   end
   BattleServer.battleResult({isWin=self.isWin, levelId=self.levelId, doubleRate=1 * self.addPercent, receiveCount=self.battleResultCount}, self.exitBattle, self)
@@ -352,7 +352,7 @@ end
 
 function BattleResultUI:onReceiveBtnClick()
   if self.type == ShareOrTvManager.TYPE_QUICKRECEIVE then
-    WindowManager.ShowTip(TranslateFunc.instance:getTranslate("#tid_ad_error"))
+    WindowManager.ShowTip(TranslateFunc.getInstance():getTranslate("#tid_ad_error"))
   else
     if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR and self.isWin then
       local enemy = FogFunc.enemyCell.eventData
@@ -360,7 +360,7 @@ function BattleResultUI:onReceiveBtnClick()
     else
       StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEVICTORY_CLICK, {doubleRate=self.battleResultRetio})
     end
-    ShareOrTvManager.instance:shareOrTv(ShareTvOrderFunc.SHARELINE_BATTLEWIN, ShareOrTvManager.TYPE_ADV, {id="1", extraData={}}, self.successCall, self.closeCall, self)
+    ShareOrTvManager.getInstance():shareOrTv(ShareTvOrderFunc.SHARELINE_BATTLEWIN, ShareOrTvManager.TYPE_ADV, {id="1", extraData={}}, self.successCall, self.closeCall, self)
   end
 end
 
@@ -389,23 +389,23 @@ function BattleResultUI:exitBattle()
   local battleUi = WindowManager.getUIByName(WindowCfgs.BattleUI)
   battleUi.visible = true
   battleUi:close()
-  BattleSceneManager.instance:exitBattle()
+  BattleSceneManager.getInstance():exitBattle()
   SoundManager.stopMusicOrSound(MusicConst.SOUND_BATTLE_BG)
   self:close()
 end
 
 function BattleResultUI:close()
-  TimerManager.instance:remove(self.timeCode)
+  TimerManager.getInstance():remove(self.timeCode)
   WindowManager.CloseUI(WindowCfgs.BattleResultUI)
   if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
     local levelId = self.controler.battleData.levelId
     WindowManager.OpenUI(WindowCfgs.GameMainUI, {fromResultLevel=levelId})
   elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
     if self.isWin then
-      Message.instance:send(FogEvent.FOGEVENT_REFRESH_COMP)
-      Message.instance:send(FogEvent.FOGEVENT_REFRESH_CELLEVENT, {cell=FogFunc.enemyCell, behind=1, type=FogEventTrigger.Event_logical_Enemy})
+      Message.getInstance():send(FogEvent.FOGEVENT_REFRESH_COMP)
+      Message.getInstance():send(FogEvent.FOGEVENT_REFRESH_CELLEVENT, {cell=FogFunc.enemyCell, behind=1, type=FogEventTrigger.Event_logical_Enemy})
     else
-      if FogModel.instance:getCountsById(FogConst.fog_battle_defeat) >= GlobalParamsFunc.instance:getDataNum("fogExitTipsTimes") then
+      if FogModel.getInstance():getCountsById(FogConst.fog_battle_defeat) >= GlobalParamsFunc.getInstance():getDataNum("fogExitTipsTimes") then
         WindowManager.OpenUI(WindowCfgs.FogTipUI, {type=FogConst.FOG_VIEW_TYPE_DEFEAT})
       end
     end

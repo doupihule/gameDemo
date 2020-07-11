@@ -18,10 +18,10 @@ function SkillActionData:ctor(id, owner, skill, delay, trigTimes, interval, resu
   self.skillEffectId = id
   self.opportunity = opportunity
   self.trigTimes = trigTimes
-  self.delay = BattleFunc.instance:turnMinisecondToframe(delay)
-  self.interval = BattleFunc.instance:turnMinisecondToframe(interval)
+  self.delay = BattleFunc.getInstance():turnMinisecondToframe(delay)
+  self.interval = BattleFunc.getInstance():turnMinisecondToframe(interval)
   self.resumeEnergy = resumeEnergy
-  self.cfgData = BattleFunc.instance:getCfgDatas("SkillEffect", id)
+  self.cfgData = BattleFunc.getInstance():getCfgDatas("SkillEffect", id)
   self.tempChooseArr = {}
   self:updateData(owner, skill, relyOnSill)
   self.condition = self.cfgData.condition
@@ -40,7 +40,7 @@ function SkillActionData:updateData(owner, skill, relyonSkill)
   if not self.cfgData.target then
     self.chooseTartgetCfg = nil
   else
-    self.chooseTartgetCfg = BattleFunc.instance:getCfgDatas("Target", tostring(self.cfgData.target))
+    self.chooseTartgetCfg = BattleFunc.getInstance():getCfgDatas("Target", tostring(self.cfgData.target))
   end
   local tempArr = self.cfgData.logicParams
   if tempArr then
@@ -73,7 +73,7 @@ function SkillActionData:updateData(owner, skill, relyonSkill)
         local temp = tempArr[i+1]
         local s = 0
         repeat
-          self.skillLogicalParams[i+1][s+1] = BattleFunc.instance:getSkillValueByParams(temp[s+1], targetSkillId, level, nil, tagStr)
+          self.skillLogicalParams[i+1][s+1] = BattleFunc.getInstance():getSkillValueByParams(temp[s+1], targetSkillId, level, nil, tagStr)
           s=s+1
         until not(s < #temp)
         i=i+1

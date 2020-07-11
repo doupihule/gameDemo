@@ -30,7 +30,7 @@ function BattleFullEnergyUI:setData(data)
   BannerAdManager.addBannerQuick(self)
   self.isEnterBattle = false
   self.normalStartBtn.visible = false
-  self.freeType = ShareOrTvManager.instance:getShareOrTvType(ShareTvOrderFunc.SHARELINE_BATTLE_START)
+  self.freeType = ShareOrTvManager.getInstance():getShareOrTvType(ShareTvOrderFunc.SHARELINE_BATTLE_START)
   if self.freeType == ShareOrTvManager.TYPE_SHARE then
     if UserInfo.isWX() then
       self.freeImg.skin = ResourceConst.ADV_PNG
@@ -43,12 +43,12 @@ function BattleFullEnergyUI:setData(data)
     StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_SHOW, {battleAddtionId=self.battleAddtionId})
   end
   self.battleAddtionId = data.battleAddtionId
-  local battleAddtionInfo = LevelFunc.instance:getBattleAddtionById(self.battleAddtionId)
-  self.rewardLab.text = TranslateFunc.instance:getTranslate(battleAddtionInfo.desc, "TranslateGlobal")
+  local battleAddtionInfo = LevelFunc.getInstance():getBattleAddtionById(self.battleAddtionId)
+  self.rewardLab.text = TranslateFunc.getInstance():getTranslate(battleAddtionInfo.desc, "TranslateGlobal")
   self.rewardImg.skin = "uisource/video/video/" .. battleAddtionInfo.addtionIcon .. ".png"
   self.detail = data.detail
-  local showTvGetShtarLateTime = GlobalParamsFunc.instance:getDataNum("showTvGetShtarLateTime")
-  TimerManager.instance:add(function()
+  local showTvGetShtarLateTime = GlobalParamsFunc.getInstance():getDataNum("showTvGetShtarLateTime")
+  TimerManager.getInstance():add(function()
     self.normalStartBtn.visible = true
   end
   , self, showTvGetShtarLateTime, 1)
@@ -67,7 +67,7 @@ function BattleFullEnergyUI:onClickFullStart()
   if self.freeType == ShareOrTvManager.TYPE_ADV then
     StatisticsManager.ins:onEvent(StatisticsManager.SHOWTV_BATTLEADDTION_CLICK, {battleAddtionId=self.battleAddtionId})
   end
-  ShareOrTvManager.instance:shareOrTv(ShareTvOrderFunc.SHARELINE_BATTLE_START, ShareOrTvManager.TYPE_ADV, {id="1", extraData={}}, self.fullStart, self.closeCall, self)
+  ShareOrTvManager.getInstance():shareOrTv(ShareTvOrderFunc.SHARELINE_BATTLE_START, ShareOrTvManager.TYPE_ADV, {id="1", extraData={}}, self.fullStart, self.closeCall, self)
 end
 
 function BattleFullEnergyUI:fullStart()

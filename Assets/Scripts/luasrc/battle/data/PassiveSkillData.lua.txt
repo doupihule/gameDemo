@@ -20,7 +20,7 @@ end
 
 function PassiveSkillData:updateLevel(level)
   PassiveSkillData.super.updateLevel(self,level)
-  self.cfgData = BattleFunc.instance:getCfgDatas("PassiveSkill", self._skillId)
+  self.cfgData = BattleFunc.getInstance():getCfgDatas("PassiveSkill", self._skillId)
   if self.cfgData.cdTime then
     self._cfgSkillCd = math.ceil(self.cfgData.cdTime * BattleFunc.miniSecondToFrame)
   end

@@ -14,13 +14,13 @@ LoginUI = class('LoginUI',ui.gameui.login.LoginUI)
 LoginUI.res = {"gameui/Login.scene"};
 function LoginUI:ctor()
   LoginUI.super.ctor(self)
-  LoginUI.instance = self
+  LoginUI.getInstance() = self
   ButtonUtils(self.loginbtn, self.onLoginClick, self)
   self.loginbtn.clickHandler = Laya.Handler:create(self, self.onLoginClick, nil, false)
 end
 
 function LoginUI:setData()
-  self._saveAccount = CacheManager.instance:getGlobalCache(StorageCode.storage_acount)
+  self._saveAccount = CacheManager.getInstance():getGlobalCache(StorageCode.storage_acount)
   if (self._saveAccount and self._saveAccount ~= "0") and #self._saveAccount > 0 then
     self.account.text = self._saveAccount
   end
@@ -35,7 +35,7 @@ function LoginUI:onLoginClick()
     return
   else
     self._saveAccount = account
-    CacheManager.instance:setGlobalCache(StorageCode.storage_acount, account)
+    CacheManager.getInstance():setGlobalCache(StorageCode.storage_acount, account)
     print("login account>>>>" .. account)
   end
   self:sendLogin(account, inviteId, shareInfo)
@@ -50,10 +50,10 @@ function LoginUI:sendLogin(account, inviteId, shareInfo)
 end
 
 function LoginUI:loginResult()
-  Client.instance:send(Method.User_login, {}, LoginUI.instance.onLoginResult, LoginUI.instance)
+  Client.getInstance():send(Method.User_login, {}, LoginUI.getInstance().onLoginResult, LoginUI.getInstance())
 end
 
 function LoginUI:onLoginResult(result)
   WindowManager.CloseUI(WindowCfgs.LoginUI)
-  MainModule.instance:onLoginResult(result)
+  MainModule.getInstance():onLoginResult(result)
 end

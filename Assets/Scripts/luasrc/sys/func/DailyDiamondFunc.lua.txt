@@ -2,7 +2,7 @@
 
 DailyDiamondFunc = class('DailyDiamondFunc',BaseFunc)
 
-function DailyDiamondFunc.__getters.instance()
+function DailyDiamondFunc.getInstance()
   if not DailyDiamondFunc._instance then
     DailyDiamondFunc._instance = DailyDiamondFunc.new()
   end

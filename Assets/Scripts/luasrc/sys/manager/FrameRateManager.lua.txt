@@ -11,7 +11,7 @@ function FrameRateManager:ctor(...)
 end
 
 function FrameRateManager:ctor() end
-function FrameRateManager.__getters.instance()
+function FrameRateManager.getInstance()
   if not FrameRateManager._instance then
     FrameRateManager._instance = FrameRateManager.new()
   end

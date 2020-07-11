@@ -78,7 +78,7 @@ function InstancePlayer:addSkillIcon()
   local i = 0
   repeat
     local item = self.skillArr[i+1]
-    local skillInfo = BattleFunc.instance:getCfgDatas("Skill", item)
+    local skillInfo = BattleFunc.getInstance():getCfgDatas("Skill", item)
     local img = Laya.Image()
     img.skin = "uisource/skill/skill/" .. skillInfo.pic .. ".png"
     img.height = 92
@@ -122,7 +122,7 @@ function InstancePlayer:onClickSkill(index)
       LogsManager.echo("使用了技能------------------")
       self:giveOutSkill(tempArr[1+1])
     else
-      WindowManager.ShowTip(TranslateFunc.instance:getTranslate("tid_battle_noAim"))
+      WindowManager.ShowTip(TranslateFunc.getInstance():getTranslate("tid_battle_noAim"))
     end
     BattleFunc.cacheOneTempArr(tempArr)
   end

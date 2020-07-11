@@ -6,7 +6,7 @@
 
 DataResourceFunc = class('DataResourceFunc',BaseFunc)
 
-function DataResourceFunc.__getters.instance()
+function DataResourceFunc.getInstance()
   if not DataResourceFunc._instance then
     DataResourceFunc._instance = DataResourceFunc.new()
   end
@@ -37,7 +37,7 @@ function DataResourceFunc:getDataResourceInfo(dataArr)
         result = {img=ResourceConst.SP_PNG, num=dataArr[1+1]}
       end,
       [DataResourceType.PIECE] = function()
-        result = {img=RolesFunc.instance:getEquipIcon(RolesFunc.instance:getCfgDatasByKey("EquipMaterial", dataArr[1+1], "icon")), id=dataArr[1+1], num=dataArr[2+1]}
+        result = {img=RolesFunc.getInstance():getEquipIcon(RolesFunc.getInstance():getCfgDatasByKey("EquipMaterial", dataArr[1+1], "icon")), id=dataArr[1+1], num=dataArr[2+1]}
       end,
       [DataResourceType.COMP] = function()
         result = {img=ResourceConst.COMP_PNG, num=dataArr[1+1]}
@@ -49,7 +49,7 @@ function DataResourceFunc:getDataResourceInfo(dataArr)
         result = {img=ResourceConst.ACT_PNG, num=dataArr[1+1]}
       end,
       [DataResourceType.FOGITEM] = function()
-        result = {img=RolesFunc.instance:getEquipIcon(RolesFunc.instance:getCfgDatasByKey("EquipMaterial", dataArr[1+1], "icon")), id=dataArr[1+1], num=dataArr[2+1]}
+        result = {img=RolesFunc.getInstance():getEquipIcon(RolesFunc.getInstance():getCfgDatasByKey("EquipMaterial", dataArr[1+1], "icon")), id=dataArr[1+1], num=dataArr[2+1]}
       end
     }
     local casef = switch[tonumber(dataArr[0+1])]

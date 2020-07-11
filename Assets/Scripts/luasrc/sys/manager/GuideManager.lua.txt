@@ -138,8 +138,8 @@ function GuideManager:getGuideData(guideId)
 end
 
 function GuideManager:isGuideFin(guideId)
-  -- [ts2lua]UserModel.instance:getSubGuide()下标访问可能不正确
-  local flag = UserModel.instance:getSubGuide()[tostring(guideId)]
+  -- [ts2lua]UserModel.getInstance():getSubGuide()下标访问可能不正确
+  local flag = UserModel.getInstance():getSubGuide()[tostring(guideId)]
   if flag then
     return true
   end
@@ -148,7 +148,7 @@ end
 
 function GuideManager:enterGuideRoom(uiName) end
 function GuideManager:checkMainGuide()
-  if UserModel.instance:getMainGuide() == 0 then
+  if UserModel.getInstance():getMainGuide() == 0 then
     return true
   end
   return false
@@ -171,7 +171,7 @@ function GuideManager:openGuideUI(id, callBack, thisObj, skipCall)
     skipCall=nil
   end
   self.nowGuideId = id
-  local guideData = GuideFunc.instance:getGuideInfo(id)
+  local guideData = GuideFunc.getInstance():getGuideInfo(id)
   Laya.timer:callLater(self, function()
     
   end

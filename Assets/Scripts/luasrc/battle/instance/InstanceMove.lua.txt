@@ -350,7 +350,7 @@ function InstanceMove:createOneEffByParam(params, isFollow, isLoop, expandParams
   params.expandParams = expandParams
   params.aniSpeed = aniSpeed
   if delayTime > 0 then
-    self.controler:setCallBack(BattleFunc.instance:turnMinisecondToframe(delayTime), self.delayCreateEffByParams, self, params)
+    self.controler:setCallBack(BattleFunc.getInstance():turnMinisecondToframe(delayTime), self.delayCreateEffByParams, self, params)
   else
     self:delayCreateEffByParams(params)
   end

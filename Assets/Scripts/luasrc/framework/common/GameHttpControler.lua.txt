@@ -57,7 +57,7 @@ function GameHttpControler:sendRequest(method, params, callback, thisObj, isWait
   if expandParams == nil then
     expandParams=nil
   end
-  self._lastSendTime = Client.instance.miniserverTime
+  self._lastSendTime = Client.getInstance().miniserverTime
   local uniuquId = self:getUniqueRequestId()
   if not expandParams then
     expandParams = self.defaultExpandParams
@@ -81,7 +81,7 @@ end
 
 function GameHttpControler:initRequest()
   if self._currentConn and self._currentConn.isWait then
-    WaitManager.instance:add(MsgCMD.ROLL_ANI)
+    WaitManager.getInstance():add(MsgCMD.ROLL_ANI)
   end
   UserInfo.platform:reRequestGlobal(self.onLoginBack, self)
 end
@@ -91,7 +91,7 @@ function GameHttpControler:onLoginBack(data)
   if self._currentConn then
     isWait = self._currentConn.isWait
     if isWait then
-      WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+      WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
     end
     LogsManager.echo("gamehttp _____resend---", self.loginToken)
     self:resendConn()
@@ -118,7 +118,7 @@ end
 
 function GameHttpControler:requestServer(con)
   if con.isWait then
-    WaitManager.instance:add(MsgCMD.ROLL_ANI)
+    WaitManager.getInstance():add(MsgCMD.ROLL_ANI)
   end
   local params = self._tempParams
   self._tempParams.reqId = nil
@@ -133,7 +133,7 @@ function GameHttpControler:requestServer(con)
   else
     url = self:getServerUrl()
   end
-  HttpMessage.instance:send(url, params, self.onHttpCallBack, self, "post", self._tempWebParams)
+  HttpMessage.getInstance():send(url, params, self.onHttpCallBack, self, "post", self._tempWebParams)
 end
 
 function GameHttpControler:onHttpCallBack(backData)
@@ -142,7 +142,7 @@ function GameHttpControler:onHttpCallBack(backData)
     return
   end
   if self._currentConn.isWait then
-    WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+    WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
   end
   local data = nil
   try_catch{
@@ -152,14 +152,14 @@ function GameHttpControler:onHttpCallBack(backData)
     catch = function(e)
       LogsManager.echo("gamehttp 返回的数据不是json,走重新登入", backData)
       self.loginToken = nil
-      WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#tid_net_error"), self.initRequest, self)
+      WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.initRequest, self)
       return
     end
   }
   if (not data or type(data) == "string") or not data[0+1] then
     self.loginToken = nil
     LogsManager.echo("gamehttp 返回的数据格式不对", backData)
-    WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#tid_net_error"), self.initRequest, self)
+    WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.initRequest, self)
     return
   end
   data = data[0+1]
@@ -168,14 +168,14 @@ function GameHttpControler:onHttpCallBack(backData)
     if errorCode == GameHttpControler.tokenErrorCode then
       self.loginToken = nil
       LogsManager.echo("gamehttp token 过期", backData)
-      WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#tid_net_error"), self.initRequest, self)
+      WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.initRequest, self)
       return
     end
-    local transLateError = TranslateFunc.instance:getTranslate("#error" .. errorCode)
+    local transLateError = TranslateFunc.getInstance():getTranslate("#error" .. errorCode)
     WindowManager.ShowTip(transLateError)
   else
     TableUtils.adjustEmptyArr(data.result)
-    Client.instance:onResult(data.result, false)
+    Client.getInstance():onResult(data.result, false)
   end
   local temp = self._currentConn
   self._currentConn = nil
@@ -211,9 +211,9 @@ function GameHttpControler:onHttpError(e)
     return
   end
   if self._currentConn.isWait then
-    WaitManager.instance:remove(MsgCMD.ROLL_ANI)
+    WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
   end
-  WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#tid_net_error"), self.resendConn, self)
+  WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.resendConn, self)
 end
 
 function GameHttpControler:resendConn()
@@ -224,7 +224,7 @@ function GameHttpControler:getUniqueRequestId(requestId)
   if requestId == nil then
     requestId=""
   end
-  local rid = UserModel.instance:getUserRid()
+  local rid = UserModel.getInstance():getUserRid()
   local timestamp = (Date()):getTime()
   return "uniqueId_" .. rid .. "_" .. timestamp .. "_" .. self._requestId
 end

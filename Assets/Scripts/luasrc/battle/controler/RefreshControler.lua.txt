@@ -40,9 +40,9 @@ end
 function RefreshControler:initWarData()
   self.battleResult = BattleConst.battleResult_none
   local event = FogFunc.enemyCell.eventData
-  local enemyInfo = FogFunc.instance:getCfgDatas("Enemy", event.params[0+1])
+  local enemyInfo = FogFunc.getInstance():getCfgDatas("Enemy", event.params[0+1])
   local ai = event.ai
-  local list = FogFunc.instance:getCfgDatasByKey("Ai", ai, "powerRange")
+  local list = FogFunc.getInstance():getCfgDatasByKey("Ai", ai, "powerRange")
   local aiList = {}
   TableUtils.deepCopy(list, aiList)
   local result = {}
@@ -51,7 +51,7 @@ function RefreshControler:initWarData()
   local enemyHomeLevel = nil
   local enemyType = event.enemyType
   if enemyType == FogConst.FOG_EVENT_ENEMY_TYPE_PLAYER then
-    role = FogModel.instance:getEnemyInfoById(event.enemyId).roles
+    role = FogModel.getInstance():getEnemyInfoById(event.enemyId).roles
     for key in pairs(role) do
       -- [ts2lua]role下标访问可能不正确
       if not role[key].inLine then
@@ -62,7 +62,7 @@ function RefreshControler:initWarData()
       end
     end
   else
-    local waveData = FogFunc.instance:getCfgDatas("NpcArray", event.enemyId)
+    local waveData = FogFunc.getInstance():getCfgDatas("NpcArray", event.enemyId)
     local waveMap = waveData.waveMap
     local i = 0
     repeat
@@ -96,7 +96,7 @@ function RefreshControler:initWarData()
     i=i+1
   until not(i < #result)
   result:sort(self.sortYouxianji)
-  local energy = math.floor(enemyInfo.energy[0+1] + FogModel.instance:getCurLayer() * enemyInfo.energy[1+1] / 10000)
+  local energy = math.floor(enemyInfo.energy[0+1] + FogModel.getInstance():getCurLayer() * enemyInfo.energy[1+1] / 10000)
   local level = nil
   local starLevel = nil
   local equip = nil
@@ -106,7 +106,7 @@ function RefreshControler:initWarData()
   do
   local curInfo = result[0+1]
   local id = curInfo[0+1]
-  roleInfo = RolesFunc.instance:getCfgDatas("Role", id)
+  roleInfo = RolesFunc.getInstance():getCfgDatas("Role", id)
   if energy < roleInfo.payEnergyNmb then
     result:splice(0, 1)
     break
@@ -163,12 +163,12 @@ end
 function RefreshControler:initData()
   self.battleResult = BattleConst.battleResult_none
   self._waveIdArr = {}
-  local homeId = GlobalParamsFunc.instance:getDataNum("bornHomeId")
+  local homeId = GlobalParamsFunc.getInstance():getDataNum("bornHomeId")
   local trueHome = homeId
   if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
-    homeId = GlobalParamsFunc.instance:getDataNum("fogHomeId")
+    homeId = GlobalParamsFunc.getInstance():getDataNum("fogHomeId")
   end
-  self.controler.myHome = self.controler:createHome(homeId, {level=RolesModel.instance:getRoleLevelById(trueHome)}, BattleConst.LIFE_JIDI, BattleConst.ROLEGROUP_MYSELF)
+  self.controler.myHome = self.controler:createHome(homeId, {level=RolesModel.getInstance():getRoleLevelById(trueHome)}, BattleConst.LIFE_JIDI, BattleConst.ROLEGROUP_MYSELF)
   if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
     self:initNormalData()
   elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
@@ -187,7 +187,7 @@ function RefreshControler:enterTargetWave(waveIndex)
   self.currentWave = waveIndex
   -- [ts2lua]self._waveIdArr下标访问可能不正确
   local waveInfo = self._waveIdArr[waveIndex - 1]:split(",")
-  local enterTime = BattleFunc.instance:turnMinisecondToframe(waveInfo[1+1])
+  local enterTime = BattleFunc.getInstance():turnMinisecondToframe(waveInfo[1+1])
   self.controler:setCallBack(enterTime, self.enterWave, self, waveInfo[0+1])
   BattleLogsManager.battleEcho("进入波次:", waveIndex, "延迟", waveInfo[1+1])
   ConditionTrigger.onOpportunityByArr(ConditionTrigger.opportunity_startBattle, self.controler.campArr_2)
@@ -197,7 +197,7 @@ function RefreshControler:enterTargetWave(waveIndex)
 end
 
 function RefreshControler:enterWave(waveId)
-  local monsterArr = BattleFunc.instance:getCfgDatasByKey("LevelWave", waveId, "waveMap")
+  local monsterArr = BattleFunc.getInstance():getCfgDatasByKey("LevelWave", waveId, "waveMap")
   if self.controler.gameMode == BattleConst.battle_game_mode_auto then
     self.leftFrame = BattleFunc.waveMaxFrame
   else
@@ -213,7 +213,7 @@ function RefreshControler:enterWave(waveId)
     showTime = showTime + tonumber(info[1+1])
     local level = tonumber(info[2+1])
     local starLevel = tonumber(info[3+1]) or 0
-    local roleInfo = BattleFunc.instance:getCfgDatas("Role", id)
+    local roleInfo = BattleFunc.getInstance():getCfgDatas("Role", id)
     local num = roleInfo.heroNub or 1
     local datas = {waveAllEnemy=#monsterArr - 1, index=i, id=id, data={level=level, starLevel=starLevel}, lifeType=roleInfo.kind, camp=BattleConst.ROLEGROUP_ENEMY}
     if info[4+1] then
@@ -235,7 +235,7 @@ function RefreshControler:enterWave(waveId)
         -- [ts2lua]itemData下标访问可能不正确
         itemData["offestX"] = roleInfo.startSite[j+1]
       end
-      self.controler:setCallBack(BattleFunc.instance:turnMinisecondToframe(showTime), self.initWaveEnemy, self, itemData)
+      self.controler:setCallBack(BattleFunc.getInstance():turnMinisecondToframe(showTime), self.initWaveEnemy, self, itemData)
       j=j+1
     until not(j < num)
     i=i+1
@@ -258,7 +258,7 @@ end
 
 function RefreshControler:initLevelData(level)
   self.level = tonumber(level)
-  local levelInfo = BattleFunc.instance:getCfgDatas("Level", tostring(level))
+  local levelInfo = BattleFunc.getInstance():getCfgDatas("Level", tostring(level))
   self._waveIdArr = levelInfo.levelWave
   -- [ts2lua]修改数组长度需要手动处理。
   self.maxWave = self._waveIdArr.length
@@ -367,6 +367,6 @@ end
 function RefreshControler:setFormationWeight(formation, changeValue) end
 function RefreshControler:recvMsg(msg, data) end
 function RefreshControler:dispose()
-  Message.instance:removeObjEvents(self)
+  Message.getInstance():removeObjEvents(self)
   self.controler = nil
 end

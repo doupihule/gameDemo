@@ -46,7 +46,7 @@ function GamePlatform:initPlatform() end
 function GamePlatform:reqServerList(callBack, thisObject)
   local params = {method=251, params={loginToken=self.loginToken}}
   local url = Global.global_url .. '&ver=' .. Global.version
-  HttpMessage.instance:send(url, TableUtils.safelyJsonStringfy(params), function(data)
+  HttpMessage.getInstance():send(url, TableUtils.safelyJsonStringfy(params), function(data)
     local secList = data[0+1].result.data.secList
     local len = #secList
     local pData = nil
@@ -76,7 +76,7 @@ function GamePlatform:reqVMS()
     self:checkVersion()
   else
     local url = PackConfigManager.ins.platform.vms_url .. '?mod=vms&r=gameApi/getOnlineVersion&upgrade_path=' .. PackConfigManager.ins.platform.upgrade_path
-    HttpMessage.instance:send(url, nil, self.checkVMSBack, self)
+    HttpMessage.getInstance():send(url, nil, self.checkVMSBack, self)
   end
 end
 
@@ -91,7 +91,7 @@ end
 
 function GamePlatform:checkVersion()
   local url = PackConfigManager.ins.platform.vms_url .. '?mod=vms&r=gameApi/checkVersion&ver=' .. PackConfigManager.ins.platform.vms_version
-  HttpMessage.instance:send(url, nil, self.checkVersionCallback, self)
+  HttpMessage.getInstance():send(url, nil, self.checkVersionCallback, self)
 end
 
 function GamePlatform:checkVersionCallback(result)
@@ -125,7 +125,7 @@ end
 
 function GamePlatform:addUpdateListener()
   self:getNetwork()
-  MainModule.instance:checkSystem()
+  MainModule.getInstance():checkSystem()
 end
 
 function GamePlatform:reqGlobal(params, isInit)
@@ -143,7 +143,7 @@ function GamePlatform:reqGlobal(params, isInit)
   local onHttpErrorBack = function(data)
     if Global.checkUserCloudStorage() then
       if self._reLoginBackParams then
-        WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("tid_net_error"), self.getWxInfo, self)
+        WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("tid_net_error"), self.getWxInfo, self)
       else
         self:doSingleErrorBack()
       end
@@ -190,7 +190,7 @@ function GamePlatform:reqGlobal(params, isInit)
     end
     self.loginToken = data.loginToken
     if Global.checkUserCloudStorage() then
-      GameHttpControler.instance.loginToken = data.loginToken
+      GameHttpControler.getInstance().loginToken = data.loginToken
       self:doSingleGlobalBack(currPlatform.result.data)
       return
     end
@@ -215,7 +215,7 @@ function GamePlatform:reqGlobal(params, isInit)
     until not(i < len)
     if not pData then
       LogsManager.errorTag("globalServerError", "global请求异常")
-      WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#tid_net_error"), self.onGlobalError, self)
+      WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.onGlobalError, self)
       return
     end
     PackConfigManager.ins.platform = pData
@@ -233,11 +233,11 @@ function GamePlatform:reqGlobal(params, isInit)
   -- [ts2lua]params下标访问可能不正确
   -- [ts2lua]params["params"]下标访问可能不正确
   params["params"]["deviceId"] = Global.deviceId
-  HttpMessage.instance:send(url, params, httpBackFunc, self, "post", webParams)
+  HttpMessage.getInstance():send(url, params, httpBackFunc, self, "post", webParams)
 end
 
 function GamePlatform:onReLoginBack(data)
-  GameHttpControler.instance.loginToken = data and data.loginToken
+  GameHttpControler.getInstance().loginToken = data and data.loginToken
   LogsManager.echo("data.loginToken", data.loginToken)
   local params = self._reLoginBackParams
   self._reLoginBackParams = nil
@@ -252,7 +252,7 @@ function GamePlatform:getLoginResult() end
 function GamePlatform:sendKakuraInit()
   if Global.checkUserCloudStorage() then
     if self.platformUserInfo then
-      local userData = UserModel.instance:getData()
+      local userData = UserModel.getInstance():getData()
       if self.platformUserInfo.name then
         userData.name = self.platformUserInfo.name
         userData.userInfo = self.platformUserInfo
@@ -262,7 +262,7 @@ function GamePlatform:sendKakuraInit()
     return
   end
   local myThis = self
-  Client.instance:sendInit(myThis.loginToken, myThis.platformUserInfo, MainModule.instance.loginResult, MainModule.instance, myThis.inviteBy, myThis.shareInfo)
+  Client.getInstance():sendInit(myThis.loginToken, myThis.platformUserInfo, MainModule.getInstance().loginResult, MainModule.getInstance(), myThis.inviteBy, myThis.shareInfo)
 end
 
 function GamePlatform:reRequestGlobal(callBack, thisObj)
@@ -307,10 +307,10 @@ function GamePlatform:doSingleGlobalBack(data, isError)
     Global.global_url = data.lvsUrl
   end
   self:doCoverVersion(data.onlineVersion)
-  local isFirstLogin = Client.instance.globalLoginBackData == nil
+  local isFirstLogin = Client.getInstance().globalLoginBackData == nil
   local resultData = data
-  Client.instance.hasLoginComplete = not isError
-  Client.instance.globalLoginBackData = resultData
+  Client.getInstance().hasLoginComplete = not isError
+  Client.getInstance().globalLoginBackData = resultData
   if resultData.channelUserId then
     UserInfo.channelUserId = resultData.channelUserId
   end
@@ -326,13 +326,13 @@ function GamePlatform:doSingleGlobalBack(data, isError)
     self:addUpdateListener()
   else
     if not isError then
-      local userdata = UserModel.instance:getData()
+      local userdata = UserModel.getInstance():getData()
       if userdata then
         userdata.uid = data.uid
         userdata._id = data.uid
       end
     end
-    Client.instance:onReloginBack(data, isError)
+    Client.getInstance():onReloginBack(data, isError)
   end
 end
 
@@ -350,7 +350,7 @@ function GamePlatform:compareData(data)
   if not Global.checkUserCloudStorage() then
     return
   end
-  local localData = CacheManager.instance:getGlobalCache(StorageCode.storage_userinfo)
+  local localData = CacheManager.getInstance():getGlobalCache(StorageCode.storage_userinfo)
   if not localData or localData == "0" then
     if self:checkHasUserData(data.user) then
       localData = data.user
@@ -377,7 +377,7 @@ function GamePlatform:compareData(data)
     local deleteData = TableUtils.findNullKey(userData, {})
     if not TableUtils.isEmptyTable(deleteData) then
       local params = {clientDirty={u={}, d=deleteData}}
-      Client.instance:send("349", params, nil, nil)
+      Client.getInstance():send("349", params, nil, nil)
       LogsManager.errorTag("dataNullValue", "玩家数据有空字段," .. TableUtils.safelyJsonStringfy(deleteData))
     end
   else
@@ -453,7 +453,7 @@ function GamePlatform:createSpeLoginBtn(posX, posY, btnW, btnH, callBack, thisOb
   end
   
   LogsManager.echo("xd 没有授权系统,直接2秒后授权成功")
-  TimerManager.instance:add(tempFunc, self, 2000, 1)
+  TimerManager.getInstance():add(tempFunc, self, 2000, 1)
 end
 
 function GamePlatform:setSystemInfo() end
@@ -604,7 +604,7 @@ function GamePlatform:initChannelUserId(cuid)
     return
   end
   self.channelUserId = cuid
-  CacheManager.instance:setRid(cuid)
+  CacheManager.getInstance():setRid(cuid)
 end
 
 function GamePlatform:getUserInfoAndReq() end
@@ -651,7 +651,7 @@ end
 
 function GamePlatform:turnChannelUserInfo(userInfo)
   self.platformUserInfo = {name=userInfo.nickName, headImage=userInfo.avatarUrl, sex=userInfo.gender, province=userInfo.province, city=userInfo.city, country=userInfo.country}
-  local userData = UserModel.instance:getData()
+  local userData = UserModel.getInstance():getData()
   if self.platformUserInfo.name then
     userData.name = self.platformUserInfo.name
     userData.userInfo = self.platformUserInfo
@@ -717,12 +717,12 @@ end
 function GamePlatform:jumpToMiniProgram(data) end
 function GamePlatform:initPhysics3D(message)
   if not GameConsts.isUsePhysics then
-    MainModule.instance:changeShowMainTask(-1, MainModule.task_subpackage, "not use physics")
+    MainModule.getInstance():changeShowMainTask(-1, MainModule.task_subpackage, "not use physics")
     return
   end
   -- [ts2lua]window下标访问可能不正确
   if window["Physics3D"] then
-    MainModule.instance:changeShowMainTask(-1, MainModule.task_subpackage, "has use physics")
+    MainModule.getInstance():changeShowMainTask(-1, MainModule.task_subpackage, "has use physics")
     return
   end
   LogsManager.echo("_startInitPhysics3d--")
@@ -736,7 +736,7 @@ function GamePlatform:initPhysics3D(message)
       LogsManager.echo("Physics3D is not init")
       return
     end
-    TimerManager.instance:remove(code)
+    TimerManager.getInstance():remove(code)
     -- [ts2lua]Laya3D下标访问可能不正确
     Laya3D["_enbalePhysics"] = true
     physics3D(GameConsts.defaultPhysicsMemory * 1024 * 1024):tsvar_then(function()
@@ -749,12 +749,12 @@ function GamePlatform:initPhysics3D(message)
         LogsManager.errorTag("physics", "全局没有找到物理库对象")
       end
       LogsManager.echo("xd 物理引擎初始化完毕")
-      MainModule.instance:changeShowMainTask(-1, MainModule.task_subpackage, message)
+      MainModule.getInstance():changeShowMainTask(-1, MainModule.task_subpackage, message)
     end
     )
   end
   
-  code = TimerManager.instance:add(tempFunc, self, 10, 9999, false)
+  code = TimerManager.getInstance():add(tempFunc, self, 10, 9999, false)
   tempFunc()
 end
 
@@ -806,12 +806,12 @@ function GamePlatform:canUseJump()
       LogsManager.echo('hlx 头条互推禁用：IOS不支持头条互推')
       return false
     end
-    if #JumpFunc.instance:getJumpList() == 0 then
+    if #JumpFunc.getInstance():getJumpList() == 0 then
       LogsManager.warn("hlx 头条互推禁用 互推Jump表未配置，请联系管理员配置")
       return false
     end
   elseif UserInfo.isBaidu() then
-    if #JumpFunc.instance:getJumpList() == 0 then
+    if #JumpFunc.getInstance():getJumpList() == 0 then
       LogsManager.warn("hlx 百度互推禁用 互推Jump表未配置，请联系管理员配置")
       return false
     end
@@ -1009,7 +1009,7 @@ function GamePlatform:initCityName()
     LogsManager.echo("hlx clientInfo已经初始化完毕，无需重复初始化", TableUtils.safelyJsonStringfy(self.cityName))
   else
     local url = "https://pv.sohu.com/cityjson?ie=utf-8"
-    HttpMessage.instance:sendOtherHttpRequest(url, nil, self.initCityNameCallBack, self, "get", {errorCall=self.initCityNameErrorCallBack, contentType="application/json"})
+    HttpMessage.getInstance():sendOtherHttpRequest(url, nil, self.initCityNameCallBack, self, "get", {errorCall=self.initCityNameErrorCallBack, contentType="application/json"})
   end
   return
 end
@@ -1022,7 +1022,7 @@ function GamePlatform:initCityNameErrorCallBack(error)
 end
 
 function GamePlatform:isAuthorized()
-  local data = UserModel.instance:getData()
+  local data = UserModel.getInstance():getData()
   local uInfo = data.userInfo
   if uInfo and uInfo.name then
     if UserInfo.isWX() then
@@ -1048,7 +1048,7 @@ function GamePlatform:onGetFocus()
   LogsManager.echo("获取焦点")
   self.isHide = false
   self.showT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
-  Message.instance:send(MsgCMD.GAME_ONSHOW)
+  Message.getInstance():send(MsgCMD.GAME_ONSHOW)
   StatisticsManager.ins:onEvent(StatisticsCommonConst.ON_SHOW)
   StatisticsManager.addLoadingOutTime(self.showT - self.hideT)
 end
@@ -1057,7 +1057,7 @@ function GamePlatform:onLoseFocus()
   self.isHide = true
   self.hideT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
   LogsManager.echo('>>OnHide成功回调', self.hideT)
-  Message.instance:send(MsgCMD.GAME_ONHIDE)
+  Message.getInstance():send(MsgCMD.GAME_ONHIDE)
   StatisticsManager.ins:onEvent(StatisticsCommonConst.ON_HIDE, {onlineTime=self.hideT - self.showT, hideView=GameUtils.decryptStr(WindowManager.getCurrentWindowName())})
 end
 

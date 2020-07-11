@@ -4,11 +4,11 @@ function UserExtModel:ctor()
   UserExtModel.super.ctor(self)
   self.curSp = 0;
   self.upSpTime = 0;
-  Message.instance:add(MsgCMD.GAME_ONHIDE, self)
-  Message.instance:add(MsgCMD.GAME_ONSHOW, self)
+  Message.getInstance():add(MsgCMD.GAME_ONHIDE, self)
+  Message.getInstance():add(MsgCMD.GAME_ONSHOW, self)
 end
 
-function UserExtModel.__getters.instance()
+function UserExtModel.getInstance()
   if not UserExtModel._instance then
     UserExtModel._instance = UserExtModel.new()
   end
@@ -22,10 +22,10 @@ end
 function UserExtModel:updateData(d)
   UserExtModel.super.updateData(self,d)
   if ((d.sp or d.sp == 0) or d.upSpTime) or d.upSpTime == 0 then
-    Message.instance:send(UserEvent.USER_SP_CHANGE)
+    Message.getInstance():send(UserEvent.USER_SP_CHANGE)
   end
   if d.maxStage or d.maxStage == 0 then
-    Message.instance:send(GameMainEvent.GAMEMAIN_EVENT_STAGE)
+    Message.getInstance():send(GameMainEvent.GAMEMAIN_EVENT_STAGE)
   end
 end
 
@@ -74,10 +74,10 @@ function UserExtModel:getIsShowGiftInGame()
     return false
   end
   local level = self:getMaxLevel()
-  if level < GlobalParamsFunc.instance:getDataNum("secretBagStartPVP") then
+  if level < GlobalParamsFunc.getInstance():getDataNum("secretBagStartPVP") then
     return false
   end
-  local rate = GlobalParamsFunc.instance:getDataByTwoId("secretBagTouchRound", "arr")
+  local rate = GlobalParamsFunc.getInstance():getDataByTwoId("secretBagTouchRound", "arr")
   local num = rate[0+1]:split(",")
   local winTimes = self._data.playCount or 0
   if winTimes == 0 then
@@ -121,14 +121,14 @@ end
 
 function UserExtModel:getLastFreshPower()
   if not self._data.sp and self._data.sp ~= 0 then
-    self._data.sp = GlobalParamsFunc.instance:getDataNum('bornSp')
+    self._data.sp = GlobalParamsFunc.getInstance():getDataNum('bornSp')
   end
   return self._data.sp or 0
 end
 
 function UserExtModel:getLastPowerFreshTime()
   if not self._data.upSpTime then
-    self._data.upSpTime = Client.instance.serverTime
+    self._data.upSpTime = Client.getInstance().serverTime
   end
   return self._data.upSpTime
 end
@@ -152,22 +152,22 @@ function UserExtModel:changeSp(num, islose)
 end
 
 function UserExtModel:calcSp()
-  local recoveTime = GlobalParamsFunc.instance:getDataNum('spRestoreTime')
-  local max = GlobalParamsFunc.instance:getDataNum('maxSp')
+  local recoveTime = GlobalParamsFunc.getInstance():getDataNum('spRestoreTime')
+  local max = GlobalParamsFunc.getInstance():getDataNum('maxSp')
   if self.curSp < max then
-    local times = math.floor(Client.instance.serverTime - self.upSpTime / recoveTime)
+    local times = math.floor(Client.getInstance().serverTime - self.upSpTime / recoveTime)
     if times <= 0 then
       return
     end
     if self.curSp + times > max then
       self.curSp = max
-      self.upSpTime = Client.instance.serverTime
+      self.upSpTime = Client.getInstance().serverTime
     else
       self.curSp = self.curSp + times
       self.upSpTime = self.upSpTime + times * recoveTime
     end
   else
-    self.upSpTime = Client.instance.serverTime
+    self.upSpTime = Client.getInstance().serverTime
   end
 end
 
@@ -180,14 +180,14 @@ function UserExtModel:getUpTime()
 end
 
 function UserExtModel:getNextPowerRestoreTime()
-  return GlobalParamsFunc.instance:getDataNum('spRestoreTime') - math.floor(Client.instance.serverTime - UserExtModel.instance:getLastPowerFreshTime() % GlobalParamsFunc.instance:getDataNum('spRestoreTime'))
+  return GlobalParamsFunc.getInstance():getDataNum('spRestoreTime') - math.floor(Client.getInstance().serverTime - UserExtModel.getInstance():getLastPowerFreshTime() % GlobalParamsFunc.getInstance():getDataNum('spRestoreTime'))
 end
 
 function UserExtModel:getCurrentSp()
-  local maxSp = GlobalParamsFunc.instance:getDataNum('maxSp')
-  local nowPower = UserExtModel.instance:getLastFreshPower() + math.floor(Client.instance.serverTime - UserExtModel.instance:getLastPowerFreshTime() / GlobalParamsFunc.instance:getDataNum('spRestoreTime'))
-  if UserExtModel.instance:getLastFreshPower() > maxSp then
-    nowPower = UserExtModel.instance:getLastFreshPower()
+  local maxSp = GlobalParamsFunc.getInstance():getDataNum('maxSp')
+  local nowPower = UserExtModel.getInstance():getLastFreshPower() + math.floor(Client.getInstance().serverTime - UserExtModel.getInstance():getLastPowerFreshTime() / GlobalParamsFunc.getInstance():getDataNum('spRestoreTime'))
+  if UserExtModel.getInstance():getLastFreshPower() > maxSp then
+    nowPower = UserExtModel.getInstance():getLastFreshPower()
   elseif nowPower > maxSp then
     nowPower = maxSp
   end
@@ -203,11 +203,11 @@ function UserExtModel:getTalentFreeUpgradeCount()
 end
 
 function UserExtModel:getIsFreeUpgradeTalentInGame()
-  local talentUpgradeNum = UserExtModel.instance:getTalentSkillUpgradeNum()
-  if talentUpgradeNum < GlobalParamsFunc.instance:getDataNum("talentVideoLevelUpOpenNub") then
+  local talentUpgradeNum = UserExtModel.getInstance():getTalentSkillUpgradeNum()
+  if talentUpgradeNum < GlobalParamsFunc.getInstance():getDataNum("talentVideoLevelUpOpenNub") then
     return false
   end
-  local rate = GlobalParamsFunc.instance:getDataByTwoId("talentVideoLevelUpShowInterval", "arr")[0+1]:split(",")
+  local rate = GlobalParamsFunc.getInstance():getDataByTwoId("talentVideoLevelUpShowInterval", "arr")[0+1]:split(",")
   local freeUpgradeCount = self:getTalentFreeUpgradeCount()
   if freeUpgradeCount <= tonumber(rate[1+1]) then
     return true
@@ -224,15 +224,15 @@ function UserExtModel:getLoginTime()
 end
 
 function UserExtModel:getLastOfflineTime()
-  return self._data.lastOfflineTime or UserModel.instance:getLastSendTime()
+  return self._data.lastOfflineTime or UserModel.getInstance():getLastSendTime()
 end
 
 function UserExtModel:calcuOfflineReward()
-  local levelInfo = LevelFunc.instance:getLevelInfoById(UserExtModel.instance:getMaxLevel()).offLineGiveGold[0+1]
-  local talentBuff = TalentSkillsModel.instance:getBuff()
-  local offlineTime = UserExtModel.instance:getOfflineTime()
-  offlineTime = math.min(GlobalParamsFunc.instance:getDataNum('offLineMaxTime'), offlineTime)
-  local goldTime = math.ceil(offlineTime / GlobalParamsFunc.instance:getDataNum('offLineMinutesNub'))
+  local levelInfo = LevelFunc.getInstance():getLevelInfoById(UserExtModel.getInstance():getMaxLevel()).offLineGiveGold[0+1]
+  local talentBuff = TalentSkillsModel.getInstance():getBuff()
+  local offlineTime = UserExtModel.getInstance():getOfflineTime()
+  offlineTime = math.min(GlobalParamsFunc.getInstance():getDataNum('offLineMaxTime'), offlineTime)
+  local goldTime = math.ceil(offlineTime / GlobalParamsFunc.getInstance():getDataNum('offLineMinutesNub'))
   local reward = levelInfo:split(',')
   return {reward[0+1], math.round(reward[1+1] * goldTime * 10000 / 10000)}
 end
@@ -255,10 +255,10 @@ end
 
 function UserExtModel:checkIsTurnableShow()
   local isShow = false
-  local luckyPlateLevel = GlobalParamsFunc.instance:getDataNum("luckyPlateLevel")
-  local curMaxLevel = UserExtModel.instance:getMaxLevel()
+  local luckyPlateLevel = GlobalParamsFunc.getInstance():getDataNum("luckyPlateLevel")
+  local curMaxLevel = UserExtModel.getInstance():getMaxLevel()
   if tonumber(curMaxLevel) + 1 >= luckyPlateLevel then
-    local freeType = ShareOrTvManager.instance:getShareOrTvType(ShareTvOrderFunc.SHARELINE_TURNABLE)
+    local freeType = ShareOrTvManager.getInstance():getShareOrTvType(ShareTvOrderFunc.SHARELINE_TURNABLE)
     if freeType ~= ShareOrTvManager.TYPE_QUICKRECEIVE then
       isShow = true
     end

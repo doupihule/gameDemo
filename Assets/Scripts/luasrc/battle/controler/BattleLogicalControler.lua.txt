@@ -54,7 +54,7 @@ function BattleLogicalControler:ctor(ctn, ui, gameMode)
   self.gameMode = gameMode
   self.isGameOver = false
   BuffTrigger.init()
-  Message.instance:add(BattleEvent.BATTLEEVENT_CONTINUE_BATTLE, self)
+  Message.getInstance():add(BattleEvent.BATTLEEVENT_CONTINUE_BATTLE, self)
   self.campArr_1 = {}
   self.campArr_2 = {}
   self.diedArr_1 = {}
@@ -80,7 +80,7 @@ function BattleLogicalControler:setData(data)
   self.frontPos2 = 0
   self._isGamePause = false
   self.tweenControler:setData()
-  self.startTime = Client.instance.serverTime
+  self.startTime = Client.getInstance().serverTime
   if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
     self:setNormalMap()
   elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
@@ -90,7 +90,7 @@ function BattleLogicalControler:setData(data)
 end
 
 function BattleLogicalControler:setNormalMap()
-  self.levelCfgData = LevelFunc.instance:getLevelInfoById(self.battleData.levelId)
+  self.levelCfgData = LevelFunc.getInstance():getLevelInfoById(self.battleData.levelId)
   self.mapControler:setData(self.levelCfgData.sceneId or "1")
 end
 
@@ -98,7 +98,7 @@ function BattleLogicalControler:setWarMap()
   local mapId = nil
   if FogFunc.enemyCell then
     local event = FogFunc.enemyCell.eventData
-    mapId = FogFunc.instance:getCfgDatasByKey("Enemy", event.params[0+1], "sceneId")
+    mapId = FogFunc.getInstance():getCfgDatasByKey("Enemy", event.params[0+1], "sceneId")
   else
     LogsManager.errorTag("", "没有当前的敌人事件格子")
   end
@@ -108,7 +108,7 @@ end
 function BattleLogicalControler:initGame()
   self.cameraControler:setData()
   self.refreshControler:initData()
-  Message.instance:send(BattleEvent.BATTLEEVENT_BATTLESTART)
+  Message.getInstance():send(BattleEvent.BATTLEEVENT_BATTLESTART)
   Laya.timer:frameLoop(1, self, self.onceUpdateFrame)
 end
 
@@ -210,7 +210,7 @@ function BattleLogicalControler:createBullet(id, owner, skillAction, x, y, rotat
     offz=0
   end
   local cacheId = PoolCode.POOL_BUTTLE + id
-  local resname = BattleFunc.instance:getCfgDatasByKey("Bullet", id, "model", true)
+  local resname = BattleFunc.getInstance():getCfgDatasByKey("Bullet", id, "model", true)
   local data = {id=id}
   local cacheItem = self:createInstance(data, cacheId, BattleConst.model_bullet, InstanceBullet, resname, x, y, owner.pos.z + offz, BattleFunc.defaultScale * owner.cfgScale)
   cacheItem:setOwner(owner, skillAction, rotation, targetRole)
@@ -237,7 +237,7 @@ function BattleLogicalControler:createRole(id, data, lifeType, camp, offestX, of
   end
   local modelName = nil
   local classObj = nil
-  local cfgs = BattleFunc.instance:getCfgDatas("Role", id)
+  local cfgs = BattleFunc.getInstance():getCfgDatas("Role", id)
   if camp == BattleConst.ROLEGROUP_MYSELF then
     modelName = BattleConst.model_role
     classObj = InstanceHero
@@ -274,7 +274,7 @@ function BattleLogicalControler:createRole(id, data, lifeType, camp, offestX, of
     -- [ts2lua]lua中0和空字符串也是true，此处BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] + 1 > #BattleFunc.landArmyStartYLocation - 1需要确认
     BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] = (BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] + 1 > #BattleFunc.landArmyStartYLocation - 1 and {0} or {BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] + 1})[1]
   end
-  local viewIndex = BattleFunc.instance:getCfgDatasByKey("RoleUpdate", id, data.level).body or 0
+  local viewIndex = BattleFunc.getInstance():getCfgDatasByKey("RoleUpdate", id, data.level).body or 0
   if camp == BattleConst.ROLEGROUP_ENEMY and BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
     viewIndex = 9
   end
@@ -309,14 +309,14 @@ function BattleLogicalControler:createRole(id, data, lifeType, camp, offestX, of
   if camp == BattleConst.ROLEGROUP_MYSELF then
     if self.battleUI.battleAdditionId and (self.battleUI.battleAdditionId == BattleConst.battle_start_attack_add or self.battleUI.battleAdditionId == BattleConst.battle_start_life_add) then
       local battleAdditionId = self.battleUI.battleAdditionId
-      local skillId = LevelFunc.instance:getBattleAddtionoByTwoId(battleAdditionId, "addtionNub")
+      local skillId = LevelFunc.getInstance():getBattleAddtionoByTwoId(battleAdditionId, "addtionNub")
       local passive = PassiveSkillData.new(skillId, 1, cacheItem, BattleConst.skill_kind_passive)
       self:insterGlobalPassive(passive)
       self.passive = passive
     end
   end
   if camp == BattleConst.ROLEGROUP_ENEMY and BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
-    local level = FogModel.instance:getCurLayer() + 1
+    local level = FogModel.getInstance():getCurLayer() + 1
     local passivSkill = data.passivSkill
     if passivSkill then
       local passiveData = nil
@@ -358,18 +358,18 @@ function BattleLogicalControler:createHome(id, data, lifeType, camp, offestX, of
   end
   local modelName = BattleConst.model_home
   local classObj = InstanceHome
-  local cfgs = BattleFunc.instance:getCfgDatas("Role", id)
+  local cfgs = BattleFunc.getInstance():getCfgDatas("Role", id)
   resname = cfgs.spine
   scale = cfgs.scale / 10000 or 1
   local tempPos = BattleFunc.tempPoint
   if camp == BattleConst.ROLEGROUP_MYSELF then
-    tempPos.x = GlobalParamsFunc.instance:getDataNum("myHomeLocation")
+    tempPos.x = GlobalParamsFunc.getInstance():getDataNum("myHomeLocation")
   else
-    tempPos.x = self.mapControler._maxSceneWidth - GlobalParamsFunc.instance:getDataNum("enemyHomeLocation")
+    tempPos.x = self.mapControler._maxSceneWidth - GlobalParamsFunc.getInstance():getDataNum("enemyHomeLocation")
   end
   tempPos.z = BattleFunc.battleCenterY
   local ypos = 0
-  local viewIndex = BattleFunc.instance:getCfgDatasByKey("RoleUpdate", id, data.level).body or 0
+  local viewIndex = BattleFunc.getInstance():getCfgDatasByKey("RoleUpdate", id, data.level).body or 0
   if camp == BattleConst.ROLEGROUP_ENEMY and BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
     viewIndex = 9
   end
@@ -402,14 +402,14 @@ function BattleLogicalControler:createHome(id, data, lifeType, camp, offestX, of
   if camp == BattleConst.ROLEGROUP_MYSELF then
     if self.battleUI.battleAdditionId and self.battleUI.battleAdditionId == BattleConst.battle_start_homeCd then
       local battleAdditionId = self.battleUI.battleAdditionId
-      local skillId = LevelFunc.instance:getBattleAddtionoByTwoId(battleAdditionId, "addtionNub")
+      local skillId = LevelFunc.getInstance():getBattleAddtionoByTwoId(battleAdditionId, "addtionNub")
       local passive = PassiveSkillData.new(skillId, 1, cacheItem, BattleConst.skill_kind_passive)
       self:insterGlobalPassive(passive)
       self.passive = passive
     end
     if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
-      local level = FogModel.instance:getBusLevel()
-      local passiveSkillId = FogFunc.instance:getCfgDatasByKey("BusUpGrade_json", level, "passiveSkill")
+      local level = FogModel.getInstance():getBusLevel()
+      local passiveSkillId = FogFunc.getInstance():getCfgDatasByKey("BusUpGrade_json", level, "passiveSkill")
       if passiveSkillId then
         local passive = PassiveSkillData.new(passiveSkillId, level, cacheItem, BattleConst.skill_kind_passive)
         self:insterGlobalPassive(passive)
@@ -432,13 +432,13 @@ function BattleLogicalControler:createSummoned(id, data, x, z, fromRole, liveFra
     liveFrame=-1
   end
   local cacheId = PoolCode.POOL_MONSTER + id .. "_" .. data.level .. "_" .. data.starLevel
-  local cfgData = BattleFunc.instance:getCfgDatas("Role", id)
+  local cfgData = BattleFunc.getInstance():getCfgDatas("Role", id)
   local resname = cfgData.spine
   if not data.id then
     data.id = id
   end
   local scale = cfgData.scale / 10000
-  local viewIndex = BattleFunc.instance:getCfgDatasByKey("RoleUpdate", id, data.level).body or 0
+  local viewIndex = BattleFunc.getInstance():getCfgDatasByKey("RoleUpdate", id, data.level).body or 0
   local cacheItem = self:createInstance(data, cacheId, BattleConst.model_role, InstanceMonster, resname, x, 0, z, BattleFunc.defaultScale * scale, viewIndex)
   cacheItem.attrData:countSummonedAttr(data.level, fromRole.attrData)
   cacheItem.hp = cacheItem:getMaxHp()
@@ -448,7 +448,7 @@ function BattleLogicalControler:createSummoned(id, data, x, z, fromRole, liveFra
     self.layerControler.a22:addChild(cacheItem._myView2)
   end
   cacheItem:setCamp(fromRole.camp)
-  cacheItem:setLifeType(BattleFunc.instance:getCfgDatasByKey("Role", id, "kind"))
+  cacheItem:setLifeType(BattleFunc.getInstance():getCfgDatasByKey("Role", id, "kind"))
   cacheItem.hpBar = self:createHealthBar(cacheItem.camp, cacheItem)
   table.insert(fromRole.campArr, cacheItem)
   cacheItem:checkMoveOrAttack(true)
@@ -612,10 +612,10 @@ function BattleLogicalControler:createMyRole(id, level, starLevel, type)
   if type == nil then
     type=nil
   end
-  local data = BattleFunc.instance:getCfgDatas("Role", id)
-  level = RolesModel.instance:getRoleLevelById(id)
+  local data = BattleFunc.getInstance():getCfgDatas("Role", id)
+  level = RolesModel.getInstance():getRoleLevelById(id)
   if starLevel == nil then
-    starLevel = RolesModel.instance:getRoleStarLevel(id)
+    starLevel = RolesModel.getInstance():getRoleStarLevel(id)
   end
   local num = data.heroNub or 1
   local offestX = 0
@@ -842,6 +842,6 @@ function BattleLogicalControler:dispose()
   self.mapControler = nil
   self.player = nil
   BattleLogicalControler.super.dispose(self)
-  Message.instance:removeObjEvents(self)
+  Message.getInstance():removeObjEvents(self)
   BattleFunc.CreateRoleIndex = {}
 end

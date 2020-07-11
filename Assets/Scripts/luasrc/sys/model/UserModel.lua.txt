@@ -31,7 +31,7 @@ function UserModel:ctor(...)
   self.refuseAuth = "refuseWxAuth";
 end
 
-function UserModel.__getters.instance()
+function UserModel.getInstance()
   if not UserModel._instance then
     UserModel._instance = UserModel.new()
   end
@@ -59,20 +59,20 @@ end
 function UserModel:updateData(d)
   local coinFlag = false
   if d.coin then
-    if BigNumUtils.compare(d.coin, UserModel.instance:getLogicCoin()) then
-      local oldNum = UserModel.instance:getLogicCoin()
+    if BigNumUtils.compare(d.coin, UserModel.getInstance():getLogicCoin()) then
+      local oldNum = UserModel.getInstance():getLogicCoin()
       coinFlag = true
     end
   end
   UserModel.super.updateData(self,d)
   if ((((d.coin or d.coin == 0) or d.giftGold) or d.giftGold == 0) or d.gold) or d.gold == 0 then
-    Message.instance:send(GameMainEvent.GAMEMAIN_EVENT_FRESHMONEY)
+    Message.getInstance():send(GameMainEvent.GAMEMAIN_EVENT_FRESHMONEY)
     if coinFlag then
-      Message.instance:send(UserEvent.USER_EVET_COIN_CHANGE_TWEEN, {oldNum=oldNum})
+      Message.getInstance():send(UserEvent.USER_EVET_COIN_CHANGE_TWEEN, {oldNum=oldNum})
     end
   end
   if d.fogCoin or d.fogCoin == 0 then
-    Message.instance:send(FogEvent.FOGEVENT_REFRESH_FOGCOIN)
+    Message.getInstance():send(FogEvent.FOGEVENT_REFRESH_FOGCOIN)
   end
   self:setGuideCache()
 end
@@ -224,7 +224,7 @@ function UserModel:isLandDeathRevive(levelId)
   -- [ts2lua]self._data.levels下标访问可能不正确
   -- [ts2lua]self._data.levels下标访问可能不正确
   -- [ts2lua]self._data.levels下标访问可能不正确
-  if (((self._data and self._data.levels) and self._data.levels[levelId]) and self._data.levels[levelId].deathRevive) and self._data.levels[levelId].expireTime > Client.instance.serverTime then
+  if (((self._data and self._data.levels) and self._data.levels[levelId]) and self._data.levels[levelId].deathRevive) and self._data.levels[levelId].expireTime > Client.getInstance().serverTime then
     return true
   end
   return false
@@ -272,11 +272,11 @@ end
 
 function UserModel:getMainGuide()
   local guide = tonumber(((self._data and self._data.userExt) and self._data.userExt.newGuide) and tonumber(self._data.userExt.newGuide)) or 0
-  if UserExtModel.instance:getEnterFogFlag() and guide < 9 then
+  if UserExtModel.getInstance():getEnterFogFlag() and guide < 9 then
     return 17
   end
   local level = self:getMaxBattleLevel()
-  if level >= GlobalParamsFunc.instance:getDataNum("equipUnlock") and guide < 6 then
+  if level >= GlobalParamsFunc.getInstance():getDataNum("equipUnlock") and guide < 6 then
     return 8
   end
   if guide == 0 then
@@ -310,17 +310,17 @@ function UserModel.__getters:isAuthorized()
 end
 
 function UserModel:setRefuseAuth()
-  CacheManager.instance:setLocalCache(self.refuseAuth, true)
+  CacheManager.getInstance():setLocalCache(self.refuseAuth, true)
 end
 
 function UserModel:getRefuseAuth()
-  local authSta = CacheManager.instance:getLocalCache(self.refuseAuth)
+  local authSta = CacheManager.getInstance():getLocalCache(self.refuseAuth)
   return authSta ~= "0"
 end
 
 function UserModel:setGuideCache()
   if Global.isNew() then
-    CacheManager.instance:setFileStorageCache(StorageCode.storage_isOldPlayer, true)
+    CacheManager.getInstance():setFileStorageCache(StorageCode.storage_isOldPlayer, true)
   end
 end
 
@@ -333,11 +333,11 @@ function UserModel:getIsNewAccount()
 end
 
 function UserModel:getSimulateLand()
-  local simulateUnlock = GlobalParamsFunc.instance:getGlobalCfgDatas("runSiteUnlock").arr
+  local simulateUnlock = GlobalParamsFunc.getInstance():getGlobalCfgDatas("runSiteUnlock").arr
   local num = 0
   for index in pairs(simulateUnlock) do
     -- [ts2lua]simulateUnlock下标访问可能不正确
-    if tonumber(UserModel.instance:getLevel()) >= tonumber(simulateUnlock[index]) then
+    if tonumber(UserModel.getInstance():getLevel()) >= tonumber(simulateUnlock[index]) then
       num=num+1
     end
   end
@@ -355,8 +355,8 @@ end
 
 function UserModel:login()
   if self:checkIsNewDay() then
-    local signAddShareNum = GlobalParamsFunc.instance:getDataNum("shareDayNmb")
-    UserGlobalModel.instance:setShareNum(signAddShareNum)
+    local signAddShareNum = GlobalParamsFunc.getInstance():getDataNum("shareDayNmb")
+    UserGlobalModel.getInstance():setShareNum(signAddShareNum)
     SevenDayServer.setLoginStep()
     UserExtServer.setEverydayInvite(0)
     UserExtServer.setDailyFirstEnterFog(0)
@@ -369,7 +369,7 @@ function UserModel:login()
     if (self._data and self._data.sendTime) and tonumber(self._data.sendTime) * 1000 > self:getGoodsAccumuStartTime() then
       LogsManager.echo("登陆修改宝箱累计时间，原累计时间：" .. self:getGoodsAccumuStartTime())
       LogsManager.echo("最后一次同步数据时间：" .. self._data.sendTime)
-      local newGoodsAccumuStartTime = Client.instance.serverTimeMicro - tonumber(self._data.sendTime) * 1000 - self:getGoodsAccumuStartTime()
+      local newGoodsAccumuStartTime = Client.getInstance().serverTimeMicro - tonumber(self._data.sendTime) * 1000 - self:getGoodsAccumuStartTime()
       LogsManager.echo("新宝箱累计时间：" .. newGoodsAccumuStartTime)
       -- [ts2lua]upUserExtData下标访问可能不正确
       upUserExtData["goodsAccumuStartTime"] = newGoodsAccumuStartTime
@@ -381,7 +381,7 @@ function UserModel:login()
   end
   -- [ts2lua]upData下标访问可能不正确
   upData["userExt"] = upUserExtData
-  local backData = Client.instance:doDummyServerBack(nil, upData, nil)
+  local backData = Client.getInstance():doDummyServerBack(nil, upData, nil)
   SingleCommonServer.startSaveClientData()
 end
 
@@ -402,7 +402,7 @@ function UserModel:checkIsNewDay()
 end
 
 function UserModel:getLevelMinRoleLevel(levelId)
-  local levelInfo = LevelFunc.instance:getCfgDatas("Level", levelId)
+  local levelInfo = LevelFunc.getInstance():getCfgDatas("Level", levelId)
   return levelInfo.minCar or 1
 end
 
@@ -421,10 +421,10 @@ function UserModel:getRecycleTime()
 end
 
 function UserModel:getLand()
-  local roleInfo = RolesFunc.instance:getAllRole()
+  local roleInfo = RolesFunc.getInstance():getAllRole()
   local landNum = 0
   for id in pairs(roleInfo) do
-    local maxLevel = UserModel.instance:getMaxLevel(id)
+    local maxLevel = UserModel.getInstance():getMaxLevel(id)
     -- [ts2lua]roleInfo下标访问可能不正确
     for level in pairs(roleInfo[id]) do
       if tonumber(level) <= tonumber(maxLevel) then
@@ -453,10 +453,10 @@ function UserModel:getInviteRewardStatus(id)
 end
 
 function UserModel:getFirstNoGetInviteReward()
-  local data = InviteFunc.instance:getAll()
+  local data = InviteFunc.getInstance():getAll()
   local gainStatus = nil
   for i in pairs(data) do
-    gainStatus = UserModel.instance:getInviteRewardStatus(i)
+    gainStatus = UserModel.getInstance():getInviteRewardStatus(i)
     if not gainStatus then
       return tonumber(i)
     end
@@ -465,14 +465,14 @@ function UserModel:getFirstNoGetInviteReward()
 end
 
 function UserModel:checkNoGetInviteReward()
-  local shareNum = #Object:keys(UserGlobalModel.instance:getInviteInfo())
-  local data = InviteFunc.instance:getAll()
+  local shareNum = #Object:keys(UserGlobalModel.getInstance():getInviteInfo())
+  local data = InviteFunc.getInstance():getAll()
   local gainStatus = nil
   local info = nil
   for i in pairs(data) do
-    info = InviteFunc.instance:getInviteInfo(i)
+    info = InviteFunc.getInstance():getInviteInfo(i)
     if tonumber(info.count) <= tonumber(shareNum) then
-      gainStatus = UserModel.instance:getInviteRewardStatus(i)
+      gainStatus = UserModel.getInstance():getInviteRewardStatus(i)
       if not gainStatus then
         return true
       end
@@ -489,7 +489,7 @@ function UserModel:getFogShopGoodsList()
   end
   -- [ts2lua]lua中0和空字符串也是true，此处data.fogOuterShop.expireTime需要确认
   local expireTime = (data.fogOuterShop.expireTime and {data.fogOuterShop.expireTime} or {GameUtils.getNextRefreshTByTime(4)})[1]
-  if expireTime < Client.instance.serverTime then
+  if expireTime < Client.getInstance().serverTime then
     return goodLsit
   end
   local goods = data.fogOuterShop.goods
@@ -521,7 +521,7 @@ function UserModel:getFogShopStatus(index)
   end
   -- [ts2lua]lua中0和空字符串也是true，此处data.fogOuterShop.expireTime需要确认
   local expireTime = (data.fogOuterShop.expireTime and {data.fogOuterShop.expireTime} or {GameUtils.getNextRefreshTByTime(4)})[1]
-  if expireTime < Client.instance.serverTime then
+  if expireTime < Client.getInstance().serverTime then
     LogsManager.echo("whn outshop 已经过期")
     return false
   end

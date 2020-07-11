@@ -27,7 +27,7 @@ function NativeBridge:createBridge(className, path)
 end
 
 
-function NativeBridge.__getters.instance()
+function NativeBridge.getInstance()
   if not NativeBridge._instance then
     NativeBridge._instance = NativeBridge.new()
   end

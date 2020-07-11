@@ -1,6 +1,6 @@
 AlertUILocal = class('AlertUILocal',Laya.View)
 AlertUILocal.res = nil;
-AlertUILocal.instance = nil;
+AlertUILocal.getInstance() = nil;
 function AlertUILocal:ctor()
   AlertUILocal.super.ctor(self)
   self._callback = nil;
@@ -15,7 +15,7 @@ function AlertUILocal:ctor()
   self.cancleLab = nil;
   self.btncenterX = 0;
   self.btnOffset = 120;
-  AlertUILocal.instance = self
+  AlertUILocal.getInstance() = self
   self._cacheDataArr = {}
   self:checkInit()
 end

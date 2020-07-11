@@ -79,17 +79,17 @@ function InstanceLife:setData(data)
     self.roleType = data.type
     self.level = data.level
     self.starLevel = data.starLevel
-    self.cfgData = BattleFunc.instance:getCfgDatasByKey("RoleUpdate", self.dataId, data.level)
+    self.cfgData = BattleFunc.getInstance():getCfgDatasByKey("RoleUpdate", self.dataId, data.level)
     self:initSkillData()
     if not self.attrData then
       data.passiveSkills = self.passSkillArr
-      self.attrData = AttributeExtendData.new(self.dataId, data, self.lifeType, UserModel.instance:getData(), self.controler.globalAttrMap)
+      self.attrData = AttributeExtendData.new(self.dataId, data, self.lifeType, UserModel.getInstance():getData(), self.controler.globalAttrMap)
     else
       self._data.passiveSkills = self.passSkillArr
-      self.attrData:resetData(self.dataId, self._data, self.lifeType, UserModel.instance:getData(), self.controler.globalAttrMap)
+      self.attrData:resetData(self.dataId, self._data, self.lifeType, UserModel.getInstance():getData(), self.controler.globalAttrMap)
     end
     self.hp = self:getMaxHp()
-    local baseData = BattleFunc.instance:getCfgDatas("Role", self.dataId)
+    local baseData = BattleFunc.getInstance():getCfgDatas("Role", self.dataId)
     if baseData.scale then
       self.cfgScale = baseData.scale / 10000
     end
@@ -207,7 +207,7 @@ function InstanceLife:getPassiveSkills()
         s=s+1
       until not(s < #basePassive)
     end
-    local allInfo = RolesFunc.instance:getCfgDatas("RoleStar", self.dataId)
+    local allInfo = RolesFunc.getInstance():getCfgDatas("RoleStar", self.dataId)
     for key in pairs(allInfo) do
       if allInfo:hasOwnProperty(key) then
         -- [ts2lua]allInfo下标访问可能不正确
@@ -241,7 +241,7 @@ function InstanceLife:getLastNormalAndPassSkill()
   local i = 0
   repeat
     local item = tempArr[i+1]
-    local data = BattleFunc.instance:getCfgDatas("PassiveSkill", item)
+    local data = BattleFunc.getInstance():getCfgDatas("PassiveSkill", item)
     if data.effectType == BattleConst.passive_effect_changeSkill then
       eff = data.effectParams
       local j = 0
@@ -322,7 +322,7 @@ function InstanceLife:changeEnergy(value)
 end
 
 function InstanceLife:changeHp(value)
-  if (UserModel.instance:getMainGuide() == 0 and self.lifeType == BattleConst.LIFE_JIDI) and self.camp == BattleConst.ROLEGROUP_MYSELF then
+  if (UserModel.getInstance():getMainGuide() == 0 and self.lifeType == BattleConst.LIFE_JIDI) and self.camp == BattleConst.ROLEGROUP_MYSELF then
     return
   end
   if value < 0 then

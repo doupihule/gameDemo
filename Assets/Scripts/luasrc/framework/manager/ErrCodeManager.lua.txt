@@ -26,7 +26,7 @@ function ErrCodeManager.__getters.ins()
 end
 
 function ErrCodeManager:initConfig()
-  TranslateFunc.instance:insertOneCfgs("TranslateError_json")
+  TranslateFunc.getInstance():insertOneCfgs("TranslateError_json")
   self:checkErrCode()
 end
 
@@ -46,7 +46,7 @@ function ErrCodeManager:checkNeedSendError(errorCode)
 end
 
 function ErrCodeManager:reauthHandler()
-  Client.instance:checkConnect()
+  Client.getInstance():checkConnect()
 end
 
 function ErrCodeManager:logoutHandler() end

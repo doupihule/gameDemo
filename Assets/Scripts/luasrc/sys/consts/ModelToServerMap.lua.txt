@@ -6,14 +6,14 @@ function ModelToServerMap.initModelToServerMap()
 end
 
 function ModelToServerMap.initBuildUserData()
-  local bornSp = GlobalParamsFunc.instance:getDataNum('bornSp')
+  local bornSp = GlobalParamsFunc.getInstance():getDataNum('bornSp')
   LogsManager.echo("krma. 构造初始数据")
-  local homeId = GlobalParamsFunc.instance:getDataNum("bornHomeId")
-  local baseRoleId = GlobalParamsFunc.instance:getDataNum("bornRoleId")
+  local homeId = GlobalParamsFunc.getInstance():getDataNum("bornHomeId")
+  local baseRoleId = GlobalParamsFunc.getInstance():getDataNum("bornRoleId")
   local baseRole = {id=baseRoleId, level=1, inLine=1}
   local baseHome = {id=homeId, level=1, inLine=0}
-  local data = {coin=GlobalParamsFunc.instance:getDataNum("bornCoin"), giftGold=GlobalParamsFunc.instance:getDataNum("bornGold"), hasUpdateData=false, userExt={loginTime=Client.instance.serverTime, logoutTime=3000000000, sp=bornSp, upSpTime=Client.instance.serverTime, lastSaveTime=Client.instance.serverTimeMicro, registTime=Client.instance.serverTime}, roles={baseRoleId=baseRole}, sendTime=0, switches={3=GlobalParamsFunc.instance:getDataNum("initialMusic") / 10000, 4=GlobalParamsFunc.instance:getDataNum("initialSound") / 10000}}
-  if GlobalParamsFunc.instance:getDataNum("initialShock") ~= 1 then
+  local data = {coin=GlobalParamsFunc.getInstance():getDataNum("bornCoin"), giftGold=GlobalParamsFunc.getInstance():getDataNum("bornGold"), hasUpdateData=false, userExt={loginTime=Client.getInstance().serverTime, logoutTime=3000000000, sp=bornSp, upSpTime=Client.getInstance().serverTime, lastSaveTime=Client.getInstance().serverTimeMicro, registTime=Client.getInstance().serverTime}, roles={baseRoleId=baseRole}, sendTime=0, switches={3=GlobalParamsFunc.getInstance():getDataNum("initialMusic") / 10000, 4=GlobalParamsFunc.getInstance():getDataNum("initialSound") / 10000}}
+  if GlobalParamsFunc.getInstance():getDataNum("initialShock") ~= 1 then
     data.switches[5+1] = 1
   end
   data.roles[homeId] = baseHome

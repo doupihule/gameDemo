@@ -31,7 +31,7 @@ end
 function BattleDebugTool:exportOneRoleInfo(role)
   local str = nil
   if role.cfgData.name then
-    str = "id:" .. role.dataId .. ",name:" .. TranslateFunc.instance:getTranslate(role.cfgData.name) .. ","
+    str = "id:" .. role.dataId .. ",name:" .. TranslateFunc.getInstance():getTranslate(role.cfgData.name) .. ","
   else
     str = "id:" .. role.dataId .. ",monster,"
   end
@@ -40,7 +40,7 @@ function BattleDebugTool:exportOneRoleInfo(role)
     local info = self._attrCfgs[i+1]
     if tonumber(i) < 100 then
       index=index+1
-      local keyName = TranslateFunc.instance:getTranslate(info.AttributeName)
+      local keyName = TranslateFunc.getInstance():getTranslate(info.AttributeName)
       local value = role.attrData:getOneAttr(i)
       str = str .. keyName .. ":" .. value .. ", "
       if index % 8 == 0 then

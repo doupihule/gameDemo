@@ -10,16 +10,16 @@ MainModule.task_kariquLogin = "task_kariquLogin";
 function MainModule:ctor()
   self.timeLock = 0;
   self._taskCompMap = {};
-  MainModule.instance = self
+  MainModule.getInstance() = self
   self:initLayer()
   self:onLoadingUIComplete()
-  Message.instance:add(MsgCMD.GAME_ONSHOW, self)
-  Message.instance:add(MsgCMD.VIDEO_STOP, self)
-  Message.instance:add(MsgCMD.VIDEO_PLAY, self)
+  Message.getInstance():add(MsgCMD.GAME_ONSHOW, self)
+  Message.getInstance():add(MsgCMD.VIDEO_STOP, self)
+  Message.getInstance():add(MsgCMD.VIDEO_PLAY, self)
 end
 
 function MainModule:onLoadingUIComplete()
-  self.timeLock = Client.instance.miniserverTime
+  self.timeLock = Client.getInstance().miniserverTime
   self:reqVMS()
 end
 
@@ -32,18 +32,18 @@ function MainModule:checkSystem()
   if Global.resource_url and Global.isCDN then
     Laya.URL.basePath = Global.resource_url
   end
-  VersionManager.instance.versionName = versionName
+  VersionManager.getInstance().versionName = versionName
   LogsManager.echo("xd cdnurl:", Global.resource_url)
   LogsManager.echo("yrc reqvms suc", Laya.URL.basePath)
   LogsManager.echo("yrc req versionName:", versionName)
   if FileUtils.isUserWXSource() and not UserInfo then
-    HttpMessage.instance:send(Laya.URL.basePath .. "test.json", {}, function()
+    HttpMessage.getInstance():send(Laya.URL.basePath .. "test.json", {}, function()
       Laya.ResourceVersion:enable(versionName, Laya.Handler:create(self, self.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION)
     end
     , self, "get", {errorCall=self.useNocndResourceUrl})
   else
-    LoadManager.instance:load(versionName, Laya.Handler:create(self, function()
-      VersionManager.instance:initVersionData()
+    LoadManager.getInstance():load(versionName, Laya.Handler:create(self, function()
+      VersionManager.getInstance():initVersionData()
       self:onVersionLoaded()
     end
     ))
@@ -52,7 +52,7 @@ end
 
 function MainModule:useNocndResourceUrl()
   local versionName = nil
-  WindowManager.setPopupTip(1, TranslateFunc.instance:getTranslate("#error110"), function()
+  WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#error110"), function()
     LogsManager.echo('sanmen  启用备用cnd')
     Global.resource_url = Global.nocdn_resource_url + UserInfo.platformId .. "/"
     Laya.URL.basePath = Global.nocdn_resource_url
@@ -62,11 +62,11 @@ function MainModule:useNocndResourceUrl()
 end
 
 function MainModule:onVersionLoaded()
-  VersionManager.instance:versionFileCheck()
+  VersionManager.getInstance():versionFileCheck()
   Laya.AtlasInfoManager:enable("fileconfig.json", Laya.Handler:create(self, self.onConfigLoaded))
   FuncManager.init(function()
     if Global.checkUserCloudStorage() then
-      self:onLoginResult(Client.instance.globalLoginBackData)
+      self:onLoginResult(Client.getInstance().globalLoginBackData)
       UserInfo.platform:getLoginResult()
     end
     self:sysCallback()
@@ -79,7 +79,7 @@ function MainModule:onConfigLoaded()
 end
 
 function MainModule:sysCallback()
-  LogsManager.echo(" ======--VMSTIME--======== " .. Client.instance.miniserverTime - self.timeLock)
+  LogsManager.echo(" ======--VMSTIME--======== " .. Client.getInstance().miniserverTime - self.timeLock)
   if not Global.checkUserCloudStorage() then
     UserInfo.platform:getWxInfo()
   end
@@ -105,7 +105,7 @@ function MainModule:loadMergeFiles()
     local times = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
     local onZipLoad = function()
       LogsManager.echo("krma. onZipLoad onZipLoad onZipLoad onZipLoad onZipLoad")
-      LoadManager.instance:load(zipList, Laya.Handler:create(self, function()
+      LoadManager.getInstance():load(zipList, Laya.Handler:create(self, function()
         self:changeByte("mergefiles/mergeBin.bin")
         self:changeByte("mergefiles/mergeJson.bin")
         self:onMergeFileBack()
@@ -115,7 +115,7 @@ function MainModule:loadMergeFiles()
     end
     
     if FileUtils.checkIsUseZip() then
-      LoadZipManager.instance:loadZip("mergefiles.zip", VersionManager.ZIP_MODEL_KEY_MERGEFILES, Laya.Handler(self, onZipLoad), nil)
+      LoadZipManager.getInstance():loadZip("mergefiles.zip", VersionManager.ZIP_MODEL_KEY_MERGEFILES, Laya.Handler(self, onZipLoad), nil)
     else
       if SubPackageManager.getModelFileStyle(SubPackageConst.packName_mergefiles) == SubPackageConst.PATH_STYLE_SUBPACK then
         SubPackageManager.loadSubPackage(SubPackageConst.packName_mergefiles, onZipLoad, self, true)
@@ -131,29 +131,29 @@ function MainModule:onMergeFileBack()
 end
 
 function MainModule:loginResult()
-  LogsManager.echo(" ======--GlobalTIME--======== " .. Client.instance.miniserverTime - self.timeLock)
+  LogsManager.echo(" ======--GlobalTIME--======== " .. Client.getInstance().miniserverTime - self.timeLock)
   if Global.isNotGuide() then
     
   end
-  Client.instance:send(Method.User_login, {}, self.onLoginResult, self)
+  Client.getInstance():send(Method.User_login, {}, self.onLoginResult, self)
 end
 
 function MainModule:onLoginResult(result)
   LogsManager.echo("yrc onLoginResult", result)
   local serverData = result
   if not Global.checkUserCloudStorage() then
-    Client.instance.globalLoginBackData = result
+    Client.getInstance().globalLoginBackData = result
     serverData = result.data
   else
     UserInfo.platform:compareData(result)
   end
   if serverData.config then
-    Client.instance.heartBeatInterval = result.data.config.heartBeatInterval
+    Client.getInstance().heartBeatInterval = result.data.config.heartBeatInterval
     if result.data.config.switch then
       GameSwitch.coverServerSwitchMap(result.data.config.switch)
       LogsManager.echo("yrc gameswitch resultSwitch", result.data.config.switch)
     end
-    KakuraClient.instance:registHeartBeat()
+    KakuraClient.getInstance():registHeartBeat()
   end
   LogsManager.echo("yrc SWITCH_LOG_PANEL:", GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
   LogsManager.setLogGroupVisible(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
@@ -167,7 +167,7 @@ function MainModule:onLoginResult(result)
     local key = info.key
     local model = info.model
     if info.key == "user" then
-      model.instance:initData(userData)
+      model.getInstance():initData(userData)
     else
       -- [ts2lua]userData下标访问可能不正确
       if not userData[key] then
@@ -176,17 +176,17 @@ function MainModule:onLoginResult(result)
       end
       -- [ts2lua]userData下标访问可能不正确
       local data = userData[key]
-      model.instance:initData(data)
+      model.getInstance():initData(data)
     end
     i=i+1
   until not(i < length)
-  UserGlobalModel.instance:flushGlobalData(self.getCloudGlobalDataResult, self)
+  UserGlobalModel.getInstance():flushGlobalData(self.getCloudGlobalDataResult, self)
   SoundManager.init()
   SoundManager.initSwitch()
 end
 
 function MainModule:getCloudGlobalDataResult(params)
-  UserModel.instance:login()
+  UserModel.getInstance():login()
   BannerAdManager.setBannerSwitch()
   self:changeShowMainTask(-1, MainModule.task_onloginResult, "onLoginResult")
 end
@@ -213,7 +213,7 @@ function MainModule:checkHasTaskComplete(taskKey)
 end
 
 function MainModule:showGameMain()
-  Message.instance:send(FrameWorkEvent.FRAMEWORKEVENT_STARTENTERMAIN)
+  Message.getInstance():send(FrameWorkEvent.FRAMEWORKEVENT_STARTENTERMAIN)
 end
 
 
@@ -268,7 +268,7 @@ function MainModule:initLayer()
   if UserInfo.isWeb() then
     WindowManager.ShowLoadingUI(nil)
   else
-    TimerManager.instance:add(delayShowLoading, nil, 10, 1)
+    TimerManager.getInstance():add(delayShowLoading, nil, 10, 1)
   end
   if UserInfo.isSystemNative() then
     ScreenAdapterTools.checkFillBorder()

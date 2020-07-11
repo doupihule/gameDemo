@@ -114,31 +114,31 @@ function BattleUI:initTopShow(isShowTalk)
     self.autoGroup.visible = true
     self.smallMapGroup.visible = true
     self.bottomImg.height = 335
-    local nextLevel = tonumber(UserModel.instance:getMaxBattleLevel()) + 1
-    if nextLevel > LevelFunc.instance:getMaxLevel() then
-      nextLevel = LevelFunc.instance:getMaxLevel()
+    local nextLevel = tonumber(UserModel.getInstance():getMaxBattleLevel()) + 1
+    if nextLevel > LevelFunc.getInstance():getMaxLevel() then
+      nextLevel = LevelFunc.getInstance():getMaxLevel()
     end
     self.levelId = nextLevel
     self.levelTxt:changeText("第" .. nextLevel .. "关")
     self:freshNormalRoleList()
     self:freshReward()
     self:setNormalLevelEnergy()
-    BattleSceneManager.instance:enterBattle({levelId=nextLevel}, self.battleCtn, self)
+    BattleSceneManager.getInstance():enterBattle({levelId=nextLevel}, self.battleCtn, self)
     StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_START, {levelId=self.levelId, entrance="main"})
-    self.controler = BattleSceneManager.instance.autoBattleControler
+    self.controler = BattleSceneManager.getInstance().autoBattleControler
     if not self.controler.guideControler:checkGuide_101() then
       if isShowTalk ~= 2 then
-        local levelInfo = LevelFunc.instance:getLevelInfoById(self.levelId)
+        local levelInfo = LevelFunc.getInstance():getLevelInfoById(self.levelId)
         if levelInfo.dialogue then
           WindowManager.OpenUI(WindowCfgs.FogNpcTalkUI, {viewType=FogConst.VIEW_TYPE_MAIN_LEVEL})
-          BattleSceneManager.instance:setGamePlayOrPause(true)
+          BattleSceneManager.getInstance():setGamePlayOrPause(true)
         end
       end
     end
     self.openCameraImg.visible = self.isUseCamera
   elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
-    BattleSceneManager.instance:enterBattle({}, self.battleCtn, self)
-    self.controler = BattleSceneManager.instance.autoBattleControler
+    BattleSceneManager.getInstance():enterBattle({}, self.battleCtn, self)
+    self.controler = BattleSceneManager.getInstance().autoBattleControler
     self:setWarEnergy()
     self:freshWarRoleList()
     if self.controler.guideControler:checkFogGuide_801() then
@@ -192,12 +192,12 @@ end
 
 function BattleUI:showArrow()
   self.guideArrow.visible = true
-  TimerManager.instance:remove(self.arrowCode)
+  TimerManager.getInstance():remove(self.arrowCode)
   self.handBaseY = self.guideArrow.y
   Laya.Tween:clearTween(self.guideArrow)
   if self.guideArrow.visible then
     self:addHandTween()
-    self.arrowCode = TimerManager.instance:add(self.addHandTween, self, 600)
+    self.arrowCode = TimerManager.getInstance():add(self.addHandTween, self, 600)
   end
 end
 
@@ -213,8 +213,8 @@ end
 
 function BattleUI:initHomeSkill()
   self.skillGroup:removeChildren()
-  local homeLevel = RolesModel.instance:getRoleLevelById(GlobalParamsFunc.instance:getDataNum("bornHomeId"))
-  local homeSkill = GlobalParamsFunc.instance:getDataArray("baseSkillList")
+  local homeLevel = RolesModel.getInstance():getRoleLevelById(GlobalParamsFunc.getInstance():getDataNum("bornHomeId"))
+  local homeSkill = GlobalParamsFunc.getInstance():getDataArray("baseSkillList")
   local unlockSkill = {}
   local i = 0
   repeat
@@ -228,25 +228,25 @@ function BattleUI:initHomeSkill()
 end
 
 function BattleUI:setWarEnergy()
-  self.maxEnergy = FogFunc.instance:getCfgDatasByKey("BusUpGrade", FogModel.instance:getBusLevel(), "attribute")[2+1]
+  self.maxEnergy = FogFunc.getInstance():getCfgDatasByKey("BusUpGrade", FogModel.getInstance():getBusLevel(), "attribute")[2+1]
   FogPropTrigger.checkPropTriggerOnInstance(FogPropTrigger.Prop_type_AddEnergy, self)
   self.nowEnergy = self.maxEnergy
   self:freshEnergyShow()
 end
 
 function BattleUI:setNormalLevelEnergy()
-  self.maxEnergy = GlobalParamsFunc.instance:getDataNum("energyMaxNub")
+  self.maxEnergy = GlobalParamsFunc.getInstance():getDataNum("energyMaxNub")
   if self.battleAdditionId and self.battleAdditionId == BattleConst.battle_start_full_energy then
     self.nowEnergy = self.maxEnergy
   else
-    self.nowEnergy = GlobalParamsFunc.instance:getDataNum("energyBattleStartNub")
+    self.nowEnergy = GlobalParamsFunc.getInstance():getDataNum("energyBattleStartNub")
   end
-  local energyRestoreNub = GlobalParamsFunc.instance:getDataNum("energyRestoreNub")
+  local energyRestoreNub = GlobalParamsFunc.getInstance():getDataNum("energyRestoreNub")
   if self.battleAdditionId and self.battleAdditionId == BattleConst.battle_start_energy_resume then
-    local battleAddNum = LevelFunc.instance:getBattleAddtionoByTwoId(self.battleAdditionId, "addtionNub") / 10000
-    self.recoverPer = BattleFunc.instance:turnMinisecondToframe(energyRestoreNub * 1 - battleAddNum)
+    local battleAddNum = LevelFunc.getInstance():getBattleAddtionoByTwoId(self.battleAdditionId, "addtionNub") / 10000
+    self.recoverPer = BattleFunc.getInstance():turnMinisecondToframe(energyRestoreNub * 1 - battleAddNum)
   else
-    self.recoverPer = BattleFunc.instance:turnMinisecondToframe(energyRestoreNub)
+    self.recoverPer = BattleFunc.getInstance():turnMinisecondToframe(energyRestoreNub)
   end
   self:freshEnergyShow()
 end
@@ -270,7 +270,7 @@ function BattleUI:autoAddEnergy()
 end
 
 function BattleUI:freshReward()
-  local rewardList = LevelFunc.instance:getLevelInfoById(self.levelId).victoryReward
+  local rewardList = LevelFunc.getInstance():getLevelInfoById(self.levelId).victoryReward
   local coin = 0
   local gold = 0
   for index in pairs(rewardList) do
@@ -298,13 +298,13 @@ function BattleUI:freshReward()
 end
 
 function BattleUI:freshWarRoleList()
-  local data = RolesModel.instance:getFogRole()
+  local data = RolesModel.getInstance():getFogRole()
   self.roleList.array = data
   self.roleList.renderHandler = Laya.Handler(self, self.onListRender2)
 end
 
 function BattleUI:freshNormalRoleList()
-  local data = RolesModel.instance:getInLineRole()
+  local data = RolesModel.getInstance():getInLineRole()
   self.roleList.array = data
   self.roleList.renderHandler = Laya.Handler(self, self.onListRender2)
 end
@@ -323,7 +323,7 @@ function BattleUI:onListRender2(cell, index)
   local energy = self.energyCostTable[data.id]
   -- [ts2lua]self.energyCostTable下标访问可能不正确
   if not self.energyCostTable[data.id] then
-    energy = RolesFunc.instance:setEnergyCost(data.id, data.payEnergyNmb)
+    energy = RolesFunc.getInstance():setEnergyCost(data.id, data.payEnergyNmb)
     -- [ts2lua]self.energyCostTable下标访问可能不正确
     self.energyCostTable[data.id] = energy
   end
@@ -344,7 +344,7 @@ function BattleUI:onListRender2(cell, index)
   end
   -- [ts2lua]ResourceConst.BATTLE_ICON_DI下标访问可能不正确
   bg.skin = ResourceConst.BATTLE_ICON_DI[data.qualityType]
-  icon.skin = RolesFunc.instance:getBattleRoleIcon(data.battleIcon)
+  icon.skin = RolesFunc.getInstance():getBattleRoleIcon(data.battleIcon)
   cost.text = energy .. ""
   if index == 0 and not self.firstRole then
     self.firstRole = item
@@ -442,7 +442,7 @@ end
 
 function BattleUI:onClickPauseBtn()
   self.pauseGroup.visible = true
-  BattleSceneManager.instance:setGamePlayOrPause(true)
+  BattleSceneManager.getInstance():setGamePlayOrPause(true)
 end
 
 function BattleUI:onClickCameraFollow()
@@ -455,19 +455,19 @@ function BattleUI:onClickMainBtn()
     WindowManager.OpenUI(WindowCfgs.GameMainUI)
   end
   self:close()
-  BattleSceneManager.instance:exitBattle()
+  BattleSceneManager.getInstance():exitBattle()
 end
 
 function BattleUI:onContinueBtn()
-  BattleSceneManager.instance:setGamePlayOrPause(false)
+  BattleSceneManager.getInstance():setGamePlayOrPause(false)
   self.pauseGroup.visible = false
 end
 
 function BattleUI:onReplayGame()
   SoundManager.stopMusicOrSound(MusicConst.SOUND_BATTLE_BG)
-  Message.instance:send(BattleEvent.BATTLEEVENT_REVIEW_RESET_REVIVECOUNT)
+  Message.getInstance():send(BattleEvent.BATTLEEVENT_REVIEW_RESET_REVIVECOUNT)
   self.pauseGroup.visible = false
-  BattleSceneManager.instance:replayBattle()
+  BattleSceneManager.getInstance():replayBattle()
   StatisticsManager.ins:onEvent(StatisticsManager.LEVEL_START, {levelId=self.levelId, entrance="replay"})
   self:resetStatus()
 end
@@ -578,10 +578,10 @@ function BattleUI:freshSkillTipGroup(name, continueTime, timeScale)
   self.continueTime = continueTime
   self.timeRate = timeScale
   Laya.Tween:clearTween(self.skillTipGroup)
-  TimerManager.instance:clearTimeout(self.tweenCode)
+  TimerManager.getInstance():clearTimeout(self.tweenCode)
   self:setGameSpeed(self.timeRate)
-  TimerManager.instance:clearTimeout(self.recoverCode)
-  self.recoverCode = TimerManager.instance:setTimeout(self.setGameNormalSpeed, self, self.continueTime)
+  TimerManager.getInstance():clearTimeout(self.recoverCode)
+  self.recoverCode = TimerManager.getInstance():setTimeout(self.setGameNormalSpeed, self, self.continueTime)
   if self.skillTipGroup.visible then
     self:skillTipHideTween({self.skillTipShowTween, name, 0.2})
   else
@@ -600,7 +600,7 @@ function BattleUI:skillTipShowTween(name)
   self.skillTipGroup.visible = true
   self.skillTipGroup.alpha = 1
   Laya.Tween:to(self.skillTipGroup, {x=0}, 300, nil, Laya.Handler:create(self, function()
-    self.tweenCode = TimerManager.instance:setTimeout(self.skillTipHideTween, self, 300, {nil, name, 0.5})
+    self.tweenCode = TimerManager.getInstance():setTimeout(self.skillTipHideTween, self, 300, {nil, name, 0.5})
   end
   ))
 end

@@ -16,7 +16,7 @@ KakuraMessage.MESSAGE_FIX_ENC_NO_COMPRESS = 11;
 KakuraMessage.MESSAGE_DYNAMIC_ENC_NO_COMPRESS = 12;
 KakuraMessage.MESSAGE_HAS_ENC = 1;
 function KakuraMessage:ctor() end
-function KakuraMessage.__getters.instance()
+function KakuraMessage.getInstance()
   if not KakuraMessage._instance then
     KakuraMessage._instance = KakuraMessage.new()
   end

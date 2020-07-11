@@ -27,13 +27,13 @@ function SoundManager.init()
   Laya.SoundManager.autoReleaseSound = false
   local thisObj = SoundManager
   Laya.SoundManager.autoStopMusic = true
-  Message.instance:add(MsgCMD.GAME_ONSHOW, thisObj)
-  Message.instance:add(MsgCMD.GAME_ONHIDE, thisObj)
+  Message.getInstance():add(MsgCMD.GAME_ONSHOW, thisObj)
+  Message.getInstance():add(MsgCMD.GAME_ONHIDE, thisObj)
 end
 
 function SoundManager.initSwitch()
-  SoundManager.musicSwitch = SwitchModel.instance:getMusicSwitch()
-  SoundManager.soundSwitch = SwitchModel.instance:getSoundSwitch()
+  SoundManager.musicSwitch = SwitchModel.getInstance():getMusicSwitch()
+  SoundManager.soundSwitch = SwitchModel.getInstance():getSoundSwitch()
 end
 
 function SoundManager.playBGM(url, startTime)
@@ -267,7 +267,7 @@ function SoundManager.playNewSound(url, loops, complete, soundClass, startTime)
     
   else
     -- [ts2lua]SoundManager._soundDelayCode下标访问可能不正确
-    SoundManager._soundDelayCode[shortName] = TimerManager.instance:setTimeout(SoundManager.stopNewSound, SoundManager, soundLength, url)
+    SoundManager._soundDelayCode[shortName] = TimerManager.getInstance():setTimeout(SoundManager.stopNewSound, SoundManager, soundLength, url)
   end
   if FileUtils.isUserWXSource() then
     local soundChannel = SoundManager.getChannelIns(url)
@@ -295,7 +295,7 @@ function SoundManager.playNewSound(url, loops, complete, soundClass, startTime)
     -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
     -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
     SoundManager._soundCountMap[url]=SoundManager._soundCountMap[url]+1
-    TimerManager.instance:add(SoundManager.delayResumeSoundCount, SoundManager, 350, 1, false, {url})
+    TimerManager.getInstance():add(SoundManager.delayResumeSoundCount, SoundManager, 350, 1, false, {url})
     local sound = Laya.SoundManager:playSound(url, targetLoops, complete, soundClass, startTime)
     if sound and sound.volume then
       sound.volume = SoundManager._volume
@@ -313,7 +313,7 @@ function SoundManager.clearSoundTimeOut(url)
   -- [ts2lua]SoundManager._soundDelayCode下标访问可能不正确
   local code = SoundManager._soundDelayCode[url]
   if code then
-    TimerManager.instance:remove(code)
+    TimerManager.getInstance():remove(code)
   end
   -- [ts2lua]SoundManager._soundDelayCode下标访问可能不正确
   SoundManager._soundDelayCode[url] = nil

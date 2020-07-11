@@ -9,7 +9,7 @@ end
 CountsCommonModel.TYPE_INTERVALAD_COUNT = "1";
 CountsCommonModel.TYPE_INTERVALAD_LASTSHOWTIME = "2";
 CountsCommonModel.TYPE_INTERVAL_ORIGINAL_CLICK_COUNT = "3";
-function CountsCommonModel.__getters.instance()
+function CountsCommonModel.getInstance()
   if not CountsCommonModel._instance then
     CountsCommonModel._instance = CountsCommonModel.new()
   end
@@ -51,7 +51,7 @@ function CountsCommonModel:IsExpire(id)
       -- [ts2lua]self._data下标访问可能不正确
       -- [ts2lua]self._data[id]下标访问可能不正确
       local expireTime = self._data[id]["expireTime"]
-      if expireTime > Client.instance.serverTime then
+      if expireTime > Client.getInstance().serverTime then
         return false
       else
         return true

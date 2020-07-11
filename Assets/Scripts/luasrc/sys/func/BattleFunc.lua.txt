@@ -88,7 +88,7 @@ BattleFunc.waveMaxFrame = 60 * 60;
 BattleFunc.bossMaxFrame = 60 * 60;
 BattleFunc.CreateRoleIndex = {};
 BattleFunc.curBattleType = 1;
-function BattleFunc.__getters.instance()
+function BattleFunc.getInstance()
   if not BattleFunc._instance then
     BattleFunc._instance = BattleFunc.new()
     BattleFunc.initGlobalParams()
@@ -283,24 +283,24 @@ function BattleFunc:getSkillValueByParams(key, _skillId, level, skillParams, tag
 end
 
 function BattleFunc.initGlobalParams()
-  BattleFunc.critDamgeRatio = GlobalParamsFunc.instance:getDataNum("baseCritDamage") / 10000
-  BattleFunc.minDamageRatio = GlobalParamsFunc.instance:getDataNum("minDamage") / 10000
-  BattleFunc.battleCenterY = GlobalParamsFunc.instance:getDataNum("battleCenterY")
+  BattleFunc.critDamgeRatio = GlobalParamsFunc.getInstance():getDataNum("baseCritDamage") / 10000
+  BattleFunc.minDamageRatio = GlobalParamsFunc.getInstance():getDataNum("minDamage") / 10000
+  BattleFunc.battleCenterY = GlobalParamsFunc.getInstance():getDataNum("battleCenterY")
   BattleFunc.battleUpY = BattleFunc.battleCenterY - 180
   BattleFunc.battleDownY = BattleFunc.battleCenterY + 180
-  local cfg = BattleFunc.instance:getAllCfgData("AttributeList")
-  BattleFunc.reducedUnitArr = GlobalParamsFunc.instance:getDataString("reducedUnit"):split(",")
-  BattleFunc.airArmyHigh = GlobalParamsFunc.instance:getDataNum("airArmyHigh")
-  BattleFunc.landArmyStartYLocation = GlobalParamsFunc.instance:getDataArray("landArmyStartYLocation")
-  BattleFunc.airArmyStartXLocation = GlobalParamsFunc.instance:getDataNum("airArmyStartXLocation")
-  BattleFunc.landArmyStartXLocation = GlobalParamsFunc.instance:getDataNum("landArmyStartXLocation")
-  BattleFunc.pylonTwoLocation = GlobalParamsFunc.instance:getDataNum("pylonTwoLocation")
-  BattleFunc.pylonStartXLocation = GlobalParamsFunc.instance:getDataNum("pylonStartXLocation")
-  BattleFunc.diedShockCount = GlobalParamsFunc.instance:getDataNum("deadShock")
-  local buildAutoHp = GlobalParamsFunc.instance:getDataArray("buildingAutoReduceHp")
-  BattleFunc.warRoleXoffest = GlobalParamsFunc.instance:getDataArray("fogBattleColumns")
-  BattleFunc.buildAutoFrame = BattleFunc.instance:turnMinisecondToframe(tonumber(buildAutoHp[0+1]))
-  BattleFunc.deadLastFrame = BattleFunc.instance:turnMinisecondToframe(GlobalParamsFunc.instance:getDataNum("pylonStartXLocation"))
+  local cfg = BattleFunc.getInstance():getAllCfgData("AttributeList")
+  BattleFunc.reducedUnitArr = GlobalParamsFunc.getInstance():getDataString("reducedUnit"):split(",")
+  BattleFunc.airArmyHigh = GlobalParamsFunc.getInstance():getDataNum("airArmyHigh")
+  BattleFunc.landArmyStartYLocation = GlobalParamsFunc.getInstance():getDataArray("landArmyStartYLocation")
+  BattleFunc.airArmyStartXLocation = GlobalParamsFunc.getInstance():getDataNum("airArmyStartXLocation")
+  BattleFunc.landArmyStartXLocation = GlobalParamsFunc.getInstance():getDataNum("landArmyStartXLocation")
+  BattleFunc.pylonTwoLocation = GlobalParamsFunc.getInstance():getDataNum("pylonTwoLocation")
+  BattleFunc.pylonStartXLocation = GlobalParamsFunc.getInstance():getDataNum("pylonStartXLocation")
+  BattleFunc.diedShockCount = GlobalParamsFunc.getInstance():getDataNum("deadShock")
+  local buildAutoHp = GlobalParamsFunc.getInstance():getDataArray("buildingAutoReduceHp")
+  BattleFunc.warRoleXoffest = GlobalParamsFunc.getInstance():getDataArray("fogBattleColumns")
+  BattleFunc.buildAutoFrame = BattleFunc.getInstance():turnMinisecondToframe(tonumber(buildAutoHp[0+1]))
+  BattleFunc.deadLastFrame = BattleFunc.getInstance():turnMinisecondToframe(GlobalParamsFunc.getInstance():getDataNum("pylonStartXLocation"))
   BattleFunc.buildingAutoReduceHp = tonumber(buildAutoHp[1+1])
   BattleFunc.idToShowMap = cfg
   BattleFunc.initFrameDates()

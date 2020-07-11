@@ -20,7 +20,7 @@ function BattleMapControler:ctor(controler)
 end
 
 function BattleMapControler:setData(sceneId)
-  local sceneInfo = BattleFunc.instance:getCfgDatas("Scene", sceneId)
+  local sceneInfo = BattleFunc.getInstance():getCfgDatas("Scene", sceneId)
   local backInfo = sceneInfo.background
   local mapName = backInfo[0+1]
   self.mapName = mapName
@@ -52,7 +52,7 @@ function BattleMapControler:createDecoration(arr, firstName, ctn)
   local i = 0
   repeat
     local item = arr[i+1]
-    local info = BattleFunc.instance:getCfgDatas("Decoration", item[0+1])
+    local info = BattleFunc.getInstance():getCfgDatas("Decoration", item[0+1])
     local path = "map/" .. firstName .. "/" .. info.pic
     local imageUrl1 = nil
     if UserInfo.isSystemNative() then

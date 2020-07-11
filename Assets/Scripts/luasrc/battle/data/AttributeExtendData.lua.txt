@@ -53,7 +53,7 @@ function AttributeExtendData:updateData(roleData, globalAttrMap, outRecount)
   self.level = roleData.level or 1
   self.starLevel = roleData.starLevel or 0
   self.equip = roleData.equip or nil
-  local attrArr = BattleFunc.instance:getCfgDatasByMultyKey("RoleUpdate", self.id, self.level, "attribute")
+  local attrArr = BattleFunc.getInstance():getCfgDatasByMultyKey("RoleUpdate", self.id, self.level, "attribute")
   self.baseAttr = self:resetBaseAtt(attrArr)
   self:countPassiveAttr(roleData)
   if not outRecount then
@@ -62,19 +62,19 @@ function AttributeExtendData:updateData(roleData, globalAttrMap, outRecount)
 end
 
 function AttributeExtendData:countSummonedAttr(level, fromAttr)
-  local attrArr = BattleFunc.instance:getCfgDatasByMultyKey("RoleUpdate", self.id, level, "attribute")
+  local attrArr = BattleFunc.getInstance():getCfgDatasByMultyKey("RoleUpdate", self.id, level, "attribute")
   self.baseAttr = self:resetBaseAtt(attrArr)
   self:countAllAttr()
 end
 
 function AttributeExtendData:resetBaseAtt(attrArr)
-  attrArr = BattleFunc.instance:turnPropArrToTable(attrArr)
+  attrArr = BattleFunc.getInstance():turnPropArrToTable(attrArr)
   if self.lifeType ~= BattleConst.LIFE_JIDI then
     for key in pairs(attrArr) do
       if attrArr:hasOwnProperty(key) then
         -- [ts2lua]attrArr下标访问可能不正确
         local info = attrArr[key]
-        info[0+1] = RolesFunc.instance:getAttrNumByLevel(key, self.id, self.level, self.starLevel, true, nil, self.equip)
+        info[0+1] = RolesFunc.getInstance():getAttrNumByLevel(key, self.id, self.level, self.starLevel, true, nil, self.equip)
         -- [ts2lua]attrArr下标访问可能不正确
         attrArr[key] = info
       end
@@ -98,7 +98,7 @@ function AttributeExtendData:countPassiveAttr(roleData)
   local i = 0
   repeat
     local passiveId = passSkill[i+1]
-    local passiveCfg = BattleFunc.instance:getCfgDatas("PassiveSkill", passiveId)
+    local passiveCfg = BattleFunc.getInstance():getCfgDatas("PassiveSkill", passiveId)
     local effectType = passiveCfg.effectType
     local tempArr = {}
     if effectType == BattleConst.passive_effect_attr then

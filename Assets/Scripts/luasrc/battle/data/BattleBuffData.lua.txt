@@ -10,13 +10,13 @@ function BattleBuffData:ctor(id)
   self.group = 1;
   self.layerNums = 1;
   self._id = tostring(id)
-  self.cfgData = BattleFunc.instance:getCfgDatas("Buff", id)
+  self.cfgData = BattleFunc.getInstance():getCfgDatas("Buff", id)
   self.type = self.cfgData.type
   self.logicType = self.cfgData.logicType
   self.group = self.cfgData.group
   self.interval = tonumber(self.cfgData.interval)
   if self.interval > 0 then
-    self.interval = BattleFunc.instance:turnMinisecondToframe(self.interval)
+    self.interval = BattleFunc.getInstance():turnMinisecondToframe(self.interval)
   end
 end
 
@@ -30,7 +30,7 @@ function BattleBuffData:setData(owner, targetSkillAction, repeatNum)
   self.leftFrame = targetSkill:getSkillValue(self.cfgData.existTime)
   if self.leftFrame ~= -1 then
     if self.leftFrame then
-      self.leftFrame = BattleFunc.instance:turnMinisecondToframe(self.leftFrame)
+      self.leftFrame = BattleFunc.getInstance():turnMinisecondToframe(self.leftFrame)
     else
       self.leftFrame = 0
     end
@@ -49,7 +49,7 @@ function BattleBuffData:setData(owner, targetSkillAction, repeatNum)
       local temp = tempArr[i+1]
       local s = 0
       repeat
-        self.skillLogicalParams[i+1][s+1] = BattleFunc.instance:getSkillValueByParams(temp[s+1], skillDataId, targetLevel, nil, tagStr)
+        self.skillLogicalParams[i+1][s+1] = BattleFunc.getInstance():getSkillValueByParams(temp[s+1], skillDataId, targetLevel, nil, tagStr)
         s=s+1
       until not(s < #temp)
       i=i+1

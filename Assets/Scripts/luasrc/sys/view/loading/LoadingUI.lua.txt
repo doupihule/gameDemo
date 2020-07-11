@@ -9,7 +9,7 @@ function LoadingUI:ctor()
   self.progress = 0;
   self.isShowWxInfo = false;
   self.alphaFlag = 1;
-  LoadingUI.instance = self
+  LoadingUI.getInstance() = self
   self:initView()
   self.mainbg.mouseThrough = false
   self.mainbg.mouseEnabled = true
@@ -157,7 +157,7 @@ function LoadingUI:onLoop()
   end
   if self.progress >= 100 then
     self.progress = 100
-    Laya.timer:clearAll(LoadingUI.instance)
+    Laya.timer:clearAll(LoadingUI.getInstance())
   end
   if self.profg then
     self.profg.width = 574 * self.progress * 0.01

@@ -250,7 +250,7 @@ function SkillActionTrigger.runSkillAction_8(attacker, skill, skillAction, useAr
   local targetX = defer.pos.x + defer._viewWay * keepDis
   attacker:setLastPos(attacker.pos.x, attacker.pos.y, attacker.pos.z)
   attacker:setPos(targetX, 0, defer.pos.z)
-  local lastFrame = BattleFunc.instance:turnMinisecondToframe(params[0+1])
+  local lastFrame = BattleFunc.getInstance():turnMinisecondToframe(params[0+1])
   attacker.controler:setCallBack(lastFrame, attacker.resumeToLastPos, attacker)
   BattleLogsManager.battleEcho("xd 触发瞬移了---lastFrame:", lastFrame)
 end
@@ -296,7 +296,7 @@ function SkillActionTrigger.runSkillAction_11(attacker, skill, skillAction, useA
       local x = info[0+1] / attacker._viewWay + targetRole.pos.x
       local z = -info[1+1] + attacker.pos.z
       local id = tostring(info[2+1])
-      local lifeFrame = BattleFunc.instance:turnMinisecondToframe(info[3+1])
+      local lifeFrame = BattleFunc.getInstance():turnMinisecondToframe(info[3+1])
       attacker.controler:createSummoned(id, {level=attacker:getData().level, id=id, starLevel=attacker:getData().starLevel}, x, z, attacker, lifeFrame)
       i=i+1
     until not(i < #params)
@@ -357,7 +357,7 @@ function SkillActionTrigger.runSkillAction_14(attacker, skill, skillAction, useA
   local i = 0
   repeat
     local info = paramsArr[i+1]
-    local frame = BattleFunc.instance:turnMinisecondToframe(info[0+1])
+    local frame = BattleFunc.getInstance():turnMinisecondToframe(info[0+1])
     local isFollow = info[3+1]
     local x = nil
     local z = nil

@@ -14,7 +14,7 @@ CountsModel.equipPieceFreeGet = "5";
 CountsModel.equipPieceAdCount = "6";
 CountsModel.fogStreetCount = "7";
 CountsModel.fogStreetVideoCount = "8";
-function CountsModel.__getters.instance()
+function CountsModel.getInstance()
   if not CountsModel._instance then
     CountsModel._instance = CountsModel.new()
   end
@@ -40,7 +40,7 @@ function CountsModel:getCountsById(id)
     return 0
   else
     local time = counts[id] and counts[id]["expireTime"] or 0
-    local curT = Client.instance.serverTime
+    local curT = Client.getInstance().serverTime
     time = time - curT
     if time < 0 then
       return 0

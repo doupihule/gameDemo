@@ -25,7 +25,7 @@ function Client:ctor()
   self._serverTime = 0
 end
 
-function Client.__getters.instance()
+function Client.getInstance()
   if not Client._instance then
     Client._instance = Client.new()
   end
@@ -33,7 +33,7 @@ function Client.__getters.instance()
 end
 
 function Client:checkConnect()
-  KakuraClient.instance:aginConnect()
+  KakuraClient.getInstance():aginConnect()
 end
 
 function Client:sendInit(token, userInfo, callback, thisObj, invitedBy, shareInfo)
@@ -60,14 +60,14 @@ function Client:sendInit(token, userInfo, callback, thisObj, invitedBy, shareInf
   self._upgrade = PackConfigManager.ins.platform.upgrade_path
   self._sec = PackConfigManager.ins.platform.sec
   self._kakuraInitParams = self:getKakuraInitMsg(userInfo, invitedBy, shareInfo)
-  KakuraClient.instance:init(self._url, self._version, "", self.pushResult, self, self.onConnectBack, self)
+  KakuraClient.getInstance():init(self._url, self._version, "", self.pushResult, self, self.onConnectBack, self)
 end
 
 function Client:initResult(result)
   if result.error then
     return
   end
-  KakuraClient.instance.hasGetUserInfo = true
+  KakuraClient.getInstance().hasGetUserInfo = true
   self._requestId = result.initRequestId
   self._token = result.token
   self._rid = result.rid
@@ -90,10 +90,10 @@ function Client:sendHeart(method, param, callback, thisObj, addParam)
   if addParam == nil then
     addParam=nil
   end
-  if KakuraClient.instance._currentConn then
+  if KakuraClient.getInstance()._currentConn then
     return
   end
-  KakuraClient.instance:sendRequest(self.OPCODE_KAKURA_HEARTBEAT, KakuraClient.method_heartBeat, param, callback, thisObj, false)
+  KakuraClient.getInstance():sendRequest(self.OPCODE_KAKURA_HEARTBEAT, KakuraClient.method_heartBeat, param, callback, thisObj, false)
 end
 
 function Client:send(method, param, callback, thisObj, opcode, isWait, addParam, expandParams)
@@ -130,7 +130,7 @@ function Client:send(method, param, callback, thisObj, opcode, isWait, addParam,
       end
     end
     self._curMethod = method
-    KakuraClient.instance:sendRequest(opcode, method, param, callback, thisObj, isWait, false, addParam)
+    KakuraClient.getInstance():sendRequest(opcode, method, param, callback, thisObj, isWait, false, addParam)
   end
 end
 
@@ -178,7 +178,7 @@ function Client:updateBaseData(upData)
   local length = #mapArr
   local userChangeData = self:getUserData(upData)
   if userChangeData then
-    UserModel.instance:updateData(userChangeData)
+    UserModel.getInstance():updateData(userChangeData)
   end
   local i = 0
   repeat
@@ -188,7 +188,7 @@ function Client:updateBaseData(upData)
     -- [ts2lua]upData下标访问可能不正确
     if upData[key] then
       -- [ts2lua]upData下标访问可能不正确
-      model.instance:updateData(upData[key])
+      model.getInstance():updateData(upData[key])
     end
     i=i+1
   until not(i < length)
@@ -199,7 +199,7 @@ function Client:deleteBaseData(delData)
   local length = #mapArr
   local userChangeData = self:getUserData(delData)
   if userChangeData then
-    UserModel.instance:deleteData(userChangeData)
+    UserModel.getInstance():deleteData(userChangeData)
   end
   local i = 0
   repeat
@@ -209,7 +209,7 @@ function Client:deleteBaseData(delData)
     -- [ts2lua]delData下标访问可能不正确
     if delData[key] then
       -- [ts2lua]delData下标访问可能不正确
-      model.instance:deleteData(delData[key])
+      model.getInstance():deleteData(delData[key])
     end
     i=i+1
   until not(i < length)
@@ -253,14 +253,14 @@ end
 function Client:onConnectBack(isFirstInit)
   if isFirstInit then
     local params = self._kakuraInitParams
-    KakuraClient.instance:clearOneMethod(MethodCommon.User_kakuraInit)
-    KakuraClient.instance:sendRequest(self.OPCODE_KAKURA_INIT, MethodCommon.User_kakuraInit, params, self.initResult, self, true, true)
+    KakuraClient.getInstance():clearOneMethod(MethodCommon.User_kakuraInit)
+    KakuraClient.getInstance():sendRequest(self.OPCODE_KAKURA_INIT, MethodCommon.User_kakuraInit, params, self.initResult, self, true, true)
   else
     local param = {token=self._token}
     param.ver = self._version
     param.upgrade = self._upgrade
     param.deviceId = Global.deviceId
-    KakuraClient.instance:sendRequest(self.OPCODE_KAKURA_REAUTH, MethodCommon.User_kakuraReauth, param, self.relogin, self, true, true)
+    KakuraClient.getInstance():sendRequest(self.OPCODE_KAKURA_REAUTH, MethodCommon.User_kakuraReauth, param, self.relogin, self, true, true)
   end
 end
 
@@ -286,7 +286,7 @@ function Client:doDummyServerBack(data, u, d)
 end
 
 function Client:relogin()
-  KakuraClient.instance:sendRequest(self.OPCODE_BACKEND_REQUEST, MethodCommon.User_relogin, {}, self.reloginBack, self, true, true)
+  KakuraClient.getInstance():sendRequest(self.OPCODE_BACKEND_REQUEST, MethodCommon.User_relogin, {}, self.reloginBack, self, true, true)
 end
 
 function Client:reloginBack(result)
@@ -358,11 +358,11 @@ function Client.__getters:rid()
 end
 
 function Client.__getters:webSocketConnet()
-  return KakuraClient.instance.webSocketConnet
+  return KakuraClient.getInstance().webSocketConnet
 end
 
 function Client:testClose()
-  KakuraClient.instance:testClose()
+  KakuraClient.getInstance():testClose()
 end
 
 function Client:saveDataToCloud(params, callback, thisObj, addParam, expandParams)
@@ -468,7 +468,7 @@ function Client:startRequestCloud(method, params, callback, thisObj, addParam, e
     if callback then
       doJsCallFunc(callback,thisObj, error, addParam)
     end
-    Client.instance.lastLoginTime = Client.instance.serverTime
+    Client.getInstance().lastLoginTime = Client.getInstance().serverTime
   end
   
   local onHttpBack = function(backData)
@@ -486,7 +486,7 @@ function Client:startRequestCloud(method, params, callback, thisObj, addParam, e
     if callback then
       doJsCallFunc(callback,thisObj, backData, addParam)
     end
-    Client.instance.lastLoginTime = Client.instance.serverTime
+    Client.getInstance().lastLoginTime = Client.getInstance().serverTime
   end
   
   local sendData = {method=method, params=params}
@@ -494,9 +494,9 @@ function Client:startRequestCloud(method, params, callback, thisObj, addParam, e
   if UserInfo.isUseHttpServer and expandParams.forceConnect then
     webParams.url = url
     expandParams.url = Global.global_url
-    GameHttpControler.instance:sendRequest(method, params, callback, thisObj, true, false, addParam, expandParams)
+    GameHttpControler.getInstance():sendRequest(method, params, callback, thisObj, true, false, addParam, expandParams)
   else
-    HttpMessage.instance:send(url, sendData, onHttpBack, self, "post", webParams)
+    HttpMessage.getInstance():send(url, sendData, onHttpBack, self, "post", webParams)
   end
 end
 

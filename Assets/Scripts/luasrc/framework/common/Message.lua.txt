@@ -4,7 +4,7 @@ function Message:ctor()
   self.msgMap = HashMap.new()
 end
 
-function Message.__getters.instance()
+function Message.getInstance()
   if not Message._instance then
     Message._instance = Message.new()
   end

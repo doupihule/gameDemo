@@ -16,7 +16,7 @@
 
 SceneReference = class('SceneReference')
 
-function SceneReference.__getters.instance()
+function SceneReference.getInstance()
   if not SceneReference._instance then
     SceneReference._instance = SceneReference.new()
   end
@@ -96,15 +96,15 @@ SceneReference."1104" = "微信聊天主界面下拉，「我的小程序」栏"
 SceneReference."1129" = "微信爬虫访问";
 function SceneReference:recvMsg(cmd, data)
   if cmd == CommonEvent.GET_IPINFO_SUCCESS then
-    if not UserModel.instance:isSceneBlack() and SceneReference.checkIpBlack() then
+    if not UserModel.getInstance():isSceneBlack() and SceneReference.checkIpBlack() then
       SceneReference.setSceneBlack()
-      Message.instance:send(CommonEvent.WHITE_LIST_CHANGE)
+      Message.getInstance():send(CommonEvent.WHITE_LIST_CHANGE)
     end
   elseif cmd == CommonEvent.GET_IPINFO_FAIL then
-    if not UserModel.instance:isSceneBlack() and GameSwitch.checkOnOff(GameSwitch.SWITCH_BLACK_IP_FAIL_TYPE) then
-      StatisticsManager.ins:onEvent(StatisticsCommonConst.WHITE_LIST_LOAD_IP_FAIL, {openId=UserInfo.channelUserId, rid=UserModel.instance:getUserRid()})
+    if not UserModel.getInstance():isSceneBlack() and GameSwitch.checkOnOff(GameSwitch.SWITCH_BLACK_IP_FAIL_TYPE) then
+      StatisticsManager.ins:onEvent(StatisticsCommonConst.WHITE_LIST_LOAD_IP_FAIL, {openId=UserInfo.channelUserId, rid=UserModel.getInstance():getUserRid()})
       SceneReference.setSceneBlack()
-      Message.instance:send(CommonEvent.WHITE_LIST_CHANGE)
+      Message.getInstance():send(CommonEvent.WHITE_LIST_CHANGE)
     end
   end
 end
@@ -120,8 +120,8 @@ function SceneReference.getSceneName(sceneId)
 end
 
 function SceneReference.isInBannerScene()
-  Message.instance:add(CommonEvent.GET_IPINFO_SUCCESS, SceneReference.instance)
-  Message.instance:add(CommonEvent.GET_IPINFO_FAIL, SceneReference.instance)
+  Message.getInstance():add(CommonEvent.GET_IPINFO_SUCCESS, SceneReference.getInstance())
+  Message.getInstance():add(CommonEvent.GET_IPINFO_FAIL, SceneReference.getInstance())
   LogsManager.echo("hlx scene 开始检查是否是白名单-----start")
   if UserInfo.isWeb() then
     LogsManager.echo("zm web版永远是白名单")
@@ -131,7 +131,7 @@ function SceneReference.isInBannerScene()
     LogsManager.echo("hlx scene 全服白名单开关开启")
     return true
   end
-  if UserExtCommonModel.instance:getTestSceneMark() then
+  if UserExtCommonModel.getInstance():getTestSceneMark() then
     LogsManager.echo("hlx scene 测试用户永远是白名单")
     return true
   end
@@ -143,8 +143,8 @@ function SceneReference.isInBannerScene()
     LogsManager.echo("hlx scene 账号在Query黑名单中")
     return false
   end
-  if UserModel.instance:isSceneBlack() then
-    LogsManager.echo("hlx scene 账号不在登陆白名单,userModel.sceneBlack：", UserModel.instance:isSceneBlack())
+  if UserModel.getInstance():isSceneBlack() then
+    LogsManager.echo("hlx scene 账号不在登陆白名单,userModel.sceneBlack：", UserModel.getInstance():isSceneBlack())
     return false
   end
   LogsManager.echo("hlx scene 检查白名单结束-----白名单用户")
@@ -152,7 +152,7 @@ function SceneReference.isInBannerScene()
 end
 
 function SceneReference.checkIpBlack()
-  if UserModel.instance:isSceneBlack() then
+  if UserModel.getInstance():isSceneBlack() then
     LogsManager.echo("ycn 检查Ip黑名单： 账号已被染黑")
     return true
   end
@@ -173,14 +173,14 @@ function SceneReference.checkIpBlack()
 end
 
 function SceneReference.checkQueryBlack()
-  if UserModel.instance:isSceneBlack() then
+  if UserModel.getInstance():isSceneBlack() then
     LogsManager.echo("ycn 检查query白名单： 账号已被染黑")
     return true
   end
   if not UserInfo.isWX() then
     return false
   end
-  local blackenStr = GlobalParamsFunc.instance:getCfgDatas("GlobalParams_json", 'whiteListString', true)
+  local blackenStr = GlobalParamsFunc.getInstance():getCfgDatas("GlobalParams_json", 'whiteListString', true)
   if not blackenStr.string then
     LogsManager.echo('hlx 检查Query白名单，通过：whiteListString未配置')
     return false
@@ -203,12 +203,12 @@ end
 
 function SceneReference.setSceneBlack()
   local updateData = {sceneBlack=1}
-  local backData = Client.instance:doDummyServerBack(nil, updateData, nil)
+  local backData = Client.getInstance():doDummyServerBack(nil, updateData, nil)
   SingleCommonServer.startSaveClientData()
 end
 
 function SceneReference.checkWhiteSceneId(sceneId, type)
-  local sceneWhiteList = WhiteListFunc.instance:getWhiteList(type)
+  local sceneWhiteList = WhiteListFunc.getInstance():getWhiteList(type)
   if #sceneWhiteList == 0 and not UserInfo.isWeb() then
     LogsManager.echo("zm noWhiteList sceneId:", sceneId)
     return true

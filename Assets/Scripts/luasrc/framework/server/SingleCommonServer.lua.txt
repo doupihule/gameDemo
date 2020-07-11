@@ -25,11 +25,11 @@ function SingleCommonServer.initData(autoUpdate)
     SingleCommonServer.startSaveClientData()
   else
     SingleCommonServer._lastBackUpData = {}
-    TableUtils.deepCopy(UserModel.instance:getData(), SingleCommonServer._lastBackUpData)
+    TableUtils.deepCopy(UserModel.getInstance():getData(), SingleCommonServer._lastBackUpData)
   end
   if Global.checkIsSingleMode() then
     if autoUpdate then
-      TimerManager.instance:add(SingleCommonServer.startSaveClientData, SingleCommonServer, Global.updateUserDataDelay, 9999999)
+      TimerManager.getInstance():add(SingleCommonServer.startSaveClientData, SingleCommonServer, Global.updateUserDataDelay, 9999999)
     end
   end
 end
@@ -58,9 +58,9 @@ function SingleCommonServer.startSaveClientData(isDelaySave, callBack, thisObj, 
   end
   SingleCommonServer._saveLock = true
   SingleCommonServer.sureDoSaveData(false, callBack, thisObj, dummyBackData)
-  TimerManager.instance:remove(SingleCommonServer._delayCode)
+  TimerManager.getInstance():remove(SingleCommonServer._delayCode)
   if SingleCommonServer.minUpdateTime > 0 then
-    SingleCommonServer._delayCode = TimerManager.instance:add(SingleCommonServer.delayCheck, SingleCommonServer, SingleCommonServer.minUpdateTime, 1, false)
+    SingleCommonServer._delayCode = TimerManager.getInstance():add(SingleCommonServer.delayCheck, SingleCommonServer, SingleCommonServer.minUpdateTime, 1, false)
   end
 end
 
@@ -114,13 +114,13 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
   end
   local params = nil
   local lastBackData = {}
-  local tempUserData = UserModel.instance:getData()
+  local tempUserData = UserModel.getInstance():getData()
   if not SingleCommonServer.hasUpdateAllData then
     tempUserData.hasUpdateData = true
     local tempData = {}
     TableUtils.deepCopy(tempUserData, tempData)
     params = {clientDirty={u=tempData}}
-    CacheManager.instance:setGlobalCache(StorageCode.storage_userinfo, TableUtils.safelyJsonStringfy(tempUserData))
+    CacheManager.getInstance():setGlobalCache(StorageCode.storage_userinfo, TableUtils.safelyJsonStringfy(tempUserData))
     LogsManager.echo("_还没有完整的同步过数据,需要先整体同步")
   else
     params = {clientDirty=SingleCommonServer.getClientDirtyList()}
@@ -132,7 +132,7 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
   if not tempUserData.uid then
     tempUserData.sendTime = nil
   else
-    tempUserData.sendTime = Client.instance.serverTime
+    tempUserData.sendTime = Client.getInstance().serverTime
     params.sendTime = tempUserData.sendTime
   end
   if not params.clientDirty.u then
@@ -140,15 +140,15 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
   end
   params.clientDirty.u.sendTime = tempUserData.sendTime
   local userDataStr = TableUtils.safelyJsonStringfy(tempUserData)
-  CacheManager.instance:setGlobalCache(StorageCode.storage_userinfo, userDataStr)
+  CacheManager.getInstance():setGlobalCache(StorageCode.storage_userinfo, userDataStr)
   TableUtils.deepCopy(tempUserData, lastBackData)
   LogsManager.echo("开始同步数据,length:" .. #userDataStr)
-  KakuraClient.instance:clearOneMethod(SingleCommonServer.user_updateData_349)
+  KakuraClient.getInstance():clearOneMethod(SingleCommonServer.user_updateData_349)
   local tempParams = {callBack=callBack, thisObj=thisObj, backData=lastBackData, params=dummyBackData}
   if forceConnect then
-    Client.instance:send(SingleCommonServer.user_updateData_349, params, SingleCommonServer.doSureDoSaveDataBack, SingleCommonServer, nil, false, tempParams, SingleCommonServer._forceExpandParams)
+    Client.getInstance():send(SingleCommonServer.user_updateData_349, params, SingleCommonServer.doSureDoSaveDataBack, SingleCommonServer, nil, false, tempParams, SingleCommonServer._forceExpandParams)
   else
-    Client.instance:send(SingleCommonServer.user_updateData_349, params, SingleCommonServer.doSureDoSaveDataBack, SingleCommonServer, nil, false, tempParams)
+    Client.getInstance():send(SingleCommonServer.user_updateData_349, params, SingleCommonServer.doSureDoSaveDataBack, SingleCommonServer, nil, false, tempParams)
   end
 end
 
@@ -172,8 +172,8 @@ function SingleCommonServer.sendNoAliCloudData(params)
     return
   end
   LogsManager.echo("开始非单机项目同步数据")
-  KakuraClient.instance:clearOneMethod(SingleCommonServer.user_updateData_349)
-  Client.instance:send(SingleCommonServer.user_updateData_349, params, function(result)
+  KakuraClient.getInstance():clearOneMethod(SingleCommonServer.user_updateData_349)
+  Client.getInstance():send(SingleCommonServer.user_updateData_349, params, function(result)
     Client.temDirtList = {}
     if result.error then
       return
@@ -186,7 +186,7 @@ end
 function SingleCommonServer.getClientDirtyList()
   local dData = {}
   local uData = {}
-  local userData = UserModel.instance:getData()
+  local userData = UserModel.getInstance():getData()
   TableUtils.compareTable(SingleCommonServer._lastBackUpData, userData, uData)
   uData.loginToken = nil
   uData.sendTime = nil
@@ -208,7 +208,7 @@ end
 
 function SingleCommonServer.setUpdateDataFlag(thisObj, data)
   LogsManager.echo("krma. 确认同步，存入本地")
-  CacheManager.instance:setGlobalCache(StorageCode.storage_userinfo, TableUtils.safelyJsonStringfy(data))
+  CacheManager.getInstance():setGlobalCache(StorageCode.storage_userinfo, TableUtils.safelyJsonStringfy(data))
 end
 
 function SingleCommonServer.disposeAccount()
@@ -221,7 +221,7 @@ end
 
 SingleCommonServer._isDestoryData = false;
 function SingleCommonServer.disposeCloudStorageAccount()
-  local userData = UserModel.instance:getData()
+  local userData = UserModel.getInstance():getData()
   for key in pairs(userData) do
     -- [ts2lua]userData下标访问可能不正确
     userData[key] = nil
@@ -232,5 +232,5 @@ function SingleCommonServer.disposeCloudStorageAccount()
 end
 
 function SingleCommonServer.destoryUserData()
-  CacheManager.instance:setGlobalCache(StorageCode.storage_userinfo, '')
+  CacheManager.getInstance():setGlobalCache(StorageCode.storage_userinfo, '')
 end

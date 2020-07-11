@@ -3,7 +3,7 @@
 BattleLogsManager = class('BattleLogsManager')
 
 BattleLogsManager.isShowBattleLog = true;
-function BattleLogsManager.__getters.instance()
+function BattleLogsManager.getInstance()
   if not BattleLogsManager._instance then
     BattleLogsManager._instance = BattleLogsManager.new()
   end

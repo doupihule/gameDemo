@@ -142,7 +142,7 @@ end
 function BuffTrigger.runBuff_6(attacker, defer, skillAction, buff)
   local localParams = buff.skillLogicalParams
   local frame = tonumber(localParams[0+1][1+1])
-  frame = BattleFunc.instance:turnMinisecondToframe(frame)
+  frame = BattleFunc.getInstance():turnMinisecondToframe(frame)
   defer:interruptSkill(attacker)
   defer:onHitedBack(attacker, localParams[0+1][0+1], localParams[0+1][2+1] or 0, frame)
   defer.controler:setCallBack(frame, defer.clearOneBuff, defer, buff)

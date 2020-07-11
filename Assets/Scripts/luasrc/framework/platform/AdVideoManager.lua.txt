@@ -19,7 +19,7 @@
 
 AdVideoManager = class('AdVideoManager')
 function AdVideoManager:ctor(...)
-  self.ttInterstitialAdLastShowTime = Client.instance.miniserverTime;
+  self.ttInterstitialAdLastShowTime = Client.getInstance().miniserverTime;
   self._isInitAdv = true;
 end
 AdVideoManager.InterstitialAd_NONE = 1;
@@ -29,7 +29,7 @@ AdVideoManager.InterstitialAd_TYPE_AD = 4;
 AdVideoManager.InterstitialAd_TYPE_ORIGINAL = 5;
 AdVideoManager.TYPE_ORIGINAL_INTERSTITIAL = 'INTERSTITIAL';
 AdVideoManager.TYPE_ORIGINAL_ICON = 'ICON';
-function AdVideoManager.__getters.instance()
+function AdVideoManager.getInstance()
   if not AdVideoManager._instance then
     AdVideoManager._instance = AdVideoManager.new()
   end

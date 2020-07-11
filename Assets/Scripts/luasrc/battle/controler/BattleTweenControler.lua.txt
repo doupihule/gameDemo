@@ -31,7 +31,7 @@ function BattleTweenControler:updateOneTween(tweenInfo)
   local startParams = tweenInfo.startParams
   local targetParams = tweenInfo.targetParams
   local disParams = tweenInfo.disParams
-  local instance = tweenInfo.instance
+  local instance = tweenInfo.getInstance()
   if self:checkHasType(type, BattleConst.TWEEN_MOVE) then
     local targetx = nil
     local targety = nil
@@ -154,7 +154,7 @@ function BattleTweenControler:clearOneTween(instance)
   local i = #self._tweenInfoMap - 1
   repeat
     local info = self._tweenInfoMap[i+1]
-    if info.instance == instance then
+    if info.getInstance() == instance then
       self._tweenInfoMap:splice(i, 1)
     end
     i=i-1

@@ -6,7 +6,7 @@ function BattleSceneManager:ctor(...)
   self._battestate = 0;
 end
 
-function BattleSceneManager.__getters.instance()
+function BattleSceneManager.getInstance()
   if not BattleSceneManager._instance then
     BattleSceneManager._instance = BattleSceneManager.new()
   end
