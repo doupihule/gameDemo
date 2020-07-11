@@ -19,7 +19,7 @@
 
 AdVideoManager = class('AdVideoManager')
 function AdVideoManager:ctor(...)
-  self.ttInterstitialAdLastShowTime = Client.getInstance().miniserverTime;
+  self.ttInterstitialAdLastShowTime = Client.getInstance():getMiniServerTime();
   self._isInitAdv = true;
 end
 AdVideoManager.InterstitialAd_NONE = 1;

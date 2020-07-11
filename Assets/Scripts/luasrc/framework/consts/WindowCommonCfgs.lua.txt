@@ -9,7 +9,7 @@ WindowCommonCfgs.MainJumpKariquView = "MainJumpKariquUI";
 WindowCommonCfgs.ResultJumpDoubleView = "ResultJumpDoubleUI";
 WindowCommonCfgs.ResultJumpView = "ResultJumpUI";
 WindowCommonCfgs.ChangeDataView = "ChangeDataUI";
-function WindowCommonCfgs.__getters.windowcfgs()
+function WindowCommonCfgs.getWindowcfgs()
   if not WindowCommonCfgs._windowcfgs then
     WindowCommonCfgs._windowcfgs = {}
   end

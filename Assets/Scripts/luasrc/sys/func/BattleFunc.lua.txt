@@ -304,16 +304,6 @@ function BattleFunc.initGlobalParams()
   BattleFunc.buildingAutoReduceHp = tonumber(buildAutoHp[1+1])
   BattleFunc.idToShowMap = cfg
   BattleFunc.initFrameDates()
-  if UserInfo.isWeb() then
-    -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
-    local re = '%@(.*)%@/g'
-    if window.location.href:search(re) >= 0 then
-      local rt = re:exec(window.location.href)
-      local str = rt[1+1]
-      LogsManager.echo("战斗调试模式:", str)
-      GameSwitch.getSwitchMap().SWITCH_BATTLE_DEBUGLEVEL = str
-    end
-  end
 end
 
 function BattleFunc.initFrameDates()

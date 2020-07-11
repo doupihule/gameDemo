@@ -80,7 +80,7 @@ function BattleLogicalControler:setData(data)
   self.frontPos2 = 0
   self._isGamePause = false
   self.tweenControler:setData()
-  self.startTime = Client.getInstance().serverTime
+  self.startTime = Client.getInstance():getServerTime()
   if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
     self:setNormalMap()
   elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then

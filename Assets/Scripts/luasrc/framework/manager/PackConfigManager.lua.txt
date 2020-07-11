@@ -41,20 +41,20 @@ function PackConfigManager.initCfgs()
   LogsManager.echo("UserInfo.systemId", UserInfo.systemId, UserInfo.platformId, UserInfo.isSystemAndroid())
 end
 
-function PackConfigManager.__getters:platform()
+function PackConfigManager:getPlatform()
   if self._platform ~= nil then
     return self._platform
   end
   self._platform = {}
   local config = PackageConfig.configData
-  local platform = TestPlatform.platform
+  local platform = TestPlatform.getPlatform()
   if UserInfo.isWeb() then
     Global.isCDN = false
   else
     Global.isCDN = true
   end
   if Global.checkUserCloudStorage() then
-    platform = CloudPlatformData.platform
+    platform = CloudPlatformData.getPlatform()
   end
   if config ~= nil then
     self._platform["platform"] = config.APP_DEPLOYMENT
@@ -79,7 +79,7 @@ function PackConfigManager.__getters:platform()
   return self._platform
 end
 
-function PackConfigManager.__setters:platform(val)
+function PackConfigManager:setPlatform(val)
   self._platform["kakura_url"] = val.link
   self._platform["sec"] = val._id
 end

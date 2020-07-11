@@ -77,7 +77,7 @@ function BattleResultUI:setData(data)
   else
     self.win.visible = false
     self.lose.visible = true
-    StatisticsManager.getInstance():onEvent(StatisticsManager.LEVEL_FAIL, {levelId=data.levelId, time=Client.getInstance().serverTime - self.controler.startTime})
+    StatisticsManager.getInstance():onEvent(StatisticsManager.LEVEL_FAIL, {levelId=data.levelId, time=Client.getInstance():getServerTime() - self.controler.startTime})
   end
   self:showWinReward()
   self:showRole()
@@ -128,13 +128,13 @@ function BattleResultUI:showNormalBattleReward()
     local settlementDouble = GlobalParamsFunc.getInstance():getDataArray('settlementDouble')
     -- [ts2lua]settlementDouble下标访问可能不正确
     self.battleResultRetio = tonumber(settlementDouble[self.battleResultCount % #settlementDouble])
-    StatisticsManager.getInstance():onEvent(StatisticsManager.LEVEL_VICTORY, {levelId=self.levelId, time=Client.getInstance().serverTime - self.controler.startTime})
+    StatisticsManager.getInstance():onEvent(StatisticsManager.LEVEL_VICTORY, {levelId=self.levelId, time=Client.getInstance():getServerTime() - self.controler.startTime})
     StatisticsManager.getInstance():onEvent(StatisticsManager.SHOWTV_BATTLEVICTORY_SHOW, {doubleRate=self.battleResultRetio})
     self:showGuide_201()
   else
     self.win.visible = false
     self.lose.visible = true
-    StatisticsManager.getInstance():onEvent(StatisticsManager.LEVEL_FAIL, {levelId=self.levelId, time=Client.getInstance().serverTime - self.controler.startTime})
+    StatisticsManager.getInstance():onEvent(StatisticsManager.LEVEL_FAIL, {levelId=self.levelId, time=Client.getInstance():getServerTime() - self.controler.startTime})
   end
 end
 

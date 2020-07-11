@@ -49,7 +49,7 @@ function StatisticsExtendManager.onEvent(event, eventData)
     eventId = event
   end
   -- [ts2lua]sendData下标访问可能不正确
-  sendData["comeFrom"] = UserInfo.LoginSceneInfo
+  sendData["comeFrom"] = UserInfo.getLoginSceneInfo()
   if UserInfo.channelUserId then
     -- [ts2lua]sendData下标访问可能不正确
     sendData["channelUserId"] = UserInfo.channelUserId

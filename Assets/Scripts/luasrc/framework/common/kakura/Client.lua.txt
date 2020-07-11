@@ -55,10 +55,10 @@ function Client:sendInit(token, userInfo, callback, thisObj, invitedBy, shareInf
   self._gs_token = token
   self._callback = callback
   self._thisObj = thisObj
-  self._url = PackConfigManager.getInstance().platform.kakura_url
+  self._url = PackConfigManager.getInstance():getPlatform().kakura_url
   self._version = Global.version
-  self._upgrade = PackConfigManager.getInstance().platform.upgrade_path
-  self._sec = PackConfigManager.getInstance().platform.sec
+  self._upgrade = PackConfigManager.getInstance():getPlatform().upgrade_path
+  self._sec = PackConfigManager.getInstance():getPlatform().sec
   self._kakuraInitParams = self:getKakuraInitMsg(userInfo, invitedBy, shareInfo)
   KakuraClient.getInstance():init(self._url, self._version, "", self.pushResult, self, self.onConnectBack, self)
 end
@@ -296,21 +296,15 @@ function Client:reloginBack(result)
   end
 end
 
-function Client.__getters:serverTime()
+function Client:getServerTime()
   return math.floor(self._serverTime + math.floor(cs.GameUtils.CommonUtil.GetTimeMiniStamp()) * 0.001)
 end
 
-function Client.__getters:miniserverTime()
+function Client:getMiniServerTime()
   return self._serverTime + cs.GameUtils.CommonUtil.GetTimeMiniStamp()
 end
 
-function Client.__getters:serverTimeMicro()
-  return self._serverTime + cs.GameUtils.CommonUtil.GetTimeMiniStamp()
-end
 
-function Client.__getters:reqBackTime()
-  return self._reqBackTime * 0.001
-end
 
 function Client:getRequestId()
   if self._requestId >= 0 then
@@ -353,12 +347,12 @@ function Client:getKakuraInitMsg(userInfo, invitedBy, shareInfo)
   return params
 end
 
-function Client.__getters:rid()
+function Client:getRid()
   return self._rid
 end
 
-function Client.__getters:webSocketConnet()
-  return KakuraClient.getInstance().webSocketConnet
+function Client:getWebSocketConnet()
+  return KakuraClient.getInstance().getWebSocketConnet()
 end
 
 function Client:testClose()
@@ -468,7 +462,7 @@ function Client:startRequestCloud(method, params, callback, thisObj, addParam, e
     if callback then
       doJsCallFunc(callback,thisObj, error, addParam)
     end
-    Client.getInstance().lastLoginTime = Client.getInstance().serverTime
+    Client.getInstance().lastLoginTime = Client.getInstance():getServerTime()
   end
   
   local onHttpBack = function(backData)
@@ -486,7 +480,7 @@ function Client:startRequestCloud(method, params, callback, thisObj, addParam, e
     if callback then
       doJsCallFunc(callback,thisObj, backData, addParam)
     end
-    Client.getInstance().lastLoginTime = Client.getInstance().serverTime
+    Client.getInstance().lastLoginTime = Client.getInstance():getServerTime()
   end
   
   local sendData = {method=method, params=params}

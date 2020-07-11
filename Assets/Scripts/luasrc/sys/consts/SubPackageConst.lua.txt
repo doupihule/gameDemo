@@ -17,13 +17,13 @@ SubPackageConst.PATH_STYLE_CDN = 0;
 SubPackageConst.PATH_STYLE_NATIVE = 1;
 SubPackageConst.PATH_STYLE_SUBPACK = 2;
 SubPackageConst._subPackData = {}
-function SubPackageConst.__getters.subPackData()
+function SubPackageConst.getSubPackData()
   if not SubPackageConst._hasCoverSubpack then
     SubPackageConst._hasCoverSubpack = true
     local data = SubPackageConst._platSubpackData[UserInfo.platformId]
     if data then
       for i in pairs(data) do
-        SubPackageConst.subPackData[i+1] = data[i+1]
+        SubPackageConst._subPackData[i] = data[i]
       end
     end
   end

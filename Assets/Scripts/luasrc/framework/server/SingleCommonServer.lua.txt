@@ -120,7 +120,7 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
     local tempData = {}
     TableUtils.deepCopy(tempUserData, tempData)
     params = {clientDirty={u=tempData}}
-    CacheManager.getInstance():setGlobalCache(StorageCode.storage_userinfo, TableUtils.safelyJsonStringfy(tempUserData))
+    CacheManager.getInstance():setGlobalCache(StorageCode.getStorage_userinfo(), TableUtils.safelyJsonStringfy(tempUserData))
     LogsManager.echo("_还没有完整的同步过数据,需要先整体同步")
   else
     params = {clientDirty=SingleCommonServer.getClientDirtyList()}
@@ -132,7 +132,7 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
   if not tempUserData.uid then
     tempUserData.sendTime = nil
   else
-    tempUserData.sendTime = Client.getInstance().serverTime
+    tempUserData.sendTime = Client.getInstance():getServerTime()
     params.sendTime = tempUserData.sendTime
   end
   if not params.clientDirty.u then
@@ -140,7 +140,7 @@ function SingleCommonServer.sureDoSaveData(forceConnect, callBack, thisObj, dumm
   end
   params.clientDirty.u.sendTime = tempUserData.sendTime
   local userDataStr = TableUtils.safelyJsonStringfy(tempUserData)
-  CacheManager.getInstance():setGlobalCache(StorageCode.storage_userinfo, userDataStr)
+  CacheManager.getInstance():setGlobalCache(StorageCode.getStorage_userinfo(), userDataStr)
   TableUtils.deepCopy(tempUserData, lastBackData)
   LogsManager.echo("开始同步数据,length:" .. #userDataStr)
   KakuraClient.getInstance():clearOneMethod(SingleCommonServer.user_updateData_349)
@@ -208,7 +208,7 @@ end
 
 function SingleCommonServer.setUpdateDataFlag(thisObj, data)
   LogsManager.echo("krma. 确认同步，存入本地")
-  CacheManager.getInstance():setGlobalCache(StorageCode.storage_userinfo, TableUtils.safelyJsonStringfy(data))
+  CacheManager.getInstance():setGlobalCache(StorageCode.getStorage_userinfo(), TableUtils.safelyJsonStringfy(data))
 end
 
 function SingleCommonServer.disposeAccount()
@@ -232,5 +232,5 @@ function SingleCommonServer.disposeCloudStorageAccount()
 end
 
 function SingleCommonServer.destoryUserData()
-  CacheManager.getInstance():setGlobalCache(StorageCode.storage_userinfo, '')
+  CacheManager.getInstance():setGlobalCache(StorageCode.getStorage_userinfo(), '')
 end

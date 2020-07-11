@@ -40,7 +40,7 @@ function CountsModel:getCountsById(id)
     return 0
   else
     local time = counts[id] and counts[id]["expireTime"] or 0
-    local curT = Client.getInstance().serverTime
+    local curT = Client.getInstance():getServerTime()
     time = time - curT
     if time < 0 then
       return 0

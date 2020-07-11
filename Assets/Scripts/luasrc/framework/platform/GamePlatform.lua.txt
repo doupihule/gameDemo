@@ -59,7 +59,7 @@ function GamePlatform:reqServerList(callBack, thisObject)
       end
       i=i+1
     until not(i < len)
-    PackConfigManager.getInstance().platform = pData
+    PackConfigManager.getInstance():setPlatform(pData)
     callBack and doJsCallFunc(callBack,thisObject, data[0+1].result.data)
   end
   , self, "post")
@@ -67,30 +67,30 @@ end
 
 function GamePlatform:reqVMS()
   if Global.checkUserCloudStorage() then
-    Global.global_url = PackConfigManager.getInstance().platform.cloud_url
-    Global.version = PackConfigManager.getInstance().platform.vms_version
+    Global.global_url = PackConfigManager.getInstance():getPlatform().cloud_url
+    Global.version = PackConfigManager.getInstance():getPlatform().vms_version
     self:getWxInfo()
     return
   end
   if PackageConfig.configData then
     self:checkVersion()
   else
-    local url = PackConfigManager.getInstance().platform.vms_url .. '?mod=vms&r=gameApi/getOnlineVersion&upgrade_path=' .. PackConfigManager.getInstance().platform.upgrade_path
+    local url = PackConfigManager.getInstance():getPlatform().vms_url .. '?mod=vms&r=gameApi/getOnlineVersion&upgrade_path=' .. PackConfigManager.getInstance():getPlatform().upgrade_path
     HttpMessage.getInstance():send(url, nil, self.checkVMSBack, self)
   end
 end
 
 function GamePlatform:checkVMSBack(result)
   local version = result.online_version
-  LogsManager.echo("online_version:", version, "local vms_version", PackConfigManager.getInstance().platform.vms_version)
+  LogsManager.echo("online_version:", version, "local vms_version", PackConfigManager.getInstance():getPlatform().vms_version)
   LogsManager.echo("client_version:", Global.client_version)
-  version = math.max(version, PackConfigManager.getInstance().platform.vms_version)
-  PackConfigManager.getInstance().platform.vms_version = version
+  version = math.max(version, PackConfigManager.getInstance():getPlatform().vms_version)
+  PackConfigManager.getInstance():getPlatform().vms_version = version
   self:checkVersion()
 end
 
 function GamePlatform:checkVersion()
-  local url = PackConfigManager.getInstance().platform.vms_url .. '?mod=vms&r=gameApi/checkVersion&ver=' .. PackConfigManager.getInstance().platform.vms_version
+  local url = PackConfigManager.getInstance():getPlatform().vms_url .. '?mod=vms&r=gameApi/checkVersion&ver=' .. PackConfigManager.getInstance():getPlatform().vms_version
   HttpMessage.getInstance():send(url, nil, self.checkVersionCallback, self)
 end
 
@@ -116,9 +116,9 @@ function GamePlatform:checkVersionCallback(result)
   if result.s == VersionManager.VERSION_STATUS_FORCE_UPDATE then
     Global.version = result.v.version
   else
-    Global.version = PackConfigManager.getInstance().platform.vms_version
+    Global.version = PackConfigManager.getInstance():getPlatform().vms_version
   end
-  LogsManager.echo("Global.version:", Global.version, "localVersion:", PackConfigManager.getInstance().platform.vms_version, "updateSatus:", result.s)
+  LogsManager.echo("Global.version:", Global.version, "localVersion:", PackConfigManager.getInstance():getPlatform().vms_version, "updateSatus:", result.s)
   self:addUpdateListener()
   KariqiShareManager.kariquLogin()
 end
@@ -218,7 +218,7 @@ function GamePlatform:reqGlobal(params, isInit)
       WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.onGlobalError, self)
       return
     end
-    PackConfigManager.getInstance().platform = pData
+    PackConfigManager.getInstance():getPlatform() = pData
     self:getLoginResult()
   end
   
@@ -226,7 +226,7 @@ function GamePlatform:reqGlobal(params, isInit)
   if Global.checkUserCloudStorage() then
     url = Global.global_url
     params.params.game = GameConsts.gameCode
-    params.params.platform = PackConfigManager.getInstance().platform.platform
+    params.params.platform = PackConfigManager.getInstance():getPlatform().platform
     params.params.version = Global.version
     webParams.errorCall = onHttpErrorBack
   end
@@ -350,7 +350,7 @@ function GamePlatform:compareData(data)
   if not Global.checkUserCloudStorage() then
     return
   end
-  local localData = CacheManager.getInstance():getGlobalCache(StorageCode.storage_userinfo)
+  local localData = CacheManager.getInstance():getGlobalCache(StorageCode.getStorage_userinfo())
   if not localData or localData == "0" then
     if self:checkHasUserData(data.user) then
       localData = data.user

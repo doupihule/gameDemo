@@ -20,8 +20,8 @@ function GameHttpControler:ctor()
   self.defaultExpandParams = {url=nil, forceConnect=true};
   self._tempWebParams.errorCall = self.onHttpError
   self._tempWebParams.isOrigin = true
-  if PackConfigManager.getInstance().platform.backend_url then
-    self.httpServerUrl = PackConfigManager.getInstance().platform.backend_url
+  if PackConfigManager.getInstance():getPlatform().backend_url then
+    self.httpServerUrl = PackConfigManager.getInstance():getPlatform().backend_url
   else
     LogsManager.warn("backendUrlError", "httpserver Platform没有设置backend_url")
   end
@@ -29,10 +29,10 @@ end
 
 function GameHttpControler:getServerUrl()
   local version = Global.version
-  if Global.version == "1" and PackConfigManager.getInstance().platform.platform == "test" then
+  if Global.version == "1" and PackConfigManager.getInstance():getPlatform().platform == "test" then
     version = "100000000"
   end
-  return self.httpServerUrl .. "&ver=" .. version .. "&upgrade_path=" .. PackConfigManager.getInstance().platform.upgrade_path
+  return self.httpServerUrl .. "&ver=" .. version .. "&upgrade_path=" .. PackConfigManager.getInstance():getPlatform().upgrade_path
 end
 
 function GameHttpControler:sendRequest(method, params, callback, thisObj, isWait, isInsert, addParams, expandParams)
@@ -57,7 +57,7 @@ function GameHttpControler:sendRequest(method, params, callback, thisObj, isWait
   if expandParams == nil then
     expandParams=nil
   end
-  self._lastSendTime = Client.getInstance().miniserverTime
+  self._lastSendTime = Client.getInstance():getMiniServerTime()
   local uniuquId = self:getUniqueRequestId()
   if not expandParams then
     expandParams = self.defaultExpandParams

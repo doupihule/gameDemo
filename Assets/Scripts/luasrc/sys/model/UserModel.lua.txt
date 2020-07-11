@@ -224,7 +224,7 @@ function UserModel:isLandDeathRevive(levelId)
   -- [ts2lua]self._data.levels下标访问可能不正确
   -- [ts2lua]self._data.levels下标访问可能不正确
   -- [ts2lua]self._data.levels下标访问可能不正确
-  if (((self._data and self._data.levels) and self._data.levels[levelId]) and self._data.levels[levelId].deathRevive) and self._data.levels[levelId].expireTime > Client.getInstance().serverTime then
+  if (((self._data and self._data.levels) and self._data.levels[levelId]) and self._data.levels[levelId].deathRevive) and self._data.levels[levelId].expireTime > Client.getInstance():getServerTime() then
     return true
   end
   return false
@@ -305,9 +305,6 @@ function UserModel:getSubGuideById(id)
   return guide[id] or 0
 end
 
-function UserModel.__getters:isAuthorized()
-  return self._data.isAuthorized
-end
 
 function UserModel:setRefuseAuth()
   CacheManager.getInstance():setLocalCache(self.refuseAuth, true)
@@ -369,7 +366,7 @@ function UserModel:login()
     if (self._data and self._data.sendTime) and tonumber(self._data.sendTime) * 1000 > self:getGoodsAccumuStartTime() then
       LogsManager.echo("登陆修改宝箱累计时间，原累计时间：" .. self:getGoodsAccumuStartTime())
       LogsManager.echo("最后一次同步数据时间：" .. self._data.sendTime)
-      local newGoodsAccumuStartTime = Client.getInstance().serverTimeMicro - tonumber(self._data.sendTime) * 1000 - self:getGoodsAccumuStartTime()
+      local newGoodsAccumuStartTime = Client.getInstance():getServerTime()Micro - tonumber(self._data.sendTime) * 1000 - self:getGoodsAccumuStartTime()
       LogsManager.echo("新宝箱累计时间：" .. newGoodsAccumuStartTime)
       -- [ts2lua]upUserExtData下标访问可能不正确
       upUserExtData["goodsAccumuStartTime"] = newGoodsAccumuStartTime
@@ -489,7 +486,7 @@ function UserModel:getFogShopGoodsList()
   end
   -- [ts2lua]lua中0和空字符串也是true，此处data.fogOuterShop.expireTime需要确认
   local expireTime = (data.fogOuterShop.expireTime and {data.fogOuterShop.expireTime} or {GameUtils.getNextRefreshTByTime(4)})[1]
-  if expireTime < Client.getInstance().serverTime then
+  if expireTime < Client.getInstance():getServerTime() then
     return goodLsit
   end
   local goods = data.fogOuterShop.goods
@@ -521,7 +518,7 @@ function UserModel:getFogShopStatus(index)
   end
   -- [ts2lua]lua中0和空字符串也是true，此处data.fogOuterShop.expireTime需要确认
   local expireTime = (data.fogOuterShop.expireTime and {data.fogOuterShop.expireTime} or {GameUtils.getNextRefreshTByTime(4)})[1]
-  if expireTime < Client.getInstance().serverTime then
+  if expireTime < Client.getInstance():getServerTime() then
     LogsManager.echo("whn outshop 已经过期")
     return false
   end

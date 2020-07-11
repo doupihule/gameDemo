@@ -128,7 +128,7 @@ end
 
 function UserExtModel:getLastPowerFreshTime()
   if not self._data.upSpTime then
-    self._data.upSpTime = Client.getInstance().serverTime
+    self._data.upSpTime = Client.getInstance():getServerTime()
   end
   return self._data.upSpTime
 end
@@ -155,19 +155,19 @@ function UserExtModel:calcSp()
   local recoveTime = GlobalParamsFunc.getInstance():getDataNum('spRestoreTime')
   local max = GlobalParamsFunc.getInstance():getDataNum('maxSp')
   if self.curSp < max then
-    local times = math.floor(Client.getInstance().serverTime - self.upSpTime / recoveTime)
+    local times = math.floor(Client.getInstance():getServerTime() - self.upSpTime / recoveTime)
     if times <= 0 then
       return
     end
     if self.curSp + times > max then
       self.curSp = max
-      self.upSpTime = Client.getInstance().serverTime
+      self.upSpTime = Client.getInstance():getServerTime()
     else
       self.curSp = self.curSp + times
       self.upSpTime = self.upSpTime + times * recoveTime
     end
   else
-    self.upSpTime = Client.getInstance().serverTime
+    self.upSpTime = Client.getInstance():getServerTime()
   end
 end
 
@@ -180,12 +180,12 @@ function UserExtModel:getUpTime()
 end
 
 function UserExtModel:getNextPowerRestoreTime()
-  return GlobalParamsFunc.getInstance():getDataNum('spRestoreTime') - math.floor(Client.getInstance().serverTime - UserExtModel.getInstance():getLastPowerFreshTime() % GlobalParamsFunc.getInstance():getDataNum('spRestoreTime'))
+  return GlobalParamsFunc.getInstance():getDataNum('spRestoreTime') - math.floor(Client.getInstance():getServerTime() - UserExtModel.getInstance():getLastPowerFreshTime() % GlobalParamsFunc.getInstance():getDataNum('spRestoreTime'))
 end
 
 function UserExtModel:getCurrentSp()
   local maxSp = GlobalParamsFunc.getInstance():getDataNum('maxSp')
-  local nowPower = UserExtModel.getInstance():getLastFreshPower() + math.floor(Client.getInstance().serverTime - UserExtModel.getInstance():getLastPowerFreshTime() / GlobalParamsFunc.getInstance():getDataNum('spRestoreTime'))
+  local nowPower = UserExtModel.getInstance():getLastFreshPower() + math.floor(Client.getInstance():getServerTime() - UserExtModel.getInstance():getLastPowerFreshTime() / GlobalParamsFunc.getInstance():getDataNum('spRestoreTime'))
   if UserExtModel.getInstance():getLastFreshPower() > maxSp then
     nowPower = UserExtModel.getInstance():getLastFreshPower()
   elseif nowPower > maxSp then

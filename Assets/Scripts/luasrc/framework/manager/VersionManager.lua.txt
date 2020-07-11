@@ -43,7 +43,7 @@ end
 
 function VersionManager:initVersionData()
   self.versionJsonObj = Laya.Loader:getRes(self.versionName)
-  local subPackData = SubPackageConst.subPackData
+  local subPackData = SubPackageConst.getSubPackData()
   for i in pairs(subPackData) do
     local info = subPackData[i+1]
     if i ~= SubPackageConst.packName_json and i ~= SubPackageConst.packName_mergefiles then

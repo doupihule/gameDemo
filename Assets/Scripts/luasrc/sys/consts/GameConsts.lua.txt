@@ -23,7 +23,7 @@ GameConsts.JUMP_KARIQU_SAVEJUMP_URL = "https://xyx.17tcw.com:5201/xyx/statis/req
 GameConsts.GAME_OFFEST = 13;
 GameConsts.GAME_APPID = "wx037985b586671eee";
 GameConsts.ENCODE_SHA1 = "PhmdlmidmeQmfhmefmfgmOhmejmROmNhmfjmOhmPNmejmfcmjhmihmePmNg|kQmOPmSOmkgmljmcimcgmjemedmejmORmNjmNkmefmecmjimkdmQgmifmei";
-function GameConsts.__getters.gameName()
+function GameConsts.getGameName()
   -- [ts2lua]GameConsts._gameName下标访问可能不正确
   if GameConsts._gameName[UserInfo.platformId] then
     -- [ts2lua]GameConsts._gameName下标访问可能不正确

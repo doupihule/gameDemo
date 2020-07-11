@@ -51,7 +51,7 @@ function CountsCommonModel:IsExpire(id)
       -- [ts2lua]self._data下标访问可能不正确
       -- [ts2lua]self._data[id]下标访问可能不正确
       local expireTime = self._data[id]["expireTime"]
-      if expireTime > Client.getInstance().serverTime then
+      if expireTime > Client.getInstance():getServerTime() then
         return false
       else
         return true

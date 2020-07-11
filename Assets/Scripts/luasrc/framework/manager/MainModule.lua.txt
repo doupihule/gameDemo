@@ -19,7 +19,7 @@ function MainModule:ctor()
 end
 
 function MainModule:onLoadingUIComplete()
-  self.timeLock = Client.getInstance().miniserverTime
+  self.timeLock = Client.getInstance():getMiniServerTime()
   self:reqVMS()
 end
 
@@ -79,7 +79,7 @@ function MainModule:onConfigLoaded()
 end
 
 function MainModule:sysCallback()
-  LogsManager.echo(" ======--VMSTIME--======== " .. Client.getInstance().miniserverTime - self.timeLock)
+  LogsManager.echo(" ======--VMSTIME--======== " .. Client.getInstance():getMiniServerTime() - self.timeLock)
   if not Global.checkUserCloudStorage() then
     UserInfo.platform:getWxInfo()
   end
@@ -131,7 +131,7 @@ function MainModule:onMergeFileBack()
 end
 
 function MainModule:loginResult()
-  LogsManager.echo(" ======--GlobalTIME--======== " .. Client.getInstance().miniserverTime - self.timeLock)
+  LogsManager.echo(" ======--GlobalTIME--======== " .. Client.getInstance():getMiniServerTime() - self.timeLock)
   if Global.isNotGuide() then
     
   end

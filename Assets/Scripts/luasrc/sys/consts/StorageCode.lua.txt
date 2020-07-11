@@ -12,9 +12,9 @@ StorageCode.storage_deviceStr = "deviceStr";
 StorageCode.COMEFROM_CACHE = "COMEFROM_CACHE";
 StorageCode.storage_firstrun_data = "storage_firstrun_data";
 StorageCode.storage_zip_file = "storage_zip_file";
-function StorageCode.__getters.storage_acount()
+function StorageCode.getStorage_acount()
   if UserInfo.isWeb() then
-    return GameConsts.gameCode .. "_" .. PackConfigManager.getInstance().platform.platform .. "_count"
+    return GameConsts.gameCode .. "_" .. PackConfigManager.getInstance():getPlatform().platform .. "_count"
   end
   return "acount"
 end
@@ -22,8 +22,8 @@ end
 StorageCode.storage_offlineCoinCount = "offlineCoinCount";
 StorageCode.storage_battleResultCount = "battleResultCount";
 StorageCode.storage_fogBattleResultCount = "fogBattleResultCount";
-function StorageCode.__getters.storage_userinfo()
-  local key = GameConsts.gameCode .. "_" .. PackConfigManager.getInstance().platform.platform .. "_" .. CacheManager.getInstance():getGlobalCache(StorageCode.storage_acount) or ""
+function StorageCode.getStorage_userinfo()
+  local key = GameConsts.gameCode .. "_" .. PackConfigManager.getInstance():getPlatform().platform .. "_" .. CacheManager.getInstance():getGlobalCache(StorageCode.getStorage_acount()) or ""
   return "storage_userinfo" .. key
 end
 

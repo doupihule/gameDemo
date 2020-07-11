@@ -163,13 +163,13 @@ end
 function SoundManager.getSoundSubPack(shortName)
   local groupInfo = SubPackageManager.getSoundGroupInfo(shortName)
   if not groupInfo then
-    if SubPackageConst.subPackData.sound and SubPackageConst.subPackData.sound.isWhole then
+    if SubPackageConst.getSubPackData().sound and SubPackageConst.getSubPackData().sound.isWhole then
       return SubPackageConst.packName_sound
     end
     return shortName
   end
-  if SubPackageConst.subPackData.groupSound then
-    if SubPackageConst.subPackData.groupSound.isWhole then
+  if SubPackageConst.getSubPackData().groupSound then
+    if SubPackageConst.getSubPackData().groupSound.isWhole then
       return "groupSound"
     end
   end

@@ -611,7 +611,7 @@ end
 
 function WindowManager.getWindowCfgs(winName)
   -- [ts2lua]WindowCfgs.windowcfgs下标访问可能不正确
-  local obj = WindowCfgs.windowcfgs[winName]
+  local obj = WindowCfgs.getWindowcfgs()[winName]
   if not obj then
     return WindowCfgs.commonCfgs
   end

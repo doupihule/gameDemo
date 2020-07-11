@@ -13,6 +13,6 @@ function TimeEntity:ctor(delay, callBack, thisObject, maxCount, args)
   self.callBack = callBack
   self.thisObject = thisObject
   self.maxCount = maxCount
-  self.oldTime = Client.getInstance().miniserverTime
+  self.oldTime = Client.getInstance():getMiniServerTime()
   self.args = args or TimeEntity.emptyArr
 end

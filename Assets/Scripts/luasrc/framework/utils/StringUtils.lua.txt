@@ -48,14 +48,7 @@ function StringUtils.repeatStr(target, n)
 end
 
 
-function StringUtils.chekHasChinese(str)
-  -- [ts2lua]tslua无法自动转换正则表达式，请手动处理。
-  local req = '.*[%u4e00-%u9fa5]+.*$/'
-  if(string.find(str,req)) then
-    return true
-  end
-  return false
-end
+
 
 StringUtils._signKey = "0123456789:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 function StringUtils.decodeSign(targetSign)

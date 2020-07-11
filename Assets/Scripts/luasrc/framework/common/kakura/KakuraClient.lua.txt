@@ -377,7 +377,7 @@ function KakuraClient:onSocketError()
   self:onSocketClose(nil, true)
 end
 
-function KakuraClient.__getters:webSocketConnet()
+function KakuraClient:getWebSocketConnet()
   return self._webSocketConnet
 end
 
@@ -385,7 +385,7 @@ function KakuraClient:getUniqueRequestId(requestId)
   if requestId == nil then
     requestId=""
   end
-  local rid = Client.getInstance().rid
+  local rid = Client.getInstance():getRid()
   local timestamp = (Date()):getTime()
   return "uniqueId_" .. rid .. "_" .. timestamp .. "_" .. self._requestId
 end

@@ -16,14 +16,10 @@ CloudPlatformData.online = {platform="online",
 	upgrade_path="web_cn",
 	cloud_url="https://cloud-online.fantasyfancy.com:8544/index.php?mod=jsonrpc",
 	vms_version=1};
-function CloudPlatformData.__getters.platform()
+
+function CloudPlatformData.getPlatform()
   if UserInfo.isWeb() then
     return CloudPlatformData.dev
   end
   return CloudPlatformData.test
-end
-
-function CloudPlatformData.getPlatform(plat)
-  -- [ts2lua]CloudPlatformData下标访问可能不正确
-  return CloudPlatformData[plat]
 end
