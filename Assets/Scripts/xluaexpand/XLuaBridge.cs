@@ -117,7 +117,7 @@ namespace XLua
 
         public LuaTable XLuaDoUILuaTable( string name )
         {
-            return (LuaTable)(luaEnv.DoString( string.Format( "require 'sys/views/uisource/{0}' return {1}", name , name ) , name )[0]);
+            return (LuaTable)(luaEnv.DoString( string.Format( "local ui =require 'sys/views/uisource/{0}'; return ui.new()", name , name ) , name )[0]);
         }
 
         public LuaTable XLuaDoBattleLuaTable( string name )

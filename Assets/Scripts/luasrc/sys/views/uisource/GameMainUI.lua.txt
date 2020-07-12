@@ -23,8 +23,7 @@ function GameMainUI:OnAwake()
 end
 
 function GameMainUI:Init()
-    --Init Start--Init End
-	print("lua Init...")
+	LogsManager.echo("gameUI init")
 end
 
 function GameMainUI:setData( data )
@@ -39,6 +38,6 @@ end
 function GameMainUI:OnDestroy()
 end
 
-return GameMainUI.new()
+return GameMainUI
 
 
