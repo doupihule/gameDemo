@@ -28,7 +28,6 @@ function InstanceBullet:setData(data)
   if not self._mingzhongArr then
     self._mingzhongArr = {}
   else
-    -- [ts2lua]修改数组长度需要手动处理。
     table.clearArray(self._mingzhongArr)
   end
   InstanceBullet.super.setData(self,data)
@@ -236,7 +235,6 @@ function InstanceBullet:checkAttack(skillActionArr)
 end
 
 function InstanceBullet:clearHitArr()
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(self._mingzhongArr)
 end
 

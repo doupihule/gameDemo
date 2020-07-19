@@ -26,7 +26,6 @@ function PassiveSkillTrigger.runOnePassiveGlobalAttr(passive, attrMap, targtRole
     local percentValue = attrInfo[2+1] * way
     local useType = attrInfo[3+1]
     local compareValue = attrInfo[4+1]
-    -- [ts2lua]修改数组长度需要手动处理。
     table.clearArray(tempArr)
     ChooseTrigger.getRoleByType(onwer, useType, compareValue, tempArr)
     local s = 0
@@ -174,7 +173,6 @@ function PassiveSkillTrigger.runPassiveSkill_11(attacker, skill, useArr, skillAc
     LogsManager.errorTag("passiveerror_11", "被动技能效果参数错误,skillId:", skill._skillId)
     return
   end
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(outArr)
   local i = 0
   repeat

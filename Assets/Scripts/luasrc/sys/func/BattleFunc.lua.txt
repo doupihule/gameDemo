@@ -67,7 +67,6 @@ function BattleFunc.getOneTempArr()
 end
 
 function BattleFunc.cacheOneTempArr(value)
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(value)
   table.insert(BattleFunc._cacheTempArr, value)
 end

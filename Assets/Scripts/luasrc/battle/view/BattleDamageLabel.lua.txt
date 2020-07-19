@@ -46,8 +46,7 @@ function BattleDamageLabel:setValue(kind, value)
     local compareValue = "1000"
     local bigValue = nil
     if value < 100000 then
-      -- [ts2lua]修改数组长度需要手动处理。
-      nums = strValue.length
+      nums = #strValue
       numsWidth = nums * perWid
       bigValue = ""
     else

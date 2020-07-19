@@ -15,7 +15,6 @@ function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue
     buff=nil
   end
   local tempArr = BattleFunc.getOneTempArr()
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(tempArr)
   table.insert(tempArr, attacker)
   ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_checkDmgBefore, defer, tempArr, skillAction, attacker)
@@ -170,11 +169,9 @@ function BattleFormulaTrigger.trit(attacker, defer, skill, skillAction, buffNums
   end
   local out = BattleFunc.getOneTempArr()
   local tempArr = BattleFunc.getOneTempArr()
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(tempArr)
   table.insert(tempArr, attacker)
   ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_addhp, defer, tempArr, skillAction)
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(out)
   local attackerAttr = attacker.attrData
   local deferAttr = defer.attrData

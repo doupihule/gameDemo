@@ -260,8 +260,7 @@ function RefreshControler:initLevelData(level)
   self.level = tonumber(level)
   local levelInfo = BattleFunc.getInstance():getCfgDatas("Level", tostring(level))
   self._waveIdArr = levelInfo.levelWave
-  -- [ts2lua]修改数组长度需要手动处理。
-  self.maxWave = self._waveIdArr.length
+  self.maxWave = #self._waveIdArr
   local enemyInfo = levelInfo.enemyHomeId
   self.controler.enemyHome = self.controler:createHome(enemyInfo[0+1], {level=tonumber(enemyInfo[1+1])}, BattleConst.LIFE_JIDI, BattleConst.ROLEGROUP_ENEMY)
 end

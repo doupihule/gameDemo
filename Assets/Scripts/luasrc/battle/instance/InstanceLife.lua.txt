@@ -60,7 +60,6 @@ function InstanceLife:setData(data)
   InstanceLife.super.setData(self,data)
   self:initStand()
   self.invincibleNum = 0
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(self.shieldInfoArr)
   self.energy = 0
   self.diedState = 0

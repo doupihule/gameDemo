@@ -175,7 +175,6 @@ end
 
 function ChooseTrigger._initSkillChoose(targetRole, skill)
   local tempArr = skill.tempChooseArr
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(tempArr)
   ChooseTrigger.getSkillTargetRole(targetRole, skill, skill.chooseTartgetCfg, tempArr)
   return tempArr
@@ -210,7 +209,6 @@ function ChooseTrigger.getSkillTargetRole(instance, skill, targetData, out, used
   end
   local tempArr = nil
   local targetNumber = targetData.targetNumber
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(out)
   if chooseType == ChooseTrigger.choose_self then
     table.insert(out, instance)
@@ -325,8 +323,7 @@ function ChooseTrigger.getSkillTargetRole(instance, skill, targetData, out, used
       ChooseTrigger.chooseRoleBy_7(instance, out)
     end
     if targetNumber > 0 and targetNumber < #out then
-      -- [ts2lua]修改数组长度需要手动处理。
-      out.length = targetNumber
+      table.spliceArray(out,targetNumber+1,#out)
     end
   end
   if tempArr then
@@ -376,7 +373,6 @@ function ChooseTrigger.chooseRoleByCircle(instance, r, x, z, targetArr, chooseNu
   if soucePos == nil then
     soucePos=nil
   end
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(out)
   if not ang then
     ang = 360
@@ -444,7 +440,6 @@ function ChooseTrigger.chooseRoleByRect(instance, w, h, x, z, targetArr, chooseN
   if soucePos == nil then
     soucePos=nil
   end
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(out)
   local useSourcePos = false
   if not soucePos then

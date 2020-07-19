@@ -442,6 +442,5 @@ function InstanceMove:clearAllFollowEffect()
     self.controler:destoryEffect(self._followEffGroup[i+1])
     i=i+1
   until not(i < #self._followEffGroup)
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(self._followEffGroup)
 end

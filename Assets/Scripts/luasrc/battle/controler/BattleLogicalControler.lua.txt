@@ -781,17 +781,11 @@ function BattleLogicalControler:dispose()
   self.tweenControler:dispose()
   self.statistControler:startSendStatistics()
   self:destoryInstanceArr(self._allInstanceArr)
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(self._timeList)
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(self.campArr_1)
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(self.campArr_2)
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(self.diedArr_1)
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(self.diedArr_2)
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(self._allInstanceArr)
   self.tweenControler:dispose()
   self.cameraControler = nil

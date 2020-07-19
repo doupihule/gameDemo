@@ -626,6 +626,7 @@ function table.spliceArray( arr,pos,nums )
 		table.remove(arr,pos)
 	else
 		if not nums then nums = #arr end;
+		if(pos > #arr ) then return end;
 		local endNum = pos+ nums-1;
 		if (endNum > #arr) then endNum = #arr end;
 		for i=endNum,pos,-1 do

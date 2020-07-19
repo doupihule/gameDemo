@@ -106,7 +106,6 @@ function SkillActionTrigger.runOneSkillAction(attacker, skill, skillAction, useA
     until not(i < #useArr)
   end
   local skillTempChooseArr = skillAction.tempChooseArr
-  -- [ts2lua]修改数组长度需要手动处理。
   table.clearArray(skillTempChooseArr)
   local i = 0
   repeat
@@ -125,7 +124,6 @@ function SkillActionTrigger.runOneSkillAction(attacker, skill, skillAction, useA
     local rt = doJsCallFunc(func,SkillActionTrigger, attacker, skill, skillAction, useArr)
     ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_action_usedAfter, attacker, useArr, skillAction)
     SkillExpandTrigger.onCheckExpand(attacker, skill, skillAction.cfgData.expand, useArr)
-    -- [ts2lua]修改数组长度需要手动处理。
     table.clearArray(skillTempChooseArr)
     return rt
   end
