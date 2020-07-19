@@ -81,35 +81,6 @@ function TimerManager:removeByObject(obj)
 end
 
 
-function TimerManager:tickHandler(time)
-  self:onceUpdateFrame()
-  local timeEntity = nil
-  local curTime = Client.getInstance():getMiniServerTime()
-  local num = 0
-  for i in pairs(self._timeMap) do
-    timeEntity = self._timeMap[i]
-    local isRemove = false
-    num = math.floor(curTime - timeEntity.oldTime / timeEntity.delay)
-    if num > 0 then
-      timeEntity.maxCount = timeEntity.maxCount - num
-      timeEntity.oldTime = timeEntity.oldTime + num * timeEntity.delay
-      local args = timeEntity.args
-      local callBack = timeEntity.callBack
-      local thisObject = timeEntity.thisObject
-      if timeEntity.maxCount <= 0 then
-        self._timeMap[i+1] = nil
-        isRemove = true
-      end
-      if #args > 0 then
-        doJsApplyFunc(callBack,thisObject, args)
-      else
-        doJsApplyFunc(callBack,thisObject, {num})
-      end
-    end
-  end
-  return true
-end
-
 function TimerManager:onceUpdateFrame()
   local currentT = Client.getInstance():getMiniServerTime()
   local dt = currentT - self._lastFrameTime
@@ -123,21 +94,19 @@ function TimerManager:onceUpdateFrame()
   self._leftFrameDt = self._leftFrameDt + dt
   local nums = math.floor(self._leftFrameDt / self._oneFrameDt)
   self._leftFrameDt = self._leftFrameDt - nums * self._oneFrameDt
-  local i = 0
-  repeat
+  for i=1,nums do
     self:_updateFrame()
-    i=i+1
-  until not(i < nums)
+  end
 end
 
 function TimerManager:_updateFrame()
   for i in pairs(self.updateCallFuncGroup) do
-    local info = self.updateCallFuncGroup[i+1]
+    local info = self.updateCallFuncGroup[i]
     if info then
       if info.frame > 0 then
         info.frame=info.frame-1
         if info.frame == 0 then
-          self.updateCallFuncGroup[i+1] = nil
+          self.updateCallFuncGroup[i] = nil
         end
       end
       doJsCallFunc(info.callBack,info.thisObj, info.params)
@@ -161,8 +130,7 @@ function TimerManager:registObjUpdate(callFunc, callThisObj, params, frame)
     frame=-1
   end
   self.callFuncNums=self.callFuncNums+1
-  -- [ts2lua]self.updateCallFuncGroup下标访问可能不正确
-  self.updateCallFuncGroup[tostring(self.callFuncNums)] = {callBack=callFunc, thisObj=callThisObj, params=params, frame=frame}
+  self.updateCallFuncGroup[self.callFuncNums] = {callBack=callFunc, thisObj=callThisObj, params=params, frame=frame}
   return self.callFuncNums
 end
 
@@ -182,11 +150,36 @@ function TimerManager:deleteObjUpdate(callId, callFunc, callThisObj)
 end
 
 function TimerManager:updateFrame(  )
-  LogsManager.echo("updateFrame:",1111111111);
+  self:onceUpdateFrame()
+  local timeEntity = nil
+  local curTime = Client.getInstance():getMiniServerTime()
+  local num = 0
+  for i in pairs(self._timeMap) do
+    timeEntity = self._timeMap[i]
+    local isRemove = false
+    num = math.floor(curTime - timeEntity.oldTime / timeEntity.delay)
+    if num > 0 then
+      timeEntity.maxCount = timeEntity.maxCount - num
+      timeEntity.oldTime = timeEntity.oldTime + num * timeEntity.delay
+      local args = timeEntity.args
+      local callBack = timeEntity.callBack
+      local thisObject = timeEntity.thisObject
+      if timeEntity.maxCount <= 0 then
+        self._timeMap[i] = nil
+        isRemove = true
+      end
+      if #args > 0 then
+        doJsApplyFunc(callBack,thisObject, args)
+      else
+        doJsApplyFunc(callBack,thisObject, {num})
+      end
+    end
+  end
+  return true
 end
 
 function TimerManager:updateFrameLate(  )
-  LogsManager.echo("updateFrame:",222222222222);
+  -- LogsManager.echo("updateFrame:",222222222222);
 end
 
 
