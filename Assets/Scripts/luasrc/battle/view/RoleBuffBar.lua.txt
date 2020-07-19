@@ -59,7 +59,7 @@ function RoleBuffBar:onBuffChange(buff)
           if #buffIconList < self.maxIcon then
             local cacheItem = PoolTools.getItem(PoolCode.POOL_BUFFICON + buffInfo.icon[1+1])
             if not cacheItem then
-              cacheItem = Laya.Image("uisource/bufficon/bufficon/" .. buffInfo.icon[1+1] .. ".png")
+              cacheItem = UITools.createUIImage("uisource/bufficon/bufficon/" .. buffInfo.icon[1+1] .. ".png")
             end
             self:addChild(cacheItem)
             cacheItem.x = 25 * #buffIconList - self.maxIcon / 2

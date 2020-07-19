@@ -79,13 +79,13 @@ function InstancePlayer:addSkillIcon()
   repeat
     local item = self.skillArr[i+1]
     local skillInfo = BattleFunc.getInstance():getCfgDatas("Skill", item)
-    local img = Laya.Image()
+    local img = UITools.createUIImage()
     img.skin = "uisource/skill/skill/" .. skillInfo.pic .. ".png"
     img.height = 92
     img.width = img.height
     img.x = -i * img.width + 10
     self.skillParnet:addChild(img)
-    local mask = Laya.Image("uisource/battle/battle/battle_image_jiangli.png")
+    local mask = UITools.createUIImage("uisource/battle/battle/battle_image_jiangli.png")
     mask.height = 92
     mask.width = mask.height
     mask.sizeGrid = "13,13,13,13"

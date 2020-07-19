@@ -550,7 +550,7 @@ function WindowManager.CloseMaskUI()
 end
 
 function WindowManager.initMaskUI()
-  local mask = Laya.Image()
+  local mask = UITools.createUIImage()
   local background = UITools.createUICtn()
   mask:addChild(background)
   background.graphics:drawRect(0, 0, ScreenAdapterTools.width, ScreenAdapterTools.height, 0)

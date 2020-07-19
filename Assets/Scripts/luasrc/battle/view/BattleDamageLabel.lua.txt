@@ -105,7 +105,7 @@ end
 
 function BattleDamageLabel:updateLabel(key, x, y, label)
   if not label then
-    label = Laya.Image()
+    label = UITools.createUIImage()
     label.anchorX = 0
     label.anchorY = 0.5
     self:addChild(label)

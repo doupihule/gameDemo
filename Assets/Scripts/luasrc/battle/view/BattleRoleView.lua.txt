@@ -101,7 +101,7 @@ function BattleRoleView:sortChildView()
     if self._useShade then
       local shaderView = self._shadeViewArr[i+1]
       if not shaderView then
-        shaderView = Laya.Image(ResourceConst.BATTLE_SHADE)
+        shaderView = UITools.createUIImage(ResourceConst.BATTLE_SHADE)
         shaderView:scale(self._shadeScale, self._shadeScale, true)
         shaderView.anchorX = 0.5
         shaderView.anchorY = 0.5

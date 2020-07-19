@@ -84,7 +84,7 @@ function InstancePerformance:doShadeFollow()
 end
 
 function InstancePerformance:createShade()
-  self._shade = Laya.Image()
+  self._shade = UITools.createUIImage()
   local scale = BattleFunc.getInstance():getShadeScale(self.cfgData.size[1+1] * self.cfgScale)
   local formation = BattleRoleView.getPosArrByViewNums(self.childViewNums)
   local i = 0

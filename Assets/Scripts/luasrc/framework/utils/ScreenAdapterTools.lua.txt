@@ -96,14 +96,14 @@ function ScreenAdapterTools.checkFillBorder()
   if ScreenAdapterTools.sceneOffsetX == 0 then
     return
   end
-  local image = Laya.Image("static/global_image_heibian.png")
+  local image = UITools.createUIImage("static/global_image_heibian.png")
   image.anchorX = 1
   image.anchorY = 0.5
   image.x = ScreenAdapterTools.sceneOffsetX
   image.y = ScreenAdapterTools.height / 2 + ScreenAdapterTools.UIOffsetY
   Laya.stage:addChild(image)
   image.zOrder = 10000000
-  image = Laya.Image("static/global_image_heibian.png")
+  image = UITools.createUIImage("static/global_image_heibian.png")
   image.anchorX = 0
   image.anchorY = 0.5
   image.x = ScreenAdapterTools.sceneOffsetX + ScreenAdapterTools.width

@@ -29,26 +29,15 @@ function BattleControler:ctor(ctn)
 end
 
 function BattleControler:onceUpdateFrame()
-  local currentT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
-  local dt = currentT - self._lastFrameTime
-  if dt > self._maxFrameDt then
-    dt = self._maxFrameDt
-  end
-  self._lastFrameTime = currentT
-  self._leftFrameDt = self._leftFrameDt + dt
-  local nums = math.floor(self._leftFrameDt / self._oneFrameDt)
-  self._leftFrameDt = self._leftFrameDt - nums * self._oneFrameDt
-  for i=1,nums do
-    if self.updateScale == 1 then
+  if self.updateScale == 1 then
+    self:updateFrame()
+  else
+    self._leftScaleFrame = self._leftScaleFrame + self.updateScale
+    local s = 0
+    for s=0,self._leftScaleFrame-1 do
       self:updateFrame()
-    else
-      self._leftScaleFrame = self._leftScaleFrame + self.updateScale
-      local s = 0
-      for s=0,self._leftScaleFrame-1 do
-        self:updateFrame()
-      end
-      self._leftScaleFrame = self._leftScaleFrame - s
     end
+    self._leftScaleFrame = self._leftScaleFrame - s
   end
 end
 

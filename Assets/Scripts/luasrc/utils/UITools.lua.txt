@@ -134,6 +134,14 @@ end
 
 
 
+--创建ui图片
+function UITools.createUIImage(url )
+	local img = UITools.createUICtn();
+	return img;
+end
+
+
+
 return UITools
 
 

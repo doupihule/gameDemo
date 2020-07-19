@@ -60,7 +60,7 @@ function BattleMapControler:createDecoration(arr, firstName, ctn)
     else
       imageUrl1 = "map/" .. firstName .. "/" .. firstName .. "/" .. info.pic .. ".png"
     end
-    local image = Laya.Image()
+    local image = UITools.createUIImage()
     image:scale(info.scale / 10000, info.scale / 10000)
     ctn:addChild(image)
     table.insert(self._mapInfo.decorateArr, {view=image})
@@ -118,7 +118,7 @@ function BattleMapControler:createOneView(firstName, index, mapId, mpInfo)
   local path = nil
   name = firstName .. "_0" .. mapId
   path = "map/" .. firstName .. "/" .. name
-  local image = Laya.Image()
+  local image = UITools.createUIImage()
   if UserInfo.isSystemNative() then
     imageUrl1 = "map/" .. firstName .. "/" .. name .. ".png"
     image:scale(1 + 2 / 256, 1)

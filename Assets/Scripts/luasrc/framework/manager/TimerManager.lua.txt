@@ -167,24 +167,14 @@ function TimerManager:registObjUpdate(callFunc, callThisObj, params, frame)
 end
 
 function TimerManager:deleteObjUpdate(callId, callFunc, callThisObj)
-  if callId == nil then
-    callId=nil
-  end
-  if callFunc == nil then
-    callFunc=nil
-  end
-  if callThisObj == nil then
-    callThisObj=nil
-  end
   local info = nil
   if callId then
-    -- [ts2lua]self.updateCallFuncGroup下标访问可能不正确
     self.updateCallFuncGroup[callId] = nil
   else
     for i in pairs(self.updateCallFuncGroup) do
-      local info = self.updateCallFuncGroup[i+1]
+      local info = self.updateCallFuncGroup[i]
       if info.callBack == callFunc and info.thisObj == callThisObj then
-        self.updateCallFuncGroup[i+1] = nil
+        self.updateCallFuncGroup[i] = nil
         break
       end
     end

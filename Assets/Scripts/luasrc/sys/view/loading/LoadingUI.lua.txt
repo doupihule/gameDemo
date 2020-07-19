@@ -35,12 +35,12 @@ end
 
 function LoadingUI:initView()
   if not self.mainbg then
-    self.mainbg = Laya.Image("static/loading_bp_beijing.png")
+    self.mainbg = UITools.createUIImage("static/loading_bp_beijing.png")
     self.mainbg.width = 768
     self.mainbg.height = 1400
     self.mainbg.x = ScreenAdapterTools.width / 2 - ScreenAdapterTools.maxWidth / 2
     self.mainbg.y = ScreenAdapterTools.height / 2 - ScreenAdapterTools.maxHeight / 2
-    local title = Laya.Image("static/loading_image_logo.png")
+    local title = UITools.createUIImage("static/loading_image_logo.png")
     title.centerX = 0
     title.top = 280
     self.mainbg:addChildren(title)
@@ -70,13 +70,13 @@ function LoadingUI:initView()
     self.mainbg:addChild(self.powerlaya)
   end
   if not self.profgBg then
-    self.profgBg = Laya.Image("static/loading_image_jindudi.png")
+    self.profgBg = UITools.createUIImage("static/loading_image_jindudi.png")
     self.profgBg.sizeGrid = "17,39,7,28"
     self.profgBg.width = 578
     self.profgBg.centerX = 0
     self.profgBg.bottom = 43 + self:getVerticalOffset()
     self.mainbg:addChild(self.profgBg)
-    self.profg = Laya.Image("static/loading_image_jindu.png")
+    self.profg = UITools.createUIImage("static/loading_image_jindu.png")
     self.profgBg:addChild(self.profg)
     self.profg.sizeGrid = "16,33,10,25"
     self.profg.width = 0
@@ -95,11 +95,11 @@ function LoadingUI:initView()
     self.profgBg:addChild(self.loadingtips)
   end
   if not self.loadingstar then
-    self.loadingstar = Laya.Image("")
+    self.loadingstar = UITools.createUIImage("")
     self.loadingstar.x = -26
     self.loadingstar.y = -22
     self.profgBg:addChild(self.loadingstar)
-    self.loadingicon = Laya.Image("static/loading_image_jindudiche.png")
+    self.loadingicon = UITools.createUIImage("static/loading_image_jindudiche.png")
     self.loadingicon.x = 15
     self.loadingicon.y = -27
     self.loadingicon.anchorX = 0.5
@@ -107,13 +107,13 @@ function LoadingUI:initView()
     self.loadingstar:addChild(self.loadingicon)
   end
   if not self.aniGroup then
-    self.aniGroup = Laya.Image()
+    self.aniGroup = UITools.createUIImage()
     self.aniGroup.centerX = 0
     self.aniGroup.bottom = 400 + self:getVerticalOffset()
     self.aniGroup.anchorX = 0.5
     self.aniGroup.anchorY = 1
     self.mainbg:addChild(self.aniGroup)
-    local bg = Laya.Image("static/loading_bp_beijing2.png")
+    local bg = UITools.createUIImage("static/loading_bp_beijing2.png")
     bg.width = 279
     bg.height = 38
     bg.x = -bg.width / 2
