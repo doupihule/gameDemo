@@ -85,7 +85,7 @@ function BattleDamageLabel:setValue(kind, value)
     end
     local s = 0
     repeat
-      self._childLabels[s+1] = self:updateLabel(strValue:slice(s, s + 1), startPos - halfTotalWid, 0, self._childLabels[s+1])
+      self._childLabels[s+1] = self:updateLabel(string.sub(strValue,s, s + 1), startPos - halfTotalWid, 0, self._childLabels[s+1])
       startPos = startPos + perWid
       s=s+1
     until not(s < #strValue)

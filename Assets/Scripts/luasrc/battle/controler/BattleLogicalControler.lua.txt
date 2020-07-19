@@ -643,7 +643,7 @@ function BattleLogicalControler:getPosByTypeAndCamp(camp, type, outpos, offestX,
     -- [ts2lua]BattleFunc.landArmyStartYLocation下标访问可能不正确
     targetY = BattleFunc.battleCenterY + tonumber(BattleFunc.landArmyStartYLocation[index1]) + offestY
   end
-  if isNaN(targetY) then
+  if number.isNan(targetY) then
     LogsManager.errorTag("无效的z坐标", "无效的z坐标")
   end
   outpos.x = targetX

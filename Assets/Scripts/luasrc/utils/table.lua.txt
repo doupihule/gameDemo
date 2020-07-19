@@ -407,7 +407,7 @@ array = array or {}
 
 
 --截取指定位置的数组
-function array.slice(arr,startIndex,endIndex )
+function table.sliceArray(arr,startIndex,endIndex )
 	if not startIndex then		startIndex = 1	end
 	if not endIndex then	endIndex=  #arr	end
 	startIndex = startIndex < 1 and 1 or startIndex

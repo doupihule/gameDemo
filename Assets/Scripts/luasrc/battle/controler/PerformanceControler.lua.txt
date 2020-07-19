@@ -156,7 +156,7 @@ function PerformanceControler:showBlackScreen(targetRole, lastFrame, useArr)
     end
     i=i+1
   until not(i < #allArr)
-  self.controler:sortChildren(true)
+  self.controler:forceSortChildren()
   self.controler.isSkillPause = true
   self.blackScreen.x = -self.controler.layerControler.a2.x - 300
   self.controler:clearCallBack(self, self.hideBlackScreen)
@@ -177,7 +177,7 @@ function PerformanceControler:hideBlackScreen()
     instance:setZorderOffset(0)
     i=i+1
   until not(i < #allArr)
-  self.controler:sortChildren(true)
+  self.controler:forceSortChildren()
 end
 
 PerformanceControler._tempPos = nil

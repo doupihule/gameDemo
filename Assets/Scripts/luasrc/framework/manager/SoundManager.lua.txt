@@ -63,7 +63,7 @@ function SoundManager.playBGS(url, soundClass, startTime)
 end
 
 function SoundManager.getSoundUrl(sound)
-  if sound:slice(0, 5) == "sound" or string.find(sound,"groupSound") ~= nil then
+  if string.sub(sound,1, 5) == "sound" or string.find(sound,"groupSound") ~= nil then
     return sound
   end
   local soundPath = SoundManager.getSoundPath(sound)
@@ -322,13 +322,12 @@ end
 function SoundManager.getSoundShortName(url)
   if string.find(url,".mp3") ~= nil then
     local lastIndex = url:lastIndexOf("/")
-    return url:slice(lastIndex + 1, -4)
+    return string.sub(url,lastIndex , -4)
   end
   return url
 end
 
 function SoundManager.getSoundLength(name)
-  -- [ts2lua]MusicConst.soundCfgs下标访问可能不正确
   local info = MusicConst.soundCfgs[name]
   if not info then
     return 5000

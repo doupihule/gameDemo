@@ -276,7 +276,7 @@ function BattleFunc:getSkillValueByParams(key, _skillId, level, skillParams, tag
     return 0
   end
   rt = tonumber(rt)
-  if isNaN(rt) then
+  if number.isNan(rt) then
     LogsManager.errorTag("battleError", "错误的技能参数数据,skillId:", _skillId, "skilllv:", level, tag)
   end
   return rt

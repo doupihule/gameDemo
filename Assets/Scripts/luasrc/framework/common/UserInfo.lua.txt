@@ -83,9 +83,9 @@ end
 function UserInfo.initSystemId()
   local androidStr = "android"
   local iosStr = "ios"
-  if UserInfo.platformId:slice(0, #androidStr) == androidStr then
+  if string.sub(UserInfo.platformId,1, #androidStr) == androidStr then
     UserInfo.systemId = androidStr
-  elseif UserInfo.platformId:slice(0, #iosStr) == iosStr then
+  elseif string.sub(UserInfo.platformId,1, #iosStr) == iosStr then
     UserInfo.systemId = iosStr
   else
     UserInfo.systemId = "mini"

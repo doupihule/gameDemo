@@ -43,7 +43,7 @@ function HttpMessage:turnShortLogs(targetStr)
   if #targetStr < 1000 then
     return targetStr
   end
-  return targetStr:slice(0, 1000)
+  return string.sub(targetStr,1, 1000)
 end
 
 function HttpMessage:sendOtherHttpRequest(url, params, callBack, thisObject, method, webParams, sendCount, addParams)

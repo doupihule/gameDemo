@@ -85,7 +85,7 @@ function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue
   else
     dmg = 0
   end
-  if isNaN(dmg) then
+  if number.isNan(dmg) then
     LogsManager.errorTag("battleError", "___遇到错误的伤害")
     dmg = 1
   end

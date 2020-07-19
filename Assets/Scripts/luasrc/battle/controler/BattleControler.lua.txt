@@ -73,13 +73,14 @@ function BattleControler:updateFrame()
 end
 
 
-function BattleControler:sortChildren(isForce)
-  if isForce == nil then
-    isForce=false
-  end
-  if not isForce and self.updateCount % 60 ~= 0 then
+function BattleControler:sortChildren()
+  if self.updateCount % 60 ~= 0 then
     return
   end
+  self:sortOneArr(self._allInstanceArr)
+end
+
+function BattleControler:forceSortChildren(  )
   self:sortOneArr(self._allInstanceArr)
 end
 
@@ -185,37 +186,32 @@ function BattleControler:runInstanceUpdate()
   end
   local len = #self._allInstanceArr
   local i = len - 1
-  repeat
-    local instance = self._allInstanceArr[i+1]
+  for i=len,1,-1 do
+    local instance = self._allInstanceArr[i]
     if instance and instance:checkIsUsing() then
       if not self.isSkillPause or instance:isRunWithSkillPause() then
         instance:updateFrame()
       end
     end
-    i=i-1
-  until not(i >= 0)
+  end
   self:checkHit()
-  local i = len - 1
-  repeat
-    local instance = self._allInstanceArr[i+1]
+  len = #self._allInstanceArr
+  for i=len,1,-1 do
+    local instance = self._allInstanceArr[i]
     if instance and instance:checkIsUsing() then
       if not self.isSkillPause or instance:isRunWithSkillPause() then
         instance:updateFrameLater()
       end
     end
-    i=i-1
-  until not(i >= 0)
+  end
 end
 
 function BattleControler:checkHit() end
 function BattleControler:setCallBack(frame, callBack, thisObj, params, doApplyOrCall)
-  if params == nil then
-    params=nil
-  end
   if doApplyOrCall == nil then
     doApplyOrCall=false
   end
-  if frame == nil or isNaN(frame) then
+  if frame == nil or number.isNan(frame) then
     LogsManager.errorTag("battleerror", "没有传入frame,直接做回调")
   end
   local obj = self:getOneCacheTimeObj()
@@ -250,7 +246,7 @@ function BattleControler:setLastCallBack(delay, interval, times, callBack, thisO
   if doApplyOrCall == nil then
     doApplyOrCall=false
   end
-  if delay == nil or isNaN(delay) then
+  if delay == nil or number.isNan(delay) then
     LogsManager.errorTag("battleerror", "没有传入frame")
     return
   end
@@ -276,7 +272,6 @@ function BattleControler:clearCallBack(thisObj, callBack, params)
     params=nil
   end
   local len =#self._timeList
-  local i = #self._timeList - 1
   for i=len,1,-1 do
     local obj = self._timeList[i]
     if thisObj == obj.thisObj then
@@ -306,24 +301,11 @@ function BattleControler:registObjUpdate(callFunc, callThisObj, params, frame)
     frame=-1
   end
   self.callFuncNums=self.callFuncNums+1
-  -- [ts2lua]self.updateCallFuncGroup下标访问可能不正确
   self.updateCallFuncGroup[self.callFuncNums] = {callBack=callFunc, thisObj=callThisObj, params=params, frame=frame}
   return self.callFuncNums
 end
 
-function BattleControler:deleteObjUpdate(callFuncNums, callFunc, callThisObj)
-  if callFuncNums == nil then
-    callFuncNums=nil
-  end
-  local index = 0
-  repeat
-    if callFuncNums == index then
-      self.updateCallFuncGroup[index] = nil
-      break
-    end
-    index=index+1
-  until not(index < #self.updateCallFuncGroup)
-end
+
 
 function BattleControler:insterInstanceToArr(instance)
   if table.findArrValue(self._allInstanceArr,instance) == -1 then

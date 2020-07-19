@@ -184,7 +184,7 @@ function TableUtils.compareTable(t1, t2, resulTb)
           end
         else
           -- [ts2lua]window下标访问可能不正确
-          window["LogsManager"]:errorTag("compareTableWarn", "has array Data,k:" .. k .. ",v:" .. TableUtils.safelyJsonStringfy(v):slice(0, 100))
+          window["LogsManager"]:errorTag("compareTableWarn", "has array Data,k:" .. k .. ",v:" .. string.sub(TableUtils.safelyJsonStringfy(v),1, 100))
           resulTb[k+1] = TableUtils.deepCopy(v, {})
         end
         if TableUtils.isEmptyTable(resulTb[k+1]) then
@@ -295,8 +295,8 @@ function TableUtils.turnCsvStrTogGameArr(fromStr, transtoNumber)
     transtoNumber=false
   end
   local strLen = #fromStr
-  if fromStr:slice(strLen - 1, strLen) == ";" then
-    fromStr = fromStr:slice(0, strLen - 1)
+  if string.sub(fromStr,strLen , strLen) == ";" then
+    fromStr = string.sub(fromStr,1, strLen - 1)
   end
   local arr = string.split(fromStr,";")
   return TableUtils.turnCsvArrToGameArr(arr)

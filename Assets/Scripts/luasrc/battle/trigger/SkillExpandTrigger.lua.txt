@@ -42,7 +42,7 @@ function SkillExpandTrigger.skillExpand_1(instance, skill, params, useArr, isFol
   local i = 0
   repeat
     local targetRole = useArr[i+1]
-    local tempArr = params:slice(1, 13)
+    local tempArr = table.sliceArray(params,1, 13)
     local expandPams = {type=params[0+1], length=tonumber(sourceLenth), frame=math.floor(tweenTime * BattleFunc.miniSecondToFrame), role=targetRole}
     instance:createOneEffByParam(tempArr, isFollow, false, expandPams)
     i=i+1

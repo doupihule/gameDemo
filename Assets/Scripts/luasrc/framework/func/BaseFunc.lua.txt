@@ -67,7 +67,7 @@ function BaseFunc.onTranslateGroupLoadComplete()
   local translateKey = "Translate"
   local translatekeyLen = #translateKey
   for path in pairs(cfgsArr) do
-    if path:slice(0, translatekeyLen) == translateKey then
+    if string.sub(path,1, translatekeyLen) == translateKey then
       TranslateFunc.getInstance():insertOneCfgs(path)
     end
   end
@@ -75,8 +75,8 @@ end
 
 function BaseFunc.turnPath(path)
   local endStr = "_json"
-  if path:slice(#path - #endStr, #path) == endStr then
-    path = path:slice(0, #path - #endStr)
+  if string.sub(path,#path - #endStr+1, #path) == endStr then
+    path = string.sub(path,1, #path - #endStr)
   end
   return path
 end
@@ -89,7 +89,7 @@ function BaseFunc.getGlobalCfg(configKey, ignoreNoExist)
   local translateKey = "Translate"
   local translatekeyLen = #translateKey
   local resultTb = nil
-  if configKey:slice(0, translatekeyLen) == translateKey then
+  if string.sub(configKey,1, translatekeyLen) == translateKey then
     -- [ts2lua]BaseFunc._translateConfigs下标访问可能不正确
     resultTb = BaseFunc._translateConfigs[configKey]
     if not resultTb then
@@ -152,7 +152,7 @@ function BaseFunc:onGloablCfgLoadComplete()
     else
       path = pathInfo.path .. "/" .. name
     end
-    if pathInfo.translate or path:slice(0, translatekeyLen) == translateKey then
+    if pathInfo.translate or string.sub(path,1, translatekeyLen) == translateKey then
       local ins = TranslateFunc.getInstance()
       ins:insertOneCfgs(BaseFunc.turnPath(name))
       ins:insertOneCfgs(name)

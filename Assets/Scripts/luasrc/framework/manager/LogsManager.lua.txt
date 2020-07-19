@@ -58,7 +58,7 @@ function LogsManager.errorTag(errorId, message, ...)
     errorId=nil
   end
   local resultArr = LogsManager.turnStr("error", message, optionalParams, true)
-  local arr = resultArr:slice(1, #resultArr)
+  local arr = table.sliceArray(resultArr,1, #resultArr)
   local concatStr = "" ..   table.concat(arr,",")
   if UserInfo.isTest() then
     WindowManager.ShowTip("有错误，去看日志！")
@@ -70,7 +70,7 @@ end
 
 function LogsManager.systemError(message, ...)
   local resultArr = LogsManager.turnStr("sysError", message, optionalParams, true)
-  local arr = resultArr:slice()
+  local arr = table.sliceArray(resultArr,1,#resultArr);
   table.spliceArray(arr,1, 1)
   local concatStr = "" .. table.concat(arr,",")
   TimerManager.getInstance():add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, {concatStr, LogsManager.errorTag_sysError})
@@ -145,7 +145,7 @@ function LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorI
   end
   errorStr = LogsManager.turnURIContent(errorStr)
   errorStr = string.gsub(errorStr,'[%n%r]+/g', " ")
-  errorStr = errorStr:slice(0, math.min(#errorStr, maxLength))
+  errorStr = string.sub(errorStr,1, math.min(#errorStr, maxLength))
   LogsManager.sendDataToAiCloud(errorStr, tag, logLength, errorId, startLine, id, sendCount)
 end
 
@@ -398,7 +398,7 @@ function LogsManager.getNearestLogs(line, id, startLine, allLength)
   end
   if allLength then
     if #str > allLength then
-      str = str:slice(0, allLength)
+      str = string.sub(str,1, allLength)
     end
   end
   return str
