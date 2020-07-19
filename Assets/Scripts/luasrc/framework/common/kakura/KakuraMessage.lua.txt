@@ -253,7 +253,7 @@ function KakuraMessage:ToUTF8(str)
       k=k+1
       result[kBefore] = j:charCodeAt(0)
     else
-      local bytes = j:split("%")
+      local bytes = string.split(j,"%")
       local l = 1
       repeat
         -- [ts2lua]result下标访问可能不正确

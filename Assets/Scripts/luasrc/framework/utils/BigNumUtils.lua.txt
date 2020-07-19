@@ -51,8 +51,8 @@ function BigNumUtils.compare(a, b, equal)
 end
 
 function BigNumUtils.compareIn(a, b)
-  a = a:split("")
-  b = b:split("")
+  a = string.split(a,"")
+  b = string.split(b,"")
   if #a > #b then
     return true
   elseif #a < #b then

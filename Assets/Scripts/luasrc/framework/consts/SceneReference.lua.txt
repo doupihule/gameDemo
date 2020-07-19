@@ -87,7 +87,7 @@ function SceneReference.checkIpBlack()
     return true
   end
   if UserInfo.platform.cityName then
-    local cityNames = GameSwitch.getSwitchState(GameSwitch.SWITCH_BLACK_IP_CITY):split("|")
+    local cityNames = string.split(GameSwitch.getSwitchState(GameSwitch.SWITCH_BLACK_IP_CITY),"|")
     if cityNames then
       for _tmpi, blackCityName in pairs(cityNames) do
         if blackCityName ~= "" then

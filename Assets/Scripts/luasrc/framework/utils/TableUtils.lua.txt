@@ -269,7 +269,7 @@ function TableUtils.turnCsvArrToGameArr(fromArr, transtoNumber)
     local i = 0
     repeat
       local str = fromArr[i+1]
-      toArr[i+1] = str:split(",")
+      toArr[i+1] = string.split(str,",")
       if transtoNumber then
         local tempArr = toArr[i+1]
         local ii = 0
@@ -298,7 +298,7 @@ function TableUtils.turnCsvStrTogGameArr(fromStr, transtoNumber)
   if fromStr:slice(strLen - 1, strLen) == ";" then
     fromStr = fromStr:slice(0, strLen - 1)
   end
-  local arr = fromStr:split(";")
+  local arr = string.split(fromStr,";")
   return TableUtils.turnCsvArrToGameArr(arr)
 end
 

@@ -148,12 +148,12 @@ function GameSwitch.checkCondition(value)
     return true
   end
   local resultBo = false
-  local groupArr = value:split(";")
+  local groupArr = string.split(value,";")
   local i = 0
   repeat
     local tempValue = groupArr[i+1]
     if tempValue and tempValue ~= "" then
-      local tempArr = tempValue:split(",")
+      local tempArr = string.split(tempValue,",")
       local condition1 = tonumber(tempArr[0+1])
       local conditionVersionNums = GameSwitch.countVersionToNumber(tempArr[1+1])
       local clientVersionNums = GameSwitch.countVersionToNumber(Global.client_version)
@@ -180,7 +180,7 @@ end
 
 function GameSwitch.countVersionToNumber(version)
   if version then
-    local tempArr = version:split(".")
+    local tempArr = string.split(version,".")
     local resultNum = 0
     local len = #tempArr
     local i = len - 1

@@ -169,21 +169,6 @@ function UserInfo.getNativeDefaultUid()
 end
 
 function UserInfo.parseUrl()
-  local obj = {}
-  if UserInfo.paramStr then
-    local params = UserInfo.paramStr:split('&')
-    local len = #params
-    local i = 0
-    repeat
-      local value = string.gsub(params[i+1],'#.*$/g', ''):split('=')
-      if not value[1+1] then
-        value[1+1] = ''
-      end
-      -- [ts2lua]obj下标访问可能不正确
-      obj[value[0+1]] = value[1+1]
-      i=i+1
-    until not(i < len)
-  end
   return obj
 end
 

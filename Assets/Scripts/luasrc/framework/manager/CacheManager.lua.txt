@@ -36,7 +36,7 @@ function CacheManager:clearLocalCache(rid)
   end
   local ridKey = LocalStorageManager.getItem(rid)
   if ridKey then
-    local keys = ridKey:split(",")
+    local keys = string.split(ridKey,",")
     local i = 0
     repeat
       local key = keys[i+1]
@@ -78,7 +78,7 @@ function CacheManager:addRidKeys(key)
   local ridKey = LocalStorageManager.getItem(self._rid)
   local isHave = false
   if ridKey then
-    local keys = ridKey:split(",")
+    local keys = string.split(ridKey,",")
     local i = 0
     repeat
       if keys[i+1] == key then

@@ -759,8 +759,8 @@ function GamePlatform:initPhysics3D(message)
 end
 
 function GamePlatform:compareVersion(v1, v2)
-  v1 = v1:split('.')
-  v2 = v2:split('.')
+  v1 = string.split(v1,'.')
+  v2 = string.split(v2,'.')
   local len = math.max(#v1, #v2)
   while(#v1 < len)
   do

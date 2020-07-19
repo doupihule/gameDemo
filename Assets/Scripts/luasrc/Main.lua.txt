@@ -1,12 +1,8 @@
+
+unpack = unpack or table.unpack
 require("utils.init")
 require("components.init")
 require("framework.init")
 require("battle.init")
 require("sys.consts.init")
 require("sys.views.init")
-
-
-
-
-
-

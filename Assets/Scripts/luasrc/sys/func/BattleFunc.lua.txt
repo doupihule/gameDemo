@@ -187,7 +187,7 @@ function BattleFunc:turnPropArrToTable(propArr, outTable)
   repeat
     local info = propArr[i+1]
     if type(info) == "string" then
-      info = info:split(",")
+      info = string.split(info,",")
     end
     local id = info[0+1]
     -- [ts2lua]outTable下标访问可能不正确
@@ -262,7 +262,7 @@ function BattleFunc:getSkillValueByParams(key, _skillId, level, skillParams, tag
       return tonumber(key)
     end
   end
-  local tempArr = key:split("_")
+  local tempArr = string.split(key,"_")
   -- [ts2lua]skillParams下标访问可能不正确
   local arr1 = skillParams[tonumber(tempArr[0+1]) - 1]
   if not arr1 then
@@ -289,7 +289,7 @@ function BattleFunc.initGlobalParams()
   BattleFunc.battleUpY = BattleFunc.battleCenterY - 180
   BattleFunc.battleDownY = BattleFunc.battleCenterY + 180
   local cfg = BattleFunc.getInstance():getAllCfgData("AttributeList")
-  BattleFunc.reducedUnitArr = GlobalParamsFunc.getInstance():getDataString("reducedUnit"):split(",")
+  BattleFunc.reducedUnitArr = string.split(GlobalParamsFunc.getInstance():getDataString("reducedUnit"),",")
   BattleFunc.airArmyHigh = GlobalParamsFunc.getInstance():getDataNum("airArmyHigh")
   BattleFunc.landArmyStartYLocation = GlobalParamsFunc.getInstance():getDataArray("landArmyStartYLocation")
   BattleFunc.airArmyStartXLocation = GlobalParamsFunc.getInstance():getDataNum("airArmyStartXLocation")

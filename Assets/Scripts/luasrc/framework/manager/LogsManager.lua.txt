@@ -59,7 +59,7 @@ function LogsManager.errorTag(errorId, message, ...)
   end
   local resultArr = LogsManager.turnStr("error", message, optionalParams, true)
   local arr = resultArr:slice(1, #resultArr)
-  local concatStr = "" .. arr:join(",")
+  local concatStr = "" ..   table.concat(arr,",")
   if UserInfo.isTest() then
     WindowManager.ShowTip("有错误，去看日志！")
   end
@@ -72,7 +72,7 @@ function LogsManager.systemError(message, ...)
   local resultArr = LogsManager.turnStr("sysError", message, optionalParams, true)
   local arr = resultArr:slice()
   table.spliceArray(arr,1, 1)
-  local concatStr = "" .. arr:join(",")
+  local concatStr = "" .. table.concat(arr,",")
   TimerManager.getInstance():add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, {concatStr, LogsManager.errorTag_sysError})
   LogsManager.insterOneLogs(concatStr)
   print(unpack(resultArr))
@@ -425,7 +425,7 @@ function LogsManager.turnStr(title, message, optionalParams, isError)
     arr = {resultStr}
   else
     if length > 0 then
-      resultStr = message .. " " .. optionalParams:join(" ")
+      resultStr = message .. " " .. table.concat(optionalParams," ")
     else
       resultStr = message
     end

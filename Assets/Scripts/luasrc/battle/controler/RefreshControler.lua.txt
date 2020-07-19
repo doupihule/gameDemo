@@ -186,7 +186,7 @@ function RefreshControler:enterTargetWave(waveIndex)
   self.battleResult = BattleConst.battleResult_none
   self.currentWave = waveIndex
   -- [ts2lua]self._waveIdArr下标访问可能不正确
-  local waveInfo = self._waveIdArr[waveIndex - 1]:split(",")
+  local waveInfo = string.split(self._waveIdArr[waveIndex],",")
   local enterTime = BattleFunc.getInstance():turnMinisecondToframe(waveInfo[1+1])
   self.controler:setCallBack(enterTime, self.enterWave, self, waveInfo[0+1])
   BattleLogsManager.battleEcho("进入波次:", waveIndex, "延迟", waveInfo[1+1])
@@ -208,7 +208,7 @@ function RefreshControler:enterWave(waveId)
   local equip = nil
   local i = 0
   repeat
-    local info = monsterArr[i+1]:split(",")
+    local info = string.split(monsterArr[i+1],",")
     local id = info[0+1]
     showTime = showTime + tonumber(info[1+1])
     local level = tonumber(info[2+1])

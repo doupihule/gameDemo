@@ -78,7 +78,7 @@ function UserExtModel:getIsShowGiftInGame()
     return false
   end
   local rate = GlobalParamsFunc.getInstance():getDataByTwoId("secretBagTouchRound", "arr")
-  local num = rate[0+1]:split(",")
+  local num = string.split(rate[0+1],",")
   local winTimes = self._data.playCount or 0
   if winTimes == 0 then
     return false
@@ -207,7 +207,7 @@ function UserExtModel:getIsFreeUpgradeTalentInGame()
   if talentUpgradeNum < GlobalParamsFunc.getInstance():getDataNum("talentVideoLevelUpOpenNub") then
     return false
   end
-  local rate = GlobalParamsFunc.getInstance():getDataByTwoId("talentVideoLevelUpShowInterval", "arr")[0+1]:split(",")
+  local rate = string.split(GlobalParamsFunc.getInstance():getDataByTwoId("talentVideoLevelUpShowInterval","arr")[0+1],",")
   local freeUpgradeCount = self:getTalentFreeUpgradeCount()
   if freeUpgradeCount <= tonumber(rate[1+1]) then
     return true
@@ -233,7 +233,7 @@ function UserExtModel:calcuOfflineReward()
   local offlineTime = UserExtModel.getInstance():getOfflineTime()
   offlineTime = math.min(GlobalParamsFunc.getInstance():getDataNum('offLineMaxTime'), offlineTime)
   local goldTime = math.ceil(offlineTime / GlobalParamsFunc.getInstance():getDataNum('offLineMinutesNub'))
-  local reward = levelInfo:split(',')
+  local reward = string.split(levelInfo,',')
   return {reward[0+1], math.round(reward[1+1] * goldTime * 10000 / 10000)}
 end
 
