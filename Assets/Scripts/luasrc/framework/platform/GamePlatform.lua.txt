@@ -101,7 +101,7 @@ function GamePlatform:checkVersionCallback(result)
     ErrCodeManager.getInstance():setErr(ErrorCode.sys_error)
     return
   end
-  if result.global_server_url:find("http://") > -1 or result.global_server_url:find("https://") > -1 then
+  if string.find(result.global_server_url,"http://") ~=nil or string.find(result.global_server_url,"https://") ~= nil then
     Global.global_url = result.global_server_url
   else
     Global.global_url = "http://" .. result.global_server_url

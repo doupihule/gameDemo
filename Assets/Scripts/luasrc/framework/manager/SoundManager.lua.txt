@@ -63,7 +63,7 @@ function SoundManager.playBGS(url, soundClass, startTime)
 end
 
 function SoundManager.getSoundUrl(sound)
-  if sound:slice(0, 5) == "sound" or sound:find("groupSound") ~= -1 then
+  if sound:slice(0, 5) == "sound" or string.find(sound,"groupSound") ~= nil then
     return sound
   end
   local soundPath = SoundManager.getSoundPath(sound)
@@ -91,7 +91,7 @@ function SoundManager.checkIsMusic(url)
   local i = 0
   repeat
     local targetStr = musicArr[i+1]
-    if url:find(targetStr) ~= -1 then
+    if string.find(url,targetStr) ~= nil then
       return true
     end
     i=i+1
@@ -320,7 +320,7 @@ function SoundManager.clearSoundTimeOut(url)
 end
 
 function SoundManager.getSoundShortName(url)
-  if url:find(".mp3") ~= -1 then
+  if string.find(url,".mp3") ~= nil then
     local lastIndex = url:lastIndexOf("/")
     return url:slice(lastIndex + 1, -4)
   end

@@ -14,7 +14,7 @@ function DeviceTools.checkIsLowDevice()
   end
   DeviceTools._hasCheckDevice = true
   local deviceModel = Global.deviceModel
-  if DeviceTools.lowDeviceGroup:find(deviceModel) ~= -1 then
+  if table.findArrValue(DeviceTools.lowDeviceGroup,deviceModel) ~= -1 then
     DeviceTools._isLowDevice = true
     LogsManager.echo("this is lowDevice ")
   else

@@ -151,7 +151,7 @@ end
 
 function LogsManager.getMaxLogsLength()
   local state = GameSwitch.getSwitchState(GameSwitch.SWITCH_TURNURL_PLAT)
-  if state and state:find(UserInfo.platformId) ~= -1 then
+  if state and string.find(state,UserInfo.platformId) ~= nil then
     return LogsManager.sendMaxLength
   end
   return LogsManager.sendMaxLength / 3
@@ -159,7 +159,7 @@ end
 
 function LogsManager.turnURIContent(str)
   local state = GameSwitch.getSwitchState(GameSwitch.SWITCH_TURNURL_PLAT)
-  if state and state:find(UserInfo.platformId) ~= -1 then
+  if state and string.find(state,UserInfo.platformId) ~= nil then
     return str
   end
   return encodeURIComponent(str)
@@ -198,7 +198,7 @@ function LogsManager.sendDataToAiCloud(errorStack, tag, logLength, errorId, star
     id = errorId
   end
   local errorTagGroup = GameSwitch.getSwitchState(GameSwitch.LOGS_ERRORTAG_GROP)
-  if errorTagGroup and errorTagGroup:find(errorId) ~= -1 then
+  if errorTagGroup and string.find(errorTagGroup,errorId) ~= nil then
     LogsManager.echo("忽略报错日志", errorId)
     return
   end
@@ -415,7 +415,7 @@ function LogsManager.turnStr(title, message, optionalParams, isError)
   local resultStr = nil
   local length = #optionalParams
   local arr = nil
-  if message:find("#") ~= -1 then
+  if string.find(message,"#") ~= nil then
     resultStr = message
     local i = 0
     repeat

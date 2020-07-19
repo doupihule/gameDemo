@@ -254,7 +254,7 @@ function TableUtils.isEmptyTable(tb)
 end
 
 function TableUtils.removeValue(arr, value)
-  local index = arr:find(value)
+  local index = table.findArrValue(arr,value)
   if index ~= -1 then
     table.spliceArray(arr,index, 1)
   end

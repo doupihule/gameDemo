@@ -253,7 +253,7 @@ function BattleFunc:getPosByFromation(zhenwei)
 end
 
 function BattleFunc:getSkillValueByParams(key, _skillId, level, skillParams, tag)
-  if key:find("_") == -1 then
+  if string.find(key,"_") ==nil then
     return tonumber(key)
   end
   if not skillParams then

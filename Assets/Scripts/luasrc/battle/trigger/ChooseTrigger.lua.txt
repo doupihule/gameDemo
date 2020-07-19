@@ -40,7 +40,7 @@ function ChooseTrigger.chooseAbsNearRole(targetInstance, instanceArr, excludeArr
   repeat
     repeat
       local role2 = instanceArr[i+1]
-      if excludeArr and excludeArr:find(role2) ~= -1 then
+      if excludeArr and table.findArrValue(excludeArr,role2) ~= -1 then
         break
       end
       local dis = ChooseTrigger.getPowerDis(role2.pos, targetInstance.pos)
@@ -413,7 +413,7 @@ function ChooseTrigger.chooseRoleByCircle(instance, r, x, z, targetArr, chooseNu
   repeat
     repeat
       local targetInstance = targetArr[i+1]
-      if excludeArr and excludeArr:find(targetInstance) ~= -1 then
+      if excludeArr and table.findArrValue(excludeArr,targetInstance) ~= -1 then
         break
       end
       local disx = targetInstance.pos.x - x
@@ -474,7 +474,7 @@ function ChooseTrigger.chooseRoleByRect(instance, w, h, x, z, targetArr, chooseN
   repeat
     repeat
       local targetInstance = targetArr[i+1]
-      if excludeArr and excludeArr:find(targetInstance) ~= -1 then
+      if excludeArr and table.findArrValue(excludeArr,targetInstance) ~= -1 then
         break
       end
       local disSpdx = math.abs(targetInstance.speed.x - spdx)

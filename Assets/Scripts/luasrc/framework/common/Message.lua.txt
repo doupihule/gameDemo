@@ -17,7 +17,7 @@ function Message:add(cmd, msg)
     list = {}
     self.msgMap:put(cmd, list)
   end
-  if list:find(msg) == -1 then
+  if table.findArrValue(list,msg) == -1 then
     table.insert(list, msg)
   end
 end

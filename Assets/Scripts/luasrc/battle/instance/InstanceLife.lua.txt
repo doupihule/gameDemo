@@ -251,13 +251,13 @@ function InstanceLife:getLastNormalAndPassSkill()
         secondID = tonumber(changeSkill[1+1])
         skillType = tonumber(changeSkill[2+1])
         if skillType == BattleConst.skillType_passive then
-          local passIndex = self.passSkillArr:find(firstID)
+          local passIndex = table.findArrValue(self.passSkillArr,firstID)
           if passIndex ~= -1 then
             -- [ts2lua]self.passSkillArr下标访问可能不正确
             self.passSkillArr[passIndex] = secondID
           end
         elseif skillType == BattleConst.skillType_normal then
-          local normalIndex = self.normalSkillArr:find(firstID)
+          local normalIndex = table.findArrValue(self.normalSkillArr,firstID)
           if normalIndex ~= -1 then
             -- [ts2lua]self.normalSkillArr下标访问可能不正确
             self.normalSkillArr[normalIndex] = secondID
@@ -683,7 +683,7 @@ function InstanceLife:doRelive(hp, skillAct)
   if self.hp > 0 then
     BattleLogsManager.battleEcho("已经复活了")
     TableUtils.removeValue(self.diedArr, self)
-    if self.campArr:find(self) == -1 then
+    if table.findArrValue(self.campArr,self) == -1 then
       table.insert(self.campArr, self)
     end
     return
@@ -698,7 +698,7 @@ function InstanceLife:doRelive(hp, skillAct)
   self._myView.alpha = 1
   if self._myView2 then self._myView2.alpha = 1 end
   TableUtils.removeValue(self.diedArr, self)
-  if self.campArr:find(self) == -1 then
+  if table.findArrValue(self.campArr,self) == -1 then
     table.insert(self.campArr, self)
   end
   self:doRelivePerformance()

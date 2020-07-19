@@ -130,7 +130,7 @@ function KakuraMessage:decode(aesKey, byte)
   end
   pack.len = len
   pack.sendData = data
-  if LogsManager.ignoreLogs:find(pack.opcode .. '') == -1 then
+  if table.findArrValue(LogsManager.ignoreLogs,pack.opcode .. '') == -1 then
     LogsManager.echo("kakura,收到数据：", pack.sendData, pack.requestId, "costTime:", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - self._lastSendTime)
   else
     LogsManager.echo("kakura,pack.opcode:", pack.opcode, pack.requestId, "costTime:", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - self._lastSendTime)

@@ -29,7 +29,7 @@ function BattleLogsManager.debugByRole(roleId, message, ...)
     return
   end
   if #BattleLogsManager.debugRoleIDs > 0 then
-    if BattleLogsManager.debugRoleIDs:find(roleId) == -1 then
+    if table.findArrValue(BattleLogsManager.debugRoleIDs,roleId) == -1 then
       return
     end
   end

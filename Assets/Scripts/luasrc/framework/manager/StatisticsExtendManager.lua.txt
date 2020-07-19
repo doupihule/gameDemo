@@ -77,12 +77,12 @@ function StatisticsExtendManager.onEvent(event, eventData)
     local sendAli = true
     local switch_disable_log = GameSwitch.getSwitchState(GameSwitch.SWITCH_DISABLE_LOG)
     switch_disable_log = switch_disable_log:split(",")
-    if switch_disable_log:find(event.name) ~= -1 then
+    if table.findArrValue(switch_disable_log,event.name) ~= -1 then
       sendAli = false
     end
     local switch_disable_log_group = GameSwitch.getSwitchState(GameSwitch.SWITCH_DISABLE_LOG_GROUP)
     switch_disable_log_group = switch_disable_log_group:split(",")
-    if switch_disable_log_group:find(event.groupId) ~= -1 then
+    if table.findArrValue(switch_disable_log_group,event.groupId) ~= -1 then
       sendAli = false
     end
     if sendAli then

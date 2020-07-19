@@ -326,7 +326,7 @@ function BattleControler:deleteObjUpdate(callFuncNums, callFunc, callThisObj)
 end
 
 function BattleControler:insterInstanceToArr(instance)
-  if self._allInstanceArr:find(instance) == -1 then
+  if table.findArrValue(self._allInstanceArr,instance) == -1 then
     table.insert(self._allInstanceArr, instance)
   end
 end

@@ -120,9 +120,9 @@ function ScreenAdapterTools.setPhoneSys(sysInfo)
   end
   local phoneModel = sysInfo.model
   Global.deviceModel = phoneModel
-  if phoneModel:find("iPhone") > -1 or phoneModel:find("iPad") > -1 then
+  if string.find(phoneModel,"iPhone") ~=nil or string.find(phoneModel,"iPad") ~= nil then
     ScreenAdapterTools.phoneSys = "iphone"
-  elseif phoneModel:find("Android") then
+  elseif string.find(phoneModel,"Android") then
     ScreenAdapterTools.phoneSys = "android"
   end
   ScreenAdapterTools.checkBarBySafeArea(sysInfo)
@@ -139,7 +139,7 @@ function ScreenAdapterTools.checkBarByBangs(phoneModel)
   local i = 0
   repeat
     local key = keys[i+1]
-    if phoneModel:find(key) > -1 then
+    if string.find(phoneModel,key) ~=nil then
       ScreenAdapterTools.toolBarWidth = 60
       Global.isPhoneBangs = true
       LogsManager.echo("hlx 刘海屏高度修改:根据白名单", phoneModel, key)

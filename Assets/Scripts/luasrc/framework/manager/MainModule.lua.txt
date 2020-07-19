@@ -261,7 +261,7 @@ function MainModule:initLayer()
   LogsManager.initLogPanel()
   LogsManager.addTouchShow(Laya.stage)
   if UserInfo.isWeb() then
-    local urlParam = window.location.href:find('test=1') > 0
+    local urlParam = string.find(window.location.href,'test=1') ~= nil
     LogsManager.echo(">>>>urlParam>>>>>>", urlParam)
     GameSwitch.getSwitchMap().SWITCH_GM_DEBUG = 1
     GameSwitch.getSwitchMap().SWITCH_CD_DEBUG = 1

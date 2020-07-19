@@ -85,7 +85,7 @@ function BattleAoeData:doAoeAction(targetInstance, pos, targetBullet)
   end
   if chooseArr then
     if self.cfgData.type then
-      local index = chooseArr:find(targetInstance)
+      local index = table.findArrValue(chooseArr,targetInstance)
       if index ~= -1 then
         table.remove(chooseArr,index)
       end
@@ -120,7 +120,7 @@ function BattleAoeData:checkAoe()
     end
     if #chooseArr > 0 then
       if self.cfgData.type then
-        local index = chooseArr:find(self.targetInstance)
+        local index = table.findArrValue(chooseArr,self.targetInstance)
         if index ~= -1 then
           table.remove(chooseArr,index)
         end

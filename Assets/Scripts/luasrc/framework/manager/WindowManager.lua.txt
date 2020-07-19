@@ -632,7 +632,7 @@ function WindowManager.closeAdvMask()
 end
 
 function WindowManager._insertWindow(view)
-  local index = WindowManager._allWindowMap:find(view)
+  local index = table.findArrValue(WindowManager._allWindowMap,view)
   if index ~= -1 then
     table.spliceArray(WindowManager._allWindowMap,index, 1)
   end

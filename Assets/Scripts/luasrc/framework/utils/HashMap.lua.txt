@@ -28,7 +28,7 @@ end
 
 function HashMap:keys()
   local keys = Object:keys(self)
-  local index = keys:find("hashCode")
+  local index = table.findArrValue(keys,"hashCode")
   if index > -1 then
     table.spliceArray(keys,index, 1)
   end
