@@ -224,39 +224,39 @@ end
 
 function MainModule:reStartGame() end
 function MainModule:initLayer()
-  WindowManager.rootLayer = Laya.Sprite()
+  WindowManager.rootLayer = UITools.createUICtn()
   WindowManager.rootLayer.x = WindowManager.rootLayer.x + ScreenAdapterTools.sceneOffsetX
   WindowManager.rootLayer.y = WindowManager.rootLayer.y + ScreenAdapterTools.sceneOffsetY
   Laya.stage:addChild(WindowManager.rootLayer)
-  WindowManager.commonUILayer = Laya.Sprite()
+  WindowManager.commonUILayer = UITools.createUICtn()
   WindowManager.commonUILayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
   WindowManager.rootLayer:addChild(WindowManager.commonUILayer)
-  WindowManager.topUILayer = Laya.Sprite()
+  WindowManager.topUILayer = UITools.createUICtn()
   WindowManager.topUILayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
   WindowManager.topUILayer.mouseEnabled = true
   WindowManager.topUILayer.mouseThrough = true
   WindowManager.rootLayer:addChild(WindowManager.topUILayer)
-  WindowManager.guideLayer = Laya.Sprite()
+  WindowManager.guideLayer = UITools.createUICtn()
   WindowManager.guideLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
   WindowManager.guideLayer.cacheAs = "bitmap"
   WindowManager.rootLayer:addChild(WindowManager.guideLayer)
   WindowManager.guideLayer.mouseEnabled = true
   WindowManager.guideLayer.mouseThrough = true
   WindowManager.guideLayer.visible = false
-  WindowManager.highLayer = Laya.Sprite()
+  WindowManager.highLayer = UITools.createUICtn()
   WindowManager.highLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
   WindowManager.rootLayer:addChild(WindowManager.highLayer)
-  WindowManager.toolsLayer = Laya.Sprite()
+  WindowManager.toolsLayer = UITools.createUICtn()
   WindowManager.rootLayer:addChild(WindowManager.toolsLayer)
-  WindowManager.maskLayer = Laya.Sprite()
+  WindowManager.maskLayer = UITools.createUICtn()
   WindowManager.maskLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
   WindowManager.rootLayer:addChild(WindowManager.maskLayer)
-  WindowManager.tipsLayer = Laya.Sprite()
+  WindowManager.tipsLayer = UITools.createUICtn()
   WindowManager.tipsLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
   WindowManager.tipsLayer.mouseEnabled = false
   WindowManager.tipsLayer.mouseThrough = true
   WindowManager.rootLayer:addChild(WindowManager.tipsLayer)
-  WindowManager.debugLayer = Laya.Sprite()
+  WindowManager.debugLayer = UITools.createUICtn()
   WindowManager.rootLayer:addChild(WindowManager.debugLayer)
   LogsManager.initLogPanel()
   LogsManager.addTouchShow(Laya.stage)

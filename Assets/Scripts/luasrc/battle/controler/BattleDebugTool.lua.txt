@@ -52,10 +52,8 @@ function BattleDebugTool.initDebugValue()
       local i = 0
       for i,tempArr in ipairs(arr) do
         if #tempArr == 1 then
-          -- [ts2lua]debugMap下标访问可能不正确
           debugMap[tempArr[1]] = true
         else
-          -- [ts2lua]debugMap下标访问可能不正确
           debugMap[tempArr[1]] = table.sliceArray(tempArr,1, #tempArr)
         end
       end
@@ -89,7 +87,7 @@ function BattleDebugTool.getBattleAddSped()
   if not rt then
     return 1
   end
-  return tonumber(rt[0+1]) or 1
+  return tonumber(rt[1]) or 1
 end
 
 function BattleDebugTool.getDebugRoleId()

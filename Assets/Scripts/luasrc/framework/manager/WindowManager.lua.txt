@@ -160,7 +160,7 @@ function WindowManager.createModalView(ctn, alpha)
   if alpha == nil then
     alpha = 0.3
   end
-  local modalView = Laya.Sprite()
+  local modalView = UITools.createUICtn()
   modalView.graphics:drawRect(0, 0, ScreenAdapterTools.width, ScreenAdapterTools.height, "#000000", nil, 0)
   modalView.width = ScreenAdapterTools.width
   modalView.height = ScreenAdapterTools.height
@@ -551,7 +551,7 @@ end
 
 function WindowManager.initMaskUI()
   local mask = Laya.Image()
-  local background = Laya.Sprite()
+  local background = UITools.createUICtn()
   mask:addChild(background)
   background.graphics:drawRect(0, 0, ScreenAdapterTools.width, ScreenAdapterTools.height, 0)
   background.alpha = 1

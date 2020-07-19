@@ -29,7 +29,7 @@ function BattleMapControler:setData(sceneId)
   local startOffest = tonumber(backInfo[2+1])
   self._maxSceneWidth = sceneInfo.long
   self:setMapSize()
-  local ctn1 = Laya.Sprite()
+  local ctn1 = UITools.createUICtn()
   ctn1.x = -ScreenAdapterTools.sceneOffsetX - ScreenAdapterTools.UIOffsetX - startOffest
   self.controler.layerControler.a1:addChild(ctn1)
   self._mapInfo = {anchor=0, infoArr={}, decorateArr={}, ctn=ctn1, initY=-(ScreenAdapterTools.maxHeight - ScreenAdapterTools.designHeight) / 2, speed=0.5}

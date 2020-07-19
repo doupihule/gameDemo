@@ -34,9 +34,7 @@ function BuffTrigger.init()
     return
   end
   BuffTrigger._hasInit = true
-  -- [ts2lua]BuffTrigger.buffTypeToBit下标访问可能不正确
   BuffTrigger.safeBuffBit = BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_safe]
-  -- [ts2lua]BuffTrigger.buffTypeToBit下标访问可能不正确
   BuffTrigger.safeByAllBuffBit = BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_safe_all]
   -- [ts2lua]BuffTrigger.buffTypeToBit下标访问可能不正确
   -- [ts2lua]BuffTrigger.buffTypeToBit下标访问可能不正确
@@ -50,7 +48,6 @@ end
 
 function BuffTrigger.setOneBuff(attacker, defer, skillAction, buff)
   local logicType = buff.logicType
-  -- [ts2lua]BuffTrigger下标访问可能不正确
   local func = BuffTrigger["runBuff_" .. logicType]
   if defer.hp <= 0 then
     return
@@ -88,7 +85,6 @@ end
 
 function BuffTrigger.runOneBuffEffect(attacker, defer, skillAction, buff)
   local logicType = buff.logicType
-  -- [ts2lua]BuffTrigger下标访问可能不正确
   local func = BuffTrigger["runBuff_" .. logicType]
   ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_beUsedBuff, defer, BattleFunc.emptyArr, buff.skillAction, buff)
   local tempArr = BattleFunc.getOneTempArr()

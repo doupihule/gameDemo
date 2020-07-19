@@ -28,7 +28,7 @@ function AlertUILocal:checkInit()
   local contentBgX = stageWidth - contentBgWidth / 2
   local contentBgY = stageHeight - contentBgHeight / 2
   if self.bgCover == nil then
-    self.bgCover = Laya.Sprite()
+    self.bgCover = UITools.createUICtn()
     local path = {{"moveTo", 0, 0}, {"lineTo", stageWidth, 0}, {"lineTo", stageWidth, stageHeight}, {"lineTo", 0, stageHeight}, {"closePath"}}
     self.bgCover.graphics:drawPath(0, 0, path, {fillStyle="#000000"})
     self.bgCover.alpha = 0.5
@@ -36,7 +36,7 @@ function AlertUILocal:checkInit()
   end
   if self.contentBg == nil then
     local splitY = 70
-    self.contentBg = Laya.Sprite()
+    self.contentBg = UITools.createUICtn()
     local path = {{"moveTo", 0, 0}, {"lineTo", contentBgWidth, 0}, {"lineTo", contentBgWidth, 70}, {"lineTo", 0, 70}, {"closePath"}, {"moveTo", 0, 70}, {"lineTo", contentBgWidth, 70}, {"lineTo", contentBgWidth, contentBgHeight}, {"lineTo", 0, contentBgHeight}, {"closePath"}}
     self.contentBg.graphics:drawPath(contentBgX, contentBgY, path, {fillStyle="#111a1b"}, {strokeStyle="#202f30", lineWidth="3"})
     self:addChild(self.contentBg)
@@ -81,8 +81,8 @@ function AlertUILocal:onCancleBtn()
 end
 
 function AlertUILocal:createBtn(str, func, thisObj, x, y)
-  local sp = Laya.Sprite()
-  sp = Laya.Sprite()
+  local sp = UITools.createUICtn()
+  sp = UITools.createUICtn()
   sp.width = 166
   sp.height = 50
   local path = {{"moveTo", 0, 0}, {"lineTo", 166, 0}, {"lineTo", 166, 50}, {"lineTo", 0, 50}, {"closePath"}}

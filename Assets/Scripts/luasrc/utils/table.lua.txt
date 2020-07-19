@@ -265,6 +265,15 @@ table.clear = function (t)
 	end
 end
 
+--清空数组
+table.clearArray = function ( t )
+	local len = #t;
+	for i=len,1,-1 do
+		t[i] = nil
+	end
+end
+
+
 --测试 深度删除
 -- local t1 = {
 -- 	 a= 1,
@@ -418,6 +427,8 @@ function table.sliceArray(arr,startIndex,endIndex )
 	end
 	return resultArr
 end
+
+
 
 -- 数组最小值 如果params 是{b,c},会按照参数顺序 a.b.c ,获取值
 function array.min(arr ,params )

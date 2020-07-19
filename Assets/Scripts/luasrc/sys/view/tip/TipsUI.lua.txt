@@ -5,7 +5,7 @@ TipsUI = class('TipsUI')
 TipsUI.res = {};
 function TipsUI:ctor()
   TipsUI.super.ctor(self)
-  self.tipsbg = Laya.Sprite()
+  self.tipsbg = UITools.createUICtn()
   self.tipsbg.alpha = 0.5
   self.tipsbg.mouseEnabled = true
   self.tipsbg.mouseThrough = false

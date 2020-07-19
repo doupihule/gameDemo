@@ -1,12 +1,3 @@
-
-
-
-
-
-
-
-
-
 BattleGuideControler = class('BattleGuideControler')
 
 function BattleGuideControler:ctor(controler)

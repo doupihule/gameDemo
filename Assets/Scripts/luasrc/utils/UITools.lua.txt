@@ -64,6 +64,17 @@ local tempAddChildFunc = function (self, childLuaInstance ,index)
 	end
 end
 
+local tempRemoveAllChild = function (  self)
+	local gameObject = self.__cobject
+	if(not gameObject)then gameObject = self  end;
+	local transform = gameObject.transform;
+	local childCount = transform.childCount
+	for i=childCount,1,-1 do
+		local childTransform = transform:GetChild(i)
+		childTransform:SetParent(nil)
+	end
+end
+
 
 --移除子对象方法
 local tempRemoveUIInstance = function (self, childLuaInstance )
@@ -99,6 +110,7 @@ function UITools.bindUIFunc( luaInstance )
 	luaInstance.addChild = tempAddChildFunc
 	luaInstance.removeChild = tempRemoveChild
 	luaInstance.removeSelf = tempRemoveSelf
+	luaInstance.removeChildren = tempRemoveAllChild
 
 end
 

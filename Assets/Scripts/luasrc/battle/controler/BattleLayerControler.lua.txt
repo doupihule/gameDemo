@@ -11,16 +11,16 @@ function BattleLayerControler:ctor(controler, rootCtn)
   self.sceneWidthRate = 1;
   self.controler = controler
   self.rootCtn = rootCtn
-  self.a = Laya.Sprite()
+  self.a = UITools.createUICtn()
   self.a.x = ScreenAdapterTools.UIOffsetX
   self.a.y = ScreenAdapterTools.UIOffsetY
-  self.a1 = Laya.Sprite()
-  self.a2 = Laya.Sprite()
-  self.a3 = Laya.Sprite()
-  self.a2Offset = Laya.Sprite()
-  self.a21 = Laya.Sprite()
-  self.a22 = Laya.Sprite()
-  self.a23 = Laya.Sprite()
+  self.a1 = UITools.createUICtn()
+  self.a2 = UITools.createUICtn()
+  self.a3 = UITools.createUICtn()
+  self.a2Offset = UITools.createUICtn()
+  self.a21 = UITools.createUICtn()
+  self.a22 = UITools.createUICtn()
+  self.a23 = UITools.createUICtn()
   rootCtn:addChild(self.a)
   self.a:addChild(self.a1)
   self.a:addChild(self.a2)
@@ -56,16 +56,6 @@ function BattleLayerControler:onTouchMove(event)
   self.controler.cameraControler.focusPos.x = tempPos
   self.controler.cameraControler:updateCtnPos(1)
   self._startTouchX = event.stageX
-  if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
-    if (self.a2.x < self.maxX and self.maxX - self.a2.x < 20) and self.controler.battleUI.roleSignBtn.visible then
-      self.controler.battleUI.roleSignBtn.visible = false
-      self.controler.battleUI.enemySignBtn.visible = true
-    end
-    if (self.a2.x > self.minX and self.minX - self.a2.x > -20) and self.controler.battleUI.enemySignBtn.visible then
-      self.controler.battleUI.enemySignBtn.visible = false
-      self.controler.battleUI.roleSignBtn.visible = true
-    end
-  end
 end
 
 function BattleLayerControler:onTouchUp(event)
