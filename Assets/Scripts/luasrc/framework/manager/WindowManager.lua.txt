@@ -634,7 +634,7 @@ end
 function WindowManager._insertWindow(view)
   local index = WindowManager._allWindowMap:find(view)
   if index ~= -1 then
-    WindowManager._allWindowMap:splice(index, 1)
+    table.spliceArray(WindowManager._allWindowMap,index, 1)
   end
   table.insert(WindowManager._allWindowMap, view)
 end
@@ -669,7 +669,7 @@ function WindowManager._removeOneWindow(windowName)
   repeat
     local window = WindowManager._allWindowMap[i+1]
     if window.windowName == windowName then
-      WindowManager._allWindowMap:splice(i, 1)
+      table.spliceArray(WindowManager._allWindowMap,i, 1)
     end
     i=i-1
   until not(i >= 0)

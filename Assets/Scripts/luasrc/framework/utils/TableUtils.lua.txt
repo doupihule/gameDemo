@@ -256,7 +256,7 @@ end
 function TableUtils.removeValue(arr, value)
   local index = arr:find(value)
   if index ~= -1 then
-    arr:splice(index, 1)
+    table.spliceArray(arr,index, 1)
   end
 end
 

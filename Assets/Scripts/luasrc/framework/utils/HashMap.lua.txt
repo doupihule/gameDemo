@@ -30,7 +30,7 @@ function HashMap:keys()
   local keys = Object:keys(self)
   local index = keys:find("hashCode")
   if index > -1 then
-    keys:splice(index, 1)
+    table.spliceArray(keys,index, 1)
   end
   return keys
 end

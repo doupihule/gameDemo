@@ -29,7 +29,7 @@ function Message:remove(cmd, msg)
     local i = len - 1
     repeat
       if list[i+1] == msg then
-        list:splice(i, 1)
+        table.spliceArray(list,i, 1)
       end
       i=i-1
     until not(i >= 0)
@@ -63,7 +63,7 @@ function Message:removeObjEvents(msg)
       repeat
         -- [ts2lua]list下标访问可能不正确
         if list[ii] == msg then
-          list:splice(ii, 1)
+          table.spliceArray(list,ii, 1)
         end
         ii=ii-1
       until not(ii >= 0)

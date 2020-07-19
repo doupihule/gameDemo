@@ -426,7 +426,7 @@ function InstanceMove:clearEffByName(name, clearAll)
   repeat
     local eff = self._followEffGroup[i+1]
     if eff.cacheId == name then
-      self._followEffGroup:splice(i, 1)
+      table.spliceArray(self._followEffGroup,i, 1)
       self.controler:destoryEffect(eff)
       if not clearAll then
         break

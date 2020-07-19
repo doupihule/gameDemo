@@ -753,7 +753,7 @@ function BattleLogicalControler:clearOnePassiveAttr(passive)
   repeat
     local info = self.globalPassiveAttrMap[i+1]
     if info.passive._skillId == passive._skillId then
-      self.globalPassiveAttrMap:splice(i, 1)
+      table.remove(self.globalPassiveAttrMap,i)
       PassiveSkillTrigger.runOnePassiveGlobalAttr(info.passive, info.attr, nil, -1)
     end
     i=i-1

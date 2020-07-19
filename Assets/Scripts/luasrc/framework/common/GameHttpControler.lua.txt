@@ -64,7 +64,7 @@ function GameHttpControler:sendRequest(method, params, callback, thisObj, isWait
   end
   local coninfo = ConnectObj.new(1, method, params, callback, thisObj, isWait, addParams, expandParams)
   if isInsert then
-    self._connectCacheArr:splice(0, 0, coninfo)
+    table.insert(self._connectCacheArr,1,coninfo)
   else
     table.insert(self._connectCacheArr, coninfo)
   end
@@ -108,7 +108,7 @@ function GameHttpControler:doRequest()
     return
   end
   local con = self._connectCacheArr[0+1]
-  self._connectCacheArr:splice(0, 1)
+  table.spliceArray(self._connectCacheArr,1, 1)
   if not con.uniqueId then
     con.uniqueId = self:getUniqueRequestId()
   end

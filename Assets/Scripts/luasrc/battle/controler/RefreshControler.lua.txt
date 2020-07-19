@@ -108,7 +108,7 @@ function RefreshControler:initWarData()
   local id = curInfo[0+1]
   roleInfo = RolesFunc.getInstance():getCfgDatas("Role", id)
   if energy < roleInfo.payEnergyNmb then
-    result:splice(0, 1)
+    table.remove(result, 1)
     break
   end
   energy = energy - roleInfo.payEnergyNmb

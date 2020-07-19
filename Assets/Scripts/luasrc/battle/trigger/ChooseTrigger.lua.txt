@@ -351,7 +351,7 @@ function ChooseTrigger.chooseByTargetType(useArr, targetType)
       if role.lifeType == tonumber(tempInfo[0+1]) then
         local tempPri = tonumber(tempInfo[1+1])
         if tempPri == -1 then
-          useArr:splice(i, 1)
+          table.spliceArray(useArr,i, 1)
         else
           role.tempSortValue = tempPri
         end
@@ -538,7 +538,7 @@ function ChooseTrigger.excludeUnChooseRole(attacker, targetArr)
   repeat
     local targetRole = targetArr[i+1]
     if not ChooseTrigger.checkCanChoose(attacker, targetRole) then
-      targetArr:splice(i, 1)
+      table.spliceArray(targetArr,i, 1)
     end
     i=i-1
   until not(i >= 0)

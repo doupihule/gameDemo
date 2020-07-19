@@ -297,7 +297,7 @@ function BuffTrigger.clearBuff_2(attacker, defer, skillAction, buff, removeChanc
       for s in pairs(attr) do
         defer.attrData:updateOneAttr(s, -attr[s+1], 0, defer.attrData.extraAttr)
       end
-      defer.buffAttrInfo:splice(i, 1)
+      table.spliceArray(defer.buffAttrInfo,i, 1)
     end
     i=i-1
   until not(i >= 0)
@@ -369,7 +369,7 @@ function BuffTrigger.clearBuff_10(attacker, defer, skillAction, buff, removeChan
     repeat
       local info = arr[i+1]
       if info.buff == buff then
-        arr:splice(i, 1)
+        table.spliceArray(arr,i, 1)
       end
       i=i-1
     until not(i >= 0)
@@ -402,7 +402,7 @@ function BuffTrigger.clearBuff_13(attacker, defer, skillAction, buff, removeChan
   repeat
     local passSkill = arr[i+1]
     if passSkill.fromValue == buff then
-      arr:splice(i, 1)
+      table.spliceArray(arr,i, 1)
       PoolTools.cacheItem(PoolCode.POOL_PASSIVE, passSkill)
     end
     i=i-1

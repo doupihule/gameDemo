@@ -17,7 +17,7 @@ function BattleTweenControler:updateFrame()
     local info = self._tweenInfoMap[i+1]
     local isEnd = self:updateOneTween(info)
     if isEnd then
-      self._tweenInfoMap:splice(i, 1)
+      table.remove(self._tweenInfoMap,i)
     end
     i=i-1
   until not(i >= 0)
@@ -155,7 +155,8 @@ function BattleTweenControler:clearOneTween(instance)
   repeat
     local info = self._tweenInfoMap[i+1]
     if info.getInstance() == instance then
-      self._tweenInfoMap:splice(i, 1)
+      table.remove(self._tweenInfoMap,i)
+
     end
     i=i-1
   until not(i >= 0)

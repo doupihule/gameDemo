@@ -258,7 +258,7 @@ function InstanceBullet:doAfterHit()
       self:resetMoveAct(nearRole)
     else
       if #self._mingzhongArr >= 2 then
-        self._mingzhongArr:splice(0, #self._mingzhongArr - 1)
+        table.spliceArray(self._mingzhongArr,1, #self._mingzhongArr-1 )
         nearRole = ChooseTrigger.chooseAbsNearRole(self, self._chooseTargetArr, self._mingzhongArr, self.cfgData.pathParams[1+1])
         if nearRole then
           self:resetMoveAct(nearRole)

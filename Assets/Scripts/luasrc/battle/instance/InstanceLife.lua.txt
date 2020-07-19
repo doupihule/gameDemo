@@ -545,7 +545,7 @@ function InstanceLife:clearOneBuff(buff, removeChance)
   local i = #arr - 1
   repeat
     if arr[i+1] == buff then
-      arr:splice(i, 1)
+      table.spliceArray(arr,i, 1)
       removeResult = true
       break
     end

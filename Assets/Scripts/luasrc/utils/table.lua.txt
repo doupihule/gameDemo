@@ -598,6 +598,33 @@ function table.shiftArray(arr )
 	return ins
 end
 
+--find
+function table.findArrValue(arr,value  )
+	local len = #arr;
+	for i,v in ipairs(arr) do
+		if(v == value) then
+			return i
+		end
+	end
+	return 0;
+end
+
+--只做删除元素
+function table.spliceArray( arr,pos,nums )
+	if( nums == 1 ) then 
+		table.remove(arr,pos)
+	else
+		if not nums then nums = #arr end;
+		local endNum = pos+ nums-1;
+		if (endNum > #arr) then endNum = #arr end;
+		for i=endNum,pos,-1 do
+			table.remove(arr,i)
+		end
+
+	end
+
+end
+
 
 --四舍五入
 function math.round( value )

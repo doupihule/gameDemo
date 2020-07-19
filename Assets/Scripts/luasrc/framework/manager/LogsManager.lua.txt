@@ -71,7 +71,7 @@ end
 function LogsManager.systemError(message, ...)
   local resultArr = LogsManager.turnStr("sysError", message, optionalParams, true)
   local arr = resultArr:slice()
-  arr:splice(0, 1)
+  table.spliceArray(arr,1, 1)
   local concatStr = "" .. arr:join(",")
   TimerManager.getInstance():add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, {concatStr, LogsManager.errorTag_sysError})
   LogsManager.insterOneLogs(concatStr)

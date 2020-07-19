@@ -65,9 +65,7 @@ function PoolTools.clearOnePool(key, model)
   if model == nil then
     model=PoolCode.pool_model_battle
   end
-  -- [ts2lua]PoolTools._pools下标访问可能不正确
   local poolModel = PoolTools._pools[model]
-  -- [ts2lua]poolModel下标访问可能不正确
   local arr = poolModel[key]
   if not arr or #arr == 0 then
     return
@@ -83,5 +81,5 @@ function PoolTools.clearOnePool(key, model)
     end
     ii=ii+1
   until not(ii < #arr)
-  arr:splice(0, #arr)
+  table.spliceArray(arr,1, #arr)
 end
