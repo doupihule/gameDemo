@@ -28,7 +28,7 @@ function PoolTools.getItem(sign, model)
   -- [ts2lua]PoolTools._pools[model]下标访问可能不正确
   local pools = PoolTools._pools[model][sign]
   if pools ~= undefined then
-    return pools:shift()
+    return table.shiftArray(pools)
   end
   return nil
 end

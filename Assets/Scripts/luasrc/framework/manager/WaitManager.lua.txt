@@ -24,7 +24,7 @@ end
 function WaitManager:add(cmd)
   local wait = nil
   if #self.waitPool > 0 then
-    wait = self.waitPool:shift()
+    wait = table.shiftArray(self.waitPool)
   else
     wait = WaitEntity.new()
   end
@@ -51,7 +51,7 @@ end
 function WaitManager:clear()
   while(#self.waitList > 0)
   do
-  table.insert(self.waitPool, self.waitList:shift())
+  table.insert(self.waitPool, table.shiftArray(self.waitList))
   end
   self:checkWait()
 end

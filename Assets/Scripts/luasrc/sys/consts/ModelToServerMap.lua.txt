@@ -12,7 +12,13 @@ function ModelToServerMap.initBuildUserData()
   local baseRoleId = GlobalParamsFunc.getInstance():getDataNum("bornRoleId")
   local baseRole = {id=baseRoleId, level=1, inLine=1}
   local baseHome = {id=homeId, level=1, inLine=0}
-  local data = {coin=GlobalParamsFunc.getInstance():getDataNum("bornCoin"), giftGold=GlobalParamsFunc.getInstance():getDataNum("bornGold"), hasUpdateData=false, userExt={loginTime=Client.getInstance():getServerTime(), logoutTime=3000000000, sp=bornSp, upSpTime=Client.getInstance():getServerTime(), lastSaveTime=Client.getInstance():getServerTime()Micro, registTime=Client.getInstance():getServerTime()}, roles={baseRoleId=baseRole}, sendTime=0, switches={3=GlobalParamsFunc.getInstance():getDataNum("initialMusic") / 10000, 4=GlobalParamsFunc.getInstance():getDataNum("initialSound") / 10000}}
+  local data = {coin=GlobalParamsFunc.getInstance():getDataNum("bornCoin"), giftGold=GlobalParamsFunc.getInstance():getDataNum("bornGold"), 
+    hasUpdateData=false, userExt={loginTime=Client.getInstance():getServerTime(), 
+    logoutTime=3000000000, sp=bornSp, upSpTime=Client.getInstance():getServerTime(), 
+    lastSaveTime=Client.getInstance():getMiniServerTime(), 
+    registTime=Client.getInstance():getServerTime()}, 
+    roles={baseRoleId=baseRole}, sendTime=0
+  }
   if GlobalParamsFunc.getInstance():getDataNum("initialShock") ~= 1 then
     data.switches[5+1] = 1
   end

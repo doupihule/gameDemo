@@ -15,7 +15,6 @@ function TimerManager:ctor()
   self._oneFrameDt = 1000 / GameConsts.gameFrameRate;
   self.updateCallFuncGroup = {};
   self.callFuncNums = 0;
-  Laya.timer:frameLoop(1, self, self.tickHandler)
 end
 
 function TimerManager.getInstance()
@@ -191,6 +190,15 @@ function TimerManager:deleteObjUpdate(callId, callFunc, callThisObj)
     end
   end
 end
+
+function TimerManager:updateFrame(  )
+  LogsManager.echo("updateFrame:",1111111111);
+end
+
+function TimerManager:updateFrameLate(  )
+  LogsManager.echo("updateFrame:",222222222222);
+end
+
 
 function TimerManager:checkOverDay(targetTime)
   local daySecond = 3600000 * 24

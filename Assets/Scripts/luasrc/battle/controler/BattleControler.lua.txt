@@ -135,9 +135,7 @@ function BattleControler:doDelayCallFunc()
 end
 
 function BattleControler:doOneCallInfo(info, i)
-  if i == nil then
-    i=-1
-  end
+  if i == nil then    i=-1  end
   if info.frame <= 0 then
     if info.times > 0 then
       info.times=info.times-1
@@ -177,7 +175,7 @@ function BattleControler:getOneCacheTimeObj()
   if #self._cacheTimeArr == 0 then
     return {}
   else
-    return self._cacheTimeArr:shift()
+    return table.shiftArray(self._cacheTimeArr)
   end
 end
 

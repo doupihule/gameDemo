@@ -140,6 +140,13 @@ namespace XLua
             return luaEnv.DoString( chunk, name );
         }
 
+        public LuaTable XLuaGetLuaInstance(string value)
+        {
+            string a = string.Format("return {0} ", value);
+            return (LuaTable)(luaEnv.DoString(a)[0]);
+        }
+
+
 
         /// <summary>
         /// Registers the lua table.

@@ -74,7 +74,7 @@ function BattleFunc.getOneTempArr()
   if #BattleFunc._cacheTempArr == 0 then
     return {}
   end
-  return BattleFunc._cacheTempArr:shift()
+  return table.shiftArray(BattleFunc._cacheTempArr)
 end
 
 function BattleFunc.cacheOneTempArr(value)

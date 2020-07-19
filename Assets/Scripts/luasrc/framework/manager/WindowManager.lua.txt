@@ -224,7 +224,7 @@ function WindowManager.expandTipComplete(args)
       table.insert(WindowManager.expandTipsObject, tip)
       WindowManager.tipsLayer:removeChild(tip)
       if #WindowManager.expandTipsContent > 0 then
-        WindowManager.expandTipComplete(WindowManager.expandTipsContent:shift())
+        WindowManager.expandTipComplete(table.shiftArray(WindowManager.expandTipsContent))
       end
     end
     )
@@ -258,7 +258,7 @@ function WindowManager.TipComplete(args)
       table.insert(WindowManager.tipsObject, tip)
       WindowManager.tipsLayer:removeChild(tip)
       if #WindowManager.tipsContent > 0 then
-        WindowManager.TipComplete(WindowManager.tipsContent:shift())
+        WindowManager.TipComplete(table.shiftArray(WindowManager.tipsContent))
       end
     end
     )
@@ -294,7 +294,7 @@ function WindowManager.UpdateTipComplete(args)
       table.insert(WindowManager.updateTipsObject, tip)
       WindowManager.commonUILayer:removeChild(tip)
       if #WindowManager.updateTipsContent > 0 then
-        WindowManager.TipComplete(WindowManager.updateTipsContent:shift())
+        WindowManager.TipComplete(table.shiftArray(WindowManager.updateTipsContent))
       end
     end
     )

@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 2356802423
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 17c6b36b921ab7c76136f73cdecdccb3
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 5d4fb8002e9b5566509557301ee8899e
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+Assets:
+- Assets/UI/Prefabs/base/SpriteContainer.prefab
+Dependencies: []

@@ -590,6 +590,15 @@ end
 function table.descSort( a,b )	return b < a end
 
 
+--shift
+function table.shiftArray(arr )
+	if #arr ==0 then return nil end;
+	local ins = arr[1];
+	table.remove(arr,1);
+	return ins
+end
+
+
 --四舍五入
 function math.round( value )
 	value = math.floor(value+0.5)

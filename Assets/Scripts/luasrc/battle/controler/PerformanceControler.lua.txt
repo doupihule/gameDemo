@@ -30,7 +30,7 @@ function PerformanceControler:getCacheEffect(cacheId)
   if not arr or #arr < maxLength then
     return nil
   end
-  local eff = arr:shift()
+  local eff = table.shiftArray(arr)
   self.controler:clearCallBack(eff)
   if eff._followTarget then
     TableUtils.removeValue(eff._followTarget._followEffGroup, eff)
@@ -107,7 +107,7 @@ function PerformanceControler:setTxtShowBack(data)
   local x = targetInstance.pos.x
   local y = targetInstance._myView.y - targetInstance.cfgData.size[0+1] + 10
   if #viewArr > maxNums then
-    targetItem = viewArr:shift()
+    targetItem = table.shiftArray(viewArr)
     self.controler.tweenControler:clearOneTween(targetItem)
   else
     targetItem = BattleDamageLabel.new()

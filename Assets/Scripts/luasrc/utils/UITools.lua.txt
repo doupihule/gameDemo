@@ -111,8 +111,11 @@ local uiCtn = class("UI2DCtn");
 
 --创建一个2dui 容器
 function UITools.createUICtn(  )
-	local ui = uiCtn.new();
-	
+	local ctn = uiCtn.new();
+	local instance = ResourceManager.loadUIPrefab( "base/SpriteContainer.prefab","baseab" )
+	ctn.__cobject = instance
+	UITools.bindUIFunc(ctn)
+	return ui
 
 end
 

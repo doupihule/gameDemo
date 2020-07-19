@@ -42,12 +42,12 @@ function LogsManager.initLogsManager()
 end
 
 function LogsManager.echo(message, ...)
-  local resultArr = LogsManager.turnStr("echo", message, optionalParams)
+  local resultArr = LogsManager.turnStr("echo", message, {...})
   print(unpack(resultArr))
 end
 
 function LogsManager.warn(message, ...)
-  local resultArr = LogsManager.turnStr("warn", message, optionalParams)
+  local resultArr = LogsManager.turnStr("warn", message, {...})
   print(unpack(resultArr))
 end
 
@@ -350,7 +350,7 @@ function LogsManager.insterOneLogs(str)
   local rowLen = 50
   table.insert(LogsManager.logsArr, {label=str})
   if #LogsManager.logsArr > LogsManager.maxCancheLength then
-    LogsManager.logsArr:splice(0, 1)
+    table.remove(LogsManager.logsArr,1)
   end
   if LogsManager.logPanel then
     if not LogsManager.updateFlag and LogsManager.logPanel.visible then
@@ -429,20 +429,19 @@ function LogsManager.turnStr(title, message, optionalParams, isError)
     else
       resultStr = message
     end
-    optionalParams:splice(0, 0, message)
+    table.insert(optionalParams,1,message);
     arr = optionalParams
   end
   resultStr = timeStr .. " " .. resultStr
   if not isError then
     LogsManager.insterOneLogs(resultStr)
   end
-  arr:splice(0, 0, timeStr)
+  table.insert(arr,1,timeStr);
   return arr
 end
 
 function LogsManager.getTimeStr(title)
-  local time = Date.new()
-  return "[" .. title .. time:getHours() .. ":" .. time:getMinutes() .. ":" .. time:getSeconds() .. " ] "
+  return "[" .. title .. " ] "
 end
 
 
