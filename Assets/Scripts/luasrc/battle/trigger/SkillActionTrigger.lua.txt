@@ -107,7 +107,7 @@ function SkillActionTrigger.runOneSkillAction(attacker, skill, skillAction, useA
   end
   local skillTempChooseArr = skillAction.tempChooseArr
   -- [ts2lua]修改数组长度需要手动处理。
-  skillTempChooseArr.length = 0
+  table.clearArray(skillTempChooseArr)
   local i = 0
   repeat
     table.insert(skillTempChooseArr, useArr[i+1])
@@ -126,7 +126,7 @@ function SkillActionTrigger.runOneSkillAction(attacker, skill, skillAction, useA
     ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_action_usedAfter, attacker, useArr, skillAction)
     SkillExpandTrigger.onCheckExpand(attacker, skill, skillAction.cfgData.expand, useArr)
     -- [ts2lua]修改数组长度需要手动处理。
-    skillTempChooseArr.length = 0
+    table.clearArray(skillTempChooseArr)
     return rt
   end
 end

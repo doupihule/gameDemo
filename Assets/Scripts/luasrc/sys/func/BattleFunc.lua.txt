@@ -1,14 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
 BattleFunc = class('BattleFunc',BaseFunc)
 BattleFunc.debugValue = "0";
 BattleFunc.idToShowMap = {};
@@ -79,7 +68,7 @@ end
 
 function BattleFunc.cacheOneTempArr(value)
   -- [ts2lua]修改数组长度需要手动处理。
-  value.length = 0
+  table.clearArray(value)
   table.insert(BattleFunc._cacheTempArr, value)
 end
 

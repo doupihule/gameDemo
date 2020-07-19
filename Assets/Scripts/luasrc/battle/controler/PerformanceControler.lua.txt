@@ -61,8 +61,7 @@ end
 
 function PerformanceControler:clearAllCacheEffect()
   for i in pairs(self._effectCacheMap) do
-    -- [ts2lua]修改数组长度需要手动处理。
-    self._effectCacheMap.length = 0
+    table.clearArray(self._effectCacheMap)
   end
 end
 

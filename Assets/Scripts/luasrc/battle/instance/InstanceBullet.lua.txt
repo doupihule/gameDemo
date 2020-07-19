@@ -15,7 +15,7 @@ InstanceBullet = class('InstanceBullet',InstanceMove)
 function InstanceBullet:ctor(controler)
   InstanceBullet.super.ctor(self,controler)
   self.moveSpeed = 0;
-  self.moveLength = 0;
+  table.clearArray(self.mov);
   self.leftCollisionTimes = 1;
   self._hasHitNums = 0;
   self._repeatCheckFrame = 0;
@@ -29,7 +29,7 @@ function InstanceBullet:setData(data)
     self._mingzhongArr = {}
   else
     -- [ts2lua]修改数组长度需要手动处理。
-    self._mingzhongArr.length = 0
+    table.clearArray(self._mingzhongArr)
   end
   InstanceBullet.super.setData(self,data)
   self._followRole = nil
@@ -237,7 +237,7 @@ end
 
 function InstanceBullet:clearHitArr()
   -- [ts2lua]修改数组长度需要手动处理。
-  self._mingzhongArr.length = 0
+  table.clearArray(self._mingzhongArr)
 end
 
 function InstanceBullet:doAfterHit()

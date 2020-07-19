@@ -267,7 +267,7 @@ function InstanceLogical:checkAttack()
       self:giveOutSkill(skill)
     elseif rt == -1 then
       -- [ts2lua]修改数组长度需要手动处理。
-      tempArr.length = 0
+      table.clearArray(tempArr)
       ChooseTrigger.getSkillTargetRole(self, skill, skill.chooseTartgetCfg, tempArr, nil, nil, true)
       if self:checkCanMove() then
         if #tempArr > 0 then

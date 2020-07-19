@@ -90,7 +90,7 @@ function TableUtils.copyOneArr(arr, outArr)
     outArr = {}
   else
     -- [ts2lua]修改数组长度需要手动处理。
-    outArr.length = 0
+    table.clearArray(outArr)
   end
   if arr then
     local len = #arr

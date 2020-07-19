@@ -27,7 +27,7 @@ function PassiveSkillTrigger.runOnePassiveGlobalAttr(passive, attrMap, targtRole
     local useType = attrInfo[3+1]
     local compareValue = attrInfo[4+1]
     -- [ts2lua]修改数组长度需要手动处理。
-    tempArr.length = 0
+    table.clearArray(tempArr)
     ChooseTrigger.getRoleByType(onwer, useType, compareValue, tempArr)
     local s = 0
     repeat
@@ -175,7 +175,7 @@ function PassiveSkillTrigger.runPassiveSkill_11(attacker, skill, useArr, skillAc
     return
   end
   -- [ts2lua]修改数组长度需要手动处理。
-  outArr.length = 0
+  table.clearArray(outArr)
   local i = 0
   repeat
     local tempInfo = paramsArr[i+1]
