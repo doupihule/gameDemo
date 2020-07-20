@@ -1,156 +1,42 @@
-AlertUILocal = class('AlertUILocal', Laya.View)
+AlertUILocal = class('AlertUILocal', UIBase)
 AlertUILocal.res = nil;
-AlertUILocal.getInstance() = nil;
 function AlertUILocal:ctor()
-AlertUILocal.super.ctor(self)
-self._callback = nil;
-self._thisObj = nil;
-self.bgCover = nil;
-self.contentBg = nil;
-self.titleLab = nil;
-self.msgLab = nil;
-self.sureBtn = nil;
-self.sureLab = nil;
-self.cancleBtn = nil;
-self.cancleLab = nil;
-self.btncenterX = 0;
-self.btnOffset = 120;
-AlertUILocal.getInstance() = self
-self._cacheDataArr = {}
-self:checkInit()
+    AlertUILocal.super.ctor(self)
+    self._callback = nil;
+    self._thisObj = nil;
+    self.bgCover = nil;
+    self.contentBg = nil;
+    self.titleLab = nil;
+    self.msgLab = nil;
+    self.sureBtn = nil;
+    self.sureLab = nil;
+    self.cancleBtn = nil;
+    self.cancleLab = nil;
+    self.btncenterX = 0;
+    self.btnOffset = 120;
+    AlertUILocal._instance = self
+    self._cacheDataArr = {}
+    self:checkInit()
 end
 
 function AlertUILocal:checkInit()
-local stageWidth = ScreenAdapterTools.width
-local stageHeight = ScreenAdapterTools.height
-local contentBgWidth = 566
-local contentBgHeight = 286
-local contentBgX = stageWidth - contentBgWidth / 2
-local contentBgY = stageHeight - contentBgHeight / 2
-if self.bgCover == nil then
-self.bgCover = UITools.createUICtn()
-local path = {{"moveTo", 0, 0}, {"lineTo", stageWidth, 0}, {"lineTo", stageWidth, stageHeight}, {"lineTo", 0, stageHeight}, {"closePath"}}
-self.bgCover.graphics:drawPath(0, 0, path, {fillStyle = "#000000"})
-self.bgCover.alpha = 0.5
-self:addChild(self.bgCover)
-end
-if self.contentBg == nil then
-local splitY = 70
-self.contentBg = UITools.createUICtn()
-local path = {{"moveTo", 0, 0}, {"lineTo", contentBgWidth, 0}, {"lineTo", contentBgWidth, 70}, {"lineTo", 0, 70}, {"closePath"}, {"moveTo", 0, 70}, {"lineTo", contentBgWidth, 70}, {"lineTo", contentBgWidth, contentBgHeight}, {"lineTo", 0, contentBgHeight}, {"closePath"}}
-self.contentBg.graphics:drawPath(contentBgX, contentBgY, path, {fillStyle = "#111a1b"}, {strokeStyle = "#202f30", lineWidth = "3"})
-self:addChild(self.contentBg)
-end
-if self.titleLab == nil then
-self.titleLab = Laya.Text()
-self.titleLab.x = contentBgX
-self.titleLab.y = contentBgY + 15
-self.titleLab.width = contentBgWidth
-self.titleLab.height = 45
-self.titleLab.fontSize = 45
-self.titleLab.color = "#b8fff7"
-self.titleLab.align = "center"
-self.titleLab.text = "提示"
-self:addChild(self.titleLab)
-end
-if self.msgLab == nil then
-self.msgLab = Laya.Text()
-self.msgLab.x = contentBgX + 50
-self.msgLab.y = contentBgY + 75
-self.msgLab.width = contentBgWidth - 100
-self.msgLab.height = 130
-self.msgLab.fontSize = 24
-self.msgLab.color = "#ffffff"
-self.msgLab.align = "center"
-self.msgLab.valign = "middle"
-self.msgLab.wordWrap = true
-self.msgLab.leading = 10
-self:addChild(self.msgLab)
-end
-self.btncenterX = contentBgX + 200
-if self.sureBtn == nil then
-self.sureBtn = self:createBtn("确定", self.touchHandler, self, self.btncenterX, contentBgY + 206)
-end
-if self.cancleBtn == nil then
-self.cancleBtn = self:createBtn("取消", self.onCancleBtn, self, self.btncenterX + self.btnOffset, contentBgY + 206)
-end
+
 end
 
 function AlertUILocal:onCancleBtn()
-WindowManager.CloseUI(WindowCfgs.AlertUILocal)
+    WindowManager.CloseUI(WindowCfgs.AlertUILocal)
 end
 
 function AlertUILocal:createBtn(str, func, thisObj, x, y)
-local sp = UITools.createUICtn()
-sp = UITools.createUICtn()
-sp.width = 166
-sp.height = 50
-local path = {{"moveTo", 0, 0}, {"lineTo", 166, 0}, {"lineTo", 166, 50}, {"lineTo", 0, 50}, {"closePath"}}
-sp.graphics:drawPath(0, 0, path, {fillStyle = "#111a1b"}, {strokeStyle = "#202f30", lineWidth = "2"})
-sp.x = x
-sp.y = y
-self:addChild(sp)
-if func then
-sp:on(Laya.Event.CLICK, thisObj, func)
-end
-local label = nil
-label = Laya.Text()
-label.x = 0
-label.y = 10
-label.width = 166
-label.height = 30
-label.fontSize = 30
-label.color = "#e1fcf5"
-label.align = "center"
-label.valign = "middle"
-label.text = str
-sp:addChild(label)
-return sp
+
 end
 
 function AlertUILocal:setData(data)
-table.insert(self._cacheDataArr, data)
-self._callback = data.callBack
-self._thisObj = data.thisObj
-if data.msg then
-self.msgLab.text = data.msg
-end
-if data.type == 2 then
-self.sureBtn.visible = true
-self.cancleBtn.visible = true
-self.sureBtn.x = self.btncenterX - self.btnOffset
-self.cancleBtn.x = self.btncenterX + self.btnOffset
-else
-self.sureBtn.visible = true
-self.cancleBtn.visible = false
-self.sureBtn.x = self.btncenterX
-end
 end
 
 function AlertUILocal:touchHandler(target)
-WindowManager.CloseUI(WindowCfgs.AlertUILocal)
-local copyArr = TableUtils.copyOneArr(self._cacheDataArr)
-self._cacheDataArr = {}
-local i = 0
-repeat
-local data = copyArr[i+1]
-if data then
-if Global.isGameDestory then
-return
-end
-local callBack = data.callBack
-local thisObj = data.thisObj
-if callBack then
-doJsCallFunc(callBack, thisObj)
-end
-end
-i = i+1
-until not (i < #copyArr)
+
 end
 
 function AlertUILocal:reConnect()
-if self._callback then
-doJsCallFunc(self._callback, self._thisObj)
-end
-WindowManager.CloseUI(WindowCfgs.AlertUILocal)
 end

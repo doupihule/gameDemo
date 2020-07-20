@@ -338,13 +338,12 @@ function LogsManager.insterOneLogs(str)
     end
     if LogsManager.logPanel then
         if not LogsManager.updateFlag and LogsManager.logPanel.visible then
-            Laya.timer:once(500, LogsManager, function()
+            TimerManager.getInstance().add(function()
                 if LogsManager.updateFlag and LogsManager.logPanel.visible then
                     LogsManager.refreshLog()
                 end
                 LogsManager.updateFlag = false
-            end
-            )
+            end,nil,500,1)
             LogsManager.updateFlag = true
         end
     end

@@ -25,7 +25,7 @@ function BaseFunc.onConfigGroupLoadComplete()
     if GameUtils.isReview then
         congfigName = BaseFunc._globalConfigsReviewName
     end
-    BaseFunc._globalConfigMap = Laya.loader:getRes(congfigName)
+    BaseFunc._globalConfigMap = require("globalCfgs.lua")
     -- [ts2lua]GameSwitch.switchMap下标访问可能不正确
     local hotCfg = GameSwitch.getSwitchMap()[BaseFunc.SWITCH_CONFIG_HOT]
     if hotCfg and hotCfg ~= "" then
@@ -54,7 +54,7 @@ function BaseFunc.onTranslateGroupLoadComplete()
     if not BaseFunc.isMergeConfig then
         return
     end
-    BaseFunc._translateConfigs = Laya.loader:getRes(BaseFunc._translateCfgsName) or {}
+    BaseFunc._translateConfigs =  {}
     local cfgsArr = BaseFunc._globalConfigMap
     local translateKey = "Translate"
     local translatekeyLen = #translateKey

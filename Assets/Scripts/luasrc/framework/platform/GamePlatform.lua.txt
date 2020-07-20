@@ -45,90 +45,24 @@ end
 function GamePlatform:initPlatform()
 end
 function GamePlatform:reqServerList(callBack, thisObject)
-    local params = { method = 251, params = { loginToken = self.loginToken } }
-    local url = Global.global_url .. '&ver=' .. Global.version
-    HttpMessage.getInstance():send(url, TableUtils.safelyJsonStringfy(params), function(data)
-        local secList = data[0 + 1].result.data.secList
-        local len = #secList
-        local pData = nil
-        local i = 0
-        repeat
-            local secData = data[0 + 1].result.data.secList[i + 1]
-            if secData.mainSec == 1 then
-                pData = data[0 + 1].result.data.secList[i + 1]
-                break
-            end
-            i = i + 1
-        until not (i < len)
-        PackConfigManager.getInstance():setPlatform(pData)
-        if callBack then
-            doJsCallFunc(callBack, thisObject, data[0 + 1].result.data)
-        end
-    end
-    , self, "post")
+
 end
 
 function GamePlatform:reqVMS()
-    if Global.checkUserCloudStorage() then
-        Global.global_url = PackConfigManager.getInstance():getPlatform().cloud_url
-        Global.version = PackConfigManager.getInstance():getPlatform().vms_version
-        self:getWxInfo()
-        return
-    end
-    if PackageConfig.configData then
-        self:checkVersion()
-    else
-        local url = PackConfigManager.getInstance():getPlatform().vms_url .. '?mod=vms&r=gameApi/getOnlineVersion&upgrade_path=' .. PackConfigManager.getInstance():getPlatform().upgrade_path
-        HttpMessage.getInstance():send(url, nil, self.checkVMSBack, self)
-    end
+
 end
 
 function GamePlatform:checkVMSBack(result)
-    local version = result.online_version
-    LogsManager.echo("online_version:", version, "local vms_version", PackConfigManager.getInstance():getPlatform().vms_version)
-    LogsManager.echo("client_version:", Global.client_version)
-    version = math.max(version, PackConfigManager.getInstance():getPlatform().vms_version)
-    PackConfigManager.getInstance():getPlatform().vms_version = version
-    self:checkVersion()
 end
 
 function GamePlatform:checkVersion()
-    local url = PackConfigManager.getInstance():getPlatform().vms_url .. '?mod=vms&r=gameApi/checkVersion&ver=' .. PackConfigManager.getInstance():getPlatform().vms_version
-    HttpMessage.getInstance():send(url, nil, self.checkVersionCallback, self)
 end
 
 function GamePlatform:checkVersionCallback(result)
-    LogsManager.echo(nil == undefined, "___null undefined")
-    if (result.s == nil or not result.global_server_url) or not result.v.version then
-        LogsManager.errorTag(nil, TableUtils.safelyJsonStringfy(result))
-        ErrCodeManager.getInstance():setErr(ErrorCode.sys_error)
-        return
-    end
-    if string.find(result.global_server_url, "http://") ~= nil or string.find(result.global_server_url, "https://") ~= nil then
-        Global.global_url = result.global_server_url
-    else
-        Global.global_url = "http://" .. result.global_server_url
-    end
-    if result.GameStatic then
-        GameSwitch.coverServerSwitchMap(result.GameStatic)
-    end
-    Global.resource_url = result.resource_url_root .. "/" .. UserInfo.platformId .. "/"
-    Global.nocdn_resource_url = result.nocdn_resource_url_root .. "/"
-    VersionManager.versionStatus = result.s
-    VersionManager.vmsVersion = result.v.version
-    if result.s == VersionManager.VERSION_STATUS_FORCE_UPDATE then
-        Global.version = result.v.version
-    else
-        Global.version = PackConfigManager.getInstance():getPlatform().vms_version
-    end
-    LogsManager.echo("Global.version:", Global.version, "localVersion:", PackConfigManager.getInstance():getPlatform().vms_version, "updateSatus:", result.s)
-    self:addUpdateListener()
-    KariqiShareManager.kariquLogin()
+
 end
 
 function GamePlatform:addUpdateListener()
-    self:getNetwork()
-    MainModule.getInstance():checkSystem()
 end
 
 function GamePlatform:reqGlobal(params, isInit)
@@ -138,9 +72,7 @@ function GamePlatform:reqGlobal(params, isInit)
     self._reloginCount = self._reloginCount + 1
     local url = Global.global_url .. '&ver=' .. Global.version
     self._globalParams = params
-    -- [ts2lua]params下标访问可能不正确
     if not params["params"] then
-        -- [ts2lua]params下标访问可能不正确
         params["params"] = {}
     end
     local onHttpErrorBack = function(data)
@@ -254,19 +186,6 @@ end
 function GamePlatform:getLoginResult()
 end
 function GamePlatform:sendKakuraInit()
-    if Global.checkUserCloudStorage() then
-        if self.platformUserInfo then
-            local userData = UserModel.getInstance():getData()
-            if self.platformUserInfo.name then
-                userData.name = self.platformUserInfo.name
-                userData.userInfo = self.platformUserInfo
-                UserInfo.userSex = self.platformUserInfo.sex
-            end
-        end
-        return
-    end
-    local myThis = self
-    Client.getInstance():sendInit(myThis.loginToken, myThis.platformUserInfo, MainModule.getInstance().loginResult, MainModule.getInstance(), myThis.inviteBy, myThis.shareInfo)
 end
 
 function GamePlatform:reRequestGlobal(callBack, thisObj)
@@ -366,14 +285,10 @@ function GamePlatform:compareData(data)
             localData.sendTime = 0
         end
     else
-        try_catch {
-            main = function()
-                localData = TableUtils.safelyJsonParse(localData)
-            end,
-            catch = function(e)
-                localData = ModelToServerMap.initBuildUserData()
-            end
-        }
+        localData = TableUtils.safelyJsonParse(localData)
+        if(not localData) then
+            localData = ModelToServerMap.initBuildUserData()
+        end
     end
     local userData = data.user
     if self:checkHasUserData(userData) then
@@ -479,18 +394,6 @@ end
 function GamePlatform:sharePage()
 end
 function GamePlatform:showVideoAd(successCallBack, closeCallBack, thisObj, extraData)
-    if successCallBack == nil then
-        successCallBack = nil
-    end
-    if closeCallBack == nil then
-        closeCallBack = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if extraData == nil then
-        extraData = {}
-    end
 
 
 end
@@ -512,18 +415,6 @@ function GamePlatform:loginOut()
 end
 
 function GamePlatform:share(id, extraData, callback, thisObj)
-    if id == nil then
-        id = ""
-    end
-    if extraData == nil then
-        extraData = {}
-    end
-    if callback == nil then
-        callback = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
 
 
 end
@@ -539,24 +430,6 @@ end
 function GamePlatform:registerRecord()
 end
 function GamePlatform:recordStart(callback, thisObj, endCallback, durT, recordTimeRange, recordType)
-    if callback == nil then
-        callback = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if endCallback == nil then
-        endCallback = nil
-    end
-    if durT == nil then
-        durT = 120
-    end
-    if recordTimeRange == nil then
-        recordTimeRange = nil
-    end
-    if recordType == nil then
-        recordType = self.RECORD_TYPE_AUTO
-    end
 
 
 end
@@ -570,12 +443,6 @@ function GamePlatform:recordStop(recordType)
 end
 
 function GamePlatform:shareVideo(callBack, thisObj)
-    if callBack == nil then
-        callBack = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
 
 
 end
@@ -587,36 +454,14 @@ end
 function GamePlatform:createMoreGamesButton()
 end
 function GamePlatform:showMoreGamesModal(data)
-    if data == nil then
-        data = nil
-    end
-
-
 end
 
 function GamePlatform:jumpToPayXCX(data, succCall, failCall, thisObj)
-    if succCall == nil then
-        succCall = nil
-    end
-    if failCall == nil then
-        failCall = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
 
 
 end
 
 function GamePlatform:changeLeftTask(value, tag)
-    if tag == nil then
-        tag = nil
-    end
-    self._leftWaitTask = self._leftWaitTask + value
-    LogsManager.echo("yrc changeLeftTask", value, self._leftWaitTask, tag)
-    if self._leftWaitTask == 0 then
-        self:getUserInfoAndReq()
-    end
 end
 
 function GamePlatform:isCanShareVideo()
@@ -635,15 +480,6 @@ end
 function GamePlatform:getUserInfoAndReq()
 end
 function GamePlatform:vibrate(isLong, callBack, thisObject)
-    if isLong == nil then
-        isLong = false
-    end
-    if callBack == nil then
-        callBack = nil
-    end
-    if thisObject == nil then
-        thisObject = nil
-    end
     if callBack then
         doJsCallFunc(callBack, thisObject, true)
     end
@@ -652,20 +488,20 @@ end
 function GamePlatform:vibrateByCount(count)
     local myThis = self
     local index = 0
-    local obj = { count = count, index = index }
     myThis:vibrate(false)
     index = index + 1
     if count <= 1 then
         return
     end
-    Laya.timer:loop(16, obj, function()
+
+    TimerManager.getInstance():registObjUpdate( function()
         myThis:vibrate(false)
         index = index + 1
         if index >= count then
-            Laya.timer:clearAll(obj)
+            TimerManager.getInstance():deleteObjUpdate(nil,nil,self);
         end
-    end
-    )
+    end,self)
+
 end
 
 function GamePlatform:setVersionCheckResult(num)
@@ -689,12 +525,9 @@ end
 
 function GamePlatform:setGameFrame()
     if GameConsts.gameFrameRate == 30 then
-        Laya.stage.frameRate = Laya.Stage.FRAME_SLOW
-        LogsManager.echo("zm setGameFrame: ", Laya.stage.frameRate)
+        LogsManager.echo("zm setGameFrame: ")
     end
-    -- [ts2lua]BattleFunc下标访问可能不正确
     if BattleFunc["initFrameDates"] then
-        -- [ts2lua]BattleFunc下标访问可能不正确
         BattleFunc["initFrameDates"]()
     end
 end
@@ -708,26 +541,10 @@ end
 function GamePlatform:destroyGameClubBtn()
 end
 function GamePlatform:openCustomerService(isShowCard)
-    if isShowCard == nil then
-        isShowCard = false
-    end
-
 
 end
 
 function GamePlatform:showPopTip(title, content, extraData)
-    if extraData == nil then
-        extraData = nil
-    end
-    local onSureBack = function(rt)
-        doJsCallFunc(extraData.success, nil, rt)
-    end
-
-    local onCancleBack = function(rt)
-        doJsCallFunc(extraData.success, nil, rt)
-    end
-
-    WindowManager.setPopupTip(2, content, onSureBack, self, title, onCancleBack)
 end
 
 function GamePlatform:showFlyTip(title, icon)
@@ -749,208 +566,42 @@ end
 function GamePlatform:jumpToMiniProgram(data)
 end
 function GamePlatform:initPhysics3D(message)
-    if not GameConsts.isUsePhysics then
-        MainModule.getInstance():changeShowMainTask(-1, MainModule.task_subpackage, "not use physics")
-        return
-    end
-    -- [ts2lua]window下标访问可能不正确
-    if window["Physics3D"] then
-        MainModule.getInstance():changeShowMainTask(-1, MainModule.task_subpackage, "has use physics")
-        return
-    end
-    LogsManager.echo("_startInitPhysics3d--")
-    -- [ts2lua]window下标访问可能不正确
-    window["loadLib"]("libs/laya.physics3D.js")
-    local code = nil
-    local tempFunc = function()
-        -- [ts2lua]window下标访问可能不正确
-        local physics3D = window["Physics3D"]
-        if not physics3D then
-            LogsManager.echo("Physics3D is not init")
-            return
-        end
-        TimerManager.getInstance():remove(code)
-        -- [ts2lua]Laya3D下标访问可能不正确
-        Laya3D["_enbalePhysics"] = true
-        physics3D(GameConsts.defaultPhysicsMemory * 1024 * 1024):tsvar_then(function()
-            -- [ts2lua]window下标访问可能不正确
-            if window["__physics3D"] then
-                -- [ts2lua]Laya3D下标访问可能不正确
-                -- [ts2lua]window下标访问可能不正确
-                Laya3D["_physics3D"] = window["__physics3D"]
-            else
-                LogsManager.errorTag("physics", "全局没有找到物理库对象")
-            end
-            LogsManager.echo("xd 物理引擎初始化完毕")
-            MainModule.getInstance():changeShowMainTask(-1, MainModule.task_subpackage, message)
-        end
-        )
-    end
-
-    code = TimerManager.getInstance():add(tempFunc, self, 10, 9999, false)
-    tempFunc()
+    MainModule.getInstance():changeShowMainTask(-1, MainModule.task_subpackage, "has use physics")
 end
 
 function GamePlatform:compareVersion(v1, v2)
-    v1 = string.split(v1, '.')
-    v2 = string.split(v2, '.')
-    local len = math.max(#v1, #v2)
-    while (#v1 < len)
-    do
-        table.insert(v1, '0')
-    end
-    while (#v2 < len)
-    do
-        table.insert(v2, '0')
-    end
-    local i = 0
-    repeat
-        local num1 = parseInt(v1[i + 1])
-        local num2 = parseInt(v2[i + 1])
-        if num1 > num2 then
-            return 1
-        elseif num1 < num2 then
-            return -1
-        end
-        i = i + 1
-    until not (i < len)
-    return 0
 end
 
 function GamePlatform:canUseJump()
-    if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_SHOWJUMP) then
-        LogsManager.echo('hlx 互推禁用：互推开关关闭')
-        return false
-    end
-    if UserInfo.isOppo() and GameSwitch.checkOnOff(GameSwitch.SWITCH_OPPO_REVIEW) then
-        LogsManager.echo('hlx 互推禁用：审核模式无互推')
-        return false
-    end
-    if not ((UserInfo.isTT() or UserInfo.isWX()) or UserInfo.isBaidu()) or UserInfo.isOppo() then
-        LogsManager.echo('hlx 互推禁用：该平台不支持互推')
-        return false
-    end
-    if UserInfo.isTT() then
-        if not self:getWX().showMoreGamesModal then
-            LogsManager.warn("hlx 头条互推禁用 showMoreGamesModal not support")
-            return false
-        end
-        if UserInfo.platform:getSystemInfo().platform == "ios" then
-            LogsManager.echo('hlx 头条互推禁用：IOS不支持头条互推')
-            return false
-        end
-        if #JumpFunc.getInstance():getJumpList() == 0 then
-            LogsManager.warn("hlx 头条互推禁用 互推Jump表未配置，请联系管理员配置")
-            return false
-        end
-    elseif UserInfo.isBaidu() then
-        if #JumpFunc.getInstance():getJumpList() == 0 then
-            LogsManager.warn("hlx 百度互推禁用 互推Jump表未配置，请联系管理员配置")
-            return false
-        end
-    end
-    return true
+
 end
 
 function GamePlatform:addToDesktop(thisObj, successCall, failCall, channelParams)
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if successCall == nil then
-        successCall = nil
-    end
-    if failCall == nil then
-        failCall = nil
-    end
-    if channelParams == nil then
-        channelParams = {}
-    end
-
 
 end
 
 function GamePlatform:addToFavorite(thisObj, successCall, failCall, channelParams)
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if successCall == nil then
-        successCall = nil
-    end
-    if failCall == nil then
-        failCall = nil
-    end
-    if channelParams == nil then
-        channelParams = {}
-    end
 
 
 end
 
 function GamePlatform:canAddToDesktop()
-    if not (((UserInfo.isQQGame() or UserInfo.isBaidu()) or UserInfo.isOppo()) or UserInfo.isVivo()) then
-        LogsManager.echo('hlx 添加到桌面功能禁用：该平台不支持添加到桌面功能')
-        return false
-    end
-    if self:getSystemInfo().platform and (self:getSystemInfo().platform == "ios" or self:getSystemInfo().platform == "devtools") then
-        LogsManager.echo('hlx 添加到桌面功能禁用：IOS不支持')
-        return false
-    end
-    if UserInfo.isQQGame() then
-        if not self:getWX().saveAppToDesktop then
-            LogsManager.echo('hlx 添加到桌面功能禁用：saveAppToDesktop不支持')
-            return false
-        end
-    elseif UserInfo.isBaidu() then
-        if type(self:getWX().showAddToDesktopGuide) ~= 'function' then
-            LogsManager.echo('hlx 添加到桌面功能禁用：showAddToDesktopGuide不支持')
-            return false
-        end
-    elseif UserInfo.isOppo() or UserInfo.isVivo() then
-        if not self:getWX().installShortcut then
-            LogsManager.echo('hlx 添加到桌面功能禁用：installShortcut不支持')
-            return false
-        end
-    end
-    return true
+
 end
 
 function GamePlatform:canAddToFavorite()
-    if not UserInfo.isBaidu() then
-        LogsManager.echo('hlx 添加到桌面功能禁用：该平台不支持添加到桌面功能')
-        return false
-    end
-    if self:getSystemInfo().platform == "devtools" then
-        LogsManager.echo('hlx 添加到桌面功能禁用：开发者工具无此功能')
-        return false
-    end
-    if type(self:getWX().showFavoriteGuide) ~= 'function' then
-        return false
-    end
-    return true
+
 end
 
 function GamePlatform:canCreateDisPlayPbject()
-    if UserInfo.isWX() or UserInfo.isQQGame() then
-        return true
-    end
     return false
 end
 
 function GamePlatform:createDisplayObject(type, width, height, x, y)
-    if x == nil then
-        x = 0
-    end
-    if y == nil then
-        y = 0
-    end
-
 
 end
 
 function GamePlatform:canSetRankInfo()
-    if UserInfo.isWX() or UserInfo.isQQGame() then
-        return true
-    end
     return false
 end
 
@@ -961,51 +612,14 @@ function GamePlatform:isFromFavourite()
 end
 
 function GamePlatform:canAdv()
-    if not GameUtils.canVideo then
-        return false
-    end
-    if UserInfo.isWeb() then
-        return true
-    end
-    if not self._videoId and not UserInfo.isUC() then
-        return false
-    end
     return true
 end
 
 function GamePlatform:canShareVideo()
-    if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_SHAREVIDEO) then
-        LogsManager.echo("hlx 录屏功能禁用: 开关关闭")
-        return false
-    end
-    if self._canShareVideoRt == nil then
-        if not UserInfo.isTT() and not UserInfo.isBaidu() then
-            LogsManager.echo("hlx 录屏功能禁用: 该平台不支持录屏")
-            self._canShareVideoRt = false
-            return false
-        end
-        if UserInfo.isBaidu() then
-            local systemInfo = UserInfo.platform:getSystemInfo()
-            if systemInfo.host and systemInfo.host ~= 'baiduboxapp' then
-                LogsManager.echo("hlx 录屏功能禁用: 百度渠道只有手百支持录屏", systemInfo.host)
-                self._canShareVideoRt = false
-                return false
-            end
-        end
-        self._canShareVideoRt = true
-    end
-    return self._canShareVideoRt
+
 end
 
 function GamePlatform:canShare()
-    if ((UserInfo.isBaidu() or UserInfo.isTT()) or UserInfo.isOppo()) or UserInfo.isVivo() then
-        LogsManager.echo("hlx 分享功能禁用: 该平台不开启分享功能：")
-        return false
-    end
-    if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_SHARE_NEW) then
-        LogsManager.echo("hlx 分享功能禁用: 分享开关关闭")
-        return false
-    end
     return true
 end
 
@@ -1014,17 +628,7 @@ function GamePlatform:showAntiAddtionView()
 end
 
 function GamePlatform:getLaunchOptions()
-    if not self._launchOptions then
-        if 'function' == type(self:getWX().getLaunchOptionsSync) then
-            self._launchOptions = self:getWX():getLaunchOptionsSync()
-            if self._launchOptions.scene == "1014" then
-                StatisticsManager.getInstance():onEvent(StatisticsCommonConst.SUBSCRIBE_JOIN_GAME, { msgId = self._launchOptions.query.msgId })
-            end
-            LogsManager.echo('_launchOptions', TableUtils.safelyJsonStringfy(self._launchOptions))
-        else
-            LogsManager.echo('该平台不支持 getLaunchOptionsSync')
-        end
-    end
+
     return self._launchOptions
 end
 
@@ -1035,20 +639,7 @@ end
 function GamePlatform:afterVideoLoadCallBack()
 end
 function GamePlatform:initCityName()
-    if not UserInfo.isWX() then
-        return
-    end
-    -- [ts2lua]GameConsts下标访问可能不正确
-    if not GameConsts["OPEN_IP_LIST"] then
-        return
-    end
-    if self.cityName then
-        LogsManager.echo("hlx clientInfo已经初始化完毕，无需重复初始化", TableUtils.safelyJsonStringfy(self.cityName))
-    else
-        local url = "https://pv.sohu.com/cityjson?ie=utf-8"
-        HttpMessage.getInstance():sendOtherHttpRequest(url, nil, self.initCityNameCallBack, self, "get", { errorCall = self.initCityNameErrorCallBack, contentType = "application/json" })
-    end
-    return
+
 end
 
 function GamePlatform:initCityNameCallBack(data)
@@ -1059,27 +650,12 @@ function GamePlatform:initCityNameErrorCallBack(error)
 end
 
 function GamePlatform:isAuthorized()
-    local data = UserModel.getInstance():getData()
-    local uInfo = data.userInfo
-    if uInfo and uInfo.name then
-        if UserInfo.isWX() then
-            local name = uInfo.name
-            if name:match("^oE7B") then
-                return false
-            end
-        end
-        return true
-    end
-    return false
+
 end
 
-function GamePlatform:requestSubscribeMessage(tmpIds, successCall, failCall, completeCall)
-end
 function GamePlatform:registFocusEvent()
     self.hideT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
     self.showT = self.hideT
-    Laya.stage:on(Laya.Event.FOCUS, self, self.onGetFocus)
-    Laya.stage:on(Laya.Event.BLUR, self, self.onLoseFocus)
 end
 
 function GamePlatform:onGetFocus()

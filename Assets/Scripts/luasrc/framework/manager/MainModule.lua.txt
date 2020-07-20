@@ -34,25 +34,11 @@ end
 
 function MainModule:checkSystem()
     local versionName = UserInfo.platform:getVersionName()
-    if Global.resource_url and Global.isCDN then
-        Laya.URL.basePath = Global.resource_url
-    end
     VersionManager.getInstance().versionName = versionName
     LogsManager.echo("xd cdnurl:", Global.resource_url)
-    LogsManager.echo("yrc reqvms suc", Laya.URL.basePath)
     LogsManager.echo("yrc req versionName:", versionName)
-    if FileUtils.isUserWXSource() and not UserInfo then
-        HttpMessage.getInstance():send(Laya.URL.basePath .. "test.json", {}, function()
-            Laya.ResourceVersion:enable(versionName, Laya.Handler:create(self, self.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION)
-        end
-        , self, "get", { errorCall = self.useNocndResourceUrl })
-    else
-        LoadManager.getInstance():load(versionName, Laya.Handler:create(self, function()
-            VersionManager.getInstance():initVersionData()
-            self:onVersionLoaded()
-        end
-        ))
-    end
+    VersionManager.getInstance():initVersionData()
+    self:onVersionLoaded()
 end
 
 function MainModule:useNocndResourceUrl()
@@ -60,15 +46,13 @@ function MainModule:useNocndResourceUrl()
     WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#error110"), function()
         LogsManager.echo('sanmen  启用备用cnd')
         Global.resource_url = Global.nocdn_resource_url + UserInfo.platformId .. "/"
-        Laya.URL.basePath = Global.nocdn_resource_url
-        Laya.ResourceVersion:enable(versionName, Laya.Handler:create(self, self.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION)
+        self:onVersionLoaded();
     end
     , self)
 end
 
 function MainModule:onVersionLoaded()
     VersionManager.getInstance():versionFileCheck()
-    Laya.AtlasInfoManager:enable("fileconfig.json", Laya.Handler:create(self, self.onConfigLoaded))
     FuncManager.init(function()
         if Global.checkUserCloudStorage() then
             self:onLoginResult(Client.getInstance().globalLoginBackData)
@@ -93,42 +77,10 @@ function MainModule:sysCallback()
 end
 
 function MainModule:changeByte(name)
-    local buffer = Laya.Loader:getRes(name)
-    local byte = Laya.Byte(buffer)
-    if #byte > 4 then
-        FileUtils.decodeBinAssets(byte)
-    end
-    Laya.Loader:clearRes(name)
 end
 
 function MainModule:loadMergeFiles()
-    if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_MERGEFILES) or UserInfo.isWeb() then
-        self:onMergeFileBack()
-    else
-        LogsManager.echo("xd----使用文件合并功能,注意开发模式下 可以禁掉文件合并功能.防止版本使用冲突")
-        local zipList = { { url = "mergefiles/mergeBin.bin", type = "arraybuffer" }, { url = "mergefiles/mergeJson.bin", type = "arraybuffer" } }
-        local times = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
-        local onZipLoad = function()
-            LogsManager.echo("krma. onZipLoad onZipLoad onZipLoad onZipLoad onZipLoad")
-            LoadManager.getInstance():load(zipList, Laya.Handler:create(self, function()
-                self:changeByte("mergefiles/mergeBin.bin")
-                self:changeByte("mergefiles/mergeJson.bin")
-                self:onMergeFileBack()
-                LogsManager.echo("xd  合并文件下载解析总耗时-----------", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - times)
-            end
-            ))
-        end
-
-        if FileUtils.checkIsUseZip() then
-            LoadZipManager.getInstance():loadZip("mergefiles.zip", VersionManager.ZIP_MODEL_KEY_MERGEFILES, Laya.Handler(self, onZipLoad), nil)
-        else
-            if SubPackageManager.getModelFileStyle(SubPackageConst.packName_mergefiles) == SubPackageConst.PATH_STYLE_SUBPACK then
-                SubPackageManager.loadSubPackage(SubPackageConst.packName_mergefiles, onZipLoad, self, true)
-            else
-                onZipLoad()
-            end
-        end
-    end
+    self:onMergeFileBack()
 end
 
 function MainModule:onMergeFileBack()
@@ -227,7 +179,6 @@ function MainModule:initLayer()
     WindowManager.rootLayer = UITools.createUICtn()
     WindowManager.rootLayer.x = WindowManager.rootLayer.x + ScreenAdapterTools.sceneOffsetX
     WindowManager.rootLayer.y = WindowManager.rootLayer.y + ScreenAdapterTools.sceneOffsetY
-    Laya.stage:addChild(WindowManager.rootLayer)
     WindowManager.commonUILayer = UITools.createUICtn()
     WindowManager.commonUILayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
     WindowManager.rootLayer:addChild(WindowManager.commonUILayer)
@@ -259,7 +210,6 @@ function MainModule:initLayer()
     WindowManager.debugLayer = UITools.createUICtn()
     WindowManager.rootLayer:addChild(WindowManager.debugLayer)
     LogsManager.initLogPanel()
-    LogsManager.addTouchShow(Laya.stage)
     if UserInfo.isWeb() then
         local urlParam = string.find(window.location.href, 'test=1') ~= nil
         LogsManager.echo(">>>>urlParam>>>>>>", urlParam)

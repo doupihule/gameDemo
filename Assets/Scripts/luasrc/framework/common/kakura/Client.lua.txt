@@ -37,130 +37,20 @@ function Client:checkConnect()
 end
 
 function Client:sendInit(token, userInfo, callback, thisObj, invitedBy, shareInfo)
-    if userInfo == nil then
-        userInfo = nil
-    end
-    if callback == nil then
-        callback = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if invitedBy == nil then
-        invitedBy = ""
-    end
-    if shareInfo == nil then
-        shareInfo = ""
-    end
-    self._gs_token = token
-    self._callback = callback
-    self._thisObj = thisObj
-    self._url = PackConfigManager.getInstance():getPlatform().kakura_url
-    self._version = Global.version
-    self._upgrade = PackConfigManager.getInstance():getPlatform().upgrade_path
-    self._sec = PackConfigManager.getInstance():getPlatform().sec
-    self._kakuraInitParams = self:getKakuraInitMsg(userInfo, invitedBy, shareInfo)
-    KakuraClient.getInstance():init(self._url, self._version, "", self.pushResult, self, self.onConnectBack, self)
 end
 
 function Client:initResult(result)
-    if result.error then
-        return
-    end
-    KakuraClient.getInstance().hasGetUserInfo = true
-    self._requestId = result.initRequestId
-    self._token = result.token
-    self._rid = result.rid
-    if self._callback then
-        doJsCallFunc(self._callback, self._thisObj)
-    end
 end
 
 function Client:sendHeart(method, param, callback, thisObj, addParam)
-    if method == nil then
-        method = nil
-    end
-    if param == nil then
-        param = nil
-    end
-    if callback == nil then
-        callback = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if addParam == nil then
-        addParam = nil
-    end
-    if KakuraClient.getInstance()._currentConn then
-        return
-    end
-    KakuraClient.getInstance():sendRequest(self.OPCODE_KAKURA_HEARTBEAT, KakuraClient.method_heartBeat, param, callback, thisObj, false)
 end
 
 function Client:send(method, param, callback, thisObj, opcode, isWait, addParam, expandParams)
-    if opcode == nil then
-        opcode = self.OPCODE_BACKEND_REQUEST
-    end
-    if isWait == nil then
-        isWait = true
-    end
-    if addParam == nil then
-        addParam = nil
-    end
-    if expandParams == nil then
-        expandParams = nil
-    end
-    if Global.checkUserCloudStorage() then
-        self:saveDataToCloud(param, callback, thisObj, addParam, expandParams)
-    else
-        if not opcode then
-            opcode = self.OPCODE_BACKEND_REQUEST
-        end
-        if (not param or param == nil) or param == "" then
-            param = {}
-        else
-            for key in pairs(param) do
 
-            end
-        end
-        if opcode == self.OPCODE_BACKEND_REQUEST then
-            if Global.checkIsSingleMode() then
-                if not param.clientDirty then
-                    param.clientDirty = SingleCommonServer.getClientDirtyList()
-                end
-            end
-        end
-        self._curMethod = method
-        KakuraClient.getInstance():sendRequest(opcode, method, param, callback, thisObj, isWait, false, addParam)
-    end
 end
 
 function Client:onResult(result, isPush)
-    if isPush == nil then
-        isPush = false
-    end
-    if result.data then
-        local rdata = result.data
-        if rdata.dirtyList then
-            self:onDirtyList(rdata.dirtyList)
-        end
-        if isPush then
-            if rdata.d then
-                self:deleteBaseData(rdata.d)
-            end
-            if rdata.u then
-                self:updateBaseData(rdata.u)
-            end
-        end
-    elseif result.error then
-        local err = result.error
-        ErrCodeManager.getInstance():setErr(err.code)
-    end
-    if result.serverInfo then
-        self._reqBackTime = result.serverInfo.serverTime
-        self._serverTime = parseInt(result.serverInfo.serverTime) - math.floor(cs.GameUtils.CommonUtil.GetTimeMiniStamp())
-    end
+
 end
 
 function Client:onDirtyList(baseData)
@@ -176,134 +66,38 @@ function Client:onDirtyList(baseData)
 end
 
 function Client:updateBaseData(upData)
-    local mapArr = ModelToServerMap.modelToServerMap
-    local length = #mapArr
-    local userChangeData = self:getUserData(upData)
-    if userChangeData then
-        UserModel.getInstance():updateData(userChangeData)
-    end
-    local i = 0
-    repeat
-        local info = mapArr[i + 1]
-        local key = info.key
-        local model = info.model
-        -- [ts2lua]upData下标访问可能不正确
-        if upData[key] then
-            -- [ts2lua]upData下标访问可能不正确
-            model.getInstance():updateData(upData[key])
-        end
-        i = i + 1
-    until not (i < length)
 end
 
 function Client:deleteBaseData(delData)
-    local mapArr = ModelToServerMap.modelToServerMap
-    local length = #mapArr
-    local userChangeData = self:getUserData(delData)
-    if userChangeData then
-        UserModel.getInstance():deleteData(userChangeData)
-    end
-    local i = 0
-    repeat
-        local info = mapArr[i + 1]
-        local key = info.key
-        local model = info.model
-        -- [ts2lua]delData下标访问可能不正确
-        if delData[key] then
-            -- [ts2lua]delData下标访问可能不正确
-            model.getInstance():deleteData(delData[key])
-        end
-        i = i + 1
-    until not (i < length)
+
 end
 
 function Client:getUserData(data)
-    local mapArr = ModelToServerMap.modelToServerMap
-    local length = #mapArr
-    local userChangeData = nil
-    for i in pairs(data) do
-        local model = nil
-        local value = data[i + 1]
-        if i ~= "_id" then
-            local j = 0
-            repeat
-                local info = mapArr[j + 1]
-                if info.key == i then
-                    model = info.model
-                    break
-                end
-                j = j + 1
-            until not (j < length)
-            if not model and i ~= "_id" then
-                if not userChangeData then
-                    userChangeData = {}
-                end
-                userChangeData[i + 1] = value
-            end
-        end
-    end
-    return userChangeData
+
+    return data
 end
 
 function Client:pushResult(result)
-    if result.params.dirtyList then
-        self:onDirtyList(result.params.dirtyList)
-    end
-    NotifyManager.onServerNotify(result)
 end
 
 function Client:onConnectBack(isFirstInit)
-    if isFirstInit then
-        local params = self._kakuraInitParams
-        KakuraClient.getInstance():clearOneMethod(MethodCommon.User_kakuraInit)
-        KakuraClient.getInstance():sendRequest(self.OPCODE_KAKURA_INIT, MethodCommon.User_kakuraInit, params, self.initResult, self, true, true)
-    else
-        local param = { token = self._token }
-        param.ver = self._version
-        param.upgrade = self._upgrade
-        param.deviceId = Global.deviceId
-        KakuraClient.getInstance():sendRequest(self.OPCODE_KAKURA_REAUTH, MethodCommon.User_kakuraReauth, param, self.relogin, self, true, true)
-    end
+
 end
 
 function Client:doDummyServerBack(data, u, d)
-    if data == nil then
-        data = nil
-    end
-    if u == nil then
-        u = nil
-    end
-    if d == nil then
-        d = nil
-    end
-    if not data then
-        data = {}
-    end
-    if u or d then
-        data.dirtyList = { u = u, d = d }
-        Client.temDirtList = data.dirtyList
-        self:onDirtyList(data.dirtyList)
-    end
-    return { data = data }
+
 end
 
 function Client:relogin()
-    KakuraClient.getInstance():sendRequest(self.OPCODE_BACKEND_REQUEST, MethodCommon.User_relogin, {}, self.reloginBack, self, true, true)
 end
 
 function Client:reloginBack(result)
-    if (result.data and result.data.config) and result.data.config.switch then
-        GameSwitch.coverServerSwitchConditionMap(result.data.config.switchCondition)
-        GameSwitch.coverServerSwitchMap(result.data.config.switch)
-    end
 end
 
 function Client:getServerTime()
-    return math.floor(self._serverTime + math.floor(cs.GameUtils.CommonUtil.GetTimeMiniStamp()) * 0.001)
 end
 
 function Client:getMiniServerTime()
-    return self._serverTime + cs.GameUtils.CommonUtil.GetTimeMiniStamp()
 end
 
 function Client:getRequestId()
@@ -323,29 +117,7 @@ function Client:getUniqueRequestId(requestId)
     return "h5_" .. rid .. "_" .. timestamp .. "_" .. self._baseUnqiueRequestId .. "_"
 end
 
-function Client:getKakuraInitMsg(userInfo, invitedBy, shareInfo)
-    if userInfo == nil then
-        userInfo = nil
-    end
-    if invitedBy == nil then
-        invitedBy = ""
-    end
-    if shareInfo == nil then
-        shareInfo = ""
-    end
-    local params = { ver = self._version, account_name = "1", upgrade = self._upgrade, gs_token = self._gs_token, sec = self._sec, account_id = "1", deviceId = Global.deviceId }
-    if invitedBy ~= "" and shareInfo ~= "" then
-        -- [ts2lua]params下标访问可能不正确
-        params["invitedBy"] = invitedBy
-        -- [ts2lua]params下标访问可能不正确
-        params["shareInfo"] = shareInfo
-    end
-    if userInfo ~= nil then
-        -- [ts2lua]params下标访问可能不正确
-        params["userInfo"] = userInfo
-    end
-    return params
-end
+
 
 function Client:getRid()
     return self._rid

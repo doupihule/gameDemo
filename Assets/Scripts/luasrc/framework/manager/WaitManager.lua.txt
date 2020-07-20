@@ -6,7 +6,7 @@ function WaitManager:ctor()
     self._waitView = ReqLoadingUI.new()
     self._waitView.width = ScreenAdapterTools.width
     self._waitView.height = ScreenAdapterTools.height
-    Laya.timer:loop(1000, self, self.timeCallBack)
+    TimerManager.getInstance().add(self,this.timeCallBack,1000,9999999);
 end
 
 function WaitManager.getInstance()
@@ -27,7 +27,7 @@ function WaitManager:add(cmd)
     wait.time = Client.getInstance():getMiniServerTime()
     table.insert(self.waitList, wait)
     self:showOrHideWaitView(true)
-    Laya.timer:loop(1000, self, self.timeCallBack)
+    TimerManager.getInstance().add(self,this.timeCallBack,1000,9999999);
 end
 
 function WaitManager:remove(cmd)
@@ -55,7 +55,7 @@ end
 function WaitManager:checkWait()
     if #self.waitList <= 0 then
         self:showOrHideWaitView(false)
-        Laya.timer:clearAll(self)
+        TimerManager.getInstance().removeByObject(self);
     end
 end
 

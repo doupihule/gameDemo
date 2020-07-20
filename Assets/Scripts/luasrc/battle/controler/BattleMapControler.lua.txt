@@ -82,16 +82,6 @@ function BattleMapControler:destoryOneLayer(mapInfo)
     until not (i < #infoArr)
     local decorateArr = mapInfo.decorateArr
     local i = 0
-    repeat
-        local view = decorateArr[i + 1].view
-        view:removeSelf()
-        view:dispose()
-        i = i + 1
-    until not (i < #decorateArr)
-    if not UserInfo.isSystemNative() then
-        Laya.loader:clearRes("res/atlas/map/" .. self.mapName .. "/" .. self.mapName .. ".atlas")
-        Laya.loader:clearRes("res/atlas/map/" .. self.mapName .. "/" .. self.mapName .. ".png")
-    end
     mapInfo.ctn:removeSelf()
 end
 

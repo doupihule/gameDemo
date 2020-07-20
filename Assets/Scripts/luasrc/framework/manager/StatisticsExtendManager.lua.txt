@@ -30,15 +30,9 @@ function StatisticsExtendManager.onEvent(event, eventData)
     end
     local isAld = false
     if type(event) == "object" then
-        -- [ts2lua]event下标访问可能不正确
         eventId = event["name"]
-        -- [ts2lua]sendData下标访问可能不正确
-        -- [ts2lua]event下标访问可能不正确
         sendData["sortId"] = event["sortId"]
-        -- [ts2lua]sendData下标访问可能不正确
-        -- [ts2lua]event下标访问可能不正确
         sendData["groupId"] = event["groupId"]
-        -- [ts2lua]event下标访问可能不正确
         isAld = event["isAld"]
     else
         eventId = event

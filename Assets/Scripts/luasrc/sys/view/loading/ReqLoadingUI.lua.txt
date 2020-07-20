@@ -1,13 +1,13 @@
-ReqLoadingUI = class('ReqLoadingUI', Laya.View)
+ReqLoadingUI = class('ReqLoadingUI', UIBase)
 ReqLoadingUI.res = nil;
 function ReqLoadingUI:ctor()
     ReqLoadingUI.super.ctor(self)
-    self.rollAsset = Laya.Label("loading...");
+    self.rollAsset = UITools.createLabel("loading...");
     self.rollAsset.color = "#ffffff"
     self.rollAsset.font = "Microsoft YaHei"
     self.rollAsset.fontSize = 24
-    self.rollAsset.x = Laya.stage.width - 150
-    self.rollAsset.y = Laya.stage.height - 50
+    self.rollAsset.x = ScreenAdapterTools.width - 150
+    self.rollAsset.y = ScreenAdapterTools.height - 50
     self:addChild(self.rollAsset)
     self.mouseEnabled = true
     self.mouseThrough = false
@@ -17,22 +17,16 @@ end
 
 function ReqLoadingUI:setData(data)
     self.rollAsset.visible = false
-    Laya.timer:once(1, self, function()
+    TimerManager.getInstance().add(self,function()
         self.rollAsset.visible = true
         self.rollAsset.alpha = 0
-        Laya.Tween:to(self.rollAsset, { alpha = 1 }, 500, nil, Laya.Handler:create(self, self.onTween1))
-    end
-    )
+    end,1,1)
 end
 
 function ReqLoadingUI:onTween1()
     self.rollAsset.alpha = 1
-    Laya.Tween:to(self.rollAsset, { alpha = 0 }, 2000, nil, Laya.Handler:create(self, self.onTween2))
-    Laya.Tween:clearTween(self.onTween1)
 end
 
 function ReqLoadingUI:onTween2()
     self.rollAsset.alpha = 0
-    Laya.Tween:to(self.rollAsset, { alpha = 1 }, 2000, nil, Laya.Handler:create(self, self.onTween1))
-    Laya.Tween:clearTween(self.onTween2)
 end

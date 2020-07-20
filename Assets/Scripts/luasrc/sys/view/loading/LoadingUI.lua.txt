@@ -1,10 +1,14 @@
 LoadingUI = class('LoadingUI')
 
+function LoadingUI.getInstance()
+    return LoadingUI._instance;
+end
+
 function LoadingUI:ctor()
     self.progress = 0;
     self.isShowWxInfo = false;
     self.alphaFlag = 1;
-    LoadingUI.getInstance() = self
+    LoadingUI._instance =  self
     self:initView()
     self.mainbg.mouseThrough = false
     self.mainbg.mouseEnabled = true
@@ -41,7 +45,7 @@ function LoadingUI:initView()
         self.mainbg:addChildren(title)
     end
     if not self.clientVersionTxt then
-        self.clientVersionTxt = Laya.Label()
+        self.clientVersionTxt = UITools.createLabel()
         self.clientVersionTxt.text = "client_version:1.0.1"
         self.clientVersionTxt.width = 134
         self.clientVersionTxt.height = 16
@@ -53,7 +57,7 @@ function LoadingUI:initView()
         self.mainbg:addChild(self.clientVersionTxt)
     end
     if not self.powerlaya then
-        self.powerlaya = Laya.Label()
+        self.powerlaya = UITools.createLabel()
         self.powerlaya.text = "Powered by LayaAir Engine"
         self.powerlaya.width = 159
         self.powerlaya.height = 16
@@ -77,7 +81,7 @@ function LoadingUI:initView()
         self.profg.width = 0
     end
     if not self.loadingtips then
-        self.loadingtips = Laya.Label()
+        self.loadingtips = UITools.createLabel()
         self.loadingtips.text = "资源加载加载中，请稍后..."
         self.loadingtips.x = -33
         self.loadingtips.y = -37.5
@@ -127,9 +131,8 @@ function LoadingUI:setData()
     self.progress = 0
     self.profg.width = 0
     self:onLoop()
-    Laya.timer:loop(60, self, self.onLoop)
+    TimerManager.getInstance():registObjUpdate(self.onLoop,self);
     self.alphaFlag = 1
-    Laya.timer:loop(50, self, self.loadingFlash)
 end
 
 function LoadingUI:loadingFlash()
@@ -152,7 +155,7 @@ function LoadingUI:onLoop()
     end
     if self.progress >= 100 then
         self.progress = 100
-        Laya.timer:clearAll(LoadingUI.getInstance())
+        TimerManager.getInstance().removeByObject(self);
     end
     if self.profg then
         self.profg.width = 574 * self.progress * 0.01

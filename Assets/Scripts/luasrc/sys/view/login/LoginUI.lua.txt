@@ -2,9 +2,7 @@ LoginUI = class('LoginUI', ui.gameui.login.LoginUI)
 LoginUI.res = { "gameui/Login.scene" };
 function LoginUI:ctor()
     LoginUI.super.ctor(self)
-    LoginUI.getInstance() = self
     ButtonUtils(self.loginbtn, self.onLoginClick, self)
-    self.loginbtn.clickHandler = Laya.Handler:create(self, self.onLoginClick, nil, false)
 end
 
 function LoginUI:setData()

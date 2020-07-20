@@ -80,7 +80,7 @@ function InstancePlayer:addSkillIcon()
         mask.width = mask.height
         mask.sizeGrid = "13,13,13,13"
         mask.name = "mask"
-        local timeTxt = Laya.Label()
+        local timeTxt = UITools.createLabel()
         timeTxt.width = 92
         timeTxt.height = 49
         timeTxt.y = 25

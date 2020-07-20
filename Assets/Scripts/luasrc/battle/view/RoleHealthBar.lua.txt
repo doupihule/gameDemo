@@ -18,7 +18,7 @@ function RoleHealthBar:setData(owner, ctn)
             self.srollImage = self:createImage(ResourceConst.BATTLE_HEALTH_PROGRESS2, self._initWidth, self._initHeight)
         end
         self.shieldImage = self:createImage(ResourceConst.BATTLE_HEALTH_HUDUN, self._initWidth, self._initHeight)
-        self.nameText = Laya.Label()
+        self.nameText = UITools.createLabel()
         local nameText = self.nameText
         self:addChild(nameText)
         nameText.bold = true

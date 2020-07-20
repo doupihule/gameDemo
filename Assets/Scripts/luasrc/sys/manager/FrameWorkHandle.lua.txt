@@ -44,31 +44,7 @@ function FrameWorkHandle:onStartEnterGameMain()
 end
 
 function FrameWorkHandle:onCheckShareSucess(distime, shareExtraData)
-    local shareResult = false
-    if UserInfo.platform._shareNoWait or distime >= 3000 then
-        shareResult = true
-    end
-    if shareResult then
-        UserInfo.platform:onShareComplete(true)
-    else
-        local failHandleType = GlobalParamsFunc.getInstance().shareHandleType
-        if failHandleType == 1 then
-            WindowManager.ShowTip("分享失败，请稍后再试")
-            UserInfo.platform:onShareComplete(false)
-        elseif failHandleType == 2 then
-            -- [ts2lua]TranslateFunc.shareTranslateArr下标访问可能不正确
-            UserInfo.platform:showPopTip("提示", TranslateFunc.shareTranslateArr[math.floor(math.random() * #TranslateFunc.shareTranslateArr)], { confirmText = TranslateFunc.shareLabTranslate, success = function(res)
-                if res.confirm then
-                    LogsManager.echo('用户点击确定,再次拉起分享')
-                    UserInfo.platform:share(UserInfo.platform._shareId, UserInfo.platform._shareExtraData, UserInfo.platform._shareCallback, UserInfo.platform._shareThisObj)
-                elseif res.cancel then
-                    LogsManager.echo("用户取消了再次分享")
-                    UserInfo.platform:onShareComplete(false)
-                end
-            end
-            })
-        end
-    end
+
 end
 
 function FrameWorkHandle:recvMsg(cmd, data)

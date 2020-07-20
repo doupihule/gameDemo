@@ -24,8 +24,6 @@ end
 function CountsCommonModel:getCountById(id)
     local num = 0
     if not self:IsExpire(id) then
-        -- [ts2lua]self._data下标访问可能不正确
-        -- [ts2lua]self._data[id]下标访问可能不正确
         num = self._data[id]["count"]
     end
     return num
@@ -40,13 +38,8 @@ function CountsCommonModel:turnShareTvId(id)
 end
 
 function CountsCommonModel:IsExpire(id)
-    -- [ts2lua]self._data下标访问可能不正确
     if self._data[id] then
-        -- [ts2lua]self._data下标访问可能不正确
-        -- [ts2lua]self._data[id]下标访问可能不正确
         if self._data[id]["expireTime"] then
-            -- [ts2lua]self._data下标访问可能不正确
-            -- [ts2lua]self._data[id]下标访问可能不正确
             local expireTime = self._data[id]["expireTime"]
             if expireTime > Client.getInstance():getServerTime() then
                 return false

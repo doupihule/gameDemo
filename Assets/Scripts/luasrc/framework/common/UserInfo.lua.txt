@@ -156,10 +156,21 @@ function UserInfo.parseUrl()
     return obj
 end
 
-local AppIdType = class('AppIdType')
-AppIdType.test = "9173";
-AppIdType.qqbrowser = "ogqq";
-AppIdType.wxhortor = "hortor";
-AppIdType.gz1758 = "i1758";
-AppIdType.egret = "egret";
-AppIdType.wxgame = "wxgame";
+
+
+PlatformIdType = class('PlatformIdType')
+PlatformIdType.test = "9173";
+PlatformIdType.qqbrowser = "ogqq";
+PlatformIdType.wxhortor = "hortor";
+PlatformIdType.gz1758 = "i1758";
+PlatformIdType.egret = "egret";
+PlatformIdType.wxgame = "wxgame";
+PlatformIdType.web = "web";
+PlatformIdType.facebook = "facebook";
+PlatformIdType.qqgame = "qqgame";
+PlatformIdType.tt = "tt";
+PlatformIdType.oppo = "oppogame";
+PlatformIdType.baidugame = "baidugame";
+PlatformIdType.vivogame = "vivogame";
+PlatformIdType.ucgame = "ucgame";
+PlatformIdType.android_master = "android_master";

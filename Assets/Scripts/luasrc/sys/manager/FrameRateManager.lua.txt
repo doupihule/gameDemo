@@ -18,9 +18,6 @@ function FrameRateManager.getInstance()
 end
 
 function FrameRateManager:updateFrame()
-    if Laya.stage.frameRate == Laya.Stage.FRAME_SLOW then
-        return
-    end
     self.num = self.num + 1
     if self.num % self.highFrameFPS * self.readRate == 0 then
         local nowTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()

@@ -109,7 +109,6 @@ function InstanceEffect:doTweenAniScale()
     if self.expandParams.type ~= SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT then
         return
     end
-    Laya.Tween:clearAll(self._myView)
     self.expandParams.totalFrame = self.expandParams.frame
     local targetRole = self.expandParams.role
     self.expandParams.sourceX = targetRole.pos.x

@@ -73,11 +73,7 @@ function KakuraClient:registConnectEvent()
     if not self.hasGetUserInfo or not Global.checkIsSingleMode() then
         WaitManager.getInstance():add(MsgCMD.ROLL_ANI)
     end
-    self._websocket = Laya.Socket()
-    self._websocket:on(Laya.Event.MESSAGE, self, self.onReceiveMessage)
-    self._websocket:on(Laya.Event.OPEN, self, self.onSocketOpen)
-    self._websocket:on(Laya.Event.CLOSE, self, self.onSocketClose)
-    self._websocket:on(Laya.Event.ERROR, self, self.onSocketError)
+    
     self._websocket:connectByUrl(self._url)
 end
 

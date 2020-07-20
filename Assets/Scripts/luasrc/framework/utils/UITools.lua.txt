@@ -136,6 +136,13 @@ function UITools.createUIImage(url)
     return img;
 end
 
+--创建uilabel
+function UITools.createLabel(str)
+    local img = UITools.createUICtn();
+    return label;
+end
+
+
 return UITools
 
 

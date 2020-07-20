@@ -7,48 +7,12 @@ function DisplayUtils.swapChildrenAt(parent, index1, index2)
 end
 
 function DisplayUtils.getModelByUrl(url, parentObj, isClone)
-    if isClone == nil then
-        isClone = false
-    end
-    local goal = nil
-    if isClone then
-        goal = Laya.loader:getRes(url):clone()
-    else
-        goal = Laya.loader:getRes(url)
-    end
-    ResourceManager.checkParticalRendeMode(goal, url)
-    local camera = nil
-    camera = goal:getChildByName("main_camera")
-    local extraAdd = 0
-    camera.orthographic = true
-    camera.orthographicVerticalSize = 2
-    local x = ScreenAdapterTools.UIOffsetX + ScreenAdapterTools.sceneOffsetX * Laya.stage.clientScaleX
-    local y = ScreenAdapterTools.UIOffsetY + ScreenAdapterTools.sceneOffsetY * Laya.stage.clientScaleY
-    camera.viewport = Laya.Viewport(x, y, ScreenAdapterTools.designWidth * Laya.stage.clientScaleX, ScreenAdapterTools.designHeight * Laya.stage.clientScaleY)
-    parentObj:addChild(camera)
-    camera.clearFlag = Laya.BaseCamera.CLEARFLAG_DEPTHONLY
+
     return goal
 end
 
 function DisplayUtils.createSkeletonExpand(aniName, aniMode, completeFunc, thisObj, expandParams)
-    if aniMode == nil then
-        aniMode = 0
-    end
-    if completeFunc == nil then
-        completeFunc = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if expandParams == nil then
-        expandParams = nil
-    end
-    local ske = SkeletonExpand.new(nil, aniMode)
-    ske.completeBackFunc = completeFunc
-    ske.completeThisObj = thisObj
-    ske.completeExpandParams = expandParams
-    ske:startLoadByShortName(aniName)
-    return ske
+    return nil
 end
 
 DisplayUtils.lightMatrix = { 0.52, 0, 0, 0, 0, 0, 0.52, 0, 0, 0, 0, 0, 0.52, 0, 0, 0, 0, 0, 0.52, 0 };
@@ -96,16 +60,13 @@ function DisplayUtils.setViewColorTransform(view, r, g, b, a, offr, offg, offb, 
         offa = 0
     end
     local matrixArr = { r, 0, 0, 0, offr, 0, g, 0, 0, offg, 0, 0, b, 0, offb, 0, 0, 0, a, offa }
-    view.filters = { Laya.ColorFilter(matrixArr) }
 end
 
 function DisplayUtils.setViewMatrixFilter(view, r1, r2, r3, r4, offr, g1, g2, g3, g4, offg, b1, b2, b3, b4, offb, a1, a2, a3, a4, offa)
     local matrixArr = { r1, r2, r3, r4, offr, g1, g2, g3, g4, offg, b1, b2, b3, b4, offb, a1, a2, a3, a4, offa }
-    view.filters = { Laya.ColorFilter(matrixArr) }
 end
 
 function DisplayUtils.setViewMatrixByMatirx(view, matrix)
-    view.filters = { Laya.ColorFilter(matrix) }
 end
 
 function DisplayUtils.localToLocalPos(p1Pos, sp1, sp2)
