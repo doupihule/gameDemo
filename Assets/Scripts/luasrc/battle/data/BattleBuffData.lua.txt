@@ -27,7 +27,7 @@ function BattleBuffData:setData(owner, targetSkillAction, repeatNum)
     local targetSkill = targetSkillAction.relyonSkill or targetSkillAction.skill
     self.leftFrame = targetSkill:getSkillValue(self.cfgData.existTime)
     if self.leftFrame ~= -1 then
-        if self.leftFrame then
+        if self.leftFrame ~=0 then
             self.leftFrame = BattleFunc.getInstance():turnMinisecondToframe(self.leftFrame)
         else
             self.leftFrame = 0
@@ -42,16 +42,12 @@ function BattleBuffData:setData(owner, targetSkillAction, repeatNum)
     if tempArr then
         self.skillLogicalParams = {}
         local i = 0
-        repeat
-            self.skillLogicalParams[i + 1] = {}
-            local temp = tempArr[i + 1]
-            local s = 0
-            repeat
-                self.skillLogicalParams[i + 1][s + 1] = BattleFunc.getInstance():getSkillValueByParams(temp[s + 1], skillDataId, targetLevel, nil, tagStr)
-                s = s + 1
-            until not (s < #temp)
-            i = i + 1
-        until not (i < #tempArr)
+        for i, temp in ipairs(tempArr) do
+            self.skillLogicalParams[i ] = {}
+            for s, vv in ipairs(temp) do
+                self.skillLogicalParams[i ][s] = BattleFunc.getInstance():getSkillValueByParams(v, skillDataId, targetLevel, nil, tagStr)
+            end
+        end
     end
 end
 

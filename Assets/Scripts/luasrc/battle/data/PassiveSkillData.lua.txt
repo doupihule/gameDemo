@@ -1,9 +1,6 @@
 PassiveSkillData = class('PassiveSkillData', BattleSkillData)
 
 function PassiveSkillData:ctor(skillId, level, role, skillType, relyonSkill)
-    if relyonSkill == nil then
-        relyonSkill = nil
-    end
     PassiveSkillData.super.ctor(self, skillId, level, role, skillType, relyonSkill)
     self.triggerNums = 0;
     self.triggerFrame = 0;
@@ -28,18 +25,13 @@ function PassiveSkillData:updateLevel(level)
             self.skillLogicalParams = {}
         end
         self.skillLogicalParams = {}
-        local i = 0
-        repeat
-            if not self.skillLogicalParams[i + 1] then
-                self.skillLogicalParams[i + 1] = {}
+        for i, temp in ipairs(tempArr) do
+            if not self.skillLogicalParams[i ] then
+                self.skillLogicalParams[i ] = {}
             end
-            local temp = tempArr[i + 1]
-            local s = 0
-            repeat
-                self.skillLogicalParams[i + 1][s + 1] = self:getSkillValue(temp[s + 1], tagStr)
-                s = s + 1
-            until not (s < #temp)
-            i = i + 1
-        until not (i < #tempArr)
+            for s, vv in ipairs(temp) do
+                self.skillLogicalParams[i][s] = self:getSkillValue(vv, tagStr)
+            end
+        end
     end
 end

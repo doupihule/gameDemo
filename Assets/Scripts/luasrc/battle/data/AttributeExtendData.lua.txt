@@ -44,8 +44,6 @@ function AttributeExtendData:updateData(roleData, globalAttrMap, outRecount)
         outRecount = false
     end
     self._globalAttrMap = globalAttrMap
-    local attrId = nil
-    local advanceAttr = nil
     self.level = roleData.level or 1
     self.starLevel = roleData.starLevel or 0
     self.equip = roleData.equip or nil
@@ -66,14 +64,9 @@ end
 function AttributeExtendData:resetBaseAtt(attrArr)
     attrArr = BattleFunc.getInstance():turnPropArrToTable(attrArr)
     if self.lifeType ~= BattleConst.LIFE_JIDI then
-        for key in pairs(attrArr) do
-            if attrArr:hasOwnProperty(key) then
-                -- [ts2lua]attrArr下标访问可能不正确
-                local info = attrArr[key]
-                info[0 + 1] = RolesFunc.getInstance():getAttrNumByLevel(key, self.id, self.level, self.starLevel, true, nil, self.equip)
-                -- [ts2lua]attrArr下标访问可能不正确
-                attrArr[key] = info
-            end
+        for key, info in pairs(attrArr) do
+            info[1] = RolesFunc.getInstance():getAttrNumByLevel(key, self.id, self.level, self.starLevel, true, nil, self.equip)
+            attrArr[key] = info
         end
     end
     return attrArr
@@ -92,37 +85,29 @@ function AttributeExtendData:countPassiveAttr(roleData)
     end
     self.hasCountPassive = true
     local i = 0
-    repeat
-        local passiveId = passSkill[i + 1]
+    for i, passiveId in ipairs(passSkill) do
         local passiveCfg = BattleFunc.getInstance():getCfgDatas("PassiveSkill", passiveId)
         local effectType = passiveCfg.effectType
         local tempArr = {}
         if effectType == BattleConst.passive_effect_attr then
             local effectParams = passiveCfg.effectParams
-            local s = 0
-            repeat
-                tempArr = effectParams[s + 1]
-                self:updateOneAttr(tempArr[0 + 1], tonumber(tempArr[1 + 1]), tonumber(tempArr[2 + 1]), self.extraAttr, true)
-                s = s + 1
-            until not (s < #effectParams)
+            for s, tempArr in ipairs(effectParams) do
+                self:updateOneAttr(tempArr[1], tonumber(tempArr[2]), tonumber(tempArr[3]), self.extraAttr, true)
+            end
         elseif effectType == BattleConst.passive_effect_skillcd then
             local effectParams = passiveCfg.effectParams
             local s = 0
-            repeat
-                local arr = effectParams[s + 1]
-                local skillId = tostring(arr[0 + 1])
-                local value = tonumber(arr[1 + 1])
+            for s, arr in ipairs(effectParams) do
+                local skillId = tostring(arr[1])
+                local value = tonumber(arr[2])
                 local skillValue = 10000 + value
                 if skillValue < 0 then
                     skillValue = 0
                 end
-                -- [ts2lua]self.skillCdMap下标访问可能不正确
                 self.skillCdMap[skillId] = skillValue
-                s = s + 1
-            until not (s < #effectParams)
+            end
         end
-        i = i + 1
-    until not (i < #passSkill)
+    end
 end
 
 function AttributeExtendData:countAllAttr()
@@ -138,11 +123,10 @@ function AttributeExtendData:clearTempAttr()
     end
     self._hasTempAttrChange = false
     local map = self.tempOnceAttr
-    for i in pairs(map) do
-        local tempArr = map[i + 1]
-        if tempArr[0 + 1] ~= 0 or tempArr[1 + 1] ~= 0 then
-            map[i + 1][0 + 1] = 0
-            map[i + 1][1 + 1] = 0
+    for i,tempArr in pairs(map) do
+        if tempArr[1] ~= 0 or tempArr[2] ~= 0 then
+            map[i][1] = 0
+            map[i][2] = 0
             self:countOneProp(i)
         end
     end
@@ -150,21 +134,11 @@ end
 
 function AttributeExtendData:countOneProp(attrId)
     local showType = BattleFunc.getPropStyle(attrId)
-    -- [ts2lua]self.baseAttr下标访问可能不正确
-    -- [ts2lua]self.baseAttr下标访问可能不正确
-    local baseValue = self.baseAttr[attrId] and self.baseAttr[attrId][0 + 1] or 0
-    -- [ts2lua]self.extraAttr下标访问可能不正确
-    -- [ts2lua]self.extraAttr下标访问可能不正确
-    local fixValue = self.extraAttr[attrId] and self.extraAttr[attrId][0 + 1] or 0
-    -- [ts2lua]self.extraAttr下标访问可能不正确
-    -- [ts2lua]self.extraAttr下标访问可能不正确
-    local percentValue = self.extraAttr[attrId] and self.extraAttr[attrId][1 + 1] or 0
-    -- [ts2lua]self.tempOnceAttr下标访问可能不正确
-    -- [ts2lua]self.tempOnceAttr下标访问可能不正确
-    fixValue = fixValue + self.tempOnceAttr[attrId] and self.tempOnceAttr[attrId][0 + 1] or 0
-    -- [ts2lua]self.tempOnceAttr下标访问可能不正确
-    -- [ts2lua]self.tempOnceAttr下标访问可能不正确
-    percentValue = percentValue + self.tempOnceAttr[attrId] and self.tempOnceAttr[attrId][1 + 1] or 0
+    local baseValue = self.baseAttr[attrId] and self.baseAttr[attrId][1] or 0
+    local fixValue = self.extraAttr[attrId] and self.extraAttr[attrId][1] or 0
+    local percentValue = self.extraAttr[attrId] and self.extraAttr[attrId][2] or 0
+    fixValue = fixValue + self.tempOnceAttr[attrId] and self.tempOnceAttr[attrId][2] or 0
+    percentValue = percentValue + self.tempOnceAttr[attrId] and self.tempOnceAttr[attrId][2] or 0
     local resultValue = nil
     if showType == BattleConst.PROPSTYLE_NUM then
         resultValue = 1 + percentValue / 10000 * baseValue + fixValue
@@ -172,7 +146,6 @@ function AttributeExtendData:countOneProp(attrId)
         resultValue = baseValue + fixValue
     end
     resultValue = math.floor(resultValue)
-    -- [ts2lua]self.finalAttr下标访问可能不正确
     self.finalAttr[attrId] = resultValue
 end
 
@@ -184,12 +157,12 @@ function AttributeExtendData:changeExtraAttr(srcMap, way, recountAttr)
         recountAttr = false
     end
     local targetMap = self.extraAttr
-    for i in pairs(srcMap) do
-        if not targetMap[i + 1] then
-            targetMap[i + 1] = { 0, 0 }
+    for i,v in pairs(srcMap) do
+        if not targetMap[i ] then
+            targetMap[i] = { 0, 0 }
         end
-        targetMap[i + 1][0 + 1] = targetMap[i + 1][0 + 1] + srcMap[i + 1][0 + 1] * way
-        targetMap[i + 1][1 + 1] = targetMap[i + 1][1 + 1] + srcMap[i + 1][1 + 1] * way
+        targetMap[i][1] = targetMap[i][1] + v[1] * way
+        targetMap[i ][2] = targetMap[i][2] + v[2] * way
         if recountAttr then
             self:countOneProp(i)
         end
@@ -198,8 +171,8 @@ end
 
 function AttributeExtendData:changeTempAttr(srcMap)
     local targetMap = self.tempOnceAttr
-    for i in pairs(srcMap) do
-        self:changeOneTempAttr(i, srcMap[i + 1][0 + 1], srcMap[i + 1][1 + 1])
+    for i,v in pairs(srcMap) do
+        self:changeOneTempAttr(i, v[1], v[2])
     end
 end
 
@@ -212,26 +185,22 @@ function AttributeExtendData:updateOneAttr(attrId, fixValue, percentValue, chang
     if outRecount == nil then
         outRecount = false
     end
-    -- [ts2lua]changeMap下标访问可能不正确
     local arr = changeMap[attrId]
     if not arr then
         arr = { 0, 0 }
-        -- [ts2lua]changeMap下标访问可能不正确
         changeMap[attrId] = arr
     end
-    arr[0 + 1] = arr[0 + 1] + fixValue
-    arr[1 + 1] = arr[1 + 1] + percentValue
+    arr[1] = arr[1] + fixValue
+    arr[2] = arr[2] + percentValue
     if not outRecount then
         self:countOneProp(attrId)
     end
 end
 
 function AttributeExtendData:getSkillCdAdded(skillId)
-    -- [ts2lua]self.skillCdMap下标访问可能不正确
     return self.skillCdMap[skillId] or 10000
 end
 
 function AttributeExtendData:getOneAttr(propId)
-    -- [ts2lua]self.finalAttr下标访问可能不正确
     return self.finalAttr[propId] or 0
 end

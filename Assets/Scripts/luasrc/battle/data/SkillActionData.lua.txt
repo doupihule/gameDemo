@@ -25,9 +25,6 @@ function SkillActionData:ctor(id, owner, skill, delay, trigTimes, interval, resu
 end
 
 function SkillActionData:updateData(owner, skill, relyonSkill)
-    if relyonSkill == nil then
-        relyonSkill = nil
-    end
     if not skill then
         LogsManager.echo("noSkill------------------")
     end
@@ -47,34 +44,24 @@ function SkillActionData:updateData(owner, skill, relyonSkill)
         local targetSkillId = tostring(self.cfgData.numId)
         local tagStr = "SkillEffect:" .. self.skillEffectId
         if targetSkillId == self.skill._skillId then
-            local i = 0
-            repeat
-                if not self.skillLogicalParams[i + 1] then
-                    self.skillLogicalParams[i + 1] = {}
+            for i, temp in ipairs(tempArr) do
+                if not self.skillLogicalParams[i] then
+                    self.skillLogicalParams[i] = {}
                 end
-                local temp = tempArr[i + 1]
-                local s = 0
-                repeat
-                    self.skillLogicalParams[i + 1][s + 1] = self.skill:getSkillValue(temp[s + 1], tagStr)
-                    s = s + 1
-                until not (s < #temp)
-                i = i + 1
-            until not (i < #tempArr)
+                for s, vv in ipairs(temp) do
+                    self.skillLogicalParams[i][s] = self.skill:getSkillValue(vv, tagStr)
+                end
+            end
         else
             local level = self.owner:getCfgSkillLevel(targetSkillId)
-            local i = 0
-            repeat
-                if not self.skillLogicalParams[i + 1] then
-                    self.skillLogicalParams[i + 1] = {}
+            for i, temp in ipairs(tempArr) do
+                if not self.skillLogicalParams[i] then
+                    self.skillLogicalParams[i] = {}
                 end
-                local temp = tempArr[i + 1]
-                local s = 0
-                repeat
-                    self.skillLogicalParams[i + 1][s + 1] = BattleFunc.getInstance():getSkillValueByParams(temp[s + 1], targetSkillId, level, nil, tagStr)
-                    s = s + 1
-                until not (s < #temp)
-                i = i + 1
-            until not (i < #tempArr)
+                for s, vv in ipairs(temp) do
+                    self.skillLogicalParams[i][s] = BattleFunc.getInstance():getSkillValueByParams(vv, targetSkillId, level, nil, tagStr)
+                end
+            end
         end
     end
 end

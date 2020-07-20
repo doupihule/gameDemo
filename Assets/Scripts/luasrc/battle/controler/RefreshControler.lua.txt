@@ -35,10 +35,8 @@ function RefreshControler:initWarData()
     if enemyType == FogConst.FOG_EVENT_ENEMY_TYPE_PLAYER then
         role = FogModel.getInstance():getEnemyInfoById(event.enemyId).roles
         for key in pairs(role) do
-            -- [ts2lua]role下标访问可能不正确
             if not role[key].inLine then
                 enemyHomeId = key
-                -- [ts2lua]role下标访问可能不正确
                 enemyHomeLevel = role[key].level
                 break
             end
@@ -46,39 +44,31 @@ function RefreshControler:initWarData()
     else
         local waveData = FogFunc.getInstance():getCfgDatas("NpcArray", event.enemyId)
         local waveMap = waveData.waveMap
-        local i = 0
-        repeat
-            local item = waveMap[i + 1]
-            -- [ts2lua]self.enemyTab下标访问可能不正确
-            self.enemyTab[item[0 + 1]] = item
-            i = i + 1
-        until not (i < #waveMap)
+        for i, item in ipairs(waveMap) do
+            self.enemyTab[item[1]] = item
+        end
         role = self.enemyTab
         enemyHomeId = waveData.enemyHomeId[0 + 1]
         enemyHomeLevel = waveData.enemyHomeId[1 + 1]
     end
     self.controler.enemyHome = self.controler:createHome(enemyHomeId, { level = enemyHomeLevel }, BattleConst.LIFE_JIDI, BattleConst.ROLEGROUP_ENEMY)
     local i = 0
-    repeat
-        local item = aiList[i + 1]
-        -- [ts2lua]role下标访问可能不正确
-        if role[item[0 + 1]] then
+    for i, item in ipairs(aiList) do
+        if role[item[ 1]] then
             table.insert(result, item)
         end
-        i = i + 1
-    until not (i < #aiList)
-    result:sort(self.sortPaixu)
+    end
+    table.sort(result,self.sortPaixu);
     local i = 0
-    repeat
-        result[i + 1][2 + 1] = tonumber(result[i + 1][2 + 1])
-        if i ~= 0 then
-            -- [ts2lua]result下标访问可能不正确
-            result[i + 1][2 + 1] = result[i + 1][2 + 1] + tonumber(result[i - 1][2 + 1])
+    for i = 1, #result do
+        result[i][3] = tonumber(result[i + 1][3])
+        if i ~= 1 then
+            result[i ][3] = result[i][3] + tonumber(result[i - 1][3])
         end
-        i = i + 1
-    until not (i < #result)
-    result:sort(self.sortYouxianji)
-    local energy = math.floor(enemyInfo.energy[0 + 1] + FogModel.getInstance():getCurLayer() * enemyInfo.energy[1 + 1] / 10000)
+    end
+
+    table.sort(result,self.sortYouxianji)
+    local energy = math.floor(enemyInfo.energy[1] + FogModel.getInstance():getCurLayer() * enemyInfo.energy[2] / 10000)
     local level = nil
     local starLevel = nil
     local equip = nil
@@ -86,56 +76,54 @@ function RefreshControler:initWarData()
     local playerEnemy = nil
     while (#result > 0)
     do
-        local curInfo = result[0 + 1]
-        local id = curInfo[0 + 1]
+        local curInfo = result[ 1]
+        local id = curInfo[1]
         roleInfo = RolesFunc.getInstance():getCfgDatas("Role", id)
         if energy < roleInfo.payEnergyNmb then
             table.remove(result, 1)
             break
         end
         energy = energy - roleInfo.payEnergyNmb
-        -- [ts2lua]role下标访问可能不正确
         playerEnemy = role[id]
         if enemyType == FogConst.FOG_EVENT_ENEMY_TYPE_PLAYER then
             level = playerEnemy.level or 1
             starLevel = playerEnemy.starLevel or 0
             equip = playerEnemy.equip or {}
         else
-            level = playerEnemy[1 + 1]
-            starLevel = playerEnemy[2 + 1]
-            if playerEnemy[3 + 1] then
+            level = playerEnemy[2]
+            starLevel = playerEnemy[3]
+            if playerEnemy[4] then
                 equip = {}
                 local i = 3
-                repeat
-                    -- [ts2lua]equip下标访问可能不正确
-                    equip[playerEnemy[i + 1]] = 1
-                    i = i + 1
-                until not (i < #playerEnemy)
+                for i = 4, #playerEnemy do
+                    equip[playerEnemy[i ]] = 1
+                end
             end
         end
         local num = roleInfo.heroNub or 1
         local offestX = 0
         local j = 0
-        repeat
-            if j ~= 0 then
-                offestX = roleInfo.startSite[j + 1]
+        for j = 1, num do
+            if j ~= 1 then
+                offestX = roleInfo.startSite[j ]
             end
             self.controler:createRole(id, { level = level, starLevel = starLevel, equip = equip, passivSkill = enemyInfo.passivSkill }, roleInfo.kind, BattleConst.ROLEGROUP_ENEMY, offestX)
-            j = j + 1
-        until not (j < num)
-        result[0 + 1][2 + 1] = result[0 + 1][2 + 1] - tonumber(result[0 + 1][3 + 1])
-        result:sort(self.sortYouxianji)
+
+        end
+
+        result[1][3] = result[1][3] - tonumber(result[1][4])
+        table.sort(result,self.sortYouxianji)
     end
     self:addHelpRole()
     StatisticsManager.getInstance():onEvent(StatisticsManager.FOG_BATTLE_START, { enemyId = event.enemyData.id })
 end
 
 function RefreshControler:sortPaixu(a, b)
-    return a[1 + 1] - b[1 + 1]
+    return a[2] - b[2]
 end
 
 function RefreshControler:sortYouxianji(a, b)
-    return b[2 + 1] - a[2 + 1]
+    return b[3] - a[3]
 end
 
 function RefreshControler:addHelpRole()
@@ -167,11 +155,10 @@ end
 function RefreshControler:enterTargetWave(waveIndex)
     self.battleResult = BattleConst.battleResult_none
     self.currentWave = waveIndex
-    -- [ts2lua]self._waveIdArr下标访问可能不正确
     local waveInfo = string.split(self._waveIdArr[waveIndex], ",")
-    local enterTime = BattleFunc.getInstance():turnMinisecondToframe(waveInfo[1 + 1])
-    self.controler:setCallBack(enterTime, self.enterWave, self, waveInfo[0 + 1])
-    BattleLogsManager.battleEcho("进入波次:", waveIndex, "延迟", waveInfo[1 + 1])
+    local enterTime = BattleFunc.getInstance():turnMinisecondToframe(waveInfo[2])
+    self.controler:setCallBack(enterTime, self.enterWave, self, waveInfo[1])
+    BattleLogsManager.battleEcho("进入波次:", waveIndex, "延迟", waveInfo[2])
     ConditionTrigger.onOpportunityByArr(ConditionTrigger.opportunity_startBattle, self.controler.campArr_2)
     ConditionTrigger.onOpportunityByArr(ConditionTrigger.opportunity_startBattle, self.controler.campArr_1)
     ConditionTrigger.onOpportunityByArr(ConditionTrigger.opportunity_refreshMonster, self.controler.campArr_1)
@@ -188,40 +175,32 @@ function RefreshControler:enterWave(waveId)
     self.batteTotalFrame = self.leftFrame
     local showTime = 0
     local equip = nil
-    local i = 0
-    repeat
-        local info = string.split(monsterArr[i + 1], ",")
-        local id = info[0 + 1]
-        showTime = showTime + tonumber(info[1 + 1])
-        local level = tonumber(info[2 + 1])
-        local starLevel = tonumber(info[3 + 1]) or 0
+    for i, v in ipairs(monsterArr) do
+        local info = string.split(v, ",")
+        local id = info[ 1]
+        showTime = showTime + tonumber(info[2])
+        local level = tonumber(info[3])
+        local starLevel = tonumber(info[4]) or 0
         local roleInfo = BattleFunc.getInstance():getCfgDatas("Role", id)
         local num = roleInfo.heroNub or 1
         local datas = { waveAllEnemy = #monsterArr - 1, index = i, id = id, data = { level = level, starLevel = starLevel }, lifeType = roleInfo.kind, camp = BattleConst.ROLEGROUP_ENEMY }
-        if info[4 + 1] then
+        if info[5] then
             equip = {}
             local k = 4
-            repeat
-                -- [ts2lua]equip下标访问可能不正确
-                equip[info[k + 1]] = 1
-                k = k + 1
-            until not (k < #info)
-            -- [ts2lua]datas下标访问可能不正确
-            -- [ts2lua]datas["data"]下标访问可能不正确
+            for k = 5 , #info do
+                equip[info[k]] = 1
+            end
             datas["data"]["equip"] = equip
         end
-        local j = 0
-        repeat
+        for j = 1, num do
             local itemData = { data = datas, index = j }
             if num > 1 then
-                -- [ts2lua]itemData下标访问可能不正确
-                itemData["offestX"] = roleInfo.startSite[j + 1]
+                itemData["offestX"] = roleInfo.startSite[j ]
             end
             self.controler:setCallBack(BattleFunc.getInstance():turnMinisecondToframe(showTime), self.initWaveEnemy, self, itemData)
-            j = j + 1
-        until not (j < num)
-        i = i + 1
-    until not (i < #monsterArr)
+        end
+    end
+
 end
 
 function RefreshControler:initWaveEnemy(info)
@@ -244,7 +223,7 @@ function RefreshControler:initLevelData(level)
     self._waveIdArr = levelInfo.levelWave
     self.maxWave = #self._waveIdArr
     local enemyInfo = levelInfo.enemyHomeId
-    self.controler.enemyHome = self.controler:createHome(enemyInfo[0 + 1], { level = tonumber(enemyInfo[1 + 1]) }, BattleConst.LIFE_JIDI, BattleConst.ROLEGROUP_ENEMY)
+    self.controler.enemyHome = self.controler:createHome(enemyInfo[1], { level = tonumber(enemyInfo[2]) }, BattleConst.LIFE_JIDI, BattleConst.ROLEGROUP_ENEMY)
 end
 
 function RefreshControler:onMonsterAllDied(monster)
@@ -255,10 +234,9 @@ function RefreshControler:oneRoleRelive(role)
     local arr = role.toCampArr
     if #role.campArr == 1 then
         local i = 0
-        repeat
-            arr[i + 1]:checkMoveOrAttack(true)
-            i = i + 1
-        until not (i < #arr)
+        for i, v in ipairs(arr) do
+            v:checkMoveOrAttack(true)
+        end
     end
 end
 
@@ -288,18 +266,16 @@ function RefreshControler:onGameOver(rt)
     self.controler.isGameOver = true
     local campArr = self.controler.campArr_1
     local i = 0
-    repeat
-        campArr[i + 1]:initStand()
-        campArr[i + 1]:resumeIdleAction()
-        i = i + 1
-    until not (i < #campArr)
+    for i, v in ipairs(campArr) do
+        v:initStand()
+        v:resumeIdleAction()
+    end
+
     campArr = self.controler.campArr_2
-    local i = 0
-    repeat
-        campArr[i + 1]:initStand()
-        campArr[i + 1]:resumeIdleAction()
-        i = i + 1
-    until not (i < #campArr)
+    for i, v in ipairs(campArr) do
+        v:initStand()
+        v:resumeIdleAction()
+    end
     self.battleResult = rt
     if self.controler.passive then
         self.controler:clearOnePassiveAttr(self.controler.passive)
@@ -322,17 +298,13 @@ function RefreshControler:reliveAllHeros()
     local diedArr = self.controler.diedArr_1
     local campArr = self.controler.campArr_1
     local i = 0
-    repeat
-        local role = campArr[i + 1]
+    for i, role in ipairs(campArr) do
         role:changeHp(role:getMaxHp() - role.hp)
-        i = i + 1
-    until not (i < #campArr)
-    local i = #diedArr - 1
-    repeat
-        local role = diedArr[i + 1]
+    end
+    for i = #diedArr,1,-1  do
+        local role = diedArr[i]
         role:doRelive(role:getMaxHp(), nil)
-        i = i - 1
-    until not (i >= 0)
+    end
 end
 
 function RefreshControler:restartLevel()

@@ -54,10 +54,8 @@ function CameraControler:updateScenePos(pos)
         targetPos = self.controler.layerControler.minX
     end
     local move = targetPos - self.controler.layerControler.a2.x
-    self.controler.layerControler.a2.x = targetPos
-    self.controler.layerControler.a2.y = self._shakeParams.y
+    UITools.setUIViewPos(self.controler.layerControler.a2,targetPos,self._shakeParams.y);
     self.controler.mapControler:onMapMove(self._shakeParams.y, move)
-    self.controler.battleUI:freshSmallMap(-pos / self.controler.layerControler.sceneWidthRate)
 end
 
 function CameraControler:followPlayer()
@@ -71,14 +69,11 @@ function CameraControler:followPlayer()
         return
     end
     self.frontPos1 = self.controler.myHome.pos.x
-    local i = 0
-    repeat
-        local item = self.controler.campArr_1[i + 1]
+    for i, item in ipairs(self.controler.campArr_1) do
         if self.frontPos1 < item.pos.x then
             self.frontPos1 = item.pos.x
         end
-        i = i + 1
-    until not (i < #self.controler.campArr_1)
+    end
     local frontPos1 = self.frontPos1 + self._followOffset
     if frontPos1 > self.controler.mapControler._maxSceneWidth - self._halfWidth then
         return
@@ -112,8 +107,8 @@ function CameraControler:shakeCamera(shakeFrame, style, strength, intervel)
 end
 
 function CameraControler:shakeCameraByParams(params)
-    local frame = tonumber(params[3 + 1])
-    self:shakeCamera(frame, tonumber(params[2 + 1]), tonumber(params[4 + 1]), tonumber(params[5 + 1]))
+    local frame = tonumber(params[4])
+    self:shakeCamera(frame, tonumber(params[3]), tonumber(params[5]), tonumber(params[6]))
 end
 
 function CameraControler:updateShakeParams(shakeParams)

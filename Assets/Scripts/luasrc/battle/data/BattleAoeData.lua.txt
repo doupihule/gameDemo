@@ -26,27 +26,19 @@ function BattleAoeData:setData(skillAction, attacker)
         local actArr = self.cfgData.skillEffect
         self.skillActionArr = {}
         local i = 0
-        repeat
-            local actionData = SkillActionData.new(actArr[i + 1], skillAction.owner, skillAction.skill, 0, 1, 0, 0, 0)
+        for i, v in ipairs(actArr) do
+            local actionData = SkillActionData.new(v, skillAction.owner, skillAction.skill, 0, 1, 0, 0, 0)
             table.insert(self.skillActionArr, actionData)
-            i = i + 1
-        until not (i < #actArr)
+        end
     else
         local i = 0
-        repeat
-            self.skillActionArr[i + 1]:updateData(skillAction.owner, skillAction.skill)
-            i = i + 1
-        until not (i < #self.skillActionArr)
+        for i, v in ipairs(self.skillActionArr) do
+            v:updateData(skillAction.owner, skillAction.skill)
+        end
     end
 end
 
 function BattleAoeData:doAoeAction(targetInstance, pos, targetBullet)
-    if pos == nil then
-        pos = nil
-    end
-    if targetBullet == nil then
-        targetBullet = nil
-    end
     if not pos then
         pos = targetInstance.pos
     end
@@ -65,7 +57,7 @@ function BattleAoeData:doAoeAction(targetInstance, pos, targetBullet)
     targetInstance.controler:setCallBack(self.existFrame, self.onAoeEnd, self)
     local chooseArr = nil
     local tempChooseArr = nil
-    if self.cfgData.expand and self.cfgData.expand[0 + 1][0 + 1] == SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT then
+    if self.cfgData.expand and self.cfgData.expand[1][1] == SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT then
         if not self.chooseTartgetCfg then
             chooseArr = self.skill.tempChooseArr
         else
@@ -90,7 +82,7 @@ end
 
 function BattleAoeData:onAoeEnd()
     self.targetInstance = nil
-    PoolTools.cacheItem(PoolCode.POOL_AOEDATA + self.aoeId, self)
+    PoolTools.cacheItem(PoolCode.POOL_AOEDATA .. self.aoeId, self)
 end
 
 function BattleAoeData:checkAoe()
@@ -99,7 +91,7 @@ function BattleAoeData:checkAoe()
         return
     end
     local i = 0
-    repeat
+    for i, v in ipairs(self.skillActionArr) do
         local chooseArr = nil
         local tempChooseArr = nil
         if not self.chooseTartgetCfg then
@@ -117,12 +109,11 @@ function BattleAoeData:checkAoe()
                 end
             end
             if #chooseArr > 0 then
-                SkillActionTrigger.checkSkillAction(self.owner, self.skillActionArr[i + 1], chooseArr)
+                SkillActionTrigger.checkSkillAction(self.owner, v, chooseArr)
             end
         end
         if tempChooseArr then
             BattleFunc.cacheOneTempArr(tempChooseArr)
         end
-        i = i + 1
-    until not (i < #self.skillActionArr)
+    end
 end

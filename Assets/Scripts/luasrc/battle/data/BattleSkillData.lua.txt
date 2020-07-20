@@ -49,44 +49,34 @@ function BattleSkillData:updateLevel(level)
     end
     if self.skillType ~= BattleConst.skill_kind_passive then
         self.cfgData = BattleFunc.getInstance():getCfgDatas("Skill", self._skillId)
-        local value = self.cfgData.action and self.cfgData.action[4 + 1]
-        if value then
+        local value = self.cfgData.action and self.cfgData.action[5]
+        if value and value > 0 then
             self.skillWaitFrame = BattleFunc.getInstance():turnMinisecondToframe(tonumber(value))
         end
         self.chooseTartgetCfg = BattleFunc.getInstance():getCfgDatas("Target", tostring(self.cfgData.target))
         if not self.skillLabel then
             if self.cfgData.action then
                 self.skillLabel = TableUtils.copyOneArr(self.cfgData.action)
-                local i = 1
-                repeat
-                    self.skillLabel[i + 1] = tonumber(self.skillLabel[i + 1])
-                    i = i + 1
-                until not (i < #self.skillLabel)
+                for i, v in ipairs(self.skillLabel) do
+                    self.skillLabel[i] = tonumber(v)
+                end
             end
         end
         local skillEffect = self.cfgData.skillEffect
         if skillEffect then
             if not self.skillActionArr then
                 self.skillActionArr = {}
-                local i = 0
-                repeat
-                    local info = skillEffect[i + 1]
-                    local actionData = SkillActionData.new(info[0 + 1], self.owner, self, tonumber(info[1 + 1]), tonumber(info[2 + 1]), tonumber(info[3 + 1]), tonumber(info[4 + 1]), 0)
+                for i, info in ipairs(skillEffect) do
+                    local actionData = SkillActionData.new(info[1], self.owner, self, tonumber(info[2]), tonumber(info[3]), tonumber(info[4]), tonumber(info[5]), 0)
                     table.insert(self.skillActionArr, actionData)
-                    i = i + 1
-                until not (i < #skillEffect)
+                end
             else
-                local i = 0
-                repeat
-                    local actionData = self.skillActionArr[i + 1]
+                for i, actionData in ipairs(skillEffect) do
                     actionData:updateData(self.owner, self)
-                    i = i + 1
-                until not (i < #skillEffect)
+                end
             end
         end
-        -- [ts2lua]FogFunc.warHomeSkillCd下标访问可能不正确
         if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR and FogFunc.warHomeSkillCd[self._skillId] then
-            -- [ts2lua]FogFunc.warHomeSkillCd下标访问可能不正确
             self._cfgSkillCd = math.ceil(FogFunc.warHomeSkillCd[self._skillId] * BattleFunc.miniSecondToFrame)
         else
             if self.cfgData.cdTime then
@@ -98,13 +88,11 @@ end
 
 function BattleSkillData:getActionById(id)
     local i = 0
-    repeat
-        local act = self.skillActionArr[i + 1]
+    for i, act in ipairs(self.skillActionArr) do
         if act.skillEffectId == id then
             return act
         end
-        i = i + 1
-    until not (i < #self.skillActionArr)
+    end
     return nil
 end
 

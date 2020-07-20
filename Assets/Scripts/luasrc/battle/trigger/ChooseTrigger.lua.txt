@@ -352,7 +352,7 @@ function ChooseTrigger.chooseByTargetType(useArr, targetType)
         role.tempSortPriority = role.tempSortValue
         i = i - 1
     until not (i >= 0)
-    useArr:sort(ChooseTrigger.sortByTmepValueAdd)
+    table.sort( useArr,ChooseTrigger.sortByTmepValueAdd)
     return useArr
 end
 
@@ -546,23 +546,23 @@ function ChooseTrigger.chooseRoleBy_2(attacker, useArr)
         instance.tempSortValue = RandomUtis.getUintRandom(BattleFunc.battleRandomIndex)
         i = i + 1
     until not (i < #useArr)
-    useArr:sort(ChooseTrigger.sortByTmepValueAdd)
+    table.sort(useArr,ChooseTrigger.sortByTmepValueAdd)
     return useArr
 end
 
 function ChooseTrigger.chooseRoleBy_3(attacker, useArr)
-    useArr:sort(ChooseTrigger.sortByHpAdd)
+    table.sort(useArr,ChooseTrigger.sortByHpAdd)
     return useArr
 end
 
 function ChooseTrigger.chooseRoleBy_4(attacker, useArr)
-    useArr:sort(ChooseTrigger.sortByHpReduce)
+    table.sort(useArr,ChooseTrigger.sortByHpReduce)
     return useArr
 end
 
 function ChooseTrigger.chooseRoleBy_5(attacker, useArr)
     ChooseTrigger.comparePos = attacker.pos
-    useArr:sort(ChooseTrigger.sortByFrontFormation)
+    table.sort(useArr,ChooseTrigger.sortByFrontFormation)
     return useArr
 end
 
@@ -576,7 +576,7 @@ end
 
 function ChooseTrigger.chooseRoleBy_6(attacker, useArr)
     ChooseTrigger.comparePos = attacker.pos
-    useArr:sort(ChooseTrigger.sortByBackFormation)
+    table.sort(useArr,ChooseTrigger.sortByBackFormation)
     return useArr
 end
 
@@ -590,7 +590,7 @@ function ChooseTrigger.chooseRoleBy_7(attacker, useArr)
         role2.tempSortValue = dx * dx + dz * dz
         i = i + 1
     until not (i < #useArr)
-    useArr:sort(ChooseTrigger.sortByTmepValueAdd)
+    table.sort(useArr,ChooseTrigger.sortByTmepValueAdd)
     return useArr
 end
 
@@ -603,7 +603,7 @@ function ChooseTrigger.chooseRoleBy_8(attacker, useArr)
         role2.tempSortValue = dx * dx + dz * dz
         i = i + 1
     until not (i < #useArr)
-    useArr:sort(ChooseTrigger.sortByTmepValueReduce)
+    table.sort(useArr,ChooseTrigger.sortByTmepValueReduce)
     return useArr
 end
 
@@ -616,17 +616,17 @@ function ChooseTrigger.chooseRoleBy_9(attacker, useArr)
         end
         i = i - 1
     until not (i >= 0)
-    useArr:sort(ChooseTrigger.sortByPriority)
+    table.sort(useArr,ChooseTrigger.sortByPriority)
     return useArr
 end
 
 function ChooseTrigger.chooseRoleBy_10(attacker, useArr)
-    useArr:sort(ChooseTrigger.sortByHpReducePercent)
+    table.sort(useArr,ChooseTrigger.sortByHpReducePercent)
     return useArr
 end
 
 function ChooseTrigger.chooseRoleBy_11(attacker, useArr)
-    useArr:sort(ChooseTrigger.sortByHpAddPercent)
+    table.sort(useArr,ChooseTrigger.sortByHpAddPercent)
     return useArr
 end
 

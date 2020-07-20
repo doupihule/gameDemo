@@ -883,3 +883,52 @@ function Equation.checkPosInPolygon(pos, polygonPointArr)
 
 end
 
+
+
+
+function Equation.easyToTargetPos(tovalue, fromvalue, f, min)
+    if f == nil then
+        f=0.1
+    end
+    if min == nil then
+        min=1
+    end
+    local dis = tovalue - fromvalue
+    local absDistance = math.abs(dis)
+    if absDistance < min then
+        return dis
+    end
+    local way = dis / absDistance
+    absDistance = absDistance * f
+    if absDistance < min then
+        absDistance = min
+    end
+    return absDistance * way
+end
+
+function Equation.easyToTargetAngle(tovalue, fromvalue, f, min, t)
+    if f == nil then
+        f=0.1
+    end
+    if min == nil then
+        min=1
+    end
+    if t == nil then
+        t=0
+    end
+    local disang = tovalue - fromvalue
+    if t == 0 then
+        if disang > math.pi then
+            tovalue = tovalue - math.pi * 2
+        elseif disang < -math.pi then
+            tovalue = tovalue + math.pi * 2
+        end
+    else
+        if disang > 180 then
+            tovalue = tovalue - 360
+        elseif disang < -180 then
+            tovalue = tovalue + 360
+        end
+    end
+    return Equation.easyToTargetPos(tovalue, fromvalue, f, min)
+end
