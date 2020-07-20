@@ -3,6 +3,20 @@
 -- Date: 2020-04-11 16:47:35
 --
 local packageName = "framework.utils."
+
+
+require(packageName .. "Functions")
+require(packageName .. "table")
+require(packageName .. "string")
+
+require(packageName .. "Equation")
+require(packageName .. "Tool")
+
+require(packageName .. "numEncrypt")
+
+require(packageName .. "number")
+require(packageName .. "UITools")
+
 require(packageName .. "VectorTools")
 require(packageName .. "TableUtils")
 require(packageName .. "BigNumUtils")
@@ -14,5 +28,6 @@ require(packageName .. "MathUtils")
 require(packageName .. "PoolTools")
 require(packageName .. "RandomUtis")
 require(packageName .. "ScreenAdapterTools")
+require(packageName .. "ColorMatrixFilterPlugin")
 
 

@@ -3,6 +3,8 @@
 -- Date: 2020-04-11 16:47:35
 --
 local packageName = "framework."
+require(packageName .. "utils.init")
+require(packageName .. "components.init")
 require(packageName .. "common.init")
 require(packageName .. "consts.init")
 require(packageName .. "engine.EngineExpand")
@@ -18,4 +20,3 @@ require(packageName .. "platform.init")
 
 require(packageName .. "server.SingleCommonServer")
 
-require(packageName .. "utils.init")

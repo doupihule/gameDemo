@@ -30,13 +30,10 @@ function BattleMapControler:setData(sceneId)
                       ctn = ctn1,
                       initY = -(ScreenAdapterTools.maxHeight - ScreenAdapterTools.designHeight) / 2,
                       speed = 0.5 }
-    local i = 1
-    repeat
+    for i = 1, self._pickNums,1 do
         self:createOneView(mapName, i, mapStartIndex, self._mapInfo)
-        -- [ts2lua]lua中0和空字符串也是true，此处mapStartIndex + 1 > self._allMapCount需要确认
-        mapStartIndex = (mapStartIndex + 1 > self._allMapCount and { 1 } or { mapStartIndex + 1 })[1]
-        i = i + 1
-    until not (i <= self._pickNums)
+        mapStartIndex = (mapStartIndex + 1 > self._allMapCount and 1  or  mapStartIndex + 1 )
+    end
     self:createDecoration(sceneInfo.Decoration, mapName, ctn1)
 end
 
@@ -46,10 +43,8 @@ function BattleMapControler:setMapSize()
 end
 
 function BattleMapControler:createDecoration(arr, firstName, ctn)
-    local i = 0
-    repeat
-        local item = arr[i + 1]
-        local info = BattleFunc.getInstance():getCfgDatas("Decoration", item[0 + 1])
+    for i, item in ipairs(arr) do
+        local info = BattleFunc.getInstance():getCfgDatas("Decoration", item[1])
         local path = "map/" .. firstName .. "/" .. info.pic
         local imageUrl1 = nil
         if UserInfo.isSystemNative() then
@@ -63,26 +58,17 @@ function BattleMapControler:createDecoration(arr, firstName, ctn)
         table.insert(self._mapInfo.decorateArr, { view = image })
         if self.startMapIndex ~= 1 then
             local missWidth = self.startMapIndex - 1 * 256 * 2
-            if tonumber(item[1 + 1]) - missWidth < 0 then
-                image.x = 256 * 9 - missWidth + tonumber(item[1 + 1])
+            if tonumber(item[2]) - missWidth < 0 then
+                image.x = 256 * 9 - missWidth + tonumber(item[2])
             else
-                image.x = tonumber(item[1 + 1]) - missWidth
+                image.x = tonumber(item[2]) - missWidth
             end
         else
-            image.x = tonumber(item[1 + 1])
+            image.x = tonumber(item[2])
         end
-        image.y = -tonumber(item[2 + 1])
-        local onMapComplete = function()
-            image.skin = imageUrl1
-        end
-
-        if SubPackageManager.getPackStyle(SubPackageConst.packName_map) == SubPackageConst.PATH_STYLE_SUBPACK then
-            SubPackageManager.loadDynamics(firstName, path, onMapComplete, self)
-        else
-            onMapComplete()
-        end
-        i = i + 1
-    until not (i < #arr)
+        image.y = -tonumber(item[3])
+        image.skin = imageUrl1
+    end
 end
 
 function BattleMapControler:destoryOneLayer(mapInfo)

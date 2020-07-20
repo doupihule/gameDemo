@@ -10,15 +10,14 @@ function BattleTweenControler:setData()
 end
 
 function BattleTweenControler:updateFrame()
-    local i = #self._tweenInfoMap - 1
-    repeat
-        local info = self._tweenInfoMap[i + 1]
+    local len = #self._tweenInfoMap;
+    for i = len,1,-1 do
+        local info = self._tweenInfoMap[i]
         local isEnd = self:updateOneTween(info)
         if isEnd then
             table.remove(self._tweenInfoMap, i)
         end
-        i = i - 1
-    until not (i >= 0)
+    end
 end
 
 function BattleTweenControler:updateOneTween(tweenInfo)

@@ -19,5 +19,6 @@ require(packageName .. "TimerManager")
 require(packageName .. "VersionManager")
 require(packageName .. "WaitManager")
 require(packageName .. "WindowManager")
+require(packageName .. "SubPackageManager")
 
 
