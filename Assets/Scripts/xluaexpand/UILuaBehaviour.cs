@@ -25,7 +25,7 @@ namespace XLua
             if (name.Contains("(Clone)"))
                 gameObject.name = name.Replace("(Clone)", "");
 
-            luaTable = XLuaBridge.GetInstance().XLuaDoUILuaTable(name);
+            luaTable = XLuaBridge.GetInstance().XLuaDoUILuaTable(name,"main");
             //绑定的ui类一定有会__cobject.指向这个对象的Object 这是通用规则. lua和c#绑定的对象 
             luaTable.Set("__cobject", this.gameObject);
             //luaTable.Set("__index", XLuaBridge.luaEnv.Global);

@@ -115,9 +115,9 @@ namespace XLua
             scriptEnv.Set( name, module );
         }
 
-        public LuaTable XLuaDoUILuaTable( string name )
+        public LuaTable XLuaDoUILuaTable( string name ,string path )
         {
-            return (LuaTable)(luaEnv.DoString( string.Format( "local ui =require 'sys/views/uisource/{0}'; return ui.new()", name , name ) , name )[0]);
+            return (LuaTable)(luaEnv.DoString( string.Format( "local ui =require 'sys/view/{1}/{0}'; return ui.new()", name , path ) , name )[0]);
         }
 
         public LuaTable XLuaDoBattleLuaTable( string name )
