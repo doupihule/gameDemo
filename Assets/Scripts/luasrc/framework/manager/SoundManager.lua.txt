@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 SoundManager = class('SoundManager')
 
 SoundManager.music = "musicStorage";
@@ -19,222 +5,222 @@ SoundManager.sound = "soundStorage";
 SoundManager.isQQMusic = false;
 SoundManager._soundDelayCode = {};
 SoundManager._soundCountMap = {};
-SoundManager.musicArr = {"main_bg"};
+SoundManager.musicArr = { "main_bg" };
 function SoundManager.init()
-  SoundManager.BGM = ""
-  SoundManager.BGS = {}
-  SoundManager.ME = ""
-  Laya.SoundManager.autoReleaseSound = false
-  local thisObj = SoundManager
-  Laya.SoundManager.autoStopMusic = true
-  Message.getInstance():add(MsgCMD.GAME_ONSHOW, thisObj)
-  Message.getInstance():add(MsgCMD.GAME_ONHIDE, thisObj)
+    SoundManager.BGM = ""
+    SoundManager.BGS = {}
+    SoundManager.ME = ""
+    Laya.SoundManager.autoReleaseSound = false
+    local thisObj = SoundManager
+    Laya.SoundManager.autoStopMusic = true
+    Message.getInstance():add(MsgCMD.GAME_ONSHOW, thisObj)
+    Message.getInstance():add(MsgCMD.GAME_ONHIDE, thisObj)
 end
 
 function SoundManager.initSwitch()
-  SoundManager.musicSwitch = SwitchModel.getInstance():getMusicSwitch()
-  SoundManager.soundSwitch = SwitchModel.getInstance():getSoundSwitch()
+    SoundManager.musicSwitch = SwitchModel.getInstance():getMusicSwitch()
+    SoundManager.soundSwitch = SwitchModel.getInstance():getSoundSwitch()
 end
 
 function SoundManager.playBGM(url, startTime)
-  LogsManager.echo("playmusic:", url)
-  if not url then
-    return
-  end
-  if (not url and SoundManager.BGM) and SoundManager.BGM ~= "" then
-    url = SoundManager.BGM
-  end
-  url = SoundManager.getSoundUrl(url)
-  SoundManager.BGM = url
-  if SoundManager.musicSwitch then
-    if FileUtils.isUserWXSource() then
-      SoundManager.loadSound(url, SoundManager.playNewBGM, SoundManager, {url, 0, nil, startTime})
-    else
-      SoundManager.loadSound(url, Laya.SoundManager.playMusic, Laya.SoundManager, {url, 0, nil, startTime})
+    LogsManager.echo("playmusic:", url)
+    if not url then
+        return
     end
-  end
+    if (not url and SoundManager.BGM) and SoundManager.BGM ~= "" then
+        url = SoundManager.BGM
+    end
+    url = SoundManager.getSoundUrl(url)
+    SoundManager.BGM = url
+    if SoundManager.musicSwitch then
+        if FileUtils.isUserWXSource() then
+            SoundManager.loadSound(url, SoundManager.playNewBGM, SoundManager, { url, 0, nil, startTime })
+        else
+            SoundManager.loadSound(url, Laya.SoundManager.playMusic, Laya.SoundManager, { url, 0, nil, startTime })
+        end
+    end
 end
 
 function SoundManager.playBGS(url, soundClass, startTime)
-  if SoundManager.soundSwitch then
-    url = SoundManager.getSoundUrl(url)
-    SoundManager.loadSound(url, SoundManager.playNewSound, SoundManager, {url, 0, nil, soundClass, startTime})
-  end
+    if SoundManager.soundSwitch then
+        url = SoundManager.getSoundUrl(url)
+        SoundManager.loadSound(url, SoundManager.playNewSound, SoundManager, { url, 0, nil, soundClass, startTime })
+    end
 end
 
 function SoundManager.getSoundUrl(sound)
-  if string.sub(sound,1, 5) == "sound" or string.find(sound,"groupSound") ~= nil then
-    return sound
-  end
-  local soundPath = SoundManager.getSoundPath(sound)
-  return soundPath .. "/" .. sound .. SoundManager.getSoundExpandName(sound)
+    if string.sub(sound, 1, 5) == "sound" or string.find(sound, "groupSound") ~= nil then
+        return sound
+    end
+    local soundPath = SoundManager.getSoundPath(sound)
+    return soundPath .. "/" .. sound .. SoundManager.getSoundExpandName(sound)
 end
 
 function SoundManager.getSoundExpandName(sound)
-  if UserInfo.isSystemMini() then
-    return ".mp3"
-  elseif UserInfo.isSystemNative() then
-    if SoundManager.checkIsMusic(sound) then
-      return ".mp3"
+    if UserInfo.isSystemMini() then
+        return ".mp3"
+    elseif UserInfo.isSystemNative() then
+        if SoundManager.checkIsMusic(sound) then
+            return ".mp3"
+        end
+        if UserInfo.isSystemAndroid() then
+            return ".ogg"
+        end
+        return ".wav"
+    elseif UserInfo.isSystemIos() then
+        return ".mp3"
     end
-    if UserInfo.isSystemAndroid() then
-      return ".ogg"
-    end
-    return ".wav"
-  elseif UserInfo.isSystemIos() then
-    return ".mp3"
-  end
 end
 
 function SoundManager.checkIsMusic(url)
-  local musicArr = SoundManager.musicArr
-  local i = 0
-  repeat
-    local targetStr = musicArr[i+1]
-    if string.find(url,targetStr) ~= nil then
-      return true
-    end
-    i=i+1
-  until not(i < #musicArr)
-  return false
+    local musicArr = SoundManager.musicArr
+    local i = 0
+    repeat
+        local targetStr = musicArr[i + 1]
+        if string.find(url, targetStr) ~= nil then
+            return true
+        end
+        i = i + 1
+    until not (i < #musicArr)
+    return false
 end
 
 function SoundManager.playME(url, complete, startTime)
-  SoundManager.ME = url
-  url = SoundManager.getSoundUrl(url)
-  if SoundManager.musicSwitch then
-    if FileUtils.isUserWXSource() then
-      SoundManager.loadSound(url, SoundManager.playNewBGM, SoundManager, {url, 1, nil, startTime})
-    else
-      SoundManager.loadSound(url, Laya.SoundManager.playMusic, Laya.SoundManager, {url, 1, complete, startTime})
+    SoundManager.ME = url
+    url = SoundManager.getSoundUrl(url)
+    if SoundManager.musicSwitch then
+        if FileUtils.isUserWXSource() then
+            SoundManager.loadSound(url, SoundManager.playNewBGM, SoundManager, { url, 1, nil, startTime })
+        else
+            SoundManager.loadSound(url, Laya.SoundManager.playMusic, Laya.SoundManager, { url, 1, complete, startTime })
+        end
     end
-  end
 end
 
 function SoundManager.playSE(url, loops, complete, soundClass, startTime)
-  if loops == nil then
-    loops=1
-  end
-  if SoundManager.soundSwitch then
-    url = SoundManager.getSoundUrl(url)
-    SoundManager.loadSound(url, SoundManager.playNewSound, SoundManager, {url, loops, complete, soundClass, startTime})
-  end
+    if loops == nil then
+        loops = 1
+    end
+    if SoundManager.soundSwitch then
+        url = SoundManager.getSoundUrl(url)
+        SoundManager.loadSound(url, SoundManager.playNewSound, SoundManager, { url, loops, complete, soundClass, startTime })
+    end
 end
 
 function SoundManager.loadSound(url, callBack, thisObj, callParams)
-  if callParams == nil then
-    callParams=nil
-  end
-  if not FileUtils.isUserWXSource() then
-    if callBack then
-      doJsApplyFunc(callBack,thisObj, callParams)
+    if callParams == nil then
+        callParams = nil
     end
-    return
-  end
-  local formatPath = Laya.URL:formatURL(url)
-  local fileInfo = Laya.MiniFileMgr:getFileInfo(formatPath)
-  if fileInfo then
-    if callBack then
-      doJsApplyFunc(callBack,thisObj, callParams)
+    if not FileUtils.isUserWXSource() then
+        if callBack then
+            doJsApplyFunc(callBack, thisObj, callParams)
+        end
+        return
     end
-    return
-  end
-  local onSoundLoadBack = function(issucess)
-    if callBack then
-      doJsApplyFunc(callBack,thisObj, callParams)
+    local formatPath = Laya.URL:formatURL(url)
+    local fileInfo = Laya.MiniFileMgr:getFileInfo(formatPath)
+    if fileInfo then
+        if callBack then
+            doJsApplyFunc(callBack, thisObj, callParams)
+        end
+        return
     end
-  end
-  
-  local shortName = SoundManager.getSoundShortName(url)
-  local soundStyle = SubPackageManager.getModelFileStyle(SubPackageConst.packName_sound)
-  if soundStyle == SubPackageConst.PATH_STYLE_SUBPACK then
-    if UserInfo.isBaidu() then
-      SubPackageManager.load(SubPackageConst.packName_sound, onSoundLoadBack, SoundManager)
+    local onSoundLoadBack = function(issucess)
+        if callBack then
+            doJsApplyFunc(callBack, thisObj, callParams)
+        end
+    end
+
+    local shortName = SoundManager.getSoundShortName(url)
+    local soundStyle = SubPackageManager.getModelFileStyle(SubPackageConst.packName_sound)
+    if soundStyle == SubPackageConst.PATH_STYLE_SUBPACK then
+        if UserInfo.isBaidu() then
+            SubPackageManager.load(SubPackageConst.packName_sound, onSoundLoadBack, SoundManager)
+        else
+            SubPackageManager.loadDynamics(SoundManager.getSoundSubPack(shortName), SoundManager.getSoundPath(shortName), onSoundLoadBack, SoundManager)
+        end
+    elseif soundStyle == SubPackageConst.PATH_STYLE_NATIVE then
+        onSoundLoadBack(false)
     else
-      SubPackageManager.loadDynamics(SoundManager.getSoundSubPack(shortName), SoundManager.getSoundPath(shortName), onSoundLoadBack, SoundManager)
+        Laya.MiniFileMgr:downOtherFiles(formatPath, Laya.Handler(nil, onSoundLoadBack), formatPath, true)
     end
-  elseif soundStyle == SubPackageConst.PATH_STYLE_NATIVE then
-    onSoundLoadBack(false)
-  else
-    Laya.MiniFileMgr:downOtherFiles(formatPath, Laya.Handler(nil, onSoundLoadBack), formatPath, true)
-  end
 end
 
 function SoundManager.getSoundSubPack(shortName)
-  local groupInfo = SubPackageManager.getSoundGroupInfo(shortName)
-  if not groupInfo then
-    if SubPackageConst.getSubPackData().sound and SubPackageConst.getSubPackData().sound.isWhole then
-      return SubPackageConst.packName_sound
+    local groupInfo = SubPackageManager.getSoundGroupInfo(shortName)
+    if not groupInfo then
+        if SubPackageConst.getSubPackData().sound and SubPackageConst.getSubPackData().sound.isWhole then
+            return SubPackageConst.packName_sound
+        end
+        return shortName
     end
-    return shortName
-  end
-  if SubPackageConst.getSubPackData().groupSound then
-    if SubPackageConst.getSubPackData().groupSound.isWhole then
-      return "groupSound"
+    if SubPackageConst.getSubPackData().groupSound then
+        if SubPackageConst.getSubPackData().groupSound.isWhole then
+            return "groupSound"
+        end
     end
-  end
-  return groupInfo.name
+    return groupInfo.name
 end
 
 function SoundManager.getSoundPath(shortName)
-  local groupInfo = SubPackageManager.getSoundGroupInfo(shortName)
-  if not groupInfo then
-    return "sound/" .. shortName
-  end
-  return groupInfo.path .. "/" .. groupInfo.name .. "/" .. shortName
+    local groupInfo = SubPackageManager.getSoundGroupInfo(shortName)
+    if not groupInfo then
+        return "sound/" .. shortName
+    end
+    return groupInfo.path .. "/" .. groupInfo.name .. "/" .. shortName
 end
 
 function SoundManager.stopMusic()
-  SoundManager.BGM = ""
-  SoundManager.ME = ""
-  LogsManager.echo("=============ycn stop music")
-  if FileUtils.isUserWXSource() then
-    SoundManager.stopNewBGM()
-  else
-    Laya.SoundManager:stopMusic()
-  end
+    SoundManager.BGM = ""
+    SoundManager.ME = ""
+    LogsManager.echo("=============ycn stop music")
+    if FileUtils.isUserWXSource() then
+        SoundManager.stopNewBGM()
+    else
+        Laya.SoundManager:stopMusic()
+    end
 end
 
 function SoundManager.stopAllSound()
-  SoundManager.BGS = ""
-  for i in pairs(SoundManager._soundDelayCode) do
-    SoundManager.clearSoundTimeOut(i)
-  end
-  if FileUtils.isUserWXSource() then
-    SoundManager.stopAllNewSound()
-  else
-    Laya.SoundManager:stopAllSound()
-  end
+    SoundManager.BGS = ""
+    for i in pairs(SoundManager._soundDelayCode) do
+        SoundManager.clearSoundTimeOut(i)
+    end
+    if FileUtils.isUserWXSource() then
+        SoundManager.stopAllNewSound()
+    else
+        Laya.SoundManager:stopAllSound()
+    end
 end
 
 function SoundManager.stopMusicOrSound(url)
-  SoundManager.clearSoundTimeOut(url)
-  url = SoundManager.getSoundUrl(url)
-  if FileUtils.isUserWXSource() then
-    SoundManager.stopNewSound(url)
-  else
-    Laya.SoundManager:stopSound(url)
-  end
+    SoundManager.clearSoundTimeOut(url)
+    url = SoundManager.getSoundUrl(url)
+    if FileUtils.isUserWXSource() then
+        SoundManager.stopNewSound(url)
+    else
+        Laya.SoundManager:stopSound(url)
+    end
 end
 
 function SoundManager.setSoundVol(volume, url)
-  url = SoundManager.getSoundUrl(url)
-  if FileUtils.isUserWXSource() then
-    SoundManager.setSoundVolume(volume)
-  else
-    Laya.SoundManager:setSoundVolume(volume, url)
-  end
+    url = SoundManager.getSoundUrl(url)
+    if FileUtils.isUserWXSource() then
+        SoundManager.setSoundVolume(volume)
+    else
+        Laya.SoundManager:setSoundVolume(volume, url)
+    end
 end
 
 function SoundManager.setMusicVol(volume)
-  if FileUtils.isUserWXSource() then
-    SoundManager._bgvolume = volume
-    if SoundManager._bgmSoundChannel then
-      SoundManager._bgmSoundChannel.volume = volume
+    if FileUtils.isUserWXSource() then
+        SoundManager._bgvolume = volume
+        if SoundManager._bgmSoundChannel then
+            SoundManager._bgmSoundChannel.volume = volume
+        end
+    else
+        Laya.SoundManager:setMusicVolume(volume)
     end
-  else
-    Laya.SoundManager:setMusicVolume(volume)
-  end
 end
 
 SoundManager._soundChannelCache = {};
@@ -243,176 +229,176 @@ SoundManager._volume = 1;
 SoundManager._bgvolume = 1;
 SoundManager._channelNum = 0;
 function SoundManager.playNewBGM(url, loops, complete, startTime)
-  if not SoundManager._bgmSoundChannel then
-    SoundManager._bgmSoundChannel = SoundChannel.new()
-  end
-  SoundManager._bgmSoundChannel:offAll()
-  SoundManager._bgmSoundChannel:setData(url, loops)
-  SoundManager._bgmSoundChannel:play()
-  SoundManager._bgmSoundChannel.volume = SoundManager._bgvolume
+    if not SoundManager._bgmSoundChannel then
+        SoundManager._bgmSoundChannel = SoundChannel.new()
+    end
+    SoundManager._bgmSoundChannel:offAll()
+    SoundManager._bgmSoundChannel:setData(url, loops)
+    SoundManager._bgmSoundChannel:play()
+    SoundManager._bgmSoundChannel.volume = SoundManager._bgvolume
 end
 
 function SoundManager.stopNewBGM()
-  if SoundManager._bgmSoundChannel then
-    SoundManager._bgmSoundChannel:stop()
-  end
+    if SoundManager._bgmSoundChannel then
+        SoundManager._bgmSoundChannel:stop()
+    end
 end
 
 function SoundManager.playNewSound(url, loops, complete, soundClass, startTime)
-  local shortName = SoundManager.getSoundShortName(url)
-  SoundManager.clearSoundTimeOut(shortName)
-  local soundLength = SoundManager.getSoundLength(shortName)
-  local targetLoops = loops
-  if loops == 0 then
-    
-  else
-    -- [ts2lua]SoundManager._soundDelayCode下标访问可能不正确
-    SoundManager._soundDelayCode[shortName] = TimerManager.getInstance():setTimeout(SoundManager.stopNewSound, SoundManager, soundLength, url)
-  end
-  if FileUtils.isUserWXSource() then
-    local soundChannel = SoundManager.getChannelIns(url)
-    soundChannel:offAll()
-    soundChannel:setData(url, targetLoops, complete, soundClass, startTime)
-    local volume = SoundManager._volume
-    -- [ts2lua]SoundManager._volumes下标访问可能不正确
-    if SoundManager._volumes[url] then
-      -- [ts2lua]SoundManager._volumes下标访问可能不正确
-      volume = SoundManager._volumes[url]
+    local shortName = SoundManager.getSoundShortName(url)
+    SoundManager.clearSoundTimeOut(shortName)
+    local soundLength = SoundManager.getSoundLength(shortName)
+    local targetLoops = loops
+    if loops == 0 then
+
+    else
+        -- [ts2lua]SoundManager._soundDelayCode下标访问可能不正确
+        SoundManager._soundDelayCode[shortName] = TimerManager.getInstance():setTimeout(SoundManager.stopNewSound, SoundManager, soundLength, url)
     end
-    soundChannel.volume = volume
-    soundChannel:play()
-  else
-    -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
-    if SoundManager._soundCountMap[url] == nil then
-      -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
-      SoundManager._soundCountMap[url] = 0
+    if FileUtils.isUserWXSource() then
+        local soundChannel = SoundManager.getChannelIns(url)
+        soundChannel:offAll()
+        soundChannel:setData(url, targetLoops, complete, soundClass, startTime)
+        local volume = SoundManager._volume
+        -- [ts2lua]SoundManager._volumes下标访问可能不正确
+        if SoundManager._volumes[url] then
+            -- [ts2lua]SoundManager._volumes下标访问可能不正确
+            volume = SoundManager._volumes[url]
+        end
+        soundChannel.volume = volume
+        soundChannel:play()
+    else
+        -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
+        if SoundManager._soundCountMap[url] == nil then
+            -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
+            SoundManager._soundCountMap[url] = 0
+        end
+        -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
+        local count = SoundManager._soundCountMap[url]
+        if count >= 2 then
+            return
+        end
+        -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
+        -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
+        SoundManager._soundCountMap[url] = SoundManager._soundCountMap[url] + 1
+        TimerManager.getInstance():add(SoundManager.delayResumeSoundCount, SoundManager, 350, 1, false, { url })
+        local sound = Laya.SoundManager:playSound(url, targetLoops, complete, soundClass, startTime)
+        if sound and sound.volume then
+            sound.volume = SoundManager._volume
+        end
     end
-    -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
-    local count = SoundManager._soundCountMap[url]
-    if count >= 2 then
-      return
-    end
-    -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
-    -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
-    SoundManager._soundCountMap[url]=SoundManager._soundCountMap[url]+1
-    TimerManager.getInstance():add(SoundManager.delayResumeSoundCount, SoundManager, 350, 1, false, {url})
-    local sound = Laya.SoundManager:playSound(url, targetLoops, complete, soundClass, startTime)
-    if sound and sound.volume then
-      sound.volume = SoundManager._volume
-    end
-  end
 end
 
 function SoundManager.delayResumeSoundCount(url)
-  -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
-  -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
-  SoundManager._soundCountMap[url]=SoundManager._soundCountMap[url]-1
+    -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
+    -- [ts2lua]SoundManager._soundCountMap下标访问可能不正确
+    SoundManager._soundCountMap[url] = SoundManager._soundCountMap[url] - 1
 end
 
 function SoundManager.clearSoundTimeOut(url)
-  -- [ts2lua]SoundManager._soundDelayCode下标访问可能不正确
-  local code = SoundManager._soundDelayCode[url]
-  if code then
-    TimerManager.getInstance():remove(code)
-  end
-  -- [ts2lua]SoundManager._soundDelayCode下标访问可能不正确
-  SoundManager._soundDelayCode[url] = nil
+    -- [ts2lua]SoundManager._soundDelayCode下标访问可能不正确
+    local code = SoundManager._soundDelayCode[url]
+    if code then
+        TimerManager.getInstance():remove(code)
+    end
+    -- [ts2lua]SoundManager._soundDelayCode下标访问可能不正确
+    SoundManager._soundDelayCode[url] = nil
 end
 
 function SoundManager.getSoundShortName(url)
-  if string.find(url,".mp3") ~= nil then
-    local lastIndex = url:lastIndexOf("/")
-    return string.sub(url,lastIndex , -4)
-  end
-  return url
+    if string.find(url, ".mp3") ~= nil then
+        local lastIndex = url:lastIndexOf("/")
+        return string.sub(url, lastIndex, -4)
+    end
+    return url
 end
 
 function SoundManager.getSoundLength(name)
-  local info = MusicConst.soundCfgs[name]
-  if not info then
-    return 5000
-  end
-  return #info
+    local info = MusicConst.soundCfgs[name]
+    if not info then
+        return 5000
+    end
+    return #info
 end
 
 function SoundManager.setSoundVolume(volume)
-  SoundManager._volume = volume
+    SoundManager._volume = volume
 end
 
 function SoundManager._setVolume(url, volume)
-  if url == SoundManager.getSoundUrl(SoundManager.BGM) then
-    if SoundManager._bgmSoundChannel then
-      SoundManager._bgmSoundChannel.volume = volume
-      return
+    if url == SoundManager.getSoundUrl(SoundManager.BGM) then
+        if SoundManager._bgmSoundChannel then
+            SoundManager._bgmSoundChannel.volume = volume
+            return
+        end
     end
-  end
-  local channel = nil
-  for i in pairs(SoundManager._soundChannelCache) do
-    channel = SoundManager._soundChannelCache[i+1]
-    if channel and channel._url == url then
-      channel.volume = volume
+    local channel = nil
+    for i in pairs(SoundManager._soundChannelCache) do
+        channel = SoundManager._soundChannelCache[i + 1]
+        if channel and channel._url == url then
+            channel.volume = volume
+        end
     end
-  end
 end
 
 function SoundManager.stopAllNewSound()
-  local channel = nil
-  for i in pairs(SoundManager._soundChannelCache) do
-    channel = SoundManager._soundChannelCache[i+1]
-    if channel and channel._url ~= SoundManager.BGM then
-      SoundManager.stopNewSound(i)
+    local channel = nil
+    for i in pairs(SoundManager._soundChannelCache) do
+        channel = SoundManager._soundChannelCache[i + 1]
+        if channel and channel._url ~= SoundManager.BGM then
+            SoundManager.stopNewSound(i)
+        end
     end
-  end
 end
 
 function SoundManager.stopNewSound(url)
-  if url == SoundManager.getSoundUrl(SoundManager.BGM) then
-    if SoundManager._bgmSoundChannel then
-      SoundManager._bgmSoundChannel:stop()
-      return
+    if url == SoundManager.getSoundUrl(SoundManager.BGM) then
+        if SoundManager._bgmSoundChannel then
+            SoundManager._bgmSoundChannel:stop()
+            return
+        end
     end
-  end
-  local shortName = SoundManager.getSoundShortName(url)
-  SoundManager.clearSoundTimeOut(shortName)
-  local i = nil
-  -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
-  local channel = SoundManager._soundChannelCache[url]
-  if channel then
-    channel:offAll()
-    if channel._loops ~= 0 then
-      -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
-      SoundManager._soundChannelCache[url] = nil
-      -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
-      SoundManager._soundChannelCache[url] = nil
-      PoolTools.cacheItem("soundChannel", channel, PoolCode.pool_model_sys)
+    local shortName = SoundManager.getSoundShortName(url)
+    SoundManager.clearSoundTimeOut(shortName)
+    local i = nil
+    -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
+    local channel = SoundManager._soundChannelCache[url]
+    if channel then
+        channel:offAll()
+        if channel._loops ~= 0 then
+            -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
+            SoundManager._soundChannelCache[url] = nil
+            -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
+            SoundManager._soundChannelCache[url] = nil
+            PoolTools.cacheItem("soundChannel", channel, PoolCode.pool_model_sys)
+        end
     end
-  end
 end
 
 function SoundManager.getChannelIns(url)
-  local soundChannel = nil
-  -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
-  if not SoundManager._soundChannelCache[url] then
-    local sc = PoolTools.getItem("soundChannel", PoolCode.pool_model_sys)
-    if not sc then
-      sc = SoundChannel.new()
+    local soundChannel = nil
+    -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
+    if not SoundManager._soundChannelCache[url] then
+        local sc = PoolTools.getItem("soundChannel", PoolCode.pool_model_sys)
+        if not sc then
+            sc = SoundChannel.new()
+        end
+        -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
+        SoundManager._soundChannelCache[url] = sc
     end
     -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
-    SoundManager._soundChannelCache[url] = sc
-  end
-  -- [ts2lua]SoundManager._soundChannelCache下标访问可能不正确
-  soundChannel = SoundManager._soundChannelCache[url]
-  return soundChannel
+    soundChannel = SoundManager._soundChannelCache[url]
+    return soundChannel
 end
 
 function SoundManager.recvMsg(cmd, data)
-  if cmd == MsgCMD.GAME_ONSHOW then
-    if SoundManager._bgmSoundChannel then
-      SoundManager._bgmSoundChannel:play()
+    if cmd == MsgCMD.GAME_ONSHOW then
+        if SoundManager._bgmSoundChannel then
+            SoundManager._bgmSoundChannel:play()
+        end
+    elseif cmd == MsgCMD.GAME_ONHIDE then
+        if SoundManager._bgmSoundChannel then
+            SoundManager._bgmSoundChannel:stop()
+        end
     end
-  elseif cmd == MsgCMD.GAME_ONHIDE then
-    if SoundManager._bgmSoundChannel then
-      SoundManager._bgmSoundChannel:stop()
-    end
-  end
 end

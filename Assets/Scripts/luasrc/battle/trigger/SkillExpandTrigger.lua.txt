@@ -1,126 +1,118 @@
-
-
-
-
-
-
-
-
 SkillExpandTrigger = class('SkillExpandTrigger')
 SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT = "1";
 function SkillExpandTrigger.onCheckExpand(instance, skill, expandParams, useArr, isFollow)
-  if isFollow == nil then
-    isFollow=false
-  end
-  if not expandParams then
-    return
-  end
-  local i = 0
-  repeat
-    local info = expandParams[i+1]
-    local type = info[0+1]
-    -- [ts2lua]SkillExpandTrigger下标访问可能不正确
-    local func = SkillExpandTrigger["skillExpand_" .. type]
-    if not func then
-      LogsManager.errorTag("skillExpandError", "错误的技能扩展类型:" .. type)
-    else
-      doJsCallFunc(func,SkillExpandTrigger, instance, skill, info, useArr, isFollow)
+    if isFollow == nil then
+        isFollow = false
     end
-    i=i+1
-  until not(i < #expandParams)
+    if not expandParams then
+        return
+    end
+    local i = 0
+    repeat
+        local info = expandParams[i + 1]
+        local type = info[0 + 1]
+        -- [ts2lua]SkillExpandTrigger下标访问可能不正确
+        local func = SkillExpandTrigger["skillExpand_" .. type]
+        if not func then
+            LogsManager.errorTag("skillExpandError", "错误的技能扩展类型:" .. type)
+        else
+            doJsCallFunc(func, SkillExpandTrigger, instance, skill, info, useArr, isFollow)
+        end
+        i = i + 1
+    until not (i < #expandParams)
 end
 
 function SkillExpandTrigger.skillExpand_1(instance, skill, params, useArr, isFollow)
-  if not useArr then
-    BattleLogsManager.battleWarn("连线特效没有目标,skill:", skill._skillId)
-    return
-  end
-  -- [ts2lua]params下标访问可能不正确
-  local sourceLenth = tonumber(params[13])
-  -- [ts2lua]params下标访问可能不正确
-  local tweenTime = tonumber(params[14])
-  local i = 0
-  repeat
-    local targetRole = useArr[i+1]
-    local tempArr = table.sliceArray(params,1, 13)
-    local expandPams = {type=params[0+1], length=tonumber(sourceLenth), frame=math.floor(tweenTime * BattleFunc.miniSecondToFrame), role=targetRole}
-    instance:createOneEffByParam(tempArr, isFollow, false, expandPams)
-    i=i+1
-  until not(i < #useArr)
+    if not useArr then
+        BattleLogsManager.battleWarn("连线特效没有目标,skill:", skill._skillId)
+        return
+    end
+    -- [ts2lua]params下标访问可能不正确
+    local sourceLenth = tonumber(params[13])
+    -- [ts2lua]params下标访问可能不正确
+    local tweenTime = tonumber(params[14])
+    local i = 0
+    repeat
+        local targetRole = useArr[i + 1]
+        local tempArr = table.sliceArray(params, 1, 13)
+        local expandPams = { type = params[0 + 1], length = tonumber(sourceLenth), frame = math.floor(tweenTime * BattleFunc.miniSecondToFrame), role = targetRole }
+        instance:createOneEffByParam(tempArr, isFollow, false, expandPams)
+        i = i + 1
+    until not (i < #useArr)
 end
 
 function SkillExpandTrigger.skillExpand_2(instance, skill, params, useArr)
-  local delayTime = tonumber(params[1+1])
-  if delayTime > 0 then
-    delayTime = BattleFunc.getInstance():turnMinisecondToframe(delayTime)
-    instance.controler:setCallBack(delayTime, instance.controler.cameraControler.shakeCameraByParams, instance.controler.cameraControler, params)
-  else
-    instance.controler.cameraControler:shakeCameraByParams(params)
-  end
+    local delayTime = tonumber(params[1 + 1])
+    if delayTime > 0 then
+        delayTime = BattleFunc.getInstance():turnMinisecondToframe(delayTime)
+        instance.controler:setCallBack(delayTime, instance.controler.cameraControler.shakeCameraByParams, instance.controler.cameraControler, params)
+    else
+        instance.controler.cameraControler:shakeCameraByParams(params)
+    end
 end
 
 function SkillExpandTrigger.skillExpand_3(instance, skill, params, useArr)
-  local sound = params[3+1]
-  local delayTime = tonumber(params[1+1])
-  if delayTime > 0 then
-    delayTime = BattleFunc.getInstance():turnMinisecondToframe(delayTime)
-  end
-  instance.controler:setCallBack(delayTime, instance.controler.playSoundByParams, instance.controler, params)
+    local sound = params[3 + 1]
+    local delayTime = tonumber(params[1 + 1])
+    if delayTime > 0 then
+        delayTime = BattleFunc.getInstance():turnMinisecondToframe(delayTime)
+    end
+    instance.controler:setCallBack(delayTime, instance.controler.playSoundByParams, instance.controler, params)
 end
 
 function SkillExpandTrigger.skillExpand_4(instance, skill, params, useArr)
-  local view = instance:getView()
-  local i = 1
-  repeat
-    local slotName = params[i+1]
-    view:showOrHideSlot(slotName, false)
-    i=i+1
-  until not(i < #params)
+    local view = instance:getView()
+    local i = 1
+    repeat
+        local slotName = params[i + 1]
+        view:showOrHideSlot(slotName, false)
+        i = i + 1
+    until not (i < #params)
 end
 
 function SkillExpandTrigger.skillExpand_5(instance, skill, params, useArr)
-  local name = params[1+1]
-  local continueTime = tonumber(params[2+1])
-  local scaleRate = tonumber(params[3+1]) / 10000
-  instance.controler.battleUI:freshSkillTipGroup(name, continueTime, scaleRate)
+    local name = params[1 + 1]
+    local continueTime = tonumber(params[2 + 1])
+    local scaleRate = tonumber(params[3 + 1]) / 10000
+    instance.controler.battleUI:freshSkillTipGroup(name, continueTime, scaleRate)
 end
 
 function SkillExpandTrigger.skillExpand_6(instance, skill, params, useArr)
-  if SwitchModel.getInstance():getSwitchByType(SwitchModel.shake_switch) then
-    return
-  end
-  local shakeNums = tonumber(params[1+1])
-  UserInfo.platform:vibrateByCount(shakeNums)
+    if SwitchModel.getInstance():getSwitchByType(SwitchModel.shake_switch) then
+        return
+    end
+    local shakeNums = tonumber(params[1 + 1])
+    UserInfo.platform:vibrateByCount(shakeNums)
 end
 
 function SkillExpandTrigger.skillExpand_7(instance, skill, params, useArr)
-  if #useArr == 0 then
-    return
-  end
-  local i = 0
-  repeat
-    local targetInstance = useArr[i+1]
-    local frame = tonumber(params[3+1])
-    local delayTime = tonumber(params[1+1])
-    local ratio = tonumber(params[6+1])
-    if #params < 7 then
-      LogsManager.errorTag("battleCfgsError", "受击抖动配置长度错误,skillId:" .. skill._skillId)
+    if #useArr == 0 then
+        return
     end
-    if targetInstance:checkCanMove() and (ratio >= 10000 or RandomUtis.getOneRandomInt(10000, 0, BattleFunc.battleRandomIndex) < ratio) then
-      local tempParams = params
-      local dx = targetInstance.pos.x - instance.pos.x
-      if dx < 0 then
-        tempParams = TableUtils.copyOneArr(params)
-        tempParams[4+1] = -tonumber(tempParams[4+1])
-      end
-      if delayTime > 0 then
-        delayTime = BattleFunc.getInstance():turnMinisecondToframe(delayTime)
-        targetInstance.controler:setCallBack(delayTime, instance.shakeCameraByParams, targetInstance, tempParams)
-      else
-        targetInstance:shakeCameraByParams(tempParams)
-      end
-    end
-    targetInstance:setShakeParams(frame, tonumber(params[2+1]), tonumber(params[4+1]), tonumber(params[5+1]))
-    i=i+1
-  until not(i < #useArr)
+    local i = 0
+    repeat
+        local targetInstance = useArr[i + 1]
+        local frame = tonumber(params[3 + 1])
+        local delayTime = tonumber(params[1 + 1])
+        local ratio = tonumber(params[6 + 1])
+        if #params < 7 then
+            LogsManager.errorTag("battleCfgsError", "受击抖动配置长度错误,skillId:" .. skill._skillId)
+        end
+        if targetInstance:checkCanMove() and (ratio >= 10000 or RandomUtis.getOneRandomInt(10000, 0, BattleFunc.battleRandomIndex) < ratio) then
+            local tempParams = params
+            local dx = targetInstance.pos.x - instance.pos.x
+            if dx < 0 then
+                tempParams = TableUtils.copyOneArr(params)
+                tempParams[4 + 1] = -tonumber(tempParams[4 + 1])
+            end
+            if delayTime > 0 then
+                delayTime = BattleFunc.getInstance():turnMinisecondToframe(delayTime)
+                targetInstance.controler:setCallBack(delayTime, instance.shakeCameraByParams, targetInstance, tempParams)
+            else
+                targetInstance:shakeCameraByParams(tempParams)
+            end
+        end
+        targetInstance:setShakeParams(frame, tonumber(params[2 + 1]), tonumber(params[4 + 1]), tonumber(params[5 + 1]))
+        i = i + 1
+    until not (i < #useArr)
 end

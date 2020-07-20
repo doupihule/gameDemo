@@ -1,48 +1,45 @@
-
-
-
-PassiveSkillData = class('PassiveSkillData',BattleSkillData)
+PassiveSkillData = class('PassiveSkillData', BattleSkillData)
 
 function PassiveSkillData:ctor(skillId, level, role, skillType, relyonSkill)
-  if relyonSkill == nil then
-    relyonSkill=nil
-  end
-  PassiveSkillData.super.ctor(self,skillId, level, role, skillType, relyonSkill)
-  self.triggerNums = 0;
-  self.triggerFrame = 0;
-  self.triggerNums = 0
-  self.skillActionArr = {}
+    if relyonSkill == nil then
+        relyonSkill = nil
+    end
+    PassiveSkillData.super.ctor(self, skillId, level, role, skillType, relyonSkill)
+    self.triggerNums = 0;
+    self.triggerFrame = 0;
+    self.triggerNums = 0
+    self.skillActionArr = {}
 end
 
 function PassiveSkillData:cacheOneSkillAction(skillAction)
-  table.insert(self.skillActionArr, skillAction)
+    table.insert(self.skillActionArr, skillAction)
 end
 
 function PassiveSkillData:updateLevel(level)
-  PassiveSkillData.super.updateLevel(self,level)
-  self.cfgData = BattleFunc.getInstance():getCfgDatas("PassiveSkill", self._skillId)
-  if self.cfgData.cdTime then
-    self._cfgSkillCd = math.ceil(self.cfgData.cdTime * BattleFunc.miniSecondToFrame)
-  end
-  local tempArr = self.cfgData.effectParams
-  local tagStr = "PassiveSkillData" .. self._skillId
-  if tempArr then
-    if not self.skillLogicalParams then
-      self.skillLogicalParams = {}
+    PassiveSkillData.super.updateLevel(self, level)
+    self.cfgData = BattleFunc.getInstance():getCfgDatas("PassiveSkill", self._skillId)
+    if self.cfgData.cdTime then
+        self._cfgSkillCd = math.ceil(self.cfgData.cdTime * BattleFunc.miniSecondToFrame)
     end
-    self.skillLogicalParams = {}
-    local i = 0
-    repeat
-      if not self.skillLogicalParams[i+1] then
-        self.skillLogicalParams[i+1] = {}
-      end
-      local temp = tempArr[i+1]
-      local s = 0
-      repeat
-        self.skillLogicalParams[i+1][s+1] = self:getSkillValue(temp[s+1], tagStr)
-        s=s+1
-      until not(s < #temp)
-      i=i+1
-    until not(i < #tempArr)
-  end
+    local tempArr = self.cfgData.effectParams
+    local tagStr = "PassiveSkillData" .. self._skillId
+    if tempArr then
+        if not self.skillLogicalParams then
+            self.skillLogicalParams = {}
+        end
+        self.skillLogicalParams = {}
+        local i = 0
+        repeat
+            if not self.skillLogicalParams[i + 1] then
+                self.skillLogicalParams[i + 1] = {}
+            end
+            local temp = tempArr[i + 1]
+            local s = 0
+            repeat
+                self.skillLogicalParams[i + 1][s + 1] = self:getSkillValue(temp[s + 1], tagStr)
+                s = s + 1
+            until not (s < #temp)
+            i = i + 1
+        until not (i < #tempArr)
+    end
 end

@@ -1,43 +1,36 @@
-
-
-
-
-
-
 NativeBridge = class('NativeBridge')
 
 function NativeBridge:ctor()
-  
+
 end
 
 function NativeBridge:createBridge(className, path)
-  if path == nil then
-    path=""
-  end
-  local bridge = nil
-  if UserInfo.isSystemAndroid() then
-    local fullName = path and path .. "." .. className or className
-    bridge = window["PlatformClass"] and window["PlatformClass"]:createClass(fullName)
-  elseif UserInfo.isSystemIos() then
-    bridge = window["PlatformClass"]:createClass(className)
-  else
-    return nil
-  end
-  return bridge
+    if path == nil then
+        path = ""
+    end
+    local bridge = nil
+    if UserInfo.isSystemAndroid() then
+        local fullName = path and path .. "." .. className or className
+        bridge = window["PlatformClass"] and window["PlatformClass"]:createClass(fullName)
+    elseif UserInfo.isSystemIos() then
+        bridge = window["PlatformClass"]:createClass(className)
+    else
+        return nil
+    end
+    return bridge
 end
 
-
 function NativeBridge.getInstance()
-  if not NativeBridge._instance then
-    NativeBridge._instance = NativeBridge.new()
-  end
-  return NativeBridge._instance
+    if not NativeBridge._instance then
+        NativeBridge._instance = NativeBridge.new()
+    end
+    return NativeBridge._instance
 end
 
 function NativeBridge:callNative(eventName, params, isMainHandle, bridge)
-  
+
 end
 
 function NativeBridge:onNativeCallBack(backData)
-  
+
 end

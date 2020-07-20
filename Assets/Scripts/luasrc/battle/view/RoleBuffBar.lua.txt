@@ -1,104 +1,105 @@
-
-
-
 RoleBuffBar = class('RoleBuffBar')
 
 function RoleBuffBar:ctor()
-  RoleBuffBar.super.ctor(self)
-  self._initWidth = 80;
-  self._initHeight = 8;
-  self._offsetY = 0;
-  self.buffIconListUp = {};
-  self.buffIconListDown = {};
-  self.maxIcon = 5;
+    RoleBuffBar.super.ctor(self)
+    self._initWidth = 80;
+    self._initHeight = 8;
+    self._offsetY = 0;
+    self.buffIconListUp = {};
+    self.buffIconListDown = {};
+    self.maxIcon = 5;
 end
 
 function RoleBuffBar:setData(owner, ctn)
-  self.owner = owner
-  self._offsetY = -self.owner.cfgData.size[0+1] * self.owner.cfgScale - 50
-  ctn:addChild(self)
-  self:onBuffChange()
-  self.visible = false
+    self.owner = owner
+    self._offsetY = -self.owner.cfgData.size[0 + 1] * self.owner.cfgScale - 50
+    ctn:addChild(self)
+    self:onBuffChange()
+    self.visible = false
 end
 
 function RoleBuffBar:onBuffChange(buff)
-  local allBuffInfo = self.owner.buffInfo
-  self.visible = true
-  self:removeAll()
-  for index in pairs(allBuffInfo) do
-    -- [ts2lua]allBuffInfo下标访问可能不正确
-    local someBuffInfo = allBuffInfo[index]
-    for index2 in pairs(someBuffInfo) do
-      -- [ts2lua]someBuffInfo下标访问可能不正确
-      local buffInfo = someBuffInfo[index2].cfgData
-      local flag = false
-      if buffInfo.icon then
-        local buffIconList = self.buffIconListUp
-        local offsetY = 0
-        local switch = {
-          [1] = function()
-            offsetY = 0
-            buffIconList = self.buffIconListUp
-          end,
-          [2] = function()
-            offsetY = 50
-            buffIconList = self.buffIconListDown
-          end
-        }
-        local casef = switch[tonumber(buffInfo.icon[0+1])]
-        if not casef then casef = switch["default"] end
-        if casef then casef() end
-        for index3 in pairs(buffIconList) do
-          -- [ts2lua]buffIconList下标访问可能不正确
-          if buffIconList[index3] == buffInfo.icon[1+1] then
-            flag = true
-            break
-          end
-        end
-        if not flag then
-          if #buffIconList < self.maxIcon then
-            local cacheItem = PoolTools.getItem(PoolCode.POOL_BUFFICON + buffInfo.icon[1+1])
-            if not cacheItem then
-              cacheItem = UITools.createUIImage("uisource/bufficon/bufficon/" .. buffInfo.icon[1+1] .. ".png")
+    local allBuffInfo = self.owner.buffInfo
+    self.visible = true
+    self:removeAll()
+    for index in pairs(allBuffInfo) do
+        -- [ts2lua]allBuffInfo下标访问可能不正确
+        local someBuffInfo = allBuffInfo[index]
+        for index2 in pairs(someBuffInfo) do
+            -- [ts2lua]someBuffInfo下标访问可能不正确
+            local buffInfo = someBuffInfo[index2].cfgData
+            local flag = false
+            if buffInfo.icon then
+                local buffIconList = self.buffIconListUp
+                local offsetY = 0
+                local switch = {
+                    [1] = function()
+                        offsetY = 0
+                        buffIconList = self.buffIconListUp
+                    end,
+                    [2] = function()
+                        offsetY = 50
+                        buffIconList = self.buffIconListDown
+                    end
+                }
+                local casef = switch[tonumber(buffInfo.icon[0 + 1])]
+                if not casef then
+                    casef = switch["default"]
+                end
+                if casef then
+                    casef()
+                end
+                for index3 in pairs(buffIconList) do
+                    -- [ts2lua]buffIconList下标访问可能不正确
+                    if buffIconList[index3] == buffInfo.icon[1 + 1] then
+                        flag = true
+                        break
+                    end
+                end
+                if not flag then
+                    if #buffIconList < self.maxIcon then
+                        local cacheItem = PoolTools.getItem(PoolCode.POOL_BUFFICON + buffInfo.icon[1 + 1])
+                        if not cacheItem then
+                            cacheItem = UITools.createUIImage("uisource/bufficon/bufficon/" .. buffInfo.icon[1 + 1] .. ".png")
+                        end
+                        self:addChild(cacheItem)
+                        cacheItem.x = 25 * #buffIconList - self.maxIcon / 2
+                        cacheItem.y = offsetY
+                        table.insert(buffIconList, buffInfo.icon[1 + 1])
+                    end
+                end
             end
-            self:addChild(cacheItem)
-            cacheItem.x = 25 * #buffIconList - self.maxIcon / 2
-            cacheItem.y = offsetY
-            table.insert(buffIconList, buffInfo.icon[1+1])
-          end
         end
-      end
     end
-  end
 end
 
 function RoleBuffBar:followTarget()
-  self.x = self.owner._myView.x
-  self.y = self.owner._myView.y + self._offsetY
+    self.x = self.owner._myView.x
+    self.y = self.owner._myView.y + self._offsetY
 end
 
 function RoleBuffBar:removeAll()
-  for index in pairs(self.buffIconListUp) do
-    -- [ts2lua]self.buffIconListUp下标访问可能不正确
-    PoolTools.cacheItem(PoolCode.POOL_BUFFICON + self.buffIconListUp[index], self:getChildAt(tonumber(index)))
-  end
-  for index in pairs(self.buffIconListDown) do
-    -- [ts2lua]self.buffIconListDown下标访问可能不正确
-    PoolTools.cacheItem(PoolCode.POOL_BUFFICON + self.buffIconListDown[index], self:getChildAt(tonumber(index)))
-  end
-  self.buffIconListUp = {}
-  self.buffIconListDown = {}
-  self:removeChildren()
+    for index in pairs(self.buffIconListUp) do
+        -- [ts2lua]self.buffIconListUp下标访问可能不正确
+        PoolTools.cacheItem(PoolCode.POOL_BUFFICON + self.buffIconListUp[index], self:getChildAt(tonumber(index)))
+    end
+    for index in pairs(self.buffIconListDown) do
+        -- [ts2lua]self.buffIconListDown下标访问可能不正确
+        PoolTools.cacheItem(PoolCode.POOL_BUFFICON + self.buffIconListDown[index], self:getChildAt(tonumber(index)))
+    end
+    self.buffIconListUp = {}
+    self.buffIconListDown = {}
+    self:removeChildren()
 end
 
 function RoleBuffBar:dispose()
-  self.owner = nil
-  self.backImage = nil
-  self.srollImage = nil
-  self:removeSelf()
-  self:removeAll()
+    self.owner = nil
+    self.backImage = nil
+    self.srollImage = nil
+    self:removeSelf()
+    self:removeAll()
 end
 
 function RoleBuffBar:onSetToCache()
-  self:removeSelf()
+    self:removeSelf()
 end

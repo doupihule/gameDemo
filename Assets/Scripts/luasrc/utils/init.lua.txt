@@ -4,23 +4,22 @@
 --
 
 local packageName = "utils."
-require(packageName.."Functions")
+require(packageName .. "Functions")
 if not DEBUG_SERVICES then
-	
-	require(packageName.."ColorMatrixFilterPlugin")
-	require(packageName.."ScreenAdapterTools")
+
+    require(packageName .. "ColorMatrixFilterPlugin")
+    require(packageName .. "ScreenAdapterTools")
 end
 
-require(packageName.."table")
-require(packageName.."string")
+require(packageName .. "table")
+require(packageName .. "string")
 
+require(packageName .. "Equation")
+require(packageName .. "Tool")
 
-require(packageName.."Equation")
-require(packageName.."Tool")
+require(packageName .. "numEncrypt")
 
-require(packageName.."numEncrypt")
-
-require(packageName.."number")
-require(packageName.."UITools")
+require(packageName .. "number")
+require(packageName .. "UITools")
 
 

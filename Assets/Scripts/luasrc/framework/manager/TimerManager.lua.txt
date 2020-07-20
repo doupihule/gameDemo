@@ -1,196 +1,189 @@
-
-
-
-
-
 TimerManager = class('TimerManager')
 
 TimerManager.timeOurOffset = 8;
 function TimerManager:ctor()
-  self.timeCount = 0;
-  self._timeMap = {};
-  self._lastFrameTime = 0;
-  self._maxFrameDt = 5 * 1000 / GameConsts.gameFrameRate;
-  self._leftFrameDt = 0;
-  self._oneFrameDt = 1000 / GameConsts.gameFrameRate;
-  self.updateCallFuncGroup = {};
-  self.callFuncNums = 0;
+    self.timeCount = 0;
+    self._timeMap = {};
+    self._lastFrameTime = 0;
+    self._maxFrameDt = 5 * 1000 / GameConsts.gameFrameRate;
+    self._leftFrameDt = 0;
+    self._oneFrameDt = 1000 / GameConsts.gameFrameRate;
+    self.updateCallFuncGroup = {};
+    self.callFuncNums = 0;
 end
 
 function TimerManager.getInstance()
-  if not TimerManager._instance then
-    TimerManager._instance = TimerManager.new()
-  end
-  return TimerManager._instance
+    if not TimerManager._instance then
+        TimerManager._instance = TimerManager.new()
+    end
+    return TimerManager._instance
 end
 
 function TimerManager:add(callBack, thisObject, delay, maxCount, immediate, args)
-  if delay == nil then
-    delay=1000
-  end
-  if maxCount == nil then
-    maxCount=tonumber.MAX_VALUE
-  end
-  if immediate == nil then
-    immediate=false
-  end
-  if args == nil then
-    args={}
-  end
-  local timeEntity = nil
-  self.timeCount=self.timeCount+1
-  if immediate then
-    timeEntity = TimeEntity.new(delay, callBack, thisObject, maxCount - 1, args)
-    if #args > 0 then
-      doJsApplyFunc(callBack,thisObject, args)
-    else
-      doJsApplyFunc(callBack,thisObject, {1})
+    if delay == nil then
+        delay = 1000
     end
-  else
-    timeEntity = TimeEntity.new(delay, callBack, thisObject, maxCount, args)
-  end
-  timeEntity.code = self.timeCount
-  self._timeMap[tostring(self.timeCount)] = timeEntity
-  return timeEntity.code
+    if maxCount == nil then
+        maxCount = tonumber.MAX_VALUE
+    end
+    if immediate == nil then
+        immediate = false
+    end
+    if args == nil then
+        args = {}
+    end
+    local timeEntity = nil
+    self.timeCount = self.timeCount + 1
+    if immediate then
+        timeEntity = TimeEntity.new(delay, callBack, thisObject, maxCount - 1, args)
+        if #args > 0 then
+            doJsApplyFunc(callBack, thisObject, args)
+        else
+            doJsApplyFunc(callBack, thisObject, { 1 })
+        end
+    else
+        timeEntity = TimeEntity.new(delay, callBack, thisObject, maxCount, args)
+    end
+    timeEntity.code = self.timeCount
+    self._timeMap[tostring(self.timeCount)] = timeEntity
+    return timeEntity.code
 end
 
 function TimerManager:remove(code)
-  if code > 0 then
-    self._timeMap[tostring(code)] = nil
-  end
+    if code > 0 then
+        self._timeMap[tostring(code)] = nil
+    end
 end
 
 function TimerManager:removeByCallBack(thisObject, callBack)
-  for i in pairs(self._timeMap) do
-    local time = self._timeMap[i]
-    if time.thisObject == thisObject and time.callBack == callBack then
-      time.isRemove = true
-      self._timeMap[i] = nil
+    for i in pairs(self._timeMap) do
+        local time = self._timeMap[i]
+        if time.thisObject == thisObject and time.callBack == callBack then
+            time.isRemove = true
+            self._timeMap[i] = nil
+        end
     end
-  end
 end
 
 function TimerManager:removeByObject(obj)
-  for i in pairs(self._timeMap) do
-    local time = self._timeMap[i]
-    if time.thisObject == obj then
-      time.isRemove = true
-      self._timeMap[i] = nil
+    for i in pairs(self._timeMap) do
+        local time = self._timeMap[i]
+        if time.thisObject == obj then
+            time.isRemove = true
+            self._timeMap[i] = nil
+        end
     end
-  end
 end
 
-
 function TimerManager:onceUpdateFrame()
-  local currentT = Client.getInstance():getMiniServerTime()
-  local dt = currentT - self._lastFrameTime
-  if dt > self._maxFrameDt then
-    dt = self._maxFrameDt
-  end
-  if dt > self._maxFrameDt then
-    dt = self._maxFrameDt
-  end
-  self._lastFrameTime = currentT
-  self._leftFrameDt = self._leftFrameDt + dt
-  local nums = math.floor(self._leftFrameDt / self._oneFrameDt)
-  self._leftFrameDt = self._leftFrameDt - nums * self._oneFrameDt
-  for i=1,nums do
-    self:_updateFrame()
-  end
+    local currentT = Client.getInstance():getMiniServerTime()
+    local dt = currentT - self._lastFrameTime
+    if dt > self._maxFrameDt then
+        dt = self._maxFrameDt
+    end
+    if dt > self._maxFrameDt then
+        dt = self._maxFrameDt
+    end
+    self._lastFrameTime = currentT
+    self._leftFrameDt = self._leftFrameDt + dt
+    local nums = math.floor(self._leftFrameDt / self._oneFrameDt)
+    self._leftFrameDt = self._leftFrameDt - nums * self._oneFrameDt
+    for i = 1, nums do
+        self:_updateFrame()
+    end
 end
 
 function TimerManager:_updateFrame()
-  for i in pairs(self.updateCallFuncGroup) do
-    local info = self.updateCallFuncGroup[i]
-    if info then
-      if info.frame > 0 then
-        info.frame=info.frame-1
-        if info.frame == 0 then
-          self.updateCallFuncGroup[i] = nil
+    for i in pairs(self.updateCallFuncGroup) do
+        local info = self.updateCallFuncGroup[i]
+        if info then
+            if info.frame > 0 then
+                info.frame = info.frame - 1
+                if info.frame == 0 then
+                    self.updateCallFuncGroup[i] = nil
+                end
+            end
+            doJsCallFunc(info.callBack, info.thisObj, info.params)
         end
-      end
-      doJsCallFunc(info.callBack,info.thisObj, info.params)
     end
-  end
 end
 
 function TimerManager:setTimeout(callBack, thisObject, delay, ...)
-  return self:add(callBack, thisObject, delay, 1, false, args)
+    return self:add(callBack, thisObject, delay, 1, false, args)
 end
 
 function TimerManager:clearTimeout(key)
-  return self:remove(key)
+    return self:remove(key)
 end
 
 function TimerManager:registObjUpdate(callFunc, callThisObj, params, frame)
-  if params == nil then
-    params=nil
-  end
-  if frame == nil then
-    frame=-1
-  end
-  self.callFuncNums=self.callFuncNums+1
-  self.updateCallFuncGroup[self.callFuncNums] = {callBack=callFunc, thisObj=callThisObj, params=params, frame=frame}
-  return self.callFuncNums
+    if params == nil then
+        params = nil
+    end
+    if frame == nil then
+        frame = -1
+    end
+    self.callFuncNums = self.callFuncNums + 1
+    self.updateCallFuncGroup[self.callFuncNums] = { callBack = callFunc, thisObj = callThisObj, params = params, frame = frame }
+    return self.callFuncNums
 end
 
 function TimerManager:deleteObjUpdate(callId, callFunc, callThisObj)
-  local info = nil
-  if callId then
-    self.updateCallFuncGroup[callId] = nil
-  else
-    for i in pairs(self.updateCallFuncGroup) do
-      local info = self.updateCallFuncGroup[i]
-      if info.callBack == callFunc and info.thisObj == callThisObj then
-        self.updateCallFuncGroup[i] = nil
-        break
-      end
+    local info = nil
+    if callId then
+        self.updateCallFuncGroup[callId] = nil
+    else
+        for i in pairs(self.updateCallFuncGroup) do
+            local info = self.updateCallFuncGroup[i]
+            if info.callBack == callFunc and info.thisObj == callThisObj then
+                self.updateCallFuncGroup[i] = nil
+                break
+            end
+        end
     end
-  end
 end
 
-function TimerManager:updateFrame(  )
-  self:onceUpdateFrame()
-  local timeEntity = nil
-  local curTime = Client.getInstance():getMiniServerTime()
-  local num = 0
-  for i in pairs(self._timeMap) do
-    timeEntity = self._timeMap[i]
-    local isRemove = false
-    num = math.floor(curTime - timeEntity.oldTime / timeEntity.delay)
-    if num > 0 then
-      timeEntity.maxCount = timeEntity.maxCount - num
-      timeEntity.oldTime = timeEntity.oldTime + num * timeEntity.delay
-      local args = timeEntity.args
-      local callBack = timeEntity.callBack
-      local thisObject = timeEntity.thisObject
-      if timeEntity.maxCount <= 0 then
-        self._timeMap[i] = nil
-        isRemove = true
-      end
-      if #args > 0 then
-        doJsApplyFunc(callBack,thisObject, args)
-      else
-        doJsApplyFunc(callBack,thisObject, {num})
-      end
+function TimerManager:updateFrame()
+    self:onceUpdateFrame()
+    local timeEntity = nil
+    local curTime = Client.getInstance():getMiniServerTime()
+    local num = 0
+    for i in pairs(self._timeMap) do
+        timeEntity = self._timeMap[i]
+        local isRemove = false
+        num = math.floor(curTime - timeEntity.oldTime / timeEntity.delay)
+        if num > 0 then
+            timeEntity.maxCount = timeEntity.maxCount - num
+            timeEntity.oldTime = timeEntity.oldTime + num * timeEntity.delay
+            local args = timeEntity.args
+            local callBack = timeEntity.callBack
+            local thisObject = timeEntity.thisObject
+            if timeEntity.maxCount <= 0 then
+                self._timeMap[i] = nil
+                isRemove = true
+            end
+            if #args > 0 then
+                doJsApplyFunc(callBack, thisObject, args)
+            else
+                doJsApplyFunc(callBack, thisObject, { num })
+            end
+        end
     end
-  end
-  return true
+    return true
 end
 
-function TimerManager:updateFrameLate(  )
-  -- LogsManager.echo("updateFrame:",222222222222);
+function TimerManager:updateFrameLate()
+    -- LogsManager.echo("updateFrame:",222222222222);
 end
-
 
 function TimerManager:checkOverDay(targetTime)
-  local daySecond = 3600000 * 24
-  local day1 = math.floor(targetTime - TimerManager.timeOurOffset * 3600000 / daySecond)
-  local day2 = math.floor(Client.getInstance():getMiniServerTime() - TimerManager.timeOurOffset * 3600000 / daySecond)
-  if day1 ~= day2 then
-    return true
-  end
-  return false
+    local daySecond = 3600000 * 24
+    local day1 = math.floor(targetTime - TimerManager.timeOurOffset * 3600000 / daySecond)
+    local day2 = math.floor(Client.getInstance():getMiniServerTime() - TimerManager.timeOurOffset * 3600000 / daySecond)
+    if day1 ~= day2 then
+        return true
+    end
+    return false
 end
 
 

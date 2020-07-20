@@ -1,322 +1,322 @@
 BattleControler = class('BattleControler')
 function BattleControler:ctor(ctn)
-  self._isGamePause = false;
-  self.isSkillPause = false;
-  self._leftFrameDt = 0;
-  self.callFuncNums = 0;
-  self.updateCount = 0;
-  self._lastFrameTime = 0;
-  self.stillFrame = 0;
-  self.updateScale = 1;
-  self._leftScaleFrame = 0;
-  self._leftCatchTime = 0;
-  self.performanceControler = PerformanceControler.new(self)
-  self._allInstanceArr = {}
-  self.battleState = BattleConst.battleState_out
-  self.cameraControler = CameraControler.new(self)
-  self._timeList = {}
-  self._cacheTimeArr = {}
-  self.updateCallFuncGroup = {}
-  
-  self._oneFrameDt = math.round(1000 / GameConsts.gameFrameRate)
-  self._maxFrameDt = 5 * self._oneFrameDt
-  self.tweenControler = BattleTweenControler.new(self)
-  self.battleDebugTool = BattleDebugTool.new(self)
-  self.updateScale = BattleDebugTool.getBattleAddSped()
-  if not self.updateScale then
-    self.updateScale = 1
-  end
+    self._isGamePause = false;
+    self.isSkillPause = false;
+    self._leftFrameDt = 0;
+    self.callFuncNums = 0;
+    self.updateCount = 0;
+    self._lastFrameTime = 0;
+    self.stillFrame = 0;
+    self.updateScale = 1;
+    self._leftScaleFrame = 0;
+    self._leftCatchTime = 0;
+    self.performanceControler = PerformanceControler.new(self)
+    self._allInstanceArr = {}
+    self.battleState = BattleConst.battleState_out
+    self.cameraControler = CameraControler.new(self)
+    self._timeList = {}
+    self._cacheTimeArr = {}
+    self.updateCallFuncGroup = {}
+
+    self._oneFrameDt = math.round(1000 / GameConsts.gameFrameRate)
+    self._maxFrameDt = 5 * self._oneFrameDt
+    self.tweenControler = BattleTweenControler.new(self)
+    self.battleDebugTool = BattleDebugTool.new(self)
+    self.updateScale = BattleDebugTool.getBattleAddSped()
+    if not self.updateScale then
+        self.updateScale = 1
+    end
 end
 
 function BattleControler:onceUpdateFrame()
-  if self.updateScale == 1 then
-    self:updateFrame()
-  else
-    self._leftScaleFrame = self._leftScaleFrame + self.updateScale
-    local s = 0
-    for s=0,self._leftScaleFrame-1 do
-      self:updateFrame()
+    if self.updateScale == 1 then
+        self:updateFrame()
+    else
+        self._leftScaleFrame = self._leftScaleFrame + self.updateScale
+        local s = 0
+        for s = 0, self._leftScaleFrame - 1 do
+            self:updateFrame()
+        end
+        self._leftScaleFrame = self._leftScaleFrame - s
     end
-    self._leftScaleFrame = self._leftScaleFrame - s
-  end
 end
 
 function BattleControler:updateFrame()
-  self.updateCount=self.updateCount+1
-  self.refreshControler:updateFrame()
-  self:runInstanceUpdate()
-  self.cameraControler:updateFrame()
-  self.tweenControler:updateFrame()
-  self:doDelayCallFunc()
-  for i in pairs(self.updateCallFuncGroup) do
-    local info = self.updateCallFuncGroup[i]
-    doJsCallFunc(info.callBack,info.thisObj, info.params)
-    if info.frame > 0 then
-      info.frame=info.frame-1
-      if info.frame == 0 then
-        self.updateCallFuncGroup[i] = nil
-      end
+    self.updateCount = self.updateCount + 1
+    self.refreshControler:updateFrame()
+    self:runInstanceUpdate()
+    self.cameraControler:updateFrame()
+    self.tweenControler:updateFrame()
+    self:doDelayCallFunc()
+    for i in pairs(self.updateCallFuncGroup) do
+        local info = self.updateCallFuncGroup[i]
+        doJsCallFunc(info.callBack, info.thisObj, info.params)
+        if info.frame > 0 then
+            info.frame = info.frame - 1
+            if info.frame == 0 then
+                self.updateCallFuncGroup[i] = nil
+            end
+        end
     end
-  end
-  self:sortChildren()
+    self:sortChildren()
 end
-
 
 function BattleControler:sortChildren()
-  if self.updateCount % 60 ~= 0 then
-    return
-  end
-  self:sortOneArr(self._allInstanceArr)
+    if self.updateCount % 60 ~= 0 then
+        return
+    end
+    self:sortOneArr(self._allInstanceArr)
 end
 
-function BattleControler:forceSortChildren(  )
-  self:sortOneArr(self._allInstanceArr)
+function BattleControler:forceSortChildren()
+    self:sortOneArr(self._allInstanceArr)
 end
 
 function BattleControler:sortOneArr(campArr)
-  local i = 0
-  for i,v in ipairs(campArr) do
-    v:updateViewZorder()
-  end
+    local i = 0
+    for i, v in ipairs(campArr) do
+        v:updateViewZorder()
+    end
 end
 
 function BattleControler:doDelayCallFunc()
-  if #self._timeList == 0 then
-    return
-  end
-  local i
-  if not self.isSkillPause then
-    for i=#self._timeList,1,-1 do
-      local info = self._timeList[i]
-        if not info then
-          BattleLogsManager.battleEcho("_在延迟回调里面做了清理延迟回调事情,导致序列变了")
-          break
+    if #self._timeList == 0 then
+        return
+    end
+    local i
+    if not self.isSkillPause then
+        for i = #self._timeList, 1, -1 do
+            local info = self._timeList[i]
+            if not info then
+                BattleLogsManager.battleEcho("_在延迟回调里面做了清理延迟回调事情,导致序列变了")
+                break
+            end
+            self:doOneCallInfo(info, i)
+            local obj = info.thisObj
+            if obj and obj.upTimeScale then
+                info.frame = info.frame - obj.upTimeScale
+            else
+                info.frame = info.frame - 1
+            end
         end
-        self:doOneCallInfo(info, i)
-        local obj = info.thisObj
-        if obj and obj.upTimeScale then
-          info.frame = info.frame - obj.upTimeScale
-        else
-          info.frame = info.frame - 1
+    else
+        for i = #self._timeList, 1, -1 do
+            local info = self._timeList[i]
+            if not info then
+                BattleLogsManager.battleEcho("_在延迟回调里面做了清理延迟回调事情,导致序列变了")
+                break
+            end
+            local thisObj = info.thisObj
+            local isRunWithSkillPause = true
+            if (thisObj and thisObj.isRunWithSkillPause) and not thisObj:isRunWithSkillPause() then
+                isRunWithSkillPause = false
+            end
+            if isRunWithSkillPause then
+                self:doOneCallInfo(info, i)
+                if thisObj and thisObj.upTimeScale then
+                    info.frame = info.frame - thisObj.upTimeScale
+                else
+                    info.frame = info.frame - 1
+                end
+            end
         end
     end
-  else
-    for i=#self._timeList,1,-1 do
-      local info = self._timeList[i]
-      if not info then
-        BattleLogsManager.battleEcho("_在延迟回调里面做了清理延迟回调事情,导致序列变了")
-        break
-      end
-      local thisObj = info.thisObj
-      local isRunWithSkillPause = true
-      if (thisObj and thisObj.isRunWithSkillPause) and not thisObj:isRunWithSkillPause() then
-        isRunWithSkillPause = false
-      end
-      if isRunWithSkillPause then
-        self:doOneCallInfo(info, i)
-        if thisObj and thisObj.upTimeScale then
-          info.frame = info.frame - thisObj.upTimeScale
-        else
-          info.frame = info.frame - 1
-        end
-      end
-    end
-  end
 end
 
 function BattleControler:doOneCallInfo(info, i)
-  if i == nil then    i=-1  end
-  if info.frame <= 0 then
-    if info.times > 0 then
-      info.times=info.times-1
+    if i == nil then
+        i = -1
     end
-    local doApplyOrCall = info.doApplyOrCall
-    local callBack = info.callBack
-    local thisObj = info.thisObj
-    local params = info.params
-    local endCallBack = info.endCallBack
-    local endParams = info.endParams
-    if info.times == 0 then
-      table.insert(self._cacheTimeArr, info)
-      if i ~= -1 then
-        table.remove(self._timeList,i)
-      end
-      if endCallBack then
-        if doApplyOrCall then
-          doJsApplyFunc(endCallBack,thisObj, endParams)
-        else
-          doJsCallFunc(endCallBack,thisObj, endParams)
+    if info.frame <= 0 then
+        if info.times > 0 then
+            info.times = info.times - 1
         end
-      end
-    else
-      info.frame = info.interval
+        local doApplyOrCall = info.doApplyOrCall
+        local callBack = info.callBack
+        local thisObj = info.thisObj
+        local params = info.params
+        local endCallBack = info.endCallBack
+        local endParams = info.endParams
+        if info.times == 0 then
+            table.insert(self._cacheTimeArr, info)
+            if i ~= -1 then
+                table.remove(self._timeList, i)
+            end
+            if endCallBack then
+                if doApplyOrCall then
+                    doJsApplyFunc(endCallBack, thisObj, endParams)
+                else
+                    doJsCallFunc(endCallBack, thisObj, endParams)
+                end
+            end
+        else
+            info.frame = info.interval
+        end
+        if callBack then
+            if doApplyOrCall then
+                doJsApplyFunc(callBack, thisObj, params)
+            else
+                doJsCallFunc(callBack, thisObj, params)
+            end
+        end
     end
-    if callBack then
-      if doApplyOrCall then
-        doJsApplyFunc(callBack,thisObj, params)
-      else
-        doJsCallFunc(callBack,thisObj, params)
-      end
-    end
-  end
 end
 
 function BattleControler:getOneCacheTimeObj()
-  if #self._cacheTimeArr == 0 then
-    return {}
-  else
-    return table.shiftArray(self._cacheTimeArr)
-  end
+    if #self._cacheTimeArr == 0 then
+        return {}
+    else
+        return table.shiftArray(self._cacheTimeArr)
+    end
 end
 
 function BattleControler:runInstanceUpdate()
-  if self.player then
-    self.player:updateFrame()
-  end
-  local len = #self._allInstanceArr
-  local i = len - 1
-  for i=len,1,-1 do
-    local instance = self._allInstanceArr[i]
-    if instance and instance:checkIsUsing() then
-      if not self.isSkillPause or instance:isRunWithSkillPause() then
-        instance:updateFrame()
-      end
+    if self.player then
+        self.player:updateFrame()
     end
-  end
-  self:checkHit()
-  len = #self._allInstanceArr
-  for i=len,1,-1 do
-    local instance = self._allInstanceArr[i]
-    if instance and instance:checkIsUsing() then
-      if not self.isSkillPause or instance:isRunWithSkillPause() then
-        instance:updateFrameLater()
-      end
+    local len = #self._allInstanceArr
+    local i = len - 1
+    for i = len, 1, -1 do
+        local instance = self._allInstanceArr[i]
+        if instance and instance:checkIsUsing() then
+            if not self.isSkillPause or instance:isRunWithSkillPause() then
+                instance:updateFrame()
+            end
+        end
     end
-  end
+    self:checkHit()
+    len = #self._allInstanceArr
+    for i = len, 1, -1 do
+        local instance = self._allInstanceArr[i]
+        if instance and instance:checkIsUsing() then
+            if not self.isSkillPause or instance:isRunWithSkillPause() then
+                instance:updateFrameLater()
+            end
+        end
+    end
 end
 
-function BattleControler:checkHit() end
+function BattleControler:checkHit()
+end
 function BattleControler:setCallBack(frame, callBack, thisObj, params, doApplyOrCall)
-  if doApplyOrCall == nil then
-    doApplyOrCall=false
-  end
-  if frame == nil or number.isNan(frame) then
-    LogsManager.errorTag("battleerror", "没有传入frame,直接做回调")
-  end
-  local obj = self:getOneCacheTimeObj()
-  if not frame then
-    if doApplyOrCall then
-      doJsApplyFunc(callBack,thisObj, params)
-    else
-      doJsCallFunc(callBack,thisObj, params)
+    if doApplyOrCall == nil then
+        doApplyOrCall = false
     end
-    return
-  end
-  obj.frame = frame
-  obj.interval = frame
-  obj.times = 1
-  obj.callBack = callBack
-  obj.thisObj = thisObj
-  obj.params = params
-  obj.doApplyOrCall = doApplyOrCall
-  table.insert(self._timeList, obj)
+    if frame == nil or number.isNan(frame) then
+        LogsManager.errorTag("battleerror", "没有传入frame,直接做回调")
+    end
+    local obj = self:getOneCacheTimeObj()
+    if not frame then
+        if doApplyOrCall then
+            doJsApplyFunc(callBack, thisObj, params)
+        else
+            doJsCallFunc(callBack, thisObj, params)
+        end
+        return
+    end
+    obj.frame = frame
+    obj.interval = frame
+    obj.times = 1
+    obj.callBack = callBack
+    obj.thisObj = thisObj
+    obj.params = params
+    obj.doApplyOrCall = doApplyOrCall
+    table.insert(self._timeList, obj)
 end
 
 function BattleControler:setLastCallBack(delay, interval, times, callBack, thisObj, params, endCallBack, endParams, doApplyOrCall)
-  if params == nil then
-    params=nil
-  end
-  if endCallBack == nil then
-    endCallBack=nil
-  end
-  if endParams == nil then
-    endParams=nil
-  end
-  if doApplyOrCall == nil then
-    doApplyOrCall=false
-  end
-  if delay == nil or number.isNan(delay) then
-    LogsManager.errorTag("battleerror", "没有传入frame")
-    return
-  end
-  local obj = self:getOneCacheTimeObj()
-  obj.frame = delay
-  obj.interval = interval
-  obj.times = times
-  obj.callBack = callBack
-  obj.thisObj = thisObj
-  obj.params = params
-  obj.doApplyOrCall = doApplyOrCall
-  obj.endCallBack = endCallBack
-  obj.endParams = endParams
-  table.insert(self._timeList, obj)
-  self:doOneCallInfo(obj, #self._timeList )
+    if params == nil then
+        params = nil
+    end
+    if endCallBack == nil then
+        endCallBack = nil
+    end
+    if endParams == nil then
+        endParams = nil
+    end
+    if doApplyOrCall == nil then
+        doApplyOrCall = false
+    end
+    if delay == nil or number.isNan(delay) then
+        LogsManager.errorTag("battleerror", "没有传入frame")
+        return
+    end
+    local obj = self:getOneCacheTimeObj()
+    obj.frame = delay
+    obj.interval = interval
+    obj.times = times
+    obj.callBack = callBack
+    obj.thisObj = thisObj
+    obj.params = params
+    obj.doApplyOrCall = doApplyOrCall
+    obj.endCallBack = endCallBack
+    obj.endParams = endParams
+    table.insert(self._timeList, obj)
+    self:doOneCallInfo(obj, #self._timeList)
 end
 
 function BattleControler:clearCallBack(thisObj, callBack, params)
-  if callBack == nil then
-    callBack=nil
-  end
-  if params == nil then
-    params=nil
-  end
-  local len =#self._timeList
-  for i=len,1,-1 do
-    local obj = self._timeList[i]
-    if thisObj == obj.thisObj then
-      if not callBack then
-        table.remove(this._timeList,i)
-      else 
-        if callBack == obj.callBack then
-          if params == nil then
-            table.remove(this._timeList,i)
-          else
-            if params == obj.params then
-              table.remove(this._timeList,i)
-            end
-          end
-        end
-      end
+    if callBack == nil then
+        callBack = nil
     end
-  end
-  
+    if params == nil then
+        params = nil
+    end
+    local len = #self._timeList
+    for i = len, 1, -1 do
+        local obj = self._timeList[i]
+        if thisObj == obj.thisObj then
+            if not callBack then
+                table.remove(this._timeList, i)
+            else
+                if callBack == obj.callBack then
+                    if params == nil then
+                        table.remove(this._timeList, i)
+                    else
+                        if params == obj.params then
+                            table.remove(this._timeList, i)
+                        end
+                    end
+                end
+            end
+        end
+    end
+
 end
 
 function BattleControler:registObjUpdate(callFunc, callThisObj, params, frame)
-  if params == nil then
-    params=nil
-  end
-  if frame == nil then
-    frame=-1
-  end
-  self.callFuncNums=self.callFuncNums+1
-  self.updateCallFuncGroup[self.callFuncNums] = {callBack=callFunc, thisObj=callThisObj, params=params, frame=frame}
-  return self.callFuncNums
+    if params == nil then
+        params = nil
+    end
+    if frame == nil then
+        frame = -1
+    end
+    self.callFuncNums = self.callFuncNums + 1
+    self.updateCallFuncGroup[self.callFuncNums] = { callBack = callFunc, thisObj = callThisObj, params = params, frame = frame }
+    return self.callFuncNums
 end
 
-
-
 function BattleControler:insterInstanceToArr(instance)
-  if table.findArrValue(self._allInstanceArr,instance) == -1 then
-    table.insert(self._allInstanceArr, instance)
-  end
+    if table.findArrValue(self._allInstanceArr, instance) == -1 then
+        table.insert(self._allInstanceArr, instance)
+    end
 end
 
 function BattleControler:getAllInstanceArr()
-  return self._allInstanceArr
+    return self._allInstanceArr
 end
 
 function BattleControler:setBattleState(value)
-  self.battleState = value
+    self.battleState = value
 end
 
 function BattleControler:setGamePlayOrPause(value)
-  self._isGamePause = value
+    self._isGamePause = value
 end
 
 function BattleControler:dispose()
-  if self._isDisposed then
-    return
-  end
-  self._timeList = {}
+    if self._isDisposed then
+        return
+    end
+    self._timeList = {}
 end

@@ -4,19 +4,18 @@
 --
 
 local packageName = "sys.consts."
-require(packageName.."BattleConst")
-require(packageName.."GameConsts")
+require(packageName .. "BattleConst")
+require(packageName .. "GameConsts")
 
+require(packageName .. "ChannelConst")
+require(packageName .. "GameSwitchConst")
 
-require(packageName.."ChannelConst")
-require(packageName.."GameSwitchConst")
+require(packageName .. "ModelToServerMap")
 
-require(packageName.."ModelToServerMap")
-
-require(packageName.."GuideConst")
-require(packageName.."PoolCode")
-require(packageName.."StorageCode")
-require(packageName.."TranslateConst")
-require(packageName.."PoolCode")
+require(packageName .. "GuideConst")
+require(packageName .. "PoolCode")
+require(packageName .. "StorageCode")
+require(packageName .. "TranslateConst")
+require(packageName .. "PoolCode")
 
 

@@ -1,69 +1,67 @@
-
-
 BattleBuffData = class('BattleBuffData')
 
 function BattleBuffData:ctor(id)
-  self.leftFrame = -1;
-  self.leftTimes = 0;
-  self.interval = 0;
-  self.type = 1;
-  self.group = 1;
-  self.layerNums = 1;
-  self._id = tostring(id)
-  self.cfgData = BattleFunc.getInstance():getCfgDatas("Buff", id)
-  self.type = self.cfgData.type
-  self.logicType = self.cfgData.logicType
-  self.group = self.cfgData.group
-  self.interval = tonumber(self.cfgData.interval)
-  if self.interval > 0 then
-    self.interval = BattleFunc.getInstance():turnMinisecondToframe(self.interval)
-  end
+    self.leftFrame = -1;
+    self.leftTimes = 0;
+    self.interval = 0;
+    self.type = 1;
+    self.group = 1;
+    self.layerNums = 1;
+    self._id = tostring(id)
+    self.cfgData = BattleFunc.getInstance():getCfgDatas("Buff", id)
+    self.type = self.cfgData.type
+    self.logicType = self.cfgData.logicType
+    self.group = self.cfgData.group
+    self.interval = tonumber(self.cfgData.interval)
+    if self.interval > 0 then
+        self.interval = BattleFunc.getInstance():turnMinisecondToframe(self.interval)
+    end
 end
 
 function BattleBuffData:setData(owner, targetSkillAction, repeatNum)
-  if repeatNum == nil then
-    repeatNum=1
-  end
-  self.onwer = owner
-  self.layerNums = repeatNum
-  local targetSkill = targetSkillAction.relyonSkill or targetSkillAction.skill
-  self.leftFrame = targetSkill:getSkillValue(self.cfgData.existTime)
-  if self.leftFrame ~= -1 then
-    if self.leftFrame then
-      self.leftFrame = BattleFunc.getInstance():turnMinisecondToframe(self.leftFrame)
-    else
-      self.leftFrame = 0
+    if repeatNum == nil then
+        repeatNum = 1
     end
-  end
-  self.skillAction = targetSkillAction
-  local skillDataId = self.skillAction.cfgData.numId
-  local targetLevel = owner:getCfgSkillLevel(skillDataId)
-  self.leftTimes = tonumber(self.cfgData.effectiveTimes)
-  local tempArr = self.cfgData.logicParams
-  local tagStr = "Buff:" .. self._id
-  if tempArr then
-    self.skillLogicalParams = {}
-    local i = 0
-    repeat
-      self.skillLogicalParams[i+1] = {}
-      local temp = tempArr[i+1]
-      local s = 0
-      repeat
-        self.skillLogicalParams[i+1][s+1] = BattleFunc.getInstance():getSkillValueByParams(temp[s+1], skillDataId, targetLevel, nil, tagStr)
-        s=s+1
-      until not(s < #temp)
-      i=i+1
-    until not(i < #tempArr)
-  end
+    self.onwer = owner
+    self.layerNums = repeatNum
+    local targetSkill = targetSkillAction.relyonSkill or targetSkillAction.skill
+    self.leftFrame = targetSkill:getSkillValue(self.cfgData.existTime)
+    if self.leftFrame ~= -1 then
+        if self.leftFrame then
+            self.leftFrame = BattleFunc.getInstance():turnMinisecondToframe(self.leftFrame)
+        else
+            self.leftFrame = 0
+        end
+    end
+    self.skillAction = targetSkillAction
+    local skillDataId = self.skillAction.cfgData.numId
+    local targetLevel = owner:getCfgSkillLevel(skillDataId)
+    self.leftTimes = tonumber(self.cfgData.effectiveTimes)
+    local tempArr = self.cfgData.logicParams
+    local tagStr = "Buff:" .. self._id
+    if tempArr then
+        self.skillLogicalParams = {}
+        local i = 0
+        repeat
+            self.skillLogicalParams[i + 1] = {}
+            local temp = tempArr[i + 1]
+            local s = 0
+            repeat
+                self.skillLogicalParams[i + 1][s + 1] = BattleFunc.getInstance():getSkillValueByParams(temp[s + 1], skillDataId, targetLevel, nil, tagStr)
+                s = s + 1
+            until not (s < #temp)
+            i = i + 1
+        until not (i < #tempArr)
+    end
 end
 
 function BattleBuffData:addLayer(value)
-  self.layerNums = self.layerNums + value
-  if self.layerNums > self.cfgData.maxLayer then
-    self.layerNums = self.cfgData.maxLayer
-  end
+    self.layerNums = self.layerNums + value
+    if self.layerNums > self.cfgData.maxLayer then
+        self.layerNums = self.cfgData.maxLayer
+    end
 end
 
 function BattleBuffData:getMaxLayer()
-  return self.cfgData.maxLayer or 1
+    return self.cfgData.maxLayer or 1
 end

@@ -1,102 +1,97 @@
-
-
-
-
-
 WaitManager = class('WaitManager')
 
 function WaitManager:ctor()
-  self.waitList = {}
-  self.waitPool = {}
-  self._waitView = ReqLoadingUI.new()
-  self._waitView.width = ScreenAdapterTools.width
-  self._waitView.height = ScreenAdapterTools.height
-  Laya.timer:loop(1000, self, self.timeCallBack)
+    self.waitList = {}
+    self.waitPool = {}
+    self._waitView = ReqLoadingUI.new()
+    self._waitView.width = ScreenAdapterTools.width
+    self._waitView.height = ScreenAdapterTools.height
+    Laya.timer:loop(1000, self, self.timeCallBack)
 end
 
 function WaitManager.getInstance()
-  if not WaitManager._instance then
-    WaitManager._instance = WaitManager.new()
-  end
-  return WaitManager._instance
+    if not WaitManager._instance then
+        WaitManager._instance = WaitManager.new()
+    end
+    return WaitManager._instance
 end
 
 function WaitManager:add(cmd)
-  local wait = nil
-  if #self.waitPool > 0 then
-    wait = table.shiftArray(self.waitPool)
-  else
-    wait = WaitEntity.new()
-  end
-  wait.cmd = cmd
-  wait.time = Client.getInstance():getMiniServerTime()
-  table.insert(self.waitList, wait)
-  self:showOrHideWaitView(true)
-  Laya.timer:loop(1000, self, self.timeCallBack)
+    local wait = nil
+    if #self.waitPool > 0 then
+        wait = table.shiftArray(self.waitPool)
+    else
+        wait = WaitEntity.new()
+    end
+    wait.cmd = cmd
+    wait.time = Client.getInstance():getMiniServerTime()
+    table.insert(self.waitList, wait)
+    self:showOrHideWaitView(true)
+    Laya.timer:loop(1000, self, self.timeCallBack)
 end
 
 function WaitManager:remove(cmd)
-  local len = #self.waitList
-  local i = 0
-  repeat
-    if cmd == self.waitList[i+1].cmd then
-      table.insert(self.waitPool,self.waitList[i+1]);
-      table.remove(self.waitList,i+1);
-      break
-    end
-    i=i+1
-  until not(i < len)
-  self:checkWait()
+    local len = #self.waitList
+    local i = 0
+    repeat
+        if cmd == self.waitList[i + 1].cmd then
+            table.insert(self.waitPool, self.waitList[i + 1]);
+            table.remove(self.waitList, i + 1);
+            break
+        end
+        i = i + 1
+    until not (i < len)
+    self:checkWait()
 end
 
 function WaitManager:clear()
-  while(#self.waitList > 0)
-  do
-  table.insert(self.waitPool, table.shiftArray(self.waitList))
-  end
-  self:checkWait()
+    while (#self.waitList > 0)
+    do
+        table.insert(self.waitPool, table.shiftArray(self.waitList))
+    end
+    self:checkWait()
 end
 
 function WaitManager:checkWait()
-  if #self.waitList <= 0 then
-    self:showOrHideWaitView(false)
-    Laya.timer:clearAll(self)
-  end
+    if #self.waitList <= 0 then
+        self:showOrHideWaitView(false)
+        Laya.timer:clearAll(self)
+    end
 end
 
 function WaitManager:timeCallBack()
-  local len = #self.waitList
-  local nowTime = Client.getInstance():getMiniServerTime()
-  local i = 0
-  repeat
+    local len = #self.waitList
+    local nowTime = Client.getInstance():getMiniServerTime()
+    local i = 0
     repeat
-      if nowTime - self.waitList[i+1].time > 20000 then
-        table.insert(self.waitPool,self.waitList[i+1]);
-        table.remove(self.waitList,i+1);
-        len=len-1
-        break
-      end
-      i=i+1
-    until true
-  until not(i < len)
-  self:checkWait()
+        repeat
+            if nowTime - self.waitList[i + 1].time > 20000 then
+                table.insert(self.waitPool, self.waitList[i + 1]);
+                table.remove(self.waitList, i + 1);
+                len = len - 1
+                break
+            end
+            i = i + 1
+        until true
+    until not (i < len)
+    self:checkWait()
 end
 
 function WaitManager:checkIsWaiting()
-  return #self.waitList ~= 0
+    return #self.waitList ~= 0
 end
 
 function WaitManager:showOrHideWaitView(value)
-  if value then
-    if not self._waitView.parent then
-      WindowManager.topUILayer:addChild(self._waitView)
+    if value then
+        if not self._waitView.parent then
+            WindowManager.topUILayer:addChild(self._waitView)
+        end
+        self._waitView.visible = true
+        self._waitView:setData(nil)
+    else
+        self._waitView.visible = false
+        if self._waitView.parent then
+            self._waitView.parent:removeChild(self._waitView)
+        end
     end
-    self._waitView.visible = true
-    self._waitView:setData(nil)
-  else
-    self._waitView.visible = false
-    if self._waitView.parent then
-      self._waitView.parent:removeChild(self._waitView)
-    end
-  end
 end

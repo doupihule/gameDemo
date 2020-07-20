@@ -8,305 +8,305 @@ MainModule.task_onloginResult = "task_onloginResult";
 MainModule.task_mergeFileBack = "task_mergeFileBack";
 MainModule.task_kariquLogin = "task_kariquLogin";
 
-function MainModule.getInstance(  )
-  return MainModule._instance
+function MainModule.getInstance()
+    return MainModule._instance
 end
 
 function MainModule:ctor()
-  self.timeLock = 0;
-  self._taskCompMap = {};
-  MainModule._instance = self;
-  self:initLayer()
-  self:onLoadingUIComplete()
-  Message.getInstance():add(MsgCMD.GAME_ONSHOW, self)
-  Message.getInstance():add(MsgCMD.VIDEO_STOP, self)
-  Message.getInstance():add(MsgCMD.VIDEO_PLAY, self)
+    self.timeLock = 0;
+    self._taskCompMap = {};
+    MainModule._instance = self;
+    self:initLayer()
+    self:onLoadingUIComplete()
+    Message.getInstance():add(MsgCMD.GAME_ONSHOW, self)
+    Message.getInstance():add(MsgCMD.VIDEO_STOP, self)
+    Message.getInstance():add(MsgCMD.VIDEO_PLAY, self)
 end
 
 function MainModule:onLoadingUIComplete()
-  self.timeLock = Client.getInstance():getMiniServerTime()
-  self:reqVMS()
+    self.timeLock = Client.getInstance():getMiniServerTime()
+    self:reqVMS()
 end
 
 function MainModule:reqVMS()
-  UserInfo.platform:reqVMS()
+    UserInfo.platform:reqVMS()
 end
 
 function MainModule:checkSystem()
-  local versionName = UserInfo.platform:getVersionName()
-  if Global.resource_url and Global.isCDN then
-    Laya.URL.basePath = Global.resource_url
-  end
-  VersionManager.getInstance().versionName = versionName
-  LogsManager.echo("xd cdnurl:", Global.resource_url)
-  LogsManager.echo("yrc reqvms suc", Laya.URL.basePath)
-  LogsManager.echo("yrc req versionName:", versionName)
-  if FileUtils.isUserWXSource() and not UserInfo then
-    HttpMessage.getInstance():send(Laya.URL.basePath .. "test.json", {}, function()
-      Laya.ResourceVersion:enable(versionName, Laya.Handler:create(self, self.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION)
+    local versionName = UserInfo.platform:getVersionName()
+    if Global.resource_url and Global.isCDN then
+        Laya.URL.basePath = Global.resource_url
     end
-    , self, "get", {errorCall=self.useNocndResourceUrl})
-  else
-    LoadManager.getInstance():load(versionName, Laya.Handler:create(self, function()
-      VersionManager.getInstance():initVersionData()
-      self:onVersionLoaded()
+    VersionManager.getInstance().versionName = versionName
+    LogsManager.echo("xd cdnurl:", Global.resource_url)
+    LogsManager.echo("yrc reqvms suc", Laya.URL.basePath)
+    LogsManager.echo("yrc req versionName:", versionName)
+    if FileUtils.isUserWXSource() and not UserInfo then
+        HttpMessage.getInstance():send(Laya.URL.basePath .. "test.json", {}, function()
+            Laya.ResourceVersion:enable(versionName, Laya.Handler:create(self, self.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION)
+        end
+        , self, "get", { errorCall = self.useNocndResourceUrl })
+    else
+        LoadManager.getInstance():load(versionName, Laya.Handler:create(self, function()
+            VersionManager.getInstance():initVersionData()
+            self:onVersionLoaded()
+        end
+        ))
     end
-    ))
-  end
 end
 
 function MainModule:useNocndResourceUrl()
-  local versionName = nil
-  WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#error110"), function()
-    LogsManager.echo('sanmen  启用备用cnd')
-    Global.resource_url = Global.nocdn_resource_url + UserInfo.platformId .. "/"
-    Laya.URL.basePath = Global.nocdn_resource_url
-    Laya.ResourceVersion:enable(versionName, Laya.Handler:create(self, self.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION)
-  end
-  , self)
+    local versionName = nil
+    WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#error110"), function()
+        LogsManager.echo('sanmen  启用备用cnd')
+        Global.resource_url = Global.nocdn_resource_url + UserInfo.platformId .. "/"
+        Laya.URL.basePath = Global.nocdn_resource_url
+        Laya.ResourceVersion:enable(versionName, Laya.Handler:create(self, self.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION)
+    end
+    , self)
 end
 
 function MainModule:onVersionLoaded()
-  VersionManager.getInstance():versionFileCheck()
-  Laya.AtlasInfoManager:enable("fileconfig.json", Laya.Handler:create(self, self.onConfigLoaded))
-  FuncManager.init(function()
-    if Global.checkUserCloudStorage() then
-      self:onLoginResult(Client.getInstance().globalLoginBackData)
-      UserInfo.platform:getLoginResult()
+    VersionManager.getInstance():versionFileCheck()
+    Laya.AtlasInfoManager:enable("fileconfig.json", Laya.Handler:create(self, self.onConfigLoaded))
+    FuncManager.init(function()
+        if Global.checkUserCloudStorage() then
+            self:onLoginResult(Client.getInstance().globalLoginBackData)
+            UserInfo.platform:getLoginResult()
+        end
+        self:sysCallback()
     end
-    self:sysCallback()
-  end
-  , self)
+    , self)
 end
 
 function MainModule:onConfigLoaded()
-  self:changeShowMainTask(-1, MainModule.task_configsloaded, "onConfigLoaded")
+    self:changeShowMainTask(-1, MainModule.task_configsloaded, "onConfigLoaded")
 end
 
 function MainModule:sysCallback()
-  LogsManager.echo(" ======--VMSTIME--======== " .. Client.getInstance():getMiniServerTime() - self.timeLock)
-  if not Global.checkUserCloudStorage() then
-    UserInfo.platform:getWxInfo()
-  end
-  self:loadMergeFiles()
-  UserInfo.platform:initPlatformData()
+    LogsManager.echo(" ======--VMSTIME--======== " .. Client.getInstance():getMiniServerTime() - self.timeLock)
+    if not Global.checkUserCloudStorage() then
+        UserInfo.platform:getWxInfo()
+    end
+    self:loadMergeFiles()
+    UserInfo.platform:initPlatformData()
 end
 
 function MainModule:changeByte(name)
-  local buffer = Laya.Loader:getRes(name)
-  local byte = Laya.Byte(buffer)
-  if #byte > 4 then
-    FileUtils.decodeBinAssets(byte)
-  end
-  Laya.Loader:clearRes(name)
+    local buffer = Laya.Loader:getRes(name)
+    local byte = Laya.Byte(buffer)
+    if #byte > 4 then
+        FileUtils.decodeBinAssets(byte)
+    end
+    Laya.Loader:clearRes(name)
 end
 
 function MainModule:loadMergeFiles()
-  if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_MERGEFILES) or UserInfo.isWeb() then
-    self:onMergeFileBack()
-  else
-    LogsManager.echo("xd----使用文件合并功能,注意开发模式下 可以禁掉文件合并功能.防止版本使用冲突")
-    local zipList = {{url="mergefiles/mergeBin.bin", type="arraybuffer"}, {url="mergefiles/mergeJson.bin", type="arraybuffer"}}
-    local times = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
-    local onZipLoad = function()
-      LogsManager.echo("krma. onZipLoad onZipLoad onZipLoad onZipLoad onZipLoad")
-      LoadManager.getInstance():load(zipList, Laya.Handler:create(self, function()
-        self:changeByte("mergefiles/mergeBin.bin")
-        self:changeByte("mergefiles/mergeJson.bin")
+    if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_MERGEFILES) or UserInfo.isWeb() then
         self:onMergeFileBack()
-        LogsManager.echo("xd  合并文件下载解析总耗时-----------", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - times)
-      end
-      ))
-    end
-    
-    if FileUtils.checkIsUseZip() then
-      LoadZipManager.getInstance():loadZip("mergefiles.zip", VersionManager.ZIP_MODEL_KEY_MERGEFILES, Laya.Handler(self, onZipLoad), nil)
     else
-      if SubPackageManager.getModelFileStyle(SubPackageConst.packName_mergefiles) == SubPackageConst.PATH_STYLE_SUBPACK then
-        SubPackageManager.loadSubPackage(SubPackageConst.packName_mergefiles, onZipLoad, self, true)
-      else
-        onZipLoad()
-      end
+        LogsManager.echo("xd----使用文件合并功能,注意开发模式下 可以禁掉文件合并功能.防止版本使用冲突")
+        local zipList = { { url = "mergefiles/mergeBin.bin", type = "arraybuffer" }, { url = "mergefiles/mergeJson.bin", type = "arraybuffer" } }
+        local times = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
+        local onZipLoad = function()
+            LogsManager.echo("krma. onZipLoad onZipLoad onZipLoad onZipLoad onZipLoad")
+            LoadManager.getInstance():load(zipList, Laya.Handler:create(self, function()
+                self:changeByte("mergefiles/mergeBin.bin")
+                self:changeByte("mergefiles/mergeJson.bin")
+                self:onMergeFileBack()
+                LogsManager.echo("xd  合并文件下载解析总耗时-----------", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - times)
+            end
+            ))
+        end
+
+        if FileUtils.checkIsUseZip() then
+            LoadZipManager.getInstance():loadZip("mergefiles.zip", VersionManager.ZIP_MODEL_KEY_MERGEFILES, Laya.Handler(self, onZipLoad), nil)
+        else
+            if SubPackageManager.getModelFileStyle(SubPackageConst.packName_mergefiles) == SubPackageConst.PATH_STYLE_SUBPACK then
+                SubPackageManager.loadSubPackage(SubPackageConst.packName_mergefiles, onZipLoad, self, true)
+            else
+                onZipLoad()
+            end
+        end
     end
-  end
 end
 
 function MainModule:onMergeFileBack()
-  self:changeShowMainTask(-1, MainModule.task_mergeFileBack, "onMergeFileBack")
+    self:changeShowMainTask(-1, MainModule.task_mergeFileBack, "onMergeFileBack")
 end
 
 function MainModule:loginResult()
-  LogsManager.echo(" ======--GlobalTIME--======== " .. Client.getInstance():getMiniServerTime() - self.timeLock)
-  if Global.isNotGuide() then
-    
-  end
-  Client.getInstance():send(Method.User_login, {}, self.onLoginResult, self)
+    LogsManager.echo(" ======--GlobalTIME--======== " .. Client.getInstance():getMiniServerTime() - self.timeLock)
+    if Global.isNotGuide() then
+
+    end
+    Client.getInstance():send(Method.User_login, {}, self.onLoginResult, self)
 end
 
 function MainModule:onLoginResult(result)
-  LogsManager.echo("yrc onLoginResult", result)
-  local serverData = result
-  if not Global.checkUserCloudStorage() then
-    Client.getInstance().globalLoginBackData = result
-    serverData = result.data
-  else
-    UserInfo.platform:compareData(result)
-  end
-  if serverData.config then
-    Client.getInstance().heartBeatInterval = result.data.config.heartBeatInterval
-    if result.data.config.switch then
-      GameSwitch.coverServerSwitchMap(result.data.config.switch)
-      LogsManager.echo("yrc gameswitch resultSwitch", result.data.config.switch)
-    end
-    KakuraClient.getInstance():registHeartBeat()
-  end
-  LogsManager.echo("yrc SWITCH_LOG_PANEL:", GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
-  LogsManager.setLogGroupVisible(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
-  local userData = serverData.user
-  ModelToServerMapCommon.initModelToServerMap()
-  local modelMap = ModelToServerMapCommon.modelToServerMap
-  local length = #modelMap
-  local i = 0
-  repeat
-    local info = modelMap[i+1]
-    local key = info.key
-    local model = info.model
-    if info.key == "user" then
-      model.getInstance():initData(userData)
+    LogsManager.echo("yrc onLoginResult", result)
+    local serverData = result
+    if not Global.checkUserCloudStorage() then
+        Client.getInstance().globalLoginBackData = result
+        serverData = result.data
     else
-      -- [ts2lua]userData下标访问可能不正确
-      if not userData[key] then
-        -- [ts2lua]userData下标访问可能不正确
-        userData[key] = {}
-      end
-      -- [ts2lua]userData下标访问可能不正确
-      local data = userData[key]
-      model.getInstance():initData(data)
+        UserInfo.platform:compareData(result)
     end
-    i=i+1
-  until not(i < length)
-  UserGlobalModel.getInstance():flushGlobalData(self.getCloudGlobalDataResult, self)
-  SoundManager.init()
-  SoundManager.initSwitch()
+    if serverData.config then
+        Client.getInstance().heartBeatInterval = result.data.config.heartBeatInterval
+        if result.data.config.switch then
+            GameSwitch.coverServerSwitchMap(result.data.config.switch)
+            LogsManager.echo("yrc gameswitch resultSwitch", result.data.config.switch)
+        end
+        KakuraClient.getInstance():registHeartBeat()
+    end
+    LogsManager.echo("yrc SWITCH_LOG_PANEL:", GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
+    LogsManager.setLogGroupVisible(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
+    local userData = serverData.user
+    ModelToServerMapCommon.initModelToServerMap()
+    local modelMap = ModelToServerMapCommon.modelToServerMap
+    local length = #modelMap
+    local i = 0
+    repeat
+        local info = modelMap[i + 1]
+        local key = info.key
+        local model = info.model
+        if info.key == "user" then
+            model.getInstance():initData(userData)
+        else
+            -- [ts2lua]userData下标访问可能不正确
+            if not userData[key] then
+                -- [ts2lua]userData下标访问可能不正确
+                userData[key] = {}
+            end
+            -- [ts2lua]userData下标访问可能不正确
+            local data = userData[key]
+            model.getInstance():initData(data)
+        end
+        i = i + 1
+    until not (i < length)
+    UserGlobalModel.getInstance():flushGlobalData(self.getCloudGlobalDataResult, self)
+    SoundManager.init()
+    SoundManager.initSwitch()
 end
 
 function MainModule:getCloudGlobalDataResult(params)
-  UserModel.getInstance():login()
-  BannerAdManager.setBannerSwitch()
-  self:changeShowMainTask(-1, MainModule.task_onloginResult, "onLoginResult")
+    UserModel.getInstance():login()
+    BannerAdManager.setBannerSwitch()
+    self:changeShowMainTask(-1, MainModule.task_onloginResult, "onLoginResult")
 end
 
 MainModule.showMainTask = 6;
 function MainModule:changeShowMainTask(value, key, tag)
-  if tag == nil then
-    tag=nil
-  end
-  MainModule.showMainTask = MainModule.showMainTask + value
-  LogsManager.echo("yrc showMainTask", value, MainModule.showMainTask, "tag:", tag)
-  -- [ts2lua]self._taskCompMap下标访问可能不正确
-  self._taskCompMap[key] = true
-  if MainModule.showMainTask == 0 then
-    self:showGameMain()
-  elseif MainModule.showMainTask < 0 then
-    LogsManager.errorTag("mainTaskError", "taskError", MainModule.showMainTask, tag)
-  end
+    if tag == nil then
+        tag = nil
+    end
+    MainModule.showMainTask = MainModule.showMainTask + value
+    LogsManager.echo("yrc showMainTask", value, MainModule.showMainTask, "tag:", tag)
+    -- [ts2lua]self._taskCompMap下标访问可能不正确
+    self._taskCompMap[key] = true
+    if MainModule.showMainTask == 0 then
+        self:showGameMain()
+    elseif MainModule.showMainTask < 0 then
+        LogsManager.errorTag("mainTaskError", "taskError", MainModule.showMainTask, tag)
+    end
 end
 
 function MainModule:checkHasTaskComplete(taskKey)
-  -- [ts2lua]self._taskCompMap下标访问可能不正确
-  return self._taskCompMap[taskKey]
+    -- [ts2lua]self._taskCompMap下标访问可能不正确
+    return self._taskCompMap[taskKey]
 end
 
 function MainModule:showGameMain()
-  Message.getInstance():send(FrameWorkEvent.FRAMEWORKEVENT_STARTENTERMAIN)
+    Message.getInstance():send(FrameWorkEvent.FRAMEWORKEVENT_STARTENTERMAIN)
 end
 
-
-function MainModule:reStartGame() end
+function MainModule:reStartGame()
+end
 function MainModule:initLayer()
-  WindowManager.rootLayer = UITools.createUICtn()
-  WindowManager.rootLayer.x = WindowManager.rootLayer.x + ScreenAdapterTools.sceneOffsetX
-  WindowManager.rootLayer.y = WindowManager.rootLayer.y + ScreenAdapterTools.sceneOffsetY
-  Laya.stage:addChild(WindowManager.rootLayer)
-  WindowManager.commonUILayer = UITools.createUICtn()
-  WindowManager.commonUILayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
-  WindowManager.rootLayer:addChild(WindowManager.commonUILayer)
-  WindowManager.topUILayer = UITools.createUICtn()
-  WindowManager.topUILayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
-  WindowManager.topUILayer.mouseEnabled = true
-  WindowManager.topUILayer.mouseThrough = true
-  WindowManager.rootLayer:addChild(WindowManager.topUILayer)
-  WindowManager.guideLayer = UITools.createUICtn()
-  WindowManager.guideLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
-  WindowManager.guideLayer.cacheAs = "bitmap"
-  WindowManager.rootLayer:addChild(WindowManager.guideLayer)
-  WindowManager.guideLayer.mouseEnabled = true
-  WindowManager.guideLayer.mouseThrough = true
-  WindowManager.guideLayer.visible = false
-  WindowManager.highLayer = UITools.createUICtn()
-  WindowManager.highLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
-  WindowManager.rootLayer:addChild(WindowManager.highLayer)
-  WindowManager.toolsLayer = UITools.createUICtn()
-  WindowManager.rootLayer:addChild(WindowManager.toolsLayer)
-  WindowManager.maskLayer = UITools.createUICtn()
-  WindowManager.maskLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
-  WindowManager.rootLayer:addChild(WindowManager.maskLayer)
-  WindowManager.tipsLayer = UITools.createUICtn()
-  WindowManager.tipsLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
-  WindowManager.tipsLayer.mouseEnabled = false
-  WindowManager.tipsLayer.mouseThrough = true
-  WindowManager.rootLayer:addChild(WindowManager.tipsLayer)
-  WindowManager.debugLayer = UITools.createUICtn()
-  WindowManager.rootLayer:addChild(WindowManager.debugLayer)
-  LogsManager.initLogPanel()
-  LogsManager.addTouchShow(Laya.stage)
-  if UserInfo.isWeb() then
-    local urlParam = string.find(window.location.href,'test=1') ~= nil
-    LogsManager.echo(">>>>urlParam>>>>>>", urlParam)
-    GameSwitch.getSwitchMap().SWITCH_GM_DEBUG = 1
-    GameSwitch.getSwitchMap().SWITCH_CD_DEBUG = 1
-  end
-  local delayShowLoading = function()
-    WindowManager.ShowLoadingUI(nil)
-  end
-  
-  if UserInfo.isWeb() then
-    WindowManager.ShowLoadingUI(nil)
-  else
-    TimerManager.getInstance():add(delayShowLoading, nil, 10, 1)
-  end
-  if UserInfo.isSystemNative() then
-    ScreenAdapterTools.checkFillBorder()
-  end
+    WindowManager.rootLayer = UITools.createUICtn()
+    WindowManager.rootLayer.x = WindowManager.rootLayer.x + ScreenAdapterTools.sceneOffsetX
+    WindowManager.rootLayer.y = WindowManager.rootLayer.y + ScreenAdapterTools.sceneOffsetY
+    Laya.stage:addChild(WindowManager.rootLayer)
+    WindowManager.commonUILayer = UITools.createUICtn()
+    WindowManager.commonUILayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.rootLayer:addChild(WindowManager.commonUILayer)
+    WindowManager.topUILayer = UITools.createUICtn()
+    WindowManager.topUILayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.topUILayer.mouseEnabled = true
+    WindowManager.topUILayer.mouseThrough = true
+    WindowManager.rootLayer:addChild(WindowManager.topUILayer)
+    WindowManager.guideLayer = UITools.createUICtn()
+    WindowManager.guideLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.guideLayer.cacheAs = "bitmap"
+    WindowManager.rootLayer:addChild(WindowManager.guideLayer)
+    WindowManager.guideLayer.mouseEnabled = true
+    WindowManager.guideLayer.mouseThrough = true
+    WindowManager.guideLayer.visible = false
+    WindowManager.highLayer = UITools.createUICtn()
+    WindowManager.highLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.rootLayer:addChild(WindowManager.highLayer)
+    WindowManager.toolsLayer = UITools.createUICtn()
+    WindowManager.rootLayer:addChild(WindowManager.toolsLayer)
+    WindowManager.maskLayer = UITools.createUICtn()
+    WindowManager.maskLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.rootLayer:addChild(WindowManager.maskLayer)
+    WindowManager.tipsLayer = UITools.createUICtn()
+    WindowManager.tipsLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.tipsLayer.mouseEnabled = false
+    WindowManager.tipsLayer.mouseThrough = true
+    WindowManager.rootLayer:addChild(WindowManager.tipsLayer)
+    WindowManager.debugLayer = UITools.createUICtn()
+    WindowManager.rootLayer:addChild(WindowManager.debugLayer)
+    LogsManager.initLogPanel()
+    LogsManager.addTouchShow(Laya.stage)
+    if UserInfo.isWeb() then
+        local urlParam = string.find(window.location.href, 'test=1') ~= nil
+        LogsManager.echo(">>>>urlParam>>>>>>", urlParam)
+        GameSwitch.getSwitchMap().SWITCH_GM_DEBUG = 1
+        GameSwitch.getSwitchMap().SWITCH_CD_DEBUG = 1
+    end
+    local delayShowLoading = function()
+        WindowManager.ShowLoadingUI(nil)
+    end
+
+    if UserInfo.isWeb() then
+        WindowManager.ShowLoadingUI(nil)
+    else
+        TimerManager.getInstance():add(delayShowLoading, nil, 10, 1)
+    end
+    if UserInfo.isSystemNative() then
+        ScreenAdapterTools.checkFillBorder()
+    end
 end
 
 function MainModule:onTTShow()
-  LogsManager.echo("yrc onTTShow")
-  if not UserInfo.platform.isPlayVideo then
-    if WindowManager.isUIOpened(WindowCfgs.GameMainUI) then
-      LogsManager.echo("yrc have GameMainUI")
-      SoundManager.stopMusic()
-      SoundManager.playBGM(MusicConst.MUSIC_BGM)
-    else
-      LogsManager.echo("yrc have not GameMainUI")
-      SoundManager.playBGM()
+    LogsManager.echo("yrc onTTShow")
+    if not UserInfo.platform.isPlayVideo then
+        if WindowManager.isUIOpened(WindowCfgs.GameMainUI) then
+            LogsManager.echo("yrc have GameMainUI")
+            SoundManager.stopMusic()
+            SoundManager.playBGM(MusicConst.MUSIC_BGM)
+        else
+            LogsManager.echo("yrc have not GameMainUI")
+            SoundManager.playBGM()
+        end
     end
-  end
 end
 
 function MainModule:gameClose()
-  UtilsServer.exitGame({}, function()
-    
-  end
-  , self)
+    UtilsServer.exitGame({}, function()
+
+    end
+    , self)
 end
 
 function MainModule:playBGM()
-  SoundManager.playBGM(MusicConst.MUSIC_BGM)
+    SoundManager.playBGM(MusicConst.MUSIC_BGM)
 end
 
 function MainModule:stopBGM()
-  SoundManager.stopMusic()
+    SoundManager.stopMusic()
 end
 
 function MainModule:recvMsg(cmd, data)

@@ -1,23 +1,23 @@
 ConnectObj = class('ConnectObj')
 
 function ConnectObj:ctor(opcode, method, params, cb, tobj, isWait, addParams, expandParams)
-  self.uniqueId = "";
-  self.id = 0;
-  if expandParams == nil then
-    expandParams=nil
-  end
-  self.opcode = opcode
-  self.callback = cb
-  self.thisObj = tobj
-  self.method = method
-  self.params = params
-  self.id = 0
-  self.uniqueId = ""
-  self.isWait = isWait
-  self.addParams = addParams
-  self.expandParams = expandParams
+    self.uniqueId = "";
+    self.id = 0;
+    if expandParams == nil then
+        expandParams = nil
+    end
+    self.opcode = opcode
+    self.callback = cb
+    self.thisObj = tobj
+    self.method = method
+    self.params = params
+    self.id = 0
+    self.uniqueId = ""
+    self.isWait = isWait
+    self.addParams = addParams
+    self.expandParams = expandParams
 end
 
 function ConnectObj:toSendString()
-  return TableUtils.safelyJsonStringfy({method=self.method, id=self.id, uniqueId=self.uniqueId, params=self.params, wait=self.isWait})
+    return TableUtils.safelyJsonStringfy({ method = self.method, id = self.id, uniqueId = self.uniqueId, params = self.params, wait = self.isWait })
 end

@@ -1,85 +1,83 @@
-
-
 PoolTools = class('PoolTools')
-PoolTools._pools = {battle={}, sys={}, scene={}};
+PoolTools._pools = { battle = {}, sys = {}, scene = {} };
 function PoolTools.getItems(sign, model)
-  if model == nil then
-    model=PoolCode.pool_model_battle
-  end
-  -- [ts2lua]PoolTools._pools下标访问可能不正确
-  -- [ts2lua]PoolTools._pools[model]下标访问可能不正确
-  local pools = PoolTools._pools[model][sign]
-  return pools
+    if model == nil then
+        model = PoolCode.pool_model_battle
+    end
+    -- [ts2lua]PoolTools._pools下标访问可能不正确
+    -- [ts2lua]PoolTools._pools[model]下标访问可能不正确
+    local pools = PoolTools._pools[model][sign]
+    return pools
 end
 
 function PoolTools.getModelItems(model)
-  if model == nil then
-    model=PoolCode.pool_model_battle
-  end
-  -- [ts2lua]PoolTools._pools下标访问可能不正确
-  return PoolTools._pools[model]
+    if model == nil then
+        model = PoolCode.pool_model_battle
+    end
+    -- [ts2lua]PoolTools._pools下标访问可能不正确
+    return PoolTools._pools[model]
 end
 
 function PoolTools.getItem(sign, model)
-  if model == nil then
-    model=PoolCode.pool_model_battle
-  end
-  -- [ts2lua]PoolTools._pools下标访问可能不正确
-  -- [ts2lua]PoolTools._pools[model]下标访问可能不正确
-  local pools = PoolTools._pools[model][sign]
-  if pools ~= undefined then
-    return table.shiftArray(pools)
-  end
-  return nil
+    if model == nil then
+        model = PoolCode.pool_model_battle
+    end
+    -- [ts2lua]PoolTools._pools下标访问可能不正确
+    -- [ts2lua]PoolTools._pools[model]下标访问可能不正确
+    local pools = PoolTools._pools[model][sign]
+    if pools ~= undefined then
+        return table.shiftArray(pools)
+    end
+    return nil
 end
 
 function PoolTools.cacheItem(sign, item, model)
-  if model == nil then
-    model=PoolCode.pool_model_battle
-  end
-  -- [ts2lua]PoolTools._pools下标访问可能不正确
-  local poolModel = PoolTools._pools[model]
-  -- [ts2lua]poolModel下标访问可能不正确
-  local pools = poolModel[sign]
-  if pools == undefined then
-    pools = {item}
+    if model == nil then
+        model = PoolCode.pool_model_battle
+    end
+    -- [ts2lua]PoolTools._pools下标访问可能不正确
+    local poolModel = PoolTools._pools[model]
     -- [ts2lua]poolModel下标访问可能不正确
-    poolModel[sign] = pools
-  else
-    table.insert(pools, item)
-  end
+    local pools = poolModel[sign]
+    if pools == undefined then
+        pools = { item }
+        -- [ts2lua]poolModel下标访问可能不正确
+        poolModel[sign] = pools
+    else
+        table.insert(pools, item)
+    end
 end
 
 function PoolTools.clearOneModelPool(model)
-  if model == nil then
-    model=PoolCode.pool_model_battle
-  end
-  -- [ts2lua]PoolTools._pools下标访问可能不正确
-  local poolModel = PoolTools._pools[model]
-  for i in pairs(poolModel) do
-    PoolTools.clearOnePool(i, model)
-  end
+    if model == nil then
+        model = PoolCode.pool_model_battle
+    end
+    -- [ts2lua]PoolTools._pools下标访问可能不正确
+    local poolModel = PoolTools._pools[model]
+    for i in pairs(poolModel) do
+        PoolTools.clearOnePool(i, model)
+    end
 end
 
 function PoolTools.clearOnePool(key, model)
-  if model == nil then
-    model=PoolCode.pool_model_battle
-  end
-  local poolModel = PoolTools._pools[model]
-  local arr = poolModel[key]
-  if not arr or #arr == 0 then
-    return
-  end
-  local ii = 0
-  repeat
-    -- [ts2lua]arr下标访问可能不正确
-    local item = arr[ii]
-    if item.dispose then
-      item:dispose()
-    elseif item.removeSelf then
-      item:removeSelf()
+    if model == nil then
+        model = PoolCode.pool_model_battle
     end
-    ii=ii+1
-  until not(ii < #arr)
-  table.spliceArray(arr,1, #arr)
+    local poolModel = PoolTools._pools[model]
+    local arr = poolModel[key]
+    if not arr or #arr == 0 then
+        return
+    end
+    local ii = 0
+    repeat
+        -- [ts2lua]arr下标访问可能不正确
+        local item = arr[ii]
+        if item.dispose then
+            item:dispose()
+        elseif item.removeSelf then
+            item:removeSelf()
+        end
+        ii = ii + 1
+    until not (ii < #arr)
+    table.spliceArray(arr, 1, #arr)
 end

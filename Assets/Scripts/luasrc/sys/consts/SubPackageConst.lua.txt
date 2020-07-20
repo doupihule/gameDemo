@@ -1,4 +1,3 @@
-
 SubPackageConst = class('SubPackageConst')
 SubPackageConst.packName_share = "share";
 SubPackageConst.packName_json = "json";
@@ -18,16 +17,16 @@ SubPackageConst.PATH_STYLE_NATIVE = 1;
 SubPackageConst.PATH_STYLE_SUBPACK = 2;
 SubPackageConst._subPackData = {}
 function SubPackageConst.getSubPackData()
-  if not SubPackageConst._hasCoverSubpack then
-    SubPackageConst._hasCoverSubpack = true
-    local data = SubPackageConst._platSubpackData[UserInfo.platformId]
-    if data then
-      for i in pairs(data) do
-        SubPackageConst._subPackData[i] = data[i]
-      end
+    if not SubPackageConst._hasCoverSubpack then
+        SubPackageConst._hasCoverSubpack = true
+        local data = SubPackageConst._platSubpackData[UserInfo.platformId]
+        if data then
+            for i in pairs(data) do
+                SubPackageConst._subPackData[i] = data[i]
+            end
+        end
     end
-  end
-  return SubPackageConst._subPackData
+    return SubPackageConst._subPackData
 end
 
 SubPackageConst._hasCoverSubpack = false;

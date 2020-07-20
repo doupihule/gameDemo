@@ -1,194 +1,181 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
 PerformanceControler = class('PerformanceControler')
 
 function PerformanceControler:ctor(controler)
-  self._effectCacheMap = {};
-  self.effectMaxNumsMap = {};
-  self.controler = controler
-  self._effectCacheMap = {}
-  
+    self._effectCacheMap = {};
+    self.effectMaxNumsMap = {};
+    self.controler = controler
+    self._effectCacheMap = {}
+
 end
 
 function PerformanceControler:getCacheEffect(cacheId)
-  local name = cacheId
-  -- [ts2lua]self._effectCacheMap下标访问可能不正确
-  local arr = self._effectCacheMap[name]
-  -- [ts2lua]self.effectMaxNumsMap下标访问可能不正确
-  local maxLength = self.effectMaxNumsMap[cacheId] or 3
-  if not arr or #arr < maxLength then
-    return nil
-  end
-  local eff = table.shiftArray(arr)
-  self.controler:clearCallBack(eff)
-  if eff._followTarget then
-    TableUtils.removeValue(eff._followTarget._followEffGroup, eff)
-  end
-  return eff
+    local name = cacheId
+    -- [ts2lua]self._effectCacheMap下标访问可能不正确
+    local arr = self._effectCacheMap[name]
+    -- [ts2lua]self.effectMaxNumsMap下标访问可能不正确
+    local maxLength = self.effectMaxNumsMap[cacheId] or 3
+    if not arr or #arr < maxLength then
+        return nil
+    end
+    local eff = table.shiftArray(arr)
+    self.controler:clearCallBack(eff)
+    if eff._followTarget then
+        TableUtils.removeValue(eff._followTarget._followEffGroup, eff)
+    end
+    return eff
 end
 
 function PerformanceControler:setCacheEffect(effect, name)
-  -- [ts2lua]self._effectCacheMap下标访问可能不正确
-  local arr = self._effectCacheMap[name]
-  if not arr then
-    arr = {}
     -- [ts2lua]self._effectCacheMap下标访问可能不正确
-    self._effectCacheMap[name] = arr
-  end
-  table.insert(arr, effect)
+    local arr = self._effectCacheMap[name]
+    if not arr then
+        arr = {}
+        -- [ts2lua]self._effectCacheMap下标访问可能不正确
+        self._effectCacheMap[name] = arr
+    end
+    table.insert(arr, effect)
 end
 
 function PerformanceControler:removeCacheEffect(effect)
-  local name = effect.viewName
-  -- [ts2lua]self._effectCacheMap下标访问可能不正确
-  local arr = self._effectCacheMap[name]
-  if not arr then
-    return
-  end
-  TableUtils.removeValue(arr, effect)
+    local name = effect.viewName
+    -- [ts2lua]self._effectCacheMap下标访问可能不正确
+    local arr = self._effectCacheMap[name]
+    if not arr then
+        return
+    end
+    TableUtils.removeValue(arr, effect)
 end
 
 function PerformanceControler:clearAllCacheEffect()
-  for i in pairs(self._effectCacheMap) do
-    table.clearArray(self._effectCacheMap)
-  end
+    for i in pairs(self._effectCacheMap) do
+        table.clearArray(self._effectCacheMap)
+    end
 end
 
 function PerformanceControler:getEffectLength(effect, index)
-  if index == nil then
-    index=0
-  end
-  local frame = SkeletonExpand.getAniFrame(effect, index)
-  if frame == -1 then
-    -- [ts2lua]PerformanceControler._effectLength下标访问可能不正确
-    if PerformanceControler._effectLength[effect] then
-      -- [ts2lua]PerformanceControler._effectLength下标访问可能不正确
-      return PerformanceControler._effectLength[effect]
+    if index == nil then
+        index = 0
     end
-    return 60
-  end
-  return frame * BattleFunc.battleViewFrameScale
+    local frame = SkeletonExpand.getAniFrame(effect, index)
+    if frame == -1 then
+        -- [ts2lua]PerformanceControler._effectLength下标访问可能不正确
+        if PerformanceControler._effectLength[effect] then
+            -- [ts2lua]PerformanceControler._effectLength下标访问可能不正确
+            return PerformanceControler._effectLength[effect]
+        end
+        return 60
+    end
+    return frame * BattleFunc.battleViewFrameScale
 end
 
-PerformanceControler._effectLength = {effect_huangniao_skill01_AOE=240, effect_foxi_attack_hit=30};
-PerformanceControler._effectLabelCache = {normal={nums=5, views={}}, crit={nums=5, views={}}, miss={nums=5, views={}}, trit={nums=5, views={}}, tritCrit={nums=5, views={}}, hudun={nums=5, views={}}};
+PerformanceControler._effectLength = { effect_huangniao_skill01_AOE = 240, effect_foxi_attack_hit = 30 };
+PerformanceControler._effectLabelCache = { normal = { nums = 5, views = {} }, crit = { nums = 5, views = {} }, miss = { nums = 5, views = {} }, trit = { nums = 5, views = {} }, tritCrit = { nums = 5, views = {} }, hudun = { nums = 5, views = {} } };
 function PerformanceControler:createNumEff(type, value, targetInstance)
-  local txtCount = targetInstance.txtUpdateCount
-  local data = {type=type, value=value, targetInstance=targetInstance}
-  if txtCount == 0 then
-    self:setTxtShowBack(data)
-  else
-    self.controler:setCallBack(txtCount, self.setTxtShowBack, self, data)
-  end
-  targetInstance:addTxtCreateTime()
+    local txtCount = targetInstance.txtUpdateCount
+    local data = { type = type, value = value, targetInstance = targetInstance }
+    if txtCount == 0 then
+        self:setTxtShowBack(data)
+    else
+        self.controler:setCallBack(txtCount, self.setTxtShowBack, self, data)
+    end
+    targetInstance:addTxtCreateTime()
 end
 
 function PerformanceControler:setTxtShowBack(data)
-  local type = data.type
-  local value = data.value
-  local targetInstance = data.targetInstance
-  -- [ts2lua]PerformanceControler._effectLabelCache下标访问可能不正确
-  local info = PerformanceControler._effectLabelCache[type]
-  local viewArr = info.views
-  local maxNums = info.nums
-  local targetItem = nil
-  local x = targetInstance.pos.x
-  local y = targetInstance._myView.y - targetInstance.cfgData.size[0+1] + 10
-  if #viewArr > maxNums then
-    targetItem = table.shiftArray(viewArr)
-    self.controler.tweenControler:clearOneTween(targetItem)
-  else
-    targetItem = BattleDamageLabel.new()
+    local type = data.type
+    local value = data.value
+    local targetInstance = data.targetInstance
+    -- [ts2lua]PerformanceControler._effectLabelCache下标访问可能不正确
+    local info = PerformanceControler._effectLabelCache[type]
+    local viewArr = info.views
+    local maxNums = info.nums
+    local targetItem = nil
+    local x = targetInstance.pos.x
+    local y = targetInstance._myView.y - targetInstance.cfgData.size[0 + 1] + 10
+    if #viewArr > maxNums then
+        targetItem = table.shiftArray(viewArr)
+        self.controler.tweenControler:clearOneTween(targetItem)
+    else
+        targetItem = BattleDamageLabel.new()
+        -- [ts2lua]targetItem下标访问可能不正确
+        targetItem["__tempParams"] = {}
+    end
+    targetItem:setValue(type, value)
+    targetItem.x = x
+    targetItem.y = y
     -- [ts2lua]targetItem下标访问可能不正确
-    targetItem["__tempParams"] = {}
-  end
-  targetItem:setValue(type, value)
-  targetItem.x = x
-  targetItem.y = y
-  -- [ts2lua]targetItem下标访问可能不正确
-  local param = targetItem["__tempParams"]
-  param.x = x
-  param.y = y - 100
-  self.controler.layerControler.a23:addChild(targetItem)
-  table.insert(viewArr, targetItem)
-  self.controler.tweenControler:setTweenByView(30, targetItem, param, BattleConst.TWEEN_MOVE, self.onLabelTweenComplete, self, targetItem)
+    local param = targetItem["__tempParams"]
+    param.x = x
+    param.y = y - 100
+    self.controler.layerControler.a23:addChild(targetItem)
+    table.insert(viewArr, targetItem)
+    self.controler.tweenControler:setTweenByView(30, targetItem, param, BattleConst.TWEEN_MOVE, self.onLabelTweenComplete, self, targetItem)
 end
 
 function PerformanceControler:onLabelTweenComplete(label)
-  label:removeSelf()
+    label:removeSelf()
 end
 
 function PerformanceControler:isRunWithSkillPause()
-  return true
+    return true
 end
 
 function PerformanceControler:showBlackScreen(targetRole, lastFrame, useArr)
-  if lastFrame == nil then
-    lastFrame=0
-  end
-  if useArr == nil then
-    useArr=nil
-  end
-  if not self.blackScreen.parent then
-    self.controler.layerControler.a22:addChild(self.blackScreen)
-  end
-  self:hideBlackScreen()
-  local allArr = self.controler:getAllInstanceArr()
-  local i = 0
-  repeat
-    local instance = allArr[i+1]
-    if not instance:isRunWithSkillPause() then
-      instance:stopAction()
-    else
-      instance:setZorderOffset(BattleFunc.zorder_blackScreen)
+    if lastFrame == nil then
+        lastFrame = 0
     end
-    i=i+1
-  until not(i < #allArr)
-  self.controler:forceSortChildren()
-  self.controler.isSkillPause = true
-  self.blackScreen.x = -self.controler.layerControler.a2.x - 300
-  self.controler:clearCallBack(self, self.hideBlackScreen)
-  self.blackScreen.visible = true
-  if lastFrame > 0 then
-    self.controler:setCallBack(lastFrame, self.hideBlackScreen, self)
-  end
+    if useArr == nil then
+        useArr = nil
+    end
+    if not self.blackScreen.parent then
+        self.controler.layerControler.a22:addChild(self.blackScreen)
+    end
+    self:hideBlackScreen()
+    local allArr = self.controler:getAllInstanceArr()
+    local i = 0
+    repeat
+        local instance = allArr[i + 1]
+        if not instance:isRunWithSkillPause() then
+            instance:stopAction()
+        else
+            instance:setZorderOffset(BattleFunc.zorder_blackScreen)
+        end
+        i = i + 1
+    until not (i < #allArr)
+    self.controler:forceSortChildren()
+    self.controler.isSkillPause = true
+    self.blackScreen.x = -self.controler.layerControler.a2.x - 300
+    self.controler:clearCallBack(self, self.hideBlackScreen)
+    self.blackScreen.visible = true
+    if lastFrame > 0 then
+        self.controler:setCallBack(lastFrame, self.hideBlackScreen, self)
+    end
 end
 
 function PerformanceControler:hideBlackScreen()
-  self.controler.isSkillPause = false
-  self.blackScreen.visible = false
-  local allArr = self.controler:getAllInstanceArr()
-  local i = 0
-  repeat
-    local instance = allArr[i+1]
-    instance:resumeAction()
-    instance:setZorderOffset(0)
-    i=i+1
-  until not(i < #allArr)
-  self.controler:forceSortChildren()
+    self.controler.isSkillPause = false
+    self.blackScreen.visible = false
+    local allArr = self.controler:getAllInstanceArr()
+    local i = 0
+    repeat
+        local instance = allArr[i + 1]
+        instance:resumeAction()
+        instance:setZorderOffset(0)
+        i = i + 1
+    until not (i < #allArr)
+    self.controler:forceSortChildren()
 end
 
 PerformanceControler._tempPos = nil
-function PerformanceControler:onBattleWin(fromx, fromy) end
-function PerformanceControler:flyResourceAnimation(resId, fromx, fromy, value, delayFrame, fromCtn) end
-  
-
+function PerformanceControler:onBattleWin(fromx, fromy)
+end
+function PerformanceControler:flyResourceAnimation(resId, fromx, fromy, value, delayFrame, fromCtn)
+end
 
 function PerformanceControler:onItemTweenEnd(targetItem)
-  targetItem:removeSelf()
-  local params = targetItem["_cacheParams"]
-  local id = params._tempType
-  local value = params._tempValue
-  PoolTools.cacheItem(targetItem.name, targetItem)
+    targetItem:removeSelf()
+    local params = targetItem["_cacheParams"]
+    local id = params._tempType
+    local value = params._tempValue
+    PoolTools.cacheItem(targetItem.name, targetItem)
 end

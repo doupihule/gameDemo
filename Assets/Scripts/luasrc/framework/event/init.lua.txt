@@ -3,11 +3,11 @@
 -- Date: 2020-04-11 16:47:35
 --
 local packageName = "framework.event."
-require(packageName.."CommonEvent")
-require(packageName.."FrameWorkEvent")
-require(packageName.."JSToNativeEvent")
-require(packageName.."NativeToJSEvent")
-require(packageName.."NotifyEvent")
-require(packageName.."WindowEvent")
+require(packageName .. "CommonEvent")
+require(packageName .. "FrameWorkEvent")
+require(packageName .. "JSToNativeEvent")
+require(packageName .. "NativeToJSEvent")
+require(packageName .. "NotifyEvent")
+require(packageName .. "WindowEvent")
 
 

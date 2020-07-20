@@ -1,46 +1,46 @@
 HashMap = class('HashMap')
 HashMap.HASH_COUNT = 0;
 function HashMap:ctor()
-  self.hashCode = 0;
-  HashMap.HASH_COUNT=HashMap.HASH_COUNT+1
-  self.hashCode = HashMap.HASH_COUNT
+    self.hashCode = 0;
+    HashMap.HASH_COUNT = HashMap.HASH_COUNT + 1
+    self.hashCode = HashMap.HASH_COUNT
 end
 
 function HashMap:put(key, value)
-  self[key] = value
+    self[key] = value
 end
 
 function HashMap:get(key)
-  return self[key]
+    return self[key]
 end
 
 function HashMap:remove(key)
-  local value = self[key]
-  if value ~= nil then
-    self[key] = nil
-  end
-  return value
+    local value = self[key]
+    if value ~= nil then
+        self[key] = nil
+    end
+    return value
 end
 
 function HashMap:contains(key)
-  return self[key] ~= nil
+    return self[key] ~= nil
 end
 
 function HashMap:keys()
-  local keys = Object:keys(self)
-  local index = table.findArrValue(keys,"hashCode")
-  if index > -1 then
-    table.spliceArray(keys,index, 1)
-  end
-  return keys
+    local keys = Object:keys(self)
+    local index = table.findArrValue(keys, "hashCode")
+    if index > -1 then
+        table.spliceArray(keys, index, 1)
+    end
+    return keys
 end
 
 function HashMap:clear()
-  local keys = self:keys()
-  local len = #keys
-  local i = 0
-  repeat
-    self:remove(keys[i+1])
-    i=i+1
-  until not(i < len)
+    local keys = self:keys()
+    local len = #keys
+    local i = 0
+    repeat
+        self:remove(keys[i + 1])
+        i = i + 1
+    until not (i < len)
 end

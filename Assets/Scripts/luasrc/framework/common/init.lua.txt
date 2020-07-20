@@ -3,10 +3,10 @@
 -- Date: 2020-04-11 16:47:35
 --
 local packageName = "framework.common."
-require(packageName.."GameSwitch")
-require(packageName.."UserInfo")
-require(packageName.."GameHttpControler")
-require(packageName.."HttpMessage")
-require(packageName.."Message")
+require(packageName .. "GameSwitch")
+require(packageName .. "UserInfo")
+require(packageName .. "GameHttpControler")
+require(packageName .. "HttpMessage")
+require(packageName .. "Message")
 
 

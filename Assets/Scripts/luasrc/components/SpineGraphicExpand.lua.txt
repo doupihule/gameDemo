@@ -5,34 +5,34 @@ SpineGraphicExpand = class("SpineGraphicExpand")
 SpineGraphicExpand.__cobject = nil
 SpineGraphicExpand.__spineAni = nil
 --构造器函数
-function SpineGraphicExpand:ctor( url,boundlePath )
-	-- body
-	local obj =  CS.Resource.ResourceManager.Instance:luaLoadAsset(url,url,boundlePath or "animation")
-	self.__cobject = CS.UnityEngine.Object.Instantiate(obj)
-	self.__spineAni = self.__cobject:GetComponent("SkeletonGraphic")
+function SpineGraphicExpand:ctor(url, boundlePath)
+    -- body
+    local obj = CS.Resource.ResourceManager.Instance:luaLoadAsset(url, url, boundlePath or "animation")
+    self.__cobject = CS.UnityEngine.Object.Instantiate(obj)
+    self.__spineAni = self.__cobject:GetComponent("SkeletonGraphic")
 end
 
 
 
 --播放动画
-function SpineGraphicExpand:play( label ,loop)
-	self.__spineAni.freeze = false
-	self.__spineAni.AnimationState:SetAnimation(0, label, loop);
+function SpineGraphicExpand:play(label, loop)
+    self.__spineAni.freeze = false
+    self.__spineAni.AnimationState:SetAnimation(0, label, loop);
 end
 
 --停止动画
-function SpineGraphicExpand:stop(  )
-	self.__spineAni.freeze = true
+function SpineGraphicExpand:stop()
+    self.__spineAni.freeze = true
 end
 
 
 --销毁动画
-function SpineGraphicExpand:dispose( )
-	if(not self.__cobject) then
-		return
-	end
-	self.__cobject.__luaobject = nil
-	self.__cobject = nil
+function SpineGraphicExpand:dispose()
+    if (not self.__cobject) then
+        return
+    end
+    self.__cobject.__luaobject = nil
+    self.__cobject = nil
 end
 
 return SpineGraphicExpand

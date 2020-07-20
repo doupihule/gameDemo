@@ -3,16 +3,16 @@
 -- Date: 2020-04-11 16:47:35
 --
 local packageName = "framework.utils."
-require(packageName.."VectorTools")
-require(packageName.."TableUtils")
-require(packageName.."BigNumUtils")
-require(packageName.."ButtonUtils")
-require(packageName.."DeviceTools")
-require(packageName.."DisplayUtils")
-require(packageName.."HashMap")
-require(packageName.."MathUtils")
-require(packageName.."PoolTools")
-require(packageName.."RandomUtis")
-require(packageName.."ScreenAdapterTools")
+require(packageName .. "VectorTools")
+require(packageName .. "TableUtils")
+require(packageName .. "BigNumUtils")
+require(packageName .. "ButtonUtils")
+require(packageName .. "DeviceTools")
+require(packageName .. "DisplayUtils")
+require(packageName .. "HashMap")
+require(packageName .. "MathUtils")
+require(packageName .. "PoolTools")
+require(packageName .. "RandomUtis")
+require(packageName .. "ScreenAdapterTools")
 
 

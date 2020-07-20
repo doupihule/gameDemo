@@ -1,209 +1,199 @@
-
-
-
-
-
-
-
-
-
-
 BattleFormulaTrigger = class('BattleFormulaTrigger')
 BattleFormulaTrigger._cacheLogsMap = {};
 function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue, skillPercentValue, buff)
-  if buff == nil then
-    buff=nil
-  end
-  local tempArr = BattleFunc.getOneTempArr()
-  table.clearArray(tempArr)
-  table.insert(tempArr, attacker)
-  ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_checkDmgBefore, defer, tempArr, skillAction, attacker)
-  BattleFunc.cacheOneTempArr(tempArr)
-  local buffNums = 1
-  if buff then
-    buffNums = buff.layerNums
-  end
-  local attackerAttr = attacker.attrData
-  local deferAttr = defer.attrData
-  local shanbi = false
-  local shanbiRatio = nil
-  if buff then
-    shanbiRatio = 0
-  else
-    local basRatio = skillAction.skillLogicalParams[0+1][2+1] / 10000
-    shanbiRatio = math.max(1 - basRatio - attackerAttr:getOneAttr(BattleConst.attr_hit) - deferAttr:getOneAttr(BattleConst.attr_dodge) / 10000, 0)
-  end
-  local baojiRatio = math.max(attackerAttr:getOneAttr(BattleConst.attr_crit) - deferAttr:getOneAttr(BattleConst.attr_toughness) / 10000, 0)
-  local realCrit = math.max(math.min(1 - shanbiRatio, baojiRatio), 0)
-  local random = RandomUtis.getOneRandom(BattleFunc.battleRandomIndex)
-  local baoshang = 1
-  local isMiss = nil
-  local dmgType = nil
-  if random < shanbiRatio then
-    dmgType = BattleConst.damage_miss
-    isMiss = true
-  elseif random < shanbiRatio + realCrit then
-    baoshang = BattleFunc.critDamgeRatio + attackerAttr:getOneAttr(BattleConst.attr_critDmg) / 10000
-    dmgType = BattleConst.damage_baoji
-  else
-    baoshang = 1
-    dmgType = BattleConst.damage_normal
-  end
-  if not isMiss then
-    local atkDmgValue = attackerAttr:getOneAttr(BattleConst.attr_damage)
-    local defRelietValue = deferAttr:getOneAttr(BattleConst.attr_relief)
-    local dmgratio = BattleFormulaTrigger.countDmgRatio(attackerAttr, deferAttr)
-    local atk = attackerAttr:getOneAttr(BattleConst.attr_attack)
-    local def = deferAttr:getOneAttr(BattleConst.attr_def)
-    local minDmg = math.round(atk * BattleFunc.minDamageRatio)
-    local targetDmg = math.round(math.ceil(atk - def) * skillPercentValue / 10000 + skillFixValue * baoshang * dmgratio)
-    local dmg = math.max(minDmg, targetDmg) * buffNums
-    if GameSwitch.checkOnOff(GameSwitchConst.SWITCH_BATTLE_INFO) then
-      local key = attacker.dataId .. "_" .. skillAction.skillEffectId
-      -- [ts2lua]BattleFormulaTrigger._cacheLogsMap下标访问可能不正确
-      if not BattleFormulaTrigger._cacheLogsMap[key] then
-        -- [ts2lua]BattleFormulaTrigger._cacheLogsMap下标访问可能不正确
-        BattleFormulaTrigger._cacheLogsMap[key] = 0
-      end
-      -- [ts2lua]BattleFormulaTrigger._cacheLogsMap下标访问可能不正确
-      -- [ts2lua]BattleFormulaTrigger._cacheLogsMap下标访问可能不正确
-      BattleFormulaTrigger._cacheLogsMap[key]=BattleFormulaTrigger._cacheLogsMap[key]+1
-      -- [ts2lua]BattleFormulaTrigger._cacheLogsMap下标访问可能不正确
-      if BattleFormulaTrigger._cacheLogsMap[key] < 3 then
-        local logStr = "攻击者:" .. attacker.dataId .. ",受击着:" .. defer.dataId .. ",攻击:" .. atk .. ",防御:" .. def .. ",伤害加成:" .. atkDmgValue .. ",伤害减免:" .. defRelietValue .. ",技能系数:" .. skillFixValue .. "_" .. skillPercentValue .. ",爆伤:" .. baoshang .. ",最小伤害:" .. minDmg .. ",最终伤害:" .. dmg
-        if UserInfo.isWeb() then
-          BattleLogsManager.debugByRole(attacker.dataId, logStr, "\n攻击者对象", attacker, "防御者对象:", defer, "技能效果:", skillAction)
-        else
-          BattleLogsManager.debugByRole(attacker.dataId, logStr)
+    if buff == nil then
+        buff = nil
+    end
+    local tempArr = BattleFunc.getOneTempArr()
+    table.clearArray(tempArr)
+    table.insert(tempArr, attacker)
+    ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_checkDmgBefore, defer, tempArr, skillAction, attacker)
+    BattleFunc.cacheOneTempArr(tempArr)
+    local buffNums = 1
+    if buff then
+        buffNums = buff.layerNums
+    end
+    local attackerAttr = attacker.attrData
+    local deferAttr = defer.attrData
+    local shanbi = false
+    local shanbiRatio = nil
+    if buff then
+        shanbiRatio = 0
+    else
+        local basRatio = skillAction.skillLogicalParams[0 + 1][2 + 1] / 10000
+        shanbiRatio = math.max(1 - basRatio - attackerAttr:getOneAttr(BattleConst.attr_hit) - deferAttr:getOneAttr(BattleConst.attr_dodge) / 10000, 0)
+    end
+    local baojiRatio = math.max(attackerAttr:getOneAttr(BattleConst.attr_crit) - deferAttr:getOneAttr(BattleConst.attr_toughness) / 10000, 0)
+    local realCrit = math.max(math.min(1 - shanbiRatio, baojiRatio), 0)
+    local random = RandomUtis.getOneRandom(BattleFunc.battleRandomIndex)
+    local baoshang = 1
+    local isMiss = nil
+    local dmgType = nil
+    if random < shanbiRatio then
+        dmgType = BattleConst.damage_miss
+        isMiss = true
+    elseif random < shanbiRatio + realCrit then
+        baoshang = BattleFunc.critDamgeRatio + attackerAttr:getOneAttr(BattleConst.attr_critDmg) / 10000
+        dmgType = BattleConst.damage_baoji
+    else
+        baoshang = 1
+        dmgType = BattleConst.damage_normal
+    end
+    if not isMiss then
+        local atkDmgValue = attackerAttr:getOneAttr(BattleConst.attr_damage)
+        local defRelietValue = deferAttr:getOneAttr(BattleConst.attr_relief)
+        local dmgratio = BattleFormulaTrigger.countDmgRatio(attackerAttr, deferAttr)
+        local atk = attackerAttr:getOneAttr(BattleConst.attr_attack)
+        local def = deferAttr:getOneAttr(BattleConst.attr_def)
+        local minDmg = math.round(atk * BattleFunc.minDamageRatio)
+        local targetDmg = math.round(math.ceil(atk - def) * skillPercentValue / 10000 + skillFixValue * baoshang * dmgratio)
+        local dmg = math.max(minDmg, targetDmg) * buffNums
+        if GameSwitch.checkOnOff(GameSwitchConst.SWITCH_BATTLE_INFO) then
+            local key = attacker.dataId .. "_" .. skillAction.skillEffectId
+            -- [ts2lua]BattleFormulaTrigger._cacheLogsMap下标访问可能不正确
+            if not BattleFormulaTrigger._cacheLogsMap[key] then
+                -- [ts2lua]BattleFormulaTrigger._cacheLogsMap下标访问可能不正确
+                BattleFormulaTrigger._cacheLogsMap[key] = 0
+            end
+            -- [ts2lua]BattleFormulaTrigger._cacheLogsMap下标访问可能不正确
+            -- [ts2lua]BattleFormulaTrigger._cacheLogsMap下标访问可能不正确
+            BattleFormulaTrigger._cacheLogsMap[key] = BattleFormulaTrigger._cacheLogsMap[key] + 1
+            -- [ts2lua]BattleFormulaTrigger._cacheLogsMap下标访问可能不正确
+            if BattleFormulaTrigger._cacheLogsMap[key] < 3 then
+                local logStr = "攻击者:" .. attacker.dataId .. ",受击着:" .. defer.dataId .. ",攻击:" .. atk .. ",防御:" .. def .. ",伤害加成:" .. atkDmgValue .. ",伤害减免:" .. defRelietValue .. ",技能系数:" .. skillFixValue .. "_" .. skillPercentValue .. ",爆伤:" .. baoshang .. ",最小伤害:" .. minDmg .. ",最终伤害:" .. dmg
+                if UserInfo.isWeb() then
+                    BattleLogsManager.debugByRole(attacker.dataId, logStr, "\n攻击者对象", attacker, "防御者对象:", defer, "技能效果:", skillAction)
+                else
+                    BattleLogsManager.debugByRole(attacker.dataId, logStr)
+                end
+            end
         end
-      end
+        if dmg < 1 then
+            dmg = 1
+        end
+    else
+        dmg = 0
     end
-    if dmg < 1 then
-      dmg = 1
+    if number.isNan(dmg) then
+        LogsManager.errorTag("battleError", "___遇到错误的伤害")
+        dmg = 1
     end
-  else
-    dmg = 0
-  end
-  if number.isNan(dmg) then
-    LogsManager.errorTag("battleError", "___遇到错误的伤害")
-    dmg = 1
-  end
-  BattleFormulaTrigger.doDmgResult(attacker, defer, dmg, dmgType, skillAction, buff)
+    BattleFormulaTrigger.doDmgResult(attacker, defer, dmg, dmgType, skillAction, buff)
 end
 
 function BattleFormulaTrigger.dmgByAttr(attacker, defer, skillAction, skillFixValue, skillPercentValue, buff)
-  if buff == nil then
-    buff=nil
-  end
-  local attrFrom = nil
-  local tempAttrId = nil
-  local useMianshang = nil
-  attrFrom = skillAction.skillLogicalParams[0+1][3+1]
-  tempAttrId = skillAction.skillLogicalParams[0+1][4+1]
-  useMianshang = skillAction.skillLogicalParams[0+1][5+1]
-  local tempRole = nil
-  if attrFrom == 1 then
-    tempRole = attacker
-  else
-    tempRole = defer
-  end
-  local targetValue = tempRole.attrData:getOneAttr(tempAttrId)
-  local dmg = skillPercentValue / 10000 * targetValue + skillFixValue
-  if useMianshang == 1 then
-    local dmgratio = BattleFormulaTrigger.countDmgRatio(attacker.attrData, defer.attrData)
-    targetValue = targetValue * dmgratio
-  end
-  targetValue = math.floor(targetValue)
-  BattleFormulaTrigger.doDmgResult(attacker, defer, dmg, BattleConst.damage_normal, skillAction, buff)
+    if buff == nil then
+        buff = nil
+    end
+    local attrFrom = nil
+    local tempAttrId = nil
+    local useMianshang = nil
+    attrFrom = skillAction.skillLogicalParams[0 + 1][3 + 1]
+    tempAttrId = skillAction.skillLogicalParams[0 + 1][4 + 1]
+    useMianshang = skillAction.skillLogicalParams[0 + 1][5 + 1]
+    local tempRole = nil
+    if attrFrom == 1 then
+        tempRole = attacker
+    else
+        tempRole = defer
+    end
+    local targetValue = tempRole.attrData:getOneAttr(tempAttrId)
+    local dmg = skillPercentValue / 10000 * targetValue + skillFixValue
+    if useMianshang == 1 then
+        local dmgratio = BattleFormulaTrigger.countDmgRatio(attacker.attrData, defer.attrData)
+        targetValue = targetValue * dmgratio
+    end
+    targetValue = math.floor(targetValue)
+    BattleFormulaTrigger.doDmgResult(attacker, defer, dmg, BattleConst.damage_normal, skillAction, buff)
 end
 
 function BattleFormulaTrigger.doDmgResult(attacker, defer, dmg, type, skillAction, buff)
-  if buff == nil then
-    buff=nil
-  end
-  local out = BattleFunc.getOneTempArr()
-  local tempArr = BattleFunc.getOneTempArr()
-  out[0+1] = type
-  out[1+1] = dmg
-  out[2+1] = attacker
-  table.insert(tempArr, defer)
-  defer.tempBeUsedValue[0+1] = out[0+1]
-  defer.tempBeUsedValue[1+1] = out[1+1]
-  defer.tempBeUsedValue[2+1] = attacker
-  attacker.tempUseValue[0+1] = out[0+1]
-  attacker.tempUseValue[1+1] = out[1+1]
-  attacker.tempUseValue[2+1] = defer
-  ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_checkDmgAfter, defer, tempArr, skillAction, attacker)
-  if type ~= BattleConst.damage_miss then
-    if not buff then
-      local xixueValue = attacker.attrData:getOneAttr(BattleConst.attr_xixue)
-      if xixueValue > 0 then
-        local value = math.floor(xixueValue / 10000 * dmg)
-        attacker:onXixue(value)
-      end
+    if buff == nil then
+        buff = nil
     end
-  end
-  defer:onBeHit(attacker, skillAction.skill, skillAction, out)
-  attacker.attrData:clearTempAttr()
-  defer.attrData:clearTempAttr()
-  BattleFunc.cacheOneTempArr(tempArr)
-  BattleFunc.cacheOneTempArr(out)
-  return out
+    local out = BattleFunc.getOneTempArr()
+    local tempArr = BattleFunc.getOneTempArr()
+    out[0 + 1] = type
+    out[1 + 1] = dmg
+    out[2 + 1] = attacker
+    table.insert(tempArr, defer)
+    defer.tempBeUsedValue[0 + 1] = out[0 + 1]
+    defer.tempBeUsedValue[1 + 1] = out[1 + 1]
+    defer.tempBeUsedValue[2 + 1] = attacker
+    attacker.tempUseValue[0 + 1] = out[0 + 1]
+    attacker.tempUseValue[1 + 1] = out[1 + 1]
+    attacker.tempUseValue[2 + 1] = defer
+    ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_checkDmgAfter, defer, tempArr, skillAction, attacker)
+    if type ~= BattleConst.damage_miss then
+        if not buff then
+            local xixueValue = attacker.attrData:getOneAttr(BattleConst.attr_xixue)
+            if xixueValue > 0 then
+                local value = math.floor(xixueValue / 10000 * dmg)
+                attacker:onXixue(value)
+            end
+        end
+    end
+    defer:onBeHit(attacker, skillAction.skill, skillAction, out)
+    attacker.attrData:clearTempAttr()
+    defer.attrData:clearTempAttr()
+    BattleFunc.cacheOneTempArr(tempArr)
+    BattleFunc.cacheOneTempArr(out)
+    return out
 end
 
 function BattleFormulaTrigger.countDmgRatio(attackerAttr, deferAttr)
-  local atkDmgValue = attackerAttr:getOneAttr(BattleConst.attr_damage)
-  local defRelietValue = deferAttr:getOneAttr(BattleConst.attr_relief)
-  local dmgratio = 1 + atkDmgValue - defRelietValue / 10000
-  if dmgratio < 0 then
-    dmgratio = 0
-  end
-  local finalDmg = attackerAttr:getOneAttr(BattleConst.attr_final_damage) / 10000 + 1
-  local finalReliet = 1 - deferAttr:getOneAttr(BattleConst.attr_final_relief) / 10000
-  return dmgratio * finalDmg * finalReliet
+    local atkDmgValue = attackerAttr:getOneAttr(BattleConst.attr_damage)
+    local defRelietValue = deferAttr:getOneAttr(BattleConst.attr_relief)
+    local dmgratio = 1 + atkDmgValue - defRelietValue / 10000
+    if dmgratio < 0 then
+        dmgratio = 0
+    end
+    local finalDmg = attackerAttr:getOneAttr(BattleConst.attr_final_damage) / 10000 + 1
+    local finalReliet = 1 - deferAttr:getOneAttr(BattleConst.attr_final_relief) / 10000
+    return dmgratio * finalDmg * finalReliet
 end
 
 function BattleFormulaTrigger.trit(attacker, defer, skill, skillAction, buffNums)
-  if buffNums == nil then
-    buffNums=1
-  end
-  local out = BattleFunc.getOneTempArr()
-  local tempArr = BattleFunc.getOneTempArr()
-  table.clearArray(tempArr)
-  table.insert(tempArr, attacker)
-  ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_addhp, defer, tempArr, skillAction)
-  table.clearArray(out)
-  local attackerAttr = attacker.attrData
-  local deferAttr = defer.attrData
-  local critRatio = math.max(attackerAttr:getOneAttr(BattleConst.attr_crit) / 10000, 0)
-  local random = RandomUtis.getOneRandom(BattleFunc.battleRandomIndex)
-  local critdmage = nil
-  if random < critRatio then
-    out[0+1] = BattleConst.damage_baoji
-    critdmage = 2 + attackerAttr:getOneAttr(BattleConst.attr_critDmg) / 10000
-  else
-    out[0+1] = BattleConst.damage_normal
-    critdmage = 1
-  end
-  local extraAdded = 1 + deferAttr:getOneAttr(BattleConst.attr_betreated) / 10000 * 1 + attackerAttr:getOneAttr(BattleConst.attr_treate) / 10000
-  local skillParam = skillAction.skillLogicalParams[0+1]
-  local treatValue = math.max(1, math.ceil(attackerAttr:getOneAttr(BattleConst.attr_attack) * skillParam[1+1] / 10000 + skillParam[0+1]) * critdmage * extraAdded)
-  local finalDmg = attackerAttr:getOneAttr(BattleConst.attr_final_treate) / 10000 + 1
-  local finalReliet = 1 + deferAttr:getOneAttr(BattleConst.attr_final_betreated) / 10000
-  treatValue = math.floor(treatValue * finalDmg * finalReliet)
-  treatValue = treatValue * buffNums
-  out[1+1] = treatValue
-  out[2+1] = attacker
-  defer.tempBeUsedValue[0+1] = out[0+1]
-  defer.tempBeUsedValue[1+1] = out[1+1]
-  defer.tempBeUsedValue[2+1] = attacker
-  attacker.tempUseValue[0+1] = out[0+1]
-  attacker.tempUseValue[1+1] = out[1+1]
-  attacker.tempUseValue[2+1] = defer
-  defer:onBeTrit(attacker, skill, skillAction, out)
-  attackerAttr:clearTempAttr()
-  deferAttr:clearTempAttr()
-  BattleFunc.cacheOneTempArr(tempArr)
-  BattleFunc.cacheOneTempArr(out)
-  return out
+    if buffNums == nil then
+        buffNums = 1
+    end
+    local out = BattleFunc.getOneTempArr()
+    local tempArr = BattleFunc.getOneTempArr()
+    table.clearArray(tempArr)
+    table.insert(tempArr, attacker)
+    ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_addhp, defer, tempArr, skillAction)
+    table.clearArray(out)
+    local attackerAttr = attacker.attrData
+    local deferAttr = defer.attrData
+    local critRatio = math.max(attackerAttr:getOneAttr(BattleConst.attr_crit) / 10000, 0)
+    local random = RandomUtis.getOneRandom(BattleFunc.battleRandomIndex)
+    local critdmage = nil
+    if random < critRatio then
+        out[0 + 1] = BattleConst.damage_baoji
+        critdmage = 2 + attackerAttr:getOneAttr(BattleConst.attr_critDmg) / 10000
+    else
+        out[0 + 1] = BattleConst.damage_normal
+        critdmage = 1
+    end
+    local extraAdded = 1 + deferAttr:getOneAttr(BattleConst.attr_betreated) / 10000 * 1 + attackerAttr:getOneAttr(BattleConst.attr_treate) / 10000
+    local skillParam = skillAction.skillLogicalParams[0 + 1]
+    local treatValue = math.max(1, math.ceil(attackerAttr:getOneAttr(BattleConst.attr_attack) * skillParam[1 + 1] / 10000 + skillParam[0 + 1]) * critdmage * extraAdded)
+    local finalDmg = attackerAttr:getOneAttr(BattleConst.attr_final_treate) / 10000 + 1
+    local finalReliet = 1 + deferAttr:getOneAttr(BattleConst.attr_final_betreated) / 10000
+    treatValue = math.floor(treatValue * finalDmg * finalReliet)
+    treatValue = treatValue * buffNums
+    out[1 + 1] = treatValue
+    out[2 + 1] = attacker
+    defer.tempBeUsedValue[0 + 1] = out[0 + 1]
+    defer.tempBeUsedValue[1 + 1] = out[1 + 1]
+    defer.tempBeUsedValue[2 + 1] = attacker
+    attacker.tempUseValue[0 + 1] = out[0 + 1]
+    attacker.tempUseValue[1 + 1] = out[1 + 1]
+    attacker.tempUseValue[2 + 1] = defer
+    defer:onBeTrit(attacker, skill, skillAction, out)
+    attackerAttr:clearTempAttr()
+    deferAttr:clearTempAttr()
+    BattleFunc.cacheOneTempArr(tempArr)
+    BattleFunc.cacheOneTempArr(out)
+    return out
 end

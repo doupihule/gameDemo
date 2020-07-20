@@ -1,123 +1,119 @@
-
-
-
-
 BattleDamageLabel = class('BattleDamageLabel')
 function BattleDamageLabel:ctor()
-  BattleDamageLabel.super.ctor(self)
-  self._childLabels = {}
+    BattleDamageLabel.super.ctor(self)
+    self._childLabels = {}
 end
 
 BattleDamageLabel._labelCfgs = {
-  ["normal"]={w=13, sw=30, sh=20, fuhao="jian", name="putong", scale=1.5}, 
-  ["crit"]={w=15, head=35, sw=30, sh=18, fuhao="jian", name="baoji", scale=1.5}, 
-  ["trit"]={w=13, sw=30, sh=20, fuhao="jia", name="zhiliao", scale=1.5}, 
-  ["tritCrit"]={w=13, sw=30, sh=20, fuhao="jia", name="zhiliao", scale=1.8}, 
-  ["hudun"]={w=13, sw=30, sh=20, fuhao="jian", name="putong", scale=1}, 
-  ["miss"]={name="miss"}};
+    ["normal"] = { w = 13, sw = 30, sh = 20, fuhao = "jian", name = "putong", scale = 1.5 },
+    ["crit"] = { w = 15, head = 35, sw = 30, sh = 18, fuhao = "jian", name = "baoji", scale = 1.5 },
+    ["trit"] = { w = 13, sw = 30, sh = 20, fuhao = "jia", name = "zhiliao", scale = 1.5 },
+    ["tritCrit"] = { w = 13, sw = 30, sh = 20, fuhao = "jia", name = "zhiliao", scale = 1.8 },
+    ["hudun"] = { w = 13, sw = 30, sh = 20, fuhao = "jian", name = "putong", scale = 1 },
+    ["miss"] = { name = "miss" } };
 function BattleDamageLabel:setValue(kind, value)
-  if self._currentValue == value then
-    return
-  end
-  self.kind = kind
-  -- [ts2lua]BattleDamageLabel._labelCfgs下标访问可能不正确
-  self._cfgs = BattleDamageLabel._labelCfgs[kind]
-  local cfg = self._cfgs
-  local scale = cfg.scale or 1
-  self:scale(scale, scale)
-  self._baseUrl = "uisource/txt/txt/battle_txt_" .. self._cfgs.name
-  if kind == BattleConst.effect_label_miss then
-    self._headLabel = self:updateLabel("", 0, 0, self._headLabel)
-    self._headLabel.anchorX = 0.5
-  else
-    if value < 1 then
-      value = 1
+    if self._currentValue == value then
+        return
     end
-    local headWid = cfg.head or 0
-    local strValue = tostring(value)
-    local tempStr = strValue
-    local perWid = cfg.w
-    local fuhaoWid = cfg.fuhao and perWid or 0
-    local nums = 6
-    local numsWidth = nil
-    local perSourceWid = cfg.sw
-    local bigNums = 0
-    local bigWid = 0
-    local compareValue = "1000"
-    local bigValue = nil
-    if value < 100000 then
-      nums = #strValue
-      numsWidth = nums * perWid
-      bigValue = ""
+    self.kind = kind
+    -- [ts2lua]BattleDamageLabel._labelCfgs下标访问可能不正确
+    self._cfgs = BattleDamageLabel._labelCfgs[kind]
+    local cfg = self._cfgs
+    local scale = cfg.scale or 1
+    self:scale(scale, scale)
+    self._baseUrl = "uisource/txt/txt/battle_txt_" .. self._cfgs.name
+    if kind == BattleConst.effect_label_miss then
+        self._headLabel = self:updateLabel("", 0, 0, self._headLabel)
+        self._headLabel.anchorX = 0.5
     else
-      local index = 1
-      while(BigNumUtils.compare(BigNumUtils.devide(tempStr, compareValue), compareValue))
-      do
-      index=index+1
-      tempStr = BigNumUtils.devide(tempStr, "1000")
-      end
-      local reducedUnitArr = BattleFunc.reducedUnitArr
-      if index > #reducedUnitArr - 1 then
-        index = #reducedUnitArr - 1
-      end
-      -- [ts2lua]reducedUnitArr下标访问可能不正确
-      bigValue = reducedUnitArr[index - 1]
-      strValue = BigNumUtils.devide(value, BigNumUtils.pow(1000, index), 0)
-      numsWidth = #tempStr * perWid
-      bigNums = 1
+        if value < 1 then
+            value = 1
+        end
+        local headWid = cfg.head or 0
+        local strValue = tostring(value)
+        local tempStr = strValue
+        local perWid = cfg.w
+        local fuhaoWid = cfg.fuhao and perWid or 0
+        local nums = 6
+        local numsWidth = nil
+        local perSourceWid = cfg.sw
+        local bigNums = 0
+        local bigWid = 0
+        local compareValue = "1000"
+        local bigValue = nil
+        if value < 100000 then
+            nums = #strValue
+            numsWidth = nums * perWid
+            bigValue = ""
+        else
+            local index = 1
+            while (BigNumUtils.compare(BigNumUtils.devide(tempStr, compareValue), compareValue))
+            do
+                index = index + 1
+                tempStr = BigNumUtils.devide(tempStr, "1000")
+            end
+            local reducedUnitArr = BattleFunc.reducedUnitArr
+            if index > #reducedUnitArr - 1 then
+                index = #reducedUnitArr - 1
+            end
+            -- [ts2lua]reducedUnitArr下标访问可能不正确
+            bigValue = reducedUnitArr[index - 1]
+            strValue = BigNumUtils.devide(value, BigNumUtils.pow(1000, index), 0)
+            numsWidth = #tempStr * perWid
+            bigNums = 1
+        end
+        bigWid = bigNums * perSourceWid
+        local totalWid = headWid + fuhaoWid + numsWidth + bigWid
+        local halfTotalWid = totalWid / 2 + fuhaoWid
+        local startPos = 0
+        if headWid then
+            self._headLabel = self:updateLabel("", startPos - halfTotalWid, 0, self._headLabel)
+            startPos = startPos + headWid
+        end
+        if fuhaoWid then
+            self._fuhaoLabel = self:updateLabel(self._cfgs.fuhao, startPos - halfTotalWid, 0, self._fuhaoLabel)
+            startPos = startPos + perWid
+        else
+            if self._fuhaoLabel then
+                self._fuhaoLabel.visible = false
+            end
+        end
+        local s = 0
+        repeat
+            self._childLabels[s + 1] = self:updateLabel(string.sub(strValue, s, s + 1), startPos - halfTotalWid, 0, self._childLabels[s + 1])
+            startPos = startPos + perWid
+            s = s + 1
+        until not (s < #strValue)
+        local s = #strValue
+        repeat
+            self._childLabels[s + 1].visible = false
+            s = s + 1
+        until not (s < #self._childLabels)
+        if bigNums > 0 then
+            self._bigStrLabel = self:updateLabel(bigValue:toLowerCase(), startPos - halfTotalWid, 0, self._bigStrLabel)
+        else
+            if self._bigStrLabel then
+                self._bigStrLabel.visible = false
+            end
+        end
     end
-    bigWid = bigNums * perSourceWid
-    local totalWid = headWid + fuhaoWid + numsWidth + bigWid
-    local halfTotalWid = totalWid / 2 + fuhaoWid
-    local startPos = 0
-    if headWid then
-      self._headLabel = self:updateLabel("", startPos - halfTotalWid, 0, self._headLabel)
-      startPos = startPos + headWid
-    end
-    if fuhaoWid then
-      self._fuhaoLabel = self:updateLabel(self._cfgs.fuhao, startPos - halfTotalWid, 0, self._fuhaoLabel)
-      startPos = startPos + perWid
-    else
-      if self._fuhaoLabel then
-        self._fuhaoLabel.visible = false
-      end
-    end
-    local s = 0
-    repeat
-      self._childLabels[s+1] = self:updateLabel(string.sub(strValue,s, s + 1), startPos - halfTotalWid, 0, self._childLabels[s+1])
-      startPos = startPos + perWid
-      s=s+1
-    until not(s < #strValue)
-    local s = #strValue
-    repeat
-      self._childLabels[s+1].visible = false
-      s=s+1
-    until not(s < #self._childLabels)
-    if bigNums > 0 then
-      self._bigStrLabel = self:updateLabel(bigValue:toLowerCase(), startPos - halfTotalWid, 0, self._bigStrLabel)
-    else
-      if self._bigStrLabel then
-        self._bigStrLabel.visible = false
-      end
-    end
-  end
 end
 
 function BattleDamageLabel:updateLabel(key, x, y, label)
-  if not label then
-    label = UITools.createUIImage()
-    label.anchorX = 0
-    label.anchorY = 0.5
-    self:addChild(label)
-  else
-    label.visible = true
-  end
-  if key == "" then
-    label.skin = self._baseUrl .. ".png"
-  else
-    label.skin = self._baseUrl .. "_" .. key .. ".png"
-  end
-  label.x = x
-  label.y = y
-  return label
+    if not label then
+        label = UITools.createUIImage()
+        label.anchorX = 0
+        label.anchorY = 0.5
+        self:addChild(label)
+    else
+        label.visible = true
+    end
+    if key == "" then
+        label.skin = self._baseUrl .. ".png"
+    else
+        label.skin = self._baseUrl .. "_" .. key .. ".png"
+    end
+    label.x = x
+    label.y = y
+    return label
 end

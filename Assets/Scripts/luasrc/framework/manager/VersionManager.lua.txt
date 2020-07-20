@@ -1,17 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 VersionManager = class('VersionManager')
 
 VersionManager.VERSION_STATUS_NO_UPDATE = 0;
@@ -22,16 +8,15 @@ VersionManager.VERSION_STATUS_VERSION_ROLLBACK = 4;
 VersionManager.VERSION_STATUS_VERSION_NOT_EXIST = 5;
 VersionManager.VERSION_STATUS_VERSION_DEFAULT_ERROR = 999;
 function VersionManager.getInstance()
-  if not VersionManager._instance then
-    VersionManager._instance = VersionManager.new()
-  end
-  return VersionManager._instance
+    if not VersionManager._instance then
+        VersionManager._instance = VersionManager.new()
+    end
+    return VersionManager._instance
 end
 
 function VersionManager:ctor()
 end
 
-
 function VersionManager.getVirtualUrl(path)
-  return path
+    return path
 end

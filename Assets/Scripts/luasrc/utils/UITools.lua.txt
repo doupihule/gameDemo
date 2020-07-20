@@ -1,133 +1,129 @@
 UITools = {};
-local tempVec2 = CS.UnityEngine.Vector2(0,0) 
+local tempVec2 = CS.UnityEngine.Vector2(0, 0)
 --设置 视图坐标obj是 GameObject对象
-function UITools.setUIViewPos( instance,x,y )
-	local gameobj = instance.__cobject or instance
-	local tansform = gameobj:GetComponent("RectTransform");
-	-- tansform.TransformPoint(x,y,0);
-	tempVec2.x = x;
-	tempVec2.y = y;
-	tansform.anchoredPosition = tempVec2
+function UITools.setUIViewPos(instance, x, y)
+    local gameobj = instance.__cobject or instance
+    local tansform = gameobj:GetComponent("RectTransform");
+    -- tansform.TransformPoint(x,y,0);
+    tempVec2.x = x;
+    tempVec2.y = y;
+    tansform.anchoredPosition = tempVec2
 end
 
-
-
-
-local tempScaleVec3 = CS.UnityEngine.Vector3(1,1,1) 
+local tempScaleVec3 = CS.UnityEngine.Vector3(1, 1, 1)
 
 --设置obj缩放
-function UITools.setUIViewScale( instance,sx,sy )
-	local gameobj = instance.__cobject or instance
-	local tansform = gameobj:GetComponent("RectTransform");
-	tempScaleVec3.x = sx;
-	tempScaleVec3.y = sy;
-	tansform.localScale = tempScaleVec3;
+function UITools.setUIViewScale(instance, sx, sy)
+    local gameobj = instance.__cobject or instance
+    local tansform = gameobj:GetComponent("RectTransform");
+    tempScaleVec3.x = sx;
+    tempScaleVec3.y = sy;
+    tansform.localScale = tempScaleVec3;
 end
 
-
-local tempRotateVec3 = CS.UnityEngine.Vector3(0,0,1) 
+local tempRotateVec3 = CS.UnityEngine.Vector3(0, 0, 1)
 --设置obj旋转 角度
-function UITools.setUIViewRotation( instance,r )
-	local gameobj = instance.__cobject or instance
-	local tansform = gameobj:GetComponent("RectTransform");
-	tempRotateVec3.z = r;
-	tansform.eulerAngles = tempRotateVec3
+function UITools.setUIViewRotation(instance, r)
+    local gameobj = instance.__cobject or instance
+    local tansform = gameobj:GetComponent("RectTransform");
+    tempRotateVec3.z = r;
+    tansform.eulerAngles = tempRotateVec3
 end
 
+function UITools.addChildComponent(parent, child)
 
-function UITools.addChildComponent( parent,child )
-	
 end
 
 
 --添加子对象方法
-local tempAddChildFunc = function (self, childLuaInstance ,index)
-	
-	local gameObject = self.__cobject
-	if(not gameObject)then gameObject = self  end;
+local tempAddChildFunc = function(self, childLuaInstance, index)
 
+    local gameObject = self.__cobject
+    if (not gameObject) then
+        gameObject = self
+    end ;
 
-	local selfTransform = gameObject:GetComponent("RectTransform");
-	--如果传递的是 luaobject
-	local childTransform
-	if(childLuaInstance.__cobject) then
-		childTransform = childLuaInstance.__cobject:GetComponent("RectTransform");
-	else 
-		childTransform = childLuaInstance:GetComponent("RectTransform");
-	end
-	childTransform:SetParent(selfTransform,false)
-	--设置parent
-	if(index ~= nil and index >=0) then
-		--设置层级
-		childTransform:SetSiblingIndex(index)
-	else
-	end
+    local selfTransform = gameObject:GetComponent("RectTransform");
+    --如果传递的是 luaobject
+    local childTransform
+    if (childLuaInstance.__cobject) then
+        childTransform = childLuaInstance.__cobject:GetComponent("RectTransform");
+    else
+        childTransform = childLuaInstance:GetComponent("RectTransform");
+    end
+    childTransform:SetParent(selfTransform, false)
+    --设置parent
+    if (index ~= nil and index >= 0) then
+        --设置层级
+        childTransform:SetSiblingIndex(index)
+    else
+    end
 end
 
-local tempRemoveAllChild = function (  self)
-	local gameObject = self.__cobject
-	if(not gameObject)then gameObject = self  end;
-	local transform = gameObject.transform;
-	local childCount = transform.childCount
-	for i=childCount,1,-1 do
-		local childTransform = transform:GetChild(i)
-		childTransform:SetParent(nil)
-	end
+local tempRemoveAllChild = function(self)
+    local gameObject = self.__cobject
+    if (not gameObject) then
+        gameObject = self
+    end ;
+    local transform = gameObject.transform;
+    local childCount = transform.childCount
+    for i = childCount, 1, -1 do
+        local childTransform = transform:GetChild(i)
+        childTransform:SetParent(nil)
+    end
 end
 
 
 --移除子对象方法
-local tempRemoveUIInstance = function (self, childLuaInstance )
-	local childTransform
-	if(childLuaInstance.__cobject) then
-		childTransform = childLuaInstance.__cobject:GetComponent("RectTransform");
-	else 
-		childTransform = childLuaInstance:GetComponent("RectTransform");
-	end
-	childTransform:SetParent(nil)
+local tempRemoveUIInstance = function(self, childLuaInstance)
+    local childTransform
+    if (childLuaInstance.__cobject) then
+        childTransform = childLuaInstance.__cobject:GetComponent("RectTransform");
+    else
+        childTransform = childLuaInstance:GetComponent("RectTransform");
+    end
+    childTransform:SetParent(nil)
 end
 
 --移除自己.和移除子对象一样
-local tempRemoveSelf = function ( self )
-	tempRemoveUIInstance(self,self)
+local tempRemoveSelf = function(self)
+    tempRemoveUIInstance(self, self)
 end
 
 
 --移除某个位置的子对象
-local tempRemoveChildAt = function (self, index )
-	local gameObject = self.__cobject
-	if(not gameObject)then gameObject = self  end;
+local tempRemoveChildAt = function(self, index)
+    local gameObject = self.__cobject
+    if (not gameObject) then
+        gameObject = self
+    end ;
 end
 
 
 
 --给一个对象注入通用函数
-function UITools.bindUIFunc( luaInstance )
-	--如果没有绑定__cobject return
-	if(not luaInstance.__cobject) then
-		return
-	end
-	luaInstance.addChild = tempAddChildFunc
-	luaInstance.removeChild = tempRemoveChild
-	luaInstance.removeSelf = tempRemoveSelf
-	luaInstance.removeChildren = tempRemoveAllChild
+function UITools.bindUIFunc(luaInstance)
+    --如果没有绑定__cobject return
+    if (not luaInstance.__cobject) then
+        return
+    end
+    luaInstance.addChild = tempAddChildFunc
+    luaInstance.removeChild = tempRemoveChild
+    luaInstance.removeSelf = tempRemoveSelf
+    luaInstance.removeChildren = tempRemoveAllChild
 
 end
-
-
-
-
 
 local uiCtn = class("UI2DCtn");
 
 
 --创建一个2dui 容器
-function UITools.createUICtn(  )
-	local ctn = uiCtn.new();
-	local instance = ResourceManager.loadUIPrefab( "base/SpriteContainer.prefab","baseab" )
-	ctn.__cobject = instance
-	UITools.bindUIFunc(ctn)
-	return ui
+function UITools.createUICtn()
+    local ctn = uiCtn.new();
+    local instance = ResourceManager.loadUIPrefab("base/SpriteContainer.prefab", "baseab")
+    ctn.__cobject = instance
+    UITools.bindUIFunc(ctn)
+    return ui
 
 end
 
@@ -135,12 +131,10 @@ end
 
 
 --创建ui图片
-function UITools.createUIImage(url )
-	local img = UITools.createUICtn();
-	return img;
+function UITools.createUIImage(url)
+    local img = UITools.createUICtn();
+    return img;
 end
-
-
 
 return UITools
 

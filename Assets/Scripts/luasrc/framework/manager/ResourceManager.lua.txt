@@ -1,12 +1,11 @@
 ResourceManager = class('ResourceManager')
 ResourceManager._spineModelMap = {};
 
-
 local uiPrefabPath = "Assets/UI/Prefabs/"
 
-function ResourceManager.loadUIPrefab( name,boundlename )
-	local path = uiPrefabPath+ name + ".prefab";
-	local obj = CS.Resource.ResourceManager.Instance:luaLoadAsset(path,path,boundlename);
-	return  CS.UnityEngine.Object.Instantiate(obj)
+function ResourceManager.loadUIPrefab(name, boundlename)
+    local path = uiPrefabPath + name + ".prefab";
+    local obj = CS.Resource.ResourceManager.Instance:luaLoadAsset(path, path, boundlename);
+    return CS.UnityEngine.Object.Instantiate(obj)
 end
 

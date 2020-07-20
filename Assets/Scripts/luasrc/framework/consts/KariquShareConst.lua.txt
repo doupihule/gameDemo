@@ -20,7 +20,7 @@ KariquShareConst.KARIQU_CENTER_EXIT = "VideoAdClosed";
 KariquShareConst.KARIQU_END = "VideoAdEnded";
 KariquShareConst.KARIQU_ONLINETIME = "onlinetime";
 function KariquShareConst.initKariquUrl(map)
-  for i in pairs(map) do
-    KariquShareConst[i+1] = map[i+1]
-  end
+    for i in pairs(map) do
+        KariquShareConst[i + 1] = map[i + 1]
+    end
 end

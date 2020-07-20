@@ -1,13 +1,11 @@
-
-
 GameConsts = class('GameConsts')
 GameConsts.defaultPhysicsMemory = 16;
 GameConsts.gameFrameRate = 60;
 GameConsts.isUsePhysics = false;
 GameConsts.gameCode = "flat";
-GameConsts._gameName = {_default='奇葩公寓'};
+GameConsts._gameName = { _default = '奇葩公寓' };
 GameConsts.emptyFunc = function()
-  
+
 end
 ;
 GameConsts.resplatform = "Conventional";
@@ -24,11 +22,11 @@ GameConsts.GAME_OFFEST = 13;
 GameConsts.GAME_APPID = "wx037985b586671eee";
 GameConsts.ENCODE_SHA1 = "PhmdlmidmeQmfhmefmfgmOhmejmROmNhmfjmOhmPNmejmfcmjhmihmePmNg|kQmOPmSOmkgmljmcimcgmjemedmejmORmNjmNkmefmecmjimkdmQgmifmei";
 function GameConsts.getGameName()
-  -- [ts2lua]GameConsts._gameName下标访问可能不正确
-  if GameConsts._gameName[UserInfo.platformId] then
     -- [ts2lua]GameConsts._gameName下标访问可能不正确
-    return GameConsts._gameName[UserInfo.platformId]
-  else
-    return GameConsts._gameName._default
-  end
+    if GameConsts._gameName[UserInfo.platformId] then
+        -- [ts2lua]GameConsts._gameName下标访问可能不正确
+        return GameConsts._gameName[UserInfo.platformId]
+    else
+        return GameConsts._gameName._default
+    end
 end

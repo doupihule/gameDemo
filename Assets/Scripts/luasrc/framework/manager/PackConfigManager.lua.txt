@@ -1,85 +1,78 @@
-
-
-
-
-
-
-
-
 PackConfigManager = class('PackConfigManager')
 
-function PackConfigManager:ctor() end
+function PackConfigManager:ctor()
+end
 function PackConfigManager.getInstance()
-  if not PackConfigManager._ins then
-    PackConfigManager._ins = PackConfigManager.new()
-  end
-  return PackConfigManager._ins
+    if not PackConfigManager._ins then
+        PackConfigManager._ins = PackConfigManager.new()
+    end
+    return PackConfigManager._ins
 end
 
 function PackConfigManager.initCfgs()
-  local config = PackageConfig.configData
-  if not config then
-    Global.resource_url = "https://cdn-test-hz.fantasyfancy.com/" .. GameConsts.gameCode .. "/test/" .. UserInfo.platformId .. "/"
-    return
-  end
-  if config.CLIENT_VERSION then
-    Global.client_version = config.CLIENT_VERSION
-  end
-  if config.CHANNEL then
-    UserInfo.platformId = config.CHANNEL
-  end
-  if config.GAME_CODE then
-    GameConsts.gameCode = config.GAME_CODE
-    LogsManager.echo("gameCode:", GameConsts.gameCode)
-  end
-  if config.CDN_URL then
-    Global.resource_url = config.CDN_URL .. "/" .. UserInfo.platformId .. "/"
-  end
-  if config.SYSTEM then
-    UserInfo.systemId = config.SYSTEM
-  end
-  LogsManager.echo("UserInfo.systemId", UserInfo.systemId, UserInfo.platformId, UserInfo.isSystemAndroid())
+    local config = PackageConfig.configData
+    if not config then
+        Global.resource_url = "https://cdn-test-hz.fantasyfancy.com/" .. GameConsts.gameCode .. "/test/" .. UserInfo.platformId .. "/"
+        return
+    end
+    if config.CLIENT_VERSION then
+        Global.client_version = config.CLIENT_VERSION
+    end
+    if config.CHANNEL then
+        UserInfo.platformId = config.CHANNEL
+    end
+    if config.GAME_CODE then
+        GameConsts.gameCode = config.GAME_CODE
+        LogsManager.echo("gameCode:", GameConsts.gameCode)
+    end
+    if config.CDN_URL then
+        Global.resource_url = config.CDN_URL .. "/" .. UserInfo.platformId .. "/"
+    end
+    if config.SYSTEM then
+        UserInfo.systemId = config.SYSTEM
+    end
+    LogsManager.echo("UserInfo.systemId", UserInfo.systemId, UserInfo.platformId, UserInfo.isSystemAndroid())
 end
 
 function PackConfigManager:getPlatform()
-  if self._platform ~= nil then
-    return self._platform
-  end
-  self._platform = {}
-  local config = PackageConfig.configData
-  local platform = TestPlatform.getPlatform()
-  if UserInfo.isWeb() then
-    Global.isCDN = false
-  else
-    Global.isCDN = true
-  end
-  if Global.checkUserCloudStorage() then
-    platform = CloudPlatformData.getPlatform()
-  end
-  if config ~= nil then
-    self._platform["platform"] = config.APP_DEPLOYMENT
-    self._platform["vms_version"] = config.APP_BUILD_NUM
-    self._platform["upgrade_path"] = config.UPGRADE_PATH
-    self._platform["vms_url"] = config.VMS_URL
-    if config.CLOUD_URL then
-      self._platform["cloud_url"] = config.CLOUD_URL
+    if self._platform ~= nil then
+        return self._platform
     end
-    if config.BACKEND_URL then
-      self._platform["backend_url"] = config.BACKEND_URL
-    end
-    if config.DOWNLOAD_URL then
-      self._platform.DOWNLOAD_URL = config.DOWNLOAD_URL
-      LogsManager.echo("DOWNLOAD_URL" .. config.DOWNLOAD_URL)
+    self._platform = {}
+    local config = PackageConfig.configData
+    local platform = TestPlatform.getPlatform()
+    if UserInfo.isWeb() then
+        Global.isCDN = false
     else
-      LogsManager.warn("没有配置DOWNLOAD_URL")
+        Global.isCDN = true
     end
-  else
-    self._platform = platform
-  end
-  return self._platform
+    if Global.checkUserCloudStorage() then
+        platform = CloudPlatformData.getPlatform()
+    end
+    if config ~= nil then
+        self._platform["platform"] = config.APP_DEPLOYMENT
+        self._platform["vms_version"] = config.APP_BUILD_NUM
+        self._platform["upgrade_path"] = config.UPGRADE_PATH
+        self._platform["vms_url"] = config.VMS_URL
+        if config.CLOUD_URL then
+            self._platform["cloud_url"] = config.CLOUD_URL
+        end
+        if config.BACKEND_URL then
+            self._platform["backend_url"] = config.BACKEND_URL
+        end
+        if config.DOWNLOAD_URL then
+            self._platform.DOWNLOAD_URL = config.DOWNLOAD_URL
+            LogsManager.echo("DOWNLOAD_URL" .. config.DOWNLOAD_URL)
+        else
+            LogsManager.warn("没有配置DOWNLOAD_URL")
+        end
+    else
+        self._platform = platform
+    end
+    return self._platform
 end
 
 function PackConfigManager:setPlatform(val)
-  self._platform["kakura_url"] = val.link
-  self._platform["sec"] = val._id
+    self._platform["kakura_url"] = val.link
+    self._platform["sec"] = val._id
 end

@@ -1,25 +1,22 @@
-
-
-
-InstanceMonster = class('InstanceMonster',InstanceLogical)
+InstanceMonster = class('InstanceMonster', InstanceLogical)
 
 function InstanceMonster:ctor(controler)
-  InstanceMonster.super.ctor(self,controler)
-  self._changeTrackCd = 0;
-  self._isSleep = false;
-  self._aiFlyFrame = 0;
-  self.isAutoSKill = true
-  self.classModel = BattleConst.model_monster
-  self._goldTweenParams = {}
+    InstanceMonster.super.ctor(self, controler)
+    self._changeTrackCd = 0;
+    self._isSleep = false;
+    self._aiFlyFrame = 0;
+    self.isAutoSKill = true
+    self.classModel = BattleConst.model_monster
+    self._goldTweenParams = {}
 end
 
 function InstanceMonster:setLiveFrame(value)
-  self._liveFrame = value
-  if self._liveFrame > 0 then
-    self.controler:setCallBack(self._liveFrame, self.doDiedLogical, self)
-  end
+    self._liveFrame = value
+    if self._liveFrame > 0 then
+        self.controler:setCallBack(self._liveFrame, self.doDiedLogical, self)
+    end
 end
 
 function InstanceMonster:doDiedLogical()
-  InstanceMonster.super.doDiedLogical(self)
+    InstanceMonster.super.doDiedLogical(self)
 end

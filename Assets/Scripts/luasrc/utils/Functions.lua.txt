@@ -20,16 +20,17 @@ function class(classname, super)
         cls = {}
         if superType == "table" then
             -- copy fields from super
-            
+
             --为什么不用元表 ？？ todo guan 
-            for k, v in pairs(super) do 
-                cls[k] = v 
+            for k, v in pairs(super) do
+                cls[k] = v
             end
             cls.__create = super.__create
-            cls.super    = super
+            cls.super = super
         else
             cls.__create = super
-            cls.ctor = function() end
+            cls.ctor = function()
+            end
         end
 
         cls.__cname = classname
@@ -38,12 +39,12 @@ function class(classname, super)
         function cls.new(...)
             local instance = cls.__create(...)
             -- copy fields from class to native object
-            
+
             --为什么不用元表 ？？ todo guan instance 里有元表了 ！！
-            for k,v in pairs(cls) do 
-                instance[k] = v 
+            for k, v in pairs(cls) do
+                instance[k] = v
             end
-            
+
             instance.class = cls
             instance:ctor(...)
             return instance
@@ -53,10 +54,11 @@ function class(classname, super)
         -- inherited from Lua Object
         if super then
             cls = {}
-            setmetatable(cls, {__index = super})
+            setmetatable(cls, { __index = super })
             cls.super = super
         else
-            cls = {ctor = function() end}
+            cls = { ctor = function()
+            end }
         end
 
         cls.__cname = classname
@@ -98,16 +100,15 @@ print(iskindof(Duck.new(), "Animal")) -- 输出 true
 
 
 --定义一些静态的数据
-math.cospi4 = math.cos( math.pi/4 )
-
+math.cospi4 = math.cos(math.pi / 4)
 
 local oldAtan2 = math.atan2
 
-math.atan2=function ( dy,dx )
-	if dy ==0 and dx ==0 then
-		return 0
-	end
-	return oldAtan2(dy,dx)
+math.atan2 = function(dy, dx)
+    if dy == 0 and dx == 0 then
+        return 0
+    end
+    return oldAtan2(dy, dx)
 end
 
 
@@ -116,17 +117,17 @@ end
 
 
 -- return var or def
-function vcheck(var,def)
-	if var==nil then return def end
-	return var
+function vcheck(var, def)
+    if var == nil then
+        return def
+    end
+    return var
 end
 
 --一个对象是否为空 
 function empty(var)
-	return not var or var=="" or var==0 or (type(var)=="table" and table.isEmpty(var))
+    return not var or var == "" or var == 0 or (type(var) == "table" and table.isEmpty(var))
 end
-
-
 
 function tonum(v, base)
     return tonumber(v, base) or 0
@@ -165,55 +166,55 @@ end
 	local function func(...) echo(...) end
 	self:registerFunc(c_func(func,self,1,"a")) --ccc_func被调用时打印输出为 1 "a" 4 5 6 (会同时得到调用时传入的456)
  ]]
-function c_func(f,...)
-	local _args = {...}
-	if not f then
-		error("传递了空函数")
-		dump(_args,"____args")
-	end
+function c_func(f, ...)
+    local _args = { ... }
+    if not f then
+        error("传递了空函数")
+        dump(_args, "____args")
+    end
 
-	local maxNums = 0
-	for k,v in pairs(_args) do
-		maxNums = math.max(k,maxNums)
-	end
+    local maxNums = 0
+    for k, v in pairs(_args) do
+        maxNums = math.max(k, maxNums)
+    end
 
-	for i=1,maxNums do
-		if not _args[i] then
-			_args[i] = false
-		end
-	end
+    for i = 1, maxNums do
+        if not _args[i] then
+            _args[i] = false
+        end
+    end
 
-	return function(...)
-		local _tmp = table.copy(_args)
-		table.array_merge(_tmp,{...})
-		return f(unpack(_tmp))
-	end
+    return function(...)
+        local _tmp = table.copy(_args)
+        table.array_merge(_tmp, { ... })
+        return f(unpack(_tmp))
+    end
 end
 
 
 
 --执行类似js的回调
-function doJsCallFunc( callFunc,thisObj,params )
-	if not callFunc then 
-		return
-	end
-	if( thisObj) then
-		callFunc(thisObj,params)
-	else
-		callFunc(params)
-	end
+function doJsCallFunc(callFunc, thisObj, params)
+    if not callFunc then
+        return
+    end
+    if (thisObj) then
+        callFunc(thisObj, params)
+    else
+        callFunc(params)
+    end
 end
 
 --执行类似js allpy的回调
-function doJsApplyFunc( callFunc,thisObj,paramsArr )
-	if not callFunc then 
-		return
-	end
-	if( thisObj) then
-		callFunc(thisObj,unpack(paramsArr))
-	else
-		callFunc(unpack(paramsArr))
-	end
+function doJsApplyFunc(callFunc, thisObj, paramsArr)
+    if not callFunc then
+        return
+    end
+    if (thisObj) then
+        callFunc(thisObj, unpack(paramsArr))
+    else
+        callFunc(unpack(paramsArr))
+    end
 end
 
 

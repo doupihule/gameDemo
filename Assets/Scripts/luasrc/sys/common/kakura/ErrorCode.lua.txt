@@ -26,4 +26,5 @@ ErrorCode.wx_sdk_error2 = "21901";
 ErrorCode.wx_sdk_error3 = "21301";
 ErrorCode.wx_sdk_error4 = "21302";
 ErrorCode.wx_sdk_error5 = "10057";
-function ErrorCode:ctor() end
+function ErrorCode:ctor()
+end

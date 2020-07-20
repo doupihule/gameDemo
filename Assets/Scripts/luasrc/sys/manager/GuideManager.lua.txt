@@ -1,222 +1,221 @@
-
-
-
-
-
-
-
-
-
 GuideManager = class('GuideManager')
 function GuideManager:ctor(...)
-  GuideManager.super.ctor(self, unpack({...}))
-  self.noMask = false;
-  self.point = Laya.Point(0, 0);
-  self.guideData = {101={type=GuideConst.GUIDE_TYPE_M, statisticsIndex=StatisticsManager.GUIDE_1_1, centerY=0}, 102={type=GuideConst.GUIDE_TYPE_M, statisticsIndex=StatisticsManager.GUIDE_1_2, centerY=0, direction="right"}, 103={type=GuideConst.GUIDE_TYPE_M, statisticsIndex=StatisticsManager.GUIDE_1_3, centerY=0}, 104={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_1_4, bottom=440}, 105={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_1_5, bottom=440}, 106={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_1_6, bottom=480}, 107={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_1_7, bottom=200}, 108={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_1_8, bottom=600}, 109={type=1, statisticsIndex=StatisticsManager.GUIDE_1_9, centerY=-200}, 201={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_2_1, centerY=-50}, 202={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_2_2}, 203={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_2_3}, 204={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_2_4, bottom=300}, 301={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_3_1, bottom=250}, 302={type=GuideConst.GUIDE_TYPE_NONE, statisticsIndex=StatisticsManager.GUIDE_3_2, centerY=0}, 401={type=GuideConst.GUIDE_TYPE_M_RF, statisticsIndex=StatisticsManager.GUIDE_4_1, bottom=300}, 402={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_4_2, centerY=0}, 403={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_4_3, bottom=600}, 404={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_4_4, bottom=400}, 405={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_4_5, centerY=0}, 406={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_4_6, centerY=-200}, 407={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_4_7, centerY=0}, 408={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_4_8, centerY=0}, 409={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_4_9, centerY=-100}, 501={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_5_1, centerY=0}, 601={type=GuideConst.GUIDE_TYPE_M, statisticsIndex=StatisticsManager.GUIDE_6_1, centerY=0, noSkip=1, direction="right"}, 602={type=GuideConst.GUIDE_TYPE_M, statisticsIndex=StatisticsManager.GUIDE_6_2, centerY=0, noSkip=1}, 603={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_6_3, centerY=-200, noSkip=1}, 701={type=GuideConst.GUIDE_TYPE_M, statisticsIndex=StatisticsManager.GUIDE_7_1, centerY=0, noSkip=1}, 702={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_7_2, centerY=-200, noSkip=1, direction="right"}, 801={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_8_1, centerY=0, noSkip=1}, 802={type=GuideConst.GUIDE_TYPE_M, statisticsIndex=StatisticsManager.GUIDE_8_2, bottom=100, noSkip=1}, 803={type=GuideConst.GUIDE_TYPE_M, statisticsIndex=StatisticsManager.GUIDE_8_3, centerY=0, noSkip=1}, 901={type=GuideConst.GUIDE_TYPE_M, statisticsIndex=StatisticsManager.GUIDE_9_1, centerY=0, noSkip=1, direction="right"}, 902={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_9_2, centerY=-200, noSkip=1}, 1001={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_10_1, centerY=0, noSkip=1}, 1002={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_10_2, bottom=100, noSkip=1}, 1003={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_10_3, centerY=0, noSkip=1}, 1004={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_10_4, centerY=0, noSkip=1, direction="right"}, 1101={type=GuideConst.GUIDE_TYPE_M_RF, statisticsIndex=StatisticsManager.GUIDE_11_1, centerY=0, noSkip=1}, 1102={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_11_2, centerY=0, noSkip=1}, 1103={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_11_3, centerY=0, noSkip=1}, 1201={type=GuideConst.GUIDE_TYPE_M_F, statisticsIndex=StatisticsManager.GUIDE_12_1, noSkip=1}, 1301={type=GuideConst.GUIDE_TYPE_M, statisticsIndex=StatisticsManager.GUIDE_13_1, statisticsIndexExtra=StatisticsManager.GUIDE_FINISH, centerY=0, noSkip=1}, 10001={type=GuideConst.GUIDE_TYPE_M_F}};
+    GuideManager.super.ctor(self, unpack({ ... }))
+    self.noMask = false;
+    self.point = Laya.Point(0, 0);
+    self.guideData = { 101={type = GuideConst.GUIDE_TYPE_M, statisticsIndex = StatisticsManager.GUIDE_1_1, centerY = 0}, 102 ={type = GuideConst.GUIDE_TYPE_M, statisticsIndex = StatisticsManager.GUIDE_1_2, centerY = 0, direction = "right"}, 103 ={type = GuideConst.GUIDE_TYPE_M, statisticsIndex = StatisticsManager.GUIDE_1_3, centerY = 0}, 104 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_1_4, bottom = 440}, 105 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_1_5, bottom = 440}, 106 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_1_6, bottom = 480}, 107 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_1_7, bottom = 200}, 108 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_1_8, bottom = 600}, 109 ={type = 1, statisticsIndex = StatisticsManager.GUIDE_1_9, centerY = -200}, 201 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_2_1, centerY = -50}, 202 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_2_2}, 203 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_2_3}, 204 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_2_4, bottom = 300}, 301 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_3_1, bottom = 250}, 302 ={type = GuideConst.GUIDE_TYPE_NONE, statisticsIndex = StatisticsManager.GUIDE_3_2, centerY = 0}, 401 ={type = GuideConst.GUIDE_TYPE_M_RF, statisticsIndex = StatisticsManager.GUIDE_4_1, bottom = 300}, 402 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_4_2, centerY = 0}, 403 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_4_3, bottom = 600}, 404 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_4_4, bottom = 400}, 405 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_4_5, centerY = 0}, 406 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_4_6, centerY = -200}, 407 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_4_7, centerY = 0}, 408 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_4_8, centerY = 0}, 409 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_4_9, centerY = -100}, 501 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_5_1, centerY = 0}, 601 ={type = GuideConst.GUIDE_TYPE_M, statisticsIndex = StatisticsManager.GUIDE_6_1, centerY = 0, noSkip = 1, direction = "right"}, 602 ={type = GuideConst.GUIDE_TYPE_M, statisticsIndex = StatisticsManager.GUIDE_6_2, centerY = 0, noSkip = 1}, 603 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_6_3, centerY = -200, noSkip = 1}, 701 ={type = GuideConst.GUIDE_TYPE_M, statisticsIndex = StatisticsManager.GUIDE_7_1, centerY = 0, noSkip = 1}, 702 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_7_2, centerY = -200, noSkip = 1, direction = "right"}, 801 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_8_1, centerY = 0, noSkip = 1}, 802 ={type = GuideConst.GUIDE_TYPE_M, statisticsIndex = StatisticsManager.GUIDE_8_2, bottom = 100, noSkip = 1}, 803 ={type = GuideConst.GUIDE_TYPE_M, statisticsIndex = StatisticsManager.GUIDE_8_3, centerY = 0, noSkip = 1}, 901 ={type = GuideConst.GUIDE_TYPE_M, statisticsIndex = StatisticsManager.GUIDE_9_1, centerY = 0, noSkip = 1, direction = "right"}, 902 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_9_2, centerY = -200, noSkip = 1}, 1001 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_10_1, centerY = 0, noSkip = 1}, 1002 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_10_2, bottom = 100, noSkip = 1}, 1003 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_10_3, centerY = 0, noSkip = 1}, 1004 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_10_4, centerY = 0, noSkip = 1, direction = "right"}, 1101 ={type = GuideConst.GUIDE_TYPE_M_RF, statisticsIndex = StatisticsManager.GUIDE_11_1, centerY = 0, noSkip = 1}, 1102 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_11_2, centerY = 0, noSkip = 1}, 1103 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_11_3, centerY = 0, noSkip = 1}, 1201 ={type = GuideConst.GUIDE_TYPE_M_F, statisticsIndex = StatisticsManager.GUIDE_12_1, noSkip = 1}, 1301 ={type = GuideConst.GUIDE_TYPE_M, statisticsIndex = StatisticsManager.GUIDE_13_1, statisticsIndexExtra = StatisticsManager.GUIDE_FINISH, centerY =0, noSkip = 1}, 10001 ={type = GuideConst.GUIDE_TYPE_M_F}};
 end
-GuideManager.GuideType = {Auto=1, Static=2, None=3};
-function GuideManager:ctor() end
+GuideManager.GuideType = { Auto = 1, Static = 2, None = 3 };
+function GuideManager:ctor()
+end
 GuideManager.maxGuide = 10;
 function GuideManager.getInstance()
-  if not GuideManager._ins then
-    GuideManager._ins = GuideManager.new()
-  end
-  return GuideManager._ins
+    if not GuideManager._ins then
+        GuideManager._ins = GuideManager.new()
+    end
+    return GuideManager._ins
 end
 
 function GuideManager:setGuideData(guideId, type, object, parentUI, width, height, x, y, extra)
-  if object == nil then
-    object=nil
-  end
-  if parentUI == nil then
-    parentUI=nil
-  end
-  if width == nil then
-    width=nil
-  end
-  if height == nil then
-    height=nil
-  end
-  if x == nil then
-    x=nil
-  end
-  if y == nil then
-    y=nil
-  end
-  if extra == nil then
-    extra=nil
-  end
-  local button = object
-  -- [ts2lua]self.guideData下标访问可能不正确
-  local data = self.guideData[guideId] or {}
-  local point = nil
-  local pos = nil
-  local switch = {
-    [GuideManager.GuideType.Auto] = function()
-      data.sprite = button
-    end,
-    [GuideManager.GuideType.Static] = function()
-      point = self.point
-      if not width then
-        width = button.width
-      end
-      if not height then
-        height = button.height
-      end
-      point.x = 0
-      point.y = 0
-      pos = button:localToGlobal(point, false, parentUI)
-      data.x = pos.x
-      data.y = pos.y
-      data.width = width
-      data.height = height
-    end,
-    [GuideManager.GuideType.None] = function()
-      if button then
-        point = self.point
-        point.x = x
-        point.y = y
-        pos = button:localToGlobal(point, false, parentUI)
-        data.x = pos.x
-        data.y = pos.y
-      else
-        data.x = x
-        data.y = y
-      end
-      data.width = width
-      data.height = height
+    if object == nil then
+        object = nil
     end
-  }
-  local casef = switch[type]
-  if not casef then casef = switch["default"] end
-  if casef then casef() end
-  if extra then
-    if extra.base then
-      button = extra.base
+    if parentUI == nil then
+        parentUI = nil
     end
-    local offsetX = extra.offsetX or 0
-    local offsetY = extra.offsetY or 0
-    if extra.pos1 then
-      point = self.point
-      point.x = extra.pos1.x + offsetX
-      point.y = extra.pos1.y + offsetY
-      if button and parentUI then
-        extra.pos1 = button:localToGlobal(point, true, parentUI)
-      end
+    if width == nil then
+        width = nil
     end
-    if extra.pos2 then
-      point = self.point
-      point.x = extra.pos2.x + offsetX
-      point.y = extra.pos2.y + offsetY
-      if button and parentUI then
-        extra.pos2 = button:localToGlobal(point, true, parentUI)
-      end
+    if height == nil then
+        height = nil
     end
-    data.extra = extra
-  end
-  -- [ts2lua]self.guideData下标访问可能不正确
-  self.guideData[guideId] = data
+    if x == nil then
+        x = nil
+    end
+    if y == nil then
+        y = nil
+    end
+    if extra == nil then
+        extra = nil
+    end
+    local button = object
+    -- [ts2lua]self.guideData下标访问可能不正确
+    local data = self.guideData[guideId] or {}
+    local point = nil
+    local pos = nil
+    local switch = {
+        [GuideManager.GuideType.Auto] = function()
+            data.sprite = button
+        end,
+        [GuideManager.GuideType.Static] = function()
+            point = self.point
+            if not width then
+                width = button.width
+            end
+            if not height then
+                height = button.height
+            end
+            point.x = 0
+            point.y = 0
+            pos = button:localToGlobal(point, false, parentUI)
+            data.x = pos.x
+            data.y = pos.y
+            data.width = width
+            data.height = height
+        end,
+        [GuideManager.GuideType.None] = function()
+            if button then
+                point = self.point
+                point.x = x
+                point.y = y
+                pos = button:localToGlobal(point, false, parentUI)
+                data.x = pos.x
+                data.y = pos.y
+            else
+                data.x = x
+                data.y = y
+            end
+            data.width = width
+            data.height = height
+        end
+    }
+    local casef = switch[type]
+    if not casef then
+        casef = switch["default"]
+    end
+    if casef then
+        casef()
+    end
+    if extra then
+        if extra.base then
+            button = extra.base
+        end
+        local offsetX = extra.offsetX or 0
+        local offsetY = extra.offsetY or 0
+        if extra.pos1 then
+            point = self.point
+            point.x = extra.pos1.x + offsetX
+            point.y = extra.pos1.y + offsetY
+            if button and parentUI then
+                extra.pos1 = button:localToGlobal(point, true, parentUI)
+            end
+        end
+        if extra.pos2 then
+            point = self.point
+            point.x = extra.pos2.x + offsetX
+            point.y = extra.pos2.y + offsetY
+            if button and parentUI then
+                extra.pos2 = button:localToGlobal(point, true, parentUI)
+            end
+        end
+        data.extra = extra
+    end
+    -- [ts2lua]self.guideData下标访问可能不正确
+    self.guideData[guideId] = data
 end
 
 function GuideManager:getGuideData(guideId)
-  -- [ts2lua]self.guideData下标访问可能不正确
-  local data = self.guideData[guideId]
-  if data then
     -- [ts2lua]self.guideData下标访问可能不正确
-    local object = self.guideData[guideId].sprite
-    if object then
-      local position = object:localToGlobal(Laya.Point(0, 0))
-      position = WindowManager.guideLayer:globalToLocal(position)
-      data.x = position.x
-      data.y = position.y
-      data.width = position.width
-      data.height = position.height
+    local data = self.guideData[guideId]
+    if data then
+        -- [ts2lua]self.guideData下标访问可能不正确
+        local object = self.guideData[guideId].sprite
+        if object then
+            local position = object:localToGlobal(Laya.Point(0, 0))
+            position = WindowManager.guideLayer:globalToLocal(position)
+            data.x = position.x
+            data.y = position.y
+            data.width = position.width
+            data.height = position.height
+        end
+        data.fin = true
     end
-    data.fin = true
-  end
-  return data
+    return data
 end
 
 function GuideManager:isGuideFin(guideId)
-  -- [ts2lua]UserModel.getInstance():getSubGuide()下标访问可能不正确
-  local flag = UserModel.getInstance():getSubGuide()[tostring(guideId)]
-  if flag then
-    return true
-  end
-  return false
+    -- [ts2lua]UserModel.getInstance():getSubGuide()下标访问可能不正确
+    local flag = UserModel.getInstance():getSubGuide()[tostring(guideId)]
+    if flag then
+        return true
+    end
+    return false
 end
 
-function GuideManager:enterGuideRoom(uiName) end
+function GuideManager:enterGuideRoom(uiName)
+end
 function GuideManager:checkMainGuide()
-  if UserModel.getInstance():getMainGuide() == 0 then
-    return true
-  end
-  return false
+    if UserModel.getInstance():getMainGuide() == 0 then
+        return true
+    end
+    return false
 end
 
-function GuideManager:isMainGuideNeed(guideId, lastGuideId, lastGuideId2) end
+function GuideManager:isMainGuideNeed(guideId, lastGuideId, lastGuideId2)
+end
 function GuideManager:clearGuide()
-  WindowManager.CloseGuideUI(WindowCfgs.TalkFrameUI)
+    WindowManager.CloseGuideUI(WindowCfgs.TalkFrameUI)
 end
 
-function GuideManager:recvMsg() end
+function GuideManager:recvMsg()
+end
 function GuideManager:openGuideUI(id, callBack, thisObj, skipCall)
-  if callBack == nil then
-    callBack=nil
-  end
-  if thisObj == nil then
-    thisObj=nil
-  end
-  if skipCall == nil then
-    skipCall=nil
-  end
-  self.nowGuideId = id
-  local guideData = GuideFunc.getInstance():getGuideInfo(id)
-  Laya.timer:callLater(self, function()
-    
-  end
-  )
-  self.nowGuideId = id
-  LogsManager.echo("krma. GameData.nowGuideId = " .. self.nowGuideId)
-  local x = 0
-  local y = 0
-  local width = 0
-  local height = 0
-  local type = 7
-  local position = nil
-  local guideId = id
-  position = GuideManager.getInstance():getGuideData(guideId)
-  if position then
-    if position.statisticsIndex then
-      StatisticsManager.getInstance():onEvent(position.statisticsIndex)
+    if callBack == nil then
+        callBack = nil
     end
-    if position.statisticsIndexExtra then
-      StatisticsManager.getInstance():onEvent(position.statisticsIndexExtra)
+    if thisObj == nil then
+        thisObj = nil
     end
-    self.nowGuideSkip = position.guideSkip
-    type = position.type
-    x = position.x or x
-    y = position.y or y
-    width = position.width or width
-    height = position.height or height
-  end
-  if guideData.style ~= nil then
-    type = guideData.style
-  end
-  WindowManager.OpenGuideUI(WindowCfgs.GuideUI, {guideId, x, y, width, height, type, guideData.maskTransparency * 0.01, position, callBack, thisObj, skipCall})
+    if skipCall == nil then
+        skipCall = nil
+    end
+    self.nowGuideId = id
+    local guideData = GuideFunc.getInstance():getGuideInfo(id)
+    Laya.timer:callLater(self, function()
+
+    end
+    )
+    self.nowGuideId = id
+    LogsManager.echo("krma. GameData.nowGuideId = " .. self.nowGuideId)
+    local x = 0
+    local y = 0
+    local width = 0
+    local height = 0
+    local type = 7
+    local position = nil
+    local guideId = id
+    position = GuideManager.getInstance():getGuideData(guideId)
+    if position then
+        if position.statisticsIndex then
+            StatisticsManager.getInstance():onEvent(position.statisticsIndex)
+        end
+        if position.statisticsIndexExtra then
+            StatisticsManager.getInstance():onEvent(position.statisticsIndexExtra)
+        end
+        self.nowGuideSkip = position.guideSkip
+        type = position.type
+        x = position.x or x
+        y = position.y or y
+        width = position.width or width
+        height = position.height or height
+    end
+    if guideData.style ~= nil then
+        type = guideData.style
+    end
+    WindowManager.OpenGuideUI(WindowCfgs.GuideUI, { guideId, x, y, width, height, type, guideData.maskTransparency * 0.01, position, callBack, thisObj, skipCall })
 end
 
 function GuideManager:guideFin(guideId, callBack, thisObj, needSync)
-  if needSync == nil then
-    needSync=false
-  end
-  self.recentGuideId = guideId
-  self.nowGuideId = nil
-  if needSync then
-    GuideServer.setMainGuide(guideId, callBack, thisObj)
-  else
-    if callBack then
-      doJsCallFunc(callBack,thisObj)
+    if needSync == nil then
+        needSync = false
     end
-  end
+    self.recentGuideId = guideId
+    self.nowGuideId = nil
+    if needSync then
+        GuideServer.setMainGuide(guideId, callBack, thisObj)
+    else
+        if callBack then
+            doJsCallFunc(callBack, thisObj)
+        end
+    end
 end

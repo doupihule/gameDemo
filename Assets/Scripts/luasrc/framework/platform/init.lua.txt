@@ -3,7 +3,7 @@
 -- Date: 2020-04-11 16:47:35
 --
 local packageName = "framework.platform."
-require(packageName.."GamePlatform")
-require(packageName.."AdVideoManager")
+require(packageName .. "GamePlatform")
+require(packageName .. "AdVideoManager")
 
 

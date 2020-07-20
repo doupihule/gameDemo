@@ -1,159 +1,156 @@
-
-
-
 CameraControler = class('CameraControler')
 
 function CameraControler:ctor(controler)
-  self.shakeFrame = 0;
-  self.shakeStyle = 0;
-  self.shakeIntervel = 2;
-  self._followOffset = -50;
-  self._halfWidth = 0;
-  self._isPosChange = false;
-  self.frontPos1 = 0;
-  self.inControlBg = false;
-  self.controler = controler
-  self._halfWidth = ScreenAdapterTools.designWidth / 2
-  self.focusPos = VectorTools.createVector3(self._halfWidth, 0, 0)
-  self.frontPos1 = 0
-  self._shakeParams = {frame=0, style=1, strength=1, intervel=1, x=0, y=0}
+    self.shakeFrame = 0;
+    self.shakeStyle = 0;
+    self.shakeIntervel = 2;
+    self._followOffset = -50;
+    self._halfWidth = 0;
+    self._isPosChange = false;
+    self.frontPos1 = 0;
+    self.inControlBg = false;
+    self.controler = controler
+    self._halfWidth = ScreenAdapterTools.designWidth / 2
+    self.focusPos = VectorTools.createVector3(self._halfWidth, 0, 0)
+    self.frontPos1 = 0
+    self._shakeParams = { frame = 0, style = 1, strength = 1, intervel = 1, x = 0, y = 0 }
 end
 
 function CameraControler:setData()
-  self.focusPos.x = self._halfWidth
+    self.focusPos.x = self._halfWidth
 end
 
 function CameraControler:updateFrame()
-  self._isPosChange = false
-  self:updateShake()
-  self:followPlayer()
-  if self._isPosChange or self.inControlBg then
-    self:updateCtnPos()
-  end
+    self._isPosChange = false
+    self:updateShake()
+    self:followPlayer()
+    if self._isPosChange or self.inControlBg then
+        self:updateCtnPos()
+    end
 end
 
 function CameraControler:updateCtnPos(tweenFrame)
-  if tweenFrame == nil then
-    tweenFrame=0.1
-  end
-  local targetPos = self._halfWidth - self.focusPos.x
-  targetPos = targetPos + self._shakeParams.x
-  if targetPos > 0 then
-    targetPos = 0
-  end
-  if targetPos < self.controler.layerControler.minX then
-    targetPos = self.controler.layerControler.minX
-  end
-  local pos = Equation.easyToTargetPos(targetPos, self.controler.layerControler.a2.x, tweenFrame, 5)
-  self:updateScenePos(pos)
+    if tweenFrame == nil then
+        tweenFrame = 0.1
+    end
+    local targetPos = self._halfWidth - self.focusPos.x
+    targetPos = targetPos + self._shakeParams.x
+    if targetPos > 0 then
+        targetPos = 0
+    end
+    if targetPos < self.controler.layerControler.minX then
+        targetPos = self.controler.layerControler.minX
+    end
+    local pos = Equation.easyToTargetPos(targetPos, self.controler.layerControler.a2.x, tweenFrame, 5)
+    self:updateScenePos(pos)
 end
 
 function CameraControler:updateScenePos(pos)
-  local targetPos = self.controler.layerControler.a2.x + pos
-  if targetPos > 0 then
-    targetPos = 0
-  end
-  if targetPos < self.controler.layerControler.minX then
-    targetPos = self.controler.layerControler.minX
-  end
-  local move = targetPos - self.controler.layerControler.a2.x
-  self.controler.layerControler.a2.x = targetPos
-  self.controler.layerControler.a2.y = self._shakeParams.y
-  self.controler.mapControler:onMapMove(self._shakeParams.y, move)
-  self.controler.battleUI:freshSmallMap(-pos / self.controler.layerControler.sceneWidthRate)
+    local targetPos = self.controler.layerControler.a2.x + pos
+    if targetPos > 0 then
+        targetPos = 0
+    end
+    if targetPos < self.controler.layerControler.minX then
+        targetPos = self.controler.layerControler.minX
+    end
+    local move = targetPos - self.controler.layerControler.a2.x
+    self.controler.layerControler.a2.x = targetPos
+    self.controler.layerControler.a2.y = self._shakeParams.y
+    self.controler.mapControler:onMapMove(self._shakeParams.y, move)
+    self.controler.battleUI:freshSmallMap(-pos / self.controler.layerControler.sceneWidthRate)
 end
 
 function CameraControler:followPlayer()
-  if self.controler.layerControler.isInTouch then
-    return
-  end
-  if not self.controler.battleUI.isAllowFollw then
-    return
-  end
-  if not self.controler.battleUI.isUseCamera then
-    return
-  end
-  self.frontPos1 = self.controler.myHome.pos.x
-  local i = 0
-  repeat
-    local item = self.controler.campArr_1[i+1]
-    if self.frontPos1 < item.pos.x then
-      self.frontPos1 = item.pos.x
+    if self.controler.layerControler.isInTouch then
+        return
     end
-    i=i+1
-  until not(i < #self.controler.campArr_1)
-  local frontPos1 = self.frontPos1 + self._followOffset
-  if frontPos1 > self.controler.mapControler._maxSceneWidth - self._halfWidth then
-    return
-  end
-  self.focusPos.x = frontPos1
-  self._isPosChange = true
+    if not self.controler.battleUI.isAllowFollw then
+        return
+    end
+    if not self.controler.battleUI.isUseCamera then
+        return
+    end
+    self.frontPos1 = self.controler.myHome.pos.x
+    local i = 0
+    repeat
+        local item = self.controler.campArr_1[i + 1]
+        if self.frontPos1 < item.pos.x then
+            self.frontPos1 = item.pos.x
+        end
+        i = i + 1
+    until not (i < #self.controler.campArr_1)
+    local frontPos1 = self.frontPos1 + self._followOffset
+    if frontPos1 > self.controler.mapControler._maxSceneWidth - self._halfWidth then
+        return
+    end
+    self.focusPos.x = frontPos1
+    self._isPosChange = true
 end
 
 function CameraControler:updateShake()
-  if self._shakeParams.frame == 0 then
-    return
-  end
-  self:updateShakeParams(self._shakeParams)
-  self._isPosChange = true
+    if self._shakeParams.frame == 0 then
+        return
+    end
+    self:updateShakeParams(self._shakeParams)
+    self._isPosChange = true
 end
 
 function CameraControler:shakeCamera(shakeFrame, style, strength, intervel)
-  if style == nil then
-    style=1
-  end
-  if strength == nil then
-    strength=3
-  end
-  if intervel == nil then
-    intervel=2
-  end
-  self._shakeParams.frame = shakeFrame
-  self._shakeParams.style = style
-  self._shakeParams.strength = strength
-  self._shakeParams.intervel = intervel
+    if style == nil then
+        style = 1
+    end
+    if strength == nil then
+        strength = 3
+    end
+    if intervel == nil then
+        intervel = 2
+    end
+    self._shakeParams.frame = shakeFrame
+    self._shakeParams.style = style
+    self._shakeParams.strength = strength
+    self._shakeParams.intervel = intervel
 end
 
 function CameraControler:shakeCameraByParams(params)
-  local frame = tonumber(params[3+1])
-  self:shakeCamera(frame, tonumber(params[2+1]), tonumber(params[4+1]), tonumber(params[5+1]))
+    local frame = tonumber(params[3 + 1])
+    self:shakeCamera(frame, tonumber(params[2 + 1]), tonumber(params[4 + 1]), tonumber(params[5 + 1]))
 end
 
 function CameraControler:updateShakeParams(shakeParams)
-  if shakeParams.frame <= 0 then
-    return
-  end
-  local frame = shakeParams.frame
-  shakeParams.frame=shakeParams.frame-1
-  local style = shakeParams.style
-  local shakeWay = nil
-  local index = math.ceil(frame / shakeParams.intervel)
-  local yushu = frame % shakeParams.intervel
-  if yushu ~= 0 and frame > 1 then
-    return
-  end
-  if index % 2 == 1 then
-    shakeWay = 1
-  else
-    shakeWay = -1
-  end
-  local shakeValue = shakeParams.strength * shakeWay
-  local x = 0
-  local y = 0
-  if frame > 1 then
-    if style == 1 then
-      x = shakeValue
-    elseif style == 2 then
-      y = shakeValue
-    else
-      x = shakeValue
-      y = shakeValue
+    if shakeParams.frame <= 0 then
+        return
     end
-  end
-  shakeParams.x = x
-  shakeParams.y = y
+    local frame = shakeParams.frame
+    shakeParams.frame = shakeParams.frame - 1
+    local style = shakeParams.style
+    local shakeWay = nil
+    local index = math.ceil(frame / shakeParams.intervel)
+    local yushu = frame % shakeParams.intervel
+    if yushu ~= 0 and frame > 1 then
+        return
+    end
+    if index % 2 == 1 then
+        shakeWay = 1
+    else
+        shakeWay = -1
+    end
+    local shakeValue = shakeParams.strength * shakeWay
+    local x = 0
+    local y = 0
+    if frame > 1 then
+        if style == 1 then
+            x = shakeValue
+        elseif style == 2 then
+            y = shakeValue
+        else
+            x = shakeValue
+            y = shakeValue
+        end
+    end
+    shakeParams.x = x
+    shakeParams.y = y
 end
 
 function CameraControler:dispose()
-  self.controler = nil
+    self.controler = nil
 end

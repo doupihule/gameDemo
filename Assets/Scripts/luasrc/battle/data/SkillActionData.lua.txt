@@ -1,83 +1,80 @@
-
-
-
 SkillActionData = class('SkillActionData')
 
 function SkillActionData:ctor(id, owner, skill, delay, trigTimes, interval, resumeEnergy, opportunity, relyOnSill)
-  self.trigTimes = 0;
-  self.delay = 0;
-  self.interval = 0;
-  self.resumeEnergy = 0;
-  self.opportunity = 0;
-  if opportunity == nil then
-    opportunity=0
-  end
-  if relyOnSill == nil then
-    relyOnSill=nil
-  end
-  self.skillEffectId = id
-  self.opportunity = opportunity
-  self.trigTimes = trigTimes
-  self.delay = BattleFunc.getInstance():turnMinisecondToframe(delay)
-  self.interval = BattleFunc.getInstance():turnMinisecondToframe(interval)
-  self.resumeEnergy = resumeEnergy
-  self.cfgData = BattleFunc.getInstance():getCfgDatas("SkillEffect", id)
-  self.tempChooseArr = {}
-  self:updateData(owner, skill, relyOnSill)
-  self.condition = self.cfgData.condition
+    self.trigTimes = 0;
+    self.delay = 0;
+    self.interval = 0;
+    self.resumeEnergy = 0;
+    self.opportunity = 0;
+    if opportunity == nil then
+        opportunity = 0
+    end
+    if relyOnSill == nil then
+        relyOnSill = nil
+    end
+    self.skillEffectId = id
+    self.opportunity = opportunity
+    self.trigTimes = trigTimes
+    self.delay = BattleFunc.getInstance():turnMinisecondToframe(delay)
+    self.interval = BattleFunc.getInstance():turnMinisecondToframe(interval)
+    self.resumeEnergy = resumeEnergy
+    self.cfgData = BattleFunc.getInstance():getCfgDatas("SkillEffect", id)
+    self.tempChooseArr = {}
+    self:updateData(owner, skill, relyOnSill)
+    self.condition = self.cfgData.condition
 end
 
 function SkillActionData:updateData(owner, skill, relyonSkill)
-  if relyonSkill == nil then
-    relyonSkill=nil
-  end
-  if not skill then
-    LogsManager.echo("noSkill------------------")
-  end
-  self.skill = skill
-  self.relyonSkill = relyonSkill
-  self.owner = owner
-  if not self.cfgData.target then
-    self.chooseTartgetCfg = nil
-  else
-    self.chooseTartgetCfg = BattleFunc.getInstance():getCfgDatas("Target", tostring(self.cfgData.target))
-  end
-  local tempArr = self.cfgData.logicParams
-  if tempArr then
-    if not self.skillLogicalParams then
-      self.skillLogicalParams = {}
+    if relyonSkill == nil then
+        relyonSkill = nil
     end
-    local targetSkillId = tostring(self.cfgData.numId)
-    local tagStr = "SkillEffect:" .. self.skillEffectId
-    if targetSkillId == self.skill._skillId then
-      local i = 0
-      repeat
-        if not self.skillLogicalParams[i+1] then
-          self.skillLogicalParams[i+1] = {}
-        end
-        local temp = tempArr[i+1]
-        local s = 0
-        repeat
-          self.skillLogicalParams[i+1][s+1] = self.skill:getSkillValue(temp[s+1], tagStr)
-          s=s+1
-        until not(s < #temp)
-        i=i+1
-      until not(i < #tempArr)
+    if not skill then
+        LogsManager.echo("noSkill------------------")
+    end
+    self.skill = skill
+    self.relyonSkill = relyonSkill
+    self.owner = owner
+    if not self.cfgData.target then
+        self.chooseTartgetCfg = nil
     else
-      local level = self.owner:getCfgSkillLevel(targetSkillId)
-      local i = 0
-      repeat
-        if not self.skillLogicalParams[i+1] then
-          self.skillLogicalParams[i+1] = {}
-        end
-        local temp = tempArr[i+1]
-        local s = 0
-        repeat
-          self.skillLogicalParams[i+1][s+1] = BattleFunc.getInstance():getSkillValueByParams(temp[s+1], targetSkillId, level, nil, tagStr)
-          s=s+1
-        until not(s < #temp)
-        i=i+1
-      until not(i < #tempArr)
+        self.chooseTartgetCfg = BattleFunc.getInstance():getCfgDatas("Target", tostring(self.cfgData.target))
     end
-  end
+    local tempArr = self.cfgData.logicParams
+    if tempArr then
+        if not self.skillLogicalParams then
+            self.skillLogicalParams = {}
+        end
+        local targetSkillId = tostring(self.cfgData.numId)
+        local tagStr = "SkillEffect:" .. self.skillEffectId
+        if targetSkillId == self.skill._skillId then
+            local i = 0
+            repeat
+                if not self.skillLogicalParams[i + 1] then
+                    self.skillLogicalParams[i + 1] = {}
+                end
+                local temp = tempArr[i + 1]
+                local s = 0
+                repeat
+                    self.skillLogicalParams[i + 1][s + 1] = self.skill:getSkillValue(temp[s + 1], tagStr)
+                    s = s + 1
+                until not (s < #temp)
+                i = i + 1
+            until not (i < #tempArr)
+        else
+            local level = self.owner:getCfgSkillLevel(targetSkillId)
+            local i = 0
+            repeat
+                if not self.skillLogicalParams[i + 1] then
+                    self.skillLogicalParams[i + 1] = {}
+                end
+                local temp = tempArr[i + 1]
+                local s = 0
+                repeat
+                    self.skillLogicalParams[i + 1][s + 1] = BattleFunc.getInstance():getSkillValueByParams(temp[s + 1], targetSkillId, level, nil, tagStr)
+                    s = s + 1
+                until not (s < #temp)
+                i = i + 1
+            until not (i < #tempArr)
+        end
+    end
 end

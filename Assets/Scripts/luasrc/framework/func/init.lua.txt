@@ -3,8 +3,8 @@
 -- Date: 2020-04-11 16:47:35
 --
 local packageName = "framework.func."
-require(packageName.."BaseFunc")
-require(packageName.."TranslateFunc")
-require(packageName.."WhiteListFunc")
+require(packageName .. "BaseFunc")
+require(packageName .. "TranslateFunc")
+require(packageName .. "WhiteListFunc")
 
 

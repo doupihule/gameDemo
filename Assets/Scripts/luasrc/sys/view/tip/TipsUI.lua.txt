@@ -1,40 +1,38 @@
-
-
 TipsUI = class('TipsUI')
 
 TipsUI.res = {};
 function TipsUI:ctor()
-  TipsUI.super.ctor(self)
-  self.tipsbg = UITools.createUICtn()
-  self.tipsbg.alpha = 0.5
-  self.tipsbg.mouseEnabled = true
-  self.tipsbg.mouseThrough = false
-  self.tipsbg:size(543, 97)
-  self.tipsbg.y = 1207
-  self:addChild(self.tipsbg)
-  self.tips = Laya.Label()
-  self.tips.color = "#ffffff"
-  self.tips.font = "Microsoft YaHei"
-  self.tips.fontSize = 30
-  self.tips.align = "center"
-  self.tips.anchorX = 0.5
-  self.tips:pos(self.tipsbg.width / 2, 30)
-  self.tipsbg:addChild(self.tips)
+    TipsUI.super.ctor(self)
+    self.tipsbg = UITools.createUICtn()
+    self.tipsbg.alpha = 0.5
+    self.tipsbg.mouseEnabled = true
+    self.tipsbg.mouseThrough = false
+    self.tipsbg:size(543, 97)
+    self.tipsbg.y = 1207
+    self:addChild(self.tipsbg)
+    self.tips = Laya.Label()
+    self.tips.color = "#ffffff"
+    self.tips.font = "Microsoft YaHei"
+    self.tips.fontSize = 30
+    self.tips.align = "center"
+    self.tips.anchorX = 0.5
+    self.tips:pos(self.tipsbg.width / 2, 30)
+    self.tipsbg:addChild(self.tips)
 end
 
 function TipsUI:setData(data)
-  self.tipsbg.y = ScreenAdapterTools.designHeight * 0.5
-  self.tipsbg.alpha = 0
-  Laya.Tween:to(self.tipsbg, {alpha=1, y=ScreenAdapterTools.designHeight * 0.5 - 100}, 500)
-  self.tips.text = data
-  -- [ts2lua]lua中0和空字符串也是true，此处self.tips.width + 100 > 455需要确认
-  self.tipsbg.width = (self.tips.width + 100 > 455 and {self.tips.width + 100} or {455})[1]
-  self.tipsbg.graphics:clear()
-  self.tipsbg.graphics:drawRect(0, 0, self.tipsbg.width, 97, "#000000")
-  self.tipsbg.x = ScreenAdapterTools.width / 2 - self.tipsbg.width / 2
-  self.tips.x = self.tipsbg.width * 0.5
-  Laya.timer:once(1000, self, function()
-    Laya.Tween:to(self.tipsbg, {alpha=0}, 500)
-  end
-  )
+    self.tipsbg.y = ScreenAdapterTools.designHeight * 0.5
+    self.tipsbg.alpha = 0
+    Laya.Tween:to(self.tipsbg, { alpha = 1, y = ScreenAdapterTools.designHeight * 0.5 - 100 }, 500)
+    self.tips.text = data
+    -- [ts2lua]lua中0和空字符串也是true，此处self.tips.width + 100 > 455需要确认
+    self.tipsbg.width = (self.tips.width + 100 > 455 and { self.tips.width + 100 } or { 455 })[1]
+    self.tipsbg.graphics:clear()
+    self.tipsbg.graphics:drawRect(0, 0, self.tipsbg.width, 97, "#000000")
+    self.tipsbg.x = ScreenAdapterTools.width / 2 - self.tipsbg.width / 2
+    self.tips.x = self.tipsbg.width * 0.5
+    Laya.timer:once(1000, self, function()
+        Laya.Tween:to(self.tipsbg, { alpha = 0 }, 500)
+    end
+    )
 end

@@ -1,8 +1,3 @@
-
-
-
-
-
 StorageCode = class('StorageCode')
 StorageCode.storage_vmsversion = "storage_vmsversion";
 StorageCode.storage_wxGuide = "wxGuide";
@@ -13,18 +8,19 @@ StorageCode.COMEFROM_CACHE = "COMEFROM_CACHE";
 StorageCode.storage_firstrun_data = "storage_firstrun_data";
 StorageCode.storage_zip_file = "storage_zip_file";
 function StorageCode.getStorage_acount()
-  if UserInfo.isWeb() then
-    return GameConsts.gameCode .. "_" .. PackConfigManager.getInstance():getPlatform().platform .. "_count"
-  end
-  return "acount"
+    if UserInfo.isWeb() then
+        return GameConsts.gameCode .. "_" .. PackConfigManager.getInstance():getPlatform().platform .. "_count"
+    end
+    return "acount"
 end
 
 StorageCode.storage_offlineCoinCount = "offlineCoinCount";
 StorageCode.storage_battleResultCount = "battleResultCount";
 StorageCode.storage_fogBattleResultCount = "fogBattleResultCount";
 function StorageCode.getStorage_userinfo()
-  local key = GameConsts.gameCode .. "_" .. PackConfigManager.getInstance():getPlatform().platform .. "_" .. CacheManager.getInstance():getGlobalCache(StorageCode.getStorage_acount()) or ""
-  return "storage_userinfo" .. key
+    local key = GameConsts.gameCode .. "_" .. PackConfigManager.getInstance():getPlatform().platform .. "_" .. CacheManager.getInstance():getGlobalCache(StorageCode.getStorage_acount()) or ""
+    return "storage_userinfo" .. key
 end
 
-function StorageCode:ctor() end
+function StorageCode:ctor()
+end

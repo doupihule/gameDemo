@@ -7,24 +7,24 @@ UIBase.__cobject = nil
 UIBase.windowCfgs = nil
 
 --设置数据
-function UIBase:setData( ... )
-	print("____setData",self.__cname);
+function UIBase:setData(...)
+    print("____setData", self.__cname);
 end
 
 
 --关闭ui
-function UIBase:close(  )
-	
+function UIBase:close()
+
 end
 
 --显示完成
-function UIBase:onShowCompData(  )
-	
+function UIBase:onShowCompData()
+
 end
 
 
 
 --销毁
-function UIBase:dispose(  )
-	self._rootView.transform.parent = nil
+function UIBase:dispose()
+    self._rootView.transform.parent = nil
 end

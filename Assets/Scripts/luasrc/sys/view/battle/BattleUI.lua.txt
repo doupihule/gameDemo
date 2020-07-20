@@ -1,45 +1,11 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-BattleUI = class('BattleUI',ui.gameui.battle.BattleUI)
+BattleUI = class('BattleUI', ui.gameui.battle.BattleUI)
 
 function BattleUI:ctor()
-  BattleUI.super.ctor(self)
+    BattleUI.super.ctor(self)
 end
 
 function BattleUI:setData(data)
 end
-
 
 function BattleUI:autoAddEnergy()
 end
@@ -78,12 +44,12 @@ function BattleUI:onContinueBtn()
 end
 
 function BattleUI:onReplayGame()
-  SoundManager.stopMusicOrSound(MusicConst.SOUND_BATTLE_BG)
-  Message.getInstance():send(BattleEvent.BATTLEEVENT_REVIEW_RESET_REVIVECOUNT)
-  self.pauseGroup.visible = false
-  BattleSceneManager.getInstance():replayBattle()
-  StatisticsManager.getInstance():onEvent(StatisticsManager.LEVEL_START, {levelId=self.levelId, entrance="replay"})
-  self:resetStatus()
+    SoundManager.stopMusicOrSound(MusicConst.SOUND_BATTLE_BG)
+    Message.getInstance():send(BattleEvent.BATTLEEVENT_REVIEW_RESET_REVIVECOUNT)
+    self.pauseGroup.visible = false
+    BattleSceneManager.getInstance():replayBattle()
+    StatisticsManager.getInstance():onEvent(StatisticsManager.LEVEL_START, { levelId = self.levelId, entrance = "replay" })
+    self:resetStatus()
 end
 
 function BattleUI:onTouchBegin(event)
@@ -111,18 +77,18 @@ function BattleUI:startWar()
 end
 
 function BattleUI:createOneMapPoint(obj)
-  return point
+    return point
 end
 
 function BattleUI:setRoleGray()
-  self.roleList:refresh()
+    self.roleList:refresh()
 end
 
 function BattleUI:setSmallMapXByScreen(point, screenPos)
 end
 
 function BattleUI:setGameNormalSpeed()
-  self:setGameSpeed(1)
+    self:setGameSpeed(1)
 end
 
 function BattleUI:freshSkillTipGroup(name, continueTime, timeScale)
@@ -138,10 +104,14 @@ function BattleUI:setGameSpeed(speed)
 end
 
 function BattleUI:close()
-  WindowManager.CloseUI(WindowCfgs.BattleUI)
+    WindowManager.CloseUI(WindowCfgs.BattleUI)
 end
 
-function BattleUI:updateBlood(waveLeftHp, waveTotalHp) end
-function BattleUI:updateGameTime(leftFrame, batteTotalFrame) end
-function BattleUI:resetStatus() end
-function BattleUI:recvMsg() end
+function BattleUI:updateBlood(waveLeftHp, waveTotalHp)
+end
+function BattleUI:updateGameTime(leftFrame, batteTotalFrame)
+end
+function BattleUI:resetStatus()
+end
+function BattleUI:recvMsg()
+end

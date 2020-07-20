@@ -1,358 +1,357 @@
-
-
 TableUtils = class('TableUtils')
 
 local json = require("rapidjson")
 
-function TableUtils:ctor() end
+function TableUtils:ctor()
+end
 function TableUtils.deepMerge(receiveObj, fromObj)
-  if not fromObj then
-    return
-  end
-  if not receiveObj then
-    receiveObj = {}
-  end
-  for i in pairs(fromObj) do
-    local value = fromObj[i+1]
-    if type(value) == "object" then
-      if not receiveObj[i+1] then
-        receiveObj[i+1] = {}
-      end
-      if Array:isArray(value) then
-        if #value > 0 then
-          receiveObj[i+1] = TableUtils.deepCopy(value, {})
-        end
-      else
-        TableUtils.deepMerge(receiveObj[i+1], value)
-      end
-    else
-      receiveObj[i+1] = value
+    if not fromObj then
+        return
     end
-  end
+    if not receiveObj then
+        receiveObj = {}
+    end
+    for i in pairs(fromObj) do
+        local value = fromObj[i + 1]
+        if type(value) == "object" then
+            if not receiveObj[i + 1] then
+                receiveObj[i + 1] = {}
+            end
+            if Array:isArray(value) then
+                if #value > 0 then
+                    receiveObj[i + 1] = TableUtils.deepCopy(value, {})
+                end
+            else
+                TableUtils.deepMerge(receiveObj[i + 1], value)
+            end
+        else
+            receiveObj[i + 1] = value
+        end
+    end
 end
 
 function TableUtils.deepDelete(t, keyData, deltitle)
-  if deltitle == nil then
-    deltitle=1
-  end
-  if not keyData then
-    return
-  end
-  for i in pairs(keyData) do
-    local value = keyData[i+1]
-    if i ~= "_id" then
-      if value == deltitle then
-        t[i+1] = nil
-      elseif type(value) == "object" then
-        if t[i+1] ~= nil then
-          TableUtils.deepDelete(t[i+1], value, deltitle)
-        end
-      else
-        -- [ts2lua]window下标访问可能不正确
-        window["LogsManager"]:warn("错误的删除码,key: " .. i .. "_value: " .. value)
-      end
+    if deltitle == nil then
+        deltitle = 1
     end
-  end
+    if not keyData then
+        return
+    end
+    for i in pairs(keyData) do
+        local value = keyData[i + 1]
+        if i ~= "_id" then
+            if value == deltitle then
+                t[i + 1] = nil
+            elseif type(value) == "object" then
+                if t[i + 1] ~= nil then
+                    TableUtils.deepDelete(t[i + 1], value, deltitle)
+                end
+            else
+                -- [ts2lua]window下标访问可能不正确
+                window["LogsManager"]:warn("错误的删除码,key: " .. i .. "_value: " .. value)
+            end
+        end
+    end
 end
 
 function TableUtils.copyOneTable(tb)
-  local newTb = {}
-  for i in pairs(tb) do
-    newTb[i+1] = tb[i+1]
-  end
-  return newTb
+    local newTb = {}
+    for i in pairs(tb) do
+        newTb[i + 1] = tb[i + 1]
+    end
+    return newTb
 end
 
 function TableUtils.deepCopy(fromTb, toTb)
-  for i in pairs(fromTb) do
-    local tempT = fromTb[i+1]
-    if tempT ~= nil then
-      if type(tempT) == "object" then
-        if not Array:isArray(tempT) or #tempT == 0 then
-          toTb[i+1] = {}
-        else
-          toTb[i+1] = {}
+    for i in pairs(fromTb) do
+        local tempT = fromTb[i + 1]
+        if tempT ~= nil then
+            if type(tempT) == "object" then
+                if not Array:isArray(tempT) or #tempT == 0 then
+                    toTb[i + 1] = {}
+                else
+                    toTb[i + 1] = {}
+                end
+                TableUtils.deepCopy(tempT, toTb[i + 1])
+            else
+                toTb[i + 1] = tempT
+            end
         end
-        TableUtils.deepCopy(tempT, toTb[i+1])
-      else
-        toTb[i+1] = tempT
-      end
     end
-  end
-  return toTb
+    return toTb
 end
 
 function TableUtils.copyOneArr(arr, outArr)
-  if outArr == nil then
-    outArr=nil
-  end
-  if not outArr then
-    outArr = {}
-  else
-    table.clearArray(outArr)
-  end
-  if arr then
-    local len = #arr
-    local i = 0
-    repeat
-      outArr[i+1] = arr[i+1]
-      i=i+1
-    until not(i < len)
-  end
-  return outArr
+    if outArr == nil then
+        outArr = nil
+    end
+    if not outArr then
+        outArr = {}
+    else
+        table.clearArray(outArr)
+    end
+    if arr then
+        local len = #arr
+        local i = 0
+        repeat
+            outArr[i + 1] = arr[i + 1]
+            i = i + 1
+        until not (i < len)
+    end
+    return outArr
 end
 
 function TableUtils.findDelKey(t1, t2, resulTb, ignoreFristTb)
-  if ignoreFristTb == nil then
-    ignoreFristTb=true
-  end
-  for i in pairs(t1) do
-    local v = t1[i+1]
-    if v ~= nil then
-      if type(v) == "object" then
-        if t2[i+1] == nil then
-          if not ignoreFristTb then
-            resulTb[i+1] = 1
-          end
-        else
-          if TableUtils.isEmptyTable(t2[i+1]) and not ignoreFristTb then
-            resulTb[i+1] = 1
-          else
-            local tempT = resulTb[i+1]
-            if not tempT then
-              tempT = {}
-              resulTb[i+1] = tempT
-            end
-            TableUtils.findDelKey(v, t2[i+1], tempT, false)
-            if TableUtils.isEmptyTable(tempT) then
-              resulTb[i+1] = nil
-            end
-          end
-        end
-      else
-        if t2[i+1] == nil then
-          if i ~= "id" and i ~= "_id" then
-            resulTb[i+1] = 1
-          end
-        end
-      end
+    if ignoreFristTb == nil then
+        ignoreFristTb = true
     end
-  end
+    for i in pairs(t1) do
+        local v = t1[i + 1]
+        if v ~= nil then
+            if type(v) == "object" then
+                if t2[i + 1] == nil then
+                    if not ignoreFristTb then
+                        resulTb[i + 1] = 1
+                    end
+                else
+                    if TableUtils.isEmptyTable(t2[i + 1]) and not ignoreFristTb then
+                        resulTb[i + 1] = 1
+                    else
+                        local tempT = resulTb[i + 1]
+                        if not tempT then
+                            tempT = {}
+                            resulTb[i + 1] = tempT
+                        end
+                        TableUtils.findDelKey(v, t2[i + 1], tempT, false)
+                        if TableUtils.isEmptyTable(tempT) then
+                            resulTb[i + 1] = nil
+                        end
+                    end
+                end
+            else
+                if t2[i + 1] == nil then
+                    if i ~= "id" and i ~= "_id" then
+                        resulTb[i + 1] = 1
+                    end
+                end
+            end
+        end
+    end
 end
 
 function TableUtils.findNullKey(fromTb, toTb)
-  if not fromTb then
-    return toTb
-  end
-  for i in pairs(fromTb) do
-    local value = fromTb[i+1]
-    if value == nil or value == undefined then
-      toTb[i+1] = 1
-    elseif type(value) == "object" then
-      local tempTb = {}
-      TableUtils.findNullKey(value, tempTb)
-      if not TableUtils.isEmptyTable(tempTb) then
-        toTb[i+1] = tempTb
-      end
+    if not fromTb then
+        return toTb
     end
-  end
-  return toTb
+    for i in pairs(fromTb) do
+        local value = fromTb[i + 1]
+        if value == nil or value == undefined then
+            toTb[i + 1] = 1
+        elseif type(value) == "object" then
+            local tempTb = {}
+            TableUtils.findNullKey(value, tempTb)
+            if not TableUtils.isEmptyTable(tempTb) then
+                toTb[i + 1] = tempTb
+            end
+        end
+    end
+    return toTb
 end
 
 function TableUtils.compareTable(t1, t2, resulTb)
-  for k in pairs(t2) do
-    local v = t2[k+1]
-    if v ~= nil then
-      if type(v) ~= "object" then
-        if not t1 or not t2 then
-          -- [ts2lua]window下标访问可能不正确
-          window["LogsManager"]:echo("_____emyrt data")
+    for k in pairs(t2) do
+        local v = t2[k + 1]
+        if v ~= nil then
+            if type(v) ~= "object" then
+                if not t1 or not t2 then
+                    -- [ts2lua]window下标访问可能不正确
+                    window["LogsManager"]:echo("_____emyrt data")
+                end
+                if t1[k + 1] == t2[k + 1] then
+
+                else
+                    resulTb[k + 1] = v
+                end
+            else
+                if not Array:isArray(v) or #v == 0 then
+                    resulTb[k + 1] = {}
+                    if not t1[k + 1] then
+                        resulTb[k + 1] = TableUtils.deepCopy(v, {})
+                    else
+                        TableUtils.compareTable(t1[k + 1], v, resulTb[k + 1])
+                    end
+                else
+                    -- [ts2lua]window下标访问可能不正确
+                    window["LogsManager"]:errorTag("compareTableWarn", "has array Data,k:" .. k .. ",v:" .. string.sub(TableUtils.safelyJsonStringfy(v), 1, 100))
+                    resulTb[k + 1] = TableUtils.deepCopy(v, {})
+                end
+                if TableUtils.isEmptyTable(resulTb[k + 1]) then
+                    resulTb[k + 1] = nil
+                end
+            end
         end
-        if t1[k+1] == t2[k+1] then
-          
-        else
-          resulTb[k+1] = v
-        end
-      else
-        if not Array:isArray(v) or #v == 0 then
-          resulTb[k+1] = {}
-          if not t1[k+1] then
-            resulTb[k+1] = TableUtils.deepCopy(v, {})
-          else
-            TableUtils.compareTable(t1[k+1], v, resulTb[k+1])
-          end
-        else
-          -- [ts2lua]window下标访问可能不正确
-          window["LogsManager"]:errorTag("compareTableWarn", "has array Data,k:" .. k .. ",v:" .. string.sub(TableUtils.safelyJsonStringfy(v),1, 100))
-          resulTb[k+1] = TableUtils.deepCopy(v, {})
-        end
-        if TableUtils.isEmptyTable(resulTb[k+1]) then
-          resulTb[k+1] = nil
-        end
-      end
     end
-  end
 end
 
 function TableUtils.getDelData(t1, t2, resulTb)
-  for k in pairs(t1) do
-    local v = t1[k+1]
-    if v ~= nil then
-      if type(v) ~= "object" then
-        if not t1 or not t2 then
-          -- [ts2lua]window下标访问可能不正确
-          window["LogsManager"]:echo("_____emyrt data")
+    for k in pairs(t1) do
+        local v = t1[k + 1]
+        if v ~= nil then
+            if type(v) ~= "object" then
+                if not t1 or not t2 then
+                    -- [ts2lua]window下标访问可能不正确
+                    window["LogsManager"]:echo("_____emyrt data")
+                end
+                if t1[k + 1] and not t2[k + 1] then
+                    resulTb[k + 1] = 1
+                end
+            else
+                if not Array:isArray(v) then
+                    resulTb[k + 1] = {}
+                    if not t2[k + 1] then
+                        resulTb[k + 1] = 1
+                    else
+                        TableUtils.getDelData(v, t2[k + 1], resulTb[k + 1])
+                    end
+                end
+                if resulTb[k + 1] ~= 1 and TableUtils.isEmptyTable(resulTb[k + 1]) then
+                    resulTb[k + 1] = nil
+                end
+            end
         end
-        if t1[k+1] and not t2[k+1] then
-          resulTb[k+1] = 1
-        end
-      else
-        if not Array:isArray(v) then
-          resulTb[k+1] = {}
-          if not t2[k+1] then
-            resulTb[k+1] = 1
-          else
-            TableUtils.getDelData(v, t2[k+1], resulTb[k+1])
-          end
-        end
-        if resulTb[k+1] ~= 1 and TableUtils.isEmptyTable(resulTb[k+1]) then
-          resulTb[k+1] = nil
-        end
-      end
     end
-  end
 end
 
 function TableUtils.adjustEmptyArr(tb)
-  if not tb then
-    return
-  end
-  for i in pairs(tb) do
-    local v = tb[i+1]
-    if type(v) == "object" then
-      if Array:isArray(v) then
-        if #v == 0 then
-          -- [ts2lua]window下标访问可能不正确
-          window["LogsManager"]:warn("_____adjustEmptyArr,k:", i)
-          tb[i+1] = {}
-        end
-      else
-        TableUtils.adjustEmptyArr(v)
-      end
+    if not tb then
+        return
     end
-  end
+    for i in pairs(tb) do
+        local v = tb[i + 1]
+        if type(v) == "object" then
+            if Array:isArray(v) then
+                if #v == 0 then
+                    -- [ts2lua]window下标访问可能不正确
+                    window["LogsManager"]:warn("_____adjustEmptyArr,k:", i)
+                    tb[i + 1] = {}
+                end
+            else
+                TableUtils.adjustEmptyArr(v)
+            end
+        end
+    end
 end
 
 function TableUtils.isEmptyTable(tb)
-  for i in pairs(tb) do
-    if tb[i+1] ~= nil then
-      return false
+    for i in pairs(tb) do
+        if tb[i + 1] ~= nil then
+            return false
+        end
     end
-  end
-  return true
+    return true
 end
 
 function TableUtils.removeValue(arr, value)
-  local index = table.findArrValue(arr,value)
-  if index ~= -1 then
-    table.spliceArray(arr,index, 1)
-  end
+    local index = table.findArrValue(arr, value)
+    if index ~= -1 then
+        table.spliceArray(arr, index, 1)
+    end
 end
 
 function TableUtils.turnCsvArrToGameArr(fromArr, transtoNumber)
-  if transtoNumber == nil then
-    transtoNumber=false
-  end
-  local toArr = {}
-  if fromArr then
-    local i = 0
-    repeat
-      local str = fromArr[i+1]
-      toArr[i+1] = string.split(str,",")
-      if transtoNumber then
-        local tempArr = toArr[i+1]
-        local ii = 0
+    if transtoNumber == nil then
+        transtoNumber = false
+    end
+    local toArr = {}
+    if fromArr then
+        local i = 0
         repeat
-          -- [ts2lua]tempArr下标访问可能不正确
-          local value = tempArr[ii]
-          local turnValue = tonumber(value)
-          if turnValue or turnValue == 0 then
-            -- [ts2lua]tempArr下标访问可能不正确
-            tempArr[ii] = turnValue
-          end
-          ii=ii+1
-        until not(ii < #tempArr)
-      end
-      i=i+1
-    until not(i < #fromArr)
-  end
-  return toArr
+            local str = fromArr[i + 1]
+            toArr[i + 1] = string.split(str, ",")
+            if transtoNumber then
+                local tempArr = toArr[i + 1]
+                local ii = 0
+                repeat
+                    -- [ts2lua]tempArr下标访问可能不正确
+                    local value = tempArr[ii]
+                    local turnValue = tonumber(value)
+                    if turnValue or turnValue == 0 then
+                        -- [ts2lua]tempArr下标访问可能不正确
+                        tempArr[ii] = turnValue
+                    end
+                    ii = ii + 1
+                until not (ii < #tempArr)
+            end
+            i = i + 1
+        until not (i < #fromArr)
+    end
+    return toArr
 end
 
 function TableUtils.turnCsvStrTogGameArr(fromStr, transtoNumber)
-  if transtoNumber == nil then
-    transtoNumber=false
-  end
-  local strLen = #fromStr
-  if string.sub(fromStr,strLen , strLen) == ";" then
-    fromStr = string.sub(fromStr,1, strLen - 1)
-  end
-  local arr = string.split(fromStr,";")
-  return TableUtils.turnCsvArrToGameArr(arr)
+    if transtoNumber == nil then
+        transtoNumber = false
+    end
+    local strLen = #fromStr
+    if string.sub(fromStr, strLen, strLen) == ";" then
+        fromStr = string.sub(fromStr, 1, strLen - 1)
+    end
+    local arr = string.split(fromStr, ";")
+    return TableUtils.turnCsvArrToGameArr(arr)
 end
 
 function TableUtils.clearOneTable(targetTb)
-  for i in pairs(targetTb) do
-    targetTb[i+1] = nil
-  end
+    for i in pairs(targetTb) do
+        targetTb[i + 1] = nil
+    end
 end
 
 function TableUtils.safelyJsonStringfy(obj)
-  local rt = ''
-  rt = json.encode(obj)
-  return rt
+    local rt = ''
+    rt = json.encode(obj)
+    return rt
 end
 
 function TableUtils.safelyJsonParse(str)
-  local rt = nil
-  rt = json.decode(str)
-  return rt
+    local rt = nil
+    rt = json.decode(str)
+    return rt
 end
 
 function TableUtils.safelyToString(obj)
-  return tostring(obj)
+    return tostring(obj)
 end
 
 
 --矩形工具
-rectEx= rectEx or {}
+rectEx = rectEx or {}
 --是否包含一个点rect格式 x,y,w,h r = {x= x,y=y,w =w,h = h},    border 检测边界
-function rectEx.contain(r,x,y ,border)
-  border = border  and border or 0
-  r.w = r.w or r.width
-  r.h = r.h or r.height
-  if x <r.x - border or x >r.x+r.w + border or y < r.y -border or y > r.y + r.h +border then
-    return false
-  end
-  return true
+function rectEx.contain(r, x, y, border)
+    border = border and border or 0
+    r.w = r.w or r.width
+    r.h = r.h or r.height
+    if x < r.x - border or x > r.x + r.w + border or y < r.y - border or y > r.y + r.h + border then
+        return false
+    end
+    return true
 
 end
 
-function rectEx.mergeRect(rect1,rect2)
-  -- rect1宽高为0，直接返回rect2
-  if not rect1 or rect1.width<=0 or rect1.height<=0 then
-    return rect2
-  end
-  -- rect2宽高为0，直接返回rect1
-  if not rect2 or rect2.width<=0 or rect2.height<=0 then
-    return rect1
-  end
-  -- 都有宽高，合并之
-  local _minx = math.min(rect1.x,rect2.x)
-  local _maxx = math.max(rect1.x+rect1.width,rect2.x + rect2.width)
-  local _miny = math.min(rect1.y,rect2.y)
-  local _maxy = math.max(rect1.y + rect1.height,rect2.y + rect2.height)
-  return cc.rect(_minx,_miny,_maxx-_minx, _maxy-_miny)
+function rectEx.mergeRect(rect1, rect2)
+    -- rect1宽高为0，直接返回rect2
+    if not rect1 or rect1.width <= 0 or rect1.height <= 0 then
+        return rect2
+    end
+    -- rect2宽高为0，直接返回rect1
+    if not rect2 or rect2.width <= 0 or rect2.height <= 0 then
+        return rect1
+    end
+    -- 都有宽高，合并之
+    local _minx = math.min(rect1.x, rect2.x)
+    local _maxx = math.max(rect1.x + rect1.width, rect2.x + rect2.width)
+    local _miny = math.min(rect1.y, rect2.y)
+    local _maxy = math.max(rect1.y + rect1.height, rect2.y + rect2.height)
+    return cc.rect(_minx, _miny, _maxx - _minx, _maxy - _miny)
 end
 
 

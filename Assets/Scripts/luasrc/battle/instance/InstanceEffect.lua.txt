@@ -1,166 +1,161 @@
-
-
-
-
-
-InstanceEffect = class('InstanceEffect',InstanceBasic)
+InstanceEffect = class('InstanceEffect', InstanceBasic)
 function InstanceEffect:ctor(controler)
-  InstanceEffect.super.ctor(self,controler)
-  self.layerIndex = 2;
-  self.withTargetWay = 0;
-  self.classModel = BattleConst.model_effect
-  self._followOffset = VectorTools.createVector3()
+    InstanceEffect.super.ctor(self, controler)
+    self.layerIndex = 2;
+    self.withTargetWay = 0;
+    self.classModel = BattleConst.model_effect
+    self._followOffset = VectorTools.createVector3()
 end
 
 function InstanceEffect:setData(data)
-  InstanceEffect.super.setData(self,data)
-  self.ignoreTimeScale = nil
-  self.effectName = data.id
-  self.zorderOffset = 0
-  self._followOffset.y = self._followOffset.z
-  self._followOffset.x = self._followOffset.y
-  self.expandParams = nil
-  self._myView:scale(1, 1, true)
+    InstanceEffect.super.setData(self, data)
+    self.ignoreTimeScale = nil
+    self.effectName = data.id
+    self.zorderOffset = 0
+    self._followOffset.y = self._followOffset.z
+    self._followOffset.x = self._followOffset.y
+    self.expandParams = nil
+    self._myView:scale(1, 1, true)
 end
 
 function InstanceEffect:setIgnoreScale()
-  self.ignoreTimeScale = self.expandParams.ignoreScale
-  self:setAniPlaySpeed(self._aniPlaySpeed)
+    self.ignoreTimeScale = self.expandParams.ignoreScale
+    self:setAniPlaySpeed(self._aniPlaySpeed)
 end
 
 function InstanceEffect:setLastFrame(frame)
-  self.controler:clearCallBack(self, self.delayClearSelf)
-  if frame > 0 then
-    self.controler:setCallBack(math.round(frame / self._aniPlaySpeed), self.delayClearSelf, self)
-  end
+    self.controler:clearCallBack(self, self.delayClearSelf)
+    if frame > 0 then
+        self.controler:setCallBack(math.round(frame / self._aniPlaySpeed), self.delayClearSelf, self)
+    end
 end
 
 function InstanceEffect:doAiLogical()
-  if self._followTarget then
-    self:dofollowTarget()
-  end
-  if self.expandParams then
-    self:checkLineFollowTarget()
-  end
+    if self._followTarget then
+        self:dofollowTarget()
+    end
+    if self.expandParams then
+        self:checkLineFollowTarget()
+    end
 end
 
 function InstanceEffect:dofollowTarget()
-  if self._followTarget.hp <= 0 then
-    return
-  end
-  self.pos.x = self._followTarget.pos.x + self._followOffset.x * self._followTarget._viewWay
-  self.pos.y = self._followTarget.pos.y + self._followOffset.y
-  self.pos.z = self._followTarget.pos.z + self._followOffset.z
-  if self.updateCount % 30 == 0 then
-    self:_updateZorderByTarget()
-    if self.withTargetWay == 0 then
-      self:setViewWay(self._followTarget._viewWay)
+    if self._followTarget.hp <= 0 then
+        return
     end
-  end
+    self.pos.x = self._followTarget.pos.x + self._followOffset.x * self._followTarget._viewWay
+    self.pos.y = self._followTarget.pos.y + self._followOffset.y
+    self.pos.z = self._followTarget.pos.z + self._followOffset.z
+    if self.updateCount % 30 == 0 then
+        self:_updateZorderByTarget()
+        if self.withTargetWay == 0 then
+            self:setViewWay(self._followTarget._viewWay)
+        end
+    end
 end
 
 function InstanceEffect:_updateZorderByTarget()
-  if self.layerIndex == 2 then
-    self.zorderOffset = self._followTarget.zorderOffset - 1
-  elseif self.layerIndex == 3 or self.layerIndex == 5 then
-    self.zorderOffset = self._followTarget.zorderOffset + 1
-  end
-  self:updateViewZorder()
+    if self.layerIndex == 2 then
+        self.zorderOffset = self._followTarget.zorderOffset - 1
+    elseif self.layerIndex == 3 or self.layerIndex == 5 then
+        self.zorderOffset = self._followTarget.zorderOffset + 1
+    end
+    self:updateViewZorder()
 end
 
 function InstanceEffect:setFollowOffest(ofx, ofy, ofz)
-  self._followOffset.x = ofx
-  self._followOffset.y = ofy
-  self._followOffset.z = ofz
+    self._followOffset.x = ofx
+    self._followOffset.y = ofy
+    self._followOffset.z = ofz
 end
 
 function InstanceEffect:setFollowTarget(target, ofx, ofy, ofz, layer, withTargetWay)
-  if withTargetWay == nil then
-    withTargetWay=0
-  end
-  self._followTarget = target
-  self._followOffset.x = ofx
-  self._followOffset.y = ofy
-  self._followOffset.z = ofz
-  self.layerIndex = layer
-  self.withTargetWay = withTargetWay
-  self.updateCount = 0
-  self:dofollowTarget()
+    if withTargetWay == nil then
+        withTargetWay = 0
+    end
+    self._followTarget = target
+    self._followOffset.x = ofx
+    self._followOffset.y = ofy
+    self._followOffset.z = ofz
+    self.layerIndex = layer
+    self.withTargetWay = withTargetWay
+    self.updateCount = 0
+    self:dofollowTarget()
 end
 
 function InstanceEffect:delayClearSelf()
-  self.controler:destoryEffect(self)
+    self.controler:destoryEffect(self)
 end
 
 function InstanceEffect:playSpecialSysAction(actionName, sysTime, startTime, endTime, actionLength, aniSpeed)
-  if actionLength == nil then
-    actionLength=0
-  end
-  if aniSpeed == nil then
-    aniSpeed=1
-  end
-  local len = InstanceEffect.super.playSpecialSysAction(self,actionName, sysTime, startTime, endTime, actionLength, aniSpeed)
-  self:setLastFrame(len)
-  return len
+    if actionLength == nil then
+        actionLength = 0
+    end
+    if aniSpeed == nil then
+        aniSpeed = 1
+    end
+    local len = InstanceEffect.super.playSpecialSysAction(self, actionName, sysTime, startTime, endTime, actionLength, aniSpeed)
+    self:setLastFrame(len)
+    return len
 end
 
 function InstanceEffect:setExpandParams(info)
-  self.expandParams = info
-  self:doTweenAniScale()
-  self:setIgnoreScale()
+    self.expandParams = info
+    self:doTweenAniScale()
+    self:setIgnoreScale()
 end
 
 function InstanceEffect:doTweenAniScale()
-  if self.expandParams.type ~= SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT then
-    return
-  end
-  Laya.Tween:clearAll(self._myView)
-  self.expandParams.totalFrame = self.expandParams.frame
-  local targetRole = self.expandParams.role
-  self.expandParams.sourceX = targetRole.pos.x
-  self.expandParams.sourceZ = targetRole.pos.z
-  self:setViewWay(1)
-  self.controler:insterInstanceToArr(self)
-  self:checkLineFollowTarget()
+    if self.expandParams.type ~= SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT then
+        return
+    end
+    Laya.Tween:clearAll(self._myView)
+    self.expandParams.totalFrame = self.expandParams.frame
+    local targetRole = self.expandParams.role
+    self.expandParams.sourceX = targetRole.pos.x
+    self.expandParams.sourceZ = targetRole.pos.z
+    self:setViewWay(1)
+    self.controler:insterInstanceToArr(self)
+    self:checkLineFollowTarget()
 end
 
 function InstanceEffect:checkLineFollowTarget()
-  if not self.expandParams.type then
-    return
-  end
-  local sourceWid = #self.expandParams
-  local tweenFrame = self.expandParams.frame
-  local targetRole = self.expandParams.role
-  if not targetRole or targetRole.hp <= 0 then
-    self.expandParams.role = nil
-  else
-    self.expandParams.sourceX = targetRole.pos.x
-    self.expandParams.sourceZ = targetRole.pos.z
-    self.expandParams.sourceY = targetRole.pos.y
-  end
-  local targetx = self.expandParams.sourceX
-  local targetz = self.expandParams.sourceZ
-  local targety = self.expandParams.sourceY
-  local disx = targetx - self.pos.x
-  local disz = targety + targetz - self.pos.z + self.pos.y + self._followOffset.y
-  local ang = math.atan2(disz, disx)
-  local targetWid = math.sqrt(disx * disx + disz * disz)
-  local scale = targetWid / sourceWid
-  if scale < 0.3 then
-    scale = 0.3
-  end
-  self:setRotation(ang * BattleFunc.radtoAngle)
-  if tweenFrame > 0 then
-    scale = scale * 1 - tweenFrame / self.expandParams.totalFrame
-  end
-  self._myView:scale(scale, 1, true)
-  self.expandParams.frame=self.expandParams.frame-1
+    if not self.expandParams.type then
+        return
+    end
+    local sourceWid = #self.expandParams
+    local tweenFrame = self.expandParams.frame
+    local targetRole = self.expandParams.role
+    if not targetRole or targetRole.hp <= 0 then
+        self.expandParams.role = nil
+    else
+        self.expandParams.sourceX = targetRole.pos.x
+        self.expandParams.sourceZ = targetRole.pos.z
+        self.expandParams.sourceY = targetRole.pos.y
+    end
+    local targetx = self.expandParams.sourceX
+    local targetz = self.expandParams.sourceZ
+    local targety = self.expandParams.sourceY
+    local disx = targetx - self.pos.x
+    local disz = targety + targetz - self.pos.z + self.pos.y + self._followOffset.y
+    local ang = math.atan2(disz, disx)
+    local targetWid = math.sqrt(disx * disx + disz * disz)
+    local scale = targetWid / sourceWid
+    if scale < 0.3 then
+        scale = 0.3
+    end
+    self:setRotation(ang * BattleFunc.radtoAngle)
+    if tweenFrame > 0 then
+        scale = scale * 1 - tweenFrame / self.expandParams.totalFrame
+    end
+    self._myView:scale(scale, 1, true)
+    self.expandParams.frame = self.expandParams.frame - 1
 end
 
 function InstanceEffect:onSetToCache()
-  InstanceEffect.super.onSetToCache(self)
-  if self._followTarget and self._followTarget.clearEffByName then
-    self._followTarget:clearEffByName(self.cacheId, true)
-  end
-  self._followTarget = nil
+    InstanceEffect.super.onSetToCache(self)
+    if self._followTarget and self._followTarget.clearEffByName then
+        self._followTarget:clearEffByName(self.cacheId, true)
+    end
+    self._followTarget = nil
 end

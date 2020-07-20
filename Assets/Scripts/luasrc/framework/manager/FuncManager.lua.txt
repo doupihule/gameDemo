@@ -1,45 +1,34 @@
-
-
-
-
-
-
-
-
-
-
-
 FuncManager = class('FuncManager')
 function FuncManager.init(callback, thisobj)
-  local t1 = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
-  local onZipComeplete = function()
-    local congfigName = BaseFunc._globalConfigsName
-    if GameUtils.isReview then
-      congfigName = BaseFunc._globalConfigsReviewName
+    local t1 = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
+    local onZipComeplete = function()
+        local congfigName = BaseFunc._globalConfigsName
+        if GameUtils.isReview then
+            congfigName = BaseFunc._globalConfigsReviewName
+        end
+        LoadManager.getInstance():load({ congfigName }, Laya.Handler:create(FuncManager, function()
+            BaseFunc.onConfigGroupLoadComplete()
+            BaseFunc.onTranslateGroupLoadComplete()
+            ErrCodeManager.getInstance():initConfig()
+            if callback then
+                doJsCallFunc(callback, thisobj)
+            end
+            LogsManager.echo("xd__下载加解析配表总耗时", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - t1)
+        end
+        ), nil, Laya.Loader.JSON)
     end
-    LoadManager.getInstance():load({congfigName}, Laya.Handler:create(FuncManager, function()
-      BaseFunc.onConfigGroupLoadComplete()
-      BaseFunc.onTranslateGroupLoadComplete()
-      ErrCodeManager.getInstance():initConfig()
-      if callback then
-        doJsCallFunc(callback,thisobj)
-      end
-      LogsManager.echo("xd__下载加解析配表总耗时", cs.GameUtils.CommonUtil.GetTimeMiniStamp() - t1)
-    end
-    ), nil, Laya.Loader.JSON)
-  end
-  
-  if FileUtils.checkIsUseZip() then
-    LoadZipManager.getInstance():loadZip("json.zip", VersionManager.ZIP_MODEL_KEY_CONFIG, Laya.Handler(FuncManager, onZipComeplete), nil)
-  else
-    local packName_json = SubPackageConst.packName_json
-    if GameUtils.isReview then
-      packName_json = SubPackageConst.packName_jsonreview
-    end
-    if SubPackageManager.getModelFileStyle(packName_json) == SubPackageConst.PATH_STYLE_SUBPACK then
-      SubPackageManager.loadSubPackage(packName_json, onZipComeplete, FuncManager, true)
+
+    if FileUtils.checkIsUseZip() then
+        LoadZipManager.getInstance():loadZip("json.zip", VersionManager.ZIP_MODEL_KEY_CONFIG, Laya.Handler(FuncManager, onZipComeplete), nil)
     else
-      onZipComeplete()
+        local packName_json = SubPackageConst.packName_json
+        if GameUtils.isReview then
+            packName_json = SubPackageConst.packName_jsonreview
+        end
+        if SubPackageManager.getModelFileStyle(packName_json) == SubPackageConst.PATH_STYLE_SUBPACK then
+            SubPackageManager.loadSubPackage(packName_json, onZipComeplete, FuncManager, true)
+        else
+            onZipComeplete()
+        end
     end
-  end
 end

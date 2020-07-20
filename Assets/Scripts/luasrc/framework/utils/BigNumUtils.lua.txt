@@ -1,84 +1,81 @@
-
-
-
 BigNumUtils = class('BigNumUtils')
 function BigNumUtils.sum(a, b)
-  
-  return a+b
+
+    return a + b
 end
 
 function BigNumUtils.sumIn(a, b)
-  return a+b
+    return a + b
 end
 
 function BigNumUtils.substract(a, b)
-  return a-b
+    return a - b
 end
 
 function BigNumUtils.substractIn(a, b)
-  
-  return a-b
+
+    return a - b
 end
 
 function BigNumUtils.muitlfy(a, b)
-  return a*b
+    return a * b
 end
 
 function BigNumUtils.pow(a, b)
- 
-  return math.pow(a,b)
+
+    return math.pow(a, b)
 end
 
 function BigNumUtils.round(a)
-  return math.round(a)
+    return math.round(a)
 end
 
 function BigNumUtils.devide(a, b, round)
-  
-  return a/b
+
+    return a / b
 end
 
 function BigNumUtils.getMax(a, b)
-  return  math.max(a,b)
+    return math.max(a, b)
 end
 
 function BigNumUtils.getMin(a, b)
-  return math.min(a,b)
+    return math.min(a, b)
 end
 
 function BigNumUtils.compare(a, b, equal)
-  
+
 end
 
 function BigNumUtils.compareIn(a, b)
-  a = string.split(a,"")
-  b = string.split(b,"")
-  if #a > #b then
-    return true
-  elseif #a < #b then
-    return false
-  else
-    local i = 0
-    repeat
-      if tonumber(a[i+1]) > tonumber(b[i+1]) then
+    a = string.split(a, "")
+    b = string.split(b, "")
+    if #a > #b then
         return true
-      elseif tonumber(a[i+1]) < tonumber(b[i+1]) then
+    elseif #a < #b then
         return false
-      end
-      if i == #a - 1 then
-        return false
-      end
-      i=i+1
-    until not(i <= #a - 1)
-  end
+    else
+        local i = 0
+        repeat
+            if tonumber(a[i + 1]) > tonumber(b[i + 1]) then
+                return true
+            elseif tonumber(a[i + 1]) < tonumber(b[i + 1]) then
+                return false
+            end
+            if i == #a - 1 then
+                return false
+            end
+            i = i + 1
+        until not (i <= #a - 1)
+    end
 end
 
 function BigNumUtils.floatPow(a, b)
-  
+
 end
 
 function BigNumUtils.floatMuitlfy(a, b)
-  
+
 end
 
 function BigNumUtils.insertStr(soure, start, newStr)

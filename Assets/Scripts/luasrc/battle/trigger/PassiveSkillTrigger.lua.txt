@@ -1,239 +1,239 @@
-
-
-
-
-
-
-
 PassiveSkillTrigger = class('PassiveSkillTrigger')
 function PassiveSkillTrigger.runOnePassiveGlobalAttr(passive, attrMap, targtRole, way)
-  if targtRole == nil then
-    targtRole=nil
-  end
-  if way == nil then
-    way=1
-  end
-  if not attrMap then
-    attrMap = passive.skillLogicalParams
-  end
-  local onwer = passive.owner
-  local tempArr = BattleFunc.getOneTempArr()
-  local i = 0
-  repeat
-    local attrInfo = attrMap[i+1]
-    local attrId = attrInfo[0+1]
-    local fixValue = attrInfo[1+1] * way
-    local percentValue = attrInfo[2+1] * way
-    local useType = attrInfo[3+1]
-    local compareValue = attrInfo[4+1]
-    table.clearArray(tempArr)
-    ChooseTrigger.getRoleByType(onwer, useType, compareValue, tempArr)
-    local s = 0
+    if targtRole == nil then
+        targtRole = nil
+    end
+    if way == nil then
+        way = 1
+    end
+    if not attrMap then
+        attrMap = passive.skillLogicalParams
+    end
+    local onwer = passive.owner
+    local tempArr = BattleFunc.getOneTempArr()
+    local i = 0
     repeat
-      local tempInstance = tempArr[s+1]
-      if not targtRole or tempInstance == targtRole then
-        tempInstance.attrData:updateOneAttr(attrId, fixValue, percentValue, tempInstance.attrData.extraAttr)
-      end
-      s=s+1
-    until not(s < #tempArr)
-    i=i+1
-  until not(i < #attrMap)
-  BattleFunc.cacheOneTempArr(tempArr)
+        local attrInfo = attrMap[i + 1]
+        local attrId = attrInfo[0 + 1]
+        local fixValue = attrInfo[1 + 1] * way
+        local percentValue = attrInfo[2 + 1] * way
+        local useType = attrInfo[3 + 1]
+        local compareValue = attrInfo[4 + 1]
+        table.clearArray(tempArr)
+        ChooseTrigger.getRoleByType(onwer, useType, compareValue, tempArr)
+        local s = 0
+        repeat
+            local tempInstance = tempArr[s + 1]
+            if not targtRole or tempInstance == targtRole then
+                tempInstance.attrData:updateOneAttr(attrId, fixValue, percentValue, tempInstance.attrData.extraAttr)
+            end
+            s = s + 1
+        until not (s < #tempArr)
+        i = i + 1
+    until not (i < #attrMap)
+    BattleFunc.cacheOneTempArr(tempArr)
 end
 
 function PassiveSkillTrigger.runAllPassiveGlobalAttr(globalAttr, targetRole, way)
-  if way == nil then
-    way=1
-  end
-  local i = 0
-  repeat
-    local info = globalAttr[i+1]
-    PassiveSkillTrigger.runOnePassiveGlobalAttr(info.passive, info.attr, targetRole, way)
-    i=i+1
-  until not(i < #globalAttr)
+    if way == nil then
+        way = 1
+    end
+    local i = 0
+    repeat
+        local info = globalAttr[i + 1]
+        PassiveSkillTrigger.runOnePassiveGlobalAttr(info.passive, info.attr, targetRole, way)
+        i = i + 1
+    until not (i < #globalAttr)
 end
 
 function PassiveSkillTrigger.useSelfPassiveAttr(instance, passive, way, outRecount)
-  if way == nil then
-    way=1
-  end
-  if outRecount == nil then
-    outRecount=false
-  end
-  local type = passive.cfgData.effectType
-  if type ~= BattleConst.passive_effect_attr then
-    return
-  end
-  local effectParams = passive.skillLogicalParams
-  local s = 0
-  repeat
-    local tempAttr = effectParams[s+1]
-    local attrId = tempAttr[0+1]
-    instance.attrData:updateOneAttr(attrId, tempAttr[1+1] * way, tempAttr[2+1] * way, instance.attrData.extraAttr, outRecount)
-    s=s+1
-  until not(s < #effectParams)
+    if way == nil then
+        way = 1
+    end
+    if outRecount == nil then
+        outRecount = false
+    end
+    local type = passive.cfgData.effectType
+    if type ~= BattleConst.passive_effect_attr then
+        return
+    end
+    local effectParams = passive.skillLogicalParams
+    local s = 0
+    repeat
+        local tempAttr = effectParams[s + 1]
+        local attrId = tempAttr[0 + 1]
+        instance.attrData:updateOneAttr(attrId, tempAttr[1 + 1] * way, tempAttr[2 + 1] * way, instance.attrData.extraAttr, outRecount)
+        s = s + 1
+    until not (s < #effectParams)
 end
 
 function PassiveSkillTrigger.runOnePassiveSkill(attacker, skill, p1, p2, p3, p4)
-  local type = skill.cfgData.effectType
-  -- [ts2lua]PassiveSkillTrigger下标访问可能不正确
-  local func = PassiveSkillTrigger["runPassiveSkill_" .. type]
-  if skill.cfgData.cdTime then
-    skill.leftSkillCd = BattleFunc.getInstance():turnMinisecondToframe(tonumber(skill.cfgData.cdTime))
-  end
-  if not func then
-    LogsManager.errorTag("PassiveSkillCfgError", "错误的被动技能效果类型,id:", skill._skillId, "effecttype:", type)
-    return 0
-  else
-    return doJsCallFunc(func,PassiveSkillTrigger, attacker, skill, p1, p2, p3, p4)
-  end
+    local type = skill.cfgData.effectType
+    -- [ts2lua]PassiveSkillTrigger下标访问可能不正确
+    local func = PassiveSkillTrigger["runPassiveSkill_" .. type]
+    if skill.cfgData.cdTime then
+        skill.leftSkillCd = BattleFunc.getInstance():turnMinisecondToframe(tonumber(skill.cfgData.cdTime))
+    end
+    if not func then
+        LogsManager.errorTag("PassiveSkillCfgError", "错误的被动技能效果类型,id:", skill._skillId, "effecttype:", type)
+        return 0
+    else
+        return doJsCallFunc(func, PassiveSkillTrigger, attacker, skill, p1, p2, p3, p4)
+    end
 end
 
 function PassiveSkillTrigger.runPassiveSkill_1(attacker, skill)
-  PassiveSkillTrigger.useSkillActions(attacker, skill, nil)
-  return nil
+    PassiveSkillTrigger.useSkillActions(attacker, skill, nil)
+    return nil
 end
 
 function PassiveSkillTrigger.runPassiveSkill_2(attacker, skill)
-  if attacker.controler.gameMode == BattleConst.battle_game_mode_boss then
-    return
-  end
-  local params = skill.skillLogicalParams[0+1]
-  attacker.controler.refreshControler:setFormationWeight(params[0+1], params[1+1] / 10000)
+    if attacker.controler.gameMode == BattleConst.battle_game_mode_boss then
+        return
+    end
+    local params = skill.skillLogicalParams[0 + 1]
+    attacker.controler.refreshControler:setFormationWeight(params[0 + 1], params[1 + 1] / 10000)
 end
 
-function PassiveSkillTrigger.runPassiveSkill_3(attacker, skill) end
+function PassiveSkillTrigger.runPassiveSkill_3(attacker, skill)
+end
 function PassiveSkillTrigger.runPassiveSkill_4(attacker, skill)
-  attacker.attrData:changeOneTempAttr(BattleConst.attr_final_damage, skill.skillLogicalParams[0+1][0+1], 0)
-  return skill.skillLogicalParams[0+1][0+1]
+    attacker.attrData:changeOneTempAttr(BattleConst.attr_final_damage, skill.skillLogicalParams[0 + 1][0 + 1], 0)
+    return skill.skillLogicalParams[0 + 1][0 + 1]
 end
 
 function PassiveSkillTrigger.runPassiveSkill_5(attacker, skill, useArr, targetSkillAction)
-  return PassiveSkillTrigger.useSkillActions(attacker, skill, targetSkillAction)
+    return PassiveSkillTrigger.useSkillActions(attacker, skill, targetSkillAction)
 end
 
 function PassiveSkillTrigger.runPassiveSkill_6(attacker, skill, useArr, targetSkillAction, buffData)
-  local tempArr = skill.skillLogicalParams
-  local addValue = 0
-  local i = 0
-  repeat
-    local info = tempArr[i+1]
-    local type = info[0+1]
-    local params = info[1+1]
-    if type == 1 then
-      if buffData._id == tostring(params) then
-        addValue = addValue + info[2+1]
-        break
-      end
-    elseif type == 2 then
-      if buffData.logicType == params then
-        addValue = addValue + info[2+1]
-        break
-      end
-    elseif type == 3 then
-      if buffData.group == params then
-        addValue = addValue + info[2+1]
-        break
-      end
-    end
-    i=i+1
-  until not(i < #tempArr)
-  attacker.attrData:changeOneTempAttr(BattleConst.attr_final_damage, addValue, 0)
-  return addValue
+    local tempArr = skill.skillLogicalParams
+    local addValue = 0
+    local i = 0
+    repeat
+        local info = tempArr[i + 1]
+        local type = info[0 + 1]
+        local params = info[1 + 1]
+        if type == 1 then
+            if buffData._id == tostring(params) then
+                addValue = addValue + info[2 + 1]
+                break
+            end
+        elseif type == 2 then
+            if buffData.logicType == params then
+                addValue = addValue + info[2 + 1]
+                break
+            end
+        elseif type == 3 then
+            if buffData.group == params then
+                addValue = addValue + info[2 + 1]
+                break
+            end
+        end
+        i = i + 1
+    until not (i < #tempArr)
+    attacker.attrData:changeOneTempAttr(BattleConst.attr_final_damage, addValue, 0)
+    return addValue
 end
 
 function PassiveSkillTrigger.runPassiveSkill_7(attacker, skill)
-  attacker.attrData:changeOneTempAttr(BattleConst.attr_final_damage, skill.skillLogicalParams[0+1][0+1], 0)
+    attacker.attrData:changeOneTempAttr(BattleConst.attr_final_damage, skill.skillLogicalParams[0 + 1][0 + 1], 0)
 end
 
 function PassiveSkillTrigger.runPassiveSkill_8(attacker, skill)
-  attacker.attrData:changeOneTempAttr(BattleConst.attr_final_betreated, skill.skillLogicalParams[0+1][0+1], 0)
+    attacker.attrData:changeOneTempAttr(BattleConst.attr_final_betreated, skill.skillLogicalParams[0 + 1][0 + 1], 0)
 end
 
 function PassiveSkillTrigger.runPassiveSkill_9(attacker, skill)
-  attacker.attrData:changeOneTempAttr(BattleConst.attr_final_relief, skill.skillLogicalParams[0+1][0+1], 0)
+    attacker.attrData:changeOneTempAttr(BattleConst.attr_final_relief, skill.skillLogicalParams[0 + 1][0 + 1], 0)
 end
 
 function PassiveSkillTrigger.runPassiveSkill_10(attacker, skill)
-  local tempArr = skill.skillLogicalParams
-  local tempOnceAttr = attacker.attrData.tempOnceAttr
-  local i = 0
-  repeat
-    local info = tempArr[i+1]
-    local id = info[0+1]
-    attacker.attrData:changeOneTempAttr(id, info[1+1], info[2+1])
-    i=i+1
-  until not(i < #tempArr)
-  return tempOnceAttr
+    local tempArr = skill.skillLogicalParams
+    local tempOnceAttr = attacker.attrData.tempOnceAttr
+    local i = 0
+    repeat
+        local info = tempArr[i + 1]
+        local id = info[0 + 1]
+        attacker.attrData:changeOneTempAttr(id, info[1 + 1], info[2 + 1])
+        i = i + 1
+    until not (i < #tempArr)
+    return tempOnceAttr
 end
 
 function PassiveSkillTrigger.runPassiveSkill_11(attacker, skill, useArr, skillAction, outArr)
-  local paramsArr = skill.skillLogicalParams
-  if not outArr then
-    LogsManager.errorTag("passiveerror_11", "被动技能效果参数错误,skillId:", skill._skillId)
-    return
-  end
-  table.clearArray(outArr)
-  local i = 0
-  repeat
-    local tempInfo = paramsArr[i+1]
-    local id = tempInfo[0+1]
-    local delayFrame = BattleFunc.getInstance():turnMinisecondToframe(tempInfo[1+1])
-    local act = skill:getActionById(id)
-    if not act then
-      act = SkillActionData.new(id, skill.owner, skillAction.skill, delayFrame, 1, 1, 0, 0, skill)
+    local paramsArr = skill.skillLogicalParams
+    if not outArr then
+        LogsManager.errorTag("passiveerror_11", "被动技能效果参数错误,skillId:", skill._skillId)
+        return
     end
-    table.insert(outArr, act)
-    i=i+1
-  until not(i < #paramsArr)
-  return outArr
+    table.clearArray(outArr)
+    local i = 0
+    repeat
+        local tempInfo = paramsArr[i + 1]
+        local id = tempInfo[0 + 1]
+        local delayFrame = BattleFunc.getInstance():turnMinisecondToframe(tempInfo[1 + 1])
+        local act = skill:getActionById(id)
+        if not act then
+            act = SkillActionData.new(id, skill.owner, skillAction.skill, delayFrame, 1, 1, 0, 0, skill)
+        end
+        table.insert(outArr, act)
+        i = i + 1
+    until not (i < #paramsArr)
+    return outArr
 end
 
 function PassiveSkillTrigger.useSkillActions(attacker, skill, targetSkillAction)
-  if targetSkillAction == nil then
-    targetSkillAction=nil
-  end
-  local tempArr = skill.skillLogicalParams
-  local i = 0
-  repeat
-    local tempInfo = tempArr[i+1]
-    local id = tempInfo[0+1]
-    local delayFrame = BattleFunc.getInstance():turnMinisecondToframe(tempInfo[1+1])
-    local act = skill:getActionById(id)
-    local useSkill = attacker.currentSkill and attacker.currentSkill or skill
-    if not act then
-      if targetSkillAction then
-        act = SkillActionData.new(id, skill.owner, targetSkillAction.skill, delayFrame, 1, 1, 0, 0, skill)
-      else
-        act = SkillActionData.new(id, skill.owner, useSkill, delayFrame, 1, 1, 0, 0, skill)
-      end
+    if targetSkillAction == nil then
+        targetSkillAction = nil
     end
-    if targetSkillAction ~= nil then
-      if act.chooseTartgetCfg == nil then
-        if #targetSkillAction.tempChooseArr > 0 then
-          TableUtils.copyOneArr(targetSkillAction.tempChooseArr, act.tempChooseArr)
-          act.chooseTartgetCfg = targetSkillAction.chooseTartgetCfg
-        else
-          local tempSkill = targetSkillAction.skill
-          if #tempSkill.tempChooseArr > 0 then
-            TableUtils.copyOneArr(tempSkill.tempChooseArr, act.tempChooseArr)
-          end
-          act.chooseTartgetCfg = tempSkill.chooseTartgetCfg
+    local tempArr = skill.skillLogicalParams
+    local i = 0
+    repeat
+        local tempInfo = tempArr[i + 1]
+        local id = tempInfo[0 + 1]
+        local delayFrame = BattleFunc.getInstance():turnMinisecondToframe(tempInfo[1 + 1])
+        local act = skill:getActionById(id)
+        local useSkill = attacker.currentSkill and attacker.currentSkill or skill
+        if not act then
+            if targetSkillAction then
+                act = SkillActionData.new(id, skill.owner, targetSkillAction.skill, delayFrame, 1, 1, 0, 0, skill)
+            else
+                act = SkillActionData.new(id, skill.owner, useSkill, delayFrame, 1, 1, 0, 0, skill)
+            end
         end
-      end
-    end
-    if delayFrame > 0 then
-      attacker.controler:setCallBack(delayFrame, attacker.checkSkillEffect, attacker, act)
-    else
-      attacker:checkSkillEffect(act)
-    end
-    i=i+1
-  until not(i < #tempArr)
+        if targetSkillAction ~= nil then
+            if act.chooseTartgetCfg == nil then
+                if #targetSkillAction.tempChooseArr > 0 then
+                    TableUtils.copyOneArr(targetSkillAction.tempChooseArr, act.tempChooseArr)
+                    act.chooseTartgetCfg = targetSkillAction.chooseTartgetCfg
+                else
+                    local tempSkill = targetSkillAction.skill
+                    if #tempSkill.tempChooseArr > 0 then
+                        TableUtils.copyOneArr(tempSkill.tempChooseArr, act.tempChooseArr)
+                    end
+                    act.chooseTartgetCfg = tempSkill.chooseTartgetCfg
+                end
+            end
+        end
+        if delayFrame > 0 then
+            attacker.controler:setCallBack(delayFrame, attacker.checkSkillEffect, attacker, act)
+        else
+            attacker:checkSkillEffect(act)
+        end
+        i = i + 1
+    until not (i < #tempArr)
 end
 
-function PassiveSkillTrigger.runPassiveSkill_101(attacker, skill) end
-function PassiveSkillTrigger.runPassiveSkill_102(attacker, skill) end
-function PassiveSkillTrigger.runPassiveSkill_103(attacker, skill) end
-function PassiveSkillTrigger.runPassiveSkill_104(attacker, skill) end
-function PassiveSkillTrigger.runPassiveSkill_105(attacker, skill) end
-function PassiveSkillTrigger.runPassiveSkill_106(attacker, skill) end
+function PassiveSkillTrigger.runPassiveSkill_101(attacker, skill)
+end
+function PassiveSkillTrigger.runPassiveSkill_102(attacker, skill)
+end
+function PassiveSkillTrigger.runPassiveSkill_103(attacker, skill)
+end
+function PassiveSkillTrigger.runPassiveSkill_104(attacker, skill)
+end
+function PassiveSkillTrigger.runPassiveSkill_105(attacker, skill)
+end
+function PassiveSkillTrigger.runPassiveSkill_106(attacker, skill)
+end

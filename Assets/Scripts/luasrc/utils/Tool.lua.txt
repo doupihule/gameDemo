@@ -1,39 +1,41 @@
- --
+--
 -- User: ZhangYanGuang
 -- Date: 15-5-14
 -- 全局工具方法
 --
 
 local function swapGem(str)
-	--预留扩展，该方法中修改str
+    --预留扩展，该方法中修改str
     return str
 end
 
 function getPlotLanguage(id)
     --先从csv配置从读取
     local result = FuncTranslate.getPlotLanguage(id, 'zh_CN') --GameConfig:getRaw("translate", id, 'zh_CN');
- 
+
     if result == nil then
-        echo("没有找到这个语言id配置:",id) 
-        return id 
+        echo("没有找到这个语言id配置:", id)
+        return id
     end
-    if type(result)=='string' then
-        result=swapGem(result);
-    elseif type(result)=='table' then
-        for i,v in pairs(result) do
-            if type(result[i])=='string' then
-                result[i]=swapGem(result[i]);
+    if type(result) == 'string' then
+        result = swapGem(result);
+    elseif type(result) == 'table' then
+        for i, v in pairs(result) do
+            if type(result[i]) == 'string' then
+                result[i] = swapGem(result[i]);
             end
         end
     end
     return result;
 end
- 
+
 --三元运算符
 function _yuan3(a, b, c)
-    if a == nil then return c end
-    return(a and { b } or { c })[1]
-end 
+    if a == nil then
+        return c
+    end
+    return (a and { b } or { c })[1]
+end
 
 Tool = Tool or {}
 
@@ -43,36 +45,36 @@ Tool = Tool or {}
 
 
 --比较_G里面的所有变量
-function Tool.compareKey( keyArr1,keyArr2 )
+function Tool.compareKey(keyArr1, keyArr2)
     local addKey = {}
-    for i,v in ipairs(keyArr2) do
-        local hasFind =false
-        for ii,vv in ipairs(keyArr1) do
+    for i, v in ipairs(keyArr2) do
+        local hasFind = false
+        for ii, vv in ipairs(keyArr1) do
             if v.key == vv.key then
                 hasFind = true
                 break
             end
         end
         if not hasFind then
-           table.insert(addKey, v)
+            table.insert(addKey, v)
         end
-        
+
     end
     --返回增加的数组
-    return addKey 
+    return addKey
 
 end
 
 -- 转换含有nil value的有序数组
 function Tool.getTableNoNil(t)
-    local temp = {unpack(t)}
+    local temp = { unpack(t) }
     local maxNums = 0
-    for k,v in pairs(temp) do
-        maxNums = math.max(maxNums,k)
+    for k, v in pairs(temp) do
+        maxNums = math.max(maxNums, k)
     end
 
-    for i=1,maxNums do
-        if not t[i]  then
+    for i = 1, maxNums do
+        if not t[i] then
             t[i] = false
         end
     end
@@ -84,7 +86,7 @@ end
 function Tool.monitorTableVaue(t)
     local newT = {}
     local realT = {}
-    for k,v in pairs(t) do
+    for k, v in pairs(t) do
         realT[k] = v
     end
 
@@ -93,31 +95,31 @@ function Tool.monitorTableVaue(t)
             return realT[k]
         end,
         __newindex = function(t, k, v)
-            echo(string.format("修改表属性:%s为:%s",k,v))
+            echo(string.format("修改表属性:%s为:%s", k, v))
             realT[k] = v
         end,
-    }  
+    }
 
-    setmetatable(newT,mt)
+    setmetatable(newT, mt)
 
     return newT
 end
 
 -- 深度比较两个表
-function Tool.deepCompareT(t1,t2,key)
+function Tool.deepCompareT(t1, t2, key)
     if not t1 or not t2 then
         return
     end
     key = key or "table"
     local des = nil
-    for k,v in pairs(t1) do
-        des = string.format("%s-->%s",key,k)
+    for k, v in pairs(t1) do
+        des = string.format("%s-->%s", key, k)
         if type(v) ~= "table" then
             if t1[k] ~= t2[k] then
-                echo("有值变化",des,"t1",t1[k],"t2",t2[k])
+                echo("有值变化", des, "t1", t1[k], "t2", t2[k])
             end
         else
-            Tool.deepCompareT(t1[k],t2[k],des)
+            Tool.deepCompareT(t1[k], t2[k], des)
         end
     end
 end
@@ -163,7 +165,7 @@ local battleIgnoreMap = {
     ["plot.PlotTem"] = true,
     ["plot.AnimBoneNew"] = true,
     ["quest.MainlineQuest"] = true,
-    
+
     ["shop.Goods"] = true,
     ["shop.ShopWeight"] = true,
     -- ["story.Raid"] = true,
@@ -171,15 +173,15 @@ local battleIgnoreMap = {
     ["story.NpcInfo"] = true,
     ["story.Scene"] = true,
     ["story.Npc"] = true,
-    
+
     ["tower.TowerBox"] = true,
 }
 
 
 --配表reuqire
-function Tool.configRequire( path )
+function Tool.configRequire(path)
     -- if battleIgnoreMap[path] then
-    if DEBUG_SERVICES   and  battleIgnoreMap[path] then
+    if DEBUG_SERVICES and battleIgnoreMap[path] then
         return {}
     end
     return require(path)
@@ -188,7 +190,7 @@ end
 
 -- 将阿拉伯数字转化成中文 一 二 三...
 -- isComplex 是否中文繁体,默认不传,为简体
-function Tool.transformNumToChineseWord( num,isComplex )
+function Tool.transformNumToChineseWord(num, isComplex)
     -- 阿拉伯数字到中文数字的映射表
     local arabMap = {
         [0] = "十",
@@ -222,13 +224,13 @@ function Tool.transformNumToChineseWord( num,isComplex )
 
     local num = tonumber(num)
     if not num or num == nil or num == "nil" then
-        return numStr,len
+        return numStr, len
     elseif tonumber(num) == 0 then
         numStr = "零"
         len = 1
-        return numStr,len
+        return numStr, len
     else
-        local modNum = num % 10 
+        local modNum = num % 10
         local divNum = math.floor(num / 10)
 
         if modNum == 0 then
@@ -257,7 +259,7 @@ function Tool.transformNumToChineseWord( num,isComplex )
         end
     end
 
-    return numStr,len
+    return numStr, len
 end
 
 --[[
@@ -275,33 +277,33 @@ function Tool.formatLeftTime(sec)
     if sec == 3600 then
         hour = 0
     else
-        hour = math.floor( (sec - day * 86400) / 3600 )
+        hour = math.floor((sec - day * 86400) / 3600)
     end
 
     local min = nil
     if sec == 60 then
         min = 0
     else
-        min = math.floor( (sec - day * 86400 - hour * 3600) / 60 )
+        min = math.floor((sec - day * 86400 - hour * 3600) / 60)
     end
 
     local second = sec - day * 86400 - hour * 3600 - min * 60
 
     local leftTimeStr = ""
     if day > 0 then
-        leftTimeStr = string.format("%s%s天",leftTimeStr,tostring(day))
+        leftTimeStr = string.format("%s%s天", leftTimeStr, tostring(day))
     end
 
     if hour > 0 then
-        leftTimeStr = string.format("%s%s时",leftTimeStr,tostring(hour))
+        leftTimeStr = string.format("%s%s时", leftTimeStr, tostring(hour))
     end
 
     if min > 0 then
-        leftTimeStr = string.format("%s%s分",leftTimeStr,tostring(min))
+        leftTimeStr = string.format("%s%s分", leftTimeStr, tostring(min))
     end
 
-    if second > 0 or (second == 0 and (day == 0 and hour  == 0 and min  == 0) )then
-        leftTimeStr = string.format("%s%s秒",leftTimeStr,tostring(second))
+    if second > 0 or (second == 0 and (day == 0 and hour == 0 and min == 0)) then
+        leftTimeStr = string.format("%s%s秒", leftTimeStr, tostring(second))
     end
 
     return leftTimeStr
@@ -312,16 +314,16 @@ end
 
 --记录当前_G里面的所有变量  
 --返回格式{ {key = key1,value = value1},...    }
-function Tool.getGlobalKey( )
+function Tool.getGlobalKey()
     local resultArr = {}
     local keyArr = {}
-    
-    for k,v in pairs(_G) do
-        table.insert(keyArr,k)
+
+    for k, v in pairs(_G) do
+        table.insert(keyArr, k)
     end
-    table.sort( keyArr )
-    for i,v in ipairs(keyArr) do
-        table.insert(resultArr, {key = v,value = _G[v] })
+    table.sort(keyArr)
+    for i, v in ipairs(keyArr) do
+        table.insert(resultArr, { key = v, value = _G[v] })
     end
     return resultArr
 end
@@ -331,27 +333,26 @@ end
 --当全局变量有设置为index的时候 就会打印echoError
 local globalCheckKey = nil
 
-
 function Tool.initGlobalGetAndSet(tb)
     if conditions then
         --todo
     end
     local handlers = {} --存储get和set方法
     local values = {} --存储值
-    
+
     local mt = {
         __index = function(t, k)
-            return rawget(t,k)
+            return rawget(t, k)
         end,
         __newindex = function(t, k, v)
             -- print("set", k)
-            if k ==globalCheckKey then
+            if k == globalCheckKey then
                 echoError("___index被设置了")
             end
-            rawset(t , k, v)
+            rawset(t, k, v)
         end,
     }
- 
+
     setmetatable(tb, mt)--将当前环境的元表设为 mt，getfenv()只使用于lua5.1以前的版本，5.2以后请使用_ENV 变量
 end
 

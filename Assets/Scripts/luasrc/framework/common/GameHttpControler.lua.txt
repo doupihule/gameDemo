@@ -1,230 +1,228 @@
-
-
 GameHttpControler = class('GameHttpControler')
 
 function GameHttpControler.getInstance()
-  if not GameHttpControler._instance then
-    GameHttpControler._instance = GameHttpControler.new()
-  end
-  return GameHttpControler._instance
+    if not GameHttpControler._instance then
+        GameHttpControler._instance = GameHttpControler.new()
+    end
+    return GameHttpControler._instance
 end
 
 GameHttpControler.tokenErrorCode = "10038";
 function GameHttpControler:ctor()
-  self._connectCacheArr = {};
-  self._requestId = 0;
-  self.httpServerUrl = "https://cloud-dev.fantasyfancy.com:8600/?mod=jsonrpc";
-  self._tempParams = {};
-  self._tempWebParams = {};
-  self._lastSendTime = 0;
-  self.defaultExpandParams = {url=nil, forceConnect=true};
-  self._tempWebParams.errorCall = self.onHttpError
-  self._tempWebParams.isOrigin = true
-  if PackConfigManager.getInstance():getPlatform().backend_url then
-    self.httpServerUrl = PackConfigManager.getInstance():getPlatform().backend_url
-  else
-    LogsManager.warn("backendUrlError", "httpserver Platform没有设置backend_url")
-  end
+    self._connectCacheArr = {};
+    self._requestId = 0;
+    self.httpServerUrl = "https://cloud-dev.fantasyfancy.com:8600/?mod=jsonrpc";
+    self._tempParams = {};
+    self._tempWebParams = {};
+    self._lastSendTime = 0;
+    self.defaultExpandParams = { url = nil, forceConnect = true };
+    self._tempWebParams.errorCall = self.onHttpError
+    self._tempWebParams.isOrigin = true
+    if PackConfigManager.getInstance():getPlatform().backend_url then
+        self.httpServerUrl = PackConfigManager.getInstance():getPlatform().backend_url
+    else
+        LogsManager.warn("backendUrlError", "httpserver Platform没有设置backend_url")
+    end
 end
 
 function GameHttpControler:getServerUrl()
-  local version = Global.version
-  if Global.version == "1" and PackConfigManager.getInstance():getPlatform().platform == "test" then
-    version = "100000000"
-  end
-  return self.httpServerUrl .. "&ver=" .. version .. "&upgrade_path=" .. PackConfigManager.getInstance():getPlatform().upgrade_path
+    local version = Global.version
+    if Global.version == "1" and PackConfigManager.getInstance():getPlatform().platform == "test" then
+        version = "100000000"
+    end
+    return self.httpServerUrl .. "&ver=" .. version .. "&upgrade_path=" .. PackConfigManager.getInstance():getPlatform().upgrade_path
 end
 
 function GameHttpControler:sendRequest(method, params, callback, thisObj, isWait, isInsert, addParams, expandParams)
-  if params == nil then
-    params=nil
-  end
-  if callback == nil then
-    callback=nil
-  end
-  if thisObj == nil then
-    thisObj=nil
-  end
-  if isWait == nil then
-    isWait=true
-  end
-  if isInsert == nil then
-    isInsert=false
-  end
-  if addParams == nil then
-    addParams=nil
-  end
-  if expandParams == nil then
-    expandParams=nil
-  end
-  self._lastSendTime = Client.getInstance():getMiniServerTime()
-  local uniuquId = self:getUniqueRequestId()
-  if not expandParams then
-    expandParams = self.defaultExpandParams
-  end
-  local coninfo = ConnectObj.new(1, method, params, callback, thisObj, isWait, addParams, expandParams)
-  if isInsert then
-    table.insert(self._connectCacheArr,1,coninfo)
-  else
-    table.insert(self._connectCacheArr, coninfo)
-  end
-  if self._currentConn then
-    LogsManager.echo(self._currentConn.method .. "请求正在处理中...缓存:." .. coninfo.method)
-    return
-  end
-  if not self.loginToken then
-    self:initRequest()
-    return
-  end
-  self:doRequest()
+    if params == nil then
+        params = nil
+    end
+    if callback == nil then
+        callback = nil
+    end
+    if thisObj == nil then
+        thisObj = nil
+    end
+    if isWait == nil then
+        isWait = true
+    end
+    if isInsert == nil then
+        isInsert = false
+    end
+    if addParams == nil then
+        addParams = nil
+    end
+    if expandParams == nil then
+        expandParams = nil
+    end
+    self._lastSendTime = Client.getInstance():getMiniServerTime()
+    local uniuquId = self:getUniqueRequestId()
+    if not expandParams then
+        expandParams = self.defaultExpandParams
+    end
+    local coninfo = ConnectObj.new(1, method, params, callback, thisObj, isWait, addParams, expandParams)
+    if isInsert then
+        table.insert(self._connectCacheArr, 1, coninfo)
+    else
+        table.insert(self._connectCacheArr, coninfo)
+    end
+    if self._currentConn then
+        LogsManager.echo(self._currentConn.method .. "请求正在处理中...缓存:." .. coninfo.method)
+        return
+    end
+    if not self.loginToken then
+        self:initRequest()
+        return
+    end
+    self:doRequest()
 end
 
 function GameHttpControler:initRequest()
-  if self._currentConn and self._currentConn.isWait then
-    WaitManager.getInstance():add(MsgCMD.ROLL_ANI)
-  end
-  UserInfo.platform:reRequestGlobal(self.onLoginBack, self)
+    if self._currentConn and self._currentConn.isWait then
+        WaitManager.getInstance():add(MsgCMD.ROLL_ANI)
+    end
+    UserInfo.platform:reRequestGlobal(self.onLoginBack, self)
 end
 
 function GameHttpControler:onLoginBack(data)
-  local isWait = false
-  if self._currentConn then
-    isWait = self._currentConn.isWait
-    if isWait then
-      WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
+    local isWait = false
+    if self._currentConn then
+        isWait = self._currentConn.isWait
+        if isWait then
+            WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
+        end
+        LogsManager.echo("gamehttp _____resend---", self.loginToken)
+        self:resendConn()
+    else
+        self:doRequest()
     end
-    LogsManager.echo("gamehttp _____resend---", self.loginToken)
-    self:resendConn()
-  else
-    self:doRequest()
-  end
 end
 
 function GameHttpControler:doRequest()
-  if self._currentConn then
-    return
-  end
-  if #self._connectCacheArr == 0 then
-    return
-  end
-  local con = self._connectCacheArr[0+1]
-  table.spliceArray(self._connectCacheArr,1, 1)
-  if not con.uniqueId then
-    con.uniqueId = self:getUniqueRequestId()
-  end
-  self._currentConn = con
-  self:requestServer(con)
+    if self._currentConn then
+        return
+    end
+    if #self._connectCacheArr == 0 then
+        return
+    end
+    local con = self._connectCacheArr[0 + 1]
+    table.spliceArray(self._connectCacheArr, 1, 1)
+    if not con.uniqueId then
+        con.uniqueId = self:getUniqueRequestId()
+    end
+    self._currentConn = con
+    self:requestServer(con)
 end
 
 function GameHttpControler:requestServer(con)
-  if con.isWait then
-    WaitManager.getInstance():add(MsgCMD.ROLL_ANI)
-  end
-  local params = self._tempParams
-  self._tempParams.reqId = nil
-  params.method = con.method
-  params.id = con.id
-  params.uniqueId = con.uniqueId
-  params.params = con.params
-  con.params.token = self.loginToken
-  local url = nil
-  if con.expandParams.url then
-    url = con.expandParams.url
-  else
-    url = self:getServerUrl()
-  end
-  HttpMessage.getInstance():send(url, params, self.onHttpCallBack, self, "post", self._tempWebParams)
+    if con.isWait then
+        WaitManager.getInstance():add(MsgCMD.ROLL_ANI)
+    end
+    local params = self._tempParams
+    self._tempParams.reqId = nil
+    params.method = con.method
+    params.id = con.id
+    params.uniqueId = con.uniqueId
+    params.params = con.params
+    con.params.token = self.loginToken
+    local url = nil
+    if con.expandParams.url then
+        url = con.expandParams.url
+    else
+        url = self:getServerUrl()
+    end
+    HttpMessage.getInstance():send(url, params, self.onHttpCallBack, self, "post", self._tempWebParams)
 end
 
 function GameHttpControler:onHttpCallBack(backData)
-  if not self._currentConn then
-    LogsManager.echo("httpserver 当前没有连接.确返回数据了--")
-    return
-  end
-  if self._currentConn.isWait then
-    WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
-  end
-  local data = nil
-  try_catch{
-    main = function()
-      data = TableUtils.safelyJsonParse(backData)
-    end,
-    catch = function(e)
-      LogsManager.echo("gamehttp 返回的数据不是json,走重新登入", backData)
-      self.loginToken = nil
-      WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.initRequest, self)
-      return
+    if not self._currentConn then
+        LogsManager.echo("httpserver 当前没有连接.确返回数据了--")
+        return
     end
-  }
-  if (not data or type(data) == "string") or not data[0+1] then
-    self.loginToken = nil
-    LogsManager.echo("gamehttp 返回的数据格式不对", backData)
-    WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.initRequest, self)
-    return
-  end
-  data = data[0+1]
-  if data.error then
-    local errorCode = data.error.code
-    if errorCode == GameHttpControler.tokenErrorCode then
-      self.loginToken = nil
-      LogsManager.echo("gamehttp token 过期", backData)
-      WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.initRequest, self)
-      return
+    if self._currentConn.isWait then
+        WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
     end
-    local transLateError = TranslateFunc.getInstance():getTranslate("#error" .. errorCode)
-    WindowManager.ShowTip(transLateError)
-  else
-    TableUtils.adjustEmptyArr(data.result)
-    Client.getInstance():onResult(data.result, false)
-  end
-  local temp = self._currentConn
-  self._currentConn = nil
-  self:doRequest()
-  if temp.callback then
-    doJsCallFunc(temp.callback,temp.thisObj, data.result or data, temp.addParams)
-  end
+    local data = nil
+    try_catch {
+        main = function()
+            data = TableUtils.safelyJsonParse(backData)
+        end,
+        catch = function(e)
+            LogsManager.echo("gamehttp 返回的数据不是json,走重新登入", backData)
+            self.loginToken = nil
+            WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.initRequest, self)
+            return
+        end
+    }
+    if (not data or type(data) == "string") or not data[0 + 1] then
+        self.loginToken = nil
+        LogsManager.echo("gamehttp 返回的数据格式不对", backData)
+        WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.initRequest, self)
+        return
+    end
+    data = data[0 + 1]
+    if data.error then
+        local errorCode = data.error.code
+        if errorCode == GameHttpControler.tokenErrorCode then
+            self.loginToken = nil
+            LogsManager.echo("gamehttp token 过期", backData)
+            WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.initRequest, self)
+            return
+        end
+        local transLateError = TranslateFunc.getInstance():getTranslate("#error" .. errorCode)
+        WindowManager.ShowTip(transLateError)
+    else
+        TableUtils.adjustEmptyArr(data.result)
+        Client.getInstance():onResult(data.result, false)
+    end
+    local temp = self._currentConn
+    self._currentConn = nil
+    self:doRequest()
+    if temp.callback then
+        doJsCallFunc(temp.callback, temp.thisObj, data.result or data, temp.addParams)
+    end
 end
 
 function GameHttpControler:checkHasMethod(method)
-  if self._currentConn then
-    if self._currentConn.method == method then
-      return true
+    if self._currentConn then
+        if self._currentConn.method == method then
+            return true
+        end
     end
-  end
-  local i = 0
-  repeat
-    local con = self._connectCacheArr[i+1]
-    if con.method == method then
-      return true
-    end
-    i=i+1
-  until not(i < #self._connectCacheArr)
-  return false
+    local i = 0
+    repeat
+        local con = self._connectCacheArr[i + 1]
+        if con.method == method then
+            return true
+        end
+        i = i + 1
+    until not (i < #self._connectCacheArr)
+    return false
 end
 
 function GameHttpControler:onHttpError(e)
-  if e == nil then
-    e=nil
-  end
-  if not self._currentConn then
-    LogsManager.echo("httpserver 当前没有连接.确返回错误了--")
-    return
-  end
-  if self._currentConn.isWait then
-    WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
-  end
-  WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.resendConn, self)
+    if e == nil then
+        e = nil
+    end
+    if not self._currentConn then
+        LogsManager.echo("httpserver 当前没有连接.确返回错误了--")
+        return
+    end
+    if self._currentConn.isWait then
+        WaitManager.getInstance():remove(MsgCMD.ROLL_ANI)
+    end
+    WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.resendConn, self)
 end
 
 function GameHttpControler:resendConn()
-  self:requestServer(self._currentConn)
+    self:requestServer(self._currentConn)
 end
 
 function GameHttpControler:getUniqueRequestId(requestId)
-  if requestId == nil then
-    requestId=""
-  end
-  local rid = UserModel.getInstance():getUserRid()
-  local timestamp = (Date()):getTime()
-  return "uniqueId_" .. rid .. "_" .. timestamp .. "_" .. self._requestId
+    if requestId == nil then
+        requestId = ""
+    end
+    local rid = UserModel.getInstance():getUserRid()
+    local timestamp = (Date()):getTime()
+    return "uniqueId_" .. rid .. "_" .. timestamp .. "_" .. self._requestId
 end
