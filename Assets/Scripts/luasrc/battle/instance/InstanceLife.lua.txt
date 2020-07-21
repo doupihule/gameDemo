@@ -78,8 +78,8 @@ function InstanceLife:setData(data)
         if self.cfgData.expand then
             SkillExpandTrigger.onCheckExpand(self, nil, self.cfgData.expand, nil)
         end
-        self.realSize[0 + 1] = self.cfgData.size[0 + 1] * self.cfgScale
-        self.realSize[1 + 1] = self.cfgData.size[1 + 1] * self.cfgScale
+        self.realSize[1] = self.cfgData.size[1] * self.cfgScale
+        self.realSize[2] = self.cfgData.size[2] * self.cfgScale
     else
         self.attrData = self.controler.myHome.attrData
     end
@@ -95,55 +95,48 @@ function InstanceLife:initSkillData()
     self.passiveSkills = {}
     if passCfg then
         local i = 0
-        repeat
-            local info = passCfg[i + 1]
+        for i, info in ipairs(passCfg) do
             local skillId = nil
             local level = 1
             skillId = tostring(info)
             local debugPassiveSkillData = BattleDebugTool.getDebugPassiveSkill()
             if debugPassiveSkillData then
-                local passive = PassiveSkillData.new(debugPassiveSkillData[0 + 1], tonumber(debugPassiveSkillData[1 + 1]) or 1, thisObj, BattleConst.skill_kind_passive)
+                local passive = PassiveSkillData.new(debugPassiveSkillData[1], tonumber(debugPassiveSkillData[2]) or 1, thisObj, BattleConst.skill_kind_passive)
                 table.insert(self.passiveSkills, passive)
                 break
             end
             local passive = PassiveSkillData.new(skillId, level, thisObj, BattleConst.skill_kind_passive)
             table.insert(self.passiveSkills, passive)
-            i = i + 1
-        until not (i < #passCfg)
+        end
     end
     self:initNormalSkill(thisObj)
     if self.cfgData.energySkill and self.cfgData.energyParams then
-        local level = nil
-        level = 1
+        local level = 1
         self.energySkill = self.controler:createSkillData(self.cfgData.energySkill, level, thisObj, BattleConst.skill_kind_energy)
-        self.maxEnergy = self.cfgData.energyParams[1 + 1]
-        self.energyResumeValue = self.cfgData.energyParams[0 + 1]
-        self.blackFrame = math.floor(self.cfgData.energyParams[2 + 1] * BattleFunc.miniSecondToFrame)
-        self.killResumeEnergy = self.cfgData.energyParams[3 + 1] or 0
+        self.maxEnergy = self.cfgData.energyParams[2]
+        self.energyResumeValue = self.cfgData.energyParams[1]
+        self.blackFrame = math.floor(self.cfgData.energyParams[3] * BattleFunc.miniSecondToFrame)
+        self.killResumeEnergy = self.cfgData.energyParams[4] or 0
     end
 end
 
 function InstanceLife:initNormalSkill(thisObj, lifeType)
-    if lifeType == nil then
-        lifeType = nil
-    end
     self.currentSkillIndex = 0
     self.normalSkills = {}
     local normalCfg = self:getNormalSkills()
     local debugSkillData = BattleDebugTool.getDebugSkill()
     local i = 0
-    repeat
-        local info = normalCfg[i + 1]
+    for i, info in ipairs(normalCfg) do
         local level = 1
         local skillId = nil
         local skill = nil
         skillId = tostring(info)
         if debugSkillData then
-            skill = self.controler:createSkillData(debugSkillData[0 + 1], tonumber(debugSkillData[1 + 1]) or 1, thisObj, BattleConst.skill_kind_noraml, lifeType)
+            skill = self.controler:createSkillData(debugSkillData[1], tonumber(debugSkillData[2]) or 1, thisObj, BattleConst.skill_kind_noraml, lifeType)
             table.insert(self.normalSkills, skill)
             break
         else
-            if i == #normalCfg - 1 then
+            if i == #normalCfg  then
                 if level == 0 then
                     level = 1
                 end
@@ -156,8 +149,7 @@ function InstanceLife:initNormalSkill(thisObj, lifeType)
             skill.leftSkillCd = self:getSkillLeftCd(skill)
         end
         table.insert(self.normalSkills, skill)
-        i = i + 1
-    until not (i < #normalCfg)
+    end
 end
 
 function InstanceLife:getSkillLeftCd(skill)
@@ -181,22 +173,16 @@ function InstanceLife:getPassiveSkills()
         local basePassive = self.cfgData.passiveSkill
         if basePassive and #basePassive > 0 then
             local s = 0
-            repeat
-                table.insert(self.passSkillArr, basePassive[s + 1])
-                s = s + 1
-            until not (s < #basePassive)
+            for s, v in ipairs(basePassive) do
+                table.insert(self.passSkillArr, v)
+            end
         end
         local allInfo = RolesFunc.getInstance():getCfgDatas("RoleStar", self.dataId)
-        for key in pairs(allInfo) do
-            if allInfo:hasOwnProperty(key) then
-                -- [ts2lua]allInfo下标访问可能不正确
-                local item = allInfo[key]
-                if self.starLevel >= item.star and item.passiveSkill then
-                    local i = 0
-                    repeat
-                        table.insert(self.passSkillArr, item.passiveSkill[i + 1])
-                        i = i + 1
-                    until not (i < #item.passiveSkill)
+        for key,item in pairs(allInfo) do
+            if self.starLevel >= item.star and item.passiveSkill then
+                local i = 0
+                for i, ss in ipairs(item.passiveSkill) do
+                    table.insert(self.passSkillArr, ss)
                 end
             end
         end
@@ -218,35 +204,29 @@ function InstanceLife:getLastNormalAndPassSkill()
     tempArr = TableUtils.copyOneArr(self.passSkillArr, tempArr)
     self.normalSkillArr = TableUtils.copyOneArr(self.cfgData.skill)
     local i = 0
-    repeat
-        local item = tempArr[i + 1]
+    for i, item in ipairs(tempArr) do
         local data = BattleFunc.getInstance():getCfgDatas("PassiveSkill", item)
         if data.effectType == BattleConst.passive_effect_changeSkill then
             eff = data.effectParams
             local j = 0
-            repeat
-                changeSkill = eff[j + 1]
+            for j, changeSkill in ipairs(eff) do
                 firstID = tonumber(changeSkill[0 + 1])
                 secondID = tonumber(changeSkill[1 + 1])
                 skillType = tonumber(changeSkill[2 + 1])
                 if skillType == BattleConst.skillType_passive then
                     local passIndex = table.findArrValue(self.passSkillArr, firstID)
                     if passIndex ~= -1 then
-                        -- [ts2lua]self.passSkillArr下标访问可能不正确
                         self.passSkillArr[passIndex] = secondID
                     end
                 elseif skillType == BattleConst.skillType_normal then
                     local normalIndex = table.findArrValue(self.normalSkillArr, firstID)
                     if normalIndex ~= -1 then
-                        -- [ts2lua]self.normalSkillArr下标访问可能不正确
                         self.normalSkillArr[normalIndex] = secondID
                     end
                 end
-                j = j + 1
-            until not (j < #eff)
+            end
         end
-        i = i + 1
-    until not (i < #tempArr)
+    end
     BattleFunc.cacheOneTempArr(tempArr)
 end
 
@@ -283,7 +263,7 @@ function InstanceLife:setCamp(value)
     if self.lifeType ~= BattleConst.LIFE_PLAYER then
         self:createShade()
         if self.lifeType == BattleConst.LIFE_JIDI then
-            self.shadeOffestX = self.realSize[0 + 1] / 2 - 50
+            self.shadeOffestX = self.realSize[1] / 2 - 50
         end
         if self.camp == 1 then
             self.shadeOffestX = -self.shadeOffestX
@@ -307,7 +287,7 @@ function InstanceLife:changeHp(value)
     if value < 0 then
         local debugVale = BattleDebugTool.isInfiniteHp()
         if debugVale then
-            local debugCamp = tonumber(debugVale[0 + 1]) or 0
+            local debugCamp = tonumber(debugVale[1]) or 0
             if (debugCamp == 0 or debugCamp == 3) or self.camp == debugCamp then
                 value = 1
             end
@@ -354,7 +334,7 @@ function InstanceLife:doDiedLogical()
     end
     if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
         if #self.campArr == 1 then
-            local item = self.campArr[0 + 1]
+            local item = self.campArr[1]
             if item.lifeType == BattleConst.LIFE_JIDI then
                 self:doResult()
             end
@@ -365,11 +345,9 @@ end
 function InstanceLife:doResult()
     local toArr = self.toCampArr
     local i = 0
-    repeat
-        local instance = toArr[i + 1]
+    for i, instance in ipairs(toArr) do
         instance:onToCampAllDied()
-        i = i + 1
-    until not (i < #toArr)
+    end
     if self.camp == 2 then
         self.controler.refreshControler:onMonsterAllDied(self)
     else
@@ -393,27 +371,11 @@ function InstanceLife:doEndDiedLogical()
 end
 
 function InstanceLife:moveToOnePoint(x, y, z, spd, callFunc, thisObj, callParams, expandParams, movePointType)
-    if z == nil then
-        z = 0
-    end
-    if spd == nil then
-        spd = 0
-    end
-    if callFunc == nil then
-        callFunc = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if callParams == nil then
-        callParams = nil
-    end
-    if expandParams == nil then
-        expandParams = nil
-    end
-    if movePointType == nil then
-        movePointType = 1
-    end
+    if z == nil then      z = 0   end
+    if spd == nil then   spd = 0  end
+    if callFunc == nil then        callFunc = nil    end
+    if thisObj == nil then        thisObj = nil    end
+    if movePointType == nil then      movePointType = 1    end
     if self.label == BattleConst.LABEL_IDLE then
         self:playAction(BattleConst.LABEL_WALK, true)
     end
@@ -473,17 +435,13 @@ function InstanceLife:insterOneBuff(buff)
     local anythis = self
     local logicalType = buff.logicType
     local buffInfo = self.buffInfo
-    -- [ts2lua]buffInfo下标访问可能不正确
     if not buffInfo[logicalType] then
-        -- [ts2lua]buffInfo下标访问可能不正确
         buffInfo[logicalType] = {}
     end
-    -- [ts2lua]BuffTrigger.buffTypeToBit下标访问可能不正确
     local buffbit = BuffTrigger.buffTypeToBit[logicalType]
     if buffbit then
         self.ctrlBuffBit = self.ctrlBuffBit | buffbit
     end
-    -- [ts2lua]buffInfo下标访问可能不正确
     table.insert(buffInfo[logicalType], buff)
     InstanceLife.super.insterOneBuff(self, buff)
     if self.buffBar and self.buffBar.onBuffChange then
@@ -513,26 +471,23 @@ function InstanceLife:clearOneBuff(buff, removeChance)
     local logicalType = buff.logicType
     self.controler:clearCallBack(self, self.delayCheckBuff, buff)
     local buffInfo = self.buffInfo
-    -- [ts2lua]buffInfo下标访问可能不正确
     if not buffInfo[logicalType] then
-        -- [ts2lua]buffInfo下标访问可能不正确
         buffInfo[logicalType] = {}
     end
-    -- [ts2lua]buffInfo下标访问可能不正确
     local arr = buffInfo[logicalType]
     local removeResult = false
     local i = #arr - 1
-    repeat
-        if arr[i + 1] == buff then
+    local len = #arr
+    for i = len, 1,-1 do
+        if arr[i] == buff then
             table.spliceArray(arr, i, 1)
             removeResult = true
             break
         end
-        i = i - 1
-    until not (i >= 0)
+    end
+
     if removeChance ~= BattleConst.buff_remove_diedClear then
         if #arr == 0 then
-            -- [ts2lua]BuffTrigger.buffTypeToBit下标访问可能不正确
             local buffbit = BuffTrigger.buffTypeToBit[logicalType]
             if buffbit and self.ctrlBuffBit then
                 if self.ctrlBuffBit & buffbit then
@@ -556,75 +511,65 @@ function InstanceLife:clearOneBuff(buff, removeChance)
 end
 
 function InstanceLife:clearAllBuff()
-    for i in pairs(self.buffInfo) do
-        local arr = self.buffInfo[i + 1]
+    for i,arr in pairs(self.buffInfo) do
         if arr and #arr > 0 then
-            local s = #arr - 1
-            repeat
-                local buff = arr[s + 1]
+            local len = #arr
+            for s = len, 1,-1 do
+                local buff = arr[s ]
                 if buff.leftFrame ~= -1 then
-                    self:clearOneBuff(arr[s + 1], BattleConst.buff_remove_diedClear)
+                    self:clearOneBuff(arr[s ], BattleConst.buff_remove_diedClear)
                 end
-                s = s - 1
-            until not (s >= 0)
+            end
         end
     end
 end
 
 function InstanceLife:clearControlBuff()
-    for i in pairs(self.buffInfo) do
-        local arr = self.buffInfo[i + 1]
+    for i,arr in pairs(self.buffInfo) do
         if arr and #arr > 0 then
-            -- [ts2lua]BuffTrigger.buffTypeToBit下标访问可能不正确
+
             if BuffTrigger.buffTypeToBit[tonumber(i)] then
                 local s = #arr - 1
-                repeat
-                    local buff = arr[s + 1]
+                local len = #arr
+                for s = len , 1,-1 do
+                    local buff = arr[s]
                     if buff.leftFrame ~= -1 then
-                        self:clearOneBuff(arr[s + 1])
+                        self:clearOneBuff(arr[s])
                     end
-                    s = s - 1
-                until not (s >= 0)
+                end
             end
         end
     end
 end
 
 function InstanceLife:checkHasOneBuff(logicalType)
-    -- [ts2lua]self.buffInfo下标访问可能不正确
-    -- [ts2lua]self.buffInfo下标访问可能不正确
-    return self.buffInfo[logicalType] and #self.buffInfo[logicalType] > 0
+    local arr = self.buffInfo[logicalType]
+    return arr  and #arr > 0
 end
 
 function InstanceLife:getBuffById(buffId)
-    for i in pairs(self.buffInfo) do
-        local tempArr = self.buffInfo[i + 1]
+    for i,tempArr in pairs(self.buffInfo) do
         if #tempArr > 0 then
             local s = 0
-            repeat
-                local buff = tempArr[s + 1]
+            for s,buff in ipairs(tempArr) do
                 if buff._id == buffId then
                     return buff
                 end
-                s = s + 1
-            until not (s < #tempArr)
+            end
         end
     end
     return nil
 end
 
 function InstanceLife:refreshBuffTimeById(buffId)
-    for i in pairs(self.buffInfo) do
-        local tempArr = self.buffInfo[i + 1]
+    for i,tempArr in pairs(self.buffInfo) do
         if #tempArr > 0 then
             local s = 0
-            repeat
-                local buff = tempArr[s + 1]
+            for s, buff in ipairs(tempArr) do
                 if buff._id == buffId then
                     self:resetOneBuffLastTime(buff)
                 end
-                s = s + 1
-            until not (s < #tempArr)
+            end
         end
     end
     return nil
@@ -638,17 +583,14 @@ function InstanceLife:resetOneBuffLastTime(buff)
 end
 
 function InstanceLife:getBuffByGroup(groupId)
-    for i in pairs(self.buffInfo) do
-        local tempArr = self.buffInfo[i + 1]
+    for i,tempArr in pairs(self.buffInfo) do
         if #tempArr > 0 then
             local s = 0
-            repeat
-                local buff = tempArr[s + 1]
+            for s, buff in ipairs(tempArr) do
                 if buff.group == groupId then
                     return buff
                 end
-                s = s + 1
-            until not (s < #tempArr)
+            end
         end
     end
     return nil
@@ -674,10 +616,7 @@ function InstanceLife:doRelive(hp, skillAct)
     self.controler:clearCallBack(self, self.doRelive)
     self.hp = hp
     self.diedState = BattleConst.DIED_STATE_NONE
-    self._myView.alpha = 1
-    if self._myView2 then
-        self._myView2.alpha = 1
-    end
+    self:setViewAlpha(1)
     TableUtils.removeValue(self.diedArr, self)
     if table.findArrValue(self.campArr, self) == -1 then
         table.insert(self.campArr, self)
@@ -711,30 +650,22 @@ end
 
 function InstanceLife:getSkillByGroup(skillId, skillArr)
     local i = 0
-    repeat
-        if skillArr[i + 1]._skillId == skillId then
-            return skillArr[i + 1]
+    for i, v in ipairs(skillArr) do
+        if v._skillId == skillId then
+            return v
         end
-        i = i + 1
-    until not (i < #skillArr)
+    end
     return nil
 end
 
 function InstanceLife:getCfgSkillLevel(targetSkillId)
-    local normalCfg = self.cfgData.normalSkill
-    -- [ts2lua]self._data.normalSkills下标访问可能不正确
     if (self._data and self._data.normalSkills) and self._data.normalSkills[targetSkillId] then
-        -- [ts2lua]self._data.normalSkills下标访问可能不正确
         return self._data.normalSkills[targetSkillId]
     end
-    -- [ts2lua]self._data.passiveSkills下标访问可能不正确
     if (self._data and self._data.passiveSkills) and self._data.passiveSkills[targetSkillId] then
-        -- [ts2lua]self._data.passiveSkills下标访问可能不正确
         return self._data.passiveSkills[targetSkillId]
     end
     if self._data and self.energySkill then
-        local level = self._data.energySkill and self._data.energySkill.level or 1
-        local skillId = self.cfgData.energySkill
         if self.energySkill._skillId == targetSkillId then
             return self.energySkill.level
         end
@@ -745,22 +676,21 @@ end
 function InstanceLife:getSheildValue()
     local value = 0
     local i = 0
-    repeat
-        value = value + self.shieldInfoArr[i + 1].value
-        i = i + 1
-    until not (i < #self.shieldInfoArr)
+    for i, v in ipairs(self.shieldInfoArr) do
+        value = value + v.value
+    end
     return value
 end
 
 function InstanceLife:onSetToCache()
     InstanceLife.super.onSetToCache(self)
     if self.hpBar then
-        PoolTools.cacheItem(PoolCode.POOL_HPBAR + self.camp, self.hpBar)
+        PoolTools.cacheItem(PoolCode.POOL_HPBAR .. self.camp, self.hpBar)
         self.hpBar:onSetToCache()
         self.hpBar = nil
     end
     if self.buffBar then
-        PoolTools.cacheItem(PoolCode.POOL_BUFFBAR + self.camp, self.buffBar)
+        PoolTools.cacheItem(PoolCode.POOL_BUFFBAR .. self.camp, self.buffBar)
         self.buffBar:onSetToCache()
         self.buffBar = nil
     end
@@ -805,12 +735,12 @@ end
 function InstanceLife:dispose()
     InstanceLife.super.dispose(self)
     if self.hpBar then
-        PoolTools.cacheItem(PoolCode.POOL_HPBAR + self.camp, self.hpBar)
+        PoolTools.cacheItem(PoolCode.POOL_HPBAR .. self.camp, self.hpBar)
         self.hpBar:onSetToCache()
         self.hpBar = nil
     end
     if self.buffBar then
-        PoolTools.cacheItem(PoolCode.POOL_BUFFBAR + self.camp, self.buffBar)
+        PoolTools.cacheItem(PoolCode.POOL_BUFFBAR .. self.camp, self.buffBar)
         self.buffBar:onSetToCache()
         self.buffBar = nil
     end

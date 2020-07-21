@@ -21,6 +21,11 @@ function UITools.setUIViewScale(instance, sx, sy)
     tansform.localScale = tempScaleVec3;
 end
 
+--设置透明度
+function UITools.setViewAlpha(instance,alpha)
+
+end
+
 local tempRotateVec3 = CS.UnityEngine.Vector3(0, 0, 1)
 --设置obj旋转 角度
 function UITools.setUIViewRotation(instance, r)
@@ -72,6 +77,17 @@ local tempRemoveAllChild = function(self)
         childTransform:SetParent(nil)
     end
 end
+
+local tempGetChildAt = function(self,index)
+    local gameObject = self.__cobject
+    if (not gameObject) then
+        gameObject = self
+    end ;
+    local transform = gameObject.transform;
+    return transform:GetChild(index)
+end
+
+
 
 
 --移除子对象方法

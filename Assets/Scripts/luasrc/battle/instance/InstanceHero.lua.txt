@@ -12,8 +12,7 @@ function InstanceHero:onDataChange(changeData)
     local tempPrassArr = BattleFunc.getOneTempArr()
     local tempPassiveData = BattleFunc.getOneTempArr()
     if changeData.passiveSkills then
-        for i in pairs(changeData.passiveSkills) do
-            local level = changeData.passiveSkills[i + 1]
+        for i,level in pairs(changeData.passiveSkills) do
             if level > 0 then
                 local skill = self:getSkillById(i, BattleConst.skill_kind_passive)
                 if skill then
@@ -21,7 +20,7 @@ function InstanceHero:onDataChange(changeData)
                     if skill.isActive then
                         PassiveSkillTrigger.useSelfPassiveAttr(self, skill, -1, true)
                     end
-                    skill:updateLevel(changeData.passiveSkills[i + 1])
+                    skill:updateLevel(v)
                     table.insert(tempPrassArr, skill)
                 end
             end
@@ -46,28 +45,25 @@ function InstanceHero:onDataChange(changeData)
         PassiveSkillTrigger.runAllPassiveGlobalAttr(self.controler.globalPassiveAttrMap, self, 1)
         if hasPassiveChange then
             local s = 0
-            repeat
+            for s, v in ipairs(tempPrassArr) do
                 PassiveSkillTrigger.useSelfPassiveAttr(self, skill, 1, false)
-                self.controler:insterGlobalPassive(tempPrassArr[s + 1])
-                s = s + 1
-            until not (s < #tempPrassArr)
+                self.controler:insterGlobalPassive(v)
+            end
         end
     end
     BattleFunc.cacheOneTempArr(tempPrassArr)
     BattleFunc.cacheOneTempArr(tempPassiveData)
     if changeData.normalSkills then
-        for i in pairs(changeData.normalSkills) do
-            local level = changeData.normalSkills[i + 1]
+        for i ,level in pairs(changeData.normalSkills) do
             if level > 0 then
                 local skill = self:getSkillById(i, BattleConst.skill_kind_noraml)
                 if skill then
-                    skill:updateLevel(changeData.normalSkills[i + 1])
+                    skill:updateLevel(level)
                 end
             end
         end
     end
     if changeData.energySkill and changeData.energySkill.level then
-        local skill = self.energySkill
         self.energySkill:updateLevel(changeData.energySkill.level)
     end
 end

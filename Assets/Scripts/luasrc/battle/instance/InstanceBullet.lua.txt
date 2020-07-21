@@ -3,7 +3,6 @@ InstanceBullet = class('InstanceBullet', InstanceMove)
 function InstanceBullet:ctor(controler)
     InstanceBullet.super.ctor(self, controler)
     self.moveSpeed = 0;
-    table.clearArray(self.mov);
     self.leftCollisionTimes = 1;
     self._hasHitNums = 0;
     self._repeatCheckFrame = 0;
@@ -42,12 +41,12 @@ function InstanceBullet:setOwner(owner, skillAction, rotation, targetRole)
     local tagStr = "Bullet:" .. self.dataId
     if collisionParams then
         self._collisionParams = {}
-        self._collisionParams[0 + 1] = tonumber(collisionParams[0 + 1])
-        self._collisionParams[1 + 1] = self.skillAction.skill:getSkillValue(collisionParams[1 + 1], tagStr)
-        if self._collisionParams[0 + 1] == BattleConst.bullet_hit_bounce then
+        self._collisionParams[1] = tonumber(collisionParams[1])
+        self._collisionParams[2] = self.skillAction.skill:getSkillValue(collisionParams[2], tagStr)
+        if self._collisionParams[1] == BattleConst.bullet_hit_bounce then
             self._repeatCheckFrame = 60
         else
-            self._repeatCheckFrame = tonumber(collisionParams[2 + 1])
+            self._repeatCheckFrame = tonumber(collisionParams[3])
             if self._repeatCheckFrame > 0 then
                 self._repeatCheckFrame = BattleFunc.getInstance():turnMinisecondToframe(self._repeatCheckFrame)
             end
@@ -79,15 +78,14 @@ function InstanceBullet:setOwner(owner, skillAction, rotation, targetRole)
     local skillEff = self.cfgData.skillEffect
     if skillEff then
         local i = 0
-        repeat
-            if not self.skillActionArr[i + 1] then
-                local skillAction = SkillActionData.new(tostring(skillEff[i + 1]), owner, skillAction.skill, 0, 0, 0, 0, 0)
-                self.skillActionArr[i + 1] = skillAction
+        for i, v in ipairs( skillEff) do
+            if not self.skillActionArr[i] then
+                local skillAction = SkillActionData.new(tostring(v), owner, skillAction.skill, 0, 0, 0, 0, 0)
+                self.skillActionArr[i] = skillAction
             else
-                self.skillActionArr[i + 1]:updateData(owner, skillAction.skill)
+                self.skillActionArr[i]:updateData(owner, skillAction.skill)
             end
-            i = i + 1
-        until not (i < #skillEff)
+        end
     end
     self:resetMoveAct(targetRole)
     local offset = self.cfgData.offset or 0
@@ -99,8 +97,8 @@ function InstanceBullet:setOwner(owner, skillAction, rotation, targetRole)
 end
 
 function InstanceBullet:adjustInitPos(targetRole)
-    local offset = self.cfgData.offset or 0 * self.cfgScale
-    if not offset then
+    local offset = self.cfgData.offset or 0
+    if  offset == 0 then
         return
     end
     local spdAbs = math.sqrt(self.speed.x * self.speed.x + self.speed.y * self.speed.y + self.speed.z * self.speed.z)
@@ -141,16 +139,14 @@ function InstanceBullet:checkHitLandAction()
     local fallEffect = self.cfgData.fallEffect
     if fallEffect then
         local i = 0
-        repeat
-            local aoeId = fallEffect[i + 1]
-            local aoeData = PoolTools.getItem(PoolCode.POOL_AOEDATA + aoeId)
+        for i, aoeId in ipairs( fallEffect) do
+            local aoeData = PoolTools.getItem(PoolCode.POOL_AOEDATA .. aoeId)
             if not aoeData then
                 aoeData = BattleAoeData.new(aoeId)
             end
-            aoeData:setData(self.skillActionArr[0 + 1], self.owner)
+            aoeData:setData(self.skillActionArr[1], self.owner)
             aoeData:doAoeAction(self.owner, self.pos, self)
-            i = i + 1
-        until not (i < #fallEffect)
+        end
     end
     self.controler:destroyBullet(self)
 end
@@ -193,23 +189,20 @@ function InstanceBullet:checkAttack(skillActionArr)
         self.leftCollisionTimes = self.leftCollisionTimes - 1
         self._hasHitNums = self._hasHitNums + 1
         local i = 0
-        repeat
-            table.insert(self._mingzhongArr, tempArr[i + 1])
-            i = i + 1
-        until not (i < #tempArr)
+        for i, v in ipairs(tempArr) do
+            table.insert(self._mingzhongArr, v)
+        end
         local hitRatio = 0
         if self.cfgData.collisionDamage then
             -- [ts2lua]self.cfgData.collisionDamage下标访问可能不正确
             hitRatio = self.cfgData.collisionDamage[self._hasHitNums - 2] or 0
         end
-        local s = 0
-        repeat
+        for s, v in ipairs(skillActionArr) do
             if hitRatio ~= 0 then
                 self.owner.attrData:changeOneTempAttr(BattleConst.attr_final_damage, hitRatio, 0)
             end
-            SkillActionTrigger.checkSkillAction(self.owner, skillActionArr[s + 1], tempArr)
-            s = s + 1
-        until not (s < #skillActionArr)
+            SkillActionTrigger.checkSkillAction(self.owner, v, tempArr)
+        end
         if self._repeatCheckFrame > 0 then
             self.controler:setCallBack(self._repeatCheckFrame, self.clearHitArr, self)
         end
@@ -230,7 +223,7 @@ function InstanceBullet:doAfterHit()
     if not self._collisionParams then
         return
     end
-    local type = self._collisionParams[0 + 1]
+    local type = self._collisionParams[1]
     if type == BattleConst.bullet_hit_through then
         return
     elseif type == BattleConst.bullet_hit_bounce then
@@ -239,13 +232,13 @@ function InstanceBullet:doAfterHit()
             self.controler:destroyBullet(self)
             return
         end
-        local nearRole = ChooseTrigger.chooseAbsNearRole(self, self._chooseTargetArr, self._mingzhongArr, self.cfgData.pathParams[1 + 1])
+        local nearRole = ChooseTrigger.chooseAbsNearRole(self, self._chooseTargetArr, self._mingzhongArr, self.cfgData.pathParams[2])
         if nearRole then
             self:resetMoveAct(nearRole)
         else
             if #self._mingzhongArr >= 2 then
                 table.spliceArray(self._mingzhongArr, 1, #self._mingzhongArr - 1)
-                nearRole = ChooseTrigger.chooseAbsNearRole(self, self._chooseTargetArr, self._mingzhongArr, self.cfgData.pathParams[1 + 1])
+                nearRole = ChooseTrigger.chooseAbsNearRole(self, self._chooseTargetArr, self._mingzhongArr, self.cfgData.pathParams[2])
                 if nearRole then
                     self:resetMoveAct(nearRole)
                     return
@@ -265,7 +258,7 @@ function InstanceBullet:doAfterHit()
 end
 
 function InstanceBullet:checkHitRatio()
-    local raqtio = self._collisionParams[1 + 1]
+    local raqtio = self._collisionParams[2]
     if not raqtio then
         return true
     end
@@ -284,7 +277,7 @@ function InstanceBullet:resetMoveAct(targetRole)
     local yspd = 0
     local zspd = nil
     local ang = nil
-    local spdValue = BattleFunc.getInstance():turnSpeedToFrame(self.cfgData.pathParams[0 + 1])
+    local spdValue = BattleFunc.getInstance():turnSpeedToFrame(self.cfgData.pathParams[1])
     local dy = targetRole.pos.y - self.pos.y + self.initOffsetY
     local dx = targetRole.pos.x - self.pos.x
     local dz = targetRole.pos.z - self.pos.z
@@ -295,8 +288,8 @@ function InstanceBullet:resetMoveAct(targetRole)
     if targetRole.lifeType == BattleConst.LIFE_AIRHERO then
         moveType = BattleConst.BULLET_MOVE_LINE
         tempArr = BattleFunc.getOneTempArr()
-        tempArr[0 + 1] = pathParams[0 + 1] * 1.2
-        tempArr[1 + 1] = 1000
+        tempArr[1] = pathParams[1] * 1.2
+        tempArr[2] = 1000
         pathParams = tempArr
     end
     if moveType == BattleConst.BULLET_MOVE_LINE then
@@ -327,17 +320,17 @@ function InstanceBullet:resetMoveAct(targetRole)
         end
         self:setRotation(rotation)
         if not self._followRole or self._followRole ~= targetRole then
-            self.moveFrame = math.floor(pathParams[1 + 1] / spdValue)
+            self.moveFrame = math.floor(pathParams[2] / spdValue)
         end
         self:initMove(xspd, yspd, zspd, true)
-        if self._collisionParams[0 + 1] == BattleConst.bullet_hit_bounce then
+        if self._collisionParams[1] == BattleConst.bullet_hit_bounce then
             self._followRole = targetRole
         end
     elseif moveType == BattleConst.BULLET_MOVE_CURVE then
         self.gravityAble = true
         dis = math.sqrt(dx * dx + dz * dz)
-        local flyDisTance = pathParams[1 + 1] / 10000 * dis
-        local maxFlyDis = pathParams[2 + 1]
+        local flyDisTance = pathParams[2] / 10000 * dis
+        local maxFlyDis = pathParams[3]
         if flyDisTance > maxFlyDis then
             flyDisTance = maxFlyDis
         end

@@ -12,15 +12,6 @@ function InstanceMoveMultyEntity:initData(pointArr, speed, callFunc, thisObj, lo
     if speed == nil then
         speed = 0
     end
-    if callFunc == nil then
-        callFunc = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if loopParams == nil then
-        loopParams = nil
-    end
     if isGrid == nil then
         isGrid = false
     end
@@ -43,14 +34,12 @@ function InstanceMoveMultyEntity:getNextpos()
     if self.currentStep == self.totalStep + 1 then
         return nil
     end
-    -- [ts2lua]self.pointArr下标访问可能不正确
-    self.currentEntity.target = self.pointArr[self.currentStep - 1]
+    self.currentEntity.target = self.pointArr[self.currentStep ]
     if self.expandParams and #self.expandParams > 0 then
         if #self.expandParams == 1 then
-            self.currentEntity.expandParams = self.expandParams[0 + 1]
+            self.currentEntity.expandParams = self.expandParams[1]
         else
-            -- [ts2lua]self.expandParams下标访问可能不正确
-            self.currentEntity.expandParams = self.expandParams[self.currentStep - 1]
+            self.currentEntity.expandParams = self.expandParams[self.currentStep ]
         end
     end
     return self.currentEntity
@@ -60,11 +49,9 @@ function InstanceMoveMultyEntity:getLoopPos()
     local roundNum = math.floor(self.currentStep / self.totalStep)
     local pos = self.currentStep % self.totalStep
     if roundNum % 2 == 0 then
-        -- [ts2lua]self.pointArr下标访问可能不正确
-        self.currentEntity.target = self.pointArr[pos]
+        self.currentEntity.target = self.pointArr[pos+1]
     else
-        -- [ts2lua]self.pointArr下标访问可能不正确
-        self.currentEntity.target = self.pointArr[self.totalStep - pos - 1]
+        self.currentEntity.target = self.pointArr[self.totalStep - pos]
     end
     return self.currentEntity
 end

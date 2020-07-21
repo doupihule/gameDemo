@@ -39,31 +39,15 @@ function MathUtils.checkInRect(x, y, rx, ry, rw, rh)
     return true
 end
 
-function MathUtils.dot2(a, b)
-    MathUtils.tempVector3_1.x = a.x
-    MathUtils.tempVector3_1.y = a.y
-    MathUtils.tempVector3_2.x = b.x
-    MathUtils.tempVector3_2.y = b.y
-    return VectorTools.createVector3:dot(MathUtils.tempVector3_1, MathUtils.tempVector3_2)
-end
 
-function MathUtils.cross2(a, b, out)
-    MathUtils.tempVector3_1.x = a.x
-    MathUtils.tempVector3_1.y = a.y
-    MathUtils.tempVector3_2.x = b.x
-    MathUtils.tempVector3_2.y = b.y
-    VectorTools.createVector3:cross(MathUtils.tempVector3_1, MathUtils.tempVector3_2, MathUtils.tempVector3_3)
-    out.x = MathUtils.tempVector3_3.x
-    out.y = MathUtils.tempVector3_3.y
-    return out
-end
+
 
 function MathUtils.subtract2(a, b, out)
     MathUtils.tempVector3_1.x = a.x
     MathUtils.tempVector3_1.y = a.y
     MathUtils.tempVector3_2.x = b.x
     MathUtils.tempVector3_2.y = b.y
-    VectorTools.createVector3:subtract(MathUtils.tempVector3_1, MathUtils.tempVector3_2, MathUtils.tempVector3_3)
+    VectorTools.subtract(MathUtils.tempVector3_1, MathUtils.tempVector3_2, MathUtils.tempVector3_3)
     out.x = MathUtils.tempVector3_3.x
     out.y = MathUtils.tempVector3_3.y
     return out

@@ -34,18 +34,10 @@ function InstanceMove:initStand()
 end
 
 function InstanceMove:initMove(x, y, z, outAdjustWay)
-    if x == nil then
-        x = 0
-    end
-    if y == nil then
-        y = 0
-    end
-    if z == nil then
-        z = 0
-    end
-    if outAdjustWay == nil then
-        outAdjustWay = false
-    end
+    if x == nil then        x = 0    end
+    if y == nil then        y = 0    end
+    if z == nil then        z = 0    end
+    if outAdjustWay == nil then        outAdjustWay = false    end
     self.speed.x = x
     self.speed.y = y
     self.speed.z = z
@@ -81,9 +73,7 @@ function InstanceMove:updateSpeed()
 end
 
 function InstanceMove:setSpeed(speedSpace, addSpead, force)
-    speedSpace = speedSpace * force
-    speedSpace = speedSpace + addSpead
-    return speedSpace
+    return speedSpace * force +addSpead
 end
 
 function InstanceMove:movePos()
@@ -101,27 +91,9 @@ end
 function InstanceMove:onHitLand()
 end
 function InstanceMove:moveToOnePoint(x, y, z, spd, callFunc, thisObj, callParams, expandParams, movePointType)
-    if z == nil then
-        z = 0
-    end
-    if spd == nil then
-        spd = 0
-    end
-    if callFunc == nil then
-        callFunc = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if callParams == nil then
-        callParams = nil
-    end
-    if expandParams == nil then
-        expandParams = nil
-    end
-    if movePointType == nil then
-        movePointType = 1
-    end
+    if z == nil then        z = 0    end
+    if spd == nil then        spd = 0    end
+    if movePointType == nil then        movePointType = 1    end
     if not self._moveParams then
         self._moveParams = InstanceMoveEntity.new(VectorTools.createVector3(x, y, z))
     end
@@ -144,8 +116,8 @@ function InstanceMove:moveToOnePoint(x, y, z, spd, callFunc, thisObj, callParams
         end
     end
     local temp = BattleFunc.tempPoint
-    VectorTools.createVector3:subtract(self._moveParams.target, self.pos, temp)
-    local distance = VectorTools.createVector3:scalarLength(temp)
+    VectorTools.subtract(self._moveParams.target, self.pos, temp)
+    local distance = VectorTools.scalarLength(temp)
     if self._moveParams.totalFrame > 0 and spd == 0 then
         spd = distance / self._moveParams.totalFrame
     else
@@ -163,12 +135,12 @@ end
 
 function InstanceMove:countMoveSpeed()
     local temp = BattleFunc.tempPoint
-    VectorTools.createVector3:subtract(self._moveParams.target, self.pos, temp)
+    VectorTools.subtract(self._moveParams.target, self.pos, temp)
     local speed = self._moveParams.spd
-    VectorTools.createVector3:normalize(temp, self.unitVector)
-    VectorTools.createVector3:scale(self.unitVector, speed, self._moveParams.initSpeed)
+    VectorTools.normalize(temp, self.unitVector)
+    VectorTools.scale(self.unitVector, speed, self._moveParams.initSpeed)
     if self._moveParams.totalFrame == 0 then
-        local distance = VectorTools.createVector3:scalarLength(temp)
+        local distance = VectorTools.scalarLength(temp)
         self._moveParams.totalFrame = math.round(distance / speed)
     end
     self:initMove(self._moveParams.initSpeed.x, self._moveParams.initSpeed.y, self._moveParams.initSpeed.z)
@@ -177,9 +149,6 @@ end
 function InstanceMove:moveToOnePointByEntity(enetity, movePointType, isGrid)
     if movePointType == nil then
         movePointType = 1
-    end
-    if isGrid == nil then
-        isGrid = false
     end
     local x = enetity.target.x
     local y = enetity.target.y
@@ -193,15 +162,6 @@ end
 function InstanceMove:moveToGroupPoints(pointArr, speed, callFunc, thisObj, expandParams, loopParams)
     if speed == nil then
         speed = 0
-    end
-    if callFunc == nil then
-        callFunc = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if loopParams == nil then
-        loopParams = nil
     end
     if not self._multyparams then
         self._multyparams = InstanceMoveMultyEntity.new()
@@ -265,18 +225,14 @@ function InstanceMove:overFinalPoint()
         callBack = self._moveParams.callFunc
         thisObj = self._moveParams.thisObj
         self._moveParams:reset()
-        if callBack then
-            doJsCallFunc(callBack, thisObj)
-        end
+        doJsCallFunc(callBack, thisObj)
     end
     if self._multyparams then
         callBack = self._multyparams.callFunc
         thisObj = self._multyparams.thisObj
         self._multyparams:dispose()
         self._multyparams = nil
-        if callBack then
-            doJsCallFunc(callBack, thisObj)
-        end
+        doJsCallFunc(callBack, thisObj)
     end
 end
 
@@ -297,18 +253,9 @@ function InstanceMove:moveToTargetRole(spd, targetRole)
 end
 
 function InstanceMove:createEffByParams(effectParamsArr, isFollow, isLoop, expandParams, aniSpeed)
-    if isFollow == nil then
-        isFollow = false
-    end
-    if isLoop == nil then
-        isLoop = false
-    end
-    if expandParams == nil then
-        expandParams = nil
-    end
-    if aniSpeed == nil then
-        aniSpeed = 1
-    end
+    if isFollow == nil then        isFollow = false    end
+    if isLoop == nil then        isLoop = false    end
+    if aniSpeed == nil then        aniSpeed = 1    end
     if not effectParamsArr or #effectParamsArr == 0 then
         return
     end
@@ -317,27 +264,16 @@ function InstanceMove:createEffByParams(effectParamsArr, isFollow, isLoop, expan
         return
     end
     local i = 0
-    repeat
-        local params = effectParamsArr[i + 1]
+    for i, params in ipairs(effectParamsArr) do
         self:createOneEffByParam(params, isFollow, isLoop, expandParams, aniSpeed)
-        i = i + 1
-    until not (i < #effectParamsArr)
+    end
 end
 
 function InstanceMove:createOneEffByParam(params, isFollow, isLoop, expandParams, aniSpeed)
-    if isFollow == nil then
-        isFollow = false
-    end
-    if isLoop == nil then
-        isLoop = false
-    end
-    if expandParams == nil then
-        expandParams = nil
-    end
-    if aniSpeed == nil then
-        aniSpeed = 1
-    end
-    local delayTime = tonumber(params[7 + 1]) or 0
+    if isFollow == nil then        isFollow = false    end
+    if isLoop == nil then        isLoop = false    end
+    if aniSpeed == nil then        aniSpeed = 1    end
+    local delayTime = tonumber(params[8]) or 0
     params.isFollow = isFollow
     params.isLoop = isLoop
     params.expandParams = expandParams
@@ -353,23 +289,22 @@ InstanceMove._defaultViewSize = { 0, 0 };
 function InstanceMove:delayCreateEffByParams(params)
     local isFollow = params.isFollow
     local isLoop = params.isLoop
-    local offsetType = tonumber(params[2 + 1])
-    local offsetX = tonumber(params[3 + 1])
-    local offsetY = tonumber(params[4 + 1])
-    local effectName = params[0 + 1]
-    local aniIndex = tonumber(params[1 + 1])
+    local offsetType = tonumber(params[3])
+    local offsetX = tonumber(params[4])
+    local offsetY = tonumber(params[5])
+    local effectName = params[1]
+    local aniIndex = tonumber(params[2])
     local aniSpeed = params.aniSpeed or 1
     if offsetType == 2 then
         if not self.cfgData then
-            -- [ts2lua]self下标访问可能不正确
-            LogsManager.errorTag("cgfserror", "没有配置size,rid:", self.dataId, "类型:", self["lifeType"])
+            LogsManager.errorTag("cgfserror", "没有配置size,rid:", self.dataId, "类型:", self.lifeType)
         end
         local viewSize = self.cfgData.size
         if not viewSize then
             viewSize = InstanceMove._defaultViewSize
         end
-        offsetX = offsetX / 10000 * viewSize[1 + 1]
-        offsetY = -offsetY / 10000 * viewSize[0 + 1]
+        offsetX = offsetX / 10000 * viewSize[2]
+        offsetY = -offsetY / 10000 * viewSize[1]
     else
         offsetY = offsetY * -1
     end
@@ -377,15 +312,13 @@ function InstanceMove:delayCreateEffByParams(params)
     offsetY = offsetY * self.cfgScale
     local frame = -1
     if not isLoop then
-        frame = self.controler.performanceControler:getEffectLength(effectName, aniIndex - 1)
+        frame = self.controler.performanceControler:getEffectLength(effectName, aniIndex )
     end
-    local layerIndex = tonumber(params[5 + 1])
-    local ani = self:createEfect(effectName, aniIndex - 1, isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[6 + 1]), frame, aniSpeed)
-    local sysFrame = tonumber(params[8 + 1])
+    local layerIndex = tonumber(params[6])
+    local ani = self:createEfect(effectName, aniIndex , isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[7]), frame, aniSpeed)
+    local sysFrame = tonumber(params[9])
     if (sysFrame and sysFrame > 0) and #params > 10 then
-        -- [ts2lua]params下标访问可能不正确
-        -- [ts2lua]params下标访问可能不正确
-        ani:playSpecialSysAction(aniIndex - 1, sysFrame, tonumber(params[9 + 1]), tonumber(params[10]), tonumber(params[11]) * BattleFunc.battleViewFrameScale, aniSpeed)
+        ani:playSpecialSysAction(aniIndex , sysFrame, tonumber(params[10]), tonumber(params[11]), tonumber(params[12]) * BattleFunc.battleViewFrameScale, aniSpeed)
     end
     if params.expandParams then
         ani:setExpandParams(params.expandParams)
@@ -404,20 +337,18 @@ function InstanceMove:clearEffByParams(effectParams)
     if not effectParams or #effectParams == 0 then
         return
     end
-    local i = 0
-    repeat
-        self:clearEffByName(PoolCode.POOL_EFFECT + effectParams[i + 1][0 + 1] + tonumber(effectParams[i + 1][1 + 1] - 1))
-        i = i + 1
-    until not (i < #effectParams)
+    for i, v in ipairs(effectParams) do
+        self:clearEffByName(PoolCode.POOL_EFFECT .. v[1] .. v[2] )
+    end
 end
 
 function InstanceMove:clearEffByName(name, clearAll)
     if clearAll == nil then
         clearAll = false
     end
-    local i = #self._followEffGroup - 1
-    repeat
-        local eff = self._followEffGroup[i + 1]
+    local len = #self._followEffGroup
+    for i = len, 1,-1 do
+        local eff = self._followEffGroup[i]
         if eff.cacheId == name then
             table.spliceArray(self._followEffGroup, i, 1)
             self.controler:destoryEffect(eff)
@@ -425,15 +356,13 @@ function InstanceMove:clearEffByName(name, clearAll)
                 break
             end
         end
-        i = i - 1
-    until not (i >= 0)
+    end
 end
 
 function InstanceMove:clearAllFollowEffect()
-    local i = 0
-    repeat
-        self.controler:destoryEffect(self._followEffGroup[i + 1])
-        i = i + 1
-    until not (i < #self._followEffGroup)
+    local len = #self._followEffGroup;
+    for i = len, 1, -1  do
+        self.controler:destoryEffect(self._followEffGroup[i])
+    end
     table.clearArray(self._followEffGroup)
 end

@@ -26,16 +26,16 @@ function InstancePerformance:setData(data)
     self._sKillSppedUpMap = {}
     InstancePerformance.super.setData(self, data)
     self._viewPasuseValue = 0
+    self:setViewAlpha(1)
     if self._myView then
-        self._myView.alpha = 1
+        self._myView:setChildViewPos(0, 0)
+    end
+    if self._myView2 then
         self._myView:setChildViewPos(0, 0)
     end
     self._noteAlpha = 1
     self._leftDiedFrame = 0
-    if self._myView2 then
-        self._myView2.alpha = 1
-        self._myView:setChildViewPos(0, 0)
-    end
+
     self._aniPlaySpeed = 1
 end
 
@@ -73,20 +73,19 @@ end
 
 function InstancePerformance:createShade()
     self._shade = UITools.createUIImage()
-    local scale = BattleFunc.getInstance():getShadeScale(self.cfgData.size[1 + 1] * self.cfgScale)
+    local scale = BattleFunc.getInstance():getShadeScale(self.cfgData.size[2] * self.cfgScale)
     local formation = BattleRoleView.getPosArrByViewNums(self.childViewNums)
     local i = 0
-    repeat
+    for i = 1, self.childViewNums do
         local childShade = self.controler:createShade()
         childShade:scale(scale, scale)
-        local posOffset = formation[i + 1]
+        local posOffset = formation[i]
         local xSpace = self._myView._xSpace
         local ySpace = self._myView._ySpace
-        childShade:pos(xSpace * posOffset[0 + 1] + 2, ySpace * posOffset[1 + 1] + 3, true)
+        childShade:pos(xSpace * posOffset[1] + 2, ySpace * posOffset[2] + 3, true)
         childShade:scale(scale, scale, true)
         self._shade:addChild(childShade)
-        i = i + 1
-    until not (i < self.childViewNums)
+    end
     self.controler.layerControler.a21:addChild(self._shade)
     self._shade.x = self.pos.x
     self._shade.y = self.pos.z
@@ -103,13 +102,9 @@ function InstancePerformance:setViewName(value)
         return
     end
     self._frameDatas = {}
-    local i = 0
-    repeat
-        local info = frameCfg[i + 1]
-        -- [ts2lua]self._frameDatas下标访问可能不正确
-        self._frameDatas[info[0 + 1]] = tonumber(info[1 + 1])
-        i = i + 1
-    until not (i < #frameCfg)
+    for i, info in ipairs(frameCfg) do
+        self._frameDatas[info[1]] = tonumber(info[2])
+    end
 end
 
 function InstancePerformance:doDiedEffect()
@@ -150,7 +145,6 @@ end
 
 function InstancePerformance:startDoDiedPerformance()
     self:initStand()
-    -- [ts2lua]self._frameDatas下标访问可能不正确
     local frame = self._frameDatas[BattleConst.LABEL_DEAD]
     if self.lifeType ~= BattleConst.LIFE_LANDBUILD and frame then
         frame = self:getActionFrame(BattleConst.LABEL_DEAD)
@@ -185,13 +179,7 @@ function InstancePerformance:clearFlash()
     end
 end
 
-function InstancePerformance:onHitedFly(attacker, impulse, lastFrame)
-    if lastFrame == nil then
-        lastFrame = 0
-    end
 
-
-end
 
 function InstancePerformance:onHitedBack(attacker, impulse, impulseZ, lastFrame)
     if lastFrame == nil then
@@ -261,20 +249,20 @@ function InstancePerformance:onBeHitFly(params, attacker)
     else
         way = 1
     end
-    local dis = self.mass / 100 * params[3 + 1]
-    local flyDisTance = params[1 + 1] / 10000 * dis
-    local maxFlyDis = params[2 + 1]
+    local dis = self.mass / 100 * params[4]
+    local flyDisTance = params[2] / 10000 * dis
+    local maxFlyDis = params[3]
     if flyDisTance > maxFlyDis then
         flyDisTance = maxFlyDis
     end
-    local spdValue = BattleFunc.getInstance():turnSpeedToFrame(params[0 + 1])
+    local spdValue = BattleFunc.getInstance():turnSpeedToFrame(params[1])
     local moveFrame = math.ceil(dis / spdValue)
     self:initMove(spdValue * way, 0, 0, true)
     local halft = moveFrame / 2
     self.addSpeed.y = flyDisTance * 2 / halft * halft
     self:initJump(-self.addSpeed.y * halft)
-    local slideSpeed = BattleFunc.getInstance():turnSpeedToFrame(params[4 + 1]) * way
-    local addSpeed = BattleFunc.getInstance():turnAddSpeedToFrame(params[5 + 1]) * way
+    local slideSpeed = BattleFunc.getInstance():turnSpeedToFrame(params[5]) * way
+    local addSpeed = BattleFunc.getInstance():turnAddSpeedToFrame(params[6]) * way
     self.controler:setCallBack(moveFrame, self.onStartSlide, self, { slideSpeed, addSpeed }, true)
 end
 
@@ -406,7 +394,6 @@ function InstancePerformance:resumeIdleAction()
 end
 
 function InstancePerformance:getActionFrame(label)
-    -- [ts2lua]self._frameDatas下标访问可能不正确
     local frame = self._frameDatas[label]
     if not frame then
         BattleLogsManager.battleWarn("动作标签没有配置长度,id:", self.dataId, "label:", label)
@@ -439,14 +426,12 @@ function InstancePerformance:createSoundByParams(soundCfgs)
         return
     end
     local i = 0
-    repeat
-        local cfgs = soundCfgs[i + 1]
-        local delayFrame = BattleFunc.getInstance():turnMinisecondToframe(cfgs[1 + 1])
-        local times = tonumber(cfgs[2 + 1])
-        local inteval = BattleFunc.getInstance():turnMinisecondToframe(cfgs[3 + 1])
-        self.controler:setLastCallBack(delayFrame, inteval, times, self.playSound, self, cfgs[0 + 1])
-        i = i + 1
-    until not (i < #soundCfgs)
+    for i, cfgs in ipairs(soundCfgs) do
+        local delayFrame = BattleFunc.getInstance():turnMinisecondToframe(cfgs[2])
+        local times = tonumber(cfgs[3])
+        local inteval = BattleFunc.getInstance():turnMinisecondToframe(cfgs[4])
+        self.controler:setLastCallBack(delayFrame, inteval, times, self.playSound, self, cfgs[1])
+    end
 end
 
 function InstancePerformance:playSound(str)
@@ -475,11 +460,10 @@ end
 function InstancePerformance:shakeCameraByParams(params)
     local frame = tonumber(params[3 + 1])
     BattleLogsManager.battleEcho("battle,被硬直了", TableUtils.safelyJsonStringfy(params))
-    self:setShakeParams(frame, tonumber(params[2 + 1]), tonumber(params[4 + 1]), tonumber(params[5 + 1]))
+    self:setShakeParams(frame, tonumber(params[3]), tonumber(params[5]), tonumber(params[6]))
 end
 
 function InstancePerformance:setSkillSpeedUpValue(skillId, value)
-    -- [ts2lua]self._sKillSppedUpMap下标访问可能不正确
     local tempValue = self._sKillSppedUpMap[skillId]
     if tempValue == nil then
         tempValue = 10000
@@ -488,12 +472,10 @@ function InstancePerformance:setSkillSpeedUpValue(skillId, value)
     if tempValue < 0 then
         tempValue = 0
     end
-    -- [ts2lua]self._sKillSppedUpMap下标访问可能不正确
     self._sKillSppedUpMap[skillId] = tempValue
 end
 
 function InstancePerformance:getSkillSpeedUpValue(skillId)
-    -- [ts2lua]self._sKillSppedUpMap下标访问可能不正确
     local tempValue = self._sKillSppedUpMap[skillId]
     if tempValue == nil then
         tempValue = 10000
@@ -510,13 +492,11 @@ function InstancePerformance:onSetToCache()
     self:clearAllFollowEffect()
     if self._shade then
         self._shade:removeSelf()
-        local i = self.totalViewNums - 1
-        repeat
+        for i = self.totalViewNums,1,-1 do
             local childShade = self._shade:getChildAt(i)
             PoolTools.cacheItem(PoolCode.POOL_SHADE, childShade)
             childShade:removeSelf()
-            i = i - 1
-        until not (i >= 0)
+        end
         self._shade = nil
     end
     self:clearFlash()

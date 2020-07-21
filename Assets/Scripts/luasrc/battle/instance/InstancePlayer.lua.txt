@@ -20,34 +20,32 @@ function InstancePlayer:updateSkillCd()
         return
     end
     local i = 0
-    repeat
-        repeat
-            if not self.skillGroup[i + 1] then
-                break
+    for i, skill in ipairs(self.normalSkills) do
+        local skillView = self.skillGroup[i ];
+        if not skillView then
+            break
+        end
+
+        if skill.leftSkillCd > 0 then
+            skill.leftSkillCd = skill.leftSkillCd - cdcheck
+            if skill.leftSkillCd < 0 then
+                skill.leftSkillCd = 0
+                if skillView:getChildByName("mask").visible then
+                    skillView:getChildByName("mask").visible = false
+                    skillView:getChildByName("timeTxt").text = ""
+                end
             end
-            local skill = self.normalSkills[i + 1]
-            if skill.leftSkillCd > 0 then
-                skill.leftSkillCd = skill.leftSkillCd - cdcheck
-                if skill.leftSkillCd < 0 then
-                    skill.leftSkillCd = 0
-                    if self.skillGroup[i + 1]:getChildByName("mask").visible then
-                        self.skillGroup[i + 1]:getChildByName("mask").visible = false
-                        self.skillGroup[i + 1]:getChildByName("timeTxt").text = ""
-                    end
-                end
-                if not self.skillGroup[i + 1]:getChildByName("mask").visible then
-                    self.skillGroup[i + 1]:getChildByName("mask").visible = true
-                end
-                self.skillGroup[i + 1]:getChildByName("timeTxt").text = math.ceil(skill.leftSkillCd / GameConsts.gameFrameRate)
-            else
-                if self.skillGroup[i + 1]:getChildByName("mask").visible then
-                    self.skillGroup[i + 1]:getChildByName("mask").visible = false
-                end
-                self.skillGroup[i + 1]:getChildByName("timeTxt").text = ""
+            if not skillView:getChildByName("mask").visible then
+                skillView:getChildByName("mask").visible = true
             end
-        until true
-        i = i + 1
-    until not (i < #self.normalSkills)
+            skillView:getChildByName("timeTxt").text = math.ceil(skill.leftSkillCd / GameConsts.gameFrameRate)
+        else
+            if skillView:getChildByName("mask").visible then
+                skillView:getChildByName("mask").visible = false
+            end
+            skillView:getChildByName("timeTxt").text = ""
+        end
+    end
 end
 
 function InstancePlayer:setData(data)
@@ -61,46 +59,12 @@ function InstancePlayer:setSkillInfo(arr, parnet)
     self.cfgData.skill = self.skillArr
     self.skillParnet = parnet
     self:initNormalSkill(self.targetRole, self.lifeType)
-    self:addSkillIcon()
 end
 
 function InstancePlayer:addSkillIcon()
-    local i = 0
-    repeat
-        local item = self.skillArr[i + 1]
-        local skillInfo = BattleFunc.getInstance():getCfgDatas("Skill", item)
-        local img = UITools.createUIImage()
-        img.skin = "uisource/skill/skill/" .. skillInfo.pic .. ".png"
-        img.height = 92
-        img.width = img.height
-        img.x = -i * img.width + 10
-        self.skillParnet:addChild(img)
-        local mask = UITools.createUIImage("uisource/battle/battle/battle_image_jiangli.png")
-        mask.height = 92
-        mask.width = mask.height
-        mask.sizeGrid = "13,13,13,13"
-        mask.name = "mask"
-        local timeTxt = UITools.createLabel()
-        timeTxt.width = 92
-        timeTxt.height = 49
-        timeTxt.y = 25
-        timeTxt.font = "Microsoft YaHei"
-        timeTxt.fontSize = 36
-        timeTxt.valign = "middle"
-        timeTxt.align = "center"
-        timeTxt.name = "timeTxt"
-        timeTxt.color = "#ffffff"
-        timeTxt.text = math.ceil(self.normalSkills[i + 1].leftSkillCd / GameConsts.gameFrameRate) .. ""
-        img:addChild(mask)
-        img:addChild(timeTxt)
-        table.insert(self.skillGroup, img)
-        ButtonUtils(img, self.onClickSkill, self, nil, nil, i)
-        i = i + 1
-    until not (i < #self.skillArr)
 end
 
 function InstancePlayer:onClickSkill(index)
-    -- [ts2lua]self.normalSkills下标访问可能不正确
     local skillData = self.normalSkills[index]
     if not skillData then
         return
@@ -108,9 +72,9 @@ function InstancePlayer:onClickSkill(index)
     if skillData.isActive and skillData.leftSkillCd <= 0 then
         local tempArr = BattleFunc.getOneTempArr()
         ChooseTrigger.getIsCanUseSkill(self.targetRole, skillData, tempArr)
-        if tempArr[0 + 1] ~= -1 then
+        if tempArr[1] ~= -1 then
             LogsManager.echo("使用了技能------------------")
-            self:giveOutSkill(tempArr[1 + 1])
+            self:giveOutSkill(tempArr[2])
         else
             WindowManager.ShowTip(TranslateFunc.getInstance():getTranslate("tid_battle_noAim"))
         end

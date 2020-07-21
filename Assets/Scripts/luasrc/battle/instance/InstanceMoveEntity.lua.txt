@@ -8,15 +8,6 @@ function InstanceMoveEntity:ctor(target, spd, callFunc, thisObj, expandParams)
     if spd == nil then
         spd = 0
     end
-    if callFunc == nil then
-        callFunc = nil
-    end
-    if thisObj == nil then
-        thisObj = nil
-    end
-    if expandParams == nil then
-        expandParams = nil
-    end
     self.target = target
     self.spd = spd
     self.callFunc = callFunc
