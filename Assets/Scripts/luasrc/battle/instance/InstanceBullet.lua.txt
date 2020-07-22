@@ -180,9 +180,9 @@ function InstanceBullet:checkAttack(skillActionArr)
     end
     local tempArr = BattleFunc.getOneTempArr()
     if self.collisionType == ChooseTrigger.RANGE_CIRCLE then
-        ChooseTrigger.chooseRoleByCircle(self, self.collisionParams[0 + 1] * self.cfgScale, 0, 0, self._chooseTargetArr, 1, tempArr, self._mingzhongArr)
+        ChooseTrigger.chooseRoleByCircle(self, self.collisionParams[1] * self.cfgScale, 0, 0, self._chooseTargetArr, 1, tempArr, self._mingzhongArr)
     elseif self.collisionType == ChooseTrigger.RANGE_RECT then
-        ChooseTrigger.chooseRoleByRect(self, self.collisionParams[0 + 1] * self.cfgScale, self.collisionParams[1 + 1] * self.cfgScale, 0, 0, self._chooseTargetArr, 1, tempArr, self._mingzhongArr)
+        ChooseTrigger.chooseRoleByRect(self, self.collisionParams[1] * self.cfgScale, self.collisionParams[2] * self.cfgScale, 0, 0, self._chooseTargetArr, 1, tempArr, self._mingzhongArr)
     end
     ChooseTrigger.excludeUnChooseRole(self.owner, tempArr)
     if #tempArr > 0 then
@@ -194,8 +194,7 @@ function InstanceBullet:checkAttack(skillActionArr)
         end
         local hitRatio = 0
         if self.cfgData.collisionDamage then
-            -- [ts2lua]self.cfgData.collisionDamage下标访问可能不正确
-            hitRatio = self.cfgData.collisionDamage[self._hasHitNums - 2] or 0
+            hitRatio = self.cfgData.collisionDamage[self._hasHitNums - 1] or 0
         end
         for s, v in ipairs(skillActionArr) do
             if hitRatio ~= 0 then

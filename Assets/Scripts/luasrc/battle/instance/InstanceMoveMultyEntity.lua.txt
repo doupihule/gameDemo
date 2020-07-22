@@ -49,7 +49,7 @@ function InstanceMoveMultyEntity:getLoopPos()
     local roundNum = math.floor(self.currentStep / self.totalStep)
     local pos = self.currentStep % self.totalStep
     if roundNum % 2 == 0 then
-        self.currentEntity.target = self.pointArr[pos+1]
+        self.currentEntity.target = self.pointArr[pos]
     else
         self.currentEntity.target = self.pointArr[self.totalStep - pos]
     end

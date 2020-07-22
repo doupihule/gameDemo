@@ -210,9 +210,9 @@ function InstanceLife:getLastNormalAndPassSkill()
             eff = data.effectParams
             local j = 0
             for j, changeSkill in ipairs(eff) do
-                firstID = tonumber(changeSkill[0 + 1])
-                secondID = tonumber(changeSkill[1 + 1])
-                skillType = tonumber(changeSkill[2 + 1])
+                firstID = tonumber(changeSkill[1])
+                secondID = tonumber(changeSkill[2])
+                skillType = tonumber(changeSkill[3])
                 if skillType == BattleConst.skillType_passive then
                     local passIndex = table.findArrValue(self.passSkillArr, firstID)
                     if passIndex ~= -1 then

@@ -458,7 +458,7 @@ function InstancePerformance:setShakeParams(shakeFrame, style, strength, interve
 end
 
 function InstancePerformance:shakeCameraByParams(params)
-    local frame = tonumber(params[3 + 1])
+    local frame = tonumber(params[4])
     BattleLogsManager.battleEcho("battle,被硬直了", TableUtils.safelyJsonStringfy(params))
     self:setShakeParams(frame, tonumber(params[3]), tonumber(params[5]), tonumber(params[6]))
 end
