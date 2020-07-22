@@ -554,7 +554,7 @@ function BattleLogicalControler:createMyRole(id, level, starLevel, type)
     local offestX = 0
     for j = 1, num do
         if (j ~= 1) then
-            offestX = data.startSite[j + 1]
+            offestX = data.startSite[j ]
         end
         self:createRole(id, { level = level, starLevel = starLevel, type = type }, data.kind, BattleConst.ROLEGROUP_MYSELF, offestX)
     end

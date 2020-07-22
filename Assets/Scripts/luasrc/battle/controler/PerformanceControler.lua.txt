@@ -88,7 +88,7 @@ function PerformanceControler:setTxtShowBack(data)
     local maxNums = info.nums
     local targetItem = nil
     local x = targetInstance.pos.x
-    local y = targetInstance._myView.y - targetInstance.cfgData.size[0 + 1] + 10
+    local y = targetInstance._myView.y - targetInstance.cfgData.size[1] + 10
     if #viewArr > maxNums then
         targetItem = table.shiftArray(viewArr)
         self.controler.tweenControler:clearOneTween(targetItem)

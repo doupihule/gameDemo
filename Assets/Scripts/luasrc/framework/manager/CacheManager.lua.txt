@@ -17,9 +17,8 @@ function CacheManager.getInstance()
 end
 
 function CacheManager:setLocalCache(key, value)
-    self:addRidKeys(key + self._rid)
-    -- [ts2lua]self._localCache下标访问可能不正确
-    self._localCache[key + self._rid] = value
+    self:addRidKeys(key .. self._rid)
+    self._localCache[key .. self._rid] = value
     LocalStorageManager.setItem(key + self._rid, value)
 end
 
