@@ -62,6 +62,13 @@ function TableUtils.copyOneTable(tb)
     return newTb
 end
 
+--把数组a里面的元素插入到b里面
+function TableUtils.insertAtoB(a,b)
+    for i, v in ipairs(a) do
+        table.insert(b,v);
+    end
+end
+
 function TableUtils.deepCopy(fromTb, toTb)
     for i in pairs(fromTb) do
         local tempT = fromTb[i + 1]
