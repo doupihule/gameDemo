@@ -19,121 +19,72 @@ ConditionTrigger.opportunity_createMySelf = 19;
 ConditionTrigger.opportunity_beUsedBuff = 16;
 ConditionTrigger.opportunity_usedbuffRmoved = 17;
 function ConditionTrigger.onOpportunityByInstance(opportunity, selfInstance, p1, p2, p3, p4)
-    if p1 == nil then
-        p1 = nil
-    end
-    if p2 == nil then
-        p2 = nil
-    end
-    if p3 == nil then
-        p3 = nil
-    end
-    if p4 == nil then
-        p4 = nil
-    end
     local passiveSkills = selfInstance.passiveSkills
     local rtValue = 0
     if passiveSkills then
         local i = 0
-        repeat
-            repeat
-                local passive = passiveSkills[i + 1]
-                if not passive.isActive then
-                    break
-                end
-                if passive.leftSkillCd ~= 0 then
-                    break
-                end
-                if passive.cfgData.opportunity == opportunity then
-                    if passive.triggerNums == 9 then
-                        BattleLogsManager.battleEcho(1111)
+        for i, passive in ipairs(passiveSkills) do
+            if not passive.isActive then
+                break
+            end
+            if passive.leftSkillCd ~= 0 then
+                break
+            end
+            if passive.cfgData.opportunity == opportunity then
+                if ConditionTrigger.checkOneOpportunity(selfInstance, passive, passive.cfgData.condition, p1, p2, p3, p4) then
+                    if passive.triggerFrame ~= selfInstance.controler.updateCount then
+                        passive.triggerNums = 0
+                        passive.triggerFrame = selfInstance.controler.updateCount
                     end
-                    if ConditionTrigger.checkOneOpportunity(selfInstance, passive, passive.cfgData.condition, p1, p2, p3, p4) then
-                        if passive.triggerFrame ~= selfInstance.controler.updateCount then
-                            passive.triggerNums = 0
-                            passive.triggerFrame = selfInstance.controler.updateCount
-                        end
-                        passive.triggerNums = passive.triggerNums + 1
-                        if passive.triggerNums >= 10 then
-                            LogsManager.errorTag("passiveError", "被动技能死循环了,id:", passive._skillId, "opportunity:", opportunity)
-                            break
-                        end
-                        local rt = PassiveSkillTrigger.runOnePassiveSkill(selfInstance, passive, p1, p2, p3, p4)
-                        if type(rt) == "number" then
-                            rtValue = rtValue + rt
-                        end
+                    passive.triggerNums = passive.triggerNums + 1
+                    if passive.triggerNums >= 10 then
+                        LogsManager.errorTag("passiveError", "被动技能死循环了,id:", passive._skillId, "opportunity:", opportunity)
+                        break
+                    end
+                    local rt = PassiveSkillTrigger.runOnePassiveSkill(selfInstance, passive, p1, p2, p3, p4)
+                    if type(rt) == "number" then
+                        rtValue = rtValue + rt
                     end
                 end
-            until true
-            i = i + 1
-        until not (i < #passiveSkills)
+            end
+        end
     end
     return rtValue
 end
 
 function ConditionTrigger.onOpportunityByArr(opportunity, campArr, p1, p2, p3, p4)
-    if p1 == nil then
-        p1 = nil
-    end
-    if p2 == nil then
-        p2 = nil
-    end
-    if p3 == nil then
-        p3 = nil
-    end
-    if p4 == nil then
-        p4 = nil
-    end
     local rtValue = 0
-    local i = #campArr - 1
-    repeat
-        rtValue = rtValue + ConditionTrigger.onOpportunityByInstance(opportunity, campArr[i + 1], p1, p2, p3, p4)
-        i = i - 1
-    until not (i >= 0)
+    local len =#campArr
+    for i = len,1,-1 do
+        rtValue = rtValue + ConditionTrigger.onOpportunityByInstance(opportunity, campArr[i], p1, p2, p3, p4)
+    end
     return rtValue
 end
 
 function ConditionTrigger.checkOneOpportunity(instance, skill, conditionArr, p1, p2, p3, p4)
-    if p1 == nil then
-        p1 = nil
-    end
-    if p2 == nil then
-        p2 = nil
-    end
-    if p3 == nil then
-        p3 = nil
-    end
-    if p4 == nil then
-        p4 = nil
-    end
     if not conditionArr then
         return true
     end
-    local i = 0
-    repeat
-        local tempArr = conditionArr[i + 1]
+    for i, tempArr in ipairs(conditionArr) do
         local isAllSuccess = true
         local j = 0
-        repeat
-            local condition = ConditionTrigger.getCacheConditionData(tempArr[j + 1], skill)
+        for j, condition in ipairs(tempArr) do
+            local condition = ConditionTrigger.getCacheConditionData(tempArr[j], skill)
             local rt = ConditionTrigger.checkOneCondition(instance, condition, skill, p1, p2, p3, p4)
             if not rt then
                 isAllSuccess = false
                 break
             end
-            j = j + 1
-        until not (j < #tempArr)
+        end
         if isAllSuccess then
             return true
         end
-        i = i + 1
-    until not (i < #conditionArr)
+    end
     return false
 end
 
 function ConditionTrigger.checkOneCondition(selfInstance, condition, skill, p1, p2, p3, p4)
     local type = condition.type
-    -- [ts2lua]ConditionTrigger下标访问可能不正确
     local func = ConditionTrigger["checkCondition_" .. type]
     if not func then
         LogsManager.errorTag("battleCfgError", "错误的条件类型,id:", condition._id, "type:", condition.type)
@@ -144,7 +95,7 @@ function ConditionTrigger.checkOneCondition(selfInstance, condition, skill, p1, 
 end
 
 function ConditionTrigger.checkCondition_1(selfInstance, condition, skill)
-    local ratio = condition.conditionLogicalParams[0 + 1][0 + 1]
+    local ratio = condition.conditionLogicalParams[1][1]
     if ratio >= 10000 then
         return true
     end
@@ -157,7 +108,7 @@ end
 
 function ConditionTrigger.checkCondition_2(selfInstance, condition, skill)
     local hpRatio = selfInstance.hp / selfInstance:getMaxHp() * 10000
-    local rt = ConditionTrigger.compareValue(hpRatio, tonumber(condition.conditionLogicalParams[0 + 1][1 + 1]), tonumber(condition.conditionLogicalParams[0 + 1][0 + 1]))
+    local rt = ConditionTrigger.compareValue(hpRatio, tonumber(condition.conditionLogicalParams[1][2]), tonumber(condition.conditionLogicalParams[1][1]))
     return rt
 end
 
@@ -167,15 +118,13 @@ function ConditionTrigger.checkCondition_3(selfInstance, condition, skill, useAr
         return false
     end
     local i = 0
-    repeat
-        local targetInstance = useArr[i + 1]
+    for i, targetInstance in ipairs(useArr) do
         local hpRatio = targetInstance.hp / targetInstance:getMaxHp() * 10000
-        local rt = ConditionTrigger.compareValue(hpRatio, tonumber(condition.conditionLogicalParams[0 + 1][1 + 1]), tonumber(condition.conditionLogicalParams[0 + 1][0 + 1]))
+        local rt = ConditionTrigger.compareValue(hpRatio, tonumber(condition.conditionLogicalParams[1][2]), tonumber(condition.conditionLogicalParams[1][2]))
         if rt then
             return true
         end
-        i = i + 1
-    until not (i < #useArr)
+    end
     return false
 end
 
@@ -184,13 +133,11 @@ function ConditionTrigger.checkCondition_4(selfInstance, condition, skill, useAr
     if not useArr or #useArr == 0 then
         return false
     end
-    local i = 0
-    repeat
-        if ConditionTrigger.checkIsTargetLife(useArr[i + 1], params) then
+    for i, v in ipairs(useArr) do
+        if ConditionTrigger.checkIsTargetLife(v, params) then
             return true
         end
-        i = i + 1
-    until not (i < #useArr)
+    end
     return false
 end
 
@@ -198,15 +145,12 @@ function ConditionTrigger.checkCondition_5(selfInstance, condition, skill, useAr
     if not useArr or #useArr == 0 then
         return false
     end
-    local i = 0
-    repeat
-        local tempInstance = useArr[i + 1]
+    for i, tempInstance in ipairs(useArr) do
         local tempResultInfo = tempInstance.tempBeUsedValue
-        if tempResultInfo[0 + 1] == BattleConst.damage_baoji then
+        if tempResultInfo[1] == BattleConst.damage_baoji then
             return true
         end
-        i = i + 1
-    until not (i < #useArr)
+    end
     return false
 end
 
@@ -217,48 +161,41 @@ function ConditionTrigger.checkCondition_6(selfInstance, condition, skill, useAr
         LogsManager.errorTag("checkCondition_6", "检查是否配置条件错误.还没有判定结果,condition:", condition._id, "skill:", skill and skill._skillId or "none")
         return false
     end
-    if tempResultInfo[0 + 1] == BattleConst.damage_miss then
+    if tempResultInfo[1] == BattleConst.damage_miss then
         return true
     end
     return false
 end
 
 function ConditionTrigger.checkCondition_7(selfInstance, condition, skill, useArr)
-    local targetLifeType = condition.conditionLogicalParams[0 + 1][0 + 1]
+    local targetLifeType = condition.conditionLogicalParams[1][1]
     local params = condition.conditionLogicalParams
     if not useArr or #useArr == 0 then
         return false
     end
     local i = 0
-    repeat
-        local tempInstance = useArr[i + 1]
+    for i, tempInstance in ipairs(useArr) do
         if tempInstance.hp <= 0 then
             if ConditionTrigger.checkIsTargetLife(tempInstance, params) then
                 return true
             end
         end
-        i = i + 1
-    until not (i < #useArr)
+    end
     return false
 end
 
 function ConditionTrigger.checkCondition_8(selfInstance, condition, skill)
     local campArr = selfInstance.campArr
-    local targetId = tostring(condition.conditionLogicalParams[0 + 1][0 + 1])
-    local params = condition.conditionLogicalParams
+    local targetId = tostring(condition.conditionLogicalParams[1][1])
+    local params = condition.conditionLogicalParams[1]
     local s = 0
-    repeat
-        local id = tostring(params[s + 1])
-        local i = 0
-        repeat
-            local tempInstance = campArr[i + 1]
-            if tempInstance.dataId == targetId then
+    for s, id in ipairs(params) do
+        for i, tempInstance in ipairs(campArr) do
+            if tempInstance.dataId == id then
                 return true
             end
-            i = i + 1
-        until not (i < #campArr)
-        s = s + 1
-    until not (s < #params)
+        end
+    end
     return false
 end
 
@@ -266,13 +203,11 @@ function ConditionTrigger.checkCondition_9(selfInstance, condition, skill, useAr
     if not useArr or #useArr == 0 then
         return false
     end
-    local i = 0
-    repeat
-        if ConditionTrigger.checkBuffLayer(useArr[i + 1], condition) then
+    for i, v in ipairs(useArr) do
+        if ConditionTrigger.checkBuffLayer(v, condition) then
             return true
         end
-        i = i + 1
-    until not (i < #useArr)
+    end
     return false
 end
 
@@ -280,13 +215,11 @@ function ConditionTrigger.checkCondition_10(selfInstance, condition, skill, useA
     if not useArr or #useArr == 0 then
         return false
     end
-    local i = 0
-    repeat
-        if ConditionTrigger.checkHasBuff(useArr[i + 1], condition) then
+    for i, v in ipairs(useArr) do
+        if ConditionTrigger.checkHasBuff(v, condition) then
             return true
         end
-        i = i + 1
-    until not (i < #useArr)
+    end
     return false
 end
 
@@ -294,13 +227,11 @@ function ConditionTrigger.checkCondition_11(selfInstance, condition, skill, useA
     if not useArr or #useArr == 0 then
         return false
     end
-    local i = 0
-    repeat
-        if ConditionTrigger.checkHasBuffGroup(useArr[i + 1], condition) then
+    for i, v in ipairs(useArr) do
+        if ConditionTrigger.checkHasBuffGroup(v, condition) then
             return true
         end
-        i = i + 1
-    until not (i < #useArr)
+    end
     return false
 end
 
@@ -311,13 +242,11 @@ function ConditionTrigger.checkCondition_12(selfInstance, condition, skill, useA
     if not useArr or #useArr == 0 then
         return false
     end
-    local i = 0
-    repeat
-        if ConditionTrigger.checkBuffRemove(useArr[i + 1], condition, buff) then
+    for i, v in ipairs(useArr) do
+        if ConditionTrigger.checkBuffRemove(v, condition,buff) then
             return true
         end
-        i = i + 1
-    until not (i < #useArr)
+    end
     return false
 end
 
@@ -343,45 +272,40 @@ end
 function ConditionTrigger.checkHasBuff(targetInstance, condition)
     local arr1 = condition.conditionLogicalParams
     local i = 0
-    repeat
-        local arr2 = arr1[i + 1]
-        local buff = targetInstance:getBuffById(arr2[0 + 1])
+    for i, arr2 in ipairs(arr1) do
+        local buff = targetInstance:getBuffById(arr2[1])
         if buff then
             return true
         end
-        i = i + 1
-    until not (i < #arr1)
+    end
     return false
 end
 
 function ConditionTrigger.checkHasBuffGroup(targetInstance, condition)
     local arr1 = condition.conditionLogicalParams
     local i = 0
-    repeat
-        local arr2 = arr1[i + 1]
-        local buff = targetInstance:getBuffByGroup(arr2[0 + 1])
+    for i, arr2 in ipairs(arr1) do
+        local buff = targetInstance:getBuffByGroup(arr2[1])
         if buff then
             return true
         end
-        i = i + 1
-    until not (i < #arr1)
+    end
     return false
 end
+
 
 function ConditionTrigger.checkBuffLayer(targetInstance, condition)
     local arr1 = condition.conditionLogicalParams
     local i = 0
-    repeat
-        local tempArr = arr1[i + 1]
-        local buff = targetInstance:getBuffById(tostring(tempArr[0 + 1]))
+    for i, tempArr in ipairs(arr1) do
+        local buff = targetInstance:getBuffById(tostring(tempArr[1]))
         if buff then
-            local rt = ConditionTrigger.compareValue(buff.layerNums, tempArr[2 + 1], tempArr[1 + 1])
+            local rt = ConditionTrigger.compareValue(buff.layerNums, tempArr[3], tempArr[2])
             if rt then
                 return rt
             end
         end
-        i = i + 1
-    until not (i < #arr1)
+    end
     return false
 end
 
@@ -391,24 +315,20 @@ function ConditionTrigger.checkBuffRemove(instance, condition, buff, removeType)
     end
     local arr1 = condition.conditionLogicalParams
     local i = 0
-    repeat
-        local tempArr = arr1[i + 1]
-        if buff._id == tostring(tempArr[0 + 1]) then
+    for i, tempArr in ipairs(arr1) do
+        if buff._id == tostring(tempArr[1]) then
             if not removeType or removeType == 1 then
                 return true
             end
         end
-        i = i + 1
-    until not (i < #arr1)
+    end
     return false
 end
 
 function ConditionTrigger.checkCondition_17(selfInstance, condition, skill, useArr, skillAction, diedInstance)
-    local i = 0
-    repeat
-        local tempParams = condition.conditionLogicalParams[i + 1]
-        local campType = tempParams[0 + 1]
-        local lifetype = tempParams[1 + 1]
+    for i, tempParams in ipairs(condition.conditionLogicalParams) do
+        local campType = tempParams[1]
+        local lifetype = tempParams[1]
         if lifetype == diedInstance.lifeType then
             if campType == 3 then
                 return true
@@ -422,8 +342,7 @@ function ConditionTrigger.checkCondition_17(selfInstance, condition, skill, useA
                 end
             end
         end
-        i = i + 1
-    until not (i < #condition.conditionLogicalParams)
+    end
     return false
 end
 
@@ -432,50 +351,43 @@ function ConditionTrigger.checkCondition_18(selfInstance, condition, skill, useA
     if not skillAction.skill then
         LogsManager.errorTag("paramserror", "参数错误")
     end
-    local i = 0
-    repeat
-        local tempArr = arr1[i + 1]
-        local tempSkillType = tempArr[0 + 1]
+    for i, tempArr in ipairs(arr1) do
+        local tempSkillType = tempArr[1]
         if tempSkillType == 5 then
             return true
         elseif tempSkillType == 6 then
-            if skillAction.skill._skillId == tostring(tempArr[1 + 1]) then
+            if skillAction.skill._skillId == tostring(tempArr[2]) then
                 return true
             end
         elseif skillAction.skill.skillType == tempSkillType then
             return true
         end
-        i = i + 1
-    until not (i < #arr1)
+    end
     return false
 end
 
 function ConditionTrigger.checkCondition_19(selfInstance, condition, skill, useArr, targetSkillAction)
     local arr1 = condition.conditionLogicalParams
     local i = 0
-    repeat
-        local tempArr = arr1[i + 1]
-        local type = tempArr[0 + 1]
+    for i, tempArr in ipairs(arr1) do
+        local type = tempArr[1]
         if type == 1 then
-            if targetSkillAction.skillEffectId == tostring(tempArr[1 + 1]) then
+            if targetSkillAction.skillEffectId == tostring(tempArr[2]) then
                 return true
             end
         elseif type == 2 then
-            if targetSkillAction.cfgData.logicType == tostring(tempArr[1 + 1]) then
+            if targetSkillAction.cfgData.logicType == tostring(tempArr[2]) then
                 return true
             end
         end
-        i = i + 1
-    until not (i < #arr1)
+    end
 end
 
 function ConditionTrigger.checkCondition_20(selfInstance, condition, skill, useArr, targetInstance)
     local paramsArr = condition.conditionLogicalParams
-    local s = 0
-    repeat
-        local params = paramsArr[s + 1]
-        local propId = tostring(params[1 + 1])
-        local compareType = params[0 + 1]
+    for s, params in ipairs(paramsArr) do
+        local propId = tostring(params[2])
+        local compareType = params[1]
         if not propId then
             LogsManager.errorTag("conditionError", "condtion配置错误,id:", condition._id);
             return false
@@ -483,9 +395,7 @@ function ConditionTrigger.checkCondition_20(selfInstance, condition, skill, useA
         if not useArr or #useArr == 0 then
             return false
         end
-        local i = 0
-        repeat
-            local tempInstance = useArr[i + 1]
+        for i, tempInstance in ipairs(useArr) do
             local value1 = nil
             local value2 = nil
             if propId == BattleConst.attr_hp then
@@ -502,29 +412,22 @@ function ConditionTrigger.checkCondition_20(selfInstance, condition, skill, useA
             if rt then
                 return true
             end
-            i = i + 1
-        until not (i < #useArr)
-        s = s + 1
-    until not (s < #paramsArr)
+        end
+    end
     return false
 end
 
 function ConditionTrigger.checkCondition_21(selfInstance, condition, skill, useArr, targetInstance)
     local paramsArr = condition.conditionLogicalParams
-    local s = 0
-    repeat
-        local rid = tostring(paramsArr[s + 1][1 + 1])
-        local lifeType = tonumber(paramsArr[s + 1][0 + 1])
-        local i = 0
-        repeat
-            local targetRole = useArr[i + 1]
+    for s, v in ipairs(paramsArr) do
+        local rid = tostring(v[2])
+        local lifeType = tonumber(v[1])
+        for i, targetRole in ipairs(useArr) do
             if targetRole.dataId == rid and targetRole.lifeType == lifeType then
                 return true
             end
-            i = i + 1
-        until not (i < #useArr)
-        s = s + 1
-    until not (s < #paramsArr)
+        end
+    end
     return false
 end
 
@@ -547,28 +450,23 @@ function ConditionTrigger.checkIsTargetLife(instance, logicalParams)
     if not logicalParams then
         return false
     end
-    local i = 0
-    repeat
-        local targetLifeType = logicalParams[i + 1][0 + 1]
+    for i, v in ipairs(logicalParams) do
+        local targetLifeType = v[1]
         if targetLifeType == 0 then
             return true
         end
         if instance.lifeType == targetLifeType then
             return true
         end
-        i = i + 1
-    until not (i < #logicalParams)
+    end
     return false
 end
 
 ConditionTrigger._conditionDataCache = {};
 function ConditionTrigger.getCacheConditionData(id, skill)
-    -- [ts2lua]ConditionTrigger._conditionDataCache下标访问可能不正确
     local condition = ConditionTrigger._conditionDataCache[id]
     if not condition then
-        -- [ts2lua]ConditionTrigger._conditionDataCache下标访问可能不正确
         ConditionTrigger._conditionDataCache[id] = BattleConditionData.new(id)
-        -- [ts2lua]ConditionTrigger._conditionDataCache下标访问可能不正确
         condition = ConditionTrigger._conditionDataCache[id]
     end
     condition:setData(skill)

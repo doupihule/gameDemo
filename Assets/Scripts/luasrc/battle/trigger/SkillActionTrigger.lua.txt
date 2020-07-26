@@ -20,10 +20,9 @@ function SkillActionTrigger.checkSkillAction(attacker, skillAction, useArr)
     end
     if #replaceArr > 0 then
         local i = 0
-        repeat
-            SkillActionTrigger.beforRunSkillAction(attacker, replaceArr[i + 1], useArr)
-            i = i + 1
-        until not (i < #replaceArr)
+        for i, v in ipairs(replaceArr) do
+            SkillActionTrigger.beforRunSkillAction(attacker, v, useArr)
+        end
     else
         SkillActionTrigger.beforRunSkillAction(attacker, skillAction, useArr)
     end
@@ -82,25 +81,20 @@ function SkillActionTrigger.runOneSkillAction(attacker, skill, skillAction, useA
     local targetSound = skillAction.cfgData.sound
     local effectParams = skillAction.cfgData.effect
     if (useArr and #useArr > 0) and effectParams then
-        local i = 0
-        repeat
-            if useArr[i + 1].hp > 0 then
-                useArr[i + 1]:createEffByParams(effectParams, false, false)
+        for i, v in ipairs(useArr) do
+            if v.hp > 0 then
+                v:createEffByParams(effectParams, false, false)
             end
-            i = i + 1
-        until not (i < #useArr)
+        end
     end
     local skillTempChooseArr = skillAction.tempChooseArr
     table.clearArray(skillTempChooseArr)
-    local i = 0
-    repeat
-        table.insert(skillTempChooseArr, useArr[i + 1])
-        i = i + 1
-    until not (i < #useArr)
+    for i, v in ipairs(useArr) do
+        table.insert(skillTempChooseArr, v)
+    end
     if skill.skillType ~= BattleConst.skill_kind_passive then
         ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_action_usedBefore, attacker, useArr, skillAction)
     end
-    -- [ts2lua]SkillActionTrigger下标访问可能不正确
     local func = SkillActionTrigger["runSkillAction_" .. logicType]
     if not func then
         LogsManager.errorTag("skillactionError", "没有对应的效果类型:", logicType)
@@ -115,89 +109,70 @@ function SkillActionTrigger.runOneSkillAction(attacker, skill, skillAction, useA
 end
 
 function SkillActionTrigger.runSkillAction_1(attacker, skill, skillAction, useArr)
-    local i = 0
-    repeat
-        local defer = useArr[i + 1]
+    local skillParams = skillAction.skillLogicalParams
+    for i, defer in ipairs(useArr) do
         if defer.hp > 0 then
-            if skillAction.skillLogicalParams[0 + 1][3 + 1] then
-                BattleFormulaTrigger.dmgByAttr(attacker, defer, skillAction, skillAction.skillLogicalParams[0 + 1][0 + 1], skillAction.skillLogicalParams[0 + 1][1 + 1])
+            if skillParams[1][4] then
+                BattleFormulaTrigger.dmgByAttr(attacker, defer, skillAction, skillParams[1][1], skillParams[1][2])
             else
-                BattleFormulaTrigger.damage(attacker, defer, skillAction, skillAction.skillLogicalParams[0 + 1][0 + 1], skillAction.skillLogicalParams[0 + 1][1 + 1])
+                BattleFormulaTrigger.damage(attacker, defer, skillAction, skillParams[1][1], skillParams[1][2])
             end
         end
-        i = i + 1
-    until not (i < #useArr)
+    end
 end
 
 function SkillActionTrigger.runSkillAction_2(attacker, skill, skillAction, useArr)
     local i = 0
-    repeat
-        local defer = useArr[i + 1]
+    for i, defer in ipairs(useArr) do
         BattleFormulaTrigger.trit(attacker, defer, skill, skillAction)
-        i = i + 1
-    until not (i < #useArr)
+    end
 end
 
 function SkillActionTrigger.runSkillAction_3(attacker, skill, skillAction, useArr)
-    attacker.attrData:changeOneTempAttr(BattleConst.attr_xixue, skillAction.skillLogicalParams[0 + 1][0 + 1], 0)
+    attacker.attrData:changeOneTempAttr(BattleConst.attr_xixue, skillAction.skillLogicalParams[1][1], 0)
 end
 
 function SkillActionTrigger.runSkillAction_4(attacker, skill, skillAction, useArr)
 end
 function SkillActionTrigger.runSkillAction_5(attacker, skill, skillAction, useArr)
     local logicalParams = skillAction.skillLogicalParams
-    local i = 0
-    repeat
-        local buffId = logicalParams[i + 1][0 + 1]
-        local cengshu = logicalParams[i + 1][1 + 1]
+    for i, v in ipairs(logicalParams) do
+        local buffId = v[1]
+        local cengshu = v[2]
         local cacheBuff = PoolTools.getItem("buff_" .. buffId)
         if not cacheBuff then
             cacheBuff = BattleBuffData.new(buffId)
         end
         cacheBuff:setData(attacker, skillAction, cengshu)
-        local s = 0
-        repeat
-            local targetInstance = useArr[s + 1]
-            BuffTrigger.setOneBuff(attacker, useArr[s + 1], skillAction, cacheBuff)
-            s = s + 1
-        until not (s < #useArr)
-        i = i + 1
-    until not (i < #logicalParams)
+        for s, targetInstance in ipairs(useArr) do
+            BuffTrigger.setOneBuff(attacker, useArr[s], skillAction, cacheBuff)
+        end
+    end
 end
 
 function SkillActionTrigger.runSkillAction_6(attacker, skill, skillAction, useArr)
-    local i = 0
-    repeat
-        local defer = useArr[i + 1]
+    for i, defer in ipairs(useArr) do
         local skillParams = skillAction.skillLogicalParams
-        local s = 0
-        repeat
-            local tempArr = skillParams[s + 1]
-            local kind = tempArr[0 + 1]
-            local m = 1
-            repeat
-                SkillActionTrigger.removeBuffByKind(defer, kind, tempArr[m + 1])
-                m = m + 1
-            until not (m < #tempArr)
-            s = s + 1
-        until not (s < #skillParams)
-        i = i + 1
-    until not (i < #useArr)
+        for s, tempArr in ipairs(skillParams) do
+            local kind = tempArr[1]
+            for m = 2, #tempArr do
+                SkillActionTrigger.removeBuffByKind(defer, kind, tempArr[m])
+            end
+        end
+    end
 end
 
 function SkillActionTrigger.removeBuffByKind(user, kind, value)
     local buffMapInfo = user.buffInfo
     for i in pairs(buffMapInfo) do
-        local buffArr = buffMapInfo[i + 1]
+        local buffArr = buffMapInfo[i]
         local len = #buffArr
-        local s = len - 1
-        repeat
-            local buff = buffArr[s + 1]
+        for s=len,1,-1 do
+            local buff = buffArr[s]
             if SkillActionTrigger.checkBuffKind(buff, kind, value) then
                 user:clearOneBuff(buff, BattleConst.buff_remove_qusan)
             end
-            s = s - 1
-        until not (s >= 0)
+        end
     end
 end
 
@@ -218,145 +193,122 @@ end
 
 function SkillActionTrigger.runSkillAction_7(attacker, skill, skillAction, useArr)
     local i = 0
-    repeat
-        useArr[i + 1]:changeEnergy(skillAction.skillLogicalParams[0 + 1][0 + 1])
-        i = i + 1
-    until not (i < #useArr)
+    for i, v in ipairs(useArr) do
+       v:changeEnergy(skillAction.skillLogicalParams[1][1])
+    end
 end
 
 function SkillActionTrigger.runSkillAction_8(attacker, skill, skillAction, useArr)
-    local defer = useArr[0 + 1]
-    local params = skillAction.skillLogicalParams[0 + 1]
-    local keepDis = params[1 + 1] and params[1 + 1] or 60
+    local defer = useArr[1]
+    local params = skillAction.skillLogicalParams[1]
+    local keepDis = params[2] and params[2] or 60
     if not defer then
         return
     end
     local targetX = defer.pos.x + defer._viewWay * keepDis
     attacker:setLastPos(attacker.pos.x, attacker.pos.y, attacker.pos.z)
     attacker:setPos(targetX, 0, defer.pos.z)
-    local lastFrame = BattleFunc.getInstance():turnMinisecondToframe(params[0 + 1])
+    local lastFrame = BattleFunc.getInstance():turnMinisecondToframe(params[1])
     attacker.controler:setCallBack(lastFrame, attacker.resumeToLastPos, attacker)
     BattleLogsManager.battleEcho("xd 触发瞬移了---lastFrame:", lastFrame)
 end
 
 function SkillActionTrigger.runSkillAction_9(attacker, skill, skillAction, useArr)
-    local ratio = skillAction.skillLogicalParams[0 + 1][0 + 1] / 10000
-    local i = 0
-    repeat
-        local targetIns = useArr[i + 1]
+    local ratio = skillAction.skillLogicalParams[1][1] / 10000
+    for i, targetIns in ipairs(useArr) do
         targetIns:doRelive(math.floor(targetIns:getMaxHp() * ratio), skillAction)
-        i = i + 1
-    until not (i < #useArr)
+    end
 end
 
 function SkillActionTrigger.runSkillAction_10(attacker, skill, skillAction, useArr)
-    local value = skillAction.skillLogicalParams[0 + 1][0 + 1]
+    local value = skillAction.skillLogicalParams[1][1]
     local tempBeUsedValue = attacker.tempBeUsedValue
     if not tempBeUsedValue then
         return
     end
-    local dmgValue = tempBeUsedValue[1 + 1]
+    local dmgValue = tempBeUsedValue[2]
     if not dmgValue then
         return
     end
     local fanshangValue = math.floor(dmgValue * value / 10000)
-    local tempArr = BattleFunc.getOneTempArr()
-    local i = 0
-    repeat
-        local targetIns = useArr[i + 1]
+    for i, targetIns in ipairs(useArr) do
         targetIns:onBeFanshang(dmgValue, attacker)
-        i = i + 1
-    until not (i < #useArr)
+    end
 end
 
 function SkillActionTrigger.runSkillAction_11(attacker, skill, skillAction, useArr)
     local params = skillAction.skillLogicalParams
     local s = 0
-    repeat
-        local i = 0
-        repeat
-            local info = params[i + 1]
-            local targetRole = useArr[s + 1]
-            local x = info[0 + 1] / attacker._viewWay + targetRole.pos.x
-            local z = -info[1 + 1] + attacker.pos.z
-            local id = tostring(info[2 + 1])
-            local lifeFrame = BattleFunc.getInstance():turnMinisecondToframe(info[3 + 1])
+    for s, v in ipairs(useArr) do
+        for i, info in ipairs(params) do
+            local targetRole = v
+            local x = info[1] / attacker._viewWay + targetRole.pos.x
+            local z = -info[2] + attacker.pos.z
+            local id = tostring(info[3])
+            local lifeFrame = BattleFunc.getInstance():turnMinisecondToframe(info[4])
             attacker.controler:createSummoned(id, { level = attacker:getData().level, id = id, starLevel = attacker:getData().starLevel }, x, z, attacker, lifeFrame)
-            i = i + 1
-        until not (i < #params)
-        s = s + 1
-    until not (s < #useArr)
+        end
+    end
 end
 
 function SkillActionTrigger.runSkillAction_12(attacker, skill, skillAction, useArr)
-    local aoeIdArr = skillAction.skillLogicalParams[0 + 1]
-    local i = 0
-    repeat
-        local s = 0
-        repeat
-            local aoeId = tostring(aoeIdArr[s + 1])
-            local aoeData = PoolTools.getItem(PoolCode.POOL_AOEDATA + aoeId)
+    local aoeIdArr = skillAction.skillLogicalParams[1]
+    for i, v in ipairs(useArr) do
+        for s, aoeId in ipairs(aoeIdArr) do
+            local aoeData = PoolTools.getItem(PoolCode.POOL_AOEDATA .. aoeId)
             if not aoeData then
                 aoeData = BattleAoeData.new(aoeId)
             end
             aoeData:setData(skillAction, attacker)
-            aoeData:doAoeAction(useArr[i + 1])
-            s = s + 1
-        until not (s < #aoeIdArr)
-        i = i + 1
-    until not (i < #useArr)
+            aoeData:doAoeAction(v)
+        end
+    end
 end
 
 function SkillActionTrigger.runSkillAction_13(attacker, skill, skillAction, useArr)
     local paramsArr = skillAction.skillLogicalParams
-    local i = 0
-    repeat
-        local info = paramsArr[i + 1]
-        local bulletId = tostring(info[0 + 1])
-        local x = info[1 + 1] * attacker.cfgScale * attacker._viewWay
-        local y = -info[2 + 1] * attacker.cfgScale
-        local rotation = info[3 + 1]
-        local offz = info[4 + 1] or 0
+    for i, info in ipairs(paramsArr) do
+        local bulletId = tostring(info[1])
+        local x = info[2] * attacker.cfgScale * attacker._viewWay
+        local y = -info[3] * attacker.cfgScale
+        local rotation = info[4]
+        local offz = info[5] or 0
         local s = 0
-        repeat
-            attacker.controler:createBullet(bulletId, attacker, skillAction, x + attacker.pos.x, attacker.pos.y + y, rotation, useArr[s + 1], offz)
+        for s, v in ipairs(useArr) do
+            attacker.controler:createBullet(bulletId, attacker, skillAction, x + attacker.pos.x, attacker.pos.y + y, rotation, v, offz)
             if #useArr > 1 and #paramsArr > 1 then
                 LogsManager.errorTag("skillactionError", "技能效果id:", skillAction.skillEffectId, "_选择了多个目标.同时配置了多个子弹.不符合逻辑")
                 break
             end
-            s = s + 1
-        until not (s < #useArr)
-        i = i + 1
-    until not (i < #paramsArr)
+        end
+    end
 end
 
 function SkillActionTrigger.runSkillAction_14(attacker, skill, skillAction, useArr)
     if #useArr == 0 then
         return
     end
-    local targetRole = useArr[0 + 1]
+    local targetRole = useArr[1]
     local paramsArr = skillAction.skillLogicalParams
     local pointArr = {}
     local expandArr = {}
     local i = 0
-    repeat
-        local info = paramsArr[i + 1]
-        local frame = BattleFunc.getInstance():turnMinisecondToframe(info[0 + 1])
-        local isFollow = info[3 + 1]
+    for i, info in ipairs(paramsArr) do
+        local frame = BattleFunc.getInstance():turnMinisecondToframe(info[1])
+        local isFollow = info[4]
         local x = nil
         local z = nil
         local expandParams = { frame = frame }
         if isFollow == 1 then
-            x = info[1 + 1] * attacker._viewWay
-            z = info[2 + 1]
+            x = info[2] * attacker._viewWay
+            z = info[3]
             expandParams.target = targetRole
         else
-            x = info[1 + 1] * attacker._viewWay + targetRole.pos.x
-            z = info[2 + 1] + targetRole.pos.z
+            x = info[2] * attacker._viewWay + targetRole.pos.x
+            z = info[3] + targetRole.pos.z
         end
         table.insert(pointArr, VectorTools.createVector3(x, 0, z))
         table.insert(expandArr, expandParams)
-        i = i + 1
-    until not (i < #paramsArr)
+    end
     attacker:moveToGroupPoints(pointArr, 0, nil, nil, expandArr)
 end

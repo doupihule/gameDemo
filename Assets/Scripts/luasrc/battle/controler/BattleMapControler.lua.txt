@@ -74,12 +74,11 @@ end
 function BattleMapControler:destoryOneLayer(mapInfo)
     local infoArr = mapInfo.infoArr
     local i = 0
-    repeat
-        local view = infoArr[i + 1].view
+    for i, v in ipairs(infoArr) do
+        local view = v.view
         view:removeSelf()
         view:dispose()
-        i = i + 1
-    until not (i < #infoArr)
+    end
     local decorateArr = mapInfo.decorateArr
     local i = 0
     mapInfo.ctn:removeSelf()
