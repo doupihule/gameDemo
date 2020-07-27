@@ -14,7 +14,7 @@ function StatisticsExtendManager.onEvent(event, eventData)
         return
     end
     if eventData then
-        if type(eventData) == "object" then
+        if type(eventData) == "table" then
             for eKey in pairs(eventData) do
                 if eventData:hasOwnProperty(eKey) then
                     -- [ts2lua]eventData下标访问可能不正确
@@ -29,7 +29,7 @@ function StatisticsExtendManager.onEvent(event, eventData)
         end
     end
     local isAld = false
-    if type(event) == "object" then
+    if type(event) == "table" then
         eventId = event["name"]
         sendData["sortId"] = event["sortId"]
         sendData["groupId"] = event["groupId"]

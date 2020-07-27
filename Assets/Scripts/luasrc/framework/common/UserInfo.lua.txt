@@ -75,7 +75,7 @@ function UserInfo.initSystemId()
         UserInfo.systemId = "mini"
     end
     -- [ts2lua]window下标访问可能不正确
-    window["LogsManager"]:echo("xd initSystemId:" .. UserInfo.systemId)
+    LogsManager.echo("xd initSystemId:" .. UserInfo.systemId)
 end
 
 function UserInfo.init()

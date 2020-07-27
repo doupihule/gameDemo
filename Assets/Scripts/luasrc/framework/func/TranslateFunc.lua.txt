@@ -45,7 +45,7 @@ function TranslateFunc:getAllCfgData(cfgsName, ignoreError)
     if not cfgs then
         if not ignoreError then
             -- [ts2lua]window下标访问可能不正确
-            window["LogsManager"]:errorTag(LogsErrorCode.CONFIG_ERROR, "对应的配表没找到,请检查配置:" .. cfgsName)
+            LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "对应的配表没找到,请检查配置:" .. cfgsName)
         end
         return {}
     end
@@ -209,7 +209,7 @@ function TranslateFunc:getTranslate(tid, cfgsName, ...)
             end
         end
     end
-    if type(resultStr) == "object" then
+    if type(resultStr) == "table" then
         resultStr = resultStr[language]
     end
     if not resultStr then

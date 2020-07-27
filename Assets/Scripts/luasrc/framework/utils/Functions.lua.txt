@@ -172,13 +172,13 @@ function doJsApplyFunc(callFunc, thisObj, paramsArr)
     end
 end
 
---try catch 传入2个函数, ...是try传入的参数
+--try catch 传入2个函数, ...是try传入的参数 ,成功返回函数的返回值.最多3个返回值
 function try_catch(tryFunc,catchFunc,...)
-    local rt,meg = pcall(tryFunc,...);
+    local rt,me1,me2,me3 = pcall(tryFunc,...);
     if(rt) then
-        return;
+        return me1,me2,me3;
     end
-    catchFunc(rt)
+    return catchFunc(...)
 end
 
 local tempTable1 = {}

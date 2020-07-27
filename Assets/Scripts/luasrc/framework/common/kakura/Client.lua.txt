@@ -229,7 +229,7 @@ function Client:startRequestCloud(method, params, callback, thisObj, addParam, e
     params.sendTime = self.serverTime
     local thisValue = self
     local onErrorBack = function(error)
-        if type(error) == "object" and error.code then
+        if type(error) == "table" and error.code then
             local errorCode = tostring(error.code)
             if errorCode == "10038" or errorCode == "10003" then
                 thisValue:startRelogin()
