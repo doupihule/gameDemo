@@ -22,7 +22,7 @@ ScreenAdapterTools.sceneOffsetX = 0;
 ScreenAdapterTools.sceneOffsetY = 0;
 ScreenAdapterTools.toolBarWidth = 0;
 ScreenAdapterTools.phoneSys = "";
-ScreenAdapterTools.PHONE_BANGS = { "iPhone X", "PACM00", "ANE-AL00", "COL-AL10", "JSN-AL00a", "V1813BA", "PBEM00", "vivo Z3x", "MI 9", "PBAM00", "PAAT00", "PBCM10", "vivo X21A", "ONEPLUS A6000" };
+ScreenAdapterTools.PHONE_BANGS = {  };
 ScreenAdapterTools.windowWidth = 640;
 ScreenAdapterTools.windowHeight = 1136;
 ScreenAdapterTools.toolBarWay = -1;
@@ -114,18 +114,6 @@ function ScreenAdapterTools.checkBarByBangs(phoneModel)
     if ScreenAdapterTools.toolBarWidth > 0 then
         return
     end
-    local keys = ScreenAdapterTools.PHONE_BANGS
-    local len = #keys
-    local i = 0
-    repeat
-        local key = keys[i + 1]
-        if string.find(phoneModel, key) ~= nil then
-            ScreenAdapterTools.toolBarWidth = 60
-            Global.isPhoneBangs = true
-            LogsManager.echo("hlx 刘海屏高度修改:根据白名单", phoneModel, key)
-        end
-        i = i + 1
-    until not (i < len)
 end
 
 function ScreenAdapterTools.checkBarBySafeArea(sysInfo)

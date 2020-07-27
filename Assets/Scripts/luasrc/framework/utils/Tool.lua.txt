@@ -4,43 +4,9 @@
 -- 全局工具方法
 --
 
-local function swapGem(str)
-    --预留扩展，该方法中修改str
-    return str
-end
 
-function getPlotLanguage(id)
-    --先从csv配置从读取
-    local result = FuncTranslate.getPlotLanguage(id, 'zh_CN') --GameConfig:getRaw("translate", id, 'zh_CN');
-
-    if result == nil then
-        echo("没有找到这个语言id配置:", id)
-        return id
-    end
-    if type(result) == 'string' then
-        result = swapGem(result);
-    elseif type(result) == 'table' then
-        for i, v in pairs(result) do
-            if type(result[i]) == 'string' then
-                result[i] = swapGem(result[i]);
-            end
-        end
-    end
-    return result;
-end
-
---三元运算符
-function _yuan3(a, b, c)
-    if a == nil then
-        return c
-    end
-    return (a and { b } or { c })[1]
-end
 
 Tool = Tool or {}
-
-
-
 
 
 

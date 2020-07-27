@@ -235,7 +235,7 @@ function TableUtils.adjustEmptyArr(tb)
     end
     for i in pairs(tb) do
         local v = tb[i + 1]
-        if type(v) == "object" then
+        if type(v) == "table" then
             if Array:isArray(v) then
                 if #v == 0 then
                     -- [ts2lua]window下标访问可能不正确

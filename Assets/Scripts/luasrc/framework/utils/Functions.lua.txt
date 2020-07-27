@@ -181,7 +181,17 @@ function try_catch(tryFunc,catchFunc,...)
     catchFunc(rt)
 end
 
-
+local tempTable1 = {}
+local tempTable2 = {}
+--三元运算符
+function sanyuan(a, b, c)
+    if a == nil then
+        return c
+    end
+    tempTable1[1] = b
+    tempTable2[1] = c
+    return (a and tempTable1 or tempTable2)[1]
+end
 
 --以后还会有更多扩展  比如矩形是否与矩形相交  矩形是否和圆相交==
 
