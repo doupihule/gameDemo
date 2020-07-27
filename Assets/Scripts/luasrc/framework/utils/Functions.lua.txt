@@ -3,8 +3,6 @@
 -- Date: 2014-03-14 10:34:57
 --
 
-
-
 --定义clas
 function class(classname, super)
     local superType = type(super)
@@ -76,44 +74,6 @@ function class(classname, super)
     return cls
 end
 
---[[--
-
-如果对象是指定类或其子类的实例，返回 true，否则返回 false
-
-~~~ lua
-
-local Animal = class("Animal")
-local Duck = class("Duck", Animal)
-
-print(iskindof(Duck.new(), "Animal")) -- 输出 true
-
-~~~
-
-@param mixed obj 要检查的对象
-@param string classname 类名
-
-@return boolean
-
-]]
-
-
-
-
---定义一些静态的数据
-math.cospi4 = math.cos(math.pi / 4)
-
-local oldAtan2 = math.atan2
-
-math.atan2 = function(dy, dx)
-    if dy == 0 and dx == 0 then
-        return 0
-    end
-    return oldAtan2(dy, dx)
-end
-
-
-
-
 
 
 -- return var or def
@@ -129,9 +89,6 @@ function empty(var)
     return not var or var == "" or var == 0 or (type(var) == "table" and table.isEmpty(var))
 end
 
-function tonum(v, base)
-    return tonumber(v, base) or 0
-end
 
 function toint(v)
     return math.round(tonumber(v))
@@ -140,8 +97,6 @@ end
 function tobool(v)
     return (v ~= nil and v ~= false)
 end
-
-
 
 
 
@@ -215,6 +170,15 @@ function doJsApplyFunc(callFunc, thisObj, paramsArr)
     else
         callFunc(unpack(paramsArr))
     end
+end
+
+--try catch 传入2个函数, ...是try传入的参数
+function try_catch(tryFunc,catchFunc,...)
+    local rt,meg = pcall(tryFunc,...);
+    if(rt) then
+        return;
+    end
+    catchFunc(rt)
 end
 
 

@@ -76,9 +76,6 @@ function DisplayUtils.localToLocalPos(p1Pos, sp1, sp2)
 end
 
 function DisplayUtils.createSpriteFrame(imagePath, imageHead, labelsArr, anchorX, anchorY)
-    if labelsArr == nil then
-        labelsArr = nil
-    end
     if anchorX == nil then
         anchorX = 0.5
     end

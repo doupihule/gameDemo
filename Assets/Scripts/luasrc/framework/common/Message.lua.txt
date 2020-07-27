@@ -1,7 +1,7 @@
 Message = class('Message')
 
 function Message:ctor()
-    self.msgMap = HashMap.new()
+    self.msgMap = {}
 end
 
 function Message.getInstance()
@@ -12,10 +12,10 @@ function Message.getInstance()
 end
 
 function Message:add(cmd, msg)
-    local list = self.msgMap:get(cmd)
+    local list = self.msgMap[cmd]
     if not list then
         list = {}
-        self.msgMap:put(cmd, list)
+        self.msgMap[cmd] = list
     end
     if table.findArrValue(list, msg) == -1 then
         table.insert(list, msg)
@@ -23,52 +23,42 @@ function Message:add(cmd, msg)
 end
 
 function Message:remove(cmd, msg)
-    local list = self.msgMap:get(cmd)
+    local list = self.msgMap[cmd]
     if list then
         local len = #list
-        local i = len - 1
-        repeat
-            if list[i + 1] == msg then
+        for i = len,1,-1 do
+            if list[i] == msg then
                 table.spliceArray(list, i, 1)
             end
-            i = i - 1
-        until not (i >= 0)
+        end
     end
 end
 
 function Message:send(cmd, data)
-    if data == nil then
-        data = nil
-    end
-    local list = self.msgMap:get(cmd)
+    local list = self.msgMap[cmd]
     if list then
         local len = #list
-        local i = len - 1
-        repeat
-            doJsCallFunc(list[i + 1].recvMsg, list[i + 1], cmd, data)
-            i = i - 1
-        until not (i >= 0)
+        for i = len,1,-1 do
+            doJsCallFunc(list[i].recvMsg, list[i], cmd, data)
+        end
         if len <= 0 then
-            self.msgMap:remove(cmd)
+            self.msgMap[cmd] = nil
         end
     end
 end
 
 function Message:removeObjEvents(msg)
     for i in pairs(self.msgMap) do
-        local list = self.msgMap[i + 1]
+        local list = self.msgMap[i]
         if #list > 0 then
             local len = #list
-            local ii = len - 1
-            repeat
-                -- [ts2lua]list下标访问可能不正确
+            for ii = len, 1,-1 do
                 if list[ii] == msg then
                     table.spliceArray(list, ii, 1)
                 end
-                ii = ii - 1
-            until not (ii >= 0)
+            end
             if #list == 0 then
-                self.msgMap[i + 1] = nil
+                self.msgMap[i] = nil
             end
         end
     end

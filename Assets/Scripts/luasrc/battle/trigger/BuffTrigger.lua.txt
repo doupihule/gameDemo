@@ -260,17 +260,17 @@ end
 
 function BuffTrigger.clearBuff_2(attacker, defer, skillAction, buff, removeChance)
     local i = #defer.buffAttrInfo - 1
-    repeat
-        local info = defer.buffAttrInfo[i + 1]
+    local len = #defer.buffAttrInfo;
+    for i = len,1,-1 do
+        local info = defer.buffAttrInfo[i]
         if info.buff == buff then
             local attr = info.attr
             for s in pairs(attr) do
-                defer.attrData:updateOneAttr(s, -attr[s + 1], 0, defer.attrData.extraAttr)
+                defer.attrData:updateOneAttr(s, -attr[s], 0, defer.attrData.extraAttr)
             end
             table.spliceArray(defer.buffAttrInfo, i, 1)
         end
-        i = i - 1
-    until not (i >= 0)
+    end
 end
 
 function BuffTrigger.clearBuff_3(attacker, defer, skillAction, buff, removeChance)
@@ -305,14 +305,13 @@ end
 function BuffTrigger.clearBuff_10(attacker, defer, skillAction, buff, removeChance)
     local arr = defer.shieldInfoArr
     if #arr > 0 then
-        local i = #arr - 1
-        repeat
-            local info = arr[i + 1]
+        local len = #arr
+        for i = len,1,-1 do
+            local info = arr[i]
             if info.buff == buff then
                 table.spliceArray(arr, i, 1)
             end
-            i = i - 1
-        until not (i >= 0)
+        end
     end
 end
 
@@ -328,7 +327,6 @@ end
 
 function BuffTrigger.clearBuff_13(attacker, defer, skillAction, buff, removeChance)
     local arr = defer.passiveSkills
-    local i = #arr - 1
     local len =#arr;
     for i = len, 1,-1 do
         local passSkill = arr[i]

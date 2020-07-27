@@ -152,14 +152,15 @@ function CacheManager:initFileStorageCahce()
         self._fileStorage = {}
     else
         LogsManager.echo("fileCachestr:", fileInfo)
-        try_catch {
-            main = function()
-                self._fileStorage = TableUtils.safelyJsonParse(fileInfo)
-            end,
-            catch = function(e)
-                self._fileStorage = {}
-                LogsManager.errorTag("FileStorageCahceError", "cacheStr:" .. fileInfo)
-            end
-        }
+        try_catch(
+                function()
+                    self._fileStorage = TableUtils.safelyJsonParse(fileInfo)
+                end,
+                function(e)
+                    self._fileStorage = {}
+                    LogsManager.errorTag("FileStorageCahceError", "cacheStr:" .. fileInfo)
+                end,
+                self
+        )
     end
 end

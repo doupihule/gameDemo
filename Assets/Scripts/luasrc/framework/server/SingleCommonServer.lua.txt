@@ -201,10 +201,10 @@ function SingleCommonServer.getClientDirtyList()
     TableUtils.findDelKey(SingleCommonServer._lastBackUpData, userData, dData, true)
     dData.loginToken = nil
     if TableUtils.isEmptyTable(uData) then
-        uData = undefined
+        uData = nil
     end
     if TableUtils.isEmptyTable(dData) then
-        dData = undefined
+        dData = nil
     end
     if not uData and not dData then
         return SingleCommonServer._emptyObj

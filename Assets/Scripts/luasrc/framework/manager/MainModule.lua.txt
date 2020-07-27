@@ -41,19 +41,10 @@ function MainModule:checkSystem()
     self:onVersionLoaded()
 end
 
-function MainModule:useNocndResourceUrl()
-    local versionName = nil
-    WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#error110"), function()
-        LogsManager.echo('sanmen  启用备用cnd')
-        Global.resource_url = Global.nocdn_resource_url + UserInfo.platformId .. "/"
-        self:onVersionLoaded();
-    end
-    , self)
-end
 
 function MainModule:onVersionLoaded()
     VersionManager.getInstance():versionFileCheck()
-    FuncManager.init(function()
+    FuncManager.init(function(self)
         if Global.checkUserCloudStorage() then
             self:onLoginResult(Client.getInstance().globalLoginBackData)
             UserInfo.platform:getLoginResult()
@@ -119,8 +110,7 @@ function MainModule:onLoginResult(result)
     local modelMap = ModelToServerMapCommon.modelToServerMap
     local length = #modelMap
     local i = 0
-    repeat
-        local info = modelMap[i + 1]
+    for i, info in ipairs(modelMap) do
         local key = info.key
         local model = info.model
         if info.key == "user" then
@@ -135,8 +125,7 @@ function MainModule:onLoginResult(result)
             local data = userData[key]
             model.getInstance():initData(data)
         end
-        i = i + 1
-    until not (i < length)
+    end
     UserGlobalModel.getInstance():flushGlobalData(self.getCloudGlobalDataResult, self)
     SoundManager.init()
     SoundManager.initSwitch()

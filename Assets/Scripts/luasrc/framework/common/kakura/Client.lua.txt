@@ -15,7 +15,6 @@ function Client:ctor()
     self._url = "";
     self._version = "";
     self._upgrade = "";
-    self._hashMap = HashMap.new();
     self.hasLoginComplete = false;
     self.RELOGIN_INTVERL_TIME = 60;
     self.SWITCH_RELOGIN_INTVERL_TIME = "SWITCH_RELOGIN_INTVERL_TIME";

@@ -33,21 +33,21 @@ end
 function WaitManager:remove(cmd)
     local len = #self.waitList
     local i = 0
-    repeat
-        if cmd == self.waitList[i + 1].cmd then
-            table.insert(self.waitPool, self.waitList[i + 1]);
-            table.remove(self.waitList, i + 1);
+    for i = len,1,-1 do
+        if cmd == self.waitList[i].cmd then
+            table.insert(self.waitPool, self.waitList[i]);
+            table.remove(self.waitList, i );
             break
         end
-        i = i + 1
-    until not (i < len)
+    end
     self:checkWait()
 end
 
 function WaitManager:clear()
-    while (#self.waitList > 0)
-    do
-        table.insert(self.waitPool, table.shiftArray(self.waitList))
+    local len = #self.waitList;
+    for i = len,1,-1 do
+        table.insert(self.waitPool, self.waitList[i])
+        table.remove(this.waitList,i);
     end
     self:checkWait()
 end
@@ -63,17 +63,13 @@ function WaitManager:timeCallBack()
     local len = #self.waitList
     local nowTime = Client.getInstance():getMiniServerTime()
     local i = 0
-    repeat
-        repeat
-            if nowTime - self.waitList[i + 1].time > 20000 then
-                table.insert(self.waitPool, self.waitList[i + 1]);
-                table.remove(self.waitList, i + 1);
-                len = len - 1
-                break
-            end
-            i = i + 1
-        until true
-    until not (i < len)
+    for i = len,1,-1 do
+        if nowTime - self.waitList[i].time > 20000 then
+            table.insert(self.waitPool, self.waitList[i]);
+            table.remove(self.waitList, i );
+            break
+        end
+    end
     self:checkWait()
 end
 

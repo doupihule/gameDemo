@@ -16,9 +16,7 @@ function RandomUtis.setOneRandomYinzi(yinzi, step, index)
         index = 0
     end
     local randomObj = RandomUtis.newYinzi()
-    -- [ts2lua]randomObj下标访问可能不正确
     randomObj['initR'] = RandomUtis.hashi_func(yinzi)
-    -- [ts2lua]RandomUtis._yinziToIndexDic下标访问可能不正确
     RandomUtis._yinziToIndexDic[index] = randomObj
     RandomUtis.gotoTargetStep(step, index)
 end
@@ -27,19 +25,11 @@ function RandomUtis.gotoTargetStep(step, index)
     if index == nil then
         index = 0
     end
-    -- [ts2lua]RandomUtis._yinziToIndexDic下标访问可能不正确
-    -- [ts2lua]RandomUtis._yinziToIndexDic[index]下标访问可能不正确
-    -- [ts2lua]RandomUtis._yinziToIndexDic下标访问可能不正确
-    -- [ts2lua]RandomUtis._yinziToIndexDic[index]下标访问可能不正确
     RandomUtis._yinziToIndexDic[index]['r'] = RandomUtis._yinziToIndexDic[index]['initR']
-    -- [ts2lua]RandomUtis._yinziToIndexDic下标访问可能不正确
-    -- [ts2lua]RandomUtis._yinziToIndexDic[index]下标访问可能不正确
     RandomUtis._yinziToIndexDic[index]['step'] = 0
-    local i = 1
-    repeat
+    for i = 1, step do
         RandomUtis.yinziGetNext(index)
-        i = i + 1
-    until not (i <= step)
+    end
 end
 
 function RandomUtis.yinziGetNext(index)
@@ -54,23 +44,13 @@ function RandomUtis.yinziGetOriginUint(index)
     if index == nil then
         index = 0
     end
-    -- [ts2lua]RandomUtis._yinziToIndexDic下标访问可能不正确
-    -- [ts2lua]RandomUtis._yinziToIndexDic[index]下标访问可能不正确
     local quotient = math.floor(RandomUtis._yinziToIndexDic[index]['r'] / RandomUtis.MIDDLEVALUE)
-    -- [ts2lua]RandomUtis._yinziToIndexDic下标访问可能不正确
-    -- [ts2lua]RandomUtis._yinziToIndexDic[index]下标访问可能不正确
     local remainder = RandomUtis._yinziToIndexDic[index]['r'] % RandomUtis.MIDDLEVALUE + 1
     local t = RandomUtis.MODVALUE * remainder - RandomUtis.OFFSETVALUE * quotient
     if t <= 0 then
         t = t + RandomUtis.RANDOM_MAX
     end
-    -- [ts2lua]RandomUtis._yinziToIndexDic下标访问可能不正确
-    -- [ts2lua]RandomUtis._yinziToIndexDic[index]下标访问可能不正确
     RandomUtis._yinziToIndexDic[index]['r'] = t
-    -- [ts2lua]RandomUtis._yinziToIndexDic下标访问可能不正确
-    -- [ts2lua]RandomUtis._yinziToIndexDic[index]下标访问可能不正确
-    -- [ts2lua]RandomUtis._yinziToIndexDic下标访问可能不正确
-    -- [ts2lua]RandomUtis._yinziToIndexDic[index]下标访问可能不正确
     RandomUtis._yinziToIndexDic[index]['step'] = RandomUtis._yinziToIndexDic[index]['step'] + 1
     return t
 end
@@ -83,9 +63,7 @@ function RandomUtis.getOneRandom(index)
     if index == nil then
         index = 0
     end
-    -- [ts2lua]RandomUtis._yinziToIndexDic下标访问可能不正确
     if not RandomUtis._yinziToIndexDic[index] then
-        -- [ts2lua]RandomUtis._yinziToIndexDic下标访问可能不正确
         RandomUtis._yinziToIndexDic[index] = RandomUtis.newYinzi()
     end
     local result = RandomUtis.yinziGetNext(index)
@@ -116,14 +94,14 @@ function RandomUtis.getOneRandomFromArea(startNum, endNum, index, damic)
         endNum = tempValue
     end
     local random = RandomUtis.getOneRandom(index)
-    local k = endNum - startNum / 1 - 0
+    local k = endNum - startNum / 1
     local result = k * random - k * 0 + startNum
     result = result < startNum and startNum or result
     result = result > endNum and endNum or result
     local powNum = math.pow(10, damic)
     result = math.round(result * powNum) / powNum
     if damic == 0 then
-        result = parseInt(result)
+        result = toint(result)
     end
     return result
 end
@@ -142,20 +120,14 @@ function RandomUtis.getOneGroupIndex(restrict, nums, index)
         tempArr[i + 1] = i
         i = i + 1
     until not (i < restrict)
-    local pushIndex = 1
-    local i = restrict - 1
-    repeat
+    for i = restrict, restrict - nums,-1 do
         local randomInt = RandomUtis.getOneRandomInt(i, 0, index)
-        -- [ts2lua]tempArr下标访问可能不正确
         local value_1 = tempArr[randomInt]
-        local value_2 = tempArr[i + 1]
+        local value_2 = tempArr[i ]
         table.insert(resultArr, value_1)
-        pushIndex = pushIndex + 1
-        -- [ts2lua]tempArr下标访问可能不正确
         tempArr[randomInt] = value_2
-        tempArr[i + 1] = value_1
-        i = i - 1
-    until not (i >= restrict - nums)
+        tempArr[i ] = value_1
+    end
     return resultArr
 end
 
@@ -180,21 +152,19 @@ function RandomUtis.getOneIndexByWeight(arr, index)
     local totalValue = 0
     local tempArr = {}
     local i = 0
-    repeat
-        totalValue = totalValue + arr[i + 1]
+    for i, v in ipairs(arr) do
+        totalValue = totalValue + v
         table.insert(tempArr, totalValue)
-        i = i + 1
-    until not (i < #arr)
+    end
     local random = RandomUtis.getOneRandom(index)
     random = random * totalValue
     local i = 0
-    repeat
-        if random < tempArr[i + 1] then
+    for i, v in ipairs(tempArr) do
+        if random < v then
             return i
         end
-        i = i + 1
-    until not (i < #tempArr)
-    return #tempArr - 1
+    end
+    return #tempArr
 end
 
 function RandomUtis.getIndexArrByWeight(arr, nums, index)
@@ -213,13 +183,11 @@ function RandomUtis.getIndexArrByWeight(arr, nums, index)
         nums = num
     end
     local i = 0
-    repeat
+    for i = 1, num do
         local rt = RandomUtis.getOneIndexByWeight(cloneArr, index)
-        -- [ts2lua]cloneArr下标访问可能不正确
         cloneArr[rt] = 0
         table.insert(resultArr, rt)
-        i = i + 1
-    until not (i < nums)
+    end
     return resultArr
 end
 
@@ -242,10 +210,8 @@ function RandomUtis.randomOneGroupToOut(arr, resultArr, index)
         resultArr = {}
     end
     local i = 0
-    repeat
-        -- [ts2lua]arr下标访问可能不正确
-        resultArr[i + 1] = arr[indexArr[i + 1]]
-        i = i + 1
-    until not (i < nums)
+    for i = 1, nums do
+        resultArr[i] = arr[indexArr[i]]
+    end
     return resultArr
 end

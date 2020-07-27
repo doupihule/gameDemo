@@ -48,7 +48,7 @@ function TableUtils.deepDelete(t, keyData, deltitle)
                 end
             else
                 -- [ts2lua]window下标访问可能不正确
-                window["LogsManager"]:warn("错误的删除码,key: " .. i .. "_value: " .. value)
+                LogsManager.warn("错误的删除码,key: " .. i .. "_value: " .. value)
             end
         end
     end
@@ -152,7 +152,7 @@ function TableUtils.findNullKey(fromTb, toTb)
     end
     for i in pairs(fromTb) do
         local value = fromTb[i + 1]
-        if value == nil or value == undefined then
+        if value == nil  then
             toTb[i + 1] = 1
         elseif type(value) == "object" then
             local tempTb = {}

@@ -4,8 +4,6 @@ function PoolTools.getItems(sign, model)
     if model == nil then
         model = PoolCode.pool_model_battle
     end
-    -- [ts2lua]PoolTools._pools下标访问可能不正确
-    -- [ts2lua]PoolTools._pools[model]下标访问可能不正确
     local pools = PoolTools._pools[model][sign]
     return pools
 end
@@ -14,7 +12,6 @@ function PoolTools.getModelItems(model)
     if model == nil then
         model = PoolCode.pool_model_battle
     end
-    -- [ts2lua]PoolTools._pools下标访问可能不正确
     return PoolTools._pools[model]
 end
 
@@ -22,10 +19,8 @@ function PoolTools.getItem(sign, model)
     if model == nil then
         model = PoolCode.pool_model_battle
     end
-    -- [ts2lua]PoolTools._pools下标访问可能不正确
-    -- [ts2lua]PoolTools._pools[model]下标访问可能不正确
     local pools = PoolTools._pools[model][sign]
-    if pools ~= undefined then
+    if pools ~= nil then
         return table.shiftArray(pools)
     end
     return nil
@@ -35,13 +30,10 @@ function PoolTools.cacheItem(sign, item, model)
     if model == nil then
         model = PoolCode.pool_model_battle
     end
-    -- [ts2lua]PoolTools._pools下标访问可能不正确
     local poolModel = PoolTools._pools[model]
-    -- [ts2lua]poolModel下标访问可能不正确
     local pools = poolModel[sign]
-    if pools == undefined then
+    if pools == nil then
         pools = { item }
-        -- [ts2lua]poolModel下标访问可能不正确
         poolModel[sign] = pools
     else
         table.insert(pools, item)

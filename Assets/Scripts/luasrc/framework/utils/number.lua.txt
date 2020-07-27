@@ -174,55 +174,6 @@ function number.fract(floatValue)
     end
     return math.abs(floatValue - _downValue)
 end
---舍入
-function number.roundoff(floatValue)
-    --如果误差在0.003%之内,就约等于这个数字
-    local MATH_EPS = 0.000031
-    local _up = math.ceil(floatValue)
-    --低于临近的整数值
-    if (_up - floatValue) / floatValue <= MATH_EPS then
-        return _up
-    end
-    --高于临近的整数值
-    local _down = math.floor(floatValue)
-    if (floatValue - _down) / floatValue <= MATH_EPS then
-        return _down
-    end
-    return _down
-end
---向下取整,如果这个数字向右非常趋近于某一个整数,则返回这个整数
-function number.roundfloor(floatValue)
-    local MATH_EPS = 0.000002
-    local _upfloor = math.floor(floatValue + MATH_EPS)
-    local _floorValue = math.floor(floatValue)
-    if _upfloor > _floorValue then
-        return _upfloor
-    end
-    return _floorValue
-end
---向上取整,如果这个数字向左非常趋近于某一个数字,则返回这个数字
-function number.roundceil(floatValue)
-    local MATH_EPS = 0.000002
-    local _lowceil = math.ceil(floatValue - MATH_EPS)
-    local _ceilValue = math.ceil(floatValue)
-    if _ceilValue > _lowceil then
-        return _lowceil
-    end
-    return _ceilValue
-end
-
---返回给定数字的某一个二进制位
---index:从0到最高位的数目-1
-function number.bitat(d, index)
-    local m = 1
-    local i = 0
-    while i < index + 1 do
-        m = m * 2
-        i = i + 1
-    end
-    local n = m / 2
-    return math.floor(d % m / n)
-end
 
 
 
