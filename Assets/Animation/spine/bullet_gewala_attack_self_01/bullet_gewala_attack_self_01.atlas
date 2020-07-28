@@ -1,0 +1,97 @@
+
+bullet_gewala_attack_self_01.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+2eft2
+  rotate: false
+  xy: 465, 105
+  size: 110, 129
+  orig: 110, 129
+  offset: 0, 0
+  index: -1
+back
+  rotate: true
+  xy: 309, 48
+  size: 30, 61
+  orig: 30, 61
+  offset: 0, 0
+  index: -1
+bikebody
+  rotate: false
+  xy: 2, 23
+  size: 305, 211
+  orig: 305, 211
+  offset: 0, 0
+  index: -1
+burntembers3b
+  rotate: false
+  xy: 859, 157
+  size: 77, 77
+  orig: 77, 77
+  offset: 0, 0
+  index: -1
+cheba
+  rotate: false
+  xy: 577, 115
+  size: 84, 119
+  orig: 84, 119
+  offset: 0, 0
+  index: -1
+dnb
+  rotate: false
+  xy: 753, 178
+  size: 104, 56
+  orig: 104, 56
+  offset: 0, 0
+  index: -1
+downlight
+  rotate: false
+  xy: 663, 118
+  size: 42, 35
+  orig: 42, 35
+  offset: 0, 0
+  index: -1
+glow_blue3tail
+  rotate: true
+  xy: 2, 2
+  size: 19, 77
+  orig: 19, 77
+  offset: 0, 0
+  index: -1
+llight
+  rotate: false
+  xy: 372, 49
+  size: 37, 29
+  orig: 37, 29
+  offset: 0, 0
+  index: -1
+lun
+  rotate: false
+  xy: 938, 166
+  size: 75, 68
+  orig: 75, 68
+  offset: 0, 0
+  index: -1
+rlight
+  rotate: false
+  xy: 707, 128
+  size: 32, 25
+  orig: 32, 25
+  offset: 0, 0
+  index: -1
+rlun
+  rotate: false
+  xy: 663, 155
+  size: 88, 79
+  orig: 88, 79
+  offset: 0, 0
+  index: -1
+yanwu8
+  rotate: false
+  xy: 309, 80
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1

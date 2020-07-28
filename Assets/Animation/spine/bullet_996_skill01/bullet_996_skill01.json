@@ -1,0 +1,36 @@
+{
+"skeleton": { "hash": "LCPyTNwp0/0mlgMzGvWlmVmvrJA", "spine": "3.6.53", "width": 197.39, "height": 317.07, "images": "./images/" },
+"bones": [
+	{ "name": "root" },
+	{ "name": "fobao", "parent": "root" }
+],
+"slots": [
+	{ "name": "fobao", "bone": "fobao", "attachment": "fobao" }
+],
+"skins": {
+	"default": {
+		"fobao": {
+			"fobao": { "rotation": 5.13, "width": 171, "height": 303 }
+		}
+	}
+},
+"animations": {
+	"animation": {
+		"bones": {
+			"fobao": {
+				"rotate": [
+					{ "time": 0, "angle": 90 },
+					{ "time": 0.1, "angle": 180 },
+					{ "time": 0.2, "angle": -90 },
+					{ "time": 0.3, "angle": 0 },
+					{ "time": 0.4, "angle": 90 }
+				],
+				"translate": [
+					{ "time": 0, "x": 0, "y": 0, "curve": "stepped" },
+					{ "time": 0.4, "x": 0, "y": 0 }
+				]
+			}
+		}
+	}
+}
+}

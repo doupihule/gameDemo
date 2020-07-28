@@ -1,0 +1,13 @@
+
+bullet_ningmeng_attack.png
+size: 128,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bullet_ningmeng_attack
+  rotate: false
+  xy: 2, 2
+  size: 67, 92
+  orig: 67, 92
+  offset: 0, 0
+  index: -1

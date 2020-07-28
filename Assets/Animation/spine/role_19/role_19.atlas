@@ -1,0 +1,132 @@
+
+role_19.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: true
+  xy: 952, 871
+  size: 136, 62
+  orig: 136, 62
+  offset: 0, 0
+  index: -1
+body_van
+  rotate: false
+  xy: 2, 527
+  size: 948, 480
+  orig: 948, 480
+  offset: 0, 0
+  index: -1
+bu
+  rotate: false
+  xy: 345, 64
+  size: 22, 54
+  orig: 22, 54
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 2, 120
+  size: 370, 149
+  orig: 370, 149
+  offset: 0, 0
+  index: -1
+ljing
+  rotate: false
+  xy: 528, 138
+  size: 26, 43
+  orig: 26, 43
+  offset: 0, 0
+  index: -1
+lun1_1
+  rotate: true
+  xy: 374, 130
+  size: 139, 152
+  orig: 139, 152
+  offset: 0, 0
+  index: -1
+lun1_2
+  rotate: true
+  xy: 624, 230
+  size: 139, 152
+  orig: 139, 152
+  offset: 0, 0
+  index: -1
+newlun
+  rotate: true
+  xy: 624, 230
+  size: 139, 152
+  orig: 139, 152
+  offset: 0, 0
+  index: -1
+lun1bu
+  rotate: false
+  xy: 180, 2
+  size: 163, 116
+  orig: 163, 116
+  offset: 0, 0
+  index: -1
+lun2_1
+  rotate: false
+  xy: 624, 371
+  size: 162, 154
+  orig: 162, 154
+  offset: 0, 0
+  index: -1
+lun2_2
+  rotate: false
+  xy: 788, 371
+  size: 162, 154
+  orig: 162, 154
+  offset: 0, 0
+  index: -1
+lun2bu
+  rotate: false
+  xy: 2, 5
+  size: 176, 113
+  orig: 176, 113
+  offset: 0, 0
+  index: -1
+r1hand
+  rotate: true
+  xy: 952, 800
+  size: 69, 52
+  orig: 69, 52
+  offset: 0, 0
+  index: -1
+r2hand
+  rotate: false
+  xy: 778, 242
+  size: 49, 68
+  orig: 49, 68
+  offset: 0, 0
+  index: -1
+r3hand
+  rotate: false
+  xy: 883, 329
+  size: 49, 40
+  orig: 49, 40
+  offset: 0, 0
+  index: -1
+rjing
+  rotate: false
+  xy: 778, 312
+  size: 103, 57
+  orig: 103, 57
+  offset: 0, 0
+  index: -1
+tianxian
+  rotate: false
+  xy: 528, 183
+  size: 69, 86
+  orig: 69, 86
+  offset: 0, 0
+  index: -1
+wenzi
+  rotate: false
+  xy: 2, 271
+  size: 620, 254
+  orig: 620, 254
+  offset: 0, 0
+  index: -1

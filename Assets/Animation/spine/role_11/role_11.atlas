@@ -1,0 +1,167 @@
+
+role_11.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: true
+  xy: 2, 66
+  size: 188, 266
+  orig: 188, 266
+  offset: 0, 0
+  index: -1
+gold
+  rotate: false
+  xy: 709, 153
+  size: 125, 101
+  orig: 125, 101
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 424, 112
+  size: 152, 142
+  orig: 152, 142
+  offset: 0, 0
+  index: -1
+head2
+  rotate: false
+  xy: 270, 108
+  size: 152, 146
+  orig: 152, 146
+  offset: 0, 0
+  index: -1
+kou
+  rotate: false
+  xy: 836, 165
+  size: 136, 89
+  orig: 136, 89
+  offset: 0, 0
+  index: -1
+kou2
+  rotate: false
+  xy: 578, 141
+  size: 129, 113
+  orig: 129, 113
+  offset: 0, 0
+  index: -1
+l1foot
+  rotate: false
+  xy: 681, 58
+  size: 80, 81
+  orig: 80, 81
+  offset: 0, 0
+  index: -1
+l1hand
+  rotate: false
+  xy: 56, 9
+  size: 89, 55
+  orig: 89, 55
+  offset: 0, 0
+  index: -1
+l2foot
+  rotate: true
+  xy: 225, 10
+  size: 54, 43
+  orig: 54, 43
+  offset: 0, 0
+  index: -1
+l2hand
+  rotate: true
+  xy: 147, 18
+  size: 46, 76
+  orig: 46, 76
+  offset: 0, 0
+  index: -1
+l3foot
+  rotate: true
+  xy: 940, 132
+  size: 31, 39
+  orig: 31, 39
+  offset: 0, 0
+  index: -1
+l3hand
+  rotate: false
+  xy: 844, 110
+  size: 46, 26
+  orig: 46, 26
+  offset: 0, 0
+  index: -1
+l4foot
+  rotate: false
+  xy: 844, 138
+  size: 51, 25
+  orig: 51, 25
+  offset: 0, 0
+  index: -1
+legg
+  rotate: false
+  xy: 974, 167
+  size: 37, 43
+  orig: 37, 43
+  offset: 0, 0
+  index: -1
+r1foot
+  rotate: true
+  xy: 578, 69
+  size: 70, 101
+  orig: 70, 101
+  offset: 0, 0
+  index: -1
+r1hand
+  rotate: true
+  xy: 2, 2
+  size: 62, 52
+  orig: 62, 52
+  offset: 0, 0
+  index: -1
+r2foot
+  rotate: true
+  xy: 763, 79
+  size: 72, 40
+  orig: 72, 40
+  offset: 0, 0
+  index: -1
+r2hand
+  rotate: true
+  xy: 270, 4
+  size: 30, 87
+  orig: 30, 87
+  offset: 0, 0
+  index: -1
+r3foot
+  rotate: false
+  xy: 805, 97
+  size: 37, 54
+  orig: 37, 54
+  offset: 0, 0
+  index: -1
+r3hand
+  rotate: false
+  xy: 897, 132
+  size: 41, 31
+  orig: 41, 31
+  offset: 0, 0
+  index: -1
+r4foot
+  rotate: false
+  xy: 359, 6
+  size: 51, 28
+  orig: 51, 28
+  offset: 0, 0
+  index: -1
+regg
+  rotate: true
+  xy: 974, 212
+  size: 42, 48
+  orig: 42, 48
+  offset: 0, 0
+  index: -1
+weiba
+  rotate: false
+  xy: 270, 36
+  size: 148, 70
+  orig: 148, 70
+  offset: 0, 0
+  index: -1

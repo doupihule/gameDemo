@@ -1,0 +1,174 @@
+
+effect_jidi_attack_hit.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+SoftFlash
+  rotate: false
+  xy: 124, 21
+  size: 77, 77
+  orig: 77, 77
+  offset: 0, 0
+  index: -1
+aaa_000
+  rotate: false
+  xy: 2, 230
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_001
+  rotate: false
+  xy: 158, 386
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_002
+  rotate: false
+  xy: 2, 116
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_003
+  rotate: false
+  xy: 280, 386
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_004
+  rotate: false
+  xy: 2, 2
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_005
+  rotate: false
+  xy: 402, 386
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_006
+  rotate: false
+  xy: 524, 386
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_007
+  rotate: false
+  xy: 646, 386
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_008
+  rotate: false
+  xy: 768, 386
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_009
+  rotate: false
+  xy: 890, 386
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_010
+  rotate: false
+  xy: 124, 214
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_011
+  rotate: false
+  xy: 124, 100
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_012
+  rotate: false
+  xy: 302, 272
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_013
+  rotate: false
+  xy: 424, 272
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_014
+  rotate: false
+  xy: 546, 272
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_015
+  rotate: false
+  xy: 668, 272
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+aaa_016
+  rotate: false
+  xy: 790, 272
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+bao_01
+  rotate: false
+  xy: 2, 344
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1
+jiup
+  rotate: true
+  xy: 246, 136
+  size: 20, 64
+  orig: 20, 64
+  offset: 0, 0
+  index: -1
+laji
+  rotate: true
+  xy: 974, 349
+  size: 35, 48
+  orig: 35, 48
+  offset: 0, 0
+  index: -1
+shanguang_00111
+  rotate: false
+  xy: 246, 158
+  size: 120, 112
+  orig: 120, 112
+  offset: 0, 0
+  index: -1
+yilaguan
+  rotate: false
+  xy: 912, 318
+  size: 60, 66
+  orig: 60, 66
+  offset: 0, 0
+  index: -1
+yy
+  rotate: false
+  xy: 158, 328
+  size: 142, 56
+  orig: 142, 56
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,1 @@
+{"skeleton":{"hash":"AyN5yoqxO2Mdmx7Zh1uZa3KLZLE","spine":"3.6.53","width":77,"height":227,"images":"./images/"},"bones":[{"name":"root"},{"name":"bullet_jidi_attack","parent":"root"}],"slots":[{"name":"ping","bone":"bullet_jidi_attack","attachment":"ping"}],"skins":{"default":{"ping":{"ping":{"y":20,"width":77,"height":227}}}},"animations":{"animation":{}}}

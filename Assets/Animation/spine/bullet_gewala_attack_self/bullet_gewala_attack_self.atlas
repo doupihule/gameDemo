@@ -1,0 +1,55 @@
+
+bullet_gewala_attack_self.png
+size: 389,277
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+dazhao2
+  rotate: false
+  xy: 158, 125
+  size: 150, 150
+  orig: 150, 150
+  offset: 0, 0
+  index: -1
+eft10
+  rotate: false
+  xy: 158, 3
+  size: 125, 120
+  orig: 125, 120
+  offset: 0, 0
+  index: -1
+eft5
+  rotate: true
+  xy: 2, 2
+  size: 38, 77
+  orig: 38, 77
+  offset: 0, 0
+  index: -1
+eft6
+  rotate: false
+  xy: 2, 121
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1
+lizi88
+  rotate: false
+  xy: 285, 42
+  size: 77, 77
+  orig: 77, 77
+  offset: 0, 0
+  index: -1
+shugang2
+  rotate: false
+  xy: 2, 42
+  size: 154, 77
+  orig: 154, 77
+  offset: 0, 0
+  index: -1
+shuguang1
+  rotate: false
+  xy: 310, 121
+  size: 77, 154
+  orig: 77, 154
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,160 @@
+
+role_16.png
+size: 1024,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+ball
+  rotate: false
+  xy: 602, 43
+  size: 83, 83
+  orig: 83, 83
+  offset: 0, 0
+  index: -1
+body
+  rotate: true
+  xy: 2, 4
+  size: 122, 145
+  orig: 122, 145
+  offset: 0, 0
+  index: -1
+bu
+  rotate: true
+  xy: 949, 52
+  size: 24, 69
+  orig: 24, 69
+  offset: 0, 0
+  index: -1
+down
+  rotate: false
+  xy: 149, 27
+  size: 116, 99
+  orig: 116, 99
+  offset: 0, 0
+  index: -1
+hair
+  rotate: false
+  xy: 267, 25
+  size: 106, 101
+  orig: 106, 101
+  offset: 0, 0
+  index: -1
+head
+  rotate: true
+  xy: 505, 42
+  size: 84, 95
+  orig: 84, 95
+  offset: 0, 0
+  index: -1
+l1foot
+  rotate: true
+  xy: 874, 73
+  size: 53, 73
+  orig: 53, 73
+  offset: 0, 0
+  index: -1
+l1hand
+  rotate: true
+  xy: 375, 27
+  size: 43, 97
+  orig: 43, 97
+  offset: 0, 0
+  index: -1
+l2foot
+  rotate: true
+  xy: 874, 43
+  size: 28, 68
+  orig: 28, 68
+  offset: 0, 0
+  index: -1
+l2hand
+  rotate: false
+  xy: 474, 2
+  size: 67, 38
+  orig: 67, 38
+  offset: 0, 0
+  index: -1
+l3foot
+  rotate: false
+  xy: 944, 9
+  size: 52, 41
+  orig: 52, 41
+  offset: 0, 0
+  index: -1
+l3hand
+  rotate: false
+  xy: 687, 62
+  size: 90, 64
+  orig: 90, 64
+  offset: 0, 0
+  index: -1
+neck
+  rotate: true
+  xy: 375, 72
+  size: 54, 128
+  orig: 54, 128
+  offset: 0, 0
+  index: -1
+r1foot
+  rotate: true
+  xy: 687, 2
+  size: 58, 89
+  orig: 58, 89
+  offset: 0, 0
+  index: -1
+r1hand
+  rotate: false
+  xy: 779, 70
+  size: 93, 56
+  orig: 93, 56
+  offset: 0, 0
+  index: -1
+r2foot
+  rotate: true
+  xy: 778, 7
+  size: 27, 71
+  orig: 27, 71
+  offset: 0, 0
+  index: -1
+r2hand
+  rotate: false
+  xy: 779, 36
+  size: 76, 32
+  orig: 76, 32
+  offset: 0, 0
+  index: -1
+r3foot
+  rotate: false
+  xy: 570, 7
+  size: 52, 33
+  orig: 52, 33
+  offset: 0, 0
+  index: -1
+r3hand
+  rotate: false
+  xy: 949, 78
+  size: 69, 48
+  orig: 69, 48
+  offset: 0, 0
+  index: -1
+r4hand
+  rotate: true
+  xy: 624, 10
+  size: 31, 43
+  orig: 31, 43
+  offset: 0, 0
+  index: -1
+redl
+  rotate: false
+  xy: 543, 2
+  size: 25, 38
+  orig: 25, 38
+  offset: 0, 0
+  index: -1
+redr
+  rotate: true
+  xy: 851, 5
+  size: 29, 40
+  orig: 29, 40
+  offset: 0, 0
+  index: -1

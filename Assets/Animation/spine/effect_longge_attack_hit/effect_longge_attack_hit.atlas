@@ -1,0 +1,69 @@
+
+effect_longge_attack_hit.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+baozha0001
+  rotate: false
+  xy: 2, 2
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+baozha0002
+  rotate: false
+  xy: 244, 244
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+baozha0003
+  rotate: false
+  xy: 244, 2
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+baozha0004
+  rotate: false
+  xy: 486, 244
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+baozha0005
+  rotate: false
+  xy: 2, 244
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+guang
+  rotate: false
+  xy: 779, 350
+  size: 134, 134
+  orig: 134, 134
+  offset: 0, 0
+  index: -1
+guang2
+  rotate: false
+  xy: 486, 88
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1
+shutiao
+  rotate: true
+  xy: 728, 156
+  size: 328, 49
+  orig: 328, 49
+  offset: 0, 0
+  index: -1
+xing
+  rotate: false
+  xy: 486, 9
+  size: 77, 77
+  orig: 77, 77
+  offset: 0, 0
+  index: -1

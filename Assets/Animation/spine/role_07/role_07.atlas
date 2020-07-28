@@ -1,0 +1,230 @@
+
+role_07.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: false
+  xy: 2, 8
+  size: 176, 188
+  orig: 176, 188
+  offset: 0, 0
+  index: -1
+effect/effect_guangyun
+  rotate: false
+  xy: 921, 433
+  size: 77, 77
+  orig: 77, 77
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00000
+  rotate: false
+  xy: 236, 426
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00002
+  rotate: false
+  xy: 236, 340
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00004
+  rotate: false
+  xy: 373, 426
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00005
+  rotate: false
+  xy: 236, 254
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00006
+  rotate: false
+  xy: 373, 340
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00007
+  rotate: false
+  xy: 510, 426
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00013
+  rotate: false
+  xy: 510, 426
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00008
+  rotate: false
+  xy: 373, 254
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00009
+  rotate: false
+  xy: 510, 340
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00010
+  rotate: false
+  xy: 647, 426
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00011
+  rotate: false
+  xy: 510, 254
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00012
+  rotate: false
+  xy: 647, 340
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00014
+  rotate: false
+  xy: 784, 426
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00015
+  rotate: false
+  xy: 647, 254
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+effect/effect_leidian_attack_self_00016
+  rotate: false
+  xy: 784, 340
+  size: 135, 84
+  orig: 135, 84
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 2, 198
+  size: 232, 312
+  orig: 232, 312
+  offset: 0, 0
+  index: -1
+l1foot
+  rotate: true
+  xy: 308, 215
+  size: 37, 50
+  orig: 37, 50
+  offset: 0, 0
+  index: -1
+l1hand
+  rotate: false
+  xy: 880, 285
+  size: 47, 53
+  orig: 47, 53
+  offset: 0, 0
+  index: -1
+l2foot
+  rotate: false
+  xy: 454, 219
+  size: 37, 33
+  orig: 37, 33
+  offset: 0, 0
+  index: -1
+l2hand
+  rotate: true
+  xy: 180, 53
+  size: 65, 52
+  orig: 65, 52
+  offset: 0, 0
+  index: -1
+l3foot
+  rotate: false
+  xy: 236, 198
+  size: 40, 17
+  orig: 40, 17
+  offset: 0, 0
+  index: -1
+l3hand
+  rotate: false
+  xy: 180, 120
+  size: 55, 76
+  orig: 55, 76
+  offset: 0, 0
+  index: -1
+lline
+  rotate: false
+  xy: 236, 217
+  size: 70, 35
+  orig: 70, 35
+  offset: 0, 0
+  index: -1
+r1foot
+  rotate: false
+  xy: 180, 2
+  size: 38, 49
+  orig: 38, 49
+  offset: 0, 0
+  index: -1
+r1hand
+  rotate: false
+  xy: 921, 355
+  size: 59, 76
+  orig: 59, 76
+  offset: 0, 0
+  index: -1
+r2foot
+  rotate: false
+  xy: 410, 214
+  size: 42, 38
+  orig: 42, 38
+  offset: 0, 0
+  index: -1
+r2hand
+  rotate: true
+  xy: 784, 254
+  size: 26, 34
+  orig: 26, 34
+  offset: 0, 0
+  index: -1
+r3foot
+  rotate: false
+  xy: 493, 225
+  size: 35, 27
+  orig: 35, 27
+  offset: 0, 0
+  index: -1
+r3hand
+  rotate: true
+  xy: 784, 282
+  size: 56, 94
+  orig: 56, 94
+  offset: 0, 0
+  index: -1
+rline
+  rotate: false
+  xy: 360, 211
+  size: 48, 41
+  orig: 48, 41
+  offset: 0, 0
+  index: -1

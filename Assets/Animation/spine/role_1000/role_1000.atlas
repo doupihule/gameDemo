@@ -1,0 +1,96 @@
+
+role_1000.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+dimian2
+  rotate: false
+  xy: 879, 516
+  size: 103, 103
+  orig: 103, 103
+  offset: 0, 0
+  index: -1
+firevo2
+  rotate: false
+  xy: 879, 863
+  size: 74, 157
+  orig: 74, 157
+  offset: 0, 0
+  index: -1
+gaoguang
+  rotate: false
+  xy: 955, 955
+  size: 65, 65
+  orig: 65, 65
+  offset: 0, 0
+  index: -1
+gongyu
+  rotate: false
+  xy: 2, 2
+  size: 875, 1018
+  orig: 875, 1018
+  offset: 0, 0
+  index: -1
+lizi
+  rotate: false
+  xy: 955, 922
+  size: 25, 31
+  orig: 25, 31
+  offset: 0, 0
+  index: -1
+suishi
+  rotate: false
+  xy: 879, 330
+  size: 44, 31
+  orig: 44, 31
+  offset: 0, 0
+  index: -1
+yanwu1
+  rotate: false
+  xy: 879, 438
+  size: 81, 76
+  orig: 81, 76
+  offset: 0, 0
+  index: -1
+yanwu1_1
+  rotate: false
+  xy: 879, 363
+  size: 81, 73
+  orig: 81, 73
+  offset: 0, 0
+  index: -1
+yanwu3
+  rotate: true
+  xy: 879, 742
+  size: 119, 89
+  orig: 119, 89
+  offset: 0, 0
+  index: -1
+yanwu3_1
+  rotate: true
+  xy: 879, 621
+  size: 119, 89
+  orig: 119, 89
+  offset: 0, 0
+  index: -1
+
+role_10002.png
+size: 512,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+baozha
+  rotate: false
+  xy: 2, 2
+  size: 163, 166
+  orig: 163, 166
+  offset: 0, 0
+  index: -1
+flare2b
+  rotate: false
+  xy: 167, 14
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1

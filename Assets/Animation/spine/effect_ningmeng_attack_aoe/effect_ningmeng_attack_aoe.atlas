@@ -1,0 +1,76 @@
+
+effect_ningmeng_attack_aoe.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bullet_ningmeng_attack
+  rotate: false
+  xy: 926, 146
+  size: 67, 92
+  orig: 67, 92
+  offset: 0, 0
+  index: -1
+dgy1
+  rotate: false
+  xy: 263, 41
+  size: 197, 197
+  orig: 197, 197
+  offset: 0, 0
+  index: -1
+dgy12
+  rotate: true
+  xy: 804, 45
+  size: 71, 86
+  orig: 71, 86
+  offset: 0, 0
+  index: -1
+gen_splat2
+  rotate: false
+  xy: 648, 84
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1
+lizi88
+  rotate: false
+  xy: 892, 39
+  size: 77, 77
+  orig: 77, 77
+  offset: 0, 0
+  index: -1
+po1
+  rotate: false
+  xy: 995, 228
+  size: 8, 10
+  orig: 8, 10
+  offset: 0, 0
+  index: -1
+po2
+  rotate: false
+  xy: 2, 25
+  size: 259, 213
+  orig: 259, 213
+  offset: 0, 0
+  index: -1
+po89
+  rotate: false
+  xy: 462, 63
+  size: 184, 175
+  orig: 184, 175
+  offset: 0, 0
+  index: -1
+texiao1
+  rotate: false
+  xy: 804, 118
+  size: 120, 120
+  orig: 120, 120
+  offset: 0, 0
+  index: -1
+water_4
+  rotate: false
+  xy: 462, 2
+  size: 61, 59
+  orig: 61, 59
+  offset: 0, 0
+  index: -1

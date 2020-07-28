@@ -1,0 +1,27 @@
+
+effect_foxi_attack_buff.png
+size: 512,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+feng
+  rotate: true
+  xy: 2, 2
+  size: 64, 74
+  orig: 64, 74
+  offset: 0, 0
+  index: -1
+quan
+  rotate: false
+  xy: 2, 68
+  size: 180, 180
+  orig: 180, 180
+  offset: 0, 0
+  index: -1
+zhuan2
+  rotate: false
+  xy: 184, 171
+  size: 77, 77
+  orig: 77, 77
+  offset: 0, 0
+  index: -1

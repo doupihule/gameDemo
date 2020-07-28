@@ -1,0 +1,41 @@
+
+effect_foxi_attack_self.png
+size: 512,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+guagnz1
+  rotate: false
+  xy: 2, 42
+  size: 251, 72
+  orig: 251, 72
+  offset: 0, 0
+  index: -1
+guagnz2
+  rotate: false
+  xy: 255, 37
+  size: 77, 77
+  orig: 77, 77
+  offset: 0, 0
+  index: -1
+suipian1
+  rotate: false
+  xy: 2, 2
+  size: 19, 38
+  orig: 19, 38
+  offset: 0, 0
+  index: -1
+suipian2
+  rotate: false
+  xy: 334, 76
+  size: 19, 38
+  orig: 19, 38
+  offset: 0, 0
+  index: -1
+suipian3
+  rotate: false
+  xy: 23, 2
+  size: 19, 38
+  orig: 19, 38
+  offset: 0, 0
+  index: -1

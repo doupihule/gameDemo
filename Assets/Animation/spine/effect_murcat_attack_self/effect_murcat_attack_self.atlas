@@ -1,0 +1,13 @@
+
+effect_murcat_attack_self.png
+size: 256,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+effect_murcat_attack_self
+  rotate: false
+  xy: 2, 2
+  size: 149, 150
+  orig: 149, 150
+  offset: 0, 0
+  index: -1

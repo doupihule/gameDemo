@@ -1,0 +1,118 @@
+
+role_10.png
+size: 512,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: true
+  xy: 2, 2
+  size: 159, 185
+  orig: 159, 185
+  offset: 0, 0
+  index: -1
+dao
+  rotate: false
+  xy: 2, 163
+  size: 261, 338
+  orig: 261, 338
+  offset: 0, 0
+  index: -1
+down
+  rotate: false
+  xy: 273, 100
+  size: 74, 73
+  orig: 74, 73
+  offset: 0, 0
+  index: -1
+head
+  rotate: true
+  xy: 265, 235
+  size: 133, 102
+  orig: 133, 102
+  offset: 0, 0
+  index: -1
+l1foot
+  rotate: false
+  xy: 265, 370
+  size: 106, 131
+  orig: 106, 131
+  offset: 0, 0
+  index: -1
+l1hand
+  rotate: true
+  xy: 373, 369
+  size: 57, 112
+  orig: 57, 112
+  offset: 0, 0
+  index: -1
+l2foot
+  rotate: false
+  xy: 449, 284
+  size: 61, 83
+  orig: 61, 83
+  offset: 0, 0
+  index: -1
+l2hand
+  rotate: false
+  xy: 369, 292
+  size: 78, 75
+  orig: 78, 75
+  offset: 0, 0
+  index: -1
+l3foot
+  rotate: false
+  xy: 369, 253
+  size: 56, 37
+  orig: 56, 37
+  offset: 0, 0
+  index: -1
+l3hand
+  rotate: false
+  xy: 273, 61
+  size: 46, 37
+  orig: 46, 37
+  offset: 0, 0
+  index: -1
+r1foot
+  rotate: true
+  xy: 373, 428
+  size: 73, 137
+  orig: 73, 137
+  offset: 0, 0
+  index: -1
+r1hand
+  rotate: true
+  xy: 189, 8
+  size: 44, 77
+  orig: 44, 77
+  offset: 0, 0
+  index: -1
+r2foot
+  rotate: false
+  xy: 265, 175
+  size: 92, 58
+  orig: 92, 58
+  offset: 0, 0
+  index: -1
+r2hand
+  rotate: false
+  xy: 189, 54
+  size: 82, 107
+  orig: 82, 107
+  offset: 0, 0
+  index: -1
+r3foot
+  rotate: false
+  xy: 369, 226
+  size: 50, 25
+  orig: 50, 25
+  offset: 0, 0
+  index: -1
+r3hand
+  rotate: false
+  xy: 321, 67
+  size: 28, 31
+  orig: 28, 31
+  offset: 0, 0
+  index: -1

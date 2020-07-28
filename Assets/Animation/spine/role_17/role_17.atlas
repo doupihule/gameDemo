@@ -1,0 +1,174 @@
+
+role_17.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+back
+  rotate: true
+  xy: 79, 11
+  size: 30, 61
+  orig: 30, 61
+  offset: 0, 0
+  index: -1
+bikebody
+  rotate: false
+  xy: 2, 43
+  size: 305, 211
+  orig: 305, 211
+  offset: 0, 0
+  index: -1
+body
+  rotate: false
+  xy: 494, 146
+  size: 101, 108
+  orig: 101, 108
+  offset: 0, 0
+  index: -1
+cheba
+  rotate: true
+  xy: 597, 170
+  size: 84, 119
+  orig: 84, 119
+  offset: 0, 0
+  index: -1
+dnb
+  rotate: false
+  xy: 808, 198
+  size: 104, 56
+  orig: 104, 56
+  offset: 0, 0
+  index: -1
+down
+  rotate: true
+  xy: 2, 2
+  size: 39, 41
+  orig: 39, 41
+  offset: 0, 0
+  index: -1
+downlight
+  rotate: false
+  xy: 718, 138
+  size: 42, 35
+  orig: 42, 35
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 309, 89
+  size: 183, 165
+  orig: 183, 165
+  offset: 0, 0
+  index: -1
+l1foot
+  rotate: false
+  xy: 914, 178
+  size: 77, 76
+  orig: 77, 76
+  offset: 0, 0
+  index: -1
+l1hand
+  rotate: false
+  xy: 45, 2
+  size: 32, 39
+  orig: 32, 39
+  offset: 0, 0
+  index: -1
+l2foot
+  rotate: false
+  xy: 622, 112
+  size: 52, 56
+  orig: 52, 56
+  offset: 0, 0
+  index: -1
+l2hand
+  rotate: false
+  xy: 762, 138
+  size: 34, 35
+  orig: 34, 35
+  offset: 0, 0
+  index: -1
+l3foot
+  rotate: false
+  xy: 993, 216
+  size: 29, 38
+  orig: 29, 38
+  offset: 0, 0
+  index: -1
+l3hand
+  rotate: false
+  xy: 622, 84
+  size: 25, 26
+  orig: 25, 26
+  offset: 0, 0
+  index: -1
+llight
+  rotate: true
+  xy: 993, 177
+  size: 37, 29
+  orig: 37, 29
+  offset: 0, 0
+  index: -1
+lun
+  rotate: false
+  xy: 494, 76
+  size: 75, 68
+  orig: 75, 68
+  offset: 0, 0
+  index: -1
+r1foot
+  rotate: true
+  xy: 309, 41
+  size: 46, 82
+  orig: 46, 82
+  offset: 0, 0
+  index: -1
+r1hand
+  rotate: true
+  xy: 393, 41
+  size: 46, 69
+  orig: 46, 69
+  offset: 0, 0
+  index: -1
+r2foot
+  rotate: true
+  xy: 571, 79
+  size: 65, 49
+  orig: 65, 49
+  offset: 0, 0
+  index: -1
+r2hand
+  rotate: true
+  xy: 676, 121
+  size: 47, 40
+  orig: 47, 40
+  offset: 0, 0
+  index: -1
+r3foot
+  rotate: false
+  xy: 464, 42
+  size: 23, 45
+  orig: 23, 45
+  offset: 0, 0
+  index: -1
+r3hand
+  rotate: true
+  xy: 176, 16
+  size: 25, 26
+  orig: 25, 26
+  offset: 0, 0
+  index: -1
+rlight
+  rotate: false
+  xy: 142, 16
+  size: 32, 25
+  orig: 32, 25
+  offset: 0, 0
+  index: -1
+rlun
+  rotate: false
+  xy: 718, 175
+  size: 88, 79
+  orig: 88, 79
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,13 @@
+
+bullet_jidi_attack.png
+size: 512,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bullet_jidi_attack
+  rotate: true
+  xy: 2, 2
+  size: 164, 258
+  orig: 164, 258
+  offset: 0, 0
+  index: -1

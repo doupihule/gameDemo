@@ -1,0 +1,90 @@
+
+effect_huaji_attack_hit.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+burntembers3b
+  rotate: false
+  xy: 733, 705
+  size: 77, 77
+  orig: 77, 77
+  offset: 0, 0
+  index: -1
+eft223
+  rotate: false
+  xy: 424, 705
+  size: 307, 77
+  orig: 307, 77
+  offset: 0, 0
+  index: -1
+gaoguang
+  rotate: false
+  xy: 158, 77
+  size: 79, 79
+  orig: 79, 79
+  offset: 0, 0
+  index: -1
+guagnquan6
+  rotate: false
+  xy: 2, 2
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1
+pugong_01
+  rotate: false
+  xy: 424, 784
+  size: 210, 210
+  orig: 210, 210
+  offset: 0, 0
+  index: -1
+pugong_02
+  rotate: false
+  xy: 2, 158
+  size: 210, 210
+  orig: 210, 210
+  offset: 0, 0
+  index: -1
+pugong_03
+  rotate: false
+  xy: 636, 784
+  size: 210, 210
+  orig: 210, 210
+  offset: 0, 0
+  index: -1
+pugong_04
+  rotate: false
+  xy: 214, 158
+  size: 210, 210
+  orig: 210, 210
+  offset: 0, 0
+  index: -1
+pugong_05
+  rotate: false
+  xy: 364, 477
+  size: 210, 210
+  orig: 210, 210
+  offset: 0, 0
+  index: -1
+shanguang
+  rotate: false
+  xy: 848, 840
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1
+yg_cc (7)
+  rotate: false
+  xy: 2, 689
+  size: 420, 305
+  orig: 420, 305
+  offset: 0, 0
+  index: -1
+yssf009_guilie
+  rotate: false
+  xy: 2, 370
+  size: 360, 317
+  orig: 360, 317
+  offset: 0, 0
+  index: -1

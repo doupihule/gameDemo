@@ -1,0 +1,118 @@
+
+effect_dianta_shoot_1006.png
+size: 1024,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+baoguang
+  rotate: false
+  xy: 390, 32
+  size: 65, 65
+  orig: 65, 65
+  offset: 0, 0
+  index: -1
+dianliu_00
+  rotate: true
+  xy: 469, 100
+  size: 26, 155
+  orig: 26, 155
+  offset: 0, 0
+  index: -1
+dianliu_02
+  rotate: true
+  xy: 783, 102
+  size: 24, 155
+  orig: 24, 155
+  offset: 0, 0
+  index: -1
+dianliu_04
+  rotate: true
+  xy: 469, 74
+  size: 24, 155
+  orig: 24, 155
+  offset: 0, 0
+  index: -1
+dianliu_06
+  rotate: true
+  xy: 311, 99
+  size: 27, 156
+  orig: 27, 156
+  offset: 0, 0
+  index: -1
+dianliu_08
+  rotate: true
+  xy: 626, 76
+  size: 23, 155
+  orig: 23, 155
+  offset: 0, 0
+  index: -1
+dianliu_09
+  rotate: true
+  xy: 626, 101
+  size: 25, 155
+  orig: 25, 155
+  offset: 0, 0
+  index: -1
+dianliu_10
+  rotate: true
+  xy: 783, 77
+  size: 23, 155
+  orig: 23, 155
+  offset: 0, 0
+  index: -1
+dingqiu
+  rotate: false
+  xy: 626, 2
+  size: 72, 72
+  orig: 72, 72
+  offset: 0, 0
+  index: -1
+g_lanzi03
+  rotate: false
+  xy: 700, 14
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+g_lanzi06
+  rotate: false
+  xy: 457, 12
+  size: 60, 60
+  orig: 60, 60
+  offset: 0, 0
+  index: -1
+guangzhu
+  rotate: true
+  xy: 940, 79
+  size: 47, 64
+  orig: 47, 64
+  offset: 0, 0
+  index: -1
+lizi
+  rotate: false
+  xy: 519, 31
+  size: 33, 41
+  orig: 33, 41
+  offset: 0, 0
+  index: -1
+shendian_x1
+  rotate: false
+  xy: 311, 2
+  size: 77, 95
+  orig: 77, 95
+  offset: 0, 0
+  index: -1
+yanwu
+  rotate: false
+  xy: 209, 26
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
+yanwu2
+  rotate: false
+  xy: 2, 23
+  size: 205, 103
+  orig: 205, 103
+  offset: 0, 0
+  index: -1
