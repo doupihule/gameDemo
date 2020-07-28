@@ -1,1 +1,0 @@
-{"skeleton":{"hash":"O1TtbmavGL2SLx97XNdDZX7Uqpo","spine":"3.6.53","width":332,"height":382,"images":"./images/"},"bones":[{"name":"root"},{"name":"bullet_jidi_attack","parent":"root"}],"slots":[{"name":"pc","bone":"bullet_jidi_attack","attachment":"pc"}],"skins":{"default":{"pc":{"pc":{"y":10,"width":332,"height":382}}}},"animations":{"animation":{}}}

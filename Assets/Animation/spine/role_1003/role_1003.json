@@ -1,1 +1,0 @@
-{"skeleton":{"hash":"KrmO4+WEck6YfeNR3z2TH6J2Eo4","spine":"3.6.53","width":611,"height":639,"images":"./images/"},"bones":[{"name":"root"},{"name":"zhongxin","parent":"root","y":252}],"slots":[{"name":"yeye","bone":"zhongxin","attachment":"yeye"}],"skins":{"default":{"yeye":{"yeye":{"x":66,"y":60,"width":611,"height":639}}}},"animations":{"animation":{}}}
