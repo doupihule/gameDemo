@@ -34,6 +34,7 @@ function TimerManager:add(callBack, thisObject, delay, maxCount, immediate, args
     end
     local timeEntity = nil
     self.timeCount = self.timeCount + 1
+    print("immediate:",immediate)
     if immediate then
         timeEntity = TimeEntity.new(delay, callBack, thisObject, maxCount - 1, args)
         if #args > 0 then
@@ -146,7 +147,7 @@ function TimerManager:updateFrame()
     for i,timeEntity in pairs(self._timeMap) do
         timeEntity = self._timeMap[i]
         local isRemove = false
-        num = math.floor(curTime - timeEntity.oldTime / timeEntity.delay)
+        num = math.floor((curTime - timeEntity.oldTime) / timeEntity.delay)
         if num > 0 then
             timeEntity.maxCount = timeEntity.maxCount - num
             timeEntity.oldTime = timeEntity.oldTime + num * timeEntity.delay

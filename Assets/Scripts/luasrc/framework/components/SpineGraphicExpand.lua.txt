@@ -5,10 +5,10 @@ SpineGraphicExpand = class("SpineGraphicExpand")
 SpineGraphicExpand.__cobject = nil
 SpineGraphicExpand.__spineAni = nil
 --构造器函数
-function SpineGraphicExpand:ctor(url, boundlePath)
-    -- body
-    local obj = CS.Resource.ResourceManager.Instance:luaLoadAsset(url, url, boundlePath or "animation")
-    self.__cobject = CS.UnityEngine.Object.Instantiate(obj)
+function SpineGraphicExpand:ctor(name, boundlePath)
+    if(not boundlePath) then boundlePath = name end
+    print("name:",name)
+    self.__cobject = ResourceManager.loadSpinePrefab(name,boundlePath)
     self.__spineAni = self.__cobject:GetComponent("SkeletonGraphic")
     UITools.bindUIFunc(self);
 end

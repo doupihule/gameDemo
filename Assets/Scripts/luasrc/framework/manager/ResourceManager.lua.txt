@@ -2,9 +2,18 @@ ResourceManager = class('ResourceManager')
 ResourceManager._spineModelMap = {};
 
 local uiPrefabPath = "Assets/UI/Prefabs/"
+local spinePrefabPath =  "Assets/Animation/Prefabs/"
 
+--加载ui预设
 function ResourceManager.loadUIPrefab(name, boundlename)
-    local path = uiPrefabPath + name + ".prefab";
+    local path = uiPrefabPath .. name .. ".prefab";
+    local obj = CS.Resource.ResourceManager.Instance:luaLoadAsset(path, path, boundlename);
+    return CS.UnityEngine.Object.Instantiate(obj)
+end
+
+--加载动画预设.返回动画实例
+function ResourceManager.loadSpinePrefab(name,boundlename)
+    local path = spinePrefabPath .. name .. ".prefab";
     local obj = CS.Resource.ResourceManager.Instance:luaLoadAsset(path, path, boundlename);
     return CS.UnityEngine.Object.Instantiate(obj)
 end

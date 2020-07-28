@@ -99,8 +99,8 @@ function DisplayUtils.createSpriteFrameByShort(imagePath, imageHead, labelsArr, 
     return spriteFrame
 end
 
-local spinePath = "Assets/Animation/Prefabs/"
-function DisplayUtils.createSpine(name)
-    local spani = SpineGraphicExpand.new(spinePath .. name .. ".prefab");
+--创建spine
+function DisplayUtils.createSpine(name,boundleName)
+    local spani = SpineGraphicExpand.new(name,boundleName);
     return spani
 end
