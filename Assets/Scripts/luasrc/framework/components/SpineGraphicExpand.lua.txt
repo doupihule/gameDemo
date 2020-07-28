@@ -10,6 +10,7 @@ function SpineGraphicExpand:ctor(url, boundlePath)
     local obj = CS.Resource.ResourceManager.Instance:luaLoadAsset(url, url, boundlePath or "animation")
     self.__cobject = CS.UnityEngine.Object.Instantiate(obj)
     self.__spineAni = self.__cobject:GetComponent("SkeletonGraphic")
+    UITools.bindUIFunc(self);
 end
 
 
@@ -31,8 +32,10 @@ function SpineGraphicExpand:dispose()
     if (not self.__cobject) then
         return
     end
+    self:removeSelf();
     self.__cobject.__luaobject = nil
     self.__cobject = nil
+
 end
 
 return SpineGraphicExpand

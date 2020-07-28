@@ -8,5 +8,7 @@ require(packageName .. "UserInfo")
 require(packageName .. "GameHttpControler")
 require(packageName .. "HttpMessage")
 require(packageName .. "Message")
+require(packageName .. "kakura.Client")
+require(packageName .. "kakura.KakuraClient")
 
 

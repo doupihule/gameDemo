@@ -15,7 +15,7 @@ function GameMainUI:OnAwake()
         print("clicked, test Button", a)
     end)
 
-    local sp = DisplayUtils.createSpine("spine_role");
+    local sp = DisplayUtils.createSpine("role_01");
     UITools.bindUIFunc(self);
     self:addChild(sp)
     UITools.setUIViewPos(sp, 100, 200)

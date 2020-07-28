@@ -94,9 +94,13 @@ function Client:reloginBack(result)
 end
 
 function Client:getServerTime()
+    local miniTime = self:getMiniServerTime()
+    return math.round(miniTime/1000)
 end
 
 function Client:getMiniServerTime()
+    local time = CS.GameUtils.CommonUtil.GetTimeMiniStamp();
+    return time
 end
 
 function Client:getRequestId()
@@ -248,7 +252,7 @@ function Client:startRequestCloud(method, params, callback, thisObj, addParam, e
         end
         if (backData.result and backData.result.serverInfo) and backData.result.serverInfo.serverTime then
             thisValue._reqBackTime = backData.result.serverInfo.serverTime
-            thisValue._serverTime = thisValue._reqBackTime - cs.GameUtils.CommonUtil.GetTimeMiniStamp()
+            thisValue._serverTime = thisValue._reqBackTime - CS.GameUtils.CommonUtil.GetTimeMiniStamp()
         end
         if backData.error then
             onErrorBack(backData.error)

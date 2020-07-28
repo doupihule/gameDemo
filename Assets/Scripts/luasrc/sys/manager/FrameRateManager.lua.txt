@@ -20,17 +20,17 @@ end
 function FrameRateManager:updateFrame()
     self.num = self.num + 1
     if self.num % self.highFrameFPS * self.readRate == 0 then
-        local nowTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
+        local nowTime = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
         local disTime = nowTime - self._lastTime
         if disTime > self.readRate * 10 * self.mulplite then
             UserInfo.platform:setGameFrame()
         else
-            self._lastTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
+            self._lastTime = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
         end
     end
 end
 
 function FrameRateManager:initData()
     self.num = 0
-    self._lastTime = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
+    self._lastTime = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
 end

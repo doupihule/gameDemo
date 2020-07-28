@@ -1,6 +1,6 @@
 FuncManager = class('FuncManager')
 function FuncManager.init(callback, thisobj)
-    local t1 = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
+    local t1 = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
     local onZipComeplete = function()
         local congfigName = BaseFunc._globalConfigsName
         if GameUtils.isReview then

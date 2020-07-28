@@ -31,12 +31,12 @@ function StatisticsManager.onLoadingLog()
     end
     if FileUtils.isUserWXSource() then
         StatisticsManager.isLoadingLog = true
-        local disT = cs.GameUtils.CommonUtil.GetTimeMiniStamp() - StatisticsManager.mainStartT
+        local disT = CS.GameUtils.CommonUtil.GetTimeMiniStamp() - StatisticsManager.mainStartT
         if disT > StatisticsManager.loadingOutT then
             disT = disT - StatisticsManager.loadingOutT
         end
         if disT > 100000 then
-            LogsManager.echo("krma. start " .. StatisticsManager.mainStartT .. " end " .. cs.GameUtils.CommonUtil.GetTimeMiniStamp() .. " time " .. disT .. " except " .. StatisticsManager.loadingOutT)
+            LogsManager.echo("krma. start " .. StatisticsManager.mainStartT .. " end " .. CS.GameUtils.CommonUtil.GetTimeMiniStamp() .. " time " .. disT .. " except " .. StatisticsManager.loadingOutT)
             LogsManager.sendErrorToPlatform("loadingTime_moreThan_100000", LogsManager.errorTage_serverError, 1000, "loadingTime_moreThan_100000")
         end
         LogsManager.sendLoadingToAiCloud(disT)

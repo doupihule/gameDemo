@@ -1,37 +1,55 @@
 BattleControler = class('BattleControler')
+        --[[
+* 游戏的控制器 基类.
+* 是一个中枢.
+* 保证游戏所有对象都能通过controler 访问到.
+]]
 function BattleControler:ctor(ctn)
-    self._isGamePause = false;
-    self.isSkillPause = false;
-    self._leftFrameDt = 0;
-    self.callFuncNums = 0;
-    self.updateCount = 0;
-    self._lastFrameTime = 0;
-    self.stillFrame = 0;
-    self.updateScale = 1;
-    self._leftScaleFrame = 0;
-    self._leftCatchTime = 0;
-    self.performanceControler = PerformanceControler.new(self)
-    self._allInstanceArr = {}
-    self.battleState = BattleConst.battleState_out
-    self.cameraControler = CameraControler.new(self)
-    self._timeList = {}
-    self._cacheTimeArr = {}
-    self.updateCallFuncGroup = {}
 
+    self._isGamePause = false;      --是否游戏暂停
+    self.isSkillPause = false;      --是否技能暂停
+    self._leftFrameDt = 0;          --剩余追帧时间差
+    self.callFuncNums = 0;          -- 回调函数数量
+    self.updateCount = 0;           --刷新的帧数
+    self._lastFrameTime = 0;        --上次刷新时间
+    self.stillFrame = 0;            --硬直时间
+    self._leftScaleFrame = 0;       --剩余追速度帧数
+    --视图表现控制器
+    self.performanceControler = PerformanceControler.new(self)
+    --存储所有实例的数组,并会对实例进行深度排列
+    self._allInstanceArr = {}
+    --战斗状态. 默认0非占丢
+    self.battleState = BattleConst.battleState_out
+    --镜头控制器
+    self.cameraControler = CameraControler.new(self)
+    --计时器map表
+    self._timeList = {}
+    --缓存的计时器对对象
+    self._cacheTimeArr = {}
+    --回调map
+    self.updateCallFuncGroup = {}
+    --一帧的时间
     self._oneFrameDt = math.round(1000 / GameConsts.gameFrameRate)
+    --一帧最多最的帧数 .防止切后台回来卡死
     self._maxFrameDt = 5 * self._oneFrameDt
+    --缓动控制器
     self.tweenControler = BattleTweenControler.new(self)
+    --战斗调试工具
     self.battleDebugTool = BattleDebugTool.new(self)
+    --刷新速度
     self.updateScale = BattleDebugTool.getBattleAddSped()
     if not self.updateScale then
         self.updateScale = 1
     end
 end
 
+--执行一次刷新逻辑
 function BattleControler:onceUpdateFrame()
+
     if self.updateScale == 1 then
         self:updateFrame()
     else
+        --如果游戏加速或者减速. 采用每帧时间累积方式. 计算量小.
         self._leftScaleFrame = self._leftScaleFrame + self.updateScale
         local s = 0
         for s = 0, self._leftScaleFrame - 1 do
@@ -41,13 +59,20 @@ function BattleControler:onceUpdateFrame()
     end
 end
 
+--刷新函数
 function BattleControler:updateFrame()
     self.updateCount = self.updateCount + 1
+    --刷怪
     self.refreshControler:updateFrame()
+    --调用所有的实例刷新
     self:runInstanceUpdate()
+    --镜头刷新
     self.cameraControler:updateFrame()
+    --缓动刷新
     self.tweenControler:updateFrame()
+    --计时器回调
     self:doDelayCallFunc()
+    --遍历注册的刷新函数
     for i in pairs(self.updateCallFuncGroup) do
         local info = self.updateCallFuncGroup[i]
         doJsCallFunc(info.callBack, info.thisObj, info.params)
@@ -61,6 +86,7 @@ function BattleControler:updateFrame()
     self:sortChildren()
 end
 
+--深度排列
 function BattleControler:sortChildren()
     if self.updateCount % 60 ~= 0 then
         return
@@ -68,6 +94,7 @@ function BattleControler:sortChildren()
     self:sortOneArr(self._allInstanceArr)
 end
 
+--强制深度排列
 function BattleControler:forceSortChildren()
     self:sortOneArr(self._allInstanceArr)
 end
@@ -79,11 +106,11 @@ function BattleControler:sortOneArr(campArr)
     end
 end
 
+--执行延迟回调
 function BattleControler:doDelayCallFunc()
     if #self._timeList == 0 then
         return
     end
-    local i
     if not self.isSkillPause then
         for i = #self._timeList, 1, -1 do
             local info = self._timeList[i]
@@ -122,7 +149,7 @@ function BattleControler:doDelayCallFunc()
         end
     end
 end
-
+--执行某一个延迟回调
 function BattleControler:doOneCallInfo(info, i)
     if i == nil then
         i = -1

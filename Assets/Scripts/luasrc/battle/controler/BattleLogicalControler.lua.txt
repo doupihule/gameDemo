@@ -21,7 +21,7 @@ function BattleLogicalControler:ctor(ctn, ui, gameMode)
     self.diedArr_2 = {}
     self.battleUI = ui
     self.globalPassiveAttrMap = {}
-    local time = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
+    local time = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
     BattleLogsManager.battleEcho("battle 设置随机种子:", time, "用来做复盘用")
     RandomUtis.setOneRandomYinzi(time, BattleFunc.battleRandomIndex)
     self.refreshControler = RefreshControler.new(self)

@@ -654,14 +654,14 @@ function GamePlatform:isAuthorized()
 end
 
 function GamePlatform:registFocusEvent()
-    self.hideT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
+    self.hideT = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
     self.showT = self.hideT
 end
 
 function GamePlatform:onGetFocus()
     LogsManager.echo("获取焦点")
     self.isHide = false
-    self.showT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
+    self.showT = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
     Message.getInstance():send(MsgCMD.GAME_ONSHOW)
     StatisticsManager.getInstance():onEvent(StatisticsCommonConst.ON_SHOW)
     StatisticsManager.addLoadingOutTime(self.showT - self.hideT)
@@ -669,7 +669,7 @@ end
 
 function GamePlatform:onLoseFocus()
     self.isHide = true
-    self.hideT = cs.GameUtils.CommonUtil.GetTimeMiniStamp()
+    self.hideT = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
     LogsManager.echo('>>OnHide成功回调', self.hideT)
     Message.getInstance():send(MsgCMD.GAME_ONHIDE)
     StatisticsManager.getInstance():onEvent(StatisticsCommonConst.ON_HIDE, { onlineTime = self.hideT - self.showT, hideView = GameUtils.decryptStr(WindowManager.getCurrentWindowName()) })

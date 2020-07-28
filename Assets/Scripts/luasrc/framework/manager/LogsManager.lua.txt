@@ -227,7 +227,7 @@ function LogsManager.sendStaticToAiCloud(eventId, eventData)
     if GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ALIYUN) then
         return
     end
-    local params = { game = GameConsts.gameCode, platform = PackConfigManager.getInstance():getPlatform().platform, cver = Global.client_version, deviceId = Global.deviceId, eventId = eventId, rid = UserModel.getInstance():getUserRid(), device = Global.deviceModel, circleId = LogsManager.getCircleId(), t = cs.GameUtils.CommonUtil.GetTimeMiniStamp() }
+    local params = { game = GameConsts.gameCode, platform = PackConfigManager.getInstance():getPlatform().platform, cver = Global.client_version, deviceId = Global.deviceId, eventId = eventId, rid = UserModel.getInstance():getUserRid(), device = Global.deviceModel, circleId = LogsManager.getCircleId(), t = CS.GameUtils.CommonUtil.GetTimeMiniStamp() }
     if eventData then
         -- [ts2lua]eventData下标访问可能不正确
         if eventData["sortId"] then
@@ -450,7 +450,7 @@ end
 
 function LogsManager.getCircleId()
     if not LogsManager._circleId then
-        LogsManager._circleId = Global.deviceId .. "_" .. cs.GameUtils.CommonUtil.GetTimeMiniStamp() .. math.floor(math.random() * 100000)
+        LogsManager._circleId = Global.deviceId .. "_" .. CS.GameUtils.CommonUtil.GetTimeMiniStamp() .. math.floor(math.random() * 100000)
     end
     return LogsManager._circleId
 end
