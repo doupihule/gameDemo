@@ -1,19 +1,14 @@
-SpineGraphicExpand = class("SpineGraphicExpand")
+-- 2dspine 对象
+SpineGraphicExpand = class("SpineGraphicExpand",LuaBaseView)
 
-
---对应的c#对象 Object
-SpineGraphicExpand.__cobject = nil
+--spine动画对象
 SpineGraphicExpand.__spineAni = nil
 --构造器函数
 function SpineGraphicExpand:ctor(name, boundlePath)
     if(not boundlePath) then boundlePath = name end
-    print("name:",name)
-    self.__cobject = ResourceManager.loadSpinePrefab(name,boundlePath)
+    self:setCObject(ResourceManager.loadSpinePrefab(name,boundlePath))
     self.__spineAni = self.__cobject:GetComponent("SkeletonGraphic")
-    UITools.bindUIFunc(self);
 end
-
-
 
 --播放动画
 function SpineGraphicExpand:play(label, loop)
@@ -32,8 +27,8 @@ function SpineGraphicExpand:dispose()
     if (not self.__cobject) then
         return
     end
+    self.__spineAni =nil
     self:removeSelf();
-    self.__cobject.__luaobject = nil
     self.__cobject = nil
 
 end

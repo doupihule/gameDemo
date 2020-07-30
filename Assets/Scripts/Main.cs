@@ -9,16 +9,17 @@ using System;
 [LuaCallCSharp]
 public class Main : MonoBehaviour
 {
-
+    static Main instance;
     LuaTable timerManager;
 
     protected Action<LuaTable> luaUpdate = null;
     protected Action<LuaTable> luaUpdateLate = null;
-
     void Awake()
     {
+        instance = this;
         XLuaBridge.Init();
-
+        LuaTable globalEnv = XLuaBridge.GetInstance().XLuaGetLuaInstance("GlobalEnv");
+        globalEnv.Set("_stage", this);
         ResourceManager.Instance.Init(gameObject);
 
         GameObject a = ResourceManager.Instance.LoadAsset<GameObject>("Assets/UI/Prefabs/main/GameMainUI.prefab", "Assets/UI/Prefabs/main/GameMainUI.prefab", "mainab");

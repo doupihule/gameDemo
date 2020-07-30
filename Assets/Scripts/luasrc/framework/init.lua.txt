@@ -3,6 +3,7 @@
 -- Date: 2020-04-11 16:47:35
 --
 local packageName = "framework."
+require(packageName .. "engine.GlobalEnv")
 require(packageName .. "utils.init")
 require(packageName .. "components.init")
 require(packageName .. "common.init")

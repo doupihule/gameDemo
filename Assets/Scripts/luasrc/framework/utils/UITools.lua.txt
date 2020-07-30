@@ -10,6 +10,14 @@ function UITools.setUIViewPos(instance, x, y)
     tansform.anchoredPosition = tempVec2
 end
 
+
+--获取view的坐标
+function UITools.getUIViewPos(instance)
+    local gameobj = instance.__cobject or instance
+    local tansform = gameobj:GetComponent("RectTransform");
+    return tansform.anchoredPosition
+end
+
 local tempScaleVec3 = CS.UnityEngine.Vector3(1, 1, 1)
 
 --设置obj缩放
@@ -35,13 +43,10 @@ function UITools.setUIViewRotation(instance, r)
     tansform.eulerAngles = tempRotateVec3
 end
 
-function UITools.addChildComponent(parent, child)
-
-end
 
 
 --添加子对象方法
-local tempAddChildFunc = function(self, childLuaInstance, index)
+function UITools.addChild(self, childLuaInstance, index)
 
     local gameObject = self.__cobject
     if (not gameObject) then
@@ -65,7 +70,8 @@ local tempAddChildFunc = function(self, childLuaInstance, index)
     end
 end
 
-local tempRemoveAllChild = function(self)
+--移除所有子对象
+function UITools.removeAllChild  (self)
     local gameObject = self.__cobject
     if (not gameObject) then
         gameObject = self
@@ -78,7 +84,7 @@ local tempRemoveAllChild = function(self)
     end
 end
 
-local tempGetChildAt = function(self,index)
+function UITools.getChildAt (self,index)
     local gameObject = self.__cobject
     if (not gameObject) then
         gameObject = self
@@ -88,10 +94,8 @@ local tempGetChildAt = function(self,index)
 end
 
 
-
-
 --移除子对象方法
-local tempRemoveUIInstance = function(self, childLuaInstance)
+function UITools.removeChild (self, childLuaInstance)
     local childTransform
     if (childLuaInstance.__cobject) then
         childTransform = childLuaInstance.__cobject:GetComponent("RectTransform");
@@ -102,17 +106,17 @@ local tempRemoveUIInstance = function(self, childLuaInstance)
 end
 
 --移除自己.和移除子对象一样
-local tempRemoveSelf = function(self)
-    tempRemoveUIInstance(self, self)
+function UITools.removeSelf (self)
+    UITools.removeChild(self, self)
 end
 
 
 --移除某个位置的子对象
-local tempRemoveChildAt = function(self, index)
-    local gameObject = self.__cobject
-    if (not gameObject) then
-        gameObject = self
-    end ;
+function UITools.removeChildAt (self, index)
+    local childView = UITools.getChildAt(self,index);
+    if(childView) then
+        UITools.removeChild(self,childView);
+    end
 end
 
 
@@ -123,10 +127,19 @@ function UITools.bindUIFunc(luaInstance)
     if (not luaInstance.__cobject) then
         return
     end
-    luaInstance.addChild = tempAddChildFunc
-    luaInstance.removeChild = tempRemoveChild
-    luaInstance.removeSelf = tempRemoveSelf
-    luaInstance.removeChildren = tempRemoveAllChild
+    luaInstance.addChild = UITools.addChild
+    luaInstance.getChildAt = UITools.getChildAt
+    luaInstance.removeChild = UITools.removeChild
+    luaInstance.removeChildAt = UITools.removeChildAt
+    luaInstance.removeSelf = UITools.removeSelf
+    luaInstance.removeChildren = UITools.removeAllChild
+
+    --设置旋转
+    luaInstance.setRotation = UITools.setUIViewRotation
+    --缩放
+    luaInstance.setScale = UITools.setUIViewScale
+    --获取2d坐标 只能用x,y
+    luaInstance.get2dPos = UITools.getUIViewPos
 
 end
 
@@ -135,14 +148,9 @@ local uiCtn = class("UI2DCtn");
 
 --创建一个2dui 容器
 function UITools.createUICtn()
-    local ctn = uiCtn.new();
-    local instance = ResourceManager.loadUIPrefab("base/SpriteContainer.prefab", "baseab")
-    ctn.__cobject = instance
-    UITools.bindUIFunc(ctn)
-    return ui
-
+    local ctn = BaseContainer.new();
+    return ctn
 end
-
 
 
 

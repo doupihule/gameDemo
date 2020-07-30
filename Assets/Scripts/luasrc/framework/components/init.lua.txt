@@ -3,7 +3,8 @@
 -- Date: 2020-04-11 16:47:35
 --
 local packageName = "framework.components."
-require(packageName .. "SpineExpand")
+require(packageName .. "LuaBaseView")
+require(packageName .. "BaseContainer")
 require(packageName .. "SpineGraphicExpand")
 
 

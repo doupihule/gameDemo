@@ -1,0 +1,18 @@
+
+
+--全局环境
+GlobalEnv = {
+    _stage = nil,    -- c#的main
+    stage = nil ,      --舞台的luaview
+}
+
+function GlobalEnv.initStage()
+    GlobalEnv.stage = LuaBaseView.bindOneCObjet(GlobalEnv._stage);
+end
+
+--获取舞台CBaseView
+function GlobalEnv.getStage()
+    return GlobalEnv.stage
+end
+
+return GlobalEnv
