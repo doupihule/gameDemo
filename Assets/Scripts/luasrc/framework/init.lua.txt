@@ -15,7 +15,7 @@ require(packageName .. "event.init")
 require(packageName .. "manager.init")
 require(packageName .. "model.CountsCommonModel")
 require(packageName .. "native.NativeBridge")
-
+require(packageName .. "func.init")
 require(packageName .. "platform.init")
 
 require(packageName .. "server.SingleCommonServer")

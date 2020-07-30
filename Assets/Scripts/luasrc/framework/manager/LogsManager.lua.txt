@@ -41,7 +41,7 @@ function LogsManager.errorTag(errorId, message, ...)
     if errorId == nil then
         errorId = nil
     end
-    local resultArr = LogsManager.turnStr("error", message, optionalParams, true)
+    local resultArr = LogsManager.turnStr("error", message, {...}, true)
     local arr = table.sliceArray(resultArr, 1, #resultArr)
     local concatStr = "" .. table.concat(arr, ",")
     if UserInfo.isTest() then
@@ -53,7 +53,7 @@ function LogsManager.errorTag(errorId, message, ...)
 end
 
 function LogsManager.systemError(message, ...)
-    local resultArr = LogsManager.turnStr("sysError", message, optionalParams, true)
+    local resultArr = LogsManager.turnStr("sysError", message, {...}, true)
     local arr = table.sliceArray(resultArr, 1, #resultArr);
     table.spliceArray(arr, 1, 1)
     local concatStr = "" .. table.concat(arr, ",")

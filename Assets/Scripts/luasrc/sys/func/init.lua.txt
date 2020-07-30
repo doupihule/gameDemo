@@ -1,0 +1,3 @@
+local packageName = "sys.func."
+require(packageName .. "BattleFunc")
+require(packageName .. "DataResourceFunc")

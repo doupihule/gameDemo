@@ -11,7 +11,7 @@ BaseFunc.SWITCH_CONFIG_HOT = "SWITCH_CONFIG_HOT";
 BaseFunc._changeCfgs = {};
 BaseFunc.exportType_Old = 1;
 BaseFunc.exportType_New = 2;
-BaseFunc.exportType = BaseFunc.exportType_Old;
+BaseFunc.exportType = BaseFunc.exportType_New;
 BaseFunc.streamType_DelHead = 1;
 BaseFunc.streamType_ShortHead = 2;
 BaseFunc.hotCfg = {};
@@ -22,10 +22,7 @@ function BaseFunc.onConfigGroupLoadComplete()
     end
     BaseFunc.globalCfgsHasLoad = true
     local congfigName = BaseFunc._globalConfigsName
-    if GameUtils.isReview then
-        congfigName = BaseFunc._globalConfigsReviewName
-    end
-    BaseFunc._globalConfigMap = require("globalCfgs.lua")
+    BaseFunc._globalConfigMap = require("cfg.globalCfgs")
     local hotCfg = GameSwitch.getSwitchMap()[BaseFunc.SWITCH_CONFIG_HOT]
     if hotCfg and hotCfg ~= "" then
         local rt,meg = pcall(TableUtils.safelyJsonParse,hotCfg);
@@ -45,6 +42,7 @@ function BaseFunc.onConfigGroupLoadComplete()
                 end
         )
     end
+    BaseFunc.onTranslateGroupLoadComplete();
     Message.getInstance():send(MsgCMD.LOAD_JSONCOMPLETE)
 end
 
@@ -155,7 +153,8 @@ function BaseFunc:insertOneCfgs(path, ignoreNoExist)
     end
     path = BaseFunc.turnPath(path)
     if BaseFunc.isMergeConfig then
-        self._allCfgs[path] = BaseFunc.getGlobalCfg(path, ignoreNoExist)
+        local cfg = BaseFunc.getGlobalCfg(path, ignoreNoExist)
+        self._allCfgs[path] = cfg
     end
 end
 
@@ -177,7 +176,7 @@ function BaseFunc:getAllCfgData(cfgsName, ignoreError)
     end
     if BaseFunc.exportType == BaseFunc.exportType_New then
         local itemData = cfgs.d
-        if not itemData or #Object:keys(itemData) == 0 then
+        if not itemData or table.length(itemData) == 0 then
             BaseFunc._changeCfgs[cfgsName] = {}
             if BaseFunc.hotCfg and BaseFunc.hotCfg[cfgsName] then
                 cfgs = BaseFunc.hotCfg and BaseFunc.hotCfg[cfgsName]

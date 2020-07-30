@@ -5,4 +5,10 @@ unpack = unpack or table.unpack
 require("framework.init")
 require("battle.init")
 require("sys.consts.init")
-require("sys.views.init")
+require("sys.func.init")
+require("sys.view.init")
+
+BaseFunc.onConfigGroupLoadComplete()
+
+--local a = BattleFunc.getInstance():getAllCfgData("AttributeList")
+--local str = TableUtils.safelyJsonStringfy(a);

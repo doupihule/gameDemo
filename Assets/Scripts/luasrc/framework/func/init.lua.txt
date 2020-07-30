@@ -6,5 +6,5 @@ local packageName = "framework.func."
 require(packageName .. "BaseFunc")
 require(packageName .. "TranslateFunc")
 require(packageName .. "WhiteListFunc")
-
+require(packageName .. "GlobalParamsFunc")
 
