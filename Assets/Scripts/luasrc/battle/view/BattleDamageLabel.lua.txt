@@ -20,7 +20,7 @@ function BattleDamageLabel:setValue(kind, value)
     self._cfgs = BattleDamageLabel._labelCfgs[kind]
     local cfg = self._cfgs
     local scale = cfg.scale or 1
-    self:scale(scale, scale)
+    self:setScale(scale, scale)
     self._baseUrl = "uisource/txt/txt/battle_txt_" .. self._cfgs.name
     if kind == BattleConst.effect_label_miss then
         self._headLabel = self:updateLabel("", 0, 0, self._headLabel)

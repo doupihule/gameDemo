@@ -81,7 +81,7 @@ function BattleTweenControler:updateOneTween(tweenInfo)
         if mode == 1 then
             instance:setViewScale(scale)
         else
-            instance:scale(scale, scale)
+            instance:setScale(scale, scale)
         end
     end
     if self:checkHasType(type, BattleConst.TWEEN_ALPHA) then

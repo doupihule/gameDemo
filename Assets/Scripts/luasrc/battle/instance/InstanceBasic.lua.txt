@@ -151,7 +151,7 @@ function InstanceBasic:setRotationRad(value)
 end
 
 function InstanceBasic:setViewWay(value)
-    if (self._viewWay == value and self._myView) and self._myView.scaleX == self.viewScale * self._viewWay then
+    if (self._viewWay == value and self._myView) and self._myView:getScale().x == self.viewScale * self._viewWay then
         return
     end
     self._viewWay = value
@@ -313,12 +313,12 @@ function InstanceBasic:onSetToCache()
         if view.stop then
             view:stop()
         end
-        view:scale(1, 1, true)
+        view:setScale(1, 1)
     end
     if self._myView2 then
         self._myView2:removeSelf()
         self._myView2:stop()
-        view:scale(1, 1, true)
+        view:setScale(1, 1)
     end
     self.controler:clearCallBack(self)
     self.useState = BattleConst.instance_use_cache

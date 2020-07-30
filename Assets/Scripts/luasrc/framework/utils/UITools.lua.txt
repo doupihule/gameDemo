@@ -29,6 +29,12 @@ function UITools.setUIViewScale(instance, sx, sy)
     tansform.localScale = tempScaleVec3;
 end
 
+function UITools.getUIViewScale(instance)
+    local gameobj = instance.__cobject or instance
+    local tansform = gameobj:GetComponent("RectTransform");
+    return tansform.localScale
+end
+
 --设置透明度
 function UITools.setViewAlpha(instance,alpha)
 
@@ -138,6 +144,7 @@ function UITools.bindUIFunc(luaInstance)
     luaInstance.setRotation = UITools.setUIViewRotation
     --缩放
     luaInstance.setScale = UITools.setUIViewScale
+    luaInstance.getScale = UITools.getUIViewScale
     --获取2d坐标 只能用x,y
     luaInstance.get2dPos = UITools.getUIViewPos
 

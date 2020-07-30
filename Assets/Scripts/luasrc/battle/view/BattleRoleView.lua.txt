@@ -1,4 +1,4 @@
-BattleRoleView = class('BattleRoleView')
+BattleRoleView = class('BattleRoleView',BaseContainer)
 
 function BattleRoleView:ctor(viewName, scale, viewIndex)
     if scale == nil then
@@ -98,7 +98,7 @@ function BattleRoleView:sortChildView()
             local shaderView = self._shadeViewArr[i + 1]
             if not shaderView then
                 shaderView = UITools.createUIImage(ResourceConst.BATTLE_SHADE)
-                shaderView:scale(self._shadeScale, self._shadeScale, true)
+                shaderView:setScale(self._shadeScale, self._shadeScale)
                 shaderView.anchorX = 0.5
                 shaderView.anchorY = 0.5
                 self:addChildAt(shaderView, 0)
@@ -112,20 +112,16 @@ function BattleRoleView:sortChildView()
 end
 
 function BattleRoleView:cloneOneChildAni()
-    local ani = DisplayUtils.createSkeletonExpand(self._viewName, self._aniMode)
-    ani:scale(self._viewScale, self._viewScale)
+    local ani = DisplayUtils.createSpine(self._viewName)
+    ani:setScale(self._viewScale, self._viewScale)
     table.insert(self._childViewArr, ani)
-    if self._viewIndex > 0 then
-        local spinePath = ResourceManager.getSpinePath(self._viewName)
-        ani:changWholeViewTexture(spinePath + self._viewName .. "_" .. self._viewIndex .. ".png")
-    end
     self:addChild(ani)
     return ani
 end
 
 function BattleRoleView:setItemViewScale(scale)
     self._viewScale = scale
-    self.currentAni:scale(scale, scale)
+    self.currentAni:setScale(scale, scale)
 end
 
 function BattleRoleView:stop()

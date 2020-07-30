@@ -147,7 +147,7 @@ function InstanceEffect:checkLineFollowTarget()
     if tweenFrame > 0 then
         scale = scale * 1 - tweenFrame / self.expandParams.totalFrame
     end
-    self._myView:scale(scale, 1, true)
+    self._myView:setScale(scale, 1)
     self.expandParams.frame = self.expandParams.frame - 1
 end
 

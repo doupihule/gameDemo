@@ -53,7 +53,7 @@ function BattleMapControler:createDecoration(arr, firstName, ctn)
             imageUrl1 = "map/" .. firstName .. "/" .. firstName .. "/" .. info.pic .. ".png"
         end
         local image = UITools.createUIImage()
-        image:scale(info.scale / 10000, info.scale / 10000)
+        image:setScale(info.scale / 10000, info.scale / 10000)
         ctn:addChild(image)
         table.insert(self._mapInfo.decorateArr, { view = image })
         if self.startMapIndex ~= 1 then
@@ -93,10 +93,10 @@ function BattleMapControler:createOneView(firstName, index, mapId, mpInfo)
     local image = UITools.createUIImage()
     if UserInfo.isSystemNative() then
         imageUrl1 = "map/" .. firstName .. "/" .. name .. ".png"
-        image:scale(1 + 2 / 256, 1)
+        image:setScale(1 + 2 / 256, 1)
     else
         imageUrl1 = "map/" .. firstName .. "/" .. firstName .. "/" .. name .. ".png"
-        image:scale(2 * 1 + 2 / 128, 2)
+        image:setScale(2 * 1 + 2 / 128, 2)
     end
     mpInfo.ctn:addChild(image)
     local posIndex = index - 1 * 2

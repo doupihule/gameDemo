@@ -454,7 +454,7 @@ function BattleLogicalControler:createShade()
         sp.anchorY = 0.5
     end
     sp.visible = true
-    sp:scale(1, 1)
+    sp:setScale(1, 1)
     return sp
 end
 
