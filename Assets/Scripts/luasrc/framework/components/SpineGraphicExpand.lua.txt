@@ -5,6 +5,7 @@ SpineGraphicExpand = class("SpineGraphicExpand",LuaBaseView)
 SpineGraphicExpand.__spineAni = nil
 --构造器函数
 function SpineGraphicExpand:ctor(name, boundlePath)
+    SpineGraphicExpand.super.ctor(self)
     if(not boundlePath) then boundlePath = name end
     self:setCObject(ResourceManager.loadSpinePrefab(name,boundlePath))
     self.__spineAni = self.__cobject:GetComponent("SkeletonGraphic")

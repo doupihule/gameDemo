@@ -4,15 +4,21 @@
 GlobalEnv = {
     _stage = nil,    -- c#的main
     stage = nil ,      --舞台的luaview
+    _uiRoot =nil,      --uiroot object
+    uiRoot =nil,        --uiroot的luaview
 }
 
 function GlobalEnv.initStage()
+    --舞台的stage
     GlobalEnv.stage = LuaBaseView.bindOneCObjet(GlobalEnv._stage);
+    --uiroot
+    GlobalEnv.uiRoot = LuaBaseView.bindOneCObjet(GlobalEnv._uiRoot);
 end
 
 --获取舞台CBaseView
 function GlobalEnv.getStage()
     return GlobalEnv.stage
 end
+
 
 return GlobalEnv

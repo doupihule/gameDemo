@@ -13,23 +13,17 @@ BaseFunc.onConfigGroupLoadComplete()
 --延迟一帧才能初始化舞台.因为main.lua初始函数里 舞台还没被赋值
 local tempFunc = function()
     --初始化舞台
+    print("11111111111111")
     GlobalEnv.initStage()
+
     --准备进入游戏
+    local img = UITools.createUIImage("Assets/UI/UIRes/common/common_icon_jinbi","uiimage");
+    GlobalEnv.uiRoot:addChild(img);
+    img:setPos(100,300);
+    img:setScale(3,3);
 
 end
 
-
-local t1 = {v=1};
-local t2 = {v=2};
-local t3 = {v=3};
-local t4 = {v=4};
-local map = {};
-map[t1] = t3;
-map[t2] = t4;
-
-for i, v in pairs(map) do
-    print(i.v,v.v,"___aaa")
-end
 
 
 TimerManager.getInstance():add(tempFunc,null,1,1);

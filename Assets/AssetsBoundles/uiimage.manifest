@@ -1,0 +1,49 @@
+ManifestFileVersion: 0
+CRC: 927341947
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: fde61e4ecedd8093fc3ecb0942618316
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ea5a42e0fd8ea905efa7aa926a3b8944
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/UI/UIRes/common/video_image_shipin.png
+- Assets/UI/UIRes/common/login_box.png
+- Assets/UI/UIRes/common/common_image_dihui.png
+- Assets/UI/UIRes/common/common_image_dilv.png
+- Assets/UI/UIRes/common/common_image_shade.png
+- Assets/UI/UIRes/common/common_image_baidi.png
+- Assets/UI/UIRes/common/common_bt_anniulan.png
+- Assets/UI/UIRes/common/common_image_di.png
+- Assets/UI/UIRes/common/common_bt_guanbi.png
+- Assets/UI/UIRes/common/common_image_shipin.png
+- Assets/UI/UIRes/common/common_icon_tili.png
+- Assets/UI/UIRes/common/result_image_tkdi.png
+- Assets/UI/UIRes/common/common_image_dilan.png
+- Assets/UI/UIRes/common/hero_icon_fenxiang.png
+- Assets/UI/UIRes/common/hero_image_dengjidi.png
+- Assets/UI/UIRes/common/common_bt_fang.png
+- Assets/UI/UIRes/common/common_bt_lv.png
+- Assets/UI/UIRes/common/common_bg_tankuangdi.png
+- Assets/UI/UIRes/common/common_image_heidi.png
+- Assets/UI/UIRes/common/common_bt_anniuhuang.png
+- Assets/UI/UIRes/common/main_image_biaoti.png
+- Assets/UI/UIRes/common/common_icon_zuanshi.png
+- Assets/UI/UIRes/common/common_bt_cheng.png
+- Assets/UI/UIRes/common/common_image_dizi.png
+- Assets/UI/UIRes/common/common_image_dicheng.png
+- Assets/UI/UIRes/common/common_icon_jinbi.png
+- Assets/UI/UIRes/common/common_image_landi.png
+- Assets/UI/UIRes/common/common_btn_guanbi.png
+- Assets/UI/UIRes/common/common_bt_anniulv.png
+- Assets/UI/UIRes/common/main_icon_shipin.png
+- Assets/UI/UIRes/common/common_image_fenxiang.png
+- Assets/UI/UIRes/common/common_bt_anniuhui.png
+Dependencies: []

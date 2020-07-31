@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1661025607
+CRC: 581078009
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: f6d0aff30ec753ba1449a6d8e03e047d
+    Hash: d4d2045311dfe098ecd7d5ac8f73accd
   TypeTreeHash:
     serializedVersion: 2
     Hash: 01bd5aa1e4b1c3aab91f2fb40ac790ce
@@ -37,4 +37,5 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/UI/Prefabs/main/GameMainUI.prefab
-Dependencies: []
+Dependencies:
+- C:/work/unity/gameDemo/Assets/AssetsBoundles/uiimage

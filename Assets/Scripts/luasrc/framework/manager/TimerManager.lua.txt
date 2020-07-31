@@ -20,6 +20,7 @@ function TimerManager.getInstance()
 end
 
 function TimerManager:add(callBack, thisObject, delay, maxCount, immediate, args)
+    print("addvalue",delay)
     if delay == nil then
         delay = 1000
     end
@@ -145,7 +146,7 @@ function TimerManager:updateFrame()
     local curTime = Client.getInstance():getMiniServerTime()
     local num = 0
     for i,timeEntity in pairs(self._timeMap) do
-        timeEntity = self._timeMap[i]
+        local  timeEntity = self._timeMap[i]
         local isRemove = false
         num = math.floor((curTime - timeEntity.oldTime) / timeEntity.delay)
         if num > 0 then
@@ -164,6 +165,7 @@ function TimerManager:updateFrame()
                 doJsApplyFunc(callBack, thisObject, { num })
             end
         end
+        print("_____keyend:",i)
     end
     return true
 end

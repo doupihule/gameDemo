@@ -66,40 +66,6 @@ function LogsManager.systemError(message, ...)
 end
 
 function LogsManager.sendErrorToPlatform(errorStr, tag, maxLength, errorId, logLength, startLine, pieceLength, sendCount)
-    if tag == nil then
-        tag = ''
-    end
-    if maxLength == nil then
-        maxLength = 1000
-    end
-    if errorId == nil then
-        errorId = nil
-    end
-    if logLength == nil then
-        logLength = 80
-    end
-    if startLine == nil then
-        startLine = 0
-    end
-    if pieceLength == nil then
-        pieceLength = 60
-    end
-    if sendCount == nil then
-        sendCount = 1
-    end
-    local id = 0
-    while (logLength > pieceLength)
-    do
-        LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorId, pieceLength, startLine, id + 1, sendCount)
-        logLength = logLength - pieceLength
-        startLine = startLine + pieceLength
-        id = id + 1
-    end
-    if id then
-        LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorId, logLength, startLine, id + 1, sendCount)
-    else
-        LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorId, logLength, startLine, 0, sendCount)
-    end
 end
 
 function LogsManager.sendErrorToPlatformByPiece(errorStr, tag, maxLength, errorId, logLength, startLine, id, sendCount)

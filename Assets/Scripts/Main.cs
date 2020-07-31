@@ -2,11 +2,11 @@
 using UnityEditor;
 using XLua;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 //using Resource;
 using Spine.Unity;
 using Resource;
 using System;
-[LuaCallCSharp]
 public class Main : MonoBehaviour
 {
     static Main instance;
@@ -19,8 +19,10 @@ public class Main : MonoBehaviour
         instance = this;
         XLuaBridge.Init();
         LuaTable globalEnv = XLuaBridge.GetInstance().XLuaGetLuaInstance("GlobalEnv");
-        globalEnv.Set("_stage", this);
-        ResourceManager.Instance.Init(gameObject);
+        GameObject b = GameObject.Find("uiRoot");
+        globalEnv.Set("_uiRoot", b);
+        globalEnv.Set("_stage", this.gameObject);
+        ResourceManager.Instance.Init(this.gameObject);
 
         GameObject a = ResourceManager.Instance.LoadAsset<GameObject>("Assets/UI/Prefabs/main/GameMainUI.prefab", "Assets/UI/Prefabs/main/GameMainUI.prefab", "mainab");
 

@@ -18,3 +18,15 @@ function ResourceManager.loadSpinePrefab(name,boundlename)
     return CS.UnityEngine.Object.Instantiate(obj)
 end
 
+--加载Sprite图片
+function ResourceManager.loadSprite(imageurl,boundlename)
+    local path = imageurl ..".png"
+    print("path:",path)
+    local sp = CS.Resource.ResourceManager.Instance:luaLoadAsset(path, path, boundlename);
+    if(not sp)then
+        LogsManager.errorTag("spriteError",path.."加载失败");
+        return nil
+    end
+    return CS.UnityEngine.Object.Instantiate(sp)
+end
+

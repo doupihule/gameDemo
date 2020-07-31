@@ -32,7 +32,6 @@ namespace XLua
             // Need be invoked before luaAwake()
             XLuaHelper.FillCompoents(luaTable, gameObject, "{0}");
             GameObject child = GameObject.Find("testButton");
-            Image img = GetComponent<Image>();
 
             RectTransform a= child.GetComponent<RectTransform>();
             GetFunction();

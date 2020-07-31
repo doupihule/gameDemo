@@ -2,12 +2,10 @@ BaseContainer = class("LuaBaseView",LuaBaseView)
 
 --基础容器
 function BaseContainer:ctor()
-    local instance = ResourceManager.loadUIPrefab("base/SpriteContainer.prefab", "baseab");
+    BaseContainer.super.ctor(self)
+    local instance = ResourceManager.loadUIPrefab("base/SpriteContainer", "baseab");
     self:setCObject(instance);
+
 end
-
-
-
-
 
 return BaseContainer
