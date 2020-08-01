@@ -90,35 +90,19 @@ function BattleMapControler:createOneView(firstName, index, mapId, mpInfo)
     local path = nil
     name = firstName .. "_0" .. mapId
     path = "map/" .. firstName .. "/" .. name
-    local image = UITools.createUIImage()
-    if UserInfo.isSystemNative() then
-        imageUrl1 = "map/" .. firstName .. "/" .. name .. ".png"
-        image:setScale(1 + 2 / 256, 1)
-    else
-        imageUrl1 = "map/" .. firstName .. "/" .. firstName .. "/" .. name .. ".png"
-        image:setScale(2 * 1 + 2 / 128, 2)
-    end
+    imageUrl1 = "Assets/Images/map/" .. firstName .. "/" .. name
+    local image = UITools.createUIImage(imageUrl1,"map");
     mpInfo.ctn:addChild(image)
     local posIndex = index - 1 * 2
     local xpos = posIndex * self._areaWidth - self._smallMapCount * 256
     if mapId == 5 then
         self._smallMapCount = self._smallMapCount + 1
     end
-    image.anchorX = 0
-    image.anchorY = mpInfo.anchor
-    image.x = xpos
-    image.y = 0
+    image:setViewPivot(0,mpInfo.anchor);
+    image:setPos(xpos,0);
     local viewInfo = { view = image }
     table.insert(mpInfo.infoArr, viewInfo)
-    local onMapComplete = function()
-        image.skin = imageUrl1
-    end
 
-    if SubPackageManager.getPackStyle(SubPackageConst.packName_map) == SubPackageConst.PATH_STYLE_SUBPACK then
-        SubPackageManager.loadDynamics(firstName, path, onMapComplete, self)
-    else
-        onMapComplete()
-    end
     LogsManager.echo("id:", mapId, "pos:", xpos)
 end
 

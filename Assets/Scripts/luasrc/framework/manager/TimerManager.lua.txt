@@ -1,6 +1,8 @@
 TimerManager = class('TimerManager')
 
 TimerManager.timeOurOffset = 8;
+
+
 function TimerManager:ctor()
     self.timeCount = 0;
     self._timeMap = {};
@@ -10,6 +12,7 @@ function TimerManager:ctor()
     self._oneFrameDt = 1000 / GameConsts.gameFrameRate;
     self.updateCallFuncGroup = {};
     self.callFuncNums = 0;
+    self.hasAddTime = false;
 end
 
 function TimerManager.getInstance()
@@ -20,7 +23,7 @@ function TimerManager.getInstance()
 end
 
 function TimerManager:add(callBack, thisObject, delay, maxCount, immediate, args)
-    print("addvalue",delay)
+    self.hasAddTime = true
     if delay == nil then
         delay = 1000
     end
@@ -142,6 +145,7 @@ end
 
 function TimerManager:updateFrame()
     self:onceUpdateFrame()
+
     local timeEntity = nil
     local curTime = Client.getInstance():getMiniServerTime()
     local num = 0
@@ -164,9 +168,12 @@ function TimerManager:updateFrame()
             else
                 doJsApplyFunc(callBack, thisObject, { num })
             end
+            if(self.hasAddTime) then
+                break
+            end
         end
-        print("_____keyend:",i)
     end
+    self.hasAddTime = false;
     return true
 end
 

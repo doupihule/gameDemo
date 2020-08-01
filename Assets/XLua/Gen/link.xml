@@ -7,6 +7,7 @@
 		<type fullname="XLua.LuaBehaviour" preserve="all"/>
 		<type fullname="XLua.UILuaBehaviour" preserve="all"/>
 		<type fullname="XLua.XLuaHelper" preserve="all"/>
+		<type fullname="GameUtils.CommonUtil" preserve="all"/>
 		<type fullname="GameUtils.ExtensionMethods" preserve="all"/>
 		<type fullname="Resource.ResourceManager" preserve="all"/>
 		<type fullname="Main" preserve="all"/>
@@ -139,7 +140,6 @@
 		<type fullname="GameUtils.AESUtil" preserve="all"/>
 		<type fullname="GameUtils.ByteStreamReader" preserve="all"/>
 		<type fullname="GameUtils.ByteStreamWriter" preserve="all"/>
-		<type fullname="GameUtils.CommonUtil" preserve="all"/>
 		<type fullname="GameUtils.CRC32" preserve="all"/>
 		<type fullname="GameUtils.DebugToScreen" preserve="all"/>
 		<type fullname="GameUtils.DebugUtils" preserve="all"/>

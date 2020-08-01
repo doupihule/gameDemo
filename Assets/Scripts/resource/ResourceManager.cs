@@ -231,7 +231,10 @@ namespace Resource
         {
             return LoadAsset<GameObject>(assetName, path, bundleName);
         }
-
+        public Sprite luaLoadSpriteAsset(string assetName, string path = null, string bundleName = null)
+        {
+            return LoadAsset<Sprite>(assetName, path, bundleName);
+        }
 
         public T LoadAsset<T>( string assetName, string path = null, string bundleName = null ) where T : UObject
         {

@@ -24,7 +24,7 @@ function BattleDamageLabel:setValue(kind, value)
     self._baseUrl = "uisource/txt/txt/battle_txt_" .. self._cfgs.name
     if kind == BattleConst.effect_label_miss then
         self._headLabel = self:updateLabel("", 0, 0, self._headLabel)
-        self._headLabel.anchorX = 0.5
+        self._headLabel:setViewPivot(0.5,0.5);
     else
         if value < 1 then
             value = 1
@@ -102,8 +102,7 @@ end
 function BattleDamageLabel:updateLabel(key, x, y, label)
     if not label then
         label = UITools.createUIImage()
-        label.anchorX = 0
-        label.anchorY = 0.5
+        label:setViewPivot(0,0.5)
         self:addChild(label)
     else
         label.visible = true

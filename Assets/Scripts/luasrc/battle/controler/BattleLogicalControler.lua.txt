@@ -450,8 +450,7 @@ function BattleLogicalControler:createShade()
     local sp = PoolTools.getItem(PoolCode.POOL_SHADE)
     if not sp then
         sp = UITools.createUIImage(ResourceConst.BATTLE_SHADE)
-        sp.anchorX = 0.5
-        sp.anchorY = 0.5
+        sp:setViewPivot(0.5,0.5);
     end
     sp.visible = true
     sp:setScale(1, 1)

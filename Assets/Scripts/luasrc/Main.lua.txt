@@ -1,5 +1,5 @@
 package.cpath = package.cpath .. ';C:/Users/doupi/.WebStorm2019.3/config/plugins/intellij-emmylua/classes/debugger/emmy/windows/x64/?.dll'
-local dbg = require('emmy_core')
+--local dbg = require('emmy_core')
 --dbg.tcpConnect('localhost', 9966)
 unpack = unpack or table.unpack
 require("framework.init")
@@ -19,9 +19,7 @@ local tempFunc = function()
     --准备进入游戏
     local img = UITools.createUIImage("Assets/UI/UIRes/common/common_icon_jinbi","uiimage");
     GlobalEnv.uiRoot:addChild(img);
-    img:setPos(100,300);
-    img:setScale(3,3);
-
+    local size = img:getViewRect();
 end
 
 

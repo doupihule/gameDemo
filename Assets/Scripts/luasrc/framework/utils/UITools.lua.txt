@@ -1,38 +1,65 @@
 UITools = {};
 local tempVec2 = CS.UnityEngine.Vector2(0, 0)
+
+--获取recttransform  对于ui  recttransform 和 transform是同一个对象
+function UITools.getViewRectTransform(instance)
+    local gameobj = instance.__cobject or instance
+    local tansform = gameobj:GetComponent("Transform");
+    return tansform
+end
+
 --设置 视图坐标obj是 GameObject对象
 function UITools.setUIViewPos(instance, x, y)
-    local gameobj = instance.__cobject or instance
-    local tansform = gameobj:GetComponent("RectTransform");
-    -- tansform.TransformPoint(x,y,0);
+    local tansform =UITools.getViewRectTransform(instance)
     tempVec2.x = x;
     tempVec2.y = y;
     tansform.anchoredPosition = tempVec2
 end
 
+--获取view的rect x,y,width,height
+function UITools.getViewRect(instance)
+    return UITools.getViewRectTransform(instance).rect
+end
+
+--设置view的尺寸
+function UITools.setViewSize(instance,wid,hei)
+    local tansform = UITools.getViewRectTransform(instance)
+    print("wid:",wid,hei)
+    tempVec2.x = wid;
+    tempVec2.y = hei;
+
+    tansform.sizeDelta = tempVec2;
+end
+
+--设置view 旋转中心
+function UITools.setViewPivot(instance,px,py)
+    local tansform = UITools.getViewRectTransform(instance)
+    print("wid:",wid,hei)
+    tempVec2.x = px;
+    tempVec2.y = py;
+    tansform.pivot = tempVec2;
+end
+
+
 
 --获取view的坐标
 function UITools.getUIViewPos(instance)
-    local gameobj = instance.__cobject or instance
-    local tansform = gameobj:GetComponent("RectTransform");
-    return tansform.anchoredPosition
+    return UITools.getViewRectTransform(instance).anchoredPosition
 end
+
 
 local tempScaleVec3 = CS.UnityEngine.Vector3(1, 1, 1)
 
 --设置obj缩放
 function UITools.setUIViewScale(instance, sx, sy)
-    local gameobj = instance.__cobject or instance
-    local tansform = gameobj:GetComponent("RectTransform");
+    local tansform = UITools.getViewRectTransform(instance)
     tempScaleVec3.x = sx;
     tempScaleVec3.y = sy;
     tansform.localScale = tempScaleVec3;
 end
 
 function UITools.getUIViewScale(instance)
-    local gameobj = instance.__cobject or instance
-    local tansform = gameobj:GetComponent("RectTransform");
-    return tansform.localScale
+    return UITools.getViewRectTransform(instance).localScale
 end
 
 --设置透明度
@@ -43,8 +70,7 @@ end
 local tempRotateVec3 = CS.UnityEngine.Vector3(0, 0, 1)
 --设置obj旋转 角度
 function UITools.setUIViewRotation(instance, r)
-    local gameobj = instance.__cobject or instance
-    local tansform = gameobj:GetComponent("RectTransform");
+    local tansform = UITools.getViewRectTransform(instance)
     tempRotateVec3.z = r;
     tansform.eulerAngles = tempRotateVec3
 end
@@ -53,20 +79,9 @@ end
 
 --添加子对象方法
 function UITools.addChild(self, childLuaInstance, index)
-
-    local gameObject = self.__cobject
-    if (not gameObject) then
-        gameObject = self
-    end ;
-
-    local selfTransform = gameObject:GetComponent("RectTransform");
+    local selfTransform = UITools.getViewRectTransform(self)
     --如果传递的是 luaobject
-    local childTransform
-    if (childLuaInstance.__cobject) then
-        childTransform = childLuaInstance.__cobject:GetComponent("RectTransform");
-    else
-        childTransform = childLuaInstance:GetComponent("RectTransform");
-    end
+    local childTransform = UITools.getViewRectTransform(childLuaInstance)
     childTransform:SetParent(selfTransform, false)
     --设置parent
     if (index ~= nil and index >= 0) then
@@ -78,11 +93,7 @@ end
 
 --移除所有子对象
 function UITools.removeAllChild  (self)
-    local gameObject = self.__cobject
-    if (not gameObject) then
-        gameObject = self
-    end
-    local transform = gameObject.transform;
+    local transform = UITools.getViewRectTransform(self)
     local childCount = transform.childCount
     for i = childCount, 1, -1 do
         local childTransform = transform:GetChild(i)
@@ -92,12 +103,8 @@ end
 
 --获取子对象后最好建一个变量自己存起来.不要频繁调用.  原则上所有的调用c#的接口都不要频繁使用
 function UITools.getChildAt (self,index)
-    local gameObject = self.__cobject
-    if (not gameObject) then
-        gameObject = self
-    end ;
-    local transform = gameObject.transform;
-    local childTransform = transform:GetChild(i)
+    local transform = UITools.getViewRectTransform(self)
+    local childTransform = transform:GetChild(index)
     if(childTransform) then
         return  LuaBaseView.bindOneCObjet(childTransform.gameObject )
     end
@@ -106,34 +113,18 @@ end
 
 --获取childbyname
 function UITools.getChildByName(self,name)
-    local gameObject = self.__cobject
-    if (not gameObject) then
-        gameObject = self
-    end
-    local transform = gameObject.transform;
+    local transform = UITools.getViewRectTransform(self)
     local childTransform = transform:Find(name)
     if(childTransform) then
         return  LuaBaseView.bindOneCObjet(childTransform.gameObject )
     end
-    --local childCount = transform.childCount
-    --for i = childCount, 1, -1 do
-    --    local childTransform = transform:GetChild(i)
-    --    if(childTransform.name == name)then
-    --        return LuaBaseView.bindOneCObjet(childTransform.gameObject )
-    --    end
-    --end
     return nil
 end
 
 
 --移除子对象方法
 function UITools.removeChild (self, childLuaInstance)
-    local childTransform
-    if (childLuaInstance.__cobject) then
-        childTransform = childLuaInstance.__cobject:GetComponent("RectTransform");
-    else
-        childTransform = childLuaInstance:GetComponent("RectTransform");
-    end
+    local childTransform = UITools.getViewRectTransform(childLuaInstance)
     childTransform:SetParent(nil)
 end
 
@@ -150,8 +141,6 @@ function UITools.removeChildAt (self, index)
         UITools.removeChild(self,childView);
     end
 end
-
-
 
 --给一个绑定通用函数
 function UITools.bindUIFunc(luaInstance)
@@ -172,6 +161,9 @@ function UITools.bindUIFunc(luaInstance)
     luaInstance.getScale = UITools.getUIViewScale
     --获取2d坐标 只能用x,y
     luaInstance.get2dPos = UITools.getUIViewPos
+    luaInstance.getViewRect = UITools.getViewRect
+    luaInstance.setViewSize = UITools.setViewSize
+    luaInstance.setViewPivot = UITools.setViewPivot
 
 end
 
@@ -189,8 +181,14 @@ end
 --创建ui图片
 function UITools.createUIImage(url,boundlename)
     local imgCtn = UITools.createUICtn();
+
     local img =  imgCtn.__cobject:GetComponent("Image");
-    img.sprite = ResourceManager.loadSprite(url,boundlename);
+    local sprite = ResourceManager.loadSprite(url,boundlename);
+    local size =sprite.bounds.size
+    img.sprite = sprite;
+    print("sprietsize",size.x*100,size.y*100)
+    imgCtn:setViewSize(math.round( size.x*100),math.round( size.y*100) )
+    local size = imgCtn:getViewRect();
     return imgCtn;
 end
 

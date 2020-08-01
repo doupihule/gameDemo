@@ -671,7 +671,8 @@ end
 
 --四舍五入
 function math.round(value)
-    value = math.floor(value + 0.5)
+    return  math.floor(value + 0.5)
+
 end
 
 

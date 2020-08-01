@@ -22,7 +22,7 @@ end
 function ResourceManager.loadSprite(imageurl,boundlename)
     local path = imageurl ..".png"
     print("path:",path)
-    local sp = CS.Resource.ResourceManager.Instance:luaLoadAsset(path, path, boundlename);
+    local sp = CS.Resource.ResourceManager.Instance:luaLoadSpriteAsset(path, path, boundlename);
     if(not sp)then
         LogsManager.errorTag("spriteError",path.."加载失败");
         return nil
