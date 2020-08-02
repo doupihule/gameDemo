@@ -67,8 +67,7 @@ function InstancePerformance:doShadeFollow()
     if not self._shade then
         return
     end
-    self._shade.x = self.pos.x + self.shadeOffestX
-    self._shade.y = self.pos.z
+    self._shade:setPos(self.pos.x + self.shadeOffestX,self.pos.z)
 end
 
 function InstancePerformance:createShade()
@@ -87,8 +86,7 @@ function InstancePerformance:createShade()
         self._shade:addChild(childShade)
     end
     self.controler.layerControler.a21:addChild(self._shade)
-    self._shade.x = self.pos.x
-    self._shade.y = self.pos.z
+    self._shade:setPos(self.pos.x,self.pos.z)
 end
 
 function InstancePerformance:setViewName(value)

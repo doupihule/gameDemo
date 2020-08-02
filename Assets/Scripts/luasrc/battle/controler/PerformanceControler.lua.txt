@@ -133,7 +133,7 @@ function PerformanceControler:showBlackScreen(targetRole, lastFrame, useArr)
     end
     self.controler:forceSortChildren()
     self.controler.isSkillPause = true
-    self.blackScreen.x = -self.controler.layerControler.a2.x - 300
+    self.blackScreen:setPos( -self.controler.layerControler.a2.x - 300,0)
     self.controler:clearCallBack(self, self.hideBlackScreen)
     self.blackScreen.visible = true
     if lastFrame > 0 then

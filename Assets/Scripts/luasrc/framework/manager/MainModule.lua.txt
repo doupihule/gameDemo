@@ -165,9 +165,7 @@ end
 function MainModule:reStartGame()
 end
 function MainModule:initLayer()
-    WindowManager.rootLayer = UITools.createUICtn()
-    WindowManager.rootLayer.x = WindowManager.rootLayer.x + ScreenAdapterTools.sceneOffsetX
-    WindowManager.rootLayer.y = WindowManager.rootLayer.y + ScreenAdapterTools.sceneOffsetY
+    WindowManager.rootLayer = GlobalEnv.uiRoot
     WindowManager.commonUILayer = UITools.createUICtn()
     WindowManager.commonUILayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
     WindowManager.rootLayer:addChild(WindowManager.commonUILayer)
@@ -234,10 +232,6 @@ function MainModule:onTTShow()
 end
 
 function MainModule:gameClose()
-    UtilsServer.exitGame({}, function()
-
-    end
-    , self)
 end
 
 function MainModule:playBGM()

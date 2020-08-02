@@ -167,8 +167,23 @@ function UITools.bindUIFunc(luaInstance)
 
 end
 
-local uiCtn = class("UI2DCtn");
+-- ---------------------------------------------------------------非绑定的函数
 
+
+--[[
+    adjustSize是否修正尺寸.默认不修正
+]]
+function UITools.setImageUrl(image,url,boundlename,adjustSize)
+
+    local gameObj = image.__cobject or image
+    local img =  gameObj:GetComponent("Image");
+    local sprite = ResourceManager.loadSprite(url,boundlename);
+    local size =sprite.bounds.size
+    img.sprite = sprite;
+    if(adjustSize)then
+        UITools.setViewSize(image,math.round( size.x*100),math.round( size.y*100))
+    end
+end
 
 --创建一个2dui 容器
 function UITools.createUICtn()
@@ -176,19 +191,10 @@ function UITools.createUICtn()
     return ctn
 end
 
-
-
 --创建ui图片
 function UITools.createUIImage(url,boundlename)
     local imgCtn = UITools.createUICtn();
-
-    local img =  imgCtn.__cobject:GetComponent("Image");
-    local sprite = ResourceManager.loadSprite(url,boundlename);
-    local size =sprite.bounds.size
-    img.sprite = sprite;
-    print("sprietsize",size.x*100,size.y*100)
-    imgCtn:setViewSize(math.round( size.x*100),math.round( size.y*100) )
-    local size = imgCtn:getViewRect();
+    UITools.setImageUrl(imgCtn,url,boundlename,true);
     return imgCtn;
 end
 
@@ -197,7 +203,6 @@ function UITools.createLabel(str)
     local img = UITools.createUICtn();
     return label;
 end
-
 
 return UITools
 

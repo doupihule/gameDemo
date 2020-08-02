@@ -44,11 +44,9 @@ end
 function RoleHealthBar:createImage(url, wid, hei)
     local image = UITools.createUIImage(url)
     image.sizeGrid = "1,3,1,3"
-    image.width = wid
-    image.height = hei
-    image.anchorX = 0
-    image.anchorY = 0.5
-    image.x = -wid / 2
+    image:setViewSize(wid,hei);
+    image:setViewPivot(0,0.5);
+    image:setPos(-wid / 2,0)
     return image
 end
 

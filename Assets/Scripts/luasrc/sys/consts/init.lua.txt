@@ -6,7 +6,7 @@
 local packageName = "sys.consts."
 require(packageName .. "BattleConst")
 require(packageName .. "GameConsts")
-
+require(packageName .. "ResourceConst")
 require(packageName .. "ChannelConst")
 require(packageName .. "GameSwitchConst")
 

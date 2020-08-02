@@ -23,7 +23,7 @@ function BattleMapControler:setData(sceneId)
     self._maxSceneWidth = sceneInfo.long
     self:setMapSize()
     local ctn1 = UITools.createUICtn()
-    ctn1.x = -ScreenAdapterTools.sceneOffsetX - ScreenAdapterTools.UIOffsetX - startOffest
+    ctn1:setPos(-ScreenAdapterTools.sceneOffsetX - ScreenAdapterTools.UIOffsetX - startOffest,0)
     self.controler.layerControler.a1:addChild(ctn1)
     self._mapInfo = { anchor = 0, infoArr = {},
                       decorateArr = {},
@@ -52,28 +52,27 @@ function BattleMapControler:createDecoration(arr, firstName, ctn)
         else
             imageUrl1 = "map/" .. firstName .. "/" .. firstName .. "/" .. info.pic .. ".png"
         end
-        local image = UITools.createUIImage()
+        local image = UITools.createUIImage(imageUrl1,ResourceConst.boundle_map);
         image:setScale(info.scale / 10000, info.scale / 10000)
         ctn:addChild(image)
         table.insert(self._mapInfo.decorateArr, { view = image })
+        local xpos ;
         if self.startMapIndex ~= 1 then
             local missWidth = self.startMapIndex - 1 * 256 * 2
             if tonumber(item[2]) - missWidth < 0 then
-                image.x = 256 * 9 - missWidth + tonumber(item[2])
+                xpos = 256 * 9 - missWidth + tonumber(item[2])
             else
-                image.x = tonumber(item[2]) - missWidth
+                xpos = tonumber(item[2]) - missWidth
             end
         else
-            image.x = tonumber(item[2])
+            xpos = tonumber(item[2])
         end
-        image.y = -tonumber(item[3])
-        image.skin = imageUrl1
+        image:setPos(xpos,-tonumber(item[3]))
     end
 end
 
 function BattleMapControler:destoryOneLayer(mapInfo)
     local infoArr = mapInfo.infoArr
-    local i = 0
     for i, v in ipairs(infoArr) do
         local view = v.view
         view:removeSelf()

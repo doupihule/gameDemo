@@ -10,10 +10,8 @@ require("sys.view.init")
 
 BaseFunc.onConfigGroupLoadComplete()
 
---延迟一帧才能初始化舞台.因为main.lua初始函数里 舞台还没被赋值
-local tempFunc = function()
-    --初始化舞台
-    print("11111111111111")
+--在c端调用
+__startGame= function()
     GlobalEnv.initStage()
 
     --准备进入游戏
@@ -22,6 +20,3 @@ local tempFunc = function()
     local size = img:getViewRect();
 end
 
-
-
-TimerManager.getInstance():add(tempFunc,null,1,1);

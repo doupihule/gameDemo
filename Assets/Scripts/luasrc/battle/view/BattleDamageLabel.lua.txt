@@ -107,10 +107,12 @@ function BattleDamageLabel:updateLabel(key, x, y, label)
     else
         label.visible = true
     end
+
     if key == "" then
         label.skin = self._baseUrl .. ".png"
+        UITools.setImageUrl(label,self._baseUrl)
     else
-        label.skin = self._baseUrl .. "_" .. key .. ".png"
+        UITools.setImageUrl(label,self._baseUrl.."_"..key)
     end
     label.x = x
     label.y = y

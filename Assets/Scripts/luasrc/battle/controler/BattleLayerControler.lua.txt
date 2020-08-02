@@ -8,8 +8,7 @@ function BattleLayerControler:ctor(controler, rootCtn)
     self.controler = controler
     self.rootCtn = rootCtn
     self.a = UITools.createUICtn()
-    self.a.x = ScreenAdapterTools.UIOffsetX
-    self.a.y = ScreenAdapterTools.UIOffsetY
+    self.a:setPos(ScreenAdapterTools.UIOffsetX,ScreenAdapterTools.UIOffsetY)
     self.a1 = UITools.createUICtn()
     self.a2 = UITools.createUICtn()
     self.a3 = UITools.createUICtn()
@@ -22,8 +21,6 @@ function BattleLayerControler:ctor(controler, rootCtn)
     self.a:addChild(self.a2)
     self.a:addChild(self.a3)
     self.a2:addChild(self.a2Offset)
-    self.a2Offset.x = 0
-    self.a2Offset.y = 0
     self.a2Offset:addChild(self.a21)
     self.a2Offset:addChild(self.a22)
     self.a2Offset:addChild(self.a23)
