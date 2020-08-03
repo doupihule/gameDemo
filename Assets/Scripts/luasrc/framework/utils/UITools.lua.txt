@@ -8,42 +8,83 @@ function UITools.getViewRectTransform(instance)
     return tansform
 end
 
---设置 视图坐标obj是 GameObject对象
-function UITools.setUIViewPos(instance, x, y)
+--设置 视图坐标obj是 GameObject对象 ,哪个值为nil表示读取当前值
+function UITools.setPos(instance, x, y)
     local tansform =UITools.getViewRectTransform(instance)
-    tempVec2.x = x;
-    tempVec2.y = y;
+    local lastpos;
+    if(x==nil) then
+        lastpos = UITools.get2dPos(instance);
+        tempVec2.x = lastpos
+    else
+        tempVec2.x =x;
+    end
+    if (y==nil)then
+        lastpos = UITools.get2dPos(instance);
+        tempVec2.y = lastpos;
+    else
+        tempVec2.y = y
+    end
     tansform.anchoredPosition = tempVec2
 end
+
+
+
 
 --获取view的rect x,y,width,height
 function UITools.getViewRect(instance)
     return UITools.getViewRectTransform(instance).rect
 end
 
---设置view的尺寸
+--设置view的尺寸 哪个值为nil表示读取当前值
 function UITools.setViewSize(instance,wid,hei)
     local tansform = UITools.getViewRectTransform(instance)
-    print("wid:",wid,hei)
-    tempVec2.x = wid;
-    tempVec2.y = hei;
+    local lastRect
+    if(wid ==nil)then
+        lastRect = UITools.getViewRect(instance);
+        tempVec2.x = lastRect.width
+    else
+        tempVec2.x = wid
+    end
+
+    if(hei ==nil)then
+        lastRect = UITools.getViewRect(instance);
+        tempVec2.y = lastRect.height
+    else
+        tempVec2.y = hei
+    end
+
 
     tansform.sizeDelta = tempVec2;
 end
 
---设置view 旋转中心
+--设置view 旋转中心 哪个值为nil表示读取当前值
 function UITools.setViewPivot(instance,px,py)
     local tansform = UITools.getViewRectTransform(instance)
-    print("wid:",wid,hei)
-    tempVec2.x = px;
-    tempVec2.y = py;
+    local lastPivot;
+    if px == nil then
+        lastPivot=transform.pivot;
+        tempVec2.x = lastPivot.x;
+    else
+        tempVec2.x = px
+    end
+    if py == nil then
+        lastPivot=transform.pivot;
+        tempVec2.y = lastPivot.y;
+    else
+        tempVec2.y = py
+    end
     tansform.pivot = tempVec2;
 end
 
 
+--设置view是否可见
+function UITools.setViewActive(instance, value)
+    local gameObj = instance.__cobject or instance;
+    gameObj:SetActive(value);
+end
 
 --获取view的坐标
-function UITools.getUIViewPos(instance)
+function UITools.get2dPos(instance)
     return UITools.getViewRectTransform(instance).anchoredPosition
 end
 
@@ -51,14 +92,26 @@ end
 local tempScaleVec3 = CS.UnityEngine.Vector3(1, 1, 1)
 
 --设置obj缩放
-function UITools.setUIViewScale(instance, sx, sy)
+function UITools.setScale(instance, sx, sy)
     local tansform = UITools.getViewRectTransform(instance)
-    tempScaleVec3.x = sx;
-    tempScaleVec3.y = sy;
+    local lastScale;
+    if sx==nil then
+        lastScale =  tansform.localScale
+        tempScaleVec3.x = lastScale.x;
+    else
+        tempScaleVec3.x = sx
+    end
+    if sy==nil then
+        lastScale =  tansform.localScale
+        tempScaleVec3.y = lastScale.y;
+    else
+        tempScaleVec3.y = y
+    end
+    tempScaleVec3.z =1;
     tansform.localScale = tempScaleVec3;
 end
 
-function UITools.getUIViewScale(instance)
+function UITools.getScale(instance)
     return UITools.getViewRectTransform(instance).localScale
 end
 
@@ -69,7 +122,7 @@ end
 
 local tempRotateVec3 = CS.UnityEngine.Vector3(0, 0, 1)
 --设置obj旋转 角度
-function UITools.setUIViewRotation(instance, r)
+function UITools.setRotation(instance, r)
     local tansform = UITools.getViewRectTransform(instance)
     tempRotateVec3.z = r;
     tansform.eulerAngles = tempRotateVec3
@@ -92,7 +145,7 @@ function UITools.addChild(self, childLuaInstance, index)
 end
 
 --移除所有子对象
-function UITools.removeAllChild  (self)
+function UITools.removeChildren  (self)
     local transform = UITools.getViewRectTransform(self)
     local childCount = transform.childCount
     for i = childCount, 1, -1 do
@@ -150,25 +203,29 @@ function UITools.bindUIFunc(luaInstance)
     luaInstance.removeChild = UITools.removeChild
     luaInstance.removeChildAt = UITools.removeChildAt
     luaInstance.removeSelf = UITools.removeSelf
-    luaInstance.removeChildren = UITools.removeAllChild
+    luaInstance.removeChildren = UITools.removeChildren
 
-    luaInstance.setPos = UITools.setUIViewPos
+    luaInstance.setPos = UITools.setPos
 
     --设置旋转
-    luaInstance.setRotation = UITools.setUIViewRotation
+    luaInstance.setRotation = UITools.setRotation
     --缩放
-    luaInstance.setScale = UITools.setUIViewScale
+    luaInstance.setScale = UITools.setScale
     luaInstance.getScale = UITools.getUIViewScale
     --获取2d坐标 只能用x,y
-    luaInstance.get2dPos = UITools.getUIViewPos
+    luaInstance.get2dPos = UITools.get2dPos
     luaInstance.getViewRect = UITools.getViewRect
     luaInstance.setViewSize = UITools.setViewSize
     luaInstance.setViewPivot = UITools.setViewPivot
+    luaInstance.setViewActive = UITools.setViewActive
 
 end
 
 -- ---------------------------------------------------------------非绑定的函数
-
+function UITools.setXpos(instance,x)
+    local pos = UITools.getChildAt(instance);
+    UITools.setPos(instance,x,pos.y);
+end
 
 --[[
     adjustSize是否修正尺寸.默认不修正
@@ -199,7 +256,7 @@ function UITools.createUIImage(url,boundlename)
 end
 
 --创建uilabel
-function UITools.createLabel(str)
+function UITools.createLabel(str,fontSize,stroke,strokeColor)
     local img = UITools.createUICtn();
     return label;
 end

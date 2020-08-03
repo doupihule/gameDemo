@@ -18,7 +18,7 @@ function GameMainUI:OnAwake()
     local sp = DisplayUtils.createSpine("role_01");
     UITools.bindUIFunc(self);
     self:addChild(sp)
-    UITools.setUIViewPos(sp, 100, 200)
+    UITools.setPos(sp, 100, 200)
 
 end
 

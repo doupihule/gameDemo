@@ -15,7 +15,7 @@ function InstanceEffect:setData(data)
     self._followOffset.y = self._followOffset.z
     self._followOffset.x = self._followOffset.y
     self.expandParams = nil
-    UITools.setUIViewScale(self._myView,1,1);
+    UITools.setScale(self._myView,1,1);
 end
 
 function InstanceEffect:setIgnoreScale()

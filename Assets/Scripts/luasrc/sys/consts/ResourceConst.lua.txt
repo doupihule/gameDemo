@@ -2,5 +2,7 @@ ResourceConst = ResourceConst or {}
 --的boundle
 ResourceConst.boundle_ui = "uiimage"
 ResourceConst.boundle_map = "map"
+--uirespath
+ResourceConst.UIResPath = "Assets/UI/UIRes/"
 
 

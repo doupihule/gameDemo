@@ -123,19 +123,19 @@ function InstanceBasic:realShowView()
     end
     local x = self.pos.x
     local y = self.pos.y + self.pos.z
-    UITools.setUIViewPos(self._myView,x,y);
+    UITools.setPos(self._myView,x,y);
     if self._myView2 then
-        UITools.setUIViewPos(self._myView2,x,y);
+        UITools.setPos(self._myView2,x,y);
     end
 end
 
 function InstanceBasic:setRotation(value)
     self.radian = BattleFunc.angletoRad * value
     if self._myView then
-        UITools.setUIViewRotation(self._myView,value);
+        UITools.setRotation(self._myView,value);
     end
     if self._myView2 then
-        UITools.setUIViewRotation(self._myView2,value);
+        UITools.setRotation(self._myView2,value);
     end
 end
 
@@ -143,10 +143,10 @@ function InstanceBasic:setRotationRad(value)
     self.radian = BattleFunc.angletoRad * value
     local ang = BattleFunc.radtoAngle * value
     if self._myView then
-        UITools.setUIViewRotation(self._myView,ang);
+        UITools.setRotation(self._myView,ang);
     end
     if self._myView2 then
-        UITools.setUIViewRotation(self._myView2,ang);
+        UITools.setRotation(self._myView2,ang);
     end
 end
 
@@ -161,10 +161,10 @@ end
 function InstanceBasic:setViewScale(scale)
     self.viewScale = scale
     if self._myView then
-        UITools.setUIViewScale(self._myView,self._viewWay*scale,scale);
+        UITools.setScale(self._myView,self._viewWay*scale,scale);
     end
     if self._myView2 then
-        UITools.setUIViewScale(self._myView2,self._viewWay*scale,scale);
+        UITools.setScale(self._myView2,self._viewWay*scale,scale);
     end
 end
 

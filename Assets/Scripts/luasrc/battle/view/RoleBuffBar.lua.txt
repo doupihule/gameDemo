@@ -74,18 +74,15 @@ function RoleBuffBar:onBuffChange(buff)
 end
 
 function RoleBuffBar:followTarget()
-    self.x = self.owner._myView.x
-    self.y = self.owner._myView.y + self._offsetY
+    self:setPos(self.owner.pos.x,self.owner.pos.y+self.owner.pos.z+self._offsetY);
 end
 
 function RoleBuffBar:removeAll()
     for index in pairs(self.buffIconListUp) do
-        -- [ts2lua]self.buffIconListUp下标访问可能不正确
-        PoolTools.cacheItem(PoolCode.POOL_BUFFICON + self.buffIconListUp[index], self:getChildAt(tonumber(index)))
+        PoolTools.cacheItem(PoolCode.POOL_BUFFICON .. self.buffIconListUp[index], self:getChildAt(tonumber(index)))
     end
     for index in pairs(self.buffIconListDown) do
-        -- [ts2lua]self.buffIconListDown下标访问可能不正确
-        PoolTools.cacheItem(PoolCode.POOL_BUFFICON + self.buffIconListDown[index], self:getChildAt(tonumber(index)))
+        PoolTools.cacheItem(PoolCode.POOL_BUFFICON .. self.buffIconListDown[index], self:getChildAt(tonumber(index)))
     end
     self.buffIconListUp = {}
     self.buffIconListDown = {}

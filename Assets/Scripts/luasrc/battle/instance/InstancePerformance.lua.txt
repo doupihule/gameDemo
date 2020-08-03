@@ -132,7 +132,7 @@ function InstancePerformance:doEndDiedLogical()
         self.hpBar:delayHide()
     end
     if self._shade then
-        self._shade.visible = false
+        self._shade:setViewActive(false)
     end
 end
 

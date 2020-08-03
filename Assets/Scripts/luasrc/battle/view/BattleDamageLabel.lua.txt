@@ -21,7 +21,7 @@ function BattleDamageLabel:setValue(kind, value)
     local cfg = self._cfgs
     local scale = cfg.scale or 1
     self:setScale(scale, scale)
-    self._baseUrl = "uisource/txt/txt/battle_txt_" .. self._cfgs.name
+    self._baseUrl =    ResourceConst.UIResPath .. "/txt/battle_txt_" .. self._cfgs.name
     if kind == BattleConst.effect_label_miss then
         self._headLabel = self:updateLabel("", 0, 0, self._headLabel)
         self._headLabel:setViewPivot(0.5,0.5);
@@ -46,20 +46,22 @@ function BattleDamageLabel:setValue(kind, value)
             numsWidth = nums * perWid
             bigValue = ""
         else
-            local index = 1
-            while (BigNumUtils.compare(BigNumUtils.devide(tempStr, compareValue), compareValue))
-            do
-                index = index + 1
-                tempStr = BigNumUtils.devide(tempStr, "1000")
+            local index = 0
+            local tempNum = value
+            for i =1,10000 do
+                index = index+1;
+                tempNum = math.round( tempNum/1000);
+                if(tempNum < 1000)then
+                    break;
+                end
             end
             local reducedUnitArr = BattleFunc.reducedUnitArr
-            if index > #reducedUnitArr - 1 then
-                index = #reducedUnitArr - 1
+            if index > #reducedUnitArr  then
+                index = #reducedUnitArr
             end
-            -- [ts2lua]reducedUnitArr下标访问可能不正确
-            bigValue = reducedUnitArr[index - 1]
-            strValue = BigNumUtils.devide(value, BigNumUtils.pow(1000, index), 0)
-            numsWidth = #tempStr * perWid
+            bigValue = reducedUnitArr[index]
+            strValue = tostring(tempNum);
+            numsWidth = #strValue * perWid
             bigNums = 1
         end
         bigWid = bigNums * perSourceWid
@@ -75,25 +77,22 @@ function BattleDamageLabel:setValue(kind, value)
             startPos = startPos + perWid
         else
             if self._fuhaoLabel then
-                self._fuhaoLabel.visible = false
+                self._fuhaoLabel:setViewActive(false)
             end
         end
         local s = 0
-        repeat
-            self._childLabels[s + 1] = self:updateLabel(string.sub(strValue, s, s + 1), startPos - halfTotalWid, 0, self._childLabels[s + 1])
+        for s=1,#strValue do
+            self._childLabels[s] = self:updateLabel(string.sub(strValue, s, s ), startPos - halfTotalWid, 0, self._childLabels[s])
             startPos = startPos + perWid
-            s = s + 1
-        until not (s < #strValue)
-        local s = #strValue
-        repeat
-            self._childLabels[s + 1].visible = false
-            s = s + 1
-        until not (s < #self._childLabels)
+        end
+        for s = #strValue+1,#self._childLabels  do
+            self._childLabels[s].setViewActive(false)
+        end
         if bigNums > 0 then
             self._bigStrLabel = self:updateLabel(bigValue:toLowerCase(), startPos - halfTotalWid, 0, self._bigStrLabel)
         else
             if self._bigStrLabel then
-                self._bigStrLabel.visible = false
+                self._bigStrLabel:setViewActive(false)
             end
         end
     end
@@ -105,16 +104,13 @@ function BattleDamageLabel:updateLabel(key, x, y, label)
         label:setViewPivot(0,0.5)
         self:addChild(label)
     else
-        label.visible = true
+        label:setViewActive(true)
     end
-
     if key == "" then
-        label.skin = self._baseUrl .. ".png"
-        UITools.setImageUrl(label,self._baseUrl)
+        UITools.setImageUrl(label,self._baseUrl,ResourceConst.boundle_ui,true)
     else
-        UITools.setImageUrl(label,self._baseUrl.."_"..key)
+        UITools.setImageUrl(label,self._baseUrl.."_"..key,ResourceConst.boundle_ui,true)
     end
-    label.x = x
-    label.y = y
+    label:setPos(x,y)
     return label
 end

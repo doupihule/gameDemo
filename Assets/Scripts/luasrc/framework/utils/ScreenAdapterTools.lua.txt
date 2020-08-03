@@ -241,26 +241,6 @@ function ScreenAdapterTools.checkIsAlignUp(alignType)
 end
 
 function ScreenAdapterTools.offsetView(view, offsetX, offsetY)
-    if view.left or view.left == 0 then
-        view.left = view.left + offsetX
-    elseif view.right or view.right == 0 then
-        view.right = view.right - offsetX
-    elseif view.centerX or view.centerX == 0 then
-        view.centerX = view.centerX + offsetX
-    elseif view.horizontalCenter or view.horizontalCenter == 0 then
-        view.horizontalCenter = view.horizontalCenter + offsetX
-    else
-        view.x = view.x + offsetX
-    end
-    if view.top or view.top == 0 then
-        view.top = view.top + offsetY
-    elseif view.bottom or view.bottom == 0 then
-        view.bottom = view.bottom - offsetY
-    elseif view.centerY or view.centerY == 0 then
-        view.centerY = view.centerY + offsetY
-    elseif view.verticalCenter or view.verticalCenter == 0 then
-        view.verticalCenter = view.verticalCenter + offsetY
-    else
-        view.y = view.y + offsetY
-    end
+    local pos = view:get2dPos();
+    view:setPos(pos.x+offsetX,pos.y+offsetY);
 end

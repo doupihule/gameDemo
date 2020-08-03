@@ -135,7 +135,7 @@ function PerformanceControler:showBlackScreen(targetRole, lastFrame, useArr)
     self.controler.isSkillPause = true
     self.blackScreen:setPos( -self.controler.layerControler.a2.x - 300,0)
     self.controler:clearCallBack(self, self.hideBlackScreen)
-    self.blackScreen.visible = true
+    self.blackScreen:setViewActive(true)
     if lastFrame > 0 then
         self.controler:setCallBack(lastFrame, self.hideBlackScreen, self)
     end
@@ -143,7 +143,7 @@ end
 
 function PerformanceControler:hideBlackScreen()
     self.controler.isSkillPause = false
-    self.blackScreen.visible = false
+    self.blackScreen:setViewActive(false)
     local allArr = self.controler:getAllInstanceArr()
     local i = 0
     for i, instance in ipairs(allArr) do

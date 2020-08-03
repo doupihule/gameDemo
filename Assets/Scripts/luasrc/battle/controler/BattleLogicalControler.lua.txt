@@ -452,7 +452,7 @@ function BattleLogicalControler:createShade()
         sp = UITools.createUIImage(ResourceConst.BATTLE_SHADE)
         sp:setViewPivot(0.5,0.5);
     end
-    sp.visible = true
+    sp:setViewActive(true)
     sp:setScale(1, 1)
     return sp
 end

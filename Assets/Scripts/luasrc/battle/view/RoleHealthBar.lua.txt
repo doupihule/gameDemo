@@ -18,18 +18,6 @@ function RoleHealthBar:setData(owner, ctn)
             self.srollImage = self:createImage(ResourceConst.BATTLE_HEALTH_PROGRESS2, self._initWidth, self._initHeight)
         end
         self.shieldImage = self:createImage(ResourceConst.BATTLE_HEALTH_HUDUN, self._initWidth, self._initHeight)
-        self.nameText = UITools.createLabel()
-        local nameText = self.nameText
-        self:addChild(nameText)
-        nameText.bold = true
-        nameText.font = "Microsoft YaHei"
-        nameText.fontSize = 18
-        nameText.anchorX = 0.5
-        nameText.anchorY = 0.5
-        nameText.x = self.width / 2
-        nameText.y = -20
-        nameText.stroke = 2
-        nameText.strokeColor = "#000000"
         self.srollImage.sizeGrid = "3,3,3,3"
         self:addChild(self.backImage)
         self:addChild(self.srollImage)
@@ -55,7 +43,6 @@ function RoleHealthBar:delayHide()
 end
 
 function RoleHealthBar:onHpChange()
-    self.nameText.text = ""
     local hp = self.owner.hp
     local shieldValue = self.owner:getSheildValue()
     local percent = self.owner.hp / self.owner:getMaxHp()
@@ -75,12 +62,13 @@ function RoleHealthBar:onHpChange()
             percent2 = 0.7
         end
         local wid2 = math.round(self._initWidth * percent2)
-        self.shieldImage.width = wid2
+        self.shieldImage:setViewSize(wid2,nil)
         if percent + percent2 > 1 then
-            self.shieldImage.x = self._initWidth / 2 - wid2
+            self.shieldImage:setPos(self._initWidth / 2 - wid2,nil)
         else
-            self.shieldImage.x = self.srollImage.width - self._initWidth / 2
+            self.shieldImage:setPos(self.srollImage.width - self._initWidth / 2,nil)
         end
+
     else
         self.shieldImage.visible = false
     end
@@ -90,8 +78,8 @@ function RoleHealthBar:onHpChange()
 end
 
 function RoleHealthBar:followTarget()
-    self.x = self.owner._myView.x
-    self.y = self.owner._myView.y + self._offsetY
+    local ownerPos = self.owner.pos;
+    self:setPos(ownerPos.x,ownerPos.y+ownerPos.z)
 end
 
 function RoleHealthBar:dispose()

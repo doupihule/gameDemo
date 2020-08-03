@@ -51,64 +51,55 @@ function BattleRoleView:showOrHideShade(value)
         return
     end
     local i = 0
-    repeat
-        self._shadeViewArr[i + 1].visible = value
-        i = i + 1
-    until not (i < #self._shadeViewArr)
+    for i, v in pairs(self._shadeViewArr) do
+        v:setViewActive(value)
+    end
 end
 
 function BattleRoleView:changeViewNums(value)
     self.currentViewNums = value
     if #self._childViewArr < self.currentViewNums then
-        local i = #self._childViewArr
-        repeat
+        for i = 1, #self._childViewArr do
             self:cloneOneChildAni()
-            i = i + 1
-        until not (i < self.currentViewNums)
+        end
     end
     local i = self.currentViewNums
-    repeat
-        self._childViewArr[i + 1].visible = false
-        self._childViewArr[i + 1]:stop()
-        i = i + 1
-    until not (i < #self._childViewArr)
+    for i = self.currentViewNums+1,#self._childViewArr do
+        self._childViewArr[i]:setViewActive(false)
+        self._childViewArr[i]:stop()
+    end
     self:sortChildView()
 end
 
 BattleRoleView._childSortFormation = { { { 0, 0 } }, { { -0.75, 0 }, { 0.75, 0 } }, { { 0, -1 }, { -0.75, 0 }, { 0.75, 0 } }, { { -1, -1 }, { 1, -1 }, { -1, 0 }, { 0.5, 0 } }, { { 0, -1 }, { 1, -1 }, { -1, 0.5 }, { 0, 0 }, { 1, 0 } }, { { -1, -1 }, { 0, -1 }, { 1, -1 }, { -1, 0 }, { 0, 0 }, { 1, 0 } } };
 function BattleRoleView.getPosArrByViewNums(viewNums)
-    -- [ts2lua]BattleRoleView._childSortFormation下标访问可能不正确
-    return BattleRoleView._childSortFormation[viewNums - 1]
+    return BattleRoleView._childSortFormation[viewNums ]
 end
 
 function BattleRoleView:sortChildView()
-    -- [ts2lua]BattleRoleView._childSortFormation下标访问可能不正确
-    local formationArr = BattleRoleView._childSortFormation[self.currentViewNums - 1]
+    local formationArr = BattleRoleView._childSortFormation[self.currentViewNums]
     if self._useShade then
         if not self._shadeViewArr then
             self._shadeViewArr = {}
         end
     end
-    local i = 0
-    repeat
-        local posArr = formationArr[i + 1]
-        local view = self._childViewArr[i + 1]
-        view:pos(posArr[0 + 1] * self._xSpace, posArr[1 + 1] * self._ySpace)
+    for i, posArr in pairs(formationArr) do
+        local view = self._childViewArr[i ]
+        local x = posArr[1] * self._xSpace
+        local y = posArr[2] * self._ySpace
+        view:setPos(x,y )
         if self._useShade then
-            local shaderView = self._shadeViewArr[i + 1]
+            local shaderView = self._shadeViewArr[i]
             if not shaderView then
                 shaderView = UITools.createUIImage(ResourceConst.BATTLE_SHADE)
                 shaderView:setScale(self._shadeScale, self._shadeScale)
-                shaderView.anchorX = 0.5
-                shaderView.anchorY = 0.5
+                shaderView:setViewPivot(0.5,0.5)
                 self:addChildAt(shaderView, 0)
-                self._shadeViewArr[i + 1] = shaderView
+                self._shadeViewArr[i] = shaderView
             end
-            shaderView.x = view.x + 2
-            shaderView.y = view.y + 3
+            shaderView:setPos(x,y)
         end
-        i = i + 1
-    until not (i < #formationArr)
+    end
 end
 
 function BattleRoleView:cloneOneChildAni()
@@ -126,56 +117,50 @@ end
 
 function BattleRoleView:stop()
     local i = 0
-    repeat
-        self._childViewArr[i + 1]:stop()
-        i = i + 1
-    until not (i < self.currentViewNums)
+    for i = 1, self.currentViewNums do
+        self._childViewArr[i]:stop()
+    end
 end
 
 function BattleRoleView:play(nameOrIndex, loop, force, start, tsvar_end, freshSkin, playAudio)
     local i = 0
-    repeat
-        self._childViewArr[i + 1]:play(nameOrIndex, loop, force, start, tsvar_end, freshSkin, playAudio)
-        i = i + 1
-    until not (i < self.currentViewNums)
+    for i = 1, self.currentViewNums do
+        self._childViewArr[i]:play(nameOrIndex, loop, force, start, tsvar_end, freshSkin, playAudio)
+    end
 end
 
 function BattleRoleView:resume()
     local i = 0
-    repeat
-        self._childViewArr[i + 1]:resume()
-        i = i + 1
-    until not (i < self.currentViewNums)
+    for i = 1, self.currentViewNums do
+        self._childViewArr[i]:resume()
+    end
 end
 
 function BattleRoleView:setPlaySpeed(value)
     local i = 0
-    repeat
-        local childAni = self._childViewArr[i + 1]
-        if childAni.player then
-            childAni.player.playbackRate = value
-        end
-        i = i + 1
-    until not (i < self.currentViewNums)
+    for i = 1, self.currentViewNums do
+        local childAni = self._childViewArr[i]
+        --@xd_test
+        --if childAni.player then
+        --    childAni.player.playbackRate = value
+        --end
+    end
 end
 
 function BattleRoleView:setChildViewPos(x, y)
     local i = 0
-    repeat
-        local childAni = self._childViewArr[i + 1]
-        childAni:pos(x, y, true)
-        i = i + 1
-    until not (i < self.currentViewNums)
+    for i = 1, self.currentViewNums do
+        local childAni = self._childViewArr[i ]
+        childAni:setPos(x, y)
+    end
 end
 
 function BattleRoleView:showOrHideSlot(slotName, value)
     if value == nil then
         value = false
     end
-    local i = 0
-    repeat
-        local childAni = self._childViewArr[i + 1]
+    for i = 1, self.currentViewNums do
+        local childAni = self._childViewArr[i]
         childAni:showOrHideSlot(slotName, value)
-        i = i + 1
-    until not (i < self.currentViewNums)
+    end
 end

@@ -26,25 +26,25 @@ function InstancePlayer:updateSkillCd()
             break
         end
 
-        if skill.leftSkillCd > 0 then
-            skill.leftSkillCd = skill.leftSkillCd - cdcheck
-            if skill.leftSkillCd < 0 then
-                skill.leftSkillCd = 0
-                if skillView:getChildByName("mask").visible then
-                    skillView:getChildByName("mask").visible = false
-                    skillView:getChildByName("timeTxt").text = ""
-                end
-            end
-            if not skillView:getChildByName("mask").visible then
-                skillView:getChildByName("mask").visible = true
-            end
-            skillView:getChildByName("timeTxt").text = math.ceil(skill.leftSkillCd / GameConsts.gameFrameRate)
-        else
-            if skillView:getChildByName("mask").visible then
-                skillView:getChildByName("mask").visible = false
-            end
-            skillView:getChildByName("timeTxt").text = ""
-        end
+        --if skill.leftSkillCd > 0 then
+        --    skill.leftSkillCd = skill.leftSkillCd - cdcheck
+        --    if skill.leftSkillCd < 0 then
+        --        skill.leftSkillCd = 0
+        --        if skillView:getChildByName("mask").visible then
+        --            skillView:getChildByName("mask").visible = false
+        --            skillView:getChildByName("timeTxt").text = ""
+        --        end
+        --    end
+        --    if not skillView:getChildByName("mask").visible then
+        --        skillView:getChildByName("mask").visible = true
+        --    end
+        --    skillView:getChildByName("timeTxt").text = math.ceil(skill.leftSkillCd / GameConsts.gameFrameRate)
+        --else
+        --    if skillView:getChildByName("mask").visible then
+        --        skillView:getChildByName("mask").visible = false
+        --    end
+        --    skillView:getChildByName("timeTxt").text = ""
+        --end
     end
 end
 
