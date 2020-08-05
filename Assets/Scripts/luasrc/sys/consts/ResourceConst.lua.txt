@@ -2,7 +2,11 @@ ResourceConst = ResourceConst or {}
 --的boundle
 ResourceConst.boundle_ui = "uiimage"
 ResourceConst.boundle_map = "map"
+ResourceConst.boundle_base = "baseab"
+
 --uirespath
 ResourceConst.UIResPath = "Assets/UI/UIRes/"
 
+ResourceConst.baseLabelPrefeb = "base/BaseLabel";
+ResourceConst.baseContainerPrefeb = "base/BaseContainer";
 

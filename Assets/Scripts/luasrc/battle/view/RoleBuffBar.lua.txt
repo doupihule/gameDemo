@@ -15,7 +15,7 @@ function RoleBuffBar:setData(owner, ctn)
     self._offsetY = -self.owner.cfgData.size[0 + 1] * self.owner.cfgScale - 50
     ctn:addChild(self)
     self:onBuffChange()
-    self.visible = false
+    self:setViewActive(false)
 end
 
 function RoleBuffBar:onBuffChange(buff)

@@ -82,12 +82,10 @@ function WaitManager:showOrHideWaitView(value)
         if not self._waitView.parent then
             WindowManager.topUILayer:addChild(self._waitView)
         end
-        self._waitView.visible = true
+        self._waitView:setViewActive(true)
         self._waitView:setData(nil)
     else
-        self._waitView.visible = false
-        if self._waitView.parent then
-            self._waitView.parent:removeChild(self._waitView)
-        end
+        self._waitView:setViewActive(false)
+        self._waitView:removeSelf()
     end
 end

@@ -1,0 +1,56 @@
+LabelTools = class("LabelTools")
+
+
+local alignMap = {
+
+}
+
+--align 对齐方式 0左上,1中上,2右上,3左中,4中中,5右中,6左下,7中下,8右下 默认4 中中
+-- FontStyle 0 normal,  1 bold(加黑)  2 Italic(斜体), 3 BoldAndItalic
+-- supportRichText是否开启富文本 默认不开启
+-- lineSpace 行间距默认是1 建议值在1-1.2之间
+function LabelTools.createLabel(str,wid,hei,fontSize,align,supportRichText,fontStyle,lineSpace)
+    --宽度默认100.高度默认prefab的高度不变
+    if(wid == nil)then
+        wid = 100;
+    end
+    if fontSize ==nil then
+        fontSize = 24;
+    end
+    if fontStyle ==nil then
+        fontStyle = 0
+    end
+    if lineSpace==nil then
+        lineSpace = 1
+    end
+    if supportRichText == nil then
+        supportRichText =false
+    end
+
+    local label = LuaBaseView.new();
+    local instance = ResourceManager.loadUIPrefab(ResourceConst.baseLabelPrefeb, ResourceConst.boundle_base);
+    label:setCObject(instance);
+    local ctext = label.__textComp
+    ctext.fontSize = fontSize
+    ctext.alignment = align;
+    ctext.lineSpacing =lineSpace
+    ctext.text = str;
+    ctext.fontStyle =fontStyle;
+    ctext.supportRichText = supportRichText
+    label:setViewSize(wid,hei);
+    return label;
+end
+
+--设置文本str
+function LabelTools.setLabelStr(label,str)
+    if(not label.__textComp) then
+        LogsManager.errorTag("label类型错误:",str);
+        return;
+    end
+    label.__textComp.text = str;
+end
+
+--设置文本自动换行 value 0是自动换行 1是溢出
+function LabelTools.setLabelWrap(label,value)
+    label.__textComp.horizontalOverflow =value
+end

@@ -2,12 +2,8 @@ ReqLoadingUI = class('ReqLoadingUI', UIBase)
 ReqLoadingUI.res = nil;
 function ReqLoadingUI:ctor()
     ReqLoadingUI.super.ctor(self)
-    self.rollAsset = UITools.createLabel("loading...");
-    self.rollAsset.color = "#ffffff"
-    self.rollAsset.font = "Microsoft YaHei"
-    self.rollAsset.fontSize = 24
-    self.rollAsset.x = ScreenAdapterTools.width - 150
-    self.rollAsset.y = ScreenAdapterTools.height - 50
+    self.rollAsset = LabelTools.createLabel("loading...",100,30,24);
+    self.rollAsset:setPos(ScreenAdapterTools.width - 150, ScreenAdapterTools.height - 50)
     self:addChild(self.rollAsset)
     self.mouseEnabled = true
     self.mouseThrough = false
@@ -16,17 +12,17 @@ function ReqLoadingUI:ctor()
 end
 
 function ReqLoadingUI:setData(data)
-    self.rollAsset.visible = false
+    self.rollAsset:setViewActive(false);
     TimerManager.getInstance().add(self,function()
-        self.rollAsset.visible = true
-        self.rollAsset.alpha = 0
+        self.rollAsset:setViewActive(true)
+        self.rollAsset:setViewAlpha(0)
     end,1,1)
 end
 
 function ReqLoadingUI:onTween1()
-    self.rollAsset.alpha = 1
+    self.rollAsset:setViewAlpha(1)
 end
 
 function ReqLoadingUI:onTween2()
-    self.rollAsset.alpha = 0
+    self.rollAsset:setViewAlpha(0)
 end

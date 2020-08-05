@@ -13,13 +13,13 @@ function UITools.setPos(instance, x, y)
     local tansform =UITools.getViewRectTransform(instance)
     local lastpos;
     if(x==nil) then
-        lastpos = UITools.get2dPos(instance);
+        lastpos = tansform.anchoredPosition
         tempVec2.x = lastpos
     else
         tempVec2.x =x;
     end
     if (y==nil)then
-        lastpos = UITools.get2dPos(instance);
+        lastpos = tansform.anchoredPosition
         tempVec2.y = lastpos;
     else
         tempVec2.y = y
@@ -27,7 +27,38 @@ function UITools.setPos(instance, x, y)
     tansform.anchoredPosition = tempVec2
 end
 
+local tempColor  ={a=1,r=0,g=0,b=0}
+function UITools.setViewColor(instance,a,r,g,b)
+    if a then
+        tempColor.a = a
+    else
+        tempColor.a = 1;
+    end
+    if r then
+        tempColor.r = r
+    else
+        tempColor.r = 1;
+    end
 
+    if g then
+        tempColor.g = g
+    else
+        tempColor.g = 1;
+    end
+    if b then
+        tempColor.b = b
+    else
+        tempColor.b = 1;
+    end
+    --如果是lable
+    if(instance.__textComp) then
+        instance.__textComp.color = tempColor
+        --如果是图片 正常来说一定会有imageComp
+    elseif (instance.__imageComp) then
+        instance.__imageComp.color = tempColor
+    end
+
+end
 
 
 --获取view的rect x,y,width,height
@@ -40,17 +71,17 @@ function UITools.setViewSize(instance,wid,hei)
     local tansform = UITools.getViewRectTransform(instance)
     local lastRect
     if(wid ==nil)then
-        lastRect = UITools.getViewRect(instance);
-        tempVec2.x = lastRect.width
+        lastRect = tansform.rect;
+        tempVec2.x = lastRect.width;
     else
         tempVec2.x = wid
     end
 
     if(hei ==nil)then
-        lastRect = UITools.getViewRect(instance);
-        tempVec2.y = lastRect.height
+        lastRect = tansform.rect;
+        tempVec2.y = lastRect.height;
     else
-        tempVec2.y = hei
+        tempVec2.y = hei;
     end
 
 
@@ -111,13 +142,14 @@ function UITools.setScale(instance, sx, sy)
     tansform.localScale = tempScaleVec3;
 end
 
+--获取缩放值 返回的是vector3
 function UITools.getScale(instance)
     return UITools.getViewRectTransform(instance).localScale
 end
 
 --设置透明度
 function UITools.setViewAlpha(instance,alpha)
-
+    UITools.setViewColor(instance,1);
 end
 
 local tempRotateVec3 = CS.UnityEngine.Vector3(0, 0, 1)
@@ -126,6 +158,7 @@ function UITools.setRotation(instance, r)
     local tansform = UITools.getViewRectTransform(instance)
     tempRotateVec3.z = r;
     tansform.eulerAngles = tempRotateVec3
+    return self
 end
 
 
@@ -142,6 +175,7 @@ function UITools.addChild(self, childLuaInstance, index)
         childTransform:SetSiblingIndex(index)
     else
     end
+    return self
 end
 
 --移除所有子对象
@@ -179,11 +213,13 @@ end
 function UITools.removeChild (self, childLuaInstance)
     local childTransform = UITools.getViewRectTransform(childLuaInstance)
     childTransform:SetParent(nil)
+    return self
 end
 
 --移除自己.和移除子对象一样
 function UITools.removeSelf (self)
     UITools.removeChild(self, self)
+    return self
 end
 
 
@@ -222,10 +258,6 @@ function UITools.bindUIFunc(luaInstance)
 end
 
 -- ---------------------------------------------------------------非绑定的函数
-function UITools.setXpos(instance,x)
-    local pos = UITools.getChildAt(instance);
-    UITools.setPos(instance,x,pos.y);
-end
 
 --[[
     adjustSize是否修正尺寸.默认不修正

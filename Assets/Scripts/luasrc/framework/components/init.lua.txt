@@ -6,6 +6,6 @@ local packageName = "framework.components."
 require(packageName .. "LuaBaseView")
 require(packageName .. "BaseContainer")
 require(packageName .. "SpineGraphicExpand")
-
-
+require(packageName .. "UITools")
+require(packageName .. "LabelTools")
 

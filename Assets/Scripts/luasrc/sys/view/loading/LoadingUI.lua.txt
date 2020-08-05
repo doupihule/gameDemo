@@ -42,8 +42,8 @@ function LoadingUI:initView()
         self.mainbg:addChildren(title)
     end
     if not self.clientVersionTxt then
-        self.clientVersionTxt = UITools.createLabel()
-        --self.clientVersionTxt.text = "client_version:1.0.1"
+        self.clientVersionTxt = LabelTools.createLabel("client_version:1.0.1",134,16);
+        --self.clientVersionTxt.text =
         --self.clientVersionTxt.width = 134
         --self.clientVersionTxt.height = 16
         --self.clientVersionTxt.right = 10 + self:getHorizontalOffset()
@@ -66,49 +66,18 @@ function LoadingUI:initView()
         --self.profg.width = 0
     end
     if not self.loadingtips then
-        --self.loadingtips = UITools.createLabel()
-        --self.loadingtips.text = "资源加载加载中，请稍后..."
-        --self.loadingtips.x = -33
-        --self.loadingtips.y = -37.5
-        --self.loadingtips.width = 640
-        --self.loadingtips.height = 31
-        --self.loadingtips.fontSize = 20
-        --self.loadingtips.font = "Microsoft YaHei"
-        --self.loadingtips.color = "#ffffff"
-        --self.loadingtips.align = "center"
-        --self.profgBg:addChild(self.loadingtips)
+        self.loadingtips = LabelTools.createLabel("资源加载加载中，请稍后...",640,31,20,4,false,1);
+        self.loadingtips:setPos(-33,-37.5)
+        self.profgBg:addChild(self.loadingtips)
     end
     if not self.loadingstar then
-        --self.loadingstar = UITools.createUIImage("")
-        --self.loadingstar.x = -26
-        --self.loadingstar.y = -22
-        --self.profgBg:addChild(self.loadingstar)
-        --self.loadingicon = UITools.createUIImage("static/loading_image_jindudiche.png")
-        --self.loadingicon.x = 15
-        --self.loadingicon.y = -27
-        --self.loadingicon.anchorX = 0.5
-        --self.loadingicon.anchorY = 0.5
-        --self.loadingstar:addChild(self.loadingicon)
+        self.loadingstar = UITools.createUICtn()
+        self.loadingstar:setPos(-26,-22);
+        self.profgBg:addChild(self.loadingstar)
+        self.loadingicon = UITools.createUIImage("static/loading_image_jindudiche.png")
+        self.loadingicon:setPos(15,-27);
+        self.loadingstar:addChild(self.loadingicon)
     end
-    --if not self.aniGroup then
-    --    self.aniGroup = UITools.createUIImage()
-    --    self.aniGroup.centerX = 0
-    --    self.aniGroup.bottom = 400 + self:getVerticalOffset()
-    --    self.aniGroup.anchorX = 0.5
-    --    self.aniGroup.anchorY = 1
-    --    self.mainbg:addChild(self.aniGroup)
-    --    local bg = UITools.createUIImage("static/loading_bp_beijing2.png")
-    --    bg.width = 279
-    --    bg.height = 38
-    --    bg.x = -bg.width / 2
-    --    bg.y = 0
-    --    self.aniGroup:addChild(bg)
---[[    end]]
-    --if not self.roleAni then
-    --    self.roleAni = BattleRoleView.new("role_16", 0.5, 0)
-    --    self.aniGroup:addChild(self.roleAni)
-    --    self.roleAni:play("idle", true)
-    --end
 end
 
 function LoadingUI:setData()
@@ -121,11 +90,7 @@ function LoadingUI:setData()
 end
 
 function LoadingUI:loadingFlash()
-    if self.alphaFlag then
-        self.loadingtips.alpha = self.loadingtips.alpha - 0.1
-    else
-        self.loadingtips.alpha = self.loadingtips.alpha + 0.1
-    end
+
     if self.loadingtips.alpha >= 0.95 then
         self.alphaFlag = 1
     end

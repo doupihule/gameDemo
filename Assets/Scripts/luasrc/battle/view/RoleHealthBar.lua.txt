@@ -23,10 +23,10 @@ function RoleHealthBar:setData(owner, ctn)
         self:addChild(self.srollImage)
         self:addChild(self.shieldImage)
     end
-    self.shieldImage.visible = false
+    self.shieldImage:setViewActive(false)
     ctn:addChild(self)
     self:onHpChange()
-    self.visible = false
+    self:setViewActive(false)
 end
 
 function RoleHealthBar:createImage(url, wid, hei)
@@ -56,7 +56,7 @@ function RoleHealthBar:onHpChange()
     end
     self.srollImage.width = width
     if shieldValue > 0 then
-        self.shieldImage.visible = true
+        self.shieldImage:setViewActive(true)
         local percent2 = shieldValue / self.owner:getMaxHp()
         if percent2 > 0.7 then
             percent2 = 0.7
@@ -72,7 +72,7 @@ function RoleHealthBar:onHpChange()
     else
         self.shieldImage.visible = false
     end
-    self.visible = true
+    self:setViewActive(true)
     self.owner.controler:clearCallBack(self, self.delayHide)
     self.owner.controler:setCallBack(120, self.delayHide, self)
 end

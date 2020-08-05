@@ -86,11 +86,7 @@ function BattleTweenControler:updateOneTween(tweenInfo)
     end
     if self:checkHasType(type, BattleConst.TWEEN_ALPHA) then
         local value = startParams.a + disParams.a * ratio
-        if mode == 1 then
-            instance:setViewAlpha(value)
-        else
-            instance.alpha = value
-        end
+        instance:setViewAlpha(value)
     end
     if tweenInfo.frame == tweenInfo.totalFrame then
         if tweenInfo.callBack then

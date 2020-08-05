@@ -41,11 +41,9 @@ function BattleLogicalControler:setData(data)
     self._isGamePause = false
     self.tweenControler:setData()
     self.startTime = Client.getInstance():getServerTime()
-    if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
-        self:setNormalMap()
-    elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
-        self:setWarMap()
-    end
+    BattleFunc.curBattleType = BattleConst.BATTLETYPE_NORMAL
+
+    self:setNormalMap()
     self.cameraControler:updateCtnPos()
 end
 

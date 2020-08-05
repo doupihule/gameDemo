@@ -46,7 +46,6 @@ end
 function BattleUI:onReplayGame()
     SoundManager.stopMusicOrSound(MusicConst.SOUND_BATTLE_BG)
     Message.getInstance():send(BattleEvent.BATTLEEVENT_REVIEW_RESET_REVIVECOUNT)
-    self.pauseGroup.visible = false
     BattleSceneManager.getInstance():replayBattle()
     StatisticsManager.getInstance():onEvent(StatisticsManager.LEVEL_START, { levelId = self.levelId, entrance = "replay" })
     self:resetStatus()

@@ -167,30 +167,30 @@ end
 function MainModule:initLayer()
     WindowManager.rootLayer = GlobalEnv.uiRoot
     WindowManager.commonUILayer = UITools.createUICtn()
-    WindowManager.commonUILayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.commonUILayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
     WindowManager.rootLayer:addChild(WindowManager.commonUILayer)
     WindowManager.topUILayer = UITools.createUICtn()
-    WindowManager.topUILayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.topUILayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
     WindowManager.topUILayer.mouseEnabled = true
     WindowManager.topUILayer.mouseThrough = true
     WindowManager.rootLayer:addChild(WindowManager.topUILayer)
     WindowManager.guideLayer = UITools.createUICtn()
-    WindowManager.guideLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.guideLayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
     WindowManager.guideLayer.cacheAs = "bitmap"
     WindowManager.rootLayer:addChild(WindowManager.guideLayer)
     WindowManager.guideLayer.mouseEnabled = true
     WindowManager.guideLayer.mouseThrough = true
-    WindowManager.guideLayer.visible = false
+    WindowManager.guideLayer:setViewActive(false)
     WindowManager.highLayer = UITools.createUICtn()
-    WindowManager.highLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.highLayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
     WindowManager.rootLayer:addChild(WindowManager.highLayer)
     WindowManager.toolsLayer = UITools.createUICtn()
     WindowManager.rootLayer:addChild(WindowManager.toolsLayer)
     WindowManager.maskLayer = UITools.createUICtn()
-    WindowManager.maskLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.maskLayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
     WindowManager.rootLayer:addChild(WindowManager.maskLayer)
     WindowManager.tipsLayer = UITools.createUICtn()
-    WindowManager.tipsLayer:size(ScreenAdapterTools.width, ScreenAdapterTools.height)
+    WindowManager.tipsLayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
     WindowManager.tipsLayer.mouseEnabled = false
     WindowManager.tipsLayer.mouseThrough = true
     WindowManager.rootLayer:addChild(WindowManager.tipsLayer)

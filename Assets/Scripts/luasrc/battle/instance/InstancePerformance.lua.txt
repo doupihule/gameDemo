@@ -110,17 +110,20 @@ function InstancePerformance:doDiedEffect()
         local yushu = self._leftDiedFrame % 4
         self._noteAlpha = self._noteAlpha - 0.05
         local disAlpha = 0.2
+        local targetAlpha
         if yushu == 0 then
-            self._myView.alpha = self._noteAlpha + disAlpha
+            targetAlpha = self._noteAlpha + disAlpha
+
         elseif yushu == 2 then
-            self._myView.alpha = self._noteAlpha - disAlpha
+            targetAlpha = self._noteAlpha - disAlpha
         end
+        self._myView:setViewAlpha(targetAlpha)
         self._leftDiedFrame = self._leftDiedFrame - 1
         if self._myView2 then
-            self._myView2.alpha = self._myView.alpha
+            self._myView2:setViewAlpha(targetAlpha)
         end
         if self._leftDiedFrame == 0 then
-            self._myView.alpha = 0
+            self._myView:setViewAlpha(0)
             self:doEndDiedLogical()
         end
     end
