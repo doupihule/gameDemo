@@ -13,6 +13,11 @@ function GlobalEnv.initStage()
     GlobalEnv.stage = LuaBaseView.bindOneCObjet(GlobalEnv._stage);
     --uiroot
     GlobalEnv.uiRoot = LuaBaseView.bindOneCObjet(GlobalEnv._uiRoot);
+
+    local size = GlobalEnv.uiRoot:getViewRect();
+    local scale = GlobalEnv.uiRoot:getScale();
+    ScreenAdapterTools.checkScreenFixMode(size.x, size.y)
+
 end
 
 --获取舞台CBaseView

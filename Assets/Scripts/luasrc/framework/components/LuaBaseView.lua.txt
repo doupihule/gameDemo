@@ -26,11 +26,19 @@ end
 --设置要绑定的c对象
 function LuaBaseView:setCObject(cobj)
     self.__cobject = cobj;
-
+    --获取transform的引用
+    self.transform = cobj.transform;
     local tempPos = cobj.transform.anchoredPosition;
+    --如果是2d对象
     if(tempPos)then
         self.x = tempPos.x;
         self.y = tempPos.y;
+    else
+        --否则是3d对象
+        tempPos = cobj.transform.localPosition;
+        self.x = tempPos.x;
+        self.y = tempPos.y;
+        self.z = tempPos.z;
     end
 
     --目前只持有图片和文本的引用.可能都为空 .目的是为了设置透明度或者color. 理论上这2着只能同时有一个存在

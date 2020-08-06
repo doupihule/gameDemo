@@ -40,15 +40,11 @@ public class Main : MonoBehaviour
         luaUpdateLate = timerManager.Get<Action<LuaTable>>("updateFrameLate");
 
         XLuaBridge.GetInstance().XLuaDoString("__startGame()","chunk");
-        Text aa = a.GetComponent<Text>();
-        Image bbb;
-        Outline ass;
-        Shadow sha;
         
         //Image bb;
         //aa.fontSize = 20;
         //aa.color
-        
+
     }
     void Update()
     {

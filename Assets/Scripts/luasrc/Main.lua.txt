@@ -14,19 +14,23 @@ BaseFunc.onConfigGroupLoadComplete()
 __startGame= function()
     GlobalEnv.initStage()
 
+    --@xd_test测试代码
+    --local img = UITools.createUIImage("Assets/UI/UIRes/common/common_icon_jinbi","uiimage");
+    --GlobalEnv.uiRoot:addChild(img);
+    --local size = img:getViewRect();
+    --
+    --local label = LabelTools.createLabel("this<color=#FF0000>testaaa</color> istezst",100,100,20,5,true,3,1.1);
+    --LabelTools.setLabelWrap(label,0);
+    --GlobalEnv.uiRoot:addChild(label);
+    --label:setPos(100,200);
+    --UITools.setViewColor(label,1,0,0,1);
+    --LabelTools.setShade(label,5,5,1,1,1,0);
+
+
+
+
     --准备进入游戏
-    local img = UITools.createUIImage("Assets/UI/UIRes/common/common_icon_jinbi","uiimage");
-    GlobalEnv.uiRoot:addChild(img);
-    local size = img:getViewRect();
-
-    local label = LabelTools.createLabel("this<color=#FF0000>testaaa</color> istezst",100,100,20,5,true,3,1.1);
-    LabelTools.setLabelWrap(label,0);
-    GlobalEnv.uiRoot:addChild(label);
-    label:setPos(100,200);
-    UITools.setViewColor(label,1,0,0,1);
-    LabelTools.setShade(label,5,5,1,1,1,0);
-
-    MainModule.new();
+    --MainModule.new();
 
 end
 

@@ -4,9 +4,7 @@ local tempVec2 = CS.UnityEngine.Vector2(0, 0)
 
 --获取recttransform  对于ui  recttransform 和 transform是同一个对象
 function UITools.getViewRectTransform(instance)
-    local gameobj = instance.__cobject or instance
-    local tansform = gameobj.transform;
-    return tansform
+    return instance.transform
 end
 
 --设置 视图坐标obj是 GameObject对象 ,哪个值为nil表示读取当前值
@@ -68,7 +66,7 @@ end
 
 --获取view的rect x,y,width,height
 function UITools.getViewRect(instance)
-    return UITools.getViewRectTransform(instance).rect
+    return UITools.getViewRectTransform(instance).sizeDelta
 end
 
 --设置view的尺寸 哪个值为nil表示读取当前值
@@ -252,7 +250,7 @@ function UITools.bindUIFunc(luaInstance)
     luaInstance.setRotation = UITools.setRotation
     --缩放
     luaInstance.setScale = UITools.setScale
-    luaInstance.getScale = UITools.getUIViewScale
+    luaInstance.getScale = UITools.getScale
     --获取2d坐标 只能用x,y
     luaInstance.get2dPos = UITools.get2dPos
     luaInstance.getViewRect = UITools.getViewRect
