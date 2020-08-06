@@ -41,6 +41,10 @@ public class Main : MonoBehaviour
 
         XLuaBridge.GetInstance().XLuaDoString("__startGame()","chunk");
         Text aa = a.GetComponent<Text>();
+        Image bbb;
+        Outline ass;
+        Shadow sha;
+        
         //Image bb;
         //aa.fontSize = 20;
         //aa.color

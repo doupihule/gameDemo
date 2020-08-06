@@ -1,6 +1,6 @@
 BattleSceneManager = class('BattleSceneManager')
 function BattleSceneManager:ctor(...)
-    BattleSceneManager.super.ctor(self, unpack({ ... }))
+    BattleSceneManager.super.ctor(self,...)
     self._battestate = 0;
 end
 
@@ -46,10 +46,6 @@ function BattleSceneManager:setGamePlayOrPause(value)
 end
 
 function BattleSceneManager:onTouchClick(e)
-    if e == nil then
-        e = nil
-    end
-
 
 end
 

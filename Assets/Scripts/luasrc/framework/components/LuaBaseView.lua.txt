@@ -15,6 +15,9 @@ LuaBaseView.__cobject = nil
 function LuaBaseView:ctor()
     luaCount = luaCount+1;
     self._luaId =luaCount;
+    self.x = 0;
+    self.y = 0;
+    self.z = 0;
     --绑定ui的几个基础函数 addchild  removechild removeSelf
     UITools.bindUIFunc(self)
 
@@ -23,11 +26,18 @@ end
 --设置要绑定的c对象
 function LuaBaseView:setCObject(cobj)
     self.__cobject = cobj;
+
+    local tempPos = cobj.transform.anchoredPosition;
+    if(tempPos)then
+        self.x = tempPos.x;
+        self.y = tempPos.y;
+    end
+
     --目前只持有图片和文本的引用.可能都为空 .目的是为了设置透明度或者color. 理论上这2着只能同时有一个存在
     self.__imageComp = cobj:GetComponent("Image");
     self.__textComp = cobj:GetComponent("Text");
     return self
-end
+    end
 
 
 --给cobj 绑定一个lua对象 这里必须是cobj对象.

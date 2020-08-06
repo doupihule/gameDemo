@@ -56,7 +56,7 @@ function BattleLogicalControler:setWarMap()
     local mapId = nil
     if FogFunc.enemyCell then
         local event = FogFunc.enemyCell.eventData
-        mapId = FogFunc.getInstance():getCfgDatasByKey("Enemy", event.params[0 + 1], "sceneId")
+        mapId = FogFunc.getInstance():getCfgDatasByKey("Enemy", event.params[1], "sceneId")
     else
         LogsManager.errorTag("", "没有当前的敌人事件格子")
     end
@@ -253,8 +253,8 @@ function BattleLogicalControler:createRole(id, data, lifeType, camp, offestX, of
     end
 
     if camp == BattleConst.ROLEGROUP_MYSELF then
-        if self.battleUI.battleAdditionId and (self.battleUI.battleAdditionId == BattleConst.battle_start_attack_add or self.battleUI.battleAdditionId == BattleConst.battle_start_life_add) then
-            local battleAdditionId = self.battleUI.battleAdditionId
+        if self.battleAdditionId and (self.battleAdditionId == BattleConst.battle_start_attack_add or self.battleAdditionId == BattleConst.battle_start_life_add) then
+            local battleAdditionId = self.battleAdditionId
             local skillId = LevelFunc.getInstance():getBattleAddtionoByTwoId(battleAdditionId, "addtionNub")
             local passive = PassiveSkillData.new(skillId, 1, cacheItem, BattleConst.skill_kind_passive)
             self:insterGlobalPassive(passive)
@@ -276,8 +276,8 @@ function BattleLogicalControler:createRole(id, data, lifeType, camp, offestX, of
         cacheItem.attrData:countAllAttr()
     end
     if camp == BattleConst.ROLEGROUP_MYSELF then
-        if self.battleUI.battleAdditionId and self.battleUI.battleAdditionId == BattleConst.battle_start_life_add then
-            local battleAdditionId = self.battleUI.battleAdditionId
+        if self.battleAdditionId and self.battleAdditionId == BattleConst.battle_start_life_add then
+            local battleAdditionId = self.battleAdditionId
             cacheItem.hp = cacheItem.attrData:getOneAttr(BattleConst.attr_maxHp)
         end
     end
@@ -342,8 +342,8 @@ function BattleLogicalControler:createHome(id, data, lifeType, camp, offestX, of
         end
     end
     if camp == BattleConst.ROLEGROUP_MYSELF then
-        if self.battleUI.battleAdditionId and self.battleUI.battleAdditionId == BattleConst.battle_start_homeCd then
-            local battleAdditionId = self.battleUI.battleAdditionId
+        if self.battleAdditionId and self.battleAdditionId == BattleConst.battle_start_homeCd then
+            local battleAdditionId = self.battleAdditionId
             local skillId = LevelFunc.getInstance():getBattleAddtionoByTwoId(battleAdditionId, "addtionNub")
             local passive = PassiveSkillData.new(skillId, 1, cacheItem, BattleConst.skill_kind_passive)
             self:insterGlobalPassive(passive)

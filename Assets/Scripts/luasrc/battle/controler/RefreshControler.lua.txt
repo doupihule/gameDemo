@@ -16,7 +16,6 @@ function RefreshControler:ctor(controler)
     self.enemyTab = {};
     self.enemyTab = {}
     self.controler = controler
-    self.addEnergeTime = self.controler.battleUI.recoverPer
 end
 
 function RefreshControler:initWarData()
@@ -96,13 +95,12 @@ function RefreshControler:initWarData()
                 equip = {}
                 local i = 3
                 for i = 4, #playerEnemy do
-                    equip[playerEnemy[i ]] = 1
+                    equip[playerEnemy[i]] = 1
                 end
             end
         end
         local num = roleInfo.heroNub or 1
         local offestX = 0
-        local j = 0
         for j = 1, num do
             if j ~= 1 then
                 offestX = roleInfo.startSite[j ]
@@ -138,7 +136,7 @@ function RefreshControler:initData()
     if BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
         homeId = GlobalParamsFunc.getInstance():getDataNum("fogHomeId")
     end
-    self.controler.myHome = self.controler:createHome(homeId, { level = RolesModel.getInstance():getRoleLevelById(trueHome) }, BattleConst.LIFE_JIDI, BattleConst.ROLEGROUP_MYSELF)
+    self.controler.myHome = self.controler:createHome(homeId, { level = 1 }, BattleConst.LIFE_JIDI, BattleConst.ROLEGROUP_MYSELF)
     if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
         self:initNormalData()
     elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
@@ -249,8 +247,8 @@ function RefreshControler:updateBattleEnergy()
         self.addEnergeTime = self.addEnergeTime - 1
         return
     end
-    self.addEnergeTime = self.controler.battleUI.recoverPer
-    self.controler.battleUI:autoAddEnergy()
+    --self.addEnergeTime = self.controler.battleUI.recoverPer
+    --self.controler.battleUI:autoAddEnergy()
 end
 
 function RefreshControler:checkGameLose()
@@ -315,7 +313,7 @@ end
 
 function RefreshControler:changeWaveHp(value)
     self.waveLeftHp = self.waveLeftHp + value
-    self.controler.battleUI:updateBlood(self.waveLeftHp, self.waveTotalHp)
+    --self.controler.battleUI:updateBlood(self.waveLeftHp, self.waveTotalHp)
 end
 
 function RefreshControler:setFormationWeight(formation, changeValue)

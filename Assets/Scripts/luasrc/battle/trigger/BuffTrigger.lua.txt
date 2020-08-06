@@ -17,7 +17,7 @@ BuffTrigger.buff_logical_add_skill = 15;
 BuffTrigger.buff_logical_chaofeng = 16;
 BuffTrigger.buff_logical_safe = 19;
 BuffTrigger.buff_logical_safe_all = 20;
-BuffTrigger.buffTypeToBit = { [4] = 1, [5] = 2, [6] = 4, [7] = 8, [8] = 16, [19] = 512, [20] = 1024 };
+BuffTrigger.buffTypeToBit = { [4] = 1, [5] = 2, [6] = 4, [7] = 8, [8] = 16, [19] = 512, [20] = 1024,[16] = 2048 };
 BuffTrigger._hasInit = false;
 function BuffTrigger.init()
     if BuffTrigger._hasInit then
@@ -25,8 +25,10 @@ function BuffTrigger.init()
     end
     BuffTrigger._hasInit = true
     BuffTrigger.safeBuffBit = BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_safe]
+    local a = 1 | 2 |3
     BuffTrigger.safeByAllBuffBit = BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_safe_all]
-    BuffTrigger.forceCtrlBuffBit = BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_bingdong] | BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_xuanyun] | BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_jifei] | BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_jitui] | BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_chaofeng]
+    BuffTrigger.forceCtrlBuffBit = BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_bingdong] | BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_xuanyun] |
+            BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_jifei] | BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_jitui] | BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_chaofeng];
     BuffTrigger.ctrlBuffBit = BuffTrigger.forceCtrlBuffBit & BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_chenmo]
 end
 

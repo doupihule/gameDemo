@@ -17,16 +17,15 @@ function MainModule:ctor()
     self._taskCompMap = {};
     MainModule._instance = self;
     self:initLayer()
-    self:onLoadingUIComplete()
     Message.getInstance():add(MsgCMD.GAME_ONSHOW, self)
     Message.getInstance():add(MsgCMD.VIDEO_STOP, self)
     Message.getInstance():add(MsgCMD.VIDEO_PLAY, self)
+
+    BattleSceneManager.getInstance():enterBattle({levelId="1"},WindowManager.commonUILayer,WindowManager.commonUILayer);
+
 end
 
-function MainModule:onLoadingUIComplete()
-    self.timeLock = Client.getInstance():getMiniServerTime()
-    self:reqVMS()
-end
+
 
 function MainModule:reqVMS()
     UserInfo.platform:reqVMS()
@@ -167,42 +166,23 @@ end
 function MainModule:initLayer()
     WindowManager.rootLayer = GlobalEnv.uiRoot
     WindowManager.commonUILayer = UITools.createUICtn()
-    WindowManager.commonUILayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
     WindowManager.rootLayer:addChild(WindowManager.commonUILayer)
     WindowManager.topUILayer = UITools.createUICtn()
-    WindowManager.topUILayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
-    WindowManager.topUILayer.mouseEnabled = true
-    WindowManager.topUILayer.mouseThrough = true
     WindowManager.rootLayer:addChild(WindowManager.topUILayer)
     WindowManager.guideLayer = UITools.createUICtn()
-    WindowManager.guideLayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
-    WindowManager.guideLayer.cacheAs = "bitmap"
     WindowManager.rootLayer:addChild(WindowManager.guideLayer)
-    WindowManager.guideLayer.mouseEnabled = true
-    WindowManager.guideLayer.mouseThrough = true
     WindowManager.guideLayer:setViewActive(false)
     WindowManager.highLayer = UITools.createUICtn()
-    WindowManager.highLayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
     WindowManager.rootLayer:addChild(WindowManager.highLayer)
     WindowManager.toolsLayer = UITools.createUICtn()
     WindowManager.rootLayer:addChild(WindowManager.toolsLayer)
     WindowManager.maskLayer = UITools.createUICtn()
-    WindowManager.maskLayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
     WindowManager.rootLayer:addChild(WindowManager.maskLayer)
     WindowManager.tipsLayer = UITools.createUICtn()
-    WindowManager.tipsLayer:setViewSize(ScreenAdapterTools.width, ScreenAdapterTools.height)
-    WindowManager.tipsLayer.mouseEnabled = false
-    WindowManager.tipsLayer.mouseThrough = true
     WindowManager.rootLayer:addChild(WindowManager.tipsLayer)
     WindowManager.debugLayer = UITools.createUICtn()
     WindowManager.rootLayer:addChild(WindowManager.debugLayer)
     LogsManager.initLogPanel()
-    if UserInfo.isWeb() then
-        local urlParam = string.find(window.location.href, 'test=1') ~= nil
-        LogsManager.echo(">>>>urlParam>>>>>>", urlParam)
-        GameSwitch.getSwitchMap().SWITCH_GM_DEBUG = 1
-        GameSwitch.getSwitchMap().SWITCH_CD_DEBUG = 1
-    end
     local delayShowLoading = function()
         WindowManager.ShowLoadingUI(nil)
     end

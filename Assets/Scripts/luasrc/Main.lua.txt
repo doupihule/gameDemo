@@ -3,10 +3,10 @@ package.cpath = package.cpath .. ';C:/Users/doupi/.WebStorm2019.3/config/plugins
 --dbg.tcpConnect('localhost', 9966)
 unpack = unpack or table.unpack
 require("framework.init")
+require("sys.init")
 require("battle.init")
-require("sys.consts.init")
-require("sys.func.init")
-require("sys.view.init")
+
+
 
 BaseFunc.onConfigGroupLoadComplete()
 
@@ -24,6 +24,9 @@ __startGame= function()
     GlobalEnv.uiRoot:addChild(label);
     label:setPos(100,200);
     UITools.setViewColor(label,1,0,0,1);
+    LabelTools.setShade(label,5,5,1,1,1,0);
+
+    MainModule.new();
 
 end
 

@@ -1,0 +1,13 @@
+--
+-- Author: XD
+-- Date: 2020-04-11 16:47:35
+--
+local packageName = "sys.manager."
+
+
+--controler 
+require(packageName .. "BattleSceneManager")
+require(packageName .. "BattleLogsManager")
+require(packageName .. "FrameWorkHandle")
+require(packageName .. "GuideManager")
+require(packageName .. "StatisticsManager")

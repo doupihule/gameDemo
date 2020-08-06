@@ -18,49 +18,19 @@ function DataResourceFunc:getIconById(id)
 end
 
 function DataResourceFunc:getDataResourceInfo(dataArr)
-    local result = {}
-    if dataArr[0 + 1] then
-        local switch = {
-            [DataResourceType.COIN] = function()
-                result = { img = ResourceConst.COIN_PNG, num = dataArr[1 + 1] }
-            end,
-            [DataResourceType.GOLD] = function()
-                result = { img = ResourceConst.GOLD_PNG, num = dataArr[1 + 1] }
-            end,
-            [DataResourceType.SP] = function()
-                result = { img = ResourceConst.SP_PNG, num = dataArr[1 + 1] }
-            end,
-            [DataResourceType.PIECE] = function()
-                result = { img = RolesFunc.getInstance():getEquipIcon(RolesFunc.getInstance():getCfgDatasByKey("EquipMaterial", dataArr[1 + 1], "icon")), id = dataArr[1 + 1], num = dataArr[2 + 1] }
-            end,
-            [DataResourceType.COMP] = function()
-                result = { img = ResourceConst.COMP_PNG, num = dataArr[1 + 1] }
-            end,
-            [DataResourceType.FOGCOIN] = function()
-                result = { img = ResourceConst.FOGCOIN_PNG, num = dataArr[1 + 1] }
-            end,
-            [DataResourceType.ACT] = function()
-                result = { img = ResourceConst.ACT_PNG, num = dataArr[1 + 1] }
-            end,
-            [DataResourceType.FOGITEM] = function()
-                result = { img = RolesFunc.getInstance():getEquipIcon(RolesFunc.getInstance():getCfgDatasByKey("EquipMaterial", dataArr[1 + 1], "icon")), id = dataArr[1 + 1], num = dataArr[2 + 1] }
-            end
-        }
-        local casef = switch[tonumber(dataArr[0 + 1])]
-        if not casef then
-            casef = switch["default"]
-        end
-        if casef then
-            casef()
-        end
+    local result
+    local t = dataArr[1];
+    if t == DataResourceType.COIN  then
+        result = { img = ResourceConst.COIN_PNG, num = dataArr[2] }
+    elseif t == DataResourceType.GOLD then
+        result = { img = ResourceConst.GOLD_PNG, num = dataArr[2] }
+    elseif t == DataResourceType.SP then
+        result = { img = ResourceConst.SP_PNG, num = dataArr[2] }
+    elseif t == DataResourceType.PIECE then
+        result = { img = RolesFunc.getInstance():getEquipIcon(RolesFunc.getInstance():getCfgDatasByKey("EquipMaterial", dataArr[2], "icon")), id = dataArr[2], num = dataArr[3] }
+    elseif t == DataResourceType.COMP then
+        result = { img = ResourceConst.COMP_PNG, num = dataArr[2] }
     end
     return result
 end
 
-function DataResourceFunc:showTip(reward)
-    if tonumber(reward[0 + 1]) == DataResourceType.COIN then
-        WindowManager.ShowTip("获得金币 x" .. reward[1 + 1])
-    elseif tonumber(reward[0 + 1]) == DataResourceType.GOLD then
-        WindowManager.ShowTip("获得钻石 x" .. reward[1 + 1])
-    end
-end

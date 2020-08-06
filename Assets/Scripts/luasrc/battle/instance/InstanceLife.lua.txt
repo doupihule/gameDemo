@@ -394,7 +394,7 @@ function InstanceLife:movePos()
             self.hpBar:followTarget()
         end
         if self.mapPoint then
-            self.controler.battleUI:setSmallMapXByScreen(self.mapPoint, self.pos)
+            --self.controler.battleUI:setSmallMapXByScreen(self.mapPoint, self.pos)
         end
         if self.buffBar then
             self.buffBar:followTarget()
@@ -697,7 +697,7 @@ function InstanceLife:onSetToCache()
 end
 
 function InstanceLife:initPointOnSmallMap()
-    self.mapPoint = self.controler.battleUI:createOneMapPoint(self)
+    --self.mapPoint = self.controler.battleUI:createOneMapPoint(self)
 end
 
 function InstanceLife:destroyPoint()

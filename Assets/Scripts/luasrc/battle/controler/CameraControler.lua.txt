@@ -62,12 +62,12 @@ function CameraControler:followPlayer()
     if self.controler.layerControler.isInTouch then
         return
     end
-    if not self.controler.battleUI.isAllowFollw then
-        return
-    end
-    if not self.controler.battleUI.isUseCamera then
-        return
-    end
+    --if not self.controler.battleUI.isAllowFollw then
+    --    return
+    --end
+    --if not self.controler.battleUI.isUseCamera then
+    --    return
+    --end
     self.frontPos1 = self.controler.myHome.pos.x
     for i, item in ipairs(self.controler.campArr_1) do
         if self.frontPos1 < item.pos.x then

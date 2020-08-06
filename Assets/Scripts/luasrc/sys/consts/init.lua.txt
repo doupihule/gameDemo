@@ -18,5 +18,6 @@ require(packageName .. "StorageCode")
 require(packageName .. "TranslateConst")
 require(packageName .. "PoolCode")
 require(packageName .. "MsgCMD")
+require(packageName .. "WindowCfgs")
 
 

@@ -62,7 +62,7 @@ function SkillExpandTrigger.skillExpand_5(instance, skill, params, useArr)
     local name = params[2]
     local continueTime = tonumber(params[3])
     local scaleRate = tonumber(params[4]) / 10000
-    instance.controler.battleUI:freshSkillTipGroup(name, continueTime, scaleRate)
+    --instance.controler.battleUI:freshSkillTipGroup(name, continueTime, scaleRate)
 end
 
 function SkillExpandTrigger.skillExpand_6(instance, skill, params, useArr)

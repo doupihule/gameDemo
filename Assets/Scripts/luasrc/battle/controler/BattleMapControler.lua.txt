@@ -47,11 +47,7 @@ function BattleMapControler:createDecoration(arr, firstName, ctn)
         local info = BattleFunc.getInstance():getCfgDatas("Decoration", item[1])
         local path = "map/" .. firstName .. "/" .. info.pic
         local imageUrl1 = nil
-        if UserInfo.isSystemNative() then
-            imageUrl1 = "map/" .. firstName .. "/" .. info.pic .. ".png"
-        else
-            imageUrl1 = "map/" .. firstName .. "/" .. firstName .. "/" .. info.pic .. ".png"
-        end
+        imageUrl1 = "Assets/Images/map/" .. firstName .. "/" .. info.pic
         local image = UITools.createUIImage(imageUrl1,ResourceConst.boundle_map);
         image:setScale(info.scale / 10000, info.scale / 10000)
         ctn:addChild(image)

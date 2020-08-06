@@ -1,10 +1,11 @@
 UITools = {};
+
 local tempVec2 = CS.UnityEngine.Vector2(0, 0)
 
 --获取recttransform  对于ui  recttransform 和 transform是同一个对象
 function UITools.getViewRectTransform(instance)
     local gameobj = instance.__cobject or instance
-    local tansform = gameobj:GetComponent("Transform");
+    local tansform = gameobj.transform;
     return tansform
 end
 
@@ -14,21 +15,25 @@ function UITools.setPos(instance, x, y)
     local lastpos;
     if(x==nil) then
         lastpos = tansform.anchoredPosition
-        tempVec2.x = lastpos
+        tempVec2.x = instance.x
     else
         tempVec2.x =x;
+        instance.x = x;
     end
     if (y==nil)then
         lastpos = tansform.anchoredPosition
-        tempVec2.y = lastpos;
+        tempVec2.y = instance.y;
     else
-        tempVec2.y = y
+        tempVec2.y = y;
+        instance.y = y;
     end
     tansform.anchoredPosition = tempVec2
 end
 
-local tempColor  ={a=1,r=0,g=0,b=0}
+UITools._tempColor = {a=1,r=0,g=0,b=0}
+
 function UITools.setViewColor(instance,a,r,g,b)
+    local tempColor  =UITools._tempColor
     if a then
         tempColor.a = a
     else

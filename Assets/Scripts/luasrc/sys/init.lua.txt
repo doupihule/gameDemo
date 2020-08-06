@@ -1,0 +1,13 @@
+--
+-- Author: XD
+-- Date: 2020-04-11 16:47:35
+--
+local packageName = "sys."
+
+require(packageName.."consts.init")
+require(packageName.."event.init")
+require(packageName.."func.init")
+require(packageName.."view.init")
+require(packageName.."manager.init")
+require(packageName.."model.init")
+
