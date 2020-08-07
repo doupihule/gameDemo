@@ -21,9 +21,9 @@ function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue
         shanbiRatio = 0
     else
         local basRatio = skillAction.skillLogicalParams[1][3] / 10000
-        shanbiRatio = math.max(1 - basRatio - attackerAttr:getOneAttr(BattleConst.attr_hit) - deferAttr:getOneAttr(BattleConst.attr_dodge) / 10000, 0)
+        shanbiRatio = math.max(1 - basRatio - (attackerAttr:getOneAttr(BattleConst.attr_hit) - deferAttr:getOneAttr(BattleConst.attr_dodge) ) / 10000, 0)
     end
-    local baojiRatio = math.max(attackerAttr:getOneAttr(BattleConst.attr_crit) - deferAttr:getOneAttr(BattleConst.attr_toughness) / 10000, 0)
+    local baojiRatio = math.max((attackerAttr:getOneAttr(BattleConst.attr_crit) - deferAttr:getOneAttr(BattleConst.attr_toughness)) / 10000, 0)
     local realCrit = math.max(math.min(1 - shanbiRatio, baojiRatio), 0)
     local random = RandomUtis.getOneRandom(BattleFunc.battleRandomIndex)
     local baoshang = 1
@@ -33,7 +33,7 @@ function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue
         dmgType = BattleConst.damage_miss
         isMiss = true
     elseif random < shanbiRatio + realCrit then
-        baoshang = BattleFunc.critDamgeRatio + attackerAttr:getOneAttr(BattleConst.attr_critDmg) / 10000
+        baoshang = (BattleFunc.critDamgeRatio + attackerAttr:getOneAttr(BattleConst.attr_critDmg)) / 10000
         dmgType = BattleConst.damage_baoji
     else
         baoshang = 1
@@ -46,7 +46,7 @@ function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue
         local atk = attackerAttr:getOneAttr(BattleConst.attr_attack)
         local def = deferAttr:getOneAttr(BattleConst.attr_def)
         local minDmg = math.round(atk * BattleFunc.minDamageRatio)
-        local targetDmg = math.round(math.ceil(atk - def) * skillPercentValue / 10000 + skillFixValue * baoshang * dmgratio)
+        local targetDmg = math.round((math.ceil(atk - def) * skillPercentValue / 10000 + skillFixValue ) * baoshang * dmgratio)
         local dmg = math.max(minDmg, targetDmg) * buffNums
         if GameSwitch.checkOnOff(GameSwitchConst.SWITCH_BATTLE_INFO) then
             local key = attacker.dataId .. "_" .. skillAction.skillEffectId
@@ -139,7 +139,7 @@ end
 function BattleFormulaTrigger.countDmgRatio(attackerAttr, deferAttr)
     local atkDmgValue = attackerAttr:getOneAttr(BattleConst.attr_damage)
     local defRelietValue = deferAttr:getOneAttr(BattleConst.attr_relief)
-    local dmgratio = 1 + atkDmgValue - defRelietValue / 10000
+    local dmgratio = 1 + (atkDmgValue - defRelietValue) / 10000
     if dmgratio < 0 then
         dmgratio = 0
     end
@@ -170,7 +170,7 @@ function BattleFormulaTrigger.trit(attacker, defer, skill, skillAction, buffNums
         out[1] = BattleConst.damage_normal
         critdmage = 1
     end
-    local extraAdded = 1 + deferAttr:getOneAttr(BattleConst.attr_betreated) / 10000 * 1 + attackerAttr:getOneAttr(BattleConst.attr_treate) / 10000
+    local extraAdded = (1 + deferAttr:getOneAttr(BattleConst.attr_betreated) / 10000) * (1 + attackerAttr:getOneAttr(BattleConst.attr_treate) / 10000)
     local skillParam = skillAction.skillLogicalParams[1]
     local treatValue = math.max(1, math.ceil(attackerAttr:getOneAttr(BattleConst.attr_attack) * skillParam[2] / 10000 + skillParam[1]) * critdmage * extraAdded)
     local finalDmg = attackerAttr:getOneAttr(BattleConst.attr_final_treate) / 10000 + 1

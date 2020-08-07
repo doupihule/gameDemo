@@ -12,7 +12,7 @@ end
 
 function RoleBuffBar:setData(owner, ctn)
     self.owner = owner
-    self._offsetY = -self.owner.cfgData.size[0 + 1] * self.owner.cfgScale - 50
+    self._offsetY = -self.owner.cfgData.size[1] * self.owner.cfgScale - 50
     ctn:addChild(self)
     self:onBuffChange()
     self:setViewActive(false)
@@ -63,7 +63,7 @@ function RoleBuffBar:onBuffChange(buff)
                             cacheItem = UITools.createUIImage("uisource/bufficon/bufficon/" .. buffInfo.icon[1 + 1] .. ".png")
                         end
                         self:addChild(cacheItem)
-                        cacheItem.x = 25 * #buffIconList - self.maxIcon / 2
+                        cacheItem.x = 25 * (#buffIconList - self.maxIcon) / 2
                         cacheItem.y = offsetY
                         table.insert(buffIconList, buffInfo.icon[1 + 1])
                     end

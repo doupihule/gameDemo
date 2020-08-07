@@ -281,7 +281,7 @@ function InstanceBasic:playSpecialSysAction(actionName, sysTime, startTime, endT
     local sysFrame = BattleFunc.getInstance():turnMinisecondToframe(sysTime)
     local endFrame = BattleFunc.getInstance():turnMinisecondToframe(endTime)
     self.controler:setCallBack(math.round(frame / aniSpeed), self.onStartActionComp, self)
-    self.controler:setCallBack(math.round(frame + sysFrame / aniSpeed), self.onSysActionComp, self)
+    self.controler:setCallBack(math.round((frame + sysFrame) / aniSpeed), self.onSysActionComp, self)
     return actionLength + sysFrame + frame - endFrame
 end
 

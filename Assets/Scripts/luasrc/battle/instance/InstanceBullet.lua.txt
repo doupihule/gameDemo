@@ -116,7 +116,7 @@ function InstanceBullet:adjustInitPos(targetRole)
     local disSq1 = disX1 * disX1 + disZ1 * disZ1
     local disSq2 = disX2 * disX2 + disZ2 * disZ2
     if disSq2 > disSq1 then
-        self:setPos(targetRole.pos.x + self.owner.pos.x / 2, self.pos.y, targetRole.pos.z + self.owner.pos.z / 2)
+        self:setPos( (targetRole.pos.x + self.owner.pos.x) / 2, self.pos.y, (targetRole.pos.z + self.owner.pos.z) / 2)
     end
 end
 

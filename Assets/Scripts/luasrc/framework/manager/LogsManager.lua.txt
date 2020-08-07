@@ -374,7 +374,10 @@ function LogsManager.turnStr(title, message, optionalParams, isError)
         arr = { resultStr }
     else
         if length > 0 then
-            resultStr = message .. " " .. table.concat(optionalParams, " ")
+            resultStr = message;
+            for i, v in pairs(optionalParams) do
+                resultStr = resultStr .. tostring(v)
+            end
         else
             resultStr = message
         end

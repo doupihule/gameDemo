@@ -28,6 +28,7 @@ function BattleRoleView:ctor(viewName, scale, viewIndex)
     self.currentViewNums = 1
     self._viewScale = scale
     self.currentAni = self:cloneOneChildAni()
+    self:setName(viewName);
 end
 
 function BattleRoleView:setSpace(xSpace, ySpace)

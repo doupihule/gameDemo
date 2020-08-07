@@ -40,7 +40,7 @@ function RandomUtis.yinziGetNext(index)
         index = 0
     end
     local t = RandomUtis.yinziGetOriginUint(index)
-    return t % RandomUtis.RANDOM_MAX + 1 / RandomUtis.RANDOM_MAX
+    return (t % (RandomUtis.RANDOM_MAX + 1)) / RandomUtis.RANDOM_MAX
 end
 
 function RandomUtis.yinziGetOriginUint(index)
@@ -97,7 +97,7 @@ function RandomUtis.getOneRandomFromArea(startNum, endNum, index, damic)
         endNum = tempValue
     end
     local random = RandomUtis.getOneRandom(index)
-    local k = endNum - startNum / 1
+    local k = (endNum - startNum) / 1
     local result = k * random - k * 0 + startNum
     result = result < startNum and startNum or result
     result = result > endNum and endNum or result

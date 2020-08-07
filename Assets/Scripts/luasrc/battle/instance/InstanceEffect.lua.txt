@@ -145,7 +145,7 @@ function InstanceEffect:checkLineFollowTarget()
     end
     self:setRotation(ang * BattleFunc.radtoAngle)
     if tweenFrame > 0 then
-        scale = scale * 1 - tweenFrame / self.expandParams.totalFrame
+        scale = scale * (1 - tweenFrame) / self.expandParams.totalFrame
     end
     self._myView:setScale(scale, 1)
     self.expandParams.frame = self.expandParams.frame - 1

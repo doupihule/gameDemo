@@ -21,7 +21,7 @@ function MainModule:ctor()
     Message.getInstance():add(MsgCMD.VIDEO_STOP, self)
     Message.getInstance():add(MsgCMD.VIDEO_PLAY, self)
 
-    BattleSceneManager.getInstance():enterBattle({levelId="1"},WindowManager.commonUILayer,WindowManager.commonUILayer);
+    BattleSceneManager.getInstance():enterBattle({levelId="2"},WindowManager.commonUILayer,WindowManager.commonUILayer);
 
 end
 
@@ -165,22 +165,22 @@ function MainModule:reStartGame()
 end
 function MainModule:initLayer()
     WindowManager.rootLayer = GlobalEnv.uiRoot
-    WindowManager.commonUILayer = UITools.createUICtn()
+    WindowManager.commonUILayer = UITools.createUICtn("commonUILayer")
     WindowManager.rootLayer:addChild(WindowManager.commonUILayer)
-    WindowManager.topUILayer = UITools.createUICtn()
+    WindowManager.topUILayer = UITools.createUICtn("topUILayer")
     WindowManager.rootLayer:addChild(WindowManager.topUILayer)
-    WindowManager.guideLayer = UITools.createUICtn()
+    WindowManager.guideLayer = UITools.createUICtn("guideLayer")
     WindowManager.rootLayer:addChild(WindowManager.guideLayer)
     WindowManager.guideLayer:setViewActive(false)
-    WindowManager.highLayer = UITools.createUICtn()
+    WindowManager.highLayer = UITools.createUICtn("highLayer")
     WindowManager.rootLayer:addChild(WindowManager.highLayer)
-    WindowManager.toolsLayer = UITools.createUICtn()
+    WindowManager.toolsLayer = UITools.createUICtn("toolsLayer")
     WindowManager.rootLayer:addChild(WindowManager.toolsLayer)
-    WindowManager.maskLayer = UITools.createUICtn()
+    WindowManager.maskLayer = UITools.createUICtn("maskLayer")
     WindowManager.rootLayer:addChild(WindowManager.maskLayer)
-    WindowManager.tipsLayer = UITools.createUICtn()
+    WindowManager.tipsLayer = UITools.createUICtn("tipsLayer")
     WindowManager.rootLayer:addChild(WindowManager.tipsLayer)
-    WindowManager.debugLayer = UITools.createUICtn()
+    WindowManager.debugLayer = UITools.createUICtn("debugLayer")
     WindowManager.rootLayer:addChild(WindowManager.debugLayer)
     LogsManager.initLogPanel()
     local delayShowLoading = function()

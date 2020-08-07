@@ -335,7 +335,7 @@ function ChooseTrigger.chooseRoleByCircle(instance, r, x, z, targetArr, chooseNu
     end
     local radArea = nil
     local spdAbs = math.sqrt(spdx * spdx + spdy * spdy + spdz * spdz)
-    local powr = r + spdAbs * r + spdAbs
+    local powr = (r + spdAbs) * (r + spdAbs)
     if ang < 360 then
         radArea = ang * BattleFunc.angletoRad / 2
     end

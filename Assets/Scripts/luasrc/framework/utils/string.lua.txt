@@ -379,42 +379,6 @@ function string.splitCharsStr(input, lineChars)
 end
 
 
---现在是560像素宽度 18号尺寸,可以显示62个 通过比例 向下取余计算 一行文本可以显示多少个字符 24号 是 46个
---计算一行文本应该可以显示多少个字符,中文算2个 英文算一个 
-
-local lineObj = {
-    x1 = 18,
-    y1 = 62,
-    z1 = 560,
-
-    x2 = 24,
-    y2 = 45,
-    z2 = 560,
-
-
-    x3 = 18,
-    y3 = 10,
-    z3 = 96,
-
-    x4 = 24,
-    y4 = 70,
-    z4 = 844,
-
-}
-
-lineObj.k = (lineObj.y2 - lineObj.y1) / (lineObj.x2 - lineObj.x1)
-lineObj.kz = (lineObj.y3 - lineObj.y1) / (lineObj.z3 - lineObj.z1)
-
-function string.countTextLineLength(textWid, textSize)
-    --斜率k =(y2-y1)/(x2-x1) = -16/6
-    --y = k*(x-x1) - y1
-    local b = lineObj.k * (textSize - lineObj.x1) + lineObj.y1
-    --local bk = lineObj.kz *(textWid - lineObj.z1) + lineObj.y1
-    local length = math.floor(b * textWid / lineObj.z1) - 1
-    --echo(length,textSize,textWid,"____textSize")
-    return length
-end
-
 
 
 --将文本转化成带换行符的字符串
@@ -470,10 +434,6 @@ function string.stripAndLower(str)
     return string.lower(ret);
 end
 
---模拟js的正则表达式 test
-function string.rejstest(re, str)
-
-end
 
 
 

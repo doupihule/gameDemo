@@ -16,6 +16,7 @@ function GlobalEnv.initStage()
 
     local size = GlobalEnv.uiRoot:getViewRect();
     local scale = GlobalEnv.uiRoot:getScale();
+    LogsManager.echo("size",size.x,size.y);
     ScreenAdapterTools.checkScreenFixMode(size.x, size.y)
 
 end

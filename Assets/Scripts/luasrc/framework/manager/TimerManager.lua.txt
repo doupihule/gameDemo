@@ -183,8 +183,8 @@ end
 
 function TimerManager:checkOverDay(targetTime)
     local daySecond = 3600000 * 24
-    local day1 = math.floor(targetTime - TimerManager.timeOurOffset * 3600000 / daySecond)
-    local day2 = math.floor(Client.getInstance():getMiniServerTime() - TimerManager.timeOurOffset * 3600000 / daySecond)
+    local day1 = math.floor((targetTime - TimerManager.timeOurOffset * 3600000) / daySecond)
+    local day2 = math.floor((Client.getInstance():getMiniServerTime() - TimerManager.timeOurOffset * 3600000) / daySecond)
     if day1 ~= day2 then
         return true
     end

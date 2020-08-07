@@ -71,7 +71,7 @@ function LoadingUI:initView()
         self.profgBg:addChild(self.loadingtips)
     end
     if not self.loadingstar then
-        self.loadingstar = UITools.createUICtn()
+        self.loadingstar = UITools.createUICtn("loadingstar")
         self.loadingstar:setPos(-26,-22);
         self.profgBg:addChild(self.loadingstar)
         self.loadingicon = UITools.createUIImage("static/loading_image_jindudiche.png")

@@ -66,7 +66,7 @@ function RoleHealthBar:onHpChange()
         if percent + percent2 > 1 then
             self.shieldImage:setPos(self._initWidth / 2 - wid2,nil)
         else
-            self.shieldImage:setPos(self.srollImage.width - self._initWidth / 2,nil)
+            self.shieldImage:setPos( self.srollImage.width - self._initWidth / 2,nil)
         end
 
     else

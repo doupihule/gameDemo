@@ -182,9 +182,11 @@ function GameSwitch.countVersionToNumber(version)
         local tempArr = string.split(version, ".")
         local resultNum = 0
         local len = #tempArr
-        local i = len - 1
+        for i = len,1,-1 do
+            resultNum = resultNum + math.pow(1000, len - i ) * tonumber(tempArr[i ])
+        end
         repeat
-            resultNum = resultNum + math.pow(1000, len - i - 1) * tonumber(tempArr[i + 1])
+
             i = i - 1
         until not (i >= 0)
         return resultNum

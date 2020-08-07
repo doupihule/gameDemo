@@ -26,6 +26,7 @@ ScreenAdapterTools.PHONE_BANGS = {  };
 ScreenAdapterTools.windowWidth = 640;
 ScreenAdapterTools.windowHeight = 1136;
 ScreenAdapterTools.toolBarWay = -1;
+ScreenAdapterTools.rootScale = 1;
 function ScreenAdapterTools.isNotchDevice()
     return ScreenAdapterTools.toolBarWidth ~= 0
 end
@@ -44,17 +45,16 @@ function ScreenAdapterTools.checkScreenFixMode(browWidth, browHeight)
     if ScreenAdapterTools.designWidth > ScreenAdapterTools.designHeight then
         ScreenAdapterTools.isLandSpace = true
     end
-    local minScale = ScreenAdapterTools.designWidth / ScreenAdapterTools.designHeight
     local borderScale = ScreenAdapterTools.designWidth / ScreenAdapterTools.designHeight
     local targetScale = browWidth / browHeight
     local scaleMode = nil
     if ScreenAdapterTools.isLandSpace then
-        minScale = ScreenAdapterTools.designHeight / ScreenAdapterTools.maxWidth
         if targetScale < borderScale then
             ScreenAdapterTools.width = ScreenAdapterTools.designWidth
+            ScreenAdapterTools.rootScale = ScreenAdapterTools.width/browWidth;
             local targetHei = math.round(ScreenAdapterTools.width / targetScale)
             if targetHei > ScreenAdapterTools.maxHeight then
-                ScreenAdapterTools.sceneOffsetY = targetHei - ScreenAdapterTools.maxHeight / 2
+                ScreenAdapterTools.sceneOffsetY = (targetHei - ScreenAdapterTools.maxHeight) / 2
                 ScreenAdapterTools.height = ScreenAdapterTools.maxHeight
             else
                 ScreenAdapterTools.height = targetHei
@@ -63,14 +63,16 @@ function ScreenAdapterTools.checkScreenFixMode(browWidth, browHeight)
         else
             ScreenAdapterTools.height = ScreenAdapterTools.designHeight
             ScreenAdapterTools.width = math.round(ScreenAdapterTools.designHeight * targetScale)
+            ScreenAdapterTools.rootScale = ScreenAdapterTools.height/browHeight;
             scaleMode = "fixedheight"
         end
     else
         if targetScale > borderScale then
             ScreenAdapterTools.height = ScreenAdapterTools.designHeight
+            ScreenAdapterTools.rootScale = ScreenAdapterTools.height/browHeight;
             local targetWid = math.round(ScreenAdapterTools.designHeight * targetScale)
             if targetWid > ScreenAdapterTools.maxWidth then
-                ScreenAdapterTools.sceneOffsetX = targetWid - ScreenAdapterTools.maxWidth / 2
+                ScreenAdapterTools.sceneOffsetX = (targetWid - ScreenAdapterTools.maxWidth) / 2
                 ScreenAdapterTools.width = ScreenAdapterTools.maxWidth
             else
                 ScreenAdapterTools.width = targetWid
@@ -78,13 +80,14 @@ function ScreenAdapterTools.checkScreenFixMode(browWidth, browHeight)
             scaleMode = "fixedheight"
         else
             ScreenAdapterTools.width = ScreenAdapterTools.designWidth
+            ScreenAdapterTools.rootScale = ScreenAdapterTools.width/browWidth;
             ScreenAdapterTools.height = math.round(ScreenAdapterTools.designWidth / targetScale)
             scaleMode = "fixedwidth"
         end
     end
-    ScreenAdapterTools.UIOffsetX = ScreenAdapterTools.width - ScreenAdapterTools.designWidth / 2
-    ScreenAdapterTools.UIOffsetY = ScreenAdapterTools.height - ScreenAdapterTools.designHeight / 2
-    LogsManager.echo("适配结果:this.isLandSpace", scaleMode, ScreenAdapterTools.isLandSpace, ScreenAdapterTools.sceneOffsetX, ScreenAdapterTools.sceneOffsetY)
+    ScreenAdapterTools.UIOffsetX = (ScreenAdapterTools.width - ScreenAdapterTools.designWidth) / 2
+    ScreenAdapterTools.UIOffsetY = (ScreenAdapterTools.height - ScreenAdapterTools.designHeight) / 2
+    LogsManager.echo("适配结果:this.isLandSpace", scaleMode,  ScreenAdapterTools.sceneOffsetX, ScreenAdapterTools.sceneOffsetY,"targetScale",targetScale)
     LogsManager.echo("stageW:", browWidth, "stageH:", browHeight, "wd:", ScreenAdapterTools.width, "hei:", ScreenAdapterTools.height, "ofx:", ScreenAdapterTools.UIOffsetX, "ofy:", ScreenAdapterTools.UIOffsetY)
     return scaleMode
 end

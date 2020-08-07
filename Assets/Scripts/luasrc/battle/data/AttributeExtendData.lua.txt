@@ -141,7 +141,7 @@ function AttributeExtendData:countOneProp(attrId)
     percentValue = percentValue + self.tempOnceAttr[attrId] and self.tempOnceAttr[attrId][2] or 0
     local resultValue = nil
     if showType == BattleConst.PROPSTYLE_NUM then
-        resultValue = 1 + percentValue / 10000 * baseValue + fixValue
+        resultValue = (1 + percentValue / 10000) * baseValue + fixValue
     else
         resultValue = baseValue + fixValue
     end

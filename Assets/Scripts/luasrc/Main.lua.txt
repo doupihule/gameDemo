@@ -22,7 +22,7 @@ __startGame= function()
     --local label = LabelTools.createLabel("this<color=#FF0000>testaaa</color> istezst",100,100,20,5,true,3,1.1);
     --LabelTools.setLabelWrap(label,0);
     --GlobalEnv.uiRoot:addChild(label);
-    --label:setPos(100,200);
+    --label:setPos(100,200);g
     --UITools.setViewColor(label,1,0,0,1);
     --LabelTools.setShade(label,5,5,1,1,1,0);
 
@@ -30,7 +30,7 @@ __startGame= function()
 
 
     --准备进入游戏
-    --MainModule.new();
+    MainModule.new();
 
 end
 

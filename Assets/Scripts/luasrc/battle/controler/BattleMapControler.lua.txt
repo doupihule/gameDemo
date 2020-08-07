@@ -22,14 +22,14 @@ function BattleMapControler:setData(sceneId)
     local startOffest = tonumber(backInfo[3])
     self._maxSceneWidth = sceneInfo.long
     self:setMapSize()
-    local ctn1 = UITools.createUICtn()
+    local ctn1 = UITools.createUICtn("battleMapCtn");
     ctn1:setPos(-ScreenAdapterTools.sceneOffsetX - ScreenAdapterTools.UIOffsetX - startOffest,0)
     self.controler.layerControler.a1:addChild(ctn1)
     self._mapInfo = { anchor = 0, infoArr = {},
                       decorateArr = {},
                       ctn = ctn1,
-                      initY = -(ScreenAdapterTools.maxHeight - ScreenAdapterTools.designHeight) / 2,
-                      speed = 0.5 }
+                      initY = (ScreenAdapterTools.maxHeight - ScreenAdapterTools.designHeight) / 2,
+                       }
     for i = 1, self._pickNums,1 do
         self:createOneView(mapName, i, mapStartIndex, self._mapInfo)
         mapStartIndex = (mapStartIndex + 1 > self._allMapCount and 1  or  mapStartIndex + 1 )
@@ -39,6 +39,7 @@ end
 
 function BattleMapControler:setMapSize()
     self._pickNums = math.ceil(self._maxSceneWidth / self._areaWidth / 2) + 1
+    print("puckNum",self._pickNums,"self._maxSceneWidth",self._maxSceneWidth,self._areaWidth);
     self.controler.layerControler:setSceneInfo()
 end
 
@@ -54,7 +55,7 @@ function BattleMapControler:createDecoration(arr, firstName, ctn)
         table.insert(self._mapInfo.decorateArr, { view = image })
         local xpos ;
         if self.startMapIndex ~= 1 then
-            local missWidth = self.startMapIndex - 1 * 256 * 2
+            local missWidth = (self.startMapIndex - 1) * 256 * 2
             if tonumber(item[2]) - missWidth < 0 then
                 xpos = 256 * 9 - missWidth + tonumber(item[2])
             else
@@ -63,7 +64,8 @@ function BattleMapControler:createDecoration(arr, firstName, ctn)
         else
             xpos = tonumber(item[2])
         end
-        image:setPos(xpos,-tonumber(item[3]))
+        print("itemypos",item[3],xpos,imageUrl1)
+        image:setPos(xpos,tonumber(item[3]))
     end
 end
 
@@ -88,17 +90,18 @@ function BattleMapControler:createOneView(firstName, index, mapId, mpInfo)
     imageUrl1 = "Assets/Images/map/" .. firstName .. "/" .. name
     local image = UITools.createUIImage(imageUrl1,"map");
     mpInfo.ctn:addChild(image)
-    local posIndex = index - 1 * 2
+    local posIndex = (index - 1) * 2
     local xpos = posIndex * self._areaWidth - self._smallMapCount * 256
+    print("createOneView",posIndex,index,self._areaWidth,self._smallMapCount,"xpos",xpos);
     if mapId == 5 then
         self._smallMapCount = self._smallMapCount + 1
     end
-    image:setViewPivot(0,mpInfo.anchor);
+
+    image:setViewPivot(0,1);
     image:setPos(xpos,0);
     local viewInfo = { view = image }
     table.insert(mpInfo.infoArr, viewInfo)
 
-    LogsManager.echo("id:", mapId, "pos:", xpos)
 end
 
 function BattleMapControler:onMapMove(targety, pos)

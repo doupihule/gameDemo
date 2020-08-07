@@ -25,7 +25,7 @@ public class Main : MonoBehaviour
         ResourceManager.Instance.Init(this.gameObject);
 
         GameObject a = ResourceManager.Instance.LoadAsset<GameObject>("Assets/UI/Prefabs/main/GameMainUI.prefab", "Assets/UI/Prefabs/main/GameMainUI.prefab", "mainab");
-
+        
         //= (GameObject)Resources.Load("UI/Prefabs/GameMainUI");
         GameObject ui = Instantiate(a);
         //把ui添加到舞台

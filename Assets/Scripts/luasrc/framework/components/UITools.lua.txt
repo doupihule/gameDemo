@@ -139,7 +139,7 @@ function UITools.setScale(instance, sx, sy)
         lastScale =  tansform.localScale
         tempScaleVec3.y = lastScale.y;
     else
-        tempScaleVec3.y = y
+        tempScaleVec3.y = sy
     end
     tempScaleVec3.z =1;
     tansform.localScale = tempScaleVec3;
@@ -234,6 +234,11 @@ function UITools.removeChildAt (self, index)
     end
 end
 
+--设置名字
+function UITools.setName(self,name)
+    self.__cobject.name = name
+end
+
 --给一个绑定通用函数
 function UITools.bindUIFunc(luaInstance)
     --如果没有绑定__cobject return
@@ -257,6 +262,7 @@ function UITools.bindUIFunc(luaInstance)
     luaInstance.setViewSize = UITools.setViewSize
     luaInstance.setViewPivot = UITools.setViewPivot
     luaInstance.setViewActive = UITools.setViewActive
+    luaInstance.setName = UITools.setName;
 
 end
 
@@ -278,14 +284,20 @@ function UITools.setImageUrl(image,url,boundlename,adjustSize)
 end
 
 --创建一个2dui 容器
-function UITools.createUICtn()
+function UITools.createUICtn(name)
     local ctn = BaseContainer.new();
+    if(name) then
+        ctn.__cobject.name = name
+    end
+
     return ctn
 end
 
 --创建ui图片
 function UITools.createUIImage(url,boundlename)
-    local imgCtn = UITools.createUICtn();
+    local tempArr = string.split(url,"/")
+    local name = tempArr[#tempArr]
+    local imgCtn = UITools.createUICtn(name);
     UITools.setImageUrl(imgCtn,url,boundlename,true);
     return imgCtn;
 end
