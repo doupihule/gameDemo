@@ -42,7 +42,7 @@ function BattleLogicalControler:setData(data)
     self.tweenControler:setData()
     self.startTime = Client.getInstance():getServerTime()
     BattleFunc.curBattleType = BattleConst.BATTLETYPE_NORMAL
-
+    self:initGame()
     self:setNormalMap()
     self.cameraControler:updateCtnPos()
 end
@@ -121,7 +121,7 @@ function BattleLogicalControler:createInstance(data, cacheId, model, classModel,
         instance:setData(data)
     else
         local view = nil
-        instance = classModel(self)
+        instance = classModel.new(self)
         instance.cacheId = cacheId
         if resName then
             local expandView = nil
@@ -294,6 +294,8 @@ function BattleLogicalControler:createHome(id, data, lifeType, camp, offestX, of
     if offestY == nil then
         offestY = 0
     end
+    id = tostring(id);
+    print(type(id),"id---",id)
     local cacheId = PoolCode.POOL_HOME .. id .. "_" .. lifeType .. "_" .. camp
     local scale = 1
     local resname = "role_1000"

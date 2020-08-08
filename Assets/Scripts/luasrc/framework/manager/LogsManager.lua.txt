@@ -50,6 +50,7 @@ function LogsManager.errorTag(errorId, message, ...)
     TimerManager.getInstance():add(LogsManager.sendErrorToPlatform, LogsManager, 10, 1, false, { concatStr, LogsManager.errorTag_gameError, 80, errorId })
     LogsManager.insterOneLogs(concatStr)
     print(unpack(resultArr))
+    print(debug.traceback(1,1,3))
 end
 
 function LogsManager.systemError(message, ...)

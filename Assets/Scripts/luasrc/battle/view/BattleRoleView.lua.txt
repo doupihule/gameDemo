@@ -104,6 +104,7 @@ function BattleRoleView:sortChildView()
 end
 
 function BattleRoleView:cloneOneChildAni()
+    print("self._viewname",self._viewName)
     local ani = DisplayUtils.createSpine(self._viewName)
     ani:setScale(self._viewScale, self._viewScale)
     table.insert(self._childViewArr, ani)

@@ -13,7 +13,6 @@ BaseFunc.onConfigGroupLoadComplete()
 --在c端调用
 __startGame= function()
     GlobalEnv.initStage()
-
     --@xd_test测试代码
     --local img = UITools.createUIImage("Assets/UI/UIRes/common/common_icon_jinbi","uiimage");
     --GlobalEnv.uiRoot:addChild(img);
