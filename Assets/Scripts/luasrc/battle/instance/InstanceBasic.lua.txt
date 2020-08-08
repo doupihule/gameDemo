@@ -122,7 +122,7 @@ function InstanceBasic:realShowView()
         return
     end
     local x = self.pos.x
-    local y = self.pos.y + self.pos.z
+    local y = -(self.pos.y + self.pos.z)
     UITools.setPos(self._myView,x,y);
     if self._myView2 then
         UITools.setPos(self._myView2,x,y);

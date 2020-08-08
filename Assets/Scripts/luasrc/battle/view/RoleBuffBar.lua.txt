@@ -1,4 +1,4 @@
-RoleBuffBar = class('RoleBuffBar')
+RoleBuffBar = class('RoleBuffBar',BaseContainer)
 
 function RoleBuffBar:ctor()
     RoleBuffBar.super.ctor(self)

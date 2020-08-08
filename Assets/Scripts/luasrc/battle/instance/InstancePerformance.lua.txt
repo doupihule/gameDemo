@@ -71,7 +71,7 @@ function InstancePerformance:doShadeFollow()
 end
 
 function InstancePerformance:createShade()
-    self._shade = UITools.createUIImage()
+    self._shade = UITools.createUICtn("shade");
     local scale = BattleFunc.getInstance():getShadeScale(self.cfgData.size[2] * self.cfgScale)
     local formation = BattleRoleView.getPosArrByViewNums(self.childViewNums)
     local i = 0
@@ -81,7 +81,7 @@ function InstancePerformance:createShade()
         local posOffset = formation[i]
         local xSpace = self._myView._xSpace
         local ySpace = self._myView._ySpace
-        childShade:pos(xSpace * posOffset[1] + 2, ySpace * posOffset[2] + 3, true)
+        childShade:setPos(xSpace * posOffset[1] + 2, ySpace * posOffset[2] + 3, true)
         childShade:setScale(scale, scale)
         self._shade:addChild(childShade)
     end

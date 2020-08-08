@@ -1,4 +1,4 @@
-RoleHealthBar = class('RoleHealthBar')
+RoleHealthBar = class('RoleHealthBar',BaseContainer)
 
 function RoleHealthBar:ctor()
     RoleHealthBar.super.ctor(self)

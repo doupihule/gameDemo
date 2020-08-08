@@ -1,0 +1,12 @@
+RolesFunc = class('RolesFunc', BaseFunc)
+
+function RolesFunc.getInstance()
+    if not RolesFunc._instance then
+        RolesFunc._instance = RolesFunc.new()
+    end
+    return RolesFunc._instance
+end
+
+function RolesFunc:getCfgsPathArr()
+    return {   "Role" ,"RoleStar","RoleUpdate","EquipMaterial","Equip","RoleComment" };
+end

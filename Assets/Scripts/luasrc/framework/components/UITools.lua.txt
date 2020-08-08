@@ -298,6 +298,10 @@ function UITools.createUIImage(url,boundlename)
     local tempArr = string.split(url,"/")
     local name = tempArr[#tempArr]
     local imgCtn = UITools.createUICtn(name);
+    --默认是boundleui
+    if not boundlename then
+        boundlename = ResourceConst.boundle_ui
+    end
     UITools.setImageUrl(imgCtn,url,boundlename,true);
     return imgCtn;
 end

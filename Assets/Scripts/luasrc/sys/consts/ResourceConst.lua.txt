@@ -10,3 +10,10 @@ ResourceConst.UIResPath = "Assets/UI/UIRes/"
 ResourceConst.baseLabelPrefeb = "base/BaseLabel";
 ResourceConst.baseContainerPrefeb = "base/BaseContainer";
 
+ResourceConst.BATTLE_SHADE = "Assets/UI/UIRes/battle/battle_image_yinying"
+
+ResourceConst.BATTLE_HEALTH_BACK = "Assets/UI/UIRes/battle/battle_image_xutiaodi"
+ResourceConst.BATTLE_HEALTH_PROGRESS = "Assets/UI/UIRes/battle/battle_image_xutiao1"
+ResourceConst.BATTLE_HEALTH_PROGRESS2 = "Assets/UI/UIRes/battle/battle_image_xutiao2"
+ResourceConst.BATTLE_HEALTH_HUDUN = "Assets/UI/UIRes/battle/battle_image_xutiao3"
+

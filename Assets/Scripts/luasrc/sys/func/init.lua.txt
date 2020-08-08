@@ -2,3 +2,4 @@ local packageName = "sys.func."
 require(packageName .. "BattleFunc")
 require(packageName .. "LevelFunc")
 require(packageName .. "DataResourceFunc")
+require(packageName .. "RolesFunc")

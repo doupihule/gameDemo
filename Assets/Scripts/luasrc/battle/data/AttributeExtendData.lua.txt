@@ -63,12 +63,12 @@ end
 
 function AttributeExtendData:resetBaseAtt(attrArr)
     attrArr = BattleFunc.getInstance():turnPropArrToTable(attrArr)
-    if self.lifeType ~= BattleConst.LIFE_JIDI then
-        for key, info in pairs(attrArr) do
-            info[1] = RolesFunc.getInstance():getAttrNumByLevel(key, self.id, self.level, self.starLevel, true, nil, self.equip)
-            attrArr[key] = info
-        end
-    end
+    --if self.lifeType ~= BattleConst.LIFE_JIDI then
+    --    for key, info in pairs(attrArr) do
+    --        info[1] = RolesFunc.getInstance():getAttrNumByLevel(key, self.id, self.level, self.starLevel, true, nil, self.equip)
+    --        attrArr[key] = info
+    --    end
+    --end
     return attrArr
 end
 
@@ -137,8 +137,8 @@ function AttributeExtendData:countOneProp(attrId)
     local baseValue = self.baseAttr[attrId] and self.baseAttr[attrId][1] or 0
     local fixValue = self.extraAttr[attrId] and self.extraAttr[attrId][1] or 0
     local percentValue = self.extraAttr[attrId] and self.extraAttr[attrId][2] or 0
-    fixValue = fixValue + self.tempOnceAttr[attrId] and self.tempOnceAttr[attrId][2] or 0
-    percentValue = percentValue + self.tempOnceAttr[attrId] and self.tempOnceAttr[attrId][2] or 0
+    fixValue = fixValue + (self.tempOnceAttr[attrId] and self.tempOnceAttr[attrId][2] or 0)
+    percentValue = percentValue + (self.tempOnceAttr[attrId] and self.tempOnceAttr[attrId][2] or 0)
     local resultValue = nil
     if showType == BattleConst.PROPSTYLE_NUM then
         resultValue = (1 + percentValue / 10000) * baseValue + fixValue

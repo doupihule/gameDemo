@@ -42,9 +42,10 @@ function BattleLogicalControler:setData(data)
     self.tweenControler:setData()
     self.startTime = Client.getInstance():getServerTime()
     BattleFunc.curBattleType = BattleConst.BATTLETYPE_NORMAL
-    self:initGame()
+
     self:setNormalMap()
     self.cameraControler:updateCtnPos()
+    self:initGame()
 end
 
 function BattleLogicalControler:setNormalMap()
@@ -195,8 +196,8 @@ function BattleLogicalControler:createRole(id, data, lifeType, camp, offestX, of
     if not data.id then
         data.id = id
     end
-    local modelName = nil
-    local classObj = nil
+    local modelName
+    local classObj
     local cfgs = BattleFunc.getInstance():getCfgDatas("Role", id)
     if camp == BattleConst.ROLEGROUP_MYSELF then
         modelName = BattleConst.model_role
@@ -439,11 +440,11 @@ function BattleLogicalControler:createSkillContent(skillArr, parent)
 end
 
 function BattleLogicalControler:createSkillData(skillId, level, role, skillType, lifeType)
-    return BattleSkillData(skillId, level, role, skillType, nil, lifeType)
+    return BattleSkillData.new(skillId, level, role, skillType, nil, lifeType)
 end
 
 function BattleLogicalControler:createPassiveSkill(skillId, level, role, relyonSkill)
-    return PassiveSkillData(skillId, level, role, BattleConst.skill_kind_passive, relyonSkill)
+    return PassiveSkillData.new(skillId, level, role, BattleConst.skill_kind_passive, relyonSkill)
 end
 
 function BattleLogicalControler:createShade()

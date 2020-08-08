@@ -20,6 +20,9 @@ end
 
 --加载Sprite图片
 function ResourceManager.loadSprite(imageurl,boundlename)
+    if(not imageurl) then
+        LogsManager.errorTag("nullImageUrl","ResourceManager.loadSprite");
+    end
     local path = imageurl ..".png"
     local sp = CS.Resource.ResourceManager.Instance:luaLoadSpriteAsset(path, path, boundlename);
     if(not sp)then

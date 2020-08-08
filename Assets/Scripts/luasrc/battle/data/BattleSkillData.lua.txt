@@ -50,6 +50,7 @@ function BattleSkillData:updateLevel(level)
     if self.skillType ~= BattleConst.skill_kind_passive then
         self.cfgData = BattleFunc.getInstance():getCfgDatas("Skill", self._skillId)
         local value = self.cfgData.action and self.cfgData.action[5]
+        value = tonumber(value);
         if value and value > 0 then
             self.skillWaitFrame = BattleFunc.getInstance():turnMinisecondToframe(tonumber(value))
         end
