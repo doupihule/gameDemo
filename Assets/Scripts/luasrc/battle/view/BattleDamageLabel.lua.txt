@@ -68,11 +68,11 @@ function BattleDamageLabel:setValue(kind, value)
         local totalWid = headWid + fuhaoWid + numsWidth + bigWid
         local halfTotalWid = totalWid / 2 + fuhaoWid
         local startPos = 0
-        if headWid then
+        if headWid > 0 then
             self._headLabel = self:updateLabel("", startPos - halfTotalWid, 0, self._headLabel)
             startPos = startPos + headWid
         end
-        if fuhaoWid then
+        if fuhaoWid >0 then
             self._fuhaoLabel = self:updateLabel(self._cfgs.fuhao, startPos - halfTotalWid, 0, self._fuhaoLabel)
             startPos = startPos + perWid
         else

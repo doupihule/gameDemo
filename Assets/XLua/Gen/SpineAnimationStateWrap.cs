@@ -21,13 +21,14 @@ namespace XLua.CSObjectWrap
         {
 			ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
 			System.Type type = typeof(Spine.AnimationState);
-			Utils.BeginObjectRegister(type, L, translator, 0, 17, 3, 1);
+			Utils.BeginObjectRegister(type, L, translator, 0, 18, 3, 1);
 			
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Update", _m_Update);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "Apply", _m_Apply);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ClearTracks", _m_ClearTracks);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "ClearTrack", _m_ClearTrack);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetAnimation", _m_SetAnimation);
+			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetAnimationByIndex", _m_SetAnimationByIndex);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "AddAnimation", _m_AddAnimation);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "SetEmptyAnimation", _m_SetEmptyAnimation);
 			Utils.RegisterFunc(L, Utils.METHOD_IDX, "AddEmptyAnimation", _m_AddEmptyAnimation);
@@ -250,6 +251,37 @@ namespace XLua.CSObjectWrap
             }
             
             return LuaAPI.luaL_error(L, "invalid arguments to Spine.AnimationState.SetAnimation!");
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_SetAnimationByIndex(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+                Spine.AnimationState gen_to_be_invoked = (Spine.AnimationState)translator.FastGetCSObj(L, 1);
+            
+            
+                
+                {
+                    int _trackIndex = LuaAPI.xlua_tointeger(L, 2);
+                    int _animationIndex = LuaAPI.xlua_tointeger(L, 3);
+                    bool _loop = LuaAPI.lua_toboolean(L, 4);
+                    
+                        Spine.TrackEntry gen_ret = gen_to_be_invoked.SetAnimationByIndex( _trackIndex, _animationIndex, _loop );
+                        translator.Push(L, gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                
+            } catch(System.Exception gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + gen_e);
+            }
             
         }
         

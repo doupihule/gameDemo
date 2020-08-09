@@ -41,7 +41,7 @@ function BattleLayerControler:onTouchBegin(event)
 end
 
 function BattleLayerControler:onTouchMove(event)
-    if not self._startTouchX then
+    if  self._startTouchX == nil then
         return
     end
     self.controler.cameraControler.inControlBg = false

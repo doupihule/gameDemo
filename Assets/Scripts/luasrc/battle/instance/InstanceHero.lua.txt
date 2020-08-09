@@ -28,11 +28,11 @@ function InstanceHero:onDataChange(changeData)
     end
     if (changeData.level or changeData.advance) or hasPassiveChange then
         local oldHp = 0
-        if changeData.level then
+        if changeData.level ~= nil then
             oldHp = self:getMaxHp()
         end
         self.attrData:updateData(self._data)
-        if changeData.level then
+        if changeData.level ~=nil then
             local addHp = self:getMaxHp() - oldHp
             if addHp > 0 then
                 if self.hp == 0 then
@@ -80,7 +80,7 @@ function InstanceHero:onCheckGiveEnergySkill(isAuto)
         if not energySkill.isActive then
             return false
         end
-        if self.ctrlBuffBit & BuffTrigger.ctrlBuffBit then
+        if self.ctrlBuffBit & BuffTrigger.ctrlBuffBit > 0 then
             return false
         end
         if isAuto then

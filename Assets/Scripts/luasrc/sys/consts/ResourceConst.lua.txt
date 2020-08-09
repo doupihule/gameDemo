@@ -17,3 +17,5 @@ ResourceConst.BATTLE_HEALTH_PROGRESS = "Assets/UI/UIRes/battle/battle_image_xuti
 ResourceConst.BATTLE_HEALTH_PROGRESS2 = "Assets/UI/UIRes/battle/battle_image_xutiao2"
 ResourceConst.BATTLE_HEALTH_HUDUN = "Assets/UI/UIRes/battle/battle_image_xutiao3"
 
+ResourceConst.EFFECT_BORN_LANDROLE = "effect_foxi_attack_self"
+

@@ -91,21 +91,28 @@ function InstanceLogical:checkMoveOrAttack(force)
     if self.hp <= 0 then
         return
     end
+
     if #self.toCampArr == 0 then
         return
     end
-    if self.ctrlBuffBit & BuffTrigger.forceCtrlBuffBit then
+
+    if self.ctrlBuffBit & BuffTrigger.forceCtrlBuffBit > 0 then
         return
     end
+
     if self.label ~= BattleConst.LABEL_IDLE and self.label ~= BattleConst.LABEL_WALK then
         return
     end
+
     if not force and self.updateCount % 3 ~= 0 then
         return
     end
+
     if self.movePointType ~= InstanceMove.moveType_none then
         return
     end
+
+
     self:checkAttack()
 end
 
@@ -234,11 +241,13 @@ function InstanceLogical:checkAttack()
         return
     end
     local skill = tempArr[2]
+
     if self.skillWaitFrame > 0 then
         rt = -2
     else
         if rt == 0 then
             self:initStand()
+
             self:giveOutSkill(skill)
         elseif rt == -1 then
             table.clearArray(tempArr)
@@ -275,7 +284,7 @@ function InstanceLogical:checkAttack()
 end
 
 function InstanceLogical:giveOutSkill(skill)
-    if self.ctrlBuffBit then
+    if self.ctrlBuffBit > 0 then
         return false
     end
     self.currentSkill = skill

@@ -642,7 +642,7 @@ function table.findArrValue(arr, value)
             return i
         end
     end
-    return 0;
+    return -1;
 end
 
 --只做删除元素

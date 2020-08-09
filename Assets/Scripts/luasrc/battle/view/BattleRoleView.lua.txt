@@ -41,7 +41,7 @@ function BattleRoleView:setShade(scale)
         scale = 0
     end
     self._useShade = true
-    if scale then
+    if scale > 0 then
         self._shadeScale = scale
     end
     self:sortChildView()

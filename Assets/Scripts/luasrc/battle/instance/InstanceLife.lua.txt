@@ -69,7 +69,7 @@ function InstanceLife:setData(data)
         end
         self.hp = self:getMaxHp()
         local baseData = BattleFunc.getInstance():getCfgDatas("Role", self.dataId)
-        if baseData.scale then
+         if baseData.scale then
             self.cfgScale = baseData.scale / 10000
         end
         self.mass = baseData.weight or 1
@@ -125,6 +125,7 @@ function InstanceLife:initNormalSkill(thisObj, lifeType)
     self.normalSkills = {}
     local normalCfg = self:getNormalSkills()
     local debugSkillData = BattleDebugTool.getDebugSkill()
+    LogsManager.echo("initNormalSkill",self.dataId,TableUtils.safelyJsonStringfy((normalCfg)));
     local i = 0
     for i, info in ipairs(normalCfg) do
         local level = 1
@@ -490,7 +491,7 @@ function InstanceLife:clearOneBuff(buff, removeChance)
         if #arr == 0 then
             local buffbit = BuffTrigger.buffTypeToBit[logicalType]
             if buffbit and self.ctrlBuffBit then
-                if self.ctrlBuffBit & buffbit then
+                if self.ctrlBuffBit & buffbit > 0 then
                     self.ctrlBuffBit = self.ctrlBuffBit ^ buffbit
                 else
                     BattleLogsManager.battleWarn("xd buffbit错误:", self.ctrlBuffBit, buffbit, "buffid:", buff._id)

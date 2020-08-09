@@ -192,26 +192,18 @@ function Equation.lineTangent(eq1, eq2)
     local k2
     if (eq1.b == 0 and eq2.a ~= 0) then
         tan = eq2.b / eq2.a
-        if (true) then
-            return tan
-        end
+        return tan
     end
     if (eq2.b == 0 and eq1.a ~= 0) then
         tan = eq1.b / eq1.a
-        if (true) then
-            return tan
-        end
+        return tan
     else
         k1 = -eq1.a / eq1.b
         k2 = -eq2.a / eq2.b
         tan = (k2 - k1) / (k2 * k1 + 1)
-        if (true) then
-            return tan
-        end
-    end
-    if (true) then
         return tan
     end
+    return tan
 end
 --判断2个一元一次方程的交点
 function Equation.pointOf(eqObj1, eqObj2)
@@ -325,9 +317,7 @@ function Equation.plumbLine(p, eqobj)
             return true
         end
     end
-    if (true) then
-        return eq
-    end
+    return eq
 end
 --计算点到直线的距离
 function Equation.pointLineDistance(p, eqobj, tpy)
@@ -364,9 +354,7 @@ function Equation.adjustPosByLine(p, dis, r, ang, eq)
     local length = (r - dis * eq.type) / math.abs(math.sin(angDis))
     p.x = p.x - length * math.cos(ang)
     p.y = p.y - length * math.sin(ang)
-    if (true) then
-        return p
-    end
+    return p
 end
 
 --过点做目标线段的垂线，判断垂线和目标直线是否有交点 
@@ -403,13 +391,9 @@ function Equation.pointLineDistance2(p, lineP1, lineP2)
         local dis1 = (lineP1.x - p.x) * (lineP1.x - p.x) + (lineP1.y - p.y) * (lineP1.y - p.y)
         local dis2 = (lineP2.x - p.x) * (lineP2.x - p.x) + (lineP2.y - p.y) * (lineP2.y - p.y)
         local dis = math.min(dis1, dis2)
-        if (true) then
-            return math.sqrt(dis)
-        end
+        return math.sqrt(dis)
     end
-    if (true) then
-        return 0
-    end
+    return 0
 end
 
 function Equation.symmetryByPAToPB(pa, pb)
@@ -536,9 +520,7 @@ function Equation.creat_2_2(pa, pb, pc, g)
     eqObj.t1 = math.sqrt(2 * (pc.y - pa.y) / -g)
     eqObj.t2 = math.sqrt(2 * (pc.y - pb.y) / -g)
     eqObj.speed = -g * eqObj.t1 / math.sin(eqObj.radian)
-    if (true) then
-        return eqObj
-    end
+    return eqObj
 
 end
 
@@ -612,9 +594,7 @@ function Equation.countSpeedByTime(dx, dy, g, time)
     obj.xSpeed = dx / time
     obj.ySpeed = (dy - 0.5 * g * time * time) / time
     obj.angle = math.atan2(obj.ySpeed, obj.xSpeed)
-    if (true) then
-        return obj
-    end
+    return obj
 end
 
 --根据距离dx,dy,重力g  计算 速度
@@ -688,9 +668,7 @@ end
 --获取对数
 function Equation.log(base, logarithm)
     if (base == 1) then
-        if (true) then
-            return 1
-        end
+        return 1
     end
     return math.log(logarithm) / math.log(base)
 end

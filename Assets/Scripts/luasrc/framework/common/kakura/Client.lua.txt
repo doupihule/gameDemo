@@ -247,8 +247,8 @@ function Client:startRequestCloud(method, params, callback, thisObj, addParam, e
     end
 
     local onHttpBack = function(backData)
-        if backData[0 + 1] then
-            backData = backData[0 + 1]
+        if backData[1] then
+            backData = backData[1]
         end
         if (backData.result and backData.result.serverInfo) and backData.result.serverInfo.serverTime then
             thisValue._reqBackTime = backData.result.serverInfo.serverTime

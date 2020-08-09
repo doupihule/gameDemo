@@ -100,7 +100,7 @@ function ChooseTrigger.chooseSkillToOut(targetRole, out)
             out[2] = skill
         end
     end
-    if targetRole.ctrlBuffBit & BuffTrigger.buff_logical_chenmo then
+    if targetRole.ctrlBuffBit & BuffTrigger.buff_logical_chenmo > 0 then
         BattleLogsManager.battleEcho("id:", targetRole.dataId, "_被沉默了.释放普攻")
         skill = targetRole.normalSkills[#targetRole.normalSkills]
         tempArr = ChooseTrigger._initSkillChoose(targetRole, skill)
@@ -430,9 +430,9 @@ end
 
 function ChooseTrigger.checkCanChoose(attacker, defer)
     local targetBit = defer.ctrlBuffBit
-    if targetBit & BuffTrigger.safeByAllBuffBit then
+    if targetBit & BuffTrigger.safeByAllBuffBit > 0 then
         return false
-    elseif targetBit & BuffTrigger.safeBuffBit and defer.camp ~= attacker.camp then
+    elseif targetBit & BuffTrigger.safeBuffBit > 0 and defer.camp ~= attacker.camp then
         return false
     end
     return true

@@ -452,14 +452,22 @@ namespace Spine {
 			return SetAnimation(trackIndex, animation, loop);
 		}
 
-		/// <summary>Sets the current animation for a track, discarding any queued animations.</summary>
-		/// <param name="loop">If true, the animation will repeat.
-		/// If false, it will not, instead its last frame is applied if played beyond its duration.
-		/// In either case <see cref="TrackEntry.TrackEnd"/> determines when the track is cleared. </param>
-		/// <returns>
-		/// A track entry to allow further customization of animation playback. References to the track entry must not be kept
-		/// after <see cref="AnimationState.Dispose"/>.</returns>
-		public TrackEntry SetAnimation (int trackIndex, Animation animation, bool loop) {
+        public TrackEntry SetAnimationByIndex(int trackIndex, int animationIndex, bool loop)
+        {
+
+            Animation animation = data.skeletonData.animations.Items[animationIndex];
+            if (animation == null) throw new ArgumentException("Animation not found: " + animationIndex, "animationIndex");
+            return SetAnimation(trackIndex, animation, loop);
+        }
+
+        /// <summary>Sets the current animation for a track, discarding any queued animations.</summary>
+        /// <param name="loop">If true, the animation will repeat.
+        /// If false, it will not, instead its last frame is applied if played beyond its duration.
+        /// In either case <see cref="TrackEntry.TrackEnd"/> determines when the track is cleared. </param>
+        /// <returns>
+        /// A track entry to allow further customization of animation playback. References to the track entry must not be kept
+        /// after <see cref="AnimationState.Dispose"/>.</returns>
+        public TrackEntry SetAnimation (int trackIndex, Animation animation, bool loop) {
 			if (animation == null) throw new ArgumentNullException("animation", "animation cannot be null.");
 			bool interrupt = true;
 			TrackEntry current = ExpandToIndex(trackIndex);

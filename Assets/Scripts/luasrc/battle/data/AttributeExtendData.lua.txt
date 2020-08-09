@@ -34,6 +34,8 @@ function AttributeExtendData:resetData(id, roleData, lifeType, userData, globalA
     self.hasCountPassive = false
     self.lifeType = lifeType
     self:updateData(roleData, globalAttrMap, outRecount)
+    local str = TableUtils.safelyJsonStringfy(self.finalAttr);
+    print("__attr",str);
 end
 
 function AttributeExtendData:updateData(roleData, globalAttrMap, outRecount)

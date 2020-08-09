@@ -130,12 +130,9 @@ function TranslateFunc:getTranslate(tid, cfgsName, ...)
         -- [ts2lua]self._allCfgs下标访问可能不正确
         local data = self._allCfgs[cfgsName]
         if not data then
-            -- [ts2lua]window下标访问可能不正确
             LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "多语言配置缺失1:", tid, "cfgsName:", cfgsName)
             return ""
         end
-        -- [ts2lua]data下标访问可能不正确
-        -- [ts2lua]data下标访问可能不正确
         if data[tid] or data[key2] then
             -- [ts2lua]data下标访问可能不正确
             -- [ts2lua]data下标访问可能不正确
@@ -144,64 +141,39 @@ function TranslateFunc:getTranslate(tid, cfgsName, ...)
             if #Object:keys(BaseFunc.hotCfg) > 0 then
                 -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
                 if BaseFunc.hotCfg[cfgsName] then
-                    -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
-                    -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
-                    -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
-                    -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
                     if BaseFunc.hotCfg[cfgsName][tid] or BaseFunc.hotCfg[cfgsName][key2] then
-                        -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
-                        -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
-                        -- [ts2lua]BaseFunc.hotCfg下标访问可能不正确
-                        -- [ts2lua]BaseFunc.hotCfg[cfgsName]下标访问可能不正确
                         resultStr = BaseFunc.hotCfg[cfgsName][tid] or BaseFunc.hotCfg[cfgsName][key2]
                     end
                 end
             end
             if not resultStr and data.d then
                 local info = data.d
-                -- [ts2lua]info下标访问可能不正确
-                -- [ts2lua]info下标访问可能不正确
                 if info[tid] or info[key2] then
-                    -- [ts2lua]info下标访问可能不正确
-                    -- [ts2lua]info下标访问可能不正确
                     resultStr = info[tid] or info[key2]
                     if resultStr then
-                        resultStr = resultStr[0 + 1]
+                        resultStr = resultStr[1]
                     end
                 end
             end
         end
     else
-        for i in pairs(self._allCfgs) do
-            local data = self._allCfgs[i + 1]
-            -- [ts2lua]data下标访问可能不正确
-            -- [ts2lua]data下标访问可能不正确
+        for i,data in pairs(self._allCfgs) do
             resultStr = data[tid] or data[key2]
             if resultStr then
                 break
             elseif BaseFunc.exportType == BaseFunc.exportType_New then
-                if #Object:keys(BaseFunc.hotCfg) > 0 then
-                    if BaseFunc.hotCfg[i + 1] then
-                        -- [ts2lua]BaseFunc.hotCfg[i+1]下标访问可能不正确
-                        -- [ts2lua]BaseFunc.hotCfg[i+1]下标访问可能不正确
-                        if BaseFunc.hotCfg[i + 1][tid] or BaseFunc.hotCfg[i + 1][key2] then
-                            -- [ts2lua]BaseFunc.hotCfg[i+1]下标访问可能不正确
-                            -- [ts2lua]BaseFunc.hotCfg[i+1]下标访问可能不正确
-                            resultStr = BaseFunc.hotCfg[i + 1][tid] or BaseFunc.hotCfg[i + 1][key2]
-                            break
-                        end
+                if BaseFunc.hotCfg[i ] then
+                    if BaseFunc.hotCfg[i][tid] or BaseFunc.hotCfg[i][key2] then
+                        resultStr = BaseFunc.hotCfg[i ][tid] or BaseFunc.hotCfg[i][key2]
+                        break
                     end
                 end
                 if data.d then
                     local info = data.d
-                    -- [ts2lua]info下标访问可能不正确
-                    -- [ts2lua]info下标访问可能不正确
                     if info[tid] or info[key2] then
-                        -- [ts2lua]info下标访问可能不正确
-                        -- [ts2lua]info下标访问可能不正确
                         resultStr = info[tid] or info[key2]
                         if resultStr then
-                            resultStr = resultStr[0 + 1]
+                            resultStr = resultStr[1]
                             break
                         end
                     end
@@ -218,7 +190,7 @@ function TranslateFunc:getTranslate(tid, cfgsName, ...)
     end
     if #replaceArr > 0 then
         for i, v in ipairs(replaceArr) do
-            resultStr = string.gsub(resultStr, "#" .. m + 1, v)
+            resultStr = string.gsub(resultStr, "#" .. i, v)
         end
     end
     return resultStr

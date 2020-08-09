@@ -15,7 +15,13 @@ end
 function SpineGraphicExpand:play(label, loop)
     self.__spineAni.freeze = false
     print(label,loop,"__SpineGraphicExpand___",self.name,self.__spineAni)
-    self.__spineAni.AnimationState:SetAnimation(0, label, loop);
+    local trackEntity;
+    if(type(label) == "number") then
+        trackEntity = self.__spineAni.AnimationState:SetAnimationByIndex(0, label, loop);
+    else
+        trackEntity = self.__spineAni.AnimationState:SetAnimation(0, label, loop);
+    end
+
 end
 
 --停止动画

@@ -258,7 +258,7 @@ end
 
 function InstanceBullet:checkHitRatio()
     local raqtio = self._collisionParams[2]
-    if not raqtio then
+    if not raqtio or raqtio ==0 then
         return true
     end
     local random = RandomUtis.getOneRandom()
