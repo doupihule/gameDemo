@@ -137,7 +137,7 @@ function InstanceEffect:checkLineFollowTarget()
     local targety = self.expandParams.sourceY
     local disx = targetx - self.pos.x
     local disz = targety + targetz - self.pos.z + self.pos.y + self._followOffset.y
-    local ang = math.atan2(disz, disx)
+    local ang = math.atan(disz, disx)
     local targetWid = math.sqrt(disx * disx + disz * disz)
     local scale = targetWid / sourceWid
     if scale < 0.3 then

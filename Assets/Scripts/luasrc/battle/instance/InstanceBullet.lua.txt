@@ -158,7 +158,7 @@ function InstanceBullet:checkAdjustAngle()
     if self.updateCount % 2 == 0 then
         return
     end
-    local ang = math.atan2(self.speed.z + self.speed.y, self.speed.x)
+    local ang = math.atan(self.speed.z + self.speed.y, self.speed.x)
     self:setRotationRad(ang)
 end
 
@@ -306,7 +306,7 @@ function InstanceBullet:resetMoveAct(targetRole)
                 xspd = dx * spdperDis
                 zspd = dz * spdperDis
             end
-            local r = math.atan2(yspd + zspd, xspd)
+            local r = math.atan(yspd + zspd, xspd)
             ang = r
             rotation = r * BattleFunc.radtoAngle
         else
@@ -334,7 +334,7 @@ function InstanceBullet:resetMoveAct(targetRole)
             flyDisTance = maxFlyDis
         end
         self.moveFrame = math.ceil(dis / spdValue)
-        local ang = math.atan2(dz, dx)
+        local ang = math.atan(dz, dx)
         xspd = math.cos(ang) * spdValue
         zspd = math.sin(ang) * spdValue
         self:initMove(xspd, 0, zspd, true)

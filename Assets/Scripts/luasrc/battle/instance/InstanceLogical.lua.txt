@@ -301,6 +301,7 @@ function InstanceLogical:giveOutSkill(skill)
     if skillLabel then
         local sysTime = tonumber(skillLabel[2])
         self.controler:clearCallBack(self, self.resumeIdleAction)
+        local str = TableUtils.safelyJsonStringfy(skillLabel,"___label");
         if sysTime == -1 then
             self:playAction(skillLabel[1], false)
             self:setAniPlaySpeed(skillSpeedValue)
@@ -321,6 +322,7 @@ function InstanceLogical:giveOutSkill(skill)
 end
 
 function InstanceLogical:checkSkillEffect(skillAction)
+
     if self.hp == 0 then
         BattleLogsManager.debugByRole(self.dataId, "检测的是死亡技", skillAction.skillEffectId)
     end
@@ -352,7 +354,7 @@ function InstanceLogical:moveFollowNearRole(targetRole)
         self:playAction(BattleConst.LABEL_IDLE, true)
         return
     end
-    local ang = math.atan2(dz, dx)
+    local ang = math.atan(dz, dx)
     local spdx = self:getWalkSpeed() * math.cos(ang)
     local spdz = self:getWalkSpeed() * math.sin(ang)
     self:initMove(spdx, 0, spdz)

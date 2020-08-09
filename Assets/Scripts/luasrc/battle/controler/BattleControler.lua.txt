@@ -294,14 +294,14 @@ function BattleControler:clearCallBack(thisObj, callBack, params)
         local obj = self._timeList[i]
         if thisObj == obj.thisObj then
             if not callBack then
-                table.remove(this._timeList, i)
+                table.remove(self._timeList, i)
             else
                 if callBack == obj.callBack then
                     if params == nil then
-                        table.remove(this._timeList, i)
+                        table.remove(self._timeList, i)
                     else
                         if params == obj.params then
-                            table.remove(this._timeList, i)
+                            table.remove(self._timeList, i)
                         end
                     end
                 end

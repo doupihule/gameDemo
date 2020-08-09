@@ -90,7 +90,7 @@ function ConditionTrigger.checkOneCondition(selfInstance, condition, skill, p1, 
         LogsManager.errorTag("battleCfgError", "错误的条件类型,id:", condition._id, "type:", condition.type)
         return false
     else
-        return doJsCallFunc(func, ConditionTrigger, selfInstance, condition, skill, p1, p2, p3, p4)
+        return func(selfInstance, condition, skill, p1, p2, p3, p4)
     end
 end
 

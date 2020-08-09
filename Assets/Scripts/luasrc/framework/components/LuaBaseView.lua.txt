@@ -3,7 +3,10 @@ LuaBaseView = class("LuaBaseView")
 --lua对应的c对象map表 所有的__cobject 对应的是c#里的gameObject 而不是transform. 确保统一性  用getChild函数会做一层封装.返回的是luabaseView. 会自动对c-lua做一层绑定关系.保证结构的统一性
 --[[
    {cobj:luaobj}
+   扩展属性 x,y,z  __cobject
+   x,y,z只能访问. 要修改坐标必须用setPos set3dpos
 ]]
+
 local cobjToLuaMap = {}
 
 local luaCount=0;

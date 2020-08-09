@@ -74,7 +74,8 @@ function RoleBuffBar:onBuffChange(buff)
 end
 
 function RoleBuffBar:followTarget()
-    self:setPos(self.owner.pos.x,self.owner.pos.y+self.owner.pos.z+self._offsetY);
+    local ownerView = self.owner._myView;
+    self:setPos(ownerView.x,ownerView.y+self._offsetY * BattleFunc.yCoordinateWay);
 end
 
 function RoleBuffBar:removeAll()

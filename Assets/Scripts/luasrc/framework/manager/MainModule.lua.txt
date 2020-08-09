@@ -20,7 +20,7 @@ function MainModule:ctor()
     Message.getInstance():add(MsgCMD.GAME_ONSHOW, self)
     Message.getInstance():add(MsgCMD.VIDEO_STOP, self)
     Message.getInstance():add(MsgCMD.VIDEO_PLAY, self)
-
+    self:onLoginResult({user={}});
     BattleSceneManager.getInstance():enterBattle({levelId="2"},WindowManager.commonUILayer,WindowManager.commonUILayer);
 
 end
@@ -86,28 +86,18 @@ function MainModule:loginResult()
 end
 
 function MainModule:onLoginResult(result)
-    LogsManager.echo("yrc onLoginResult", result)
-    local serverData = result
-    if not Global.checkUserCloudStorage() then
-        Client.getInstance().globalLoginBackData = result
-        serverData = result.data
-    else
-        UserInfo.platform:compareData(result)
-    end
+    local serverData = result;
     if serverData.config then
         Client.getInstance().heartBeatInterval = result.data.config.heartBeatInterval
         if result.data.config.switch then
             GameSwitch.coverServerSwitchMap(result.data.config.switch)
             LogsManager.echo("yrc gameswitch resultSwitch", result.data.config.switch)
         end
-        KakuraClient.getInstance():registHeartBeat()
     end
     LogsManager.echo("yrc SWITCH_LOG_PANEL:", GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
-    LogsManager.setLogGroupVisible(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
+    --LogsManager.setLogGroupVisible(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
     local userData = serverData.user
-    ModelToServerMapCommon.initModelToServerMap()
-    local modelMap = ModelToServerMapCommon.modelToServerMap
-    local length = #modelMap
+    local modelMap = ModelToServerMap.modelToServerMap
     local i = 0
     for i, info in ipairs(modelMap) do
         local key = info.key
@@ -115,19 +105,20 @@ function MainModule:onLoginResult(result)
         if info.key == "user" then
             model.getInstance():initData(userData)
         else
-            -- [ts2lua]userData下标访问可能不正确
             if not userData[key] then
-                -- [ts2lua]userData下标访问可能不正确
                 userData[key] = {}
             end
-            -- [ts2lua]userData下标访问可能不正确
             local data = userData[key]
             model.getInstance():initData(data)
         end
     end
-    UserGlobalModel.getInstance():flushGlobalData(self.getCloudGlobalDataResult, self)
-    SoundManager.init()
-    SoundManager.initSwitch()
+    --UserGlobalModel.getInstance():flushGlobalData(self.getCloudGlobalDataResult, self)
+    --SoundManager.init()
+    --SoundManager.initSwitch()
+end
+
+function MainModule:initLoginData()
+
 end
 
 function MainModule:getCloudGlobalDataResult(params)

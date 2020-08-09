@@ -25,6 +25,16 @@ __startGame= function()
     --UITools.setViewColor(label,1,0,0,1);
     --LabelTools.setShade(label,5,5,1,1,1,0);
 
+    --local aa= {2,1,3,1,1}
+    --local sortFun = function(a,b)
+    --    if(a==b) then
+    --        return false
+    --    end
+    --    return sanyuan(a-b<0,false,true)
+    --end
+    --table.sort(aa,sortFun)
+    --
+    --print(TableUtils.safelyJsonStringfy(aa),"__a",aa[1],aa[2],aa[3],aa[4])
 
 
 

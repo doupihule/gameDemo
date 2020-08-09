@@ -58,8 +58,8 @@ function BattleSkillData:updateLevel(level)
         if not self.skillLabel then
             if self.cfgData.action then
                 self.skillLabel = TableUtils.copyOneArr(self.cfgData.action)
-                for i, v in ipairs(self.skillLabel) do
-                    self.skillLabel[i] = tonumber(v)
+                for i = 2, #self.skillLabel do
+                    self.skillLabel[i] = tonumber(self.skillLabel[i])
                 end
             end
         end

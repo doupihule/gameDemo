@@ -33,6 +33,7 @@ function SkillActionTrigger.beforRunSkillAction(attacker, skillAction, useArr)
     local chooseArr = nil
     local hasHit = false
     local needCahce = false
+    LogsManager.echo("beforRunSkillAction11111111",skillAction.skillEffectId,#skillAction.tempChooseArr)
     if useArr then
         chooseArr = useArr
     else
@@ -49,6 +50,7 @@ function SkillActionTrigger.beforRunSkillAction(attacker, skillAction, useArr)
                 needCahce = true
             end
         end
+        LogsManager.echo("beforRunSkillAction22222222",skillAction.skillEffectId,#skillAction.tempChooseArr,#chooseArr)
     end
     if #chooseArr > 0 then
         hasHit = true
@@ -67,6 +69,7 @@ function SkillActionTrigger.runOneSkillAction(attacker, skill, skillAction, useA
     local logicType = skillAction.cfgData.logicType
     if skillAction.condition then
         local rt = ConditionTrigger.checkOneOpportunity(attacker, skill, skillAction.condition, useArr, skillAction)
+        LogsManager.echo("runOneSkillAction",skillAction.skillEffectId,rt)
         if not rt then
             return
         end
@@ -100,10 +103,11 @@ function SkillActionTrigger.runOneSkillAction(attacker, skill, skillAction, useA
         LogsManager.errorTag("skillactionError", "没有对应的效果类型:", logicType)
         return 0
     else
-        local rt = doJsCallFunc(func, SkillActionTrigger, attacker, skill, skillAction, useArr)
+        local rt = func(attacker, skill, skillAction, useArr)
         ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_action_usedAfter, attacker, useArr, skillAction)
         SkillExpandTrigger.onCheckExpand(attacker, skill, skillAction.cfgData.expand, useArr)
         table.clearArray(skillTempChooseArr)
+        LogsManager.echo("runOneSkillAction",logicType,skill._skillId);
         return rt
     end
 end

@@ -78,8 +78,8 @@ function RoleHealthBar:onHpChange()
 end
 
 function RoleHealthBar:followTarget()
-    local ownerPos = self.owner.pos;
-    self:setPos(ownerPos.x,ownerPos.y+ownerPos.z)
+    local ownerView = self.owner._myView;
+    self:setPos(ownerView.x,ownerView.y+self._offsetY * BattleFunc.yCoordinateWay);
 end
 
 function RoleHealthBar:dispose()

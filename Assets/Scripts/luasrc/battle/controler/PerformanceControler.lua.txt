@@ -50,7 +50,7 @@ function PerformanceControler:getEffectLength(effect, index)
     if index == nil then
         index = 0
     end
-    local frame = SkeletonExpand.getAniFrame(effect, index)
+    local frame = -1;
     if frame == -1 then
         if PerformanceControler._effectLength[effect] then
             return PerformanceControler._effectLength[effect]
@@ -88,7 +88,7 @@ function PerformanceControler:setTxtShowBack(data)
     local maxNums = info.nums
     local targetItem = nil
     local x = targetInstance.pos.x
-    local y = targetInstance._myView.y - targetInstance.cfgData.size[1] + 10
+    local y = (targetInstance._myView.y + (10- targetInstance.cfgData.size[1])*BattleFunc.yCoordinateWay )
     if #viewArr > maxNums then
         targetItem = table.shiftArray(viewArr)
         self.controler.tweenControler:clearOneTween(targetItem)
@@ -97,11 +97,10 @@ function PerformanceControler:setTxtShowBack(data)
         targetItem["__tempParams"] = {}
     end
     targetItem:setValue(type, value)
-    targetItem.x = x
-    targetItem.y = y
+    targetItem:setPos(x,y)
     local param = targetItem["__tempParams"]
     param.x = x
-    param.y = y - 100
+    param.y = y - 100 * BattleFunc.yCoordinateWay
     self.controler.layerControler.a23:addChild(targetItem)
     table.insert(viewArr, targetItem)
     self.controler.tweenControler:setTweenByView(30, targetItem, param, BattleConst.TWEEN_MOVE, self.onLabelTweenComplete, self, targetItem)

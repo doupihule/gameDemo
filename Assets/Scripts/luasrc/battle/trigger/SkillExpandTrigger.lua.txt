@@ -13,7 +13,7 @@ function SkillExpandTrigger.onCheckExpand(instance, skill, expandParams, useArr,
         if not func then
             LogsManager.errorTag("skillExpandError", "错误的技能扩展类型:" .. type)
         else
-            doJsCallFunc(func, SkillExpandTrigger, instance, skill, info, useArr, isFollow)
+            func(instance, skill, info, useArr, isFollow)
         end
     end
 end

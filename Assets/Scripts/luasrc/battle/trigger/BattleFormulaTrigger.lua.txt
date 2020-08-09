@@ -68,6 +68,7 @@ function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue
         end
     else
         dmg = 0
+        LogsManager.echo("ismiss")
     end
     if number.isNan(dmg) then
         LogsManager.errorTag("battleError", "___遇到错误的伤害")

@@ -8,6 +8,7 @@ function BattleRoleView:ctor(viewName, scale, viewIndex)
         viewIndex = 0
     end
     BattleRoleView.super.ctor(self)
+    self.__cobject.name = "BattleRoleView";
     self.aniScale = 1;
     self._viewIndex = 0;
     self._viewScale = 1;

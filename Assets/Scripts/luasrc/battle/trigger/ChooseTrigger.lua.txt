@@ -111,7 +111,8 @@ function ChooseTrigger.chooseSkillToOut(targetRole, out)
         end
     end
     local i = 0
-    for i, skill in ipairs(targetRole.normalSkills) do
+
+        for i, skill in ipairs(targetRole.normalSkills) do
         if skill.isActive and skill.leftSkillCd <= 0 then
             tempArr = ChooseTrigger._initSkillChoose(targetRole, skill)
             if #tempArr > 0 then
@@ -125,8 +126,7 @@ function ChooseTrigger.chooseSkillToOut(targetRole, out)
         end
     end
     if out[1] == -2 then
-        out[2] = -1
-        -- [ts2lua]targetRole.normalSkills下标访问可能不正确
+        out[1] = -1
         out[2] = targetRole.normalSkills[#targetRole.normalSkills ]
         ChooseTrigger._initSkillChoose(targetRole, out[2])
     end
@@ -259,7 +259,7 @@ function ChooseTrigger.getSkillTargetRole(instance, skill, targetData, out, used
                 if not func then
                     LogsManager.errorTag("cfgerror", "battle 没有对应的选择类型,targetId:", targetData.id, "targetChoose:", i)
                 else
-                    doJsCallFunc(func, ChooseTrigger, instance, out)
+                    func(instance, out)
                 end
             end
         end
@@ -349,7 +349,7 @@ function ChooseTrigger.chooseRoleByCircle(instance, r, x, z, targetArr, chooseNu
         local disz = targetInstance.pos.z - z
         if disx * disx + disz * disz + disy * disy <= powr then
             if ang < 360 then
-                local disAng = math.atan2(disz, disx)
+                local disAng = math.atan(disz, disx)
                 if math.abs(disAng) > radArea then
                     break
                 end
@@ -538,63 +538,63 @@ function ChooseTrigger.getTargetRoleByBuff(def, buffData, outArr)
 end
 
 function ChooseTrigger.sortByPriority(r1, r2)
-    return r1.tempSortPriority - r2.tempSortPriority
+    return r1.tempSortPriority - r2.tempSortPriority  > 0 and true or false
 end
 
 function ChooseTrigger.sortByHpAdd(r1, r2)
     local disPri = r1.tempSortPriority - r2.tempSortPriority
     if disPri == 0 then
         if r1.hp > r2.hp then
-            return 1
+            return true
         elseif r1.hp == r2.hp then
-            return 0
+            return false
         else
-            return -1
+            return false
         end
     end
-    return disPri
+    return disPri  > 0 and true or false
 end
 
 function ChooseTrigger.sortByHpReduce(r1, r2)
     local disPri = r1.tempSortPriority - r2.tempSortPriority
     if disPri == 0 then
         if r1.hp > r2.hp then
-            return -1
+            return false
         elseif r1.hp == r2.hp then
-            return 0
+            return false
         else
-            return 1
+            return true
         end
     end
-    return disPri
+    return disPri  > 0 and true or false
 end
 
 function ChooseTrigger.sortByHpReducePercent(r1, r2)
     local disPri = r1.tempSortPriority - r2.tempSortPriority
     if disPri == 0 then
         if r1.hpPercent > r2.hpPercent then
-            return -1
+            return false
         elseif r1.hpPercent == r2.hpPercent then
-            return 0
+            return false
         else
-            return 1
+            return true
         end
     end
-    return disPri
+    return disPri  > 0 and true or false
 end
 
 function ChooseTrigger.sortByHpAddPercent(r1, r2)
     local disPri = r1.tempSortPriority - r2.tempSortPriority
     if disPri == 0 then
         if r1.hpPercent > r2.hpPercent then
-            return 1
+            return true
         elseif r1.hpPercent == r2.hpPercent then
-            return 0
+            return false
         else
-            return -1
+            return false
         end
     end
-    return disPri
+    return disPri  > 0 and true or false
 end
 
 function ChooseTrigger.sortByFrontFormation(r1, r2)
@@ -606,10 +606,10 @@ function ChooseTrigger.sortByFrontFormation(r1, r2)
             local dis2 = ChooseTrigger.getPowerDis(r2.pos, ChooseTrigger.comparePos)
             return dis1 - dis2
         else
-            return disPos
+            return disPos > 0 and true or false
         end
     end
-    return disPri
+    return disPri > 0 and true or false
 end
 
 function ChooseTrigger.sortByBackFormation(r1, r2)
@@ -619,20 +619,20 @@ function ChooseTrigger.sortByBackFormation(r1, r2)
         if disPos == 0 then
             local dis1 = ChooseTrigger.getPowerDis(r1.pos, ChooseTrigger.comparePos)
             local dis2 = ChooseTrigger.getPowerDis(r2.pos, ChooseTrigger.comparePos)
-            return dis1 - dis2
+            return dis1 - dis2 > 0 and true or false
         else
-            return disPos
+            return disPos > 0 and true or false
         end
     end
-    return disPri
+    return disPri > 0 and true or false
 end
 
 function ChooseTrigger.sortByTmepValueAdd(r1, r2)
     local disPri = r1.tempSortPriority - r2.tempSortPriority
     if disPri == 0 then
-        return r1.tempSortValue - r2.tempSortValue
+        return r1.tempSortValue - r2.tempSortValue > 0 and true or false
     end
-    return disPri
+    return disPri > 0 and true or false
 end
 
 function ChooseTrigger.sortByTmepValueReduce(r1, r2)
@@ -640,14 +640,14 @@ function ChooseTrigger.sortByTmepValueReduce(r1, r2)
     if disPri == 0 then
         return r2.tempSortValue - r1.tempSortValue
     end
-    return disPri
+    return disPri   > 0 and true or false
 end
 
 function ChooseTrigger.sortByRandom(r1, r2)
     local disPri = r1.tempSortPriority - r2.tempSortPriority
     if disPri == 0 then
         local random = RandomUtis.getOneRandom(BattleFunc.battleRandomIndex)
-        return random - 0.5
+        return random - 0.5 > 0 and true or false
     end
-    return disPri
+    return disPri > 0 and true or false
 end

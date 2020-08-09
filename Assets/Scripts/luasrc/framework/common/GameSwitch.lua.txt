@@ -68,7 +68,9 @@ GameSwitch.SWITCH_DISABLE_HOTFIX = "SWITCH_DISABLE_HOTFIX";
 GameSwitch.SWITCH_ORIGIN_ICON_REFRESH_SECOND = "SWITCH_ORIGIN_ICON_REFRESH_SECOND";
 GameSwitch.SWITCH_MONEY_NOTENOUGH_OPEN_TURNABLE = "SWITCH_MONEY_NOTENOUGH_OPEN_TURNABLE";
 GameSwitch.SWITCH_SIGN_METHOD = "SWITCH_SIGN_METHOD";
-GameSwitch._switchMap = {}
+GameSwitch._switchMap = {
+    SWITCH_BATTLE_INFO=1
+}
 GameSwitch._hasInitSwitch = false;
 GameSwitch._switchCondition = {};
 function GameSwitch.getSwitchMap()

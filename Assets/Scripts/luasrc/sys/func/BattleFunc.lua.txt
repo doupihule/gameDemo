@@ -22,6 +22,10 @@ BattleFunc.buildingAutoReduceHp = 160;
 BattleFunc.buildAutoFrame = 30;
 BattleFunc.deadLastFrame = 10;
 BattleFunc.diedShockCount = 3;
+
+--引擎y坐标系方向 1是从上到下 -1表示从下到上. 2d游戏统一坐标系从上到下 最后y坐标反向
+BattleFunc.yCoordinateWay = -1;
+
 function BattleFunc.getPropStyle(id)
     local info = BattleFunc.idToShowMap[id]
     if not info then

@@ -3,23 +3,39 @@ SpineGraphicExpand = class("SpineGraphicExpand",LuaBaseView)
 
 --spine动画对象
 SpineGraphicExpand.__spineAni = nil
+
 --构造器函数
 function SpineGraphicExpand:ctor(name, boundlePath)
     SpineGraphicExpand.super.ctor(self)
     if(not boundlePath) then boundlePath = name end
+    self._currentLabel = nil;
     self:setCObject(ResourceManager.loadSpinePrefab(name,boundlePath))
     self.__spineAni = self.__cobject:GetComponent("SkeletonGraphic")
 end
 
 --播放动画
-function SpineGraphicExpand:play(label, loop)
+function SpineGraphicExpand:play(label, loop,force, start, tsvar_end)
     self.__spineAni.freeze = false
-    print(label,loop,"__SpineGraphicExpand___",self.name,self.__spineAni)
+    if not force then
+        if self._currentLabel == label then
+            return;
+        end
+    end
+    if not start then
+        start =0
+    end
+    if not tsvar_end then
+        tsvar_end = 0
+    end
     local trackEntity;
     if(type(label) == "number") then
         trackEntity = self.__spineAni.AnimationState:SetAnimationByIndex(0, label, loop);
     else
         trackEntity = self.__spineAni.AnimationState:SetAnimation(0, label, loop);
+    end
+    if tsvar_end >0  then
+        trackEntity.animationStart = start;
+        trackEntity.animationEnd = tsvar_end;
     end
 
 end

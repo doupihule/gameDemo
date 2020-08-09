@@ -246,7 +246,7 @@ end
 function InstanceMove:moveToTargetRole(spd, targetRole)
     local dx = targetRole.pos.x - self.pos.x
     local dz = targetRole.pos.z - self.pos.z
-    local ang = math.atan2(dz, dx)
+    local ang = math.atan(dz, dx)
     local spdx = spd * math.cos(ang)
     local spdz = spd * math.sin(ang)
     self:initMove(spdx, 0, spdz)
@@ -312,13 +312,14 @@ function InstanceMove:delayCreateEffByParams(params)
     offsetY = offsetY * self.cfgScale
     local frame = -1
     if not isLoop then
-        frame = self.controler.performanceControler:getEffectLength(effectName, aniIndex )
+        frame = self.controler.performanceControler:getEffectLength(effectName, aniIndex-1 )
     end
     local layerIndex = tonumber(params[6])
-    local ani = self:createEfect(effectName, aniIndex , isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[7]), frame, aniSpeed)
+    LogsManager.echo("delayCreateEffByParams",effectName,aniIndex-1 , isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[7]), frame, aniSpeed)
+    local ani = self:createEfect(effectName, aniIndex-1 , isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[7]), frame, aniSpeed)
     local sysFrame = tonumber(params[9])
     if (sysFrame and sysFrame > 0) and #params > 10 then
-        ani:playSpecialSysAction(aniIndex , sysFrame, tonumber(params[10]), tonumber(params[11]), tonumber(params[12]) * BattleFunc.battleViewFrameScale, aniSpeed)
+        ani:playSpecialSysAction(aniIndex-1 , sysFrame, tonumber(params[10]), tonumber(params[11]), tonumber(params[12]) * BattleFunc.battleViewFrameScale, aniSpeed)
     end
     if params.expandParams then
         ani:setExpandParams(params.expandParams)

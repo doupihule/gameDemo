@@ -7,7 +7,7 @@ MathUtils.tempVector3_3 = VectorTools.createVector3();
 function MathUtils.countAngle(p1, p2)
     local dx = p1.x - p2.x
     local dy = p1.y - p2.y
-    return math.atan2(dy, dx)
+    return math.atan(dy, dx)
 end
 
 function MathUtils.countDistance(p1, p2)

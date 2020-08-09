@@ -263,21 +263,23 @@ end
 
 function TableUtils.safelyJsonStringfy(obj)
     local rt = ''
-    local rt =  try_catch(json.encode,TableUtils.emptyTable,obj)
+    local rt =  try_catch(json.encode,TableUtils.emptyString,obj)
     return rt
 end
 
 function TableUtils.emptyTable()
+    print("__jsonParseError")
     return {}
 end
 function TableUtils.emptyString()
+    print("__jsonStringfyError")
     return ""
 end
 
 
 function TableUtils.safelyJsonParse(str)
     local rt = nil
-    local rt =  try_catch(json.decode,TableUtils.emptyString,str)
+    local rt =  try_catch(json.decode,TableUtils.emptyTable,str)
     return rt
 end
 

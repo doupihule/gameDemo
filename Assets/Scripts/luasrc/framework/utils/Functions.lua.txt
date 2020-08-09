@@ -149,14 +149,14 @@ end
 
 
 --执行类似js的回调
-function doJsCallFunc(callFunc, thisObj, params)
+function doJsCallFunc(callFunc, thisObj, ...)
     if not callFunc then
-        return
+        return nil
     end
     if (thisObj) then
-        callFunc(thisObj, params)
+        return callFunc(thisObj, ...)
     else
-        callFunc(params)
+        return callFunc(...)
     end
 end
 

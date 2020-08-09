@@ -282,9 +282,7 @@ function InstanceLife:changeEnergy(value)
 end
 
 function InstanceLife:changeHp(value)
-    if (UserModel.getInstance():getMainGuide() == 0 and self.lifeType == BattleConst.LIFE_JIDI) and self.camp == BattleConst.ROLEGROUP_MYSELF then
-        return
-    end
+
     if value < 0 then
         local debugVale = BattleDebugTool.isInfiniteHp()
         if debugVale then

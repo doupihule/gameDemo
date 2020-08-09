@@ -1,6 +1,7 @@
-BattleDamageLabel = class('BattleDamageLabel')
+BattleDamageLabel = class('BattleDamageLabel',BaseContainer)
 function BattleDamageLabel:ctor()
     BattleDamageLabel.super.ctor(self)
+    self.__cobject.name = "BattleDamageLabel"
     self._childLabels = {}
 end
 
@@ -21,7 +22,7 @@ function BattleDamageLabel:setValue(kind, value)
     local cfg = self._cfgs
     local scale = cfg.scale or 1
     self:setScale(scale, scale)
-    self._baseUrl =    ResourceConst.UIResPath .. "/txt/battle_txt_" .. self._cfgs.name
+    self._baseUrl =    ResourceConst.UIResPath .. "txt/battle_txt_" .. self._cfgs.name
     if kind == BattleConst.effect_label_miss then
         self._headLabel = self:updateLabel("", 0, 0, self._headLabel)
         self._headLabel:setViewPivot(0.5,0.5);
@@ -99,18 +100,22 @@ function BattleDamageLabel:setValue(kind, value)
 end
 
 function BattleDamageLabel:updateLabel(key, x, y, label)
+    local imageUrl;
+    if key == "" then
+        imageUrl = self._baseUrl;
+    else
+        imageUrl = self._baseUrl.."_"..key
+
+    end
     if not label then
-        label = UITools.createUIImage()
+        label = UITools.createUIImage(imageUrl,ResourceConst.boundle_ui);
         label:setViewPivot(0,0.5)
         self:addChild(label)
     else
         label:setViewActive(true)
+        UITools.setImageUrl(label,imageUrl,ResourceConst.boundle_ui,true)
     end
-    if key == "" then
-        UITools.setImageUrl(label,self._baseUrl,ResourceConst.boundle_ui,true)
-    else
-        UITools.setImageUrl(label,self._baseUrl.."_"..key,ResourceConst.boundle_ui,true)
-    end
+
     label:setPos(x,y)
     return label
 end

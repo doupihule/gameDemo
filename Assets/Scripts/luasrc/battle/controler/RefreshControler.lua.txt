@@ -209,12 +209,13 @@ function RefreshControler:initWaveEnemy(info)
     if self.controler and self.controler.isGameOver then
         return
     end
-    if(hasCreate)then
-        return
-    end
-    hasCreate = true;
+    --if(hasCreate)then
+    --    return
+    --end
+    --hasCreate = true;
     local data = info.data
     self.controler:createRole(data.id, data.data, data.lifeType, data.camp, info.offestX)
+    --@xd_test
     self.controler:createRole(data.id, data.data, data.lifeType, 1, info.offestX)
     if data.waveAllEnemy == data.index and info.index == 0 then
         if self.currentWave == self.maxWave then

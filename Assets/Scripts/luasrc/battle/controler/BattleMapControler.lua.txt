@@ -116,7 +116,8 @@ function BattleMapControler:updateOneLayer(mapInfo, targety, pos)
     if targety == nil then
         targety = 0
     end
-    mapInfo.ctn.x = mapInfo.ctn.x + pos
+    mapInfo.ctn:setPos(mapInfo.ctn.x + pos,mapInfo.ctn.y)
+    --mapInfo.ctn.x = mapInfo.ctn.x + pos
 end
 
 function BattleMapControler:destoryMap()
