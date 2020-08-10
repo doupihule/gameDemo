@@ -255,6 +255,7 @@ function InstanceLogical:checkAttack()
             if self:checkCanMove() then
                 if #tempArr > 0 then
                     local nearHero = tempArr[1]
+
                     local disx = nearHero.pos.x - self.pos.x
                     local absDis = math.abs(disx)
                     if absDis > self.battleKeepDis then

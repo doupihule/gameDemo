@@ -346,3 +346,8 @@ function InstanceBasic:disposeView()
         end
     end
 end
+
+--转字符串输出方法
+function InstanceBasic:tostring()
+    return "id:"..self.dataId ..",pos:"..this.pos.x.."_"..this.pos.z;
+end

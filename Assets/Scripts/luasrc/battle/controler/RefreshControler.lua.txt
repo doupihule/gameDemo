@@ -137,6 +137,7 @@ function RefreshControler:initData()
         homeId = GlobalParamsFunc.getInstance():getDataNum("fogHomeId")
     end
     self.controler.myHome = self.controler:createHome(homeId, { level = 1 }, BattleConst.LIFE_JIDI, BattleConst.ROLEGROUP_MYSELF)
+    LogsManager.echo("BattleFunc.curBattleType ",BattleFunc.curBattleType,BattleConst.BATTLETYPE_NORMAL  )
     if BattleFunc.curBattleType == BattleConst.BATTLETYPE_NORMAL then
         self:initNormalData()
     elseif BattleFunc.curBattleType == BattleConst.BATTLETYPE_WAR then
@@ -203,16 +204,16 @@ function RefreshControler:enterWave(waveId)
 
 end
 
-local hasCreate
+local hasCreateNum = 0;
 
 function RefreshControler:initWaveEnemy(info)
     if self.controler and self.controler.isGameOver then
         return
     end
-    --if(hasCreate)then
-    --    return
+    --hasCreateNum = hasCreateNum +1;
+    --if hasCreateNum >=2 then
+    --    return;
     --end
-    --hasCreate = true;
     local data = info.data
     self.controler:createRole(data.id, data.data, data.lifeType, data.camp, info.offestX)
     --@xd_test

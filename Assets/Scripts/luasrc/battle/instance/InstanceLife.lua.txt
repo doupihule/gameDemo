@@ -746,3 +746,7 @@ function InstanceLife:dispose()
     self.campArr = nil
     self.toCampArr = nil
 end
+
+function InstanceLife:tostring()
+    return "id:"..self.dataId ..",pos:"..math.round( self.pos.x).."_".. math.round( self.pos.z)..",camp:"..self.camp..","..self.attrData:tostring()
+end

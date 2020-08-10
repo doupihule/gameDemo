@@ -206,3 +206,7 @@ end
 function AttributeExtendData:getOneAttr(propId)
     return self.finalAttr[propId] or 0
 end
+
+function AttributeExtendData:tostring()
+    return "mhp:"..self:getOneAttr(BattleConst.attr_maxHp)..",atk:"..self:getOneAttr(BattleConst.attr_attack)..",def:"..self:getOneAttr(BattleConst.attr_def)
+end
