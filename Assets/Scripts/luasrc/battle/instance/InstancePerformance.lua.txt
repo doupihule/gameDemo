@@ -497,7 +497,7 @@ function InstancePerformance:onSetToCache()
     if self._shade then
         self._shade:removeSelf()
         for i = self.totalViewNums,1,-1 do
-            local childShade = self._shade:getChildAt(i)
+            local childShade = self._shade:getChildAt(i-1)
             PoolTools.cacheItem(PoolCode.POOL_SHADE, childShade)
             childShade:removeSelf()
         end

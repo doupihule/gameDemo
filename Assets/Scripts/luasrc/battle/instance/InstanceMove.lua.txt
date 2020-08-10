@@ -315,7 +315,7 @@ function InstanceMove:delayCreateEffByParams(params)
         frame = self.controler.performanceControler:getEffectLength(effectName, aniIndex-1 )
     end
     local layerIndex = tonumber(params[6])
-    LogsManager.echo("delayCreateEffByParams",effectName,aniIndex-1 , isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[7]), frame, aniSpeed)
+    --LogsManager.echo("delayCreateEffByParams",effectName,aniIndex-1 , isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[7]), frame, aniSpeed)
     local ani = self:createEfect(effectName, aniIndex-1 , isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[7]), frame, aniSpeed)
     local sysFrame = tonumber(params[9])
     if (sysFrame and sysFrame > 0) and #params > 10 then

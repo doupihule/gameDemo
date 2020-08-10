@@ -31,15 +31,8 @@ namespace XLua
             //luaTable.Set("__index", XLuaBridge.luaEnv.Global);
             // Need be invoked before luaAwake()
             XLuaHelper.FillCompoents(luaTable, gameObject, "{0}");
-            GameObject child = GameObject.Find("testButton");
-
-            RectTransform a= child.GetComponent<RectTransform>();
             GetFunction();
-            //a.localRotation = new Vector3(0, 0, 0);
             
-            Vector3 vv = new Vector3(0, 0, 70);
-            a.eulerAngles = vv;
-            vv.z = 0;
             if ( luaAwake != null )
             {
                 luaAwake( luaTable );

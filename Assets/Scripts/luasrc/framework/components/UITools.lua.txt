@@ -152,7 +152,7 @@ end
 
 --设置透明度
 function UITools.setViewAlpha(instance,alpha)
-    UITools.setViewColor(instance,1);
+    UITools.setViewColor(instance,alpha);
 end
 
 local tempRotateVec3 = CS.UnityEngine.Vector3(0, 0, 1)
@@ -192,6 +192,7 @@ function UITools.removeChildren  (self)
 end
 
 --获取子对象后最好建一个变量自己存起来.不要频繁调用.  原则上所有的调用c#的接口都不要频繁使用
+--index 下标是从0开始的. 这点一定要注意
 function UITools.getChildAt (self,index)
     local transform = UITools.getViewRectTransform(self)
     local childTransform = transform:GetChild(index)
@@ -262,6 +263,8 @@ function UITools.bindUIFunc(luaInstance)
     luaInstance.setViewSize = UITools.setViewSize
     luaInstance.setViewPivot = UITools.setViewPivot
     luaInstance.setViewActive = UITools.setViewActive
+    luaInstance.setViewAlpha = UITools.setViewAlpha
+
     luaInstance.setName = UITools.setName;
 
 end

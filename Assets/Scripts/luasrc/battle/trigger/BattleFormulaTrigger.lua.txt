@@ -33,12 +33,13 @@ function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue
         dmgType = BattleConst.damage_miss
         isMiss = true
     elseif random < shanbiRatio + realCrit then
-        baoshang = (BattleFunc.critDamgeRatio + attackerAttr:getOneAttr(BattleConst.attr_critDmg)) / 10000
+        baoshang = BattleFunc.critDamgeRatio + attackerAttr:getOneAttr(BattleConst.attr_critDmg) / 10000
         dmgType = BattleConst.damage_baoji
     else
         baoshang = 1
         dmgType = BattleConst.damage_normal
     end
+    local dmg =0;
     if not isMiss then
         local atkDmgValue = attackerAttr:getOneAttr(BattleConst.attr_damage)
         local defRelietValue = deferAttr:getOneAttr(BattleConst.attr_relief)
@@ -47,7 +48,8 @@ function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue
         local def = deferAttr:getOneAttr(BattleConst.attr_def)
         local minDmg = math.round(atk * BattleFunc.minDamageRatio)
         local targetDmg = math.round((math.ceil(atk - def) * skillPercentValue / 10000 + skillFixValue ) * baoshang * dmgratio)
-        local dmg = math.max(minDmg, targetDmg) * buffNums
+        dmg = math.max(minDmg, targetDmg) * buffNums
+        LogsManager.echo("buffNums",buffNums,"dmgType",dmgType,"dmgratio",dmgratio,"def",def)
         if GameSwitch.checkOnOff(GameSwitchConst.SWITCH_BATTLE_INFO) then
             local key = attacker.dataId .. "_" .. skillAction.skillEffectId
             if not BattleFormulaTrigger._cacheLogsMap[key] then
@@ -57,9 +59,9 @@ function BattleFormulaTrigger.damage(attacker, defer, skillAction, skillFixValue
             if BattleFormulaTrigger._cacheLogsMap[key] < 3 then
                 local logStr = "攻击者:" .. attacker.dataId .. ",受击着:" .. defer.dataId .. ",攻击:" .. atk .. ",防御:" .. def .. ",伤害加成:" .. atkDmgValue .. ",伤害减免:" .. defRelietValue .. ",技能系数:" .. skillFixValue .. "_" .. skillPercentValue .. ",爆伤:" .. baoshang .. ",最小伤害:" .. minDmg .. ",最终伤害:" .. dmg
                 if UserInfo.isWeb() then
-                    BattleLogsManager.debugByRole(attacker.dataId, logStr, "\n攻击者对象", attacker, "防御者对象:", defer, "技能效果:", skillAction)
+                    BattleLogsManager.battleEcho(attacker.dataId, logStr, "\n攻击者对象", attacker, "防御者对象:", defer, "技能效果:", skillAction)
                 else
-                    BattleLogsManager.debugByRole(attacker.dataId, logStr)
+                    BattleLogsManager.battleEcho(attacker.dataId, logStr)
                 end
             end
         end

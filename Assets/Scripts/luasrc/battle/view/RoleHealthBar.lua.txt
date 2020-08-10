@@ -5,6 +5,7 @@ function RoleHealthBar:ctor()
     self._initWidth = 80;
     self._initHeight = 8;
     self._offsetY = 0;
+    self:setName("RoleHealthBar");
 end
 
 function RoleHealthBar:setData(owner, ctn)

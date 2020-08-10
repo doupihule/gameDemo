@@ -5,6 +5,8 @@ LuaBaseView = class("LuaBaseView")
    {cobj:luaobj}
    扩展属性 x,y,z  __cobject
    x,y,z只能访问. 要修改坐标必须用setPos set3dpos
+   transform 拿到transfrom的引用
+   getChildAt 里面的index 下标是从0开始的. 这个一定要注意. 因为是直接读取的c#对象
 ]]
 
 local cobjToLuaMap = {}
@@ -74,6 +76,9 @@ function LuaBaseView:dispose()
     --销毁c和lua的绑定关系
     cobjToLuaMap[self.__cobject] = nil
     self.__cobject = nil
+    self.__imageComp =nil
+    self.__textComp =nil
+    self.transform = nil
 end
 
 return LuaBaseView

@@ -147,7 +147,7 @@ function BattleLogicalControler:createInstance(data, cacheId, model, classModel,
 end
 
 function BattleLogicalControler:createEffect(data)
-    LogsManager.echo(TableUtils.safelyJsonStringfy(data),"_createEffect_")
+    --LogsManager.echo(TableUtils.safelyJsonStringfy(data),"_createEffect_")
     local cacheId = PoolCode.POOL_EFFECT .. data.id .. data.index
 
     local cacheItem = self.performanceControler:getCacheEffect(cacheId)

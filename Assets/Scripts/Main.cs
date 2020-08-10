@@ -24,14 +24,13 @@ public class Main : MonoBehaviour
         globalEnv.Set("_stage", this.gameObject);
         ResourceManager.Instance.Init(this.gameObject);
 
-        GameObject a = ResourceManager.Instance.LoadAsset<GameObject>("Assets/UI/Prefabs/main/GameMainUI.prefab", "Assets/UI/Prefabs/main/GameMainUI.prefab", "mainab");
+        //GameObject a = ResourceManager.Instance.LoadAsset<GameObject>("Assets/UI/Prefabs/main/GameMainUI.prefab", "Assets/UI/Prefabs/main/GameMainUI.prefab", "mainab");
         
-        //= (GameObject)Resources.Load("UI/Prefabs/GameMainUI");
-        GameObject ui = Instantiate(a);
-        //把ui添加到舞台
-        RectTransform childUI = ui.GetComponent<RectTransform>();
-        //childUI.parent = this.GetComponent<RectTransform>();
-        ui.transform.SetParent(this.transform, false);
+        ////= (GameObject)Resources.Load("UI/Prefabs/GameMainUI");
+        //GameObject ui = Instantiate(a);
+        ////把ui添加到舞台
+        //RectTransform childUI = ui.GetComponent<RectTransform>();
+        //ui.transform.SetParent(this.transform, false);
         //SkeletonGraphic bb;
         //bb.AnimationState.TimeScale = 0;
         //bb.unscaledTime

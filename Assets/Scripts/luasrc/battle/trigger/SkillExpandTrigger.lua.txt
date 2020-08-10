@@ -70,7 +70,8 @@ function SkillExpandTrigger.skillExpand_6(instance, skill, params, useArr)
         return
     end
     local shakeNums = tonumber(params[2])
-    UserInfo.platform:vibrateByCount(shakeNums)
+    --@xd_test 屏蔽震动接口
+    --UserInfo.platform:vibrateByCount(shakeNums)
 end
 
 function SkillExpandTrigger.skillExpand_7(instance, skill, params, useArr)

@@ -69,7 +69,6 @@ function SkillActionTrigger.runOneSkillAction(attacker, skill, skillAction, useA
     local logicType = skillAction.cfgData.logicType
     if skillAction.condition then
         local rt = ConditionTrigger.checkOneOpportunity(attacker, skill, skillAction.condition, useArr, skillAction)
-        LogsManager.echo("runOneSkillAction",skillAction.skillEffectId,rt)
         if not rt then
             return
         end
@@ -107,7 +106,7 @@ function SkillActionTrigger.runOneSkillAction(attacker, skill, skillAction, useA
         ConditionTrigger.onOpportunityByInstance(ConditionTrigger.opportunity_action_usedAfter, attacker, useArr, skillAction)
         SkillExpandTrigger.onCheckExpand(attacker, skill, skillAction.cfgData.expand, useArr)
         table.clearArray(skillTempChooseArr)
-        LogsManager.echo("runOneSkillAction",logicType,skill._skillId);
+        --LogsManager.echo("runOneSkillAction",logicType,skill._skillId);
         return rt
     end
 end

@@ -8,6 +8,7 @@ function RoleBuffBar:ctor()
     self.buffIconListUp = {};
     self.buffIconListDown = {};
     self.maxIcon = 5;
+	self:setName("RoleBuffBar");
 end
 
 function RoleBuffBar:setData(owner, ctn)
@@ -26,7 +27,6 @@ function RoleBuffBar:onBuffChange(buff)
         -- [ts2lua]allBuffInfo下标访问可能不正确
         local someBuffInfo = allBuffInfo[index]
         for index2 in pairs(someBuffInfo) do
-            -- [ts2lua]someBuffInfo下标访问可能不正确
             local buffInfo = someBuffInfo[index2].cfgData
             local flag = false
             if buffInfo.icon then
@@ -42,7 +42,7 @@ function RoleBuffBar:onBuffChange(buff)
                         buffIconList = self.buffIconListDown
                     end
                 }
-                local casef = switch[tonumber(buffInfo.icon[0 + 1])]
+                local casef = switch[tonumber(buffInfo.icon[1])]
                 if not casef then
                     casef = switch["default"]
                 end
@@ -50,22 +50,21 @@ function RoleBuffBar:onBuffChange(buff)
                     casef()
                 end
                 for index3 in pairs(buffIconList) do
-                    -- [ts2lua]buffIconList下标访问可能不正确
-                    if buffIconList[index3] == buffInfo.icon[1 + 1] then
+                    if buffIconList[index3] == buffInfo.icon[2] then
                         flag = true
                         break
                     end
                 end
                 if not flag then
                     if #buffIconList < self.maxIcon then
-                        local cacheItem = PoolTools.getItem(PoolCode.POOL_BUFFICON + buffInfo.icon[1 + 1])
+                        local cacheItem = PoolTools.getItem(PoolCode.POOL_BUFFICON + buffInfo.icon[2])
                         if not cacheItem then
-                            cacheItem = UITools.createUIImage("uisource/bufficon/bufficon/" .. buffInfo.icon[1 + 1] .. ".png")
+                            cacheItem = UITools.createUIImage("uisource/bufficon/bufficon/" .. buffInfo.icon[2] .. ".png")
                         end
                         self:addChild(cacheItem)
                         cacheItem.x = 25 * (#buffIconList - self.maxIcon) / 2
                         cacheItem.y = offsetY
-                        table.insert(buffIconList, buffInfo.icon[1 + 1])
+                        table.insert(buffIconList, buffInfo.icon[2])
                     end
                 end
             end
@@ -79,11 +78,11 @@ function RoleBuffBar:followTarget()
 end
 
 function RoleBuffBar:removeAll()
-    for index in pairs(self.buffIconListUp) do
-        PoolTools.cacheItem(PoolCode.POOL_BUFFICON .. self.buffIconListUp[index], self:getChildAt(tonumber(index)))
+    for index,v in ipairs(self.buffIconListUp) do
+        PoolTools.cacheItem(PoolCode.POOL_BUFFICON .. v, self:getChildAt(index-1))
     end
-    for index in pairs(self.buffIconListDown) do
-        PoolTools.cacheItem(PoolCode.POOL_BUFFICON .. self.buffIconListDown[index], self:getChildAt(tonumber(index)))
+    for index,v in ipairs(self.buffIconListDown) do
+        PoolTools.cacheItem(PoolCode.POOL_BUFFICON .. v, self:getChildAt(index-1))
     end
     self.buffIconListUp = {}
     self.buffIconListDown = {}

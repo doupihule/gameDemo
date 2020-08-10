@@ -193,7 +193,8 @@ function InstanceBasic:updateViewZorder()
     if not self._myView then
         return
     end
-    self._myView.zOrder = math.round(self.pos.z) * 10 + self.zorderOffset
+    local targetZorder = math.round(self.pos.z) * 10 + self.zorderOffset
+    self._myView.zOrder = targetZorder
     if self._myView2 then
         self._myView2.zOrder = math.round(self.pos.z) * 10 + self.zorderOffset + 4
     end

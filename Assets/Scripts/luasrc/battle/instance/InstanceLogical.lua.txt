@@ -137,6 +137,7 @@ function InstanceLogical:onBeHit(attacker, skill, skillAction, dmgResult, isFans
     end
     local resistValue = 0
     local leftDmg = dmgValue
+    --LogsManager.echo("onBeHit","dmgValue",dmgValue,rt)
     if rt ~= BattleConst.damage_miss then
         if #self.shieldInfoArr > 0 then
             local i = #self.shieldInfoArr - 1

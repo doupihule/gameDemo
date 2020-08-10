@@ -45,7 +45,6 @@ end
 
 --执行一次刷新逻辑
 function BattleControler:onceUpdateFrame()
-
     if self.updateScale == 1 then
         self:updateFrame()
     else
