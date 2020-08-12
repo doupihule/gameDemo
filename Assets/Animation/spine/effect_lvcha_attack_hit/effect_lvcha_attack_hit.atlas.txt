@@ -1,0 +1,153 @@
+
+effect_lvcha_attack_hit.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+body
+  rotate: true
+  xy: 529, 40
+  size: 80, 93
+  orig: 80, 93
+  offset: 0, 0
+  index: -1
+chong1
+  rotate: false
+  xy: 366, 335
+  size: 201, 131
+  orig: 201, 131
+  offset: 0, 0
+  index: -1
+chong2
+  rotate: false
+  xy: 366, 202
+  size: 201, 131
+  orig: 201, 131
+  offset: 0, 0
+  index: -1
+chong3
+  rotate: false
+  xy: 569, 335
+  size: 201, 131
+  orig: 201, 131
+  offset: 0, 0
+  index: -1
+chong4
+  rotate: false
+  xy: 569, 202
+  size: 201, 131
+  orig: 201, 131
+  offset: 0, 0
+  index: -1
+chong5
+  rotate: false
+  xy: 772, 335
+  size: 201, 131
+  orig: 201, 131
+  offset: 0, 0
+  index: -1
+chong6
+  rotate: false
+  xy: 772, 202
+  size: 201, 131
+  orig: 201, 131
+  offset: 0, 0
+  index: -1
+chong7
+  rotate: false
+  xy: 170, 63
+  size: 201, 130
+  orig: 201, 130
+  offset: 0, 0
+  index: -1
+head
+  rotate: false
+  xy: 2, 6
+  size: 166, 187
+  orig: 166, 187
+  offset: 0, 0
+  index: -1
+jiaodiguang
+  rotate: false
+  xy: 529, 122
+  size: 209, 78
+  orig: 209, 78
+  offset: 0, 0
+  index: -1
+l1foot
+  rotate: true
+  xy: 246, 2
+  size: 59, 65
+  orig: 59, 65
+  offset: 0, 0
+  index: -1
+l1hand
+  rotate: false
+  xy: 624, 51
+  size: 82, 69
+  orig: 82, 69
+  offset: 0, 0
+  index: -1
+l2foot
+  rotate: false
+  xy: 975, 339
+  size: 37, 59
+  orig: 37, 59
+  offset: 0, 0
+  index: -1
+l2hand
+  rotate: false
+  xy: 915, 98
+  size: 26, 27
+  orig: 26, 27
+  offset: 0, 0
+  index: -1
+r1foot
+  rotate: false
+  xy: 915, 127
+  size: 68, 73
+  orig: 68, 73
+  offset: 0, 0
+  index: -1
+r1hand
+  rotate: false
+  xy: 170, 4
+  size: 74, 57
+  orig: 74, 57
+  offset: 0, 0
+  index: -1
+r2foot
+  rotate: false
+  xy: 975, 400
+  size: 47, 66
+  orig: 47, 66
+  offset: 0, 0
+  index: -1
+r2hand
+  rotate: false
+  xy: 708, 89
+  size: 29, 31
+  orig: 29, 31
+  offset: 0, 0
+  index: -1
+yanwu8
+  rotate: false
+  xy: 373, 46
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1
+zhengtig
+  rotate: false
+  xy: 2, 195
+  size: 362, 271
+  orig: 362, 271
+  offset: 0, 0
+  index: -1
+zhengtig2
+  rotate: false
+  xy: 740, 90
+  size: 173, 110
+  orig: 173, 110
+  offset: 0, 0
+  index: -1

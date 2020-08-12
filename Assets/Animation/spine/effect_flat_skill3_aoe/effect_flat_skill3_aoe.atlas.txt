@@ -1,0 +1,104 @@
+
+effect_flat_skill3_aoe.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+01_dilie
+  rotate: true
+  xy: 378, 207
+  size: 47, 17
+  orig: 47, 17
+  offset: 0, 0
+  index: -1
+03_dilie
+  rotate: true
+  xy: 973, 190
+  size: 64, 13
+  orig: 64, 13
+  offset: 0, 0
+  index: -1
+06_dilie
+  rotate: false
+  xy: 149, 60
+  size: 28, 12
+  orig: 28, 12
+  offset: 0, 0
+  index: -1
+12_dilie
+  rotate: false
+  xy: 573, 36
+  size: 19, 10
+  orig: 19, 10
+  offset: 0, 0
+  index: -1
+18_dilie
+  rotate: true
+  xy: 2, 2
+  size: 38, 18
+  orig: 38, 18
+  offset: 0, 0
+  index: -1
+40midao
+  rotate: true
+  xy: 2, 42
+  size: 30, 145
+  orig: 30, 145
+  offset: 0, 0
+  index: -1
+dilie
+  rotate: false
+  xy: 2, 197
+  size: 374, 57
+  orig: 374, 57
+  offset: 0, 0
+  index: -1
+gaoguang
+  rotate: false
+  xy: 573, 48
+  size: 79, 79
+  orig: 79, 79
+  offset: 0, 0
+  index: -1
+qg1
+  rotate: false
+  xy: 402, 34
+  size: 169, 93
+  orig: 169, 93
+  offset: 0, 0
+  index: -1
+qg2
+  rotate: false
+  xy: 2, 74
+  size: 242, 121
+  orig: 242, 121
+  offset: 0, 0
+  index: -1
+yanwu8
+  rotate: false
+  xy: 246, 41
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1
+zdg1
+  rotate: false
+  xy: 594, 131
+  size: 190, 123
+  orig: 190, 123
+  offset: 0, 0
+  index: -1
+zdg2
+  rotate: false
+  xy: 402, 129
+  size: 190, 125
+  orig: 190, 125
+  offset: 0, 0
+  index: -1
+zdg3
+  rotate: false
+  xy: 786, 131
+  size: 185, 123
+  orig: 185, 123
+  offset: 0, 0
+  index: -1

@@ -1,0 +1,48 @@
+
+effect_flat_skill4_hit.png
+size: 512,128
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+gaoguang
+  rotate: false
+  xy: 2, 2
+  size: 102, 102
+  orig: 102, 102
+  offset: 0, 0
+  index: -1
+lizi
+  rotate: false
+  xy: 382, 78
+  size: 26, 26
+  orig: 26, 26
+  offset: 0, 0
+  index: -1
+xiaguang
+  rotate: true
+  xy: 106, 14
+  size: 51, 103
+  orig: 51, 103
+  offset: 0, 0
+  index: -1
+xiaguang2
+  rotate: true
+  xy: 262, 76
+  size: 28, 118
+  orig: 28, 118
+  offset: 0, 0
+  index: -1
+xiaguang3
+  rotate: true
+  xy: 106, 67
+  size: 37, 154
+  orig: 37, 154
+  offset: 0, 0
+  index: -1
+xingguang1
+  rotate: false
+  xy: 211, 20
+  size: 47, 45
+  orig: 47, 45
+  offset: 0, 0
+  index: -1

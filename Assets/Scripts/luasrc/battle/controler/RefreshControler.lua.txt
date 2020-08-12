@@ -197,9 +197,9 @@ function RefreshControler:enterWave(waveId)
             if num > 1 then
                 itemData["offestX"] = roleInfo.startSite[j ]
             end
-            --self.controler:setCallBack(BattleFunc.getInstance():turnMinisecondToframe(showTime), self.initWaveEnemy, self, itemData)
+            self.controler:setCallBack(BattleFunc.getInstance():turnMinisecondToframe(showTime), self.initWaveEnemy, self, itemData)
             --@xd_test
-            self.controler:setCallBack(30, self.initWaveEnemy, self, itemData)
+            --self.controler:setCallBack(30, self.initWaveEnemy, self, itemData)
         end
     end
 

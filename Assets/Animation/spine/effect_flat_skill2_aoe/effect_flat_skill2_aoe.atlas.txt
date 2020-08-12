@@ -1,0 +1,111 @@
+
+effect_flat_skill2_aoe.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+beijitexiao
+  rotate: true
+  xy: 730, 325
+  size: 46, 120
+  orig: 46, 120
+  offset: 0, 0
+  index: -1
+chui1
+  rotate: false
+  xy: 692, 373
+  size: 165, 137
+  orig: 165, 137
+  offset: 0, 0
+  index: -1
+chui12
+  rotate: false
+  xy: 859, 379
+  size: 161, 131
+  orig: 161, 131
+  offset: 0, 0
+  index: -1
+chui13
+  rotate: false
+  xy: 517, 367
+  size: 173, 143
+  orig: 173, 143
+  offset: 0, 0
+  index: -1
+chui14
+  rotate: false
+  xy: 2, 42
+  size: 156, 40
+  orig: 156, 40
+  offset: 0, 0
+  index: -1
+chuizi
+  rotate: false
+  xy: 244, 268
+  size: 168, 94
+  orig: 168, 94
+  offset: 0, 0
+  index: -1
+dilie08
+  rotate: false
+  xy: 229, 112
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1
+dimian1
+  rotate: false
+  xy: 414, 262
+  size: 156, 100
+  orig: 156, 100
+  offset: 0, 0
+  index: -1
+dimian2
+  rotate: false
+  xy: 572, 273
+  size: 156, 92
+  orig: 156, 92
+  offset: 0, 0
+  index: -1
+dimian3
+  rotate: true
+  xy: 244, 364
+  size: 146, 271
+  orig: 146, 271
+  offset: 0, 0
+  index: -1
+dubao33
+  rotate: false
+  xy: 730, 255
+  size: 68, 68
+  orig: 68, 68
+  offset: 0, 0
+  index: -1
+eft8
+  rotate: false
+  xy: 229, 2
+  size: 108, 108
+  orig: 108, 108
+  offset: 0, 0
+  index: -1
+guagxiao2
+  rotate: false
+  xy: 2, 84
+  size: 225, 184
+  orig: 225, 184
+  offset: 0, 0
+  index: -1
+hg2
+  rotate: false
+  xy: 2, 270
+  size: 240, 240
+  orig: 240, 240
+  offset: 0, 0
+  index: -1
+shanguang1
+  rotate: false
+  xy: 385, 106
+  size: 154, 154
+  orig: 154, 154
+  offset: 0, 0
+  index: -1
