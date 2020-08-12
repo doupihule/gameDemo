@@ -6,7 +6,7 @@ function BattleAoeData:ctor(id)
     self.effectiveTimes = 0;
     self.intervalFrame = 0;
     self.existFrame = 0;
-    self.aoeId = id
+    self.aoeId = id;
     self.cfgData = BattleFunc.getInstance():getCfgDatas("AoeEffect", id)
     self.delayFrame = BattleFunc.getInstance():turnMinisecondToframe(self.cfgData.delayTime)
     self.intervalFrame = BattleFunc.getInstance():turnMinisecondToframe(self.cfgData.interval)
@@ -96,10 +96,14 @@ function BattleAoeData:checkAoe()
         local tempChooseArr = nil
         if not self.chooseTartgetCfg then
             chooseArr = self.skill.tempChooseArr
+            LogsManager.echo("222222222222",tempChooseArr);
         else
             tempChooseArr = BattleFunc.getOneTempArr()
             ChooseTrigger.getAoeTargetRole(self, self.owner, self.targetInstance, tempChooseArr)
             chooseArr = tempChooseArr
+        end
+        if not chooseArr then
+            LogsManager.errorTag("aoeerror","没有chooseArr",self.chooseTartgetCfg);
         end
         if #chooseArr > 0 then
             if self.cfgData.type then

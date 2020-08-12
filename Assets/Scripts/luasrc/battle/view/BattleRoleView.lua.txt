@@ -142,10 +142,7 @@ function BattleRoleView:setPlaySpeed(value)
     local i = 0
     for i = 1, self.currentViewNums do
         local childAni = self._childViewArr[i]
-        --@xd_test
-        --if childAni.player then
-        --    childAni.player.playbackRate = value
-        --end
+        childAni:setTimeScale(value);
     end
 end
 

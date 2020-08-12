@@ -142,7 +142,7 @@ function InstanceBullet:checkHitLandAction()
         for i, aoeId in ipairs( fallEffect) do
             local aoeData = PoolTools.getItem(PoolCode.POOL_AOEDATA .. aoeId)
             if not aoeData then
-                aoeData = BattleAoeData.new(aoeId)
+                aoeData = BattleAoeData.new(tostring(aoeId))
             end
             aoeData:setData(self.skillActionArr[1], self.owner)
             aoeData:doAoeAction(self.owner, self.pos, self)

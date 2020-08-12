@@ -7,7 +7,8 @@ function BattleBuffData:ctor(id)
     self.type = 1;
     self.group = 1;
     self.layerNums = 1;
-    self._id = tostring(id)
+    id = tostring(id)
+    self._id = id
     self.cfgData = BattleFunc.getInstance():getCfgDatas("Buff", id)
     self.type = self.cfgData.type
     self.logicType = self.cfgData.logicType
@@ -41,11 +42,10 @@ function BattleBuffData:setData(owner, targetSkillAction, repeatNum)
     local tagStr = "Buff:" .. self._id
     if tempArr then
         self.skillLogicalParams = {}
-        local i = 0
         for i, temp in ipairs(tempArr) do
-            self.skillLogicalParams[i ] = {}
+            self.skillLogicalParams[i] = {}
             for s, vv in ipairs(temp) do
-                self.skillLogicalParams[i ][s] = BattleFunc.getInstance():getSkillValueByParams(v, skillDataId, targetLevel, nil, tagStr)
+                self.skillLogicalParams[i][s] = BattleFunc.getInstance():getSkillValueByParams(vv, skillDataId, targetLevel, nil, tagStr)
             end
         end
     end

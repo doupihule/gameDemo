@@ -59,6 +59,8 @@ function UITools.setViewColor(instance,a,r,g,b)
         --如果是图片 正常来说一定会有imageComp
     elseif (instance.__imageComp) then
         instance.__imageComp.color = tempColor
+    else
+        LogsManager.warn("____这是特殊组件-")
     end
 
 end
@@ -152,7 +154,14 @@ end
 
 --设置透明度
 function UITools.setViewAlpha(instance,alpha)
-    UITools.setViewColor(instance,alpha);
+    --UITools.setViewColor(instance,alpha);
+    local canvasGroup = instance.__canvasGroupComp;
+    if not canvasGroup then
+        canvasGroup = instance.__cobject:AddComponent(typeof (CS.UnityEngine.CanvasGroup) )
+        instance.__canvasGroupComp = canvasGroup
+    end
+    canvasGroup.alpha = alpha;
+
 end
 
 local tempRotateVec3 = CS.UnityEngine.Vector3(0, 0, 1)
@@ -186,7 +195,7 @@ function UITools.removeChildren  (self)
     local transform = UITools.getViewRectTransform(self)
     local childCount = transform.childCount
     for i = childCount, 1, -1 do
-        local childTransform = transform:GetChild(i)
+        local childTransform = transform:GetChild(i-1)
         childTransform:SetParent(nil)
     end
 end

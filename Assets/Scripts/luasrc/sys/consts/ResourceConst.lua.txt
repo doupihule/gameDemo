@@ -3,7 +3,7 @@ ResourceConst = ResourceConst or {}
 ResourceConst.boundle_ui = "uiimage"
 ResourceConst.boundle_map = "map"
 ResourceConst.boundle_base = "baseab"
-
+ResourceConst.boundle_animation = "animation"
 --uirespath
 ResourceConst.UIResPath = "Assets/UI/UIRes/"
 
@@ -18,4 +18,5 @@ ResourceConst.BATTLE_HEALTH_PROGRESS2 = "Assets/UI/UIRes/battle/battle_image_xut
 ResourceConst.BATTLE_HEALTH_HUDUN = "Assets/UI/UIRes/battle/battle_image_xutiao3"
 
 ResourceConst.EFFECT_BORN_LANDROLE = "effect_foxi_attack_self"
+ResourceConst.BUFFICON_PATH = "Assets/UI/UIRes/bufficon/";
 

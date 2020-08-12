@@ -1,0 +1,14 @@
+SwitchModel = class("SwitchModel",BaseModel)
+
+function SwitchModel.getInstance()
+    if not SwitchModel._instance then
+        SwitchModel._instance = SwitchModel.new()
+    end
+    return SwitchModel._instance
+end
+
+function SwitchModel:getSwitchByType(type)
+    local data = self._data;
+    local result = data and data[type];
+    return result;
+end

@@ -7,6 +7,7 @@ LuaBaseView = class("LuaBaseView")
    x,y,z只能访问. 要修改坐标必须用setPos set3dpos
    transform 拿到transfrom的引用
    getChildAt 里面的index 下标是从0开始的. 这个一定要注意. 因为是直接读取的c#对象
+   __canvasGroupComp        --透明度容器管理
 ]]
 
 local cobjToLuaMap = {}
@@ -50,7 +51,7 @@ function LuaBaseView:setCObject(cobj)
     self.__imageComp = cobj:GetComponent("Image");
     self.__textComp = cobj:GetComponent("Text");
     return self
-    end
+end
 
 
 --给cobj 绑定一个lua对象 这里必须是cobj对象.
@@ -78,6 +79,8 @@ function LuaBaseView:dispose()
     self.__cobject = nil
     self.__imageComp =nil
     self.__textComp =nil
+    --销毁透明容器组
+    self.__canvasGroupComp = nil
     self.transform = nil
 end
 

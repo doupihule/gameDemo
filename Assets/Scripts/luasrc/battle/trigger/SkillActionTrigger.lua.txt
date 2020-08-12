@@ -260,7 +260,7 @@ function SkillActionTrigger.runSkillAction_12(attacker, skill, skillAction, useA
         for s, aoeId in ipairs(aoeIdArr) do
             local aoeData = PoolTools.getItem(PoolCode.POOL_AOEDATA .. aoeId)
             if not aoeData then
-                aoeData = BattleAoeData.new(aoeId)
+                aoeData = BattleAoeData.new(tostring(aoeId))
             end
             aoeData:setData(skillAction, attacker)
             aoeData:doAoeAction(v)

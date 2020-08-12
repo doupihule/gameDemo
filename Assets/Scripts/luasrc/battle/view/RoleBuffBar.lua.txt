@@ -23,31 +23,21 @@ function RoleBuffBar:onBuffChange(buff)
     local allBuffInfo = self.owner.buffInfo
     self.visible = true
     self:removeAll()
-    for index in pairs(allBuffInfo) do
-        -- [ts2lua]allBuffInfo下标访问可能不正确
-        local someBuffInfo = allBuffInfo[index]
-        for index2 in pairs(someBuffInfo) do
-            local buffInfo = someBuffInfo[index2].cfgData
+    for index,someBuffInfo in pairs(allBuffInfo) do
+        for index2,tempInfo in pairs(someBuffInfo) do
+            local buffInfo = tempInfo.cfgData
             local flag = false
-            if buffInfo.icon then
+            local iconType = (buffInfo.icon);
+            if  iconType then
+                iconType = tonumber(iconType)
                 local buffIconList = self.buffIconListUp
                 local offsetY = 0
-                local switch = {
-                    [1] = function()
-                        offsetY = 0
-                        buffIconList = self.buffIconListUp
-                    end,
-                    [2] = function()
-                        offsetY = 50
-                        buffIconList = self.buffIconListDown
-                    end
-                }
-                local casef = switch[tonumber(buffInfo.icon[1])]
-                if not casef then
-                    casef = switch["default"]
-                end
-                if casef then
-                    casef()
+                if iconType == 1 then
+                    offsetY = 0
+                    buffIconList = self.buffIconListUp
+                elseif iconType == 2 then
+                    offsetY = 50
+                    buffIconList = self.buffIconListDown
                 end
                 for index3 in pairs(buffIconList) do
                     if buffIconList[index3] == buffInfo.icon[2] then
@@ -57,13 +47,12 @@ function RoleBuffBar:onBuffChange(buff)
                 end
                 if not flag then
                     if #buffIconList < self.maxIcon then
-                        local cacheItem = PoolTools.getItem(PoolCode.POOL_BUFFICON + buffInfo.icon[2])
+                        local cacheItem = PoolTools.getItem(PoolCode.POOL_BUFFICON .. buffInfo.icon[2])
                         if not cacheItem then
-                            cacheItem = UITools.createUIImage("uisource/bufficon/bufficon/" .. buffInfo.icon[2] .. ".png")
+                            cacheItem = UITools.createUIImage(ResourceConst.BUFFICON_PATH  .. buffInfo.icon[2] )
                         end
                         self:addChild(cacheItem)
-                        cacheItem.x = 25 * (#buffIconList - self.maxIcon) / 2
-                        cacheItem.y = offsetY
+                        cacheItem:setPos(25 * (#buffIconList - self.maxIcon) / 2,offsetY*BattleFunc.yCoordinateWay);
                         table.insert(buffIconList, buffInfo.icon[2])
                     end
                 end

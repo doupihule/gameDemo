@@ -200,7 +200,7 @@ function ChooseTrigger.getSkillTargetRole(instance, skill, targetData, out, used
     elseif chooseType == ChooseTrigger.choose_campoutself then
         tempArr = BattleFunc.getOneTempArr()
         local i = 0
-        for i, tempInstance in ipairs(instance.tempArr) do
+        for i, tempInstance in ipairs(instance.campArr) do
             if tempInstance ~= instance then
                 table.insert(tempArr, tempInstance)
             end

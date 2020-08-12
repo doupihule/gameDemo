@@ -36,10 +36,11 @@ namespace GameUtils
         
         public static string EncodingToMd5( string data )
         {
-            byte[] bytes = Encoding.Default.GetBytes( data );
-            MD5 md5 = new MD5CryptoServiceProvider();
-            bytes = md5.ComputeHash( bytes );
-            return BitConverter.ToString( bytes ).Replace( "-", "" ); ;
+            //byte[] bytes = Encoding.Default.GetBytes( data );
+            //MD5 md5 = new MD5CryptoServiceProvider();
+            //bytes = md5.ComputeHash( bytes );
+            //return BitConverter.ToString( bytes ).Replace( "-", "" ); ;
+            return data;
         }
 
         public static byte[] ReverseBytes( byte[] inArray )

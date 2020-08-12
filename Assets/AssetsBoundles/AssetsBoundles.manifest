@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 153466290
+CRC: 4224853359
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -7,8 +7,17 @@ AssetBundleManifest:
       Dependencies:
         Dependency_0: uiimage
     Info_1:
-      Name: baseab
+      Name: animation
       Dependencies: {}
     Info_2:
+      Name: baseab
+      Dependencies: {}
+    Info_3:
       Name: uiimage
+      Dependencies: {}
+    Info_4:
+      Name: map
+      Dependencies: {}
+    Info_5:
+      Name: scriptab
       Dependencies: {}

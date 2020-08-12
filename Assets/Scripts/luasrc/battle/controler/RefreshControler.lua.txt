@@ -165,6 +165,7 @@ function RefreshControler:enterTargetWave(waveIndex)
 end
 
 function RefreshControler:enterWave(waveId)
+    waveId = "30"
     local monsterArr = BattleFunc.getInstance():getCfgDatasByKey("LevelWave", waveId, "waveMap")
     if self.controler.gameMode == BattleConst.battle_game_mode_auto then
         self.leftFrame = BattleFunc.waveMaxFrame

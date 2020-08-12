@@ -39,6 +39,11 @@ public class Main : MonoBehaviour
         luaUpdateLate = timerManager.Get<Action<LuaTable>>("updateFrameLate");
 
         XLuaBridge.GetInstance().XLuaDoString("__startGame()","chunk");
+        //Spine.AnimationState sss;
+        //SkeletonGraphic sken;
+        //Spine.TrackEntry entry = sken.AnimationState.SetAnimation(0, "1", true);
+        //sken.AnimationState.TimeScale
+
         //Image bb;
         //aa.fontSize = 20;
         //aa.color

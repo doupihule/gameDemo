@@ -19,7 +19,7 @@ namespace Resource
         public static ResourceManager Instance { get { if( instance == null ) { instance = new ResourceManager(); } return instance; } }
         private ResourceManager() { }
 
-        public const string BUNDLE_PATH = "bundles/";
+        public const string BUNDLE_PATH = "AssetsBoundles/";
         public const string BYTES_PATH = "bytes/";
         public const string TEMP_PATH = "temp/";
 
@@ -48,28 +48,32 @@ namespace Resource
         public void Init( GameObject go )
         {
 #if UNITY_EDITOR
-            assetPath = "Assets" + "/AssetsBoundles/";
+            assetPath = "Assets";
+            //如果是 pc 平台  那么自动索引到工程路径
+#elif UNITY_STANDALONE
+            assetPath =  Application.dataPath +"/../../Assets/";
 #else
-            assetPath = string.Concat( Application.persistentDataPath, "/", GameConstants.SERVER_URL_BRANCH, "/GameResources/" );
+            assetPath = Application.dataPath +"/";
+            //assetPath = string.Concat( Application.persistentDataPath, "/", GameConstants.SERVER_URL_BRANCH, "/GameResources/" );
 #endif
             bytesLuaTxtPath = string.Concat( assetPath, BYTES_PATH, "{0}.byte" );
 
 			SetVersionNumber ();
 
-            if( !Directory.Exists( assetPath + BUNDLE_PATH ) )
-            {
-                Directory.CreateDirectory( assetPath + BUNDLE_PATH );
-            }
+            //if( !Directory.Exists( assetPath + BUNDLE_PATH ) )
+            //{
+            //    Directory.CreateDirectory( assetPath + BUNDLE_PATH );
+            //}
 
-            if( !Directory.Exists( assetPath + BYTES_PATH ) )
-            {
-                Directory.CreateDirectory( assetPath + BYTES_PATH );
-            }
+            //if( !Directory.Exists( assetPath + BYTES_PATH ) )
+            //{
+            //    Directory.CreateDirectory( assetPath + BYTES_PATH );
+            //}
 
-            if( !Directory.Exists( assetPath + TEMP_PATH ) )
-            {
-                Directory.CreateDirectory( assetPath + TEMP_PATH );
-            }
+            //if( !Directory.Exists( assetPath + TEMP_PATH ) )
+            //{
+            //    Directory.CreateDirectory( assetPath + TEMP_PATH );
+            //}
 
             goBoot = go;
             bundleManager = goBoot.AddComponent<LoadAssetBundle>();

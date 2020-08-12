@@ -20,7 +20,7 @@ BattleFunc.pylonStartXLocation = 350;
 BattleFunc.pylonTwoLocation = 30;
 BattleFunc.buildingAutoReduceHp = 160;
 BattleFunc.buildAutoFrame = 30;
-BattleFunc.deadLastFrame = 10;
+BattleFunc.deadLastFrame = 20;
 BattleFunc.diedShockCount = 3;
 
 --引擎y坐标系方向 1是从上到下 -1表示从下到上. 2d游戏统一坐标系从上到下 最后y坐标反向

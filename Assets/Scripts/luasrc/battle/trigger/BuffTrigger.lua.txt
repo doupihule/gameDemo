@@ -25,7 +25,6 @@ function BuffTrigger.init()
     end
     BuffTrigger._hasInit = true
     BuffTrigger.safeBuffBit = BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_safe]
-    local a = 1 | 2 |3
     BuffTrigger.safeByAllBuffBit = BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_safe_all]
     BuffTrigger.forceCtrlBuffBit = BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_bingdong] | BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_xuanyun] |
             BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_jifei] | BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_jitui] | BuffTrigger.buffTypeToBit[BuffTrigger.buff_logical_chaofeng];

@@ -87,7 +87,7 @@ function BattleDamageLabel:setValue(kind, value)
             startPos = startPos + perWid
         end
         for s = #strValue+1,#self._childLabels  do
-            self._childLabels[s].setViewActive(false)
+            self._childLabels[s]:setViewActive(false)
         end
         if bigNums > 0 then
             self._bigStrLabel = self:updateLabel(bigValue:toLowerCase(), startPos - halfTotalWid, 0, self._bigStrLabel)

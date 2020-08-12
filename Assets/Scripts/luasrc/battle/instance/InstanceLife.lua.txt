@@ -438,6 +438,7 @@ function InstanceLife:insterOneBuff(buff)
         buffInfo[logicalType] = {}
     end
     local buffbit = BuffTrigger.buffTypeToBit[logicalType]
+
     if buffbit then
         self.ctrlBuffBit = self.ctrlBuffBit | buffbit
     end
@@ -490,7 +491,7 @@ function InstanceLife:clearOneBuff(buff, removeChance)
             local buffbit = BuffTrigger.buffTypeToBit[logicalType]
             if buffbit and self.ctrlBuffBit then
                 if self.ctrlBuffBit & buffbit > 0 then
-                    self.ctrlBuffBit = self.ctrlBuffBit ^ buffbit
+                    self.ctrlBuffBit = math.round( self.ctrlBuffBit ~ buffbit )
                 else
                     BattleLogsManager.battleWarn("xd buffbit错误:", self.ctrlBuffBit, buffbit, "buffid:", buff._id)
                 end

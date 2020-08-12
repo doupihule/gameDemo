@@ -15,6 +15,13 @@ end
 function ResourceManager.loadSpinePrefab(name,boundlename)
     local path = spinePrefabPath .. name .. ".prefab";
     local obj = CS.Resource.ResourceManager.Instance:luaLoadAsset(path, path, boundlename);
+    if(not obj)then
+        name = "effect_jidi_attack_hit";
+        LogsManager.errorTag("spineError","没有找到对应的spine:"..name.."_用临时spine替代effect_jidi_attack_hit");
+        path = spinePrefabPath .. name .. ".prefab";
+        obj = CS.Resource.ResourceManager.Instance:luaLoadAsset(path, path, boundlename);
+
+    end
     return CS.UnityEngine.Object.Instantiate(obj)
 end
 

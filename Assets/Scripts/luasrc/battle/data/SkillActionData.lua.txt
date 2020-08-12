@@ -1,6 +1,7 @@
 SkillActionData = class('SkillActionData')
 
 function SkillActionData:ctor(id, owner, skill, delay, trigTimes, interval, resumeEnergy, opportunity, relyOnSill)
+    id= tostring(id);
     self.trigTimes = 0;
     self.delay = 0;
     self.interval = 0;

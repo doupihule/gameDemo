@@ -65,12 +65,14 @@ end
 
 function AttributeExtendData:resetBaseAtt(attrArr)
     attrArr = BattleFunc.getInstance():turnPropArrToTable(attrArr)
-    --if self.lifeType ~= BattleConst.LIFE_JIDI then
+    if self.lifeType == BattleConst.LIFE_JIDI then
+        --@xd_test
+        attrArr[BattleConst.attr_maxHp][1]  = attrArr[BattleConst.attr_maxHp][1] + 100000000;
     --    for key, info in pairs(attrArr) do
     --        info[1] = RolesFunc.getInstance():getAttrNumByLevel(key, self.id, self.level, self.starLevel, true, nil, self.equip)
     --        attrArr[key] = info
     --    end
-    --end
+    end
     return attrArr
 end
 
