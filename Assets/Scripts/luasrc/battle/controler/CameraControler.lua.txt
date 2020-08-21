@@ -54,7 +54,7 @@ function CameraControler:updateScenePos(pos)
         targetPos = self.controler.layerControler.minX
     end
     local move = targetPos - self.controler.layerControler.a2.x
-    UITools.setPos(self.controler.layerControler.a2,targetPos,self._shakeParams.y);
+    UITools.setPos(self.controler.layerControler.a2, targetPos, self._shakeParams.y);
     self.controler.mapControler:onMapMove(self._shakeParams.y, move)
 end
 

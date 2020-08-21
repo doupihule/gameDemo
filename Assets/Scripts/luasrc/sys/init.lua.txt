@@ -4,10 +4,10 @@
 --
 local packageName = "sys."
 
-require(packageName.."consts.init")
-require(packageName.."event.init")
-require(packageName.."func.init")
-require(packageName.."view.init")
-require(packageName.."manager.init")
-require(packageName.."model.init")
+require(packageName .. "consts.init")
+require(packageName .. "event.init")
+require(packageName .. "func.init")
+require(packageName .. "view.init")
+require(packageName .. "manager.init")
+require(packageName .. "model.init")
 

@@ -6,20 +6,18 @@ require("framework.init")
 require("sys.init")
 require("battle.init")
 
-
-
 BaseFunc.onConfigGroupLoadComplete()
 
 --在c端调用
-__startGame= function()
+__startGame = function()
     GlobalEnv.initStage()
     --@xd_test测试代码
-    --local label = LabelTools.createLabel("this<color=#FF0000>testaaa</color> istezst",100,100,20,5,true,3,1.1);
-    --LabelTools.setLabelWrap(label,0);
-    --GlobalEnv.uiRoot:addChild(label);
+    local label = LabelTools.createLabel("this<color=#FF0000>testaaa</color> istezst",100,100,20,5,true,3,1.1);
+    label:setLabelWrap(0);
+    GlobalEnv.uiRoot:addChild(label);
     --label:setPos(100,200);g
     --UITools.setViewColor(label,1,0,0,1);
-    --LabelTools.setShade(label,5,5,1,1,1,0);
+    label:setShade(5,5,1,1,1,0);
 
     --local aa= {2,1,3,1,1}
     --local sortFun = function(a,b)
@@ -41,7 +39,7 @@ __startGame= function()
     --GlobalEnv.uiRoot:setViewAlpha(0.2)
 
     --准备进入游戏
-    MainModule.new();
+    --MainModule.new();
 
 end
 

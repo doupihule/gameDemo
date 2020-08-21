@@ -157,7 +157,7 @@ function BattleFunc:countPlayerAttr(outMap, heroId, heroInfo, userData)
     else
         self._cacheAttrData:resetData(heroId, heroInfo, BattleConst.LIFE_PLAYER, userData)
     end
-    for i ,v in pairs(self._cacheAttrData.finalAttr) do
+    for i, v in pairs(self._cacheAttrData.finalAttr) do
         outMap[i] = v
     end
     return outMap
@@ -176,11 +176,11 @@ function BattleFunc:turnPropArrToTable(propArr, outTable)
         if type(info) == "string" then
             info = string.split(info, ",")
         end
-        local id = info[ 1]
+        local id = info[1]
         if not outTable[id] then
             outTable[id] = { 0, 0 }
         end
-        outTable[id][1] = outTable[id][1] + (tonumber(info[2]) or 0 )
+        outTable[id][1] = outTable[id][1] + (tonumber(info[2]) or 0)
         outTable[id][2] = outTable[id][2] + (tonumber(info[3]) or 0)
     end
     return outTable
@@ -232,7 +232,7 @@ function BattleFunc:getSkillValueByParams(key, _skillId, level, skillParams, tag
     end
     local tempArr = string.split(key, "_")
     -- [ts2lua]skillParams下标访问可能不正确
-    local arr1 = skillParams[tonumber(tempArr[1]) ]
+    local arr1 = skillParams[tonumber(tempArr[1])]
     if not arr1 then
         LogsManager.errorTag("SkillCfgsError", "参数配置错误,skillId:", _skillId, "skilllv:", level, "key:", key, tag)
         return 0

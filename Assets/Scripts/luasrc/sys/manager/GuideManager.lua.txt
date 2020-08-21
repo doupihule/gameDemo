@@ -2,7 +2,7 @@ GuideManager = class('GuideManager')
 function GuideManager:ctor(...)
     GuideManager.super.ctor(self, unpack({ ... }))
     self.noMask = false;
-    self.point = VectorTools.createVector2(0,0)
+    self.point = VectorTools.createVector2(0, 0)
     self.guideData = {};
 
 end

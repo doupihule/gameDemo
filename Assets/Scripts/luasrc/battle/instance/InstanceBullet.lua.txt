@@ -78,7 +78,7 @@ function InstanceBullet:setOwner(owner, skillAction, rotation, targetRole)
     local skillEff = self.cfgData.skillEffect
     if skillEff then
         local i = 0
-        for i, v in ipairs( skillEff) do
+        for i, v in ipairs(skillEff) do
             if not self.skillActionArr[i] then
                 local skillAction = SkillActionData.new(tostring(v), owner, skillAction.skill, 0, 0, 0, 0, 0)
                 self.skillActionArr[i] = skillAction
@@ -98,7 +98,7 @@ end
 
 function InstanceBullet:adjustInitPos(targetRole)
     local offset = self.cfgData.offset or 0
-    if  offset == 0 then
+    if offset == 0 then
         return
     end
     local spdAbs = math.sqrt(self.speed.x * self.speed.x + self.speed.y * self.speed.y + self.speed.z * self.speed.z)
@@ -116,7 +116,7 @@ function InstanceBullet:adjustInitPos(targetRole)
     local disSq1 = disX1 * disX1 + disZ1 * disZ1
     local disSq2 = disX2 * disX2 + disZ2 * disZ2
     if disSq2 > disSq1 then
-        self:setPos( (targetRole.pos.x + self.owner.pos.x) / 2, self.pos.y, (targetRole.pos.z + self.owner.pos.z) / 2)
+        self:setPos((targetRole.pos.x + self.owner.pos.x) / 2, self.pos.y, (targetRole.pos.z + self.owner.pos.z) / 2)
     end
 end
 
@@ -139,7 +139,7 @@ function InstanceBullet:checkHitLandAction()
     local fallEffect = self.cfgData.fallEffect
     if fallEffect then
         local i = 0
-        for i, aoeId in ipairs( fallEffect) do
+        for i, aoeId in ipairs(fallEffect) do
             local aoeData = PoolTools.getItem(PoolCode.POOL_AOEDATA .. aoeId)
             if not aoeData then
                 aoeData = BattleAoeData.new(tostring(aoeId))
@@ -258,7 +258,7 @@ end
 
 function InstanceBullet:checkHitRatio()
     local raqtio = self._collisionParams[2]
-    if not raqtio or raqtio ==0 then
+    if not raqtio or raqtio == 0 then
         return true
     end
     local random = RandomUtis.getOneRandom()

@@ -2,10 +2,17 @@
 -- Author: XD
 -- Date: 2020-04-11 16:47:35
 --
+luaui = luaui or {};
 local packageName = "framework.components."
 require(packageName .. "LuaBaseView")
-require(packageName .. "BaseContainer")
-require(packageName .. "SpineGraphicExpand")
+
 require(packageName .. "UITools")
 require(packageName .. "LabelTools")
+require(packageName .. "Label")
+require(packageName .. "SpineGraphicExpand")
+require(packageName .. "BaseContainer")
 
+require(packageName .. "Button")
+require(packageName .. "List")
+require(packageName .. "Scroll")
+require(packageName .. "UIBase")

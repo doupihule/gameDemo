@@ -11,7 +11,7 @@ end
 
 function BattleTweenControler:updateFrame()
     local len = #self._tweenInfoMap;
-    for i = len,1,-1 do
+    for i = len, 1, -1 do
         local info = self._tweenInfoMap[i]
         local isEnd = self:updateOneTween(info)
         if isEnd then
@@ -60,7 +60,7 @@ function BattleTweenControler:updateOneTween(tweenInfo)
             else
                 targety = startParams.y + disParams.y * ratio
             end
-            instance:setPos(targetx,targety);
+            instance:setPos(targetx, targety);
         end
     end
     if self:checkHasType(type, BattleConst.TWEEN_ROTATE) then
@@ -172,8 +172,8 @@ end
 function BattleTweenControler:clearOneTween(instance)
     local i = #self._tweenInfoMap - 1
     local len = #self._tweenInfoMap
-    for i=len,1,-1 do
-        local info = self._tweenInfoMap[i ]
+    for i = len, 1, -1 do
+        local info = self._tweenInfoMap[i]
         if info.instance == instance then
             table.remove(self._tweenInfoMap, i)
 
@@ -195,11 +195,11 @@ end
 function BattleTweenControler:dispose()
     local i = #self._tweenInfoMap - 1
     local len = #self._tweenInfoMap
-    for i=len,1,-1 do
-        local info = self._tweenInfoMap[i ]
+    for i = len, 1, -1 do
+        local info = self._tweenInfoMap[i]
         if info.callBack then
             doJsCallFunc(info.callBack, info.thisObj, info.callParams)
         end
-        table.remove(self._tweenInfoMap,i)
+        table.remove(self._tweenInfoMap, i)
     end
 end

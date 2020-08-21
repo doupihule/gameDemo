@@ -1,6 +1,6 @@
 BattleSceneManager = class('BattleSceneManager')
 function BattleSceneManager:ctor(...)
-    BattleSceneManager.super.ctor(self,...)
+    BattleSceneManager.super.ctor(self, ...)
     self._battestate = 0;
 end
 

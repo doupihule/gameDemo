@@ -39,9 +39,6 @@ function MathUtils.checkInRect(x, y, rx, ry, rw, rh)
     return true
 end
 
-
-
-
 function MathUtils.subtract2(a, b, out)
     MathUtils.tempVector3_1.x = a.x
     MathUtils.tempVector3_1.y = a.y

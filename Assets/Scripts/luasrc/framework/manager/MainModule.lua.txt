@@ -20,12 +20,10 @@ function MainModule:ctor()
     Message.getInstance():add(MsgCMD.GAME_ONSHOW, self)
     Message.getInstance():add(MsgCMD.VIDEO_STOP, self)
     Message.getInstance():add(MsgCMD.VIDEO_PLAY, self)
-    self:onLoginResult({user={}});
-    BattleSceneManager.getInstance():enterBattle({levelId="2"},WindowManager.commonUILayer,WindowManager.commonUILayer);
+    self:onLoginResult({ user = {} });
+    BattleSceneManager.getInstance():enterBattle({ levelId = "2" }, WindowManager.commonUILayer, WindowManager.commonUILayer);
 
 end
-
-
 
 function MainModule:reqVMS()
     UserInfo.platform:reqVMS()
@@ -39,7 +37,6 @@ function MainModule:checkSystem()
     VersionManager.getInstance():initVersionData()
     self:onVersionLoaded()
 end
-
 
 function MainModule:onVersionLoaded()
     VersionManager.getInstance():versionFileCheck()

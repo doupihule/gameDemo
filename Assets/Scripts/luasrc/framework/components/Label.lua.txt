@@ -1,0 +1,107 @@
+local Label = class("Label", LuaBaseView)
+luaui.Label = Label;
+--对应的文本组件
+Label.__textComp = nil
+
+function Label:ctor(cobj)
+    self.uiType = UICompConst.comp_label
+    Label.super.ctor(self)
+    if not cobj then
+        cobj = ResourceManager.loadUIPrefab(ResourceConst.baseLabelPrefeb, ResourceConst.boundle_base);
+    end
+    self:setCObject(cobj);
+
+end
+
+function Label:setCObject(cobj)
+    Label.super.setCObject(self, cobj);
+    self.__textComp = cobj:GetComponent("Text");
+    return self
+end
+
+--设置文本
+function Label:setText(str)
+    self.__textComp.text = str;
+end
+
+--设置字体大小
+function Label:setFontSize(fontSize)
+    self.__textComp.fontSize = fontSize;
+end
+
+function Label:setFontStyle(value)
+    self.__textComp.fontStyle = value
+end
+
+function Label:setLineSpacing(value)
+    self.__textComp.lineSpacing = value
+end
+
+function Label:setAlignment(value)
+    self.__textComp.alignment = value
+end
+
+function Label:setSupportRichText(value)
+    self.__textComp.supportRichText = value
+end
+
+function Label:setLineSpacing(value)
+    self.__textComp.lineSpacing = value
+end
+--设置文本自动换行 value 0是自动换行 1是溢出
+function Label:setLabelWrap(value)
+    self.__textComp.horizontalOverflow = value
+end
+
+
+
+--设置文本描边
+function Label:setOutLine(xlen, ylen, a, r, g, b)
+    local tempColor = UITools._tempColor
+    local outlineComp = self.__outLineComp;
+    if (not outlineComp) then
+        outlineComp = self.__cobject:AddComponent(typeof(CS.UnityEngine.UI.Outline));
+        print("_____", outlineComp)
+        if (not outlineComp) then
+            return
+        end
+        self.__outLineComp = outlineComp;
+    end
+    tempColor.a = a;
+    tempColor.r = r;
+    tempColor.g = g;
+    tempColor.b = b;
+    outlineComp.effectColor = tempColor;
+    tempVec2.x = xlen
+    tempVec2.y = ylen
+    outlineComp.effectDistance = tempVec2;
+
+end
+local tempVec2 = {x=0,y=0};
+--设置文本投影
+function Label:setShade(xlen, ylen, a, r, g, b)
+    local tempColor = UITools._tempColor
+    local shadowComp = self.__shadowComp;
+    if (not shadowComp) then
+        shadowComp = self.__cobject:AddComponent(typeof(CS.UnityEngine.UI.Shadow));
+        if (not shadowComp) then
+            return
+        end
+        self.__shadowComp = shadowComp;
+    end
+    tempColor.a = a;
+    tempColor.r = r;
+    tempColor.g = g;
+    tempColor.b = b;
+    shadowComp.effectColor = tempColor;
+    tempVec2.x = xlen
+    tempVec2.y = ylen
+    shadowComp.effectDistance = tempVec2;
+end
+
+function Label:dispose()
+    self.__textComp = nil
+    Label.super.dispose(self);
+end
+
+return Label

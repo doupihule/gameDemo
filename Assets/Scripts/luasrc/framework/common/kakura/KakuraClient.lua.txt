@@ -73,7 +73,7 @@ function KakuraClient:registConnectEvent()
     if not self.hasGetUserInfo or not Global.checkIsSingleMode() then
         WaitManager.getInstance():add(MsgCMD.ROLL_ANI)
     end
-    
+
     self._websocket:connectByUrl(self._url)
 end
 

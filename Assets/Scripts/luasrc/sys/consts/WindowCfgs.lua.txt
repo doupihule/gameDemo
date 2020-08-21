@@ -88,17 +88,17 @@ WindowCfgs.commonCfgs = { modal = 1, modalAlpha = 0.3, parent = WindowCfgs.UILAY
 function WindowCfgs.getWindowcfgs()
     if not WindowCfgs._windowcfgs then
         WindowCfgs._windowcfgs = {
-            [WindowCfgs.LoadingUI] ={modal = 1, path = LoadingUI, modalAlpha =0, position = 8, offset ={0, -100}},
-            [WindowCfgs.ReqLoadingUI] ={modal = 1, path = ReqLoadingUI, parent =WindowCfgs.TOPLAYER, autoClose = true, modalAlpha =0.01},
-            [WindowCfgs.AlertUILocal] ={modal = 1, path = AlertUILocal, parent =WindowCfgs.HIGHLAYER, autoClose = true, modalAlpha =0.01},
-            [WindowCfgs.TestOpListUI] ={modal = 1, path = TestOpListUI, parent =WindowCfgs.HIGHLAYER, autoClose = true, modalAlpha =0.01, group ={"gameui/test/TestOpList.scene"}},
-            [WindowCfgs.LoginUI] ={modal = 1, path = LoginUI, parent =WindowCfgs.TOPLAYER, modalAlpha = 0.01, group ={"gameui/login/Login.scene"}, subPackage ={"uisource", "atlas_source"}},
-            [WindowCfgs.TipsUI] ={modal = 1, path = TipsUI, modalAlpha =0.01},
-            [WindowCfgs.ResultJumpUI] ={modal = 1, path = ResultJumpUI, modalAlpha =0.01, group ={"gameui/jump/ResultJump.scene"}, subPackage ={"uisource", "atlas_source"}},
-            [WindowCfgs.ResultJumpDoubleUI] ={modal = 1, path = ResultJumpDoubleUI, modalAlpha =0.01, group ={"gameui/jump/ResultJumpDouble.scene"}, subPackage ={"uisource", "atlas_source"}},
-            [WindowCfgs.JumpListUI] ={modal = 1, path = JumpListUI, modalAlpha =0.01, group ={"gameui/jump/JumpList.scene"}, subPackage ={"uisource", "atlas_source"}},
-            [WindowCfgs.GameMainUI] ={path = GameMainUI, group ={"native/GameMain.scene"}, subPackage ={"uisource", "atlas_source"}, full = true},
-            [WindowCfgs.BattleUI] ={path = BattleUI, group ={"gameui/battle/Battle.scene"}, subPackage ={"uisource", "atlas_source"}, full = true},
+            [WindowCfgs.LoadingUI] = { modal = 1, path = LoadingUI, modalAlpha = 0, position = 8, offset = { 0, -100 } },
+            [WindowCfgs.ReqLoadingUI] = { modal = 1, path = ReqLoadingUI, parent = WindowCfgs.TOPLAYER, autoClose = true, modalAlpha = 0.01 },
+            [WindowCfgs.AlertUILocal] = { modal = 1, path = AlertUILocal, parent = WindowCfgs.HIGHLAYER, autoClose = true, modalAlpha = 0.01 },
+            [WindowCfgs.TestOpListUI] = { modal = 1, path = TestOpListUI, parent = WindowCfgs.HIGHLAYER, autoClose = true, modalAlpha = 0.01, group = { "gameui/test/TestOpList.scene" } },
+            [WindowCfgs.LoginUI] = { modal = 1, path = LoginUI, parent = WindowCfgs.TOPLAYER, modalAlpha = 0.01, group = { "gameui/login/Login.scene" }, subPackage = { "uisource", "atlas_source" } },
+            [WindowCfgs.TipsUI] = { modal = 1, path = TipsUI, modalAlpha = 0.01 },
+            [WindowCfgs.ResultJumpUI] = { modal = 1, path = ResultJumpUI, modalAlpha = 0.01, group = { "gameui/jump/ResultJump.scene" }, subPackage = { "uisource", "atlas_source" } },
+            [WindowCfgs.ResultJumpDoubleUI] = { modal = 1, path = ResultJumpDoubleUI, modalAlpha = 0.01, group = { "gameui/jump/ResultJumpDouble.scene" }, subPackage = { "uisource", "atlas_source" } },
+            [WindowCfgs.JumpListUI] = { modal = 1, path = JumpListUI, modalAlpha = 0.01, group = { "gameui/jump/JumpList.scene" }, subPackage = { "uisource", "atlas_source" } },
+            [WindowCfgs.GameMainUI] = { path = GameMainUI, group = { "native/GameMain.scene" }, subPackage = { "uisource", "atlas_source" }, full = true },
+            [WindowCfgs.BattleUI] = { path = BattleUI, group = { "gameui/battle/Battle.scene" }, subPackage = { "uisource", "atlas_source" }, full = true },
         }
     end
     return WindowCfgs._windowcfgs

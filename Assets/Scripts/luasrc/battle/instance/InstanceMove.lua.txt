@@ -34,10 +34,18 @@ function InstanceMove:initStand()
 end
 
 function InstanceMove:initMove(x, y, z, outAdjustWay)
-    if x == nil then        x = 0    end
-    if y == nil then        y = 0    end
-    if z == nil then        z = 0    end
-    if outAdjustWay == nil then        outAdjustWay = false    end
+    if x == nil then
+        x = 0
+    end
+    if y == nil then
+        y = 0
+    end
+    if z == nil then
+        z = 0
+    end
+    if outAdjustWay == nil then
+        outAdjustWay = false
+    end
     self.speed.x = x
     self.speed.y = y
     self.speed.z = z
@@ -73,7 +81,7 @@ function InstanceMove:updateSpeed()
 end
 
 function InstanceMove:setSpeed(speedSpace, addSpead, force)
-    return speedSpace * force +addSpead
+    return speedSpace * force + addSpead
 end
 
 function InstanceMove:movePos()
@@ -91,9 +99,15 @@ end
 function InstanceMove:onHitLand()
 end
 function InstanceMove:moveToOnePoint(x, y, z, spd, callFunc, thisObj, callParams, expandParams, movePointType)
-    if z == nil then        z = 0    end
-    if spd == nil then        spd = 0    end
-    if movePointType == nil then        movePointType = 1    end
+    if z == nil then
+        z = 0
+    end
+    if spd == nil then
+        spd = 0
+    end
+    if movePointType == nil then
+        movePointType = 1
+    end
     if not self._moveParams then
         self._moveParams = InstanceMoveEntity.new(VectorTools.createVector3(x, y, z))
     end
@@ -253,9 +267,15 @@ function InstanceMove:moveToTargetRole(spd, targetRole)
 end
 
 function InstanceMove:createEffByParams(effectParamsArr, isFollow, isLoop, expandParams, aniSpeed)
-    if isFollow == nil then        isFollow = false    end
-    if isLoop == nil then        isLoop = false    end
-    if aniSpeed == nil then        aniSpeed = 1    end
+    if isFollow == nil then
+        isFollow = false
+    end
+    if isLoop == nil then
+        isLoop = false
+    end
+    if aniSpeed == nil then
+        aniSpeed = 1
+    end
     if not effectParamsArr or #effectParamsArr == 0 then
         return
     end
@@ -270,9 +290,15 @@ function InstanceMove:createEffByParams(effectParamsArr, isFollow, isLoop, expan
 end
 
 function InstanceMove:createOneEffByParam(params, isFollow, isLoop, expandParams, aniSpeed)
-    if isFollow == nil then        isFollow = false    end
-    if isLoop == nil then        isLoop = false    end
-    if aniSpeed == nil then        aniSpeed = 1    end
+    if isFollow == nil then
+        isFollow = false
+    end
+    if isLoop == nil then
+        isLoop = false
+    end
+    if aniSpeed == nil then
+        aniSpeed = 1
+    end
     local delayTime = tonumber(params[8]) or 0
     params.isFollow = isFollow
     params.isLoop = isLoop
@@ -312,14 +338,14 @@ function InstanceMove:delayCreateEffByParams(params)
     offsetY = offsetY * self.cfgScale
     local frame = -1
     if not isLoop then
-        frame = self.controler.performanceControler:getEffectLength(effectName, aniIndex-1 )
+        frame = self.controler.performanceControler:getEffectLength(effectName, aniIndex - 1)
     end
     local layerIndex = tonumber(params[6])
     --LogsManager.echo("delayCreateEffByParams",effectName,aniIndex-1 , isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[7]), frame, aniSpeed)
-    local ani = self:createEfect(effectName, aniIndex-1 , isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[7]), frame, aniSpeed)
+    local ani = self:createEfect(effectName, aniIndex - 1, isLoop, offsetX, offsetY, 0, isFollow, layerIndex, tonumber(params[7]), frame, aniSpeed)
     local sysFrame = tonumber(params[9])
     if (sysFrame and sysFrame > 0) and #params > 10 then
-        ani:playSpecialSysAction(aniIndex-1 , sysFrame, tonumber(params[10]), tonumber(params[11]), tonumber(params[12]) * BattleFunc.battleViewFrameScale, aniSpeed)
+        ani:playSpecialSysAction(aniIndex - 1, sysFrame, tonumber(params[10]), tonumber(params[11]), tonumber(params[12]) * BattleFunc.battleViewFrameScale, aniSpeed)
     end
     if params.expandParams then
         ani:setExpandParams(params.expandParams)
@@ -339,7 +365,7 @@ function InstanceMove:clearEffByParams(effectParams)
         return
     end
     for i, v in ipairs(effectParams) do
-        self:clearEffByName(PoolCode.POOL_EFFECT .. v[1] .. v[2] )
+        self:clearEffByName(PoolCode.POOL_EFFECT .. v[1] .. v[2])
     end
 end
 
@@ -348,7 +374,7 @@ function InstanceMove:clearEffByName(name, clearAll)
         clearAll = false
     end
     local len = #self._followEffGroup
-    for i = len, 1,-1 do
+    for i = len, 1, -1 do
         local eff = self._followEffGroup[i]
         if eff.cacheId == name then
             table.spliceArray(self._followEffGroup, i, 1)
@@ -362,7 +388,7 @@ end
 
 function InstanceMove:clearAllFollowEffect()
     local len = #self._followEffGroup;
-    for i = len, 1, -1  do
+    for i = len, 1, -1 do
         self.controler:destoryEffect(self._followEffGroup[i])
     end
     table.clearArray(self._followEffGroup)

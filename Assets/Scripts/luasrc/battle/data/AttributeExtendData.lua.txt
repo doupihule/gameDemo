@@ -35,7 +35,7 @@ function AttributeExtendData:resetData(id, roleData, lifeType, userData, globalA
     self.lifeType = lifeType
     self:updateData(roleData, globalAttrMap, outRecount)
     local str = TableUtils.safelyJsonStringfy(self.finalAttr);
-    print("__attr",str);
+    print("__attr", str);
 end
 
 function AttributeExtendData:updateData(roleData, globalAttrMap, outRecount)
@@ -67,11 +67,11 @@ function AttributeExtendData:resetBaseAtt(attrArr)
     attrArr = BattleFunc.getInstance():turnPropArrToTable(attrArr)
     if self.lifeType == BattleConst.LIFE_JIDI then
         --@xd_test
-        attrArr[BattleConst.attr_maxHp][1]  = attrArr[BattleConst.attr_maxHp][1] + 100000000;
-    --    for key, info in pairs(attrArr) do
-    --        info[1] = RolesFunc.getInstance():getAttrNumByLevel(key, self.id, self.level, self.starLevel, true, nil, self.equip)
-    --        attrArr[key] = info
-    --    end
+        attrArr[BattleConst.attr_maxHp][1] = attrArr[BattleConst.attr_maxHp][1] + 100000000;
+        --    for key, info in pairs(attrArr) do
+        --        info[1] = RolesFunc.getInstance():getAttrNumByLevel(key, self.id, self.level, self.starLevel, true, nil, self.equip)
+        --        attrArr[key] = info
+        --    end
     end
     return attrArr
 end
@@ -127,7 +127,7 @@ function AttributeExtendData:clearTempAttr()
     end
     self._hasTempAttrChange = false
     local map = self.tempOnceAttr
-    for i,tempArr in pairs(map) do
+    for i, tempArr in pairs(map) do
         if tempArr[1] ~= 0 or tempArr[2] ~= 0 then
             map[i][1] = 0
             map[i][2] = 0
@@ -161,12 +161,12 @@ function AttributeExtendData:changeExtraAttr(srcMap, way, recountAttr)
         recountAttr = false
     end
     local targetMap = self.extraAttr
-    for i,v in pairs(srcMap) do
-        if not targetMap[i ] then
+    for i, v in pairs(srcMap) do
+        if not targetMap[i] then
             targetMap[i] = { 0, 0 }
         end
         targetMap[i][1] = targetMap[i][1] + v[1] * way
-        targetMap[i ][2] = targetMap[i][2] + v[2] * way
+        targetMap[i][2] = targetMap[i][2] + v[2] * way
         if recountAttr then
             self:countOneProp(i)
         end
@@ -175,7 +175,7 @@ end
 
 function AttributeExtendData:changeTempAttr(srcMap)
     local targetMap = self.tempOnceAttr
-    for i,v in pairs(srcMap) do
+    for i, v in pairs(srcMap) do
         self:changeOneTempAttr(i, v[1], v[2])
     end
 end
@@ -210,5 +210,5 @@ function AttributeExtendData:getOneAttr(propId)
 end
 
 function AttributeExtendData:tostring()
-    return "mhp:"..self:getOneAttr(BattleConst.attr_maxHp)..",atk:"..self:getOneAttr(BattleConst.attr_attack)..",def:"..self:getOneAttr(BattleConst.attr_def)
+    return "mhp:" .. self:getOneAttr(BattleConst.attr_maxHp) .. ",atk:" .. self:getOneAttr(BattleConst.attr_attack) .. ",def:" .. self:getOneAttr(BattleConst.attr_def)
 end

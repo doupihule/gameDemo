@@ -1,4 +1,4 @@
-RoleBuffBar = class('RoleBuffBar',BaseContainer)
+RoleBuffBar = class('RoleBuffBar', BaseContainer)
 
 function RoleBuffBar:ctor()
     RoleBuffBar.super.ctor(self)
@@ -8,7 +8,7 @@ function RoleBuffBar:ctor()
     self.buffIconListUp = {};
     self.buffIconListDown = {};
     self.maxIcon = 5;
-	self:setName("RoleBuffBar");
+    self:setName("RoleBuffBar");
 end
 
 function RoleBuffBar:setData(owner, ctn)
@@ -23,12 +23,12 @@ function RoleBuffBar:onBuffChange(buff)
     local allBuffInfo = self.owner.buffInfo
     self.visible = true
     self:removeAll()
-    for index,someBuffInfo in pairs(allBuffInfo) do
-        for index2,tempInfo in pairs(someBuffInfo) do
+    for index, someBuffInfo in pairs(allBuffInfo) do
+        for index2, tempInfo in pairs(someBuffInfo) do
             local buffInfo = tempInfo.cfgData
             local flag = false
             local iconType = (buffInfo.icon);
-            if  iconType then
+            if iconType then
                 iconType = tonumber(iconType)
                 local buffIconList = self.buffIconListUp
                 local offsetY = 0
@@ -49,10 +49,10 @@ function RoleBuffBar:onBuffChange(buff)
                     if #buffIconList < self.maxIcon then
                         local cacheItem = PoolTools.getItem(PoolCode.POOL_BUFFICON .. buffInfo.icon[2])
                         if not cacheItem then
-                            cacheItem = UITools.createUIImage(ResourceConst.BUFFICON_PATH  .. buffInfo.icon[2] )
+                            cacheItem = UITools.createUIImage(ResourceConst.BUFFICON_PATH .. buffInfo.icon[2])
                         end
                         self:addChild(cacheItem)
-                        cacheItem:setPos(25 * (#buffIconList - self.maxIcon) / 2,offsetY*BattleFunc.yCoordinateWay);
+                        cacheItem:setPos(25 * (#buffIconList - self.maxIcon) / 2, offsetY * BattleFunc.yCoordinateWay);
                         table.insert(buffIconList, buffInfo.icon[2])
                     end
                 end
@@ -63,15 +63,15 @@ end
 
 function RoleBuffBar:followTarget()
     local ownerView = self.owner._myView;
-    self:setPos(ownerView.x,ownerView.y+self._offsetY * BattleFunc.yCoordinateWay);
+    self:setPos(ownerView.x, ownerView.y + self._offsetY * BattleFunc.yCoordinateWay);
 end
 
 function RoleBuffBar:removeAll()
-    for index,v in ipairs(self.buffIconListUp) do
-        PoolTools.cacheItem(PoolCode.POOL_BUFFICON .. v, self:getChildAt(index-1))
+    for index, v in ipairs(self.buffIconListUp) do
+        PoolTools.cacheItem(PoolCode.POOL_BUFFICON .. v, self:getChildAt(index - 1))
     end
-    for index,v in ipairs(self.buffIconListDown) do
-        PoolTools.cacheItem(PoolCode.POOL_BUFFICON .. v, self:getChildAt(index-1))
+    for index, v in ipairs(self.buffIconListDown) do
+        PoolTools.cacheItem(PoolCode.POOL_BUFFICON .. v, self:getChildAt(index - 1))
     end
     self.buffIconListUp = {}
     self.buffIconListDown = {}

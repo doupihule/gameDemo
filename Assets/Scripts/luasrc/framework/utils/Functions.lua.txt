@@ -89,7 +89,6 @@ function empty(var)
     return not var or var == "" or var == 0 or (type(var) == "table" and table.isEmpty(var))
 end
 
-
 function toint(v)
     return math.round(tonumber(v))
 end
@@ -173,10 +172,10 @@ function doJsApplyFunc(callFunc, thisObj, paramsArr)
 end
 
 --try catch 传入2个函数, ...是try传入的参数 ,成功返回函数的返回值.最多3个返回值
-function try_catch(tryFunc,catchFunc,...)
-    local rt,me1,me2,me3 = pcall(tryFunc,...);
-    if(rt) then
-        return me1,me2,me3;
+function try_catch(tryFunc, catchFunc, ...)
+    local rt, me1, me2, me3 = pcall(tryFunc, ...);
+    if (rt) then
+        return me1, me2, me3;
     end
     return catchFunc(...)
 end

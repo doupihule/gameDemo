@@ -1,0 +1,3 @@
+local Scroll = class("Label", LuaBaseView)
+luaui.Scroll = Scroll;
+return Scroll

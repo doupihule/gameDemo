@@ -1,4 +1,4 @@
-BattleDamageLabel = class('BattleDamageLabel',BaseContainer)
+BattleDamageLabel = class('BattleDamageLabel', BaseContainer)
 function BattleDamageLabel:ctor()
     BattleDamageLabel.super.ctor(self)
     self.__cobject.name = "BattleDamageLabel"
@@ -22,10 +22,10 @@ function BattleDamageLabel:setValue(kind, value)
     local cfg = self._cfgs
     local scale = cfg.scale or 1
     self:setScale(scale, scale)
-    self._baseUrl =    ResourceConst.UIResPath .. "txt/battle_txt_" .. self._cfgs.name
+    self._baseUrl = ResourceConst.UIResPath .. "txt/battle_txt_" .. self._cfgs.name
     if kind == BattleConst.effect_label_miss then
         self._headLabel = self:updateLabel("", 0, 0, self._headLabel)
-        self._headLabel:setViewPivot(0.5,0.5);
+        self._headLabel:setViewPivot(0.5, 0.5);
     else
         if value < 1 then
             value = 1
@@ -49,15 +49,15 @@ function BattleDamageLabel:setValue(kind, value)
         else
             local index = 0
             local tempNum = value
-            for i =1,10000 do
-                index = index+1;
-                tempNum = math.round( tempNum/1000);
-                if(tempNum < 1000)then
-                    break;
+            for i = 1, 10000 do
+                index = index + 1;
+                tempNum = math.round(tempNum / 1000);
+                if (tempNum < 1000) then
+                    break ;
                 end
             end
             local reducedUnitArr = BattleFunc.reducedUnitArr
-            if index > #reducedUnitArr  then
+            if index > #reducedUnitArr then
                 index = #reducedUnitArr
             end
             bigValue = reducedUnitArr[index]
@@ -73,7 +73,7 @@ function BattleDamageLabel:setValue(kind, value)
             self._headLabel = self:updateLabel("", startPos - halfTotalWid, 0, self._headLabel)
             startPos = startPos + headWid
         end
-        if fuhaoWid >0 then
+        if fuhaoWid > 0 then
             self._fuhaoLabel = self:updateLabel(self._cfgs.fuhao, startPos - halfTotalWid, 0, self._fuhaoLabel)
             startPos = startPos + perWid
         else
@@ -82,11 +82,11 @@ function BattleDamageLabel:setValue(kind, value)
             end
         end
         local s = 0
-        for s=1,#strValue do
-            self._childLabels[s] = self:updateLabel(string.sub(strValue, s, s ), startPos - halfTotalWid, 0, self._childLabels[s])
+        for s = 1, #strValue do
+            self._childLabels[s] = self:updateLabel(string.sub(strValue, s, s), startPos - halfTotalWid, 0, self._childLabels[s])
             startPos = startPos + perWid
         end
-        for s = #strValue+1,#self._childLabels  do
+        for s = #strValue + 1, #self._childLabels do
             self._childLabels[s]:setViewActive(false)
         end
         if bigNums > 0 then
@@ -104,18 +104,18 @@ function BattleDamageLabel:updateLabel(key, x, y, label)
     if key == "" then
         imageUrl = self._baseUrl;
     else
-        imageUrl = self._baseUrl.."_"..key
+        imageUrl = self._baseUrl .. "_" .. key
 
     end
     if not label then
-        label = UITools.createUIImage(imageUrl,ResourceConst.boundle_ui);
-        label:setViewPivot(0,0.5)
+        label = UITools.createUIImage(imageUrl, ResourceConst.boundle_ui);
+        label:setViewPivot(0, 0.5)
         self:addChild(label)
     else
         label:setViewActive(true)
-        UITools.setImageUrl(label,imageUrl,ResourceConst.boundle_ui,true)
+        UITools.setImageUrl(label, imageUrl, ResourceConst.boundle_ui, true)
     end
 
-    label:setPos(x,y)
+    label:setPos(x, y)
     return label
 end

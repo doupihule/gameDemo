@@ -69,7 +69,7 @@ GameSwitch.SWITCH_ORIGIN_ICON_REFRESH_SECOND = "SWITCH_ORIGIN_ICON_REFRESH_SECON
 GameSwitch.SWITCH_MONEY_NOTENOUGH_OPEN_TURNABLE = "SWITCH_MONEY_NOTENOUGH_OPEN_TURNABLE";
 GameSwitch.SWITCH_SIGN_METHOD = "SWITCH_SIGN_METHOD";
 GameSwitch._switchMap = {
-    SWITCH_BATTLE_INFO=1
+    SWITCH_BATTLE_INFO = 1
 }
 GameSwitch._hasInitSwitch = false;
 GameSwitch._switchCondition = {};
@@ -184,8 +184,8 @@ function GameSwitch.countVersionToNumber(version)
         local tempArr = string.split(version, ".")
         local resultNum = 0
         local len = #tempArr
-        for i = len,1,-1 do
-            resultNum = resultNum + math.pow(1000, len - i ) * tonumber(tempArr[i ])
+        for i = len, 1, -1 do
+            resultNum = resultNum + math.pow(1000, len - i) * tonumber(tempArr[i])
         end
         repeat
 

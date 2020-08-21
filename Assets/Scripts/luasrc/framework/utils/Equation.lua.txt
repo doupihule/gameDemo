@@ -861,15 +861,12 @@ function Equation.checkPosInPolygon(pos, polygonPointArr)
 
 end
 
-
-
-
 function Equation.easyToTargetPos(tovalue, fromvalue, f, min)
     if f == nil then
-        f=0.1
+        f = 0.1
     end
     if min == nil then
-        min=1
+        min = 1
     end
     local dis = tovalue - fromvalue
     local absDistance = math.abs(dis)
@@ -886,13 +883,13 @@ end
 
 function Equation.easyToTargetAngle(tovalue, fromvalue, f, min, t)
     if f == nil then
-        f=0.1
+        f = 0.1
     end
     if min == nil then
-        min=1
+        min = 1
     end
     if t == nil then
-        t=0
+        t = 0
     end
     local disang = tovalue - fromvalue
     if t == 0 then

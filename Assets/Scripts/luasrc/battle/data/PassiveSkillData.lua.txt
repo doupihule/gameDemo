@@ -26,8 +26,8 @@ function PassiveSkillData:updateLevel(level)
         end
         self.skillLogicalParams = {}
         for i, temp in ipairs(tempArr) do
-            if not self.skillLogicalParams[i ] then
-                self.skillLogicalParams[i ] = {}
+            if not self.skillLogicalParams[i] then
+                self.skillLogicalParams[i] = {}
             end
             for s, vv in ipairs(temp) do
                 self.skillLogicalParams[i][s] = self:getSkillValue(vv, tagStr)

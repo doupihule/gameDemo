@@ -1,4 +1,4 @@
-SwitchModel = class("SwitchModel",BaseModel)
+SwitchModel = class("SwitchModel", BaseModel)
 
 function SwitchModel.getInstance()
     if not SwitchModel._instance then

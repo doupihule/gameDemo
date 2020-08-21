@@ -20,7 +20,7 @@ end
 function DataResourceFunc:getDataResourceInfo(dataArr)
     local result
     local t = dataArr[1];
-    if t == DataResourceType.COIN  then
+    if t == DataResourceType.COIN then
         result = { img = ResourceConst.COIN_PNG, num = dataArr[2] }
     elseif t == DataResourceType.GOLD then
         result = { img = ResourceConst.GOLD_PNG, num = dataArr[2] }

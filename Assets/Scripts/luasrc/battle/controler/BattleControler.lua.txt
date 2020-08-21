@@ -1,5 +1,5 @@
 BattleControler = class('BattleControler')
-        --[[
+--[[
 * 游戏的控制器 基类.
 * 是一个中枢.
 * 保证游戏所有对象都能通过controler 访问到.
@@ -38,7 +38,7 @@ function BattleControler:ctor(ctn)
     self.battleDebugTool = BattleDebugTool.new(self)
     --刷新速度
     self.updateScale = BattleDebugTool.getBattleAddSped()
-    if  self.updateScale == nil then
+    if self.updateScale == nil then
         self.updateScale = 1
     end
 end
@@ -232,7 +232,7 @@ function BattleControler:setCallBack(frame, callBack, thisObj, params, doApplyOr
         LogsManager.errorTag("battleerror", "没有传入frame,直接做回调")
     end
     local obj = self:getOneCacheTimeObj()
-    if (not frame) or (frame ==0) then
+    if (not frame) or (frame == 0) then
         if doApplyOrCall then
             doJsApplyFunc(callBack, thisObj, params)
         else

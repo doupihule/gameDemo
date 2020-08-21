@@ -26,7 +26,7 @@ function Message:remove(cmd, msg)
     local list = self.msgMap[cmd]
     if list then
         local len = #list
-        for i = len,1,-1 do
+        for i = len, 1, -1 do
             if list[i] == msg then
                 table.spliceArray(list, i, 1)
             end
@@ -38,7 +38,7 @@ function Message:send(cmd, data)
     local list = self.msgMap[cmd]
     if list then
         local len = #list
-        for i = len,1,-1 do
+        for i = len, 1, -1 do
             doJsCallFunc(list[i].recvMsg, list[i], cmd, data)
         end
         if len <= 0 then
@@ -52,7 +52,7 @@ function Message:removeObjEvents(msg)
         local list = self.msgMap[i]
         if #list > 0 then
             local len = #list
-            for ii = len, 1,-1 do
+            for ii = len, 1, -1 do
                 if list[ii] == msg then
                     table.spliceArray(list, ii, 1)
                 end

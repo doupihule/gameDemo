@@ -1,0 +1,3 @@
+local Button = class("Label", LuaBaseView)
+luaui.Button = Button;
+return Button

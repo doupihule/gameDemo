@@ -54,8 +54,8 @@ end
 
 function ConditionTrigger.onOpportunityByArr(opportunity, campArr, p1, p2, p3, p4)
     local rtValue = 0
-    local len =#campArr
-    for i = len,1,-1 do
+    local len = #campArr
+    for i = len, 1, -1 do
         rtValue = rtValue + ConditionTrigger.onOpportunityByInstance(opportunity, campArr[i], p1, p2, p3, p4)
     end
     return rtValue
@@ -243,7 +243,7 @@ function ConditionTrigger.checkCondition_12(selfInstance, condition, skill, useA
         return false
     end
     for i, v in ipairs(useArr) do
-        if ConditionTrigger.checkBuffRemove(v, condition,buff) then
+        if ConditionTrigger.checkBuffRemove(v, condition, buff) then
             return true
         end
     end
@@ -292,7 +292,6 @@ function ConditionTrigger.checkHasBuffGroup(targetInstance, condition)
     end
     return false
 end
-
 
 function ConditionTrigger.checkBuffLayer(targetInstance, condition)
     local arr1 = condition.conditionLogicalParams

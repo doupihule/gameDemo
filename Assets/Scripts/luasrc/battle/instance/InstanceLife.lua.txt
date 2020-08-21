@@ -69,7 +69,7 @@ function InstanceLife:setData(data)
         end
         self.hp = self:getMaxHp()
         local baseData = BattleFunc.getInstance():getCfgDatas("Role", self.dataId)
-         if baseData.scale then
+        if baseData.scale then
             self.cfgScale = baseData.scale / 10000
         end
         self.mass = baseData.weight or 1
@@ -125,7 +125,7 @@ function InstanceLife:initNormalSkill(thisObj, lifeType)
     self.normalSkills = {}
     local normalCfg = self:getNormalSkills()
     local debugSkillData = BattleDebugTool.getDebugSkill()
-    LogsManager.echo("initNormalSkill",self.dataId,TableUtils.safelyJsonStringfy((normalCfg)));
+    LogsManager.echo("initNormalSkill", self.dataId, TableUtils.safelyJsonStringfy((normalCfg)));
     local i = 0
     for i, info in ipairs(normalCfg) do
         local level = 1
@@ -137,7 +137,7 @@ function InstanceLife:initNormalSkill(thisObj, lifeType)
             table.insert(self.normalSkills, skill)
             break
         else
-            if i == #normalCfg  then
+            if i == #normalCfg then
                 if level == 0 then
                     level = 1
                 end
@@ -179,7 +179,7 @@ function InstanceLife:getPassiveSkills()
             end
         end
         local allInfo = RolesFunc.getInstance():getCfgDatas("RoleStar", self.dataId)
-        for key,item in pairs(allInfo) do
+        for key, item in pairs(allInfo) do
             if self.starLevel >= item.star and item.passiveSkill then
                 local i = 0
                 for i, ss in ipairs(item.passiveSkill) do
@@ -370,11 +370,21 @@ function InstanceLife:doEndDiedLogical()
 end
 
 function InstanceLife:moveToOnePoint(x, y, z, spd, callFunc, thisObj, callParams, expandParams, movePointType)
-    if z == nil then      z = 0   end
-    if spd == nil then   spd = 0  end
-    if callFunc == nil then        callFunc = nil    end
-    if thisObj == nil then        thisObj = nil    end
-    if movePointType == nil then      movePointType = 1    end
+    if z == nil then
+        z = 0
+    end
+    if spd == nil then
+        spd = 0
+    end
+    if callFunc == nil then
+        callFunc = nil
+    end
+    if thisObj == nil then
+        thisObj = nil
+    end
+    if movePointType == nil then
+        movePointType = 1
+    end
     if self.label == BattleConst.LABEL_IDLE then
         self:playAction(BattleConst.LABEL_WALK, true)
     end
@@ -478,7 +488,7 @@ function InstanceLife:clearOneBuff(buff, removeChance)
     local removeResult = false
     local i = #arr - 1
     local len = #arr
-    for i = len, 1,-1 do
+    for i = len, 1, -1 do
         if arr[i] == buff then
             table.spliceArray(arr, i, 1)
             removeResult = true
@@ -491,7 +501,7 @@ function InstanceLife:clearOneBuff(buff, removeChance)
             local buffbit = BuffTrigger.buffTypeToBit[logicalType]
             if buffbit and self.ctrlBuffBit then
                 if self.ctrlBuffBit & buffbit > 0 then
-                    self.ctrlBuffBit = math.round( self.ctrlBuffBit ~ buffbit )
+                    self.ctrlBuffBit = math.round(self.ctrlBuffBit ~ buffbit)
                 else
                     BattleLogsManager.battleWarn("xd buffbit错误:", self.ctrlBuffBit, buffbit, "buffid:", buff._id)
                 end
@@ -511,13 +521,13 @@ function InstanceLife:clearOneBuff(buff, removeChance)
 end
 
 function InstanceLife:clearAllBuff()
-    for i,arr in pairs(self.buffInfo) do
+    for i, arr in pairs(self.buffInfo) do
         if arr and #arr > 0 then
             local len = #arr
-            for s = len, 1,-1 do
-                local buff = arr[s ]
+            for s = len, 1, -1 do
+                local buff = arr[s]
                 if buff.leftFrame ~= -1 then
-                    self:clearOneBuff(arr[s ], BattleConst.buff_remove_diedClear)
+                    self:clearOneBuff(arr[s], BattleConst.buff_remove_diedClear)
                 end
             end
         end
@@ -525,13 +535,13 @@ function InstanceLife:clearAllBuff()
 end
 
 function InstanceLife:clearControlBuff()
-    for i,arr in pairs(self.buffInfo) do
+    for i, arr in pairs(self.buffInfo) do
         if arr and #arr > 0 then
 
             if BuffTrigger.buffTypeToBit[tonumber(i)] then
                 local s = #arr - 1
                 local len = #arr
-                for s = len , 1,-1 do
+                for s = len, 1, -1 do
                     local buff = arr[s]
                     if buff.leftFrame ~= -1 then
                         self:clearOneBuff(arr[s])
@@ -544,14 +554,14 @@ end
 
 function InstanceLife:checkHasOneBuff(logicalType)
     local arr = self.buffInfo[logicalType]
-    return arr  and #arr > 0
+    return arr and #arr > 0
 end
 
 function InstanceLife:getBuffById(buffId)
-    for i,tempArr in pairs(self.buffInfo) do
+    for i, tempArr in pairs(self.buffInfo) do
         if #tempArr > 0 then
             local s = 0
-            for s,buff in ipairs(tempArr) do
+            for s, buff in ipairs(tempArr) do
                 if buff._id == buffId then
                     return buff
                 end
@@ -562,7 +572,7 @@ function InstanceLife:getBuffById(buffId)
 end
 
 function InstanceLife:refreshBuffTimeById(buffId)
-    for i,tempArr in pairs(self.buffInfo) do
+    for i, tempArr in pairs(self.buffInfo) do
         if #tempArr > 0 then
             local s = 0
             for s, buff in ipairs(tempArr) do
@@ -583,7 +593,7 @@ function InstanceLife:resetOneBuffLastTime(buff)
 end
 
 function InstanceLife:getBuffByGroup(groupId)
-    for i,tempArr in pairs(self.buffInfo) do
+    for i, tempArr in pairs(self.buffInfo) do
         if #tempArr > 0 then
             local s = 0
             for s, buff in ipairs(tempArr) do
@@ -749,5 +759,5 @@ function InstanceLife:dispose()
 end
 
 function InstanceLife:tostring()
-    return "id:"..self.dataId ..",pos:"..math.round( self.pos.x).."_".. math.round( self.pos.z)..",camp:"..self.camp..","..self.attrData:tostring()
+    return "id:" .. self.dataId .. ",pos:" .. math.round(self.pos.x) .. "_" .. math.round(self.pos.z) .. ",camp:" .. self.camp .. "," .. self.attrData:tostring()
 end

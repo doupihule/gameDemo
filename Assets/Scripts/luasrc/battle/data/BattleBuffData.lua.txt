@@ -28,7 +28,7 @@ function BattleBuffData:setData(owner, targetSkillAction, repeatNum)
     local targetSkill = targetSkillAction.relyonSkill or targetSkillAction.skill
     self.leftFrame = targetSkill:getSkillValue(self.cfgData.existTime)
     if self.leftFrame ~= -1 then
-        if self.leftFrame ~=0 then
+        if self.leftFrame ~= 0 then
             self.leftFrame = BattleFunc.getInstance():turnMinisecondToframe(self.leftFrame)
         else
             self.leftFrame = 0

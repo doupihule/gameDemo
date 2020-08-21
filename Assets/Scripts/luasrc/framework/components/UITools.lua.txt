@@ -9,16 +9,16 @@ end
 
 --设置 视图坐标obj是 GameObject对象 ,哪个值为nil表示读取当前值
 function UITools.setPos(instance, x, y)
-    local tansform =UITools.getViewRectTransform(instance)
+    local tansform = UITools.getViewRectTransform(instance)
     local lastpos;
-    if(x==nil) then
+    if (x == nil) then
         lastpos = tansform.anchoredPosition
         tempVec2.x = instance.x
     else
-        tempVec2.x =x;
+        tempVec2.x = x;
         instance.x = x;
     end
-    if (y==nil)then
+    if (y == nil) then
         lastpos = tansform.anchoredPosition
         tempVec2.y = instance.y;
     else
@@ -28,10 +28,12 @@ function UITools.setPos(instance, x, y)
     tansform.anchoredPosition = tempVec2
 end
 
-UITools._tempColor = {a=1,r=0,g=0,b=0}
+--临时颜色
+UITools._tempColor = { a = 1, r = 0, g = 0, b = 0 }
 
-function UITools.setViewColor(instance,a,r,g,b)
-    local tempColor  =UITools._tempColor
+--设置对象颜色.
+function UITools.setViewColor(instance, a, r, g, b)
+    local tempColor = UITools._tempColor
     if a then
         tempColor.a = a
     else
@@ -54,7 +56,7 @@ function UITools.setViewColor(instance,a,r,g,b)
         tempColor.b = 1;
     end
     --如果是lable
-    if(instance.__textComp) then
+    if (instance.__textComp) then
         instance.__textComp.color = tempColor
         --如果是图片 正常来说一定会有imageComp
     elseif (instance.__imageComp) then
@@ -72,39 +74,38 @@ function UITools.getViewRect(instance)
 end
 
 --设置view的尺寸 哪个值为nil表示读取当前值
-function UITools.setViewSize(instance,wid,hei)
+function UITools.setViewSize(instance, wid, hei)
     local tansform = UITools.getViewRectTransform(instance)
     local lastRect
-    if(wid ==nil)then
+    if (wid == nil) then
         lastRect = tansform.rect;
         tempVec2.x = lastRect.width;
     else
         tempVec2.x = wid
     end
 
-    if(hei ==nil)then
+    if (hei == nil) then
         lastRect = tansform.rect;
         tempVec2.y = lastRect.height;
     else
         tempVec2.y = hei;
     end
 
-
     tansform.sizeDelta = tempVec2;
 end
 
 --设置view 旋转中心 哪个值为nil表示读取当前值
-function UITools.setViewPivot(instance,px,py)
+function UITools.setViewPivot(instance, px, py)
     local tansform = UITools.getViewRectTransform(instance)
     local lastPivot;
     if px == nil then
-        lastPivot=transform.pivot;
+        lastPivot = transform.pivot;
         tempVec2.x = lastPivot.x;
     else
         tempVec2.x = px
     end
     if py == nil then
-        lastPivot=transform.pivot;
+        lastPivot = transform.pivot;
         tempVec2.y = lastPivot.y;
     else
         tempVec2.y = py
@@ -124,26 +125,25 @@ function UITools.get2dPos(instance)
     return UITools.getViewRectTransform(instance).anchoredPosition
 end
 
-
 local tempScaleVec3 = CS.UnityEngine.Vector3(1, 1, 1)
 
 --设置obj缩放
 function UITools.setScale(instance, sx, sy)
     local tansform = UITools.getViewRectTransform(instance)
     local lastScale;
-    if sx==nil then
-        lastScale =  tansform.localScale
+    if sx == nil then
+        lastScale = tansform.localScale
         tempScaleVec3.x = lastScale.x;
     else
         tempScaleVec3.x = sx
     end
-    if sy==nil then
-        lastScale =  tansform.localScale
+    if sy == nil then
+        lastScale = tansform.localScale
         tempScaleVec3.y = lastScale.y;
     else
         tempScaleVec3.y = sy
     end
-    tempScaleVec3.z =1;
+    tempScaleVec3.z = 1;
     tansform.localScale = tempScaleVec3;
 end
 
@@ -153,11 +153,11 @@ function UITools.getScale(instance)
 end
 
 --设置透明度
-function UITools.setViewAlpha(instance,alpha)
+function UITools.setViewAlpha(instance, alpha)
     --UITools.setViewColor(instance,alpha);
     local canvasGroup = instance.__canvasGroupComp;
     if not canvasGroup then
-        canvasGroup = instance.__cobject:AddComponent(typeof (CS.UnityEngine.CanvasGroup) )
+        canvasGroup = instance.__cobject:AddComponent(typeof(CS.UnityEngine.CanvasGroup))
         instance.__canvasGroupComp = canvasGroup
     end
     canvasGroup.alpha = alpha;
@@ -195,28 +195,28 @@ function UITools.removeChildren  (self)
     local transform = UITools.getViewRectTransform(self)
     local childCount = transform.childCount
     for i = childCount, 1, -1 do
-        local childTransform = transform:GetChild(i-1)
+        local childTransform = transform:GetChild(i - 1)
         childTransform:SetParent(nil)
     end
 end
 
 --获取子对象后最好建一个变量自己存起来.不要频繁调用.  原则上所有的调用c#的接口都不要频繁使用
 --index 下标是从0开始的. 这点一定要注意
-function UITools.getChildAt (self,index)
+function UITools.getChildAt (self, index)
     local transform = UITools.getViewRectTransform(self)
     local childTransform = transform:GetChild(index)
-    if(childTransform) then
-        return  LuaBaseView.bindOneCObjet(childTransform.gameObject )
+    if (childTransform) then
+        return LuaBaseView.bindOneCObjet(childTransform.gameObject)
     end
     return nil
 end
 
 --获取childbyname
-function UITools.getChildByName(self,name)
+function UITools.getChildByName(self, name)
     local transform = UITools.getViewRectTransform(self)
     local childTransform = transform:Find(name)
-    if(childTransform) then
-        return  LuaBaseView.bindOneCObjet(childTransform.gameObject )
+    if (childTransform) then
+        return LuaBaseView.bindOneCObjet(childTransform.gameObject)
     end
     return nil
 end
@@ -238,14 +238,14 @@ end
 
 --移除某个位置的子对象
 function UITools.removeChildAt (self, index)
-    local childView = UITools.getChildAt(self,index);
-    if(childView) then
-        UITools.removeChild(self,childView);
+    local childView = UITools.getChildAt(self, index);
+    if (childView) then
+        UITools.removeChild(self, childView);
     end
 end
 
 --设置名字
-function UITools.setName(self,name)
+function UITools.setName(self, name)
     self.__cobject.name = name
 end
 
@@ -283,43 +283,44 @@ end
 --[[
     adjustSize是否修正尺寸.默认不修正
 ]]
-function UITools.setImageUrl(image,url,boundlename,adjustSize)
+function UITools.setImageUrl(image, url, boundlename, adjustSize)
 
     local gameObj = image.__cobject or image
-    local img =  gameObj:GetComponent("Image");
-    local sprite = ResourceManager.loadSprite(url,boundlename);
-    local size =sprite.bounds.size
+    local img = gameObj:GetComponent("Image");
+    local sprite = ResourceManager.loadSprite(url, boundlename);
+    local size = sprite.bounds.size
     img.sprite = sprite;
-    if(adjustSize)then
-        UITools.setViewSize(image,math.round( size.x*100),math.round( size.y*100))
+    if (adjustSize) then
+        UITools.setViewSize(image, math.round(size.x * 100), math.round(size.y * 100))
     end
 end
 
 --创建一个2dui 容器
 function UITools.createUICtn(name)
-    local ctn = BaseContainer.new();
-    if(name) then
-        ctn.__cobject.name = name
+    local ctn = luaui.Container.new();
+    if (name) then
+        ctn:setName(name);
     end
-
     return ctn
 end
 
 --创建ui图片
-function UITools.createUIImage(url,boundlename)
-    local tempArr = string.split(url,"/")
+function UITools.createUIImage(url, boundlename)
+    local tempArr = string.split(url, "/")
     local name = tempArr[#tempArr]
-    local imgCtn = UITools.createUICtn(name);
+    local imgCtn = luaui.Image.new(name);
     --默认是boundleui
     if not boundlename then
         boundlename = ResourceConst.boundle_ui
     end
-    UITools.setImageUrl(imgCtn,url,boundlename,true);
+    UITools.setImageUrl(imgCtn, url, boundlename, true);
+    --设置名字是为了好方便在uieditor里面查看
+    imgCtn:setName(name);
     return imgCtn;
 end
 
 --创建uilabel
-function UITools.createLabel(str,fontSize,stroke,strokeColor)
+function UITools.createLabel(str, fontSize, stroke, strokeColor)
     local img = UITools.createUICtn();
     return label;
 end

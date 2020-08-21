@@ -2,7 +2,6 @@ TimerManager = class('TimerManager')
 
 TimerManager.timeOurOffset = 8;
 
-
 function TimerManager:ctor()
     self.timeCount = 0;
     self._timeMap = {};
@@ -38,7 +37,7 @@ function TimerManager:add(callBack, thisObject, delay, maxCount, immediate, args
     end
     local timeEntity = nil
     self.timeCount = self.timeCount + 1
-    print("immediate:",immediate)
+    print("immediate:", immediate)
     if immediate then
         timeEntity = TimeEntity.new(delay, callBack, thisObject, maxCount - 1, args)
         if #args > 0 then
@@ -71,7 +70,7 @@ function TimerManager:removeByCallBack(thisObject, callBack)
 end
 
 function TimerManager:removeByObject(obj)
-    for i,time in pairs(self._timeMap) do
+    for i, time in pairs(self._timeMap) do
         if time.thisObject == obj then
             time.isRemove = true
             self._timeMap[i] = nil
@@ -98,7 +97,7 @@ function TimerManager:onceUpdateFrame()
 end
 
 function TimerManager:_updateFrame()
-    for i,info in pairs(self.updateCallFuncGroup) do
+    for i, info in pairs(self.updateCallFuncGroup) do
         if info then
             if info.frame > 0 then
                 info.frame = info.frame - 1
@@ -113,7 +112,7 @@ end
 
 function TimerManager:setTimeout(callBack, thisObject, delay, ...)
 
-    return self:add(callBack, thisObject, delay, 1, false, {...});
+    return self:add(callBack, thisObject, delay, 1, false, { ... });
 end
 
 function TimerManager:clearTimeout(key)
@@ -134,7 +133,7 @@ function TimerManager:deleteObjUpdate(callId, callFunc, callThisObj)
     if callId then
         self.updateCallFuncGroup[callId] = nil
     else
-        for i,info in pairs(self.updateCallFuncGroup) do
+        for i, info in pairs(self.updateCallFuncGroup) do
             if info.callBack == callFunc and info.thisObj == callThisObj then
                 self.updateCallFuncGroup[i] = nil
                 break
@@ -149,8 +148,8 @@ function TimerManager:updateFrame()
     local timeEntity = nil
     local curTime = Client.getInstance():getMiniServerTime()
     local num = 0
-    for i,timeEntity in pairs(self._timeMap) do
-        local  timeEntity = self._timeMap[i]
+    for i, timeEntity in pairs(self._timeMap) do
+        local timeEntity = self._timeMap[i]
         local isRemove = false
         num = math.floor((curTime - timeEntity.oldTime) / timeEntity.delay)
         if num > 0 then
@@ -168,7 +167,7 @@ function TimerManager:updateFrame()
             else
                 doJsApplyFunc(callBack, thisObject, { num })
             end
-            if(self.hasAddTime) then
+            if (self.hasAddTime) then
                 break
             end
         end

@@ -20,7 +20,7 @@ function BattleConditionData:setData(skill)
                 self.conditionLogicalParams[i] = {}
             end
             for s, vv in ipairs(temp) do
-                self.conditionLogicalParams[i ][s] = skill:getSkillValue(vv, tagStr)
+                self.conditionLogicalParams[i][s] = skill:getSkillValue(vv, tagStr)
             end
         end
     end

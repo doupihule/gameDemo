@@ -2,7 +2,7 @@ ReqLoadingUI = class('ReqLoadingUI', UIBase)
 ReqLoadingUI.res = nil;
 function ReqLoadingUI:ctor()
     ReqLoadingUI.super.ctor(self)
-    self.rollAsset = LabelTools.createLabel("loading...",100,30,24);
+    self.rollAsset = LabelTools.createLabel("loading...", 100, 30, 24);
     self.rollAsset:setPos(ScreenAdapterTools.width - 150, ScreenAdapterTools.height - 50)
     self:addChild(self.rollAsset)
     self.mouseEnabled = true
@@ -13,10 +13,10 @@ end
 
 function ReqLoadingUI:setData(data)
     self.rollAsset:setViewActive(false);
-    TimerManager.getInstance().add(self,function()
+    TimerManager.getInstance().add(self, function()
         self.rollAsset:setViewActive(true)
         self.rollAsset:setViewAlpha(0)
-    end,1,1)
+    end, 1, 1)
 end
 
 function ReqLoadingUI:onTween1()

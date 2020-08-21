@@ -286,7 +286,7 @@ function GamePlatform:compareData(data)
         end
     else
         localData = TableUtils.safelyJsonParse(localData)
-        if(not localData) then
+        if (not localData) then
             localData = ModelToServerMap.initBuildUserData()
         end
     end
@@ -494,13 +494,13 @@ function GamePlatform:vibrateByCount(count)
         return
     end
 
-    TimerManager.getInstance():registObjUpdate( function()
+    TimerManager.getInstance():registObjUpdate(function()
         myThis:vibrate(false)
         index = index + 1
         if index >= count then
-            TimerManager.getInstance():deleteObjUpdate(nil,nil,self);
+            TimerManager.getInstance():deleteObjUpdate(nil, nil, self);
         end
-    end,self)
+    end, self)
 
 end
 

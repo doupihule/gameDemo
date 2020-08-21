@@ -57,10 +57,18 @@ end
 function InstanceBasic:updateView()
 end
 function InstanceBasic:setView(view, x, y, z, parent)
-    if x == nil then    x = 0   end
-    if y == nil then    y = 0   end
-    if z == nil then    z = 0   end
-    if parent == nil then    parent = nil    end
+    if x == nil then
+        x = 0
+    end
+    if y == nil then
+        y = 0
+    end
+    if z == nil then
+        z = 0
+    end
+    if parent == nil then
+        parent = nil
+    end
     if self._myView ~= view then
         self:disposeView()
     end
@@ -79,9 +87,15 @@ function InstanceBasic:setViewName(value)
 end
 
 function InstanceBasic:setPos(x, y, z)
-    if x == nil then    x = 0   end
-    if y == nil then    y = 0   end
-    if z == nil then    z = 0   end
+    if x == nil then
+        x = 0
+    end
+    if y == nil then
+        y = 0
+    end
+    if z == nil then
+        z = 0
+    end
     self.pos.x = x
     self.pos.y = y
     self.pos.z = z
@@ -122,20 +136,20 @@ function InstanceBasic:realShowView()
         return
     end
     local x = self.pos.x
-    local y = (self.pos.y + self.pos.z)*BattleFunc.yCoordinateWay
-    UITools.setPos(self._myView,x,y);
+    local y = (self.pos.y + self.pos.z) * BattleFunc.yCoordinateWay
+    UITools.setPos(self._myView, x, y);
     if self._myView2 then
-        UITools.setPos(self._myView2,x,y);
+        UITools.setPos(self._myView2, x, y);
     end
 end
 
 function InstanceBasic:setRotation(value)
     self.radian = BattleFunc.angletoRad * value
     if self._myView then
-        UITools.setRotation(self._myView,value*BattleFunc.yCoordinateWay);
+        UITools.setRotation(self._myView, value * BattleFunc.yCoordinateWay);
     end
     if self._myView2 then
-        UITools.setRotation(self._myView2,value*BattleFunc.yCoordinateWay);
+        UITools.setRotation(self._myView2, value * BattleFunc.yCoordinateWay);
     end
 end
 
@@ -143,10 +157,10 @@ function InstanceBasic:setRotationRad(value)
     self.radian = BattleFunc.angletoRad * value
     local ang = BattleFunc.radtoAngle * value
     if self._myView then
-        UITools.setRotation(self._myView,ang*BattleFunc.yCoordinateWay);
+        UITools.setRotation(self._myView, ang * BattleFunc.yCoordinateWay);
     end
     if self._myView2 then
-        UITools.setRotation(self._myView2,ang*BattleFunc.yCoordinateWay);
+        UITools.setRotation(self._myView2, ang * BattleFunc.yCoordinateWay);
     end
 end
 
@@ -161,19 +175,19 @@ end
 function InstanceBasic:setViewScale(scale)
     self.viewScale = scale
     if self._myView then
-        UITools.setScale(self._myView,self._viewWay*scale,scale);
+        UITools.setScale(self._myView, self._viewWay * scale, scale);
     end
     if self._myView2 then
-        UITools.setScale(self._myView2,self._viewWay*scale,scale);
+        UITools.setScale(self._myView2, self._viewWay * scale, scale);
     end
 end
 
 function InstanceBasic:setViewAlpha(alpha)
     if self._myView then
-        UITools.setViewAlpha(self._myView,alpha)
+        UITools.setViewAlpha(self._myView, alpha)
     end
     if self._myView2 then
-        UITools.setViewAlpha(self._myView2,alpha)
+        UITools.setViewAlpha(self._myView2, alpha)
     end
 end
 
@@ -219,12 +233,24 @@ function InstanceBasic:setAniPlaySpeed(value)
 end
 
 function InstanceBasic:createEfect(effectName, aniIndex, isLoop, ofx, ofy, ofz, isFollow, layerIndex, withTargetWay, frame, aniSpeed)
-    if aniIndex == nil then   aniIndex = 0  end
-    if isFollow == nil then   isFollow = true   end
-    if layerIndex == nil then   layerIndex = 2    end
-    if withTargetWay == nil then   withTargetWay = 0    end
-    if frame == nil then   frame = -1   end
-    if aniSpeed == nil then    aniSpeed = 1   end
+    if aniIndex == nil then
+        aniIndex = 0
+    end
+    if isFollow == nil then
+        isFollow = true
+    end
+    if layerIndex == nil then
+        layerIndex = 2
+    end
+    if withTargetWay == nil then
+        withTargetWay = 0
+    end
+    if frame == nil then
+        frame = -1
+    end
+    if aniSpeed == nil then
+        aniSpeed = 1
+    end
     local eff = self.controler:createEffect({ id = effectName, index = aniIndex })
     if not isFollow then
         self.controler.performanceControler:setCacheEffect(eff, eff.cacheId)
@@ -266,8 +292,12 @@ function InstanceBasic:createEfect(effectName, aniIndex, isLoop, ofx, ofy, ofz, 
 end
 
 function InstanceBasic:playSpecialSysAction(actionName, sysTime, startTime, endTime, actionLength, aniSpeed)
-    if actionLength == nil then    actionLength = 0   end
-    if aniSpeed == nil then     aniSpeed = 1   end
+    if actionLength == nil then
+        actionLength = 0
+    end
+    if aniSpeed == nil then
+        aniSpeed = 1
+    end
     if not self._tempAnimObj then
         self._tempAnimObj = {}
     end
@@ -350,5 +380,5 @@ end
 
 --转字符串输出方法
 function InstanceBasic:tostring()
-    return "id:"..self.dataId ..",pos:"..this.pos.x.."_"..this.pos.z;
+    return "id:" .. self.dataId .. ",pos:" .. this.pos.x .. "_" .. this.pos.z;
 end

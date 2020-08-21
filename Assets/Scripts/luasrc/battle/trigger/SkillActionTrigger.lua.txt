@@ -33,7 +33,7 @@ function SkillActionTrigger.beforRunSkillAction(attacker, skillAction, useArr)
     local chooseArr = nil
     local hasHit = false
     local needCahce = false
-    LogsManager.echo("beforRunSkillAction11111111",skillAction.skillEffectId,#skillAction.tempChooseArr)
+    LogsManager.echo("beforRunSkillAction11111111", skillAction.skillEffectId, #skillAction.tempChooseArr)
     if useArr then
         chooseArr = useArr
     else
@@ -50,7 +50,7 @@ function SkillActionTrigger.beforRunSkillAction(attacker, skillAction, useArr)
                 needCahce = true
             end
         end
-        LogsManager.echo("beforRunSkillAction22222222",skillAction.skillEffectId,#skillAction.tempChooseArr,#chooseArr)
+        LogsManager.echo("beforRunSkillAction22222222", skillAction.skillEffectId, #skillAction.tempChooseArr, #chooseArr)
     end
     if #chooseArr > 0 then
         hasHit = true
@@ -170,7 +170,7 @@ function SkillActionTrigger.removeBuffByKind(user, kind, value)
     for i in pairs(buffMapInfo) do
         local buffArr = buffMapInfo[i]
         local len = #buffArr
-        for s=len,1,-1 do
+        for s = len, 1, -1 do
             local buff = buffArr[s]
             if SkillActionTrigger.checkBuffKind(buff, kind, value) then
                 user:clearOneBuff(buff, BattleConst.buff_remove_qusan)
@@ -197,7 +197,7 @@ end
 function SkillActionTrigger.runSkillAction_7(attacker, skill, skillAction, useArr)
     local i = 0
     for i, v in ipairs(useArr) do
-       v:changeEnergy(skillAction.skillLogicalParams[1][1])
+        v:changeEnergy(skillAction.skillLogicalParams[1][1])
     end
 end
 

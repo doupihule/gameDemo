@@ -17,7 +17,7 @@ BuffTrigger.buff_logical_add_skill = 15;
 BuffTrigger.buff_logical_chaofeng = 16;
 BuffTrigger.buff_logical_safe = 19;
 BuffTrigger.buff_logical_safe_all = 20;
-BuffTrigger.buffTypeToBit = { [4] = 1, [5] = 2, [6] = 4, [7] = 8, [8] = 16, [19] = 512, [20] = 1024,[16] = 2048 };
+BuffTrigger.buffTypeToBit = { [4] = 1, [5] = 2, [6] = 4, [7] = 8, [8] = 16, [19] = 512, [20] = 1024, [16] = 2048 };
 BuffTrigger._hasInit = false;
 function BuffTrigger.init()
     if BuffTrigger._hasInit then
@@ -262,7 +262,7 @@ end
 function BuffTrigger.clearBuff_2(attacker, defer, skillAction, buff, removeChance)
     local i = #defer.buffAttrInfo - 1
     local len = #defer.buffAttrInfo;
-    for i = len,1,-1 do
+    for i = len, 1, -1 do
         local info = defer.buffAttrInfo[i]
         if info.buff == buff then
             local attr = info.attr
@@ -307,7 +307,7 @@ function BuffTrigger.clearBuff_10(attacker, defer, skillAction, buff, removeChan
     local arr = defer.shieldInfoArr
     if #arr > 0 then
         local len = #arr
-        for i = len,1,-1 do
+        for i = len, 1, -1 do
             local info = arr[i]
             if info.buff == buff then
                 table.spliceArray(arr, i, 1)
@@ -328,8 +328,8 @@ end
 
 function BuffTrigger.clearBuff_13(attacker, defer, skillAction, buff, removeChance)
     local arr = defer.passiveSkills
-    local len =#arr;
-    for i = len, 1,-1 do
+    local len = #arr;
+    for i = len, 1, -1 do
         local passSkill = arr[i]
         if passSkill.fromValue == buff then
             table.spliceArray(arr, i, 1)

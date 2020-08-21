@@ -65,7 +65,7 @@ function InstanceLogical:updateSkillCd()
         end
     end
     if self.passiveSkills then
-        for i, skill2  in ipairs(self.passiveSkills) do
+        for i, skill2 in ipairs(self.passiveSkills) do
             if skill2.leftSkillCd > 0 then
                 skill2.leftSkillCd = skill2.leftSkillCd - cdcheck
                 if skill2.leftSkillCd < 0 then
@@ -112,7 +112,6 @@ function InstanceLogical:checkMoveOrAttack(force)
         return
     end
 
-
     self:checkAttack()
 end
 
@@ -142,7 +141,7 @@ function InstanceLogical:onBeHit(attacker, skill, skillAction, dmgResult, isFans
         if #self.shieldInfoArr > 0 then
             local i = #self.shieldInfoArr - 1
             local len = #self.shieldInfoArr;
-            for i = len, 1,-1 do
+            for i = len, 1, -1 do
                 local value = self.shieldInfoArr[i].value
                 if value > leftDmg then
                     self.shieldInfoArr[i].value = value - dmgValue
@@ -150,7 +149,7 @@ function InstanceLogical:onBeHit(attacker, skill, skillAction, dmgResult, isFans
                     resistValue = resistValue + dmgValue
                     break
                 else
-                    self.shieldInfoArr[i ].value = 0
+                    self.shieldInfoArr[i].value = 0
                     leftDmg = leftDmg - value
                     resistValue = resistValue + value
                     self:clearOneBuff(self.shieldInfoArr[i].buff, BattleConst.buff_remove_hudun)
@@ -303,7 +302,7 @@ function InstanceLogical:giveOutSkill(skill)
     if skillLabel then
         local sysTime = tonumber(skillLabel[2])
         self.controler:clearCallBack(self, self.resumeIdleAction)
-        local str = TableUtils.safelyJsonStringfy(skillLabel,"___label");
+        local str = TableUtils.safelyJsonStringfy(skillLabel, "___label");
         if sysTime == -1 then
             self:playAction(skillLabel[1], false)
             self:setAniPlaySpeed(skillSpeedValue)

@@ -11,7 +11,7 @@ function TableUtils.deepMerge(receiveObj, fromObj)
     if not receiveObj then
         receiveObj = {}
     end
-    for i,value in pairs(fromObj) do
+    for i, value in pairs(fromObj) do
         if type(value) == "table" then
             if not receiveObj[i] then
                 receiveObj[i] = {}
@@ -35,13 +35,13 @@ function TableUtils.deepDelete(t, keyData, deltitle)
     if not keyData then
         return
     end
-    for i,value in pairs(keyData) do
+    for i, value in pairs(keyData) do
         local value = keyData[i + 1]
         if i ~= "_id" then
             if value == deltitle then
-                t[i ] = nil
+                t[i] = nil
             elseif type(value) == "table" then
-                if t[i ] ~= nil then
+                if t[i] ~= nil then
                     TableUtils.deepDelete(t[i], value, deltitle)
                 end
             else
@@ -53,21 +53,21 @@ end
 
 function TableUtils.copyOneTable(tb)
     local newTb = {}
-    for i,v in pairs(tb) do
+    for i, v in pairs(tb) do
         newTb[i] = v
     end
     return newTb
 end
 
 --把数组a里面的元素插入到b里面
-function TableUtils.insertAtoB(a,b)
+function TableUtils.insertAtoB(a, b)
     for i, v in ipairs(a) do
-        table.insert(b,i,v);
+        table.insert(b, i, v);
     end
 end
 
 function TableUtils.deepCopy(fromTb, toTb)
-    for i,tempT in pairs(fromTb) do
+    for i, tempT in pairs(fromTb) do
         if type(tempT) == "table" then
             toTb[i] = {}
             TableUtils.deepCopy(tempT, toTb[i])
@@ -88,7 +88,7 @@ function TableUtils.copyOneArr(arr, outArr)
     if arr then
         local len = #arr
         for i, v in ipairs(arr) do
-            outArr[i ] = v
+            outArr[i] = v
         end
     end
     return outArr
@@ -98,7 +98,7 @@ function TableUtils.findDelKey(t1, t2, resulTb, ignoreFristTb)
     if ignoreFristTb == nil then
         ignoreFristTb = true
     end
-    for i ,v in pairs(t1) do
+    for i, v in pairs(t1) do
         if type(v) == "table" then
             if t2[i] == nil then
                 if not ignoreFristTb then
@@ -106,7 +106,7 @@ function TableUtils.findDelKey(t1, t2, resulTb, ignoreFristTb)
                 end
             else
                 if TableUtils.isEmptyTable(t2[i]) and not ignoreFristTb then
-                    resulTb[i ] = 1
+                    resulTb[i] = 1
                 else
                     local tempT = resulTb[i]
                     if not tempT then
@@ -134,8 +134,8 @@ function TableUtils.findNullKey(fromTb, toTb)
     if not fromTb then
         return toTb
     end
-    for i,value in pairs(fromTb) do
-        if value == nil  then
+    for i, value in pairs(fromTb) do
+        if value == nil then
             toTb[i] = 1
         elseif type(value) == "table" then
             local tempTb = {}
@@ -149,7 +149,7 @@ function TableUtils.findNullKey(fromTb, toTb)
 end
 
 function TableUtils.compareTable(t1, t2, resulTb)
-    for k,v in pairs(t2) do
+    for k, v in pairs(t2) do
         if type(v) ~= "table" then
             if not t1 or not t2 then
                 LogsManager.echo("_____emyrt data")
@@ -160,12 +160,12 @@ function TableUtils.compareTable(t1, t2, resulTb)
                 resulTb[k] = v
             end
         else
-            if  #v == 0 then
+            if #v == 0 then
                 resulTb[k] = {}
                 if not t1[k] then
                     resulTb[k] = TableUtils.deepCopy(v, {})
                 else
-                    TableUtils.compareTable(t1[k ], v, resulTb[k ])
+                    TableUtils.compareTable(t1[k], v, resulTb[k])
                 end
             else
                 LogsManager.errorTag("compareTableWarn", "has array Data,k:" .. k .. ",v:" .. string.sub(TableUtils.safelyJsonStringfy(v), 1, 100))
@@ -179,21 +179,21 @@ function TableUtils.compareTable(t1, t2, resulTb)
 end
 
 function TableUtils.getDelData(t1, t2, resulTb)
-    for k ,v in pairs(t1) do
+    for k, v in pairs(t1) do
         if type(v) ~= "table" then
-            if t1[k ] and not t2[k] then
+            if t1[k] and not t2[k] then
                 resulTb[k] = 1
             end
         else
-            if #v ==0 then
+            if #v == 0 then
                 resulTb[k] = {}
-                if not t2[k ] then
+                if not t2[k] then
                     resulTb[k] = 1
                 else
-                    TableUtils.getDelData(v, t2[k ], resulTb[k ])
+                    TableUtils.getDelData(v, t2[k], resulTb[k])
                 end
             end
-            if resulTb[k] ~= 1 and TableUtils.isEmptyTable(resulTb[k ]) then
+            if resulTb[k] ~= 1 and TableUtils.isEmptyTable(resulTb[k]) then
                 resulTb[k] = nil
             end
         end
@@ -208,7 +208,7 @@ function TableUtils.adjustEmptyArr(tb)
 end
 
 function TableUtils.isEmptyTable(tb)
-    for i ,v in pairs(tb) do
+    for i, v in pairs(tb) do
         return false
     end
     return true
@@ -263,7 +263,7 @@ end
 
 function TableUtils.safelyJsonStringfy(obj)
     local rt = ''
-    local rt =  try_catch(json.encode,TableUtils.emptyString,obj)
+    local rt = try_catch(json.encode, TableUtils.emptyString, obj)
     return rt
 end
 
@@ -276,10 +276,9 @@ function TableUtils.emptyString()
     return ""
 end
 
-
 function TableUtils.safelyJsonParse(str)
     local rt = nil
-    local rt =  try_catch(json.decode,TableUtils.emptyTable,str)
+    local rt = try_catch(json.decode, TableUtils.emptyTable, str)
     return rt
 end
 

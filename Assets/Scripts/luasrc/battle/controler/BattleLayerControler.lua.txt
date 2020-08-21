@@ -8,7 +8,7 @@ function BattleLayerControler:ctor(controler, rootCtn)
     self.controler = controler
     self.rootCtn = rootCtn
     self.a = UITools.createUICtn("a")
-    self.a:setPos(-ScreenAdapterTools.width/2,ScreenAdapterTools.height/2);
+    self.a:setPos(-ScreenAdapterTools.width / 2, ScreenAdapterTools.height / 2);
     self.a1 = UITools.createUICtn("a1")
     self.a2 = UITools.createUICtn("a2")
     self.a3 = UITools.createUICtn("a3")
@@ -41,7 +41,7 @@ function BattleLayerControler:onTouchBegin(event)
 end
 
 function BattleLayerControler:onTouchMove(event)
-    if  self._startTouchX == nil then
+    if self._startTouchX == nil then
         return
     end
     self.controler.cameraControler.inControlBg = false

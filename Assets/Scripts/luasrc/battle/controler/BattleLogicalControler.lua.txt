@@ -298,7 +298,7 @@ function BattleLogicalControler:createHome(id, data, lifeType, camp, offestX, of
         offestY = 0
     end
     id = tostring(id);
-    print(type(id),"id---",id)
+    print(type(id), "id---", id)
     local cacheId = PoolCode.POOL_HOME .. id .. "_" .. lifeType .. "_" .. camp
     local scale = 1
     local resname = "role_1000"
@@ -453,7 +453,7 @@ function BattleLogicalControler:createShade()
     local sp = PoolTools.getItem(PoolCode.POOL_SHADE)
     if not sp then
         sp = UITools.createUIImage(ResourceConst.BATTLE_SHADE)
-        sp:setViewPivot(0.5,0.5);
+        sp:setViewPivot(0.5, 0.5);
     end
     sp:setViewActive(true)
     sp:setScale(1, 1)
@@ -556,7 +556,7 @@ function BattleLogicalControler:createMyRole(id, level, starLevel, type)
     local offestX = 0
     for j = 1, num do
         if (j ~= 1) then
-            offestX = data.startSite[j ]
+            offestX = data.startSite[j]
         end
         self:createRole(id, { level = level, starLevel = starLevel, type = type }, data.kind, BattleConst.ROLEGROUP_MYSELF, offestX)
     end

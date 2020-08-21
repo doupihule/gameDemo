@@ -1,11 +1,9 @@
-
-
 --全局环境
 GlobalEnv = {
-    _stage = nil,    -- c#的main
-    stage = nil ,      --舞台的luaview
-    _uiRoot =nil,      --uiroot object
-    uiRoot =nil,        --uiroot的luaview
+    _stage = nil, -- c#的main
+    stage = nil, --舞台的luaview
+    _uiRoot = nil, --uiroot object
+    uiRoot = nil, --uiroot的luaview
 }
 
 function GlobalEnv.initStage()
@@ -16,7 +14,7 @@ function GlobalEnv.initStage()
 
     local size = GlobalEnv.uiRoot:getViewRect();
     local scale = GlobalEnv.uiRoot:getScale();
-    LogsManager.echo("size",size.x,size.y);
+    LogsManager.echo("size", size.x, size.y);
     ScreenAdapterTools.checkScreenFixMode(size.x, size.y)
 
 end
@@ -25,6 +23,5 @@ end
 function GlobalEnv.getStage()
     return GlobalEnv.stage
 end
-
 
 return GlobalEnv

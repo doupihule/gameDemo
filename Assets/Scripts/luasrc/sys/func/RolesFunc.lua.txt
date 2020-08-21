@@ -8,5 +8,5 @@ function RolesFunc.getInstance()
 end
 
 function RolesFunc:getCfgsPathArr()
-    return {   "Role" ,"RoleStar","RoleUpdate","EquipMaterial","Equip","RoleComment" };
+    return { "Role", "RoleStar", "RoleUpdate", "EquipMaterial", "Equip", "RoleComment" };
 end

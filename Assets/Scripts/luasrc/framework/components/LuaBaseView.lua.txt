@@ -1,5 +1,5 @@
 LuaBaseView = class("LuaBaseView")
-
+luaui.BaseView = LuaBaseView;
 --lua对应的c对象map表 所有的__cobject 对应的是c#里的gameObject 而不是transform. 确保统一性  用getChild函数会做一层封装.返回的是luabaseView. 会自动对c-lua做一层绑定关系.保证结构的统一性
 --[[
    {cobj:luaobj}
@@ -12,18 +12,20 @@ LuaBaseView = class("LuaBaseView")
 
 local cobjToLuaMap = {}
 
-local luaCount=0;
+local luaCount = 0;
 --对应的c#对象 Object  LuaBaseView 一定要赋值c#里面的组件
 LuaBaseView.__cobject = nil
 
 
 --构造器函数 子类必须继承
 function LuaBaseView:ctor()
-    luaCount = luaCount+1;
-    self._luaId =luaCount;
+    luaCount = luaCount + 1;
+    self._luaId = luaCount;
     self.x = 0;
     self.y = 0;
     self.z = 0;
+    --定义ui类型
+    self.uiType = "base"
     --绑定ui的几个基础函数 addchild  removechild removeSelf
     UITools.bindUIFunc(self)
 
@@ -36,7 +38,7 @@ function LuaBaseView:setCObject(cobj)
     self.transform = cobj.transform;
     local tempPos = cobj.transform.anchoredPosition;
     --如果是2d对象
-    if(tempPos)then
+    if (tempPos) then
         self.x = tempPos.x;
         self.y = tempPos.y;
     else
@@ -47,9 +49,8 @@ function LuaBaseView:setCObject(cobj)
         self.z = tempPos.z;
     end
 
-    --目前只持有图片和文本的引用.可能都为空 .目的是为了设置透明度或者color. 理论上这2着只能同时有一个存在
-    self.__imageComp = cobj:GetComponent("Image");
-    self.__textComp = cobj:GetComponent("Text");
+
+
     return self
 end
 
@@ -62,12 +63,19 @@ function LuaBaseView.bindOneCObjet(cobj)
     --    return cobj
     --end
 
-    if(not luaobj) then
+    if (not luaobj) then
         luaobj = LuaBaseView.new();
         luaobj:setCObject(cobj);
         cobjToLuaMap[cobj] = luaobj
     end
     return luaobj;
+end
+
+
+--设置name
+function LuaBaseView:setName(value)
+    self.name = value;
+    self.__cobject.name = value;
 end
 
 
@@ -77,8 +85,8 @@ function LuaBaseView:dispose()
     --销毁c和lua的绑定关系
     cobjToLuaMap[self.__cobject] = nil
     self.__cobject = nil
-    self.__imageComp =nil
-    self.__textComp =nil
+    self.__imageComp = nil
+    self.__textComp = nil
     --销毁透明容器组
     self.__canvasGroupComp = nil
     self.transform = nil

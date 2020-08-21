@@ -1,44 +1,49 @@
 -- 2dspine 对象
-SpineGraphicExpand = class("SpineGraphicExpand",LuaBaseView)
-
+SpineGraphicExpand = class("SpineGraphicExpand", LuaBaseView)
+luaui.Spine = SpineGraphicExpand
 --spine动画对象
 SpineGraphicExpand.__spineAni = nil
 
 --构造器函数
-function SpineGraphicExpand:ctor(name, boundlePath)
+function SpineGraphicExpand:ctor(name, boundlePath, cobj)
     SpineGraphicExpand.super.ctor(self)
-    if(not boundlePath) then boundlePath = name end
+    --类型是spine
+    self.uiType = UICompConst.comp_spine;
+    if not cobj then
+        if (not boundlePath) then
+            boundlePath = name
+        end
+        cobj = ResourceManager.loadSpinePrefab(name, boundlePath)
+    end
     self._currentLabel = nil;
     self._timeScale = 1;
-    self:setCObject(ResourceManager.loadSpinePrefab(name,boundlePath))
+    self:setCObject(cobj)
     self.__spineAni = self.__cobject:GetComponent("SkeletonGraphic")
-    self.__animationState = self.__spineAni.AnimationState
-    --当期动画播放的track
-    self.__currentTrack =nil
+    self.__animationState = self.__spineAni.AnimationState;
 end
 
 --播放动画
-function SpineGraphicExpand:play(label, loop,force, start, tsvar_end)
+function SpineGraphicExpand:play(label, loop, force, start, tsvar_end)
     self.__spineAni.freeze = false
     if not force then
         if self._currentLabel == label then
-            return;
+            return ;
         end
     end
     if not start then
-        start =0
+        start = 0
     end
     if not tsvar_end then
         tsvar_end = 0
     end
     local trackEntity;
-    if(type(label) == "number") then
+    if (type(label) == "number") then
         trackEntity = self.__animationState:SetAnimationByIndex(0, label, loop);
     else
         trackEntity = self.__animationState:SetAnimation(0, label, loop);
     end
-    if tsvar_end >0  then
-        LogsManager.echo("start:",start,tsvar_end);
+    if tsvar_end > 0 then
+        LogsManager.echo("start:", start, tsvar_end);
         trackEntity.AnimationStart = start;
         trackEntity.AnimationEnd = tsvar_end;
     end
@@ -49,22 +54,22 @@ end
 
 --设置动画播放速率
 function SpineGraphicExpand:setTimeScale(value)
-    if self._timeScale ==value then
-        return;
+    if self._timeScale == value then
+        return ;
     end
     self._timeScale = value;
-    self.__animationState.TimeScale =value;
+    self.__animationState.TimeScale = value;
 end
 
 --停止动画
 function SpineGraphicExpand:stop()
     self.__spineAni.freeze = true
-    self.__animationState.TimeScale =0;
+    self.__animationState.TimeScale = 0;
 end
 
 --复原动画
 function SpineGraphicExpand:resume()
-    self.__animationState.TimeScale =self._timeScale;
+    self.__animationState.TimeScale = self._timeScale;
 end
 
 
@@ -74,8 +79,7 @@ function SpineGraphicExpand:dispose()
         return
     end
     SpineGraphicExpand.super.dispose(self);
-    self.__spineAni =nil
-    self.__currentTrack = nil
+    self.__spineAni = nil
 
 end
 

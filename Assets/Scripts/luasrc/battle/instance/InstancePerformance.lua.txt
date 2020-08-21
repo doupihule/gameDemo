@@ -67,7 +67,7 @@ function InstancePerformance:doShadeFollow()
     if not self._shade then
         return
     end
-    self._shade:setPos(self.pos.x + self.shadeOffestX,self.pos.z *BattleFunc.yCoordinateWay)
+    self._shade:setPos(self.pos.x + self.shadeOffestX, self.pos.z * BattleFunc.yCoordinateWay)
 end
 
 function InstancePerformance:createShade()
@@ -86,7 +86,7 @@ function InstancePerformance:createShade()
         self._shade:addChild(childShade)
     end
     self.controler.layerControler.a21:addChild(self._shade)
-    self._shade:setPos(self.pos.x,self.pos.z*BattleFunc.yCoordinateWay)
+    self._shade:setPos(self.pos.x, self.pos.z * BattleFunc.yCoordinateWay)
 end
 
 function InstancePerformance:setViewName(value)
@@ -179,8 +179,6 @@ function InstancePerformance:clearFlash()
         DisplayUtils.clearViewFilter(self._myView2)
     end
 end
-
-
 
 function InstancePerformance:onHitedBack(attacker, impulse, impulseZ, lastFrame)
     if lastFrame == nil then
@@ -277,8 +275,8 @@ function InstancePerformance:onStartSlide(speedValue, addSpeed)
 end
 
 function InstancePerformance:playAction(label, loop, resumeIdle, force, start, tsvar_end)
-    if(not label) then
-        LogsManager.errorTag("playactionError","没有传入标签");
+    if (not label) then
+        LogsManager.errorTag("playactionError", "没有传入标签");
     end
     if resumeIdle == nil then
         resumeIdle = true
@@ -496,8 +494,8 @@ function InstancePerformance:onSetToCache()
     self:clearAllFollowEffect()
     if self._shade then
         self._shade:removeSelf()
-        for i = self.totalViewNums,1,-1 do
-            local childShade = self._shade:getChildAt(i-1)
+        for i = self.totalViewNums, 1, -1 do
+            local childShade = self._shade:getChildAt(i - 1)
             PoolTools.cacheItem(PoolCode.POOL_SHADE, childShade)
             childShade:removeSelf()
         end

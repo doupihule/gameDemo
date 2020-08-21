@@ -8,7 +8,7 @@ function LoadingUI:ctor()
     self.progress = 0;
     self.isShowWxInfo = false;
     self.alphaFlag = 1;
-    LoadingUI._instance =  self
+    LoadingUI._instance = self
     self:initView()
     self.mainbg.mouseThrough = false
     self.mainbg.mouseEnabled = true
@@ -35,14 +35,14 @@ end
 function LoadingUI:initView()
     if not self.mainbg then
         self.mainbg = UITools.createUIImage("static/loading_bp_beijing.png")
-        self.mainbg:setViewSize(768,1400)
-        self.mainbg:setPos(ScreenAdapterTools.width / 2 - ScreenAdapterTools.maxWidth / 2,ScreenAdapterTools.height / 2 - ScreenAdapterTools.maxHeight / 2)
+        self.mainbg:setViewSize(768, 1400)
+        self.mainbg:setPos(ScreenAdapterTools.width / 2 - ScreenAdapterTools.maxWidth / 2, ScreenAdapterTools.height / 2 - ScreenAdapterTools.maxHeight / 2)
         local title = UITools.createUIImage("static/loading_image_logo.png")
-        title:setPos(ScreenAdapterTools.width / 2 - ScreenAdapterTools.maxWidth / 2,280+ScreenAdapterTools.UIOffsetY);
+        title:setPos(ScreenAdapterTools.width / 2 - ScreenAdapterTools.maxWidth / 2, 280 + ScreenAdapterTools.UIOffsetY);
         self.mainbg:addChildren(title)
     end
     if not self.clientVersionTxt then
-        self.clientVersionTxt = LabelTools.createLabel("client_version:1.0.1",134,16);
+        self.clientVersionTxt = LabelTools.createLabel("client_version:1.0.1", 134, 16);
         --self.clientVersionTxt.text =
         --self.clientVersionTxt.width = 134
         --self.clientVersionTxt.height = 16
@@ -66,16 +66,16 @@ function LoadingUI:initView()
         --self.profg.width = 0
     end
     if not self.loadingtips then
-        self.loadingtips = LabelTools.createLabel("资源加载加载中，请稍后...",640,31,20,4,false,1);
-        self.loadingtips:setPos(-33,-37.5)
+        self.loadingtips = LabelTools.createLabel("资源加载加载中，请稍后...", 640, 31, 20, 4, false, 1);
+        self.loadingtips:setPos(-33, -37.5)
         self.profgBg:addChild(self.loadingtips)
     end
     if not self.loadingstar then
         self.loadingstar = UITools.createUICtn("loadingstar")
-        self.loadingstar:setPos(-26,-22);
+        self.loadingstar:setPos(-26, -22);
         self.profgBg:addChild(self.loadingstar)
         self.loadingicon = UITools.createUIImage("static/loading_image_jindudiche.png")
-        self.loadingicon:setPos(15,-27);
+        self.loadingicon:setPos(15, -27);
         self.loadingstar:addChild(self.loadingicon)
     end
 end
@@ -85,7 +85,7 @@ function LoadingUI:setData()
     self.progress = 0
     self.profg.width = 0
     self:onLoop()
-    TimerManager.getInstance():registObjUpdate(self.onLoop,self);
+    TimerManager.getInstance():registObjUpdate(self.onLoop, self);
     self.alphaFlag = 1
 end
 

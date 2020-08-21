@@ -11,8 +11,8 @@ function TipsUI:ctor()
     self.tipsbg:setViewSize(wid, hei)
     self.tipsbg.y = 1207
     self:addChild(self.tipsbg)
-    self.tips = LabelTools.createLabel("",455,50,20,4,true,1);
-    UITools.setViewColor(self.tips,1,1,1,1)
+    self.tips = LabelTools.createLabel("", 455, 50, 20, 4, true, 1);
+    UITools.setViewColor(self.tips, 1, 1, 1, 1)
     self.tips:setPos(wid / 2, 30)
     self.tipsbg:addChild(self.tips)
 end
@@ -21,8 +21,7 @@ function TipsUI:setData(data)
 
     self.tipsbg:setPos(nil, ScreenAdapterTools.designHeight * 0.5)
     self.tipsbg:setViewAlpha(0);
-    LabelTools.setLabelStr(self.tips,data);
-
-    self.tipsbg:setPos( ScreenAdapterTools.width / 2 - self._tipsWid / 2 )
-    self.tips:setPos( self._tipsWid *0.5)
+    self.tips:setText(data);
+    self.tipsbg:setPos(ScreenAdapterTools.width / 2 - self._tipsWid / 2)
+    self.tips:setPos(self._tipsWid * 0.5)
 end

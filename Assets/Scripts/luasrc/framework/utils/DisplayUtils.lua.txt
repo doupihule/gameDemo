@@ -100,10 +100,10 @@ function DisplayUtils.createSpriteFrameByShort(imagePath, imageHead, labelsArr, 
 end
 
 --创建spine
-function DisplayUtils.createSpine(name,boundleName)
+function DisplayUtils.createSpine(name, boundleName)
     if not boundleName then
         boundleName = ResourceConst.boundle_animation
     end
-    local spani = SpineGraphicExpand.new(name,boundleName);
+    local spani = SpineGraphicExpand.new(name, boundleName);
     return spani
 end

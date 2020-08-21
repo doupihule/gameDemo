@@ -34,12 +34,12 @@ function InstanceMoveMultyEntity:getNextpos()
     if self.currentStep == self.totalStep + 1 then
         return nil
     end
-    self.currentEntity.target = self.pointArr[self.currentStep ]
+    self.currentEntity.target = self.pointArr[self.currentStep]
     if self.expandParams and #self.expandParams > 0 then
         if #self.expandParams == 1 then
             self.currentEntity.expandParams = self.expandParams[1]
         else
-            self.currentEntity.expandParams = self.expandParams[self.currentStep ]
+            self.currentEntity.expandParams = self.expandParams[self.currentStep]
         end
     end
     return self.currentEntity

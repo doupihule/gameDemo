@@ -21,7 +21,7 @@ function InstancePlayer:updateSkillCd()
     end
     local i = 0
     for i, skill in ipairs(self.normalSkills) do
-        local skillView = self.skillGroup[i ];
+        local skillView = self.skillGroup[i];
         if not skillView then
             break
         end

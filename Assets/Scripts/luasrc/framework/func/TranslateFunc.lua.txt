@@ -93,7 +93,7 @@ function TranslateFunc:changeDataById(cfgsName, id, ignoreError)
 end
 
 function TranslateFunc:setOneChangeData(cfgsName, id, ignoreError)
-    BaseFunc.setOneChangeData(self,cfgsName,id,ignoreError);
+    BaseFunc.setOneChangeData(self, cfgsName, id, ignoreError);
 end
 
 function TranslateFunc:getCfgDatas(cfgsName, id, ignoreError)
@@ -157,14 +157,14 @@ function TranslateFunc:getTranslate(tid, cfgsName, ...)
             end
         end
     else
-        for i,data in pairs(self._allCfgs) do
+        for i, data in pairs(self._allCfgs) do
             resultStr = data[tid] or data[key2]
             if resultStr then
                 break
             elseif BaseFunc.exportType == BaseFunc.exportType_New then
-                if BaseFunc.hotCfg[i ] then
+                if BaseFunc.hotCfg[i] then
                     if BaseFunc.hotCfg[i][tid] or BaseFunc.hotCfg[i][key2] then
-                        resultStr = BaseFunc.hotCfg[i ][tid] or BaseFunc.hotCfg[i][key2]
+                        resultStr = BaseFunc.hotCfg[i][tid] or BaseFunc.hotCfg[i][key2]
                         break
                     end
                 end

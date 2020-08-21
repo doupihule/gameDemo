@@ -88,7 +88,7 @@ function PerformanceControler:setTxtShowBack(data)
     local maxNums = info.nums
     local targetItem = nil
     local x = targetInstance.pos.x
-    local y = (targetInstance._myView.y + (10- targetInstance.cfgData.size[1])*BattleFunc.yCoordinateWay )
+    local y = (targetInstance._myView.y + (10 - targetInstance.cfgData.size[1]) * BattleFunc.yCoordinateWay)
     if #viewArr > maxNums then
         targetItem = table.shiftArray(viewArr)
         self.controler.tweenControler:clearOneTween(targetItem)
@@ -97,7 +97,7 @@ function PerformanceControler:setTxtShowBack(data)
         targetItem["__tempParams"] = {}
     end
     targetItem:setValue(type, value)
-    targetItem:setPos(x,y)
+    targetItem:setPos(x, y)
     local param = targetItem["__tempParams"]
     param.x = x
     param.y = y - 100 * BattleFunc.yCoordinateWay
@@ -132,7 +132,7 @@ function PerformanceControler:showBlackScreen(targetRole, lastFrame, useArr)
     end
     self.controler:forceSortChildren()
     self.controler.isSkillPause = true
-    self.blackScreen:setPos( -self.controler.layerControler.a2.x - 300,0)
+    self.blackScreen:setPos(-self.controler.layerControler.a2.x - 300, 0)
     self.controler:clearCallBack(self, self.hideBlackScreen)
     self.blackScreen:setViewActive(true)
     if lastFrame > 0 then

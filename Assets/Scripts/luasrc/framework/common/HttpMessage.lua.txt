@@ -69,7 +69,7 @@ function HttpMessage:objectToUrlParam(data)
     for key in pairs(data) do
         -- [ts2lua]data下标访问可能不正确
         local value = data[key]
-        if value ~= nil  then
+        if value ~= nil then
             if value.constructor == Array or value.constructor == Object then
                 retStr = retStr .. key .. "=" .. TableUtils.safelyJsonStringfy(value) .. "&"
             else

@@ -8,31 +8,31 @@ function LevelFunc.getInstance()
 end
 
 function LevelFunc:getCfgsPathArr()
-    return {   "Level" ,"LevelWave","TranslateGlobal","Scene","BattleAddition" }
+    return { "Level", "LevelWave", "TranslateGlobal", "Scene", "BattleAddition" }
 end
 
 function LevelFunc:getAllLevelInfo()
     return self:getAllCfgData("Level");
 end
-function LevelFunc:getLevelInfoByTwoId(id1,id2)
+function LevelFunc:getLevelInfoByTwoId(id1, id2)
     return self:getCfgDatasByKey("Level", id1, id2);
 end
 
 function LevelFunc:getLevelInfoById(id1)
-    local  level=tonumber(id1);
+    local level = tonumber(id1);
     local maxLevel = self:getMaxLevel()
-    if(level>maxLevel)then
+    if (level > maxLevel) then
         level = maxLevel;
     end
-    return self:getCfgDatas("Level",tostring(level));
+    return self:getCfgDatas("Level", tostring(level));
 end
 function LevelFunc:getMaxLevel()
-    if(not self.maxLevel)then
-        local levelList =self:getAllCfgData("Level");
-        local maxLevel =0;
+    if (not self.maxLevel) then
+        local levelList = self:getAllCfgData("Level");
+        local maxLevel = 0;
         for i, v in pairs(levelList) do
             local tempLevel = tonumber(i);
-            if(tempLevel> maxLevel) then
+            if (tempLevel > maxLevel) then
                 maxLevel = tempLevel
             end
         end
@@ -41,7 +41,6 @@ function LevelFunc:getMaxLevel()
     return self.maxLevel
 end
 
-
-function LevelFunc:getBattleAddtionoByTwoId(id1,id2)
+function LevelFunc:getBattleAddtionoByTwoId(id1, id2)
     return self:getCfgDatasByKey("BattleAddition", id1, id2);
 end

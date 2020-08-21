@@ -6,7 +6,7 @@ function WaitManager:ctor()
     self._waitView = ReqLoadingUI.new()
     self._waitView.width = ScreenAdapterTools.width
     self._waitView.height = ScreenAdapterTools.height
-    TimerManager.getInstance().add(self,self.timeCallBack,1000,9999999);
+    TimerManager.getInstance().add(self, self.timeCallBack, 1000, 9999999);
 end
 
 function WaitManager.getInstance()
@@ -27,16 +27,16 @@ function WaitManager:add(cmd)
     wait.time = Client.getInstance():getMiniServerTime()
     table.insert(self.waitList, wait)
     self:showOrHideWaitView(true)
-    TimerManager.getInstance().add(self,self.timeCallBack,1000,9999999);
+    TimerManager.getInstance().add(self, self.timeCallBack, 1000, 9999999);
 end
 
 function WaitManager:remove(cmd)
     local len = #self.waitList
     local i = 0
-    for i = len,1,-1 do
+    for i = len, 1, -1 do
         if cmd == self.waitList[i].cmd then
             table.insert(self.waitPool, self.waitList[i]);
-            table.remove(self.waitList, i );
+            table.remove(self.waitList, i);
             break
         end
     end
@@ -45,9 +45,9 @@ end
 
 function WaitManager:clear()
     local len = #self.waitList;
-    for i = len,1,-1 do
+    for i = len, 1, -1 do
         table.insert(self.waitPool, self.waitList[i])
-        table.remove(self.waitList,i);
+        table.remove(self.waitList, i);
     end
     self:checkWait()
 end
@@ -63,10 +63,10 @@ function WaitManager:timeCallBack()
     local len = #self.waitList
     local nowTime = Client.getInstance():getMiniServerTime()
     local i = 0
-    for i = len,1,-1 do
+    for i = len, 1, -1 do
         if nowTime - self.waitList[i].time > 20000 then
             table.insert(self.waitPool, self.waitList[i]);
-            table.remove(self.waitList, i );
+            table.remove(self.waitList, i);
             break
         end
     end

@@ -12,5 +12,5 @@ require(packageName .. "SceneReference")
 require(packageName .. "StatisticsCommonConst")
 require(packageName .. "TranslateCommonConst")
 require(packageName .. "WindowCommonCfgs")
-
+require(packageName .. "UICompConst")
 

@@ -26,7 +26,7 @@ function SubPackageManager.loadSubPackage(packageName, callback, thisObj, isShow
 end
 
 function SubPackageManager.checkNeedLoad(packageName)
-  return false
+    return false
 end
 
 function SubPackageManager.setLoadStatus(packageName)
@@ -46,7 +46,7 @@ end
 
 SubPackageManager.loadCacheArr = {};
 function SubPackageManager.load(names, callback, thisObj, isInsert)
-    doJsCallFunc(callback,thisObj)
+    doJsCallFunc(callback, thisObj)
 end
 
 function SubPackageManager.insertDynamicSubPack(names, paths)
@@ -70,7 +70,6 @@ end
 function SubPackageManager.getModelFileStyle(model)
     return nil
 end
-
 
 function SubPackageManager.checkSubModelIsNative(model)
     local info = SubPackageConst.subPackData[model]

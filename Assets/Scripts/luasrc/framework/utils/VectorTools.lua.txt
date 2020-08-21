@@ -35,29 +35,29 @@ function VectorTools.copyVector(vec)
 end
 
 --向量减法
-function VectorTools.subtract(v1,v2,out)
-    out.x = v1.x-v2.x;
-    out.y = v1.y- v2.y;
+function VectorTools.subtract(v1, v2, out)
+    out.x = v1.x - v2.x;
+    out.y = v1.y - v2.y;
     out.z = v1.z - v2.z;
     return out;
 end
 
 function VectorTools.scalarLength(v)
-    return math.sqrt(v.x*v.x+v.y*v.y+v.z*v.z)
+    return math.sqrt(v.x * v.x + v.y * v.y + v.z * v.z)
 end
 
-function VectorTools.scale(v,scale,out)
-    out.x = v.x*scale;
-    out.y = v.y*scale;
+function VectorTools.scale(v, scale, out)
+    out.x = v.x * scale;
+    out.y = v.y * scale;
     out.z = v.z * scale
     return out
 end
 
-function VectorTools.normalize(v,out)
+function VectorTools.normalize(v, out)
     local len = VectorTools.scalarLength(v);
-    out.x = v.x/out
-    out.y = v.y/out
-    out.z = v.z/out
+    out.x = v.x / out
+    out.y = v.y / out
+    out.z = v.z / out
     return out
 end
 function VectorTools.createVector2(x, y)

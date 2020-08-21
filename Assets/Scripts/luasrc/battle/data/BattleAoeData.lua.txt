@@ -96,14 +96,14 @@ function BattleAoeData:checkAoe()
         local tempChooseArr = nil
         if not self.chooseTartgetCfg then
             chooseArr = self.skill.tempChooseArr
-            LogsManager.echo("222222222222",tempChooseArr);
+            LogsManager.echo("222222222222", tempChooseArr);
         else
             tempChooseArr = BattleFunc.getOneTempArr()
             ChooseTrigger.getAoeTargetRole(self, self.owner, self.targetInstance, tempChooseArr)
             chooseArr = tempChooseArr
         end
         if not chooseArr then
-            LogsManager.errorTag("aoeerror","没有chooseArr",self.chooseTartgetCfg);
+            LogsManager.errorTag("aoeerror", "没有chooseArr", self.chooseTartgetCfg);
         end
         if #chooseArr > 0 then
             if self.cfgData.type then

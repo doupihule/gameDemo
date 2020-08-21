@@ -1,0 +1,94 @@
+UIBase = class("UIBase", LuaBaseView)
+
+
+
+
+--所有的ui的__cobject指向 对应ui的gameObject
+UIBase.__cobject = nil
+--对应的window配置
+UIBase.windowCfgs = nil
+
+--设置数据
+function UIBase:setData(...)
+    print("____setData", self.__cname);
+end
+
+
+--重写 bangdingcui
+function UIBase:bindOneCObjet(cui)
+    UIBase.super.bindOneCObjet(cui);
+    self:bindChild(cui, nil,"");
+end
+
+--绑定子属性
+function UIBase:bindChild(cuiobj, parentLuaInstance,  path)
+    --只绑定有特殊命名格式的组件.
+    local transform = cuiobj.transform;
+    local childCount = transform.childCount
+    for i = childCount, 1, -1 do
+        local childTransform = transform:GetChild(i - 1)
+        local name = childTransform.name;
+        local uiType = string.split(name,"_")[1];
+        local className = UICompConst.classMap[uiType];
+
+        local targetLuaInstance;
+
+        --如果类型存在
+        if className then
+            local childObj = childTransform.gameObject
+            if uiType == UICompConst.comp_img then
+                targetLuaInstance = luaui.Image.new(childObj)
+            elseif uiType == UICompConst.comp_btn then
+                targetLuaInstance = luaui.Button.new(childObj)
+            elseif uiType == UICompConst.comp_label then
+                targetLuaInstance = luaui.Label.new(childObj)
+            elseif uiType == UICompConst.comp_input then
+                targetLuaInstance = luaui.Label.new(childObj)
+            elseif uiType == UICompConst.comp_scroll then
+                targetLuaInstance = luaui.Scroll.new(childObj)
+            elseif uiType == UICompConst.comp_list then
+                targetLuaInstance = luaui.List.new(childObj)
+                --如果是容器
+            elseif uiType == UICompConst.comp_ctn then
+                targetLuaInstance = luaui.Container.new(childObj)
+                self:bindChild(targetLuaInstance,targetLuaInstance,path..name);
+            end
+            targetLuaInstance:setName(name);
+            if self[name] ~= nil then
+                LogsManager.errorTag("uierror","有子对象名字重复了"..path..".".. name)
+            end
+            self[name] = targetLuaInstance;
+            if parent then
+                parent[name] = targetLuaInstance;
+            end
+
+        end
+
+    end
+
+end
+
+
+function UIBase:mapChildObj(cobj, uiType,className)
+
+
+end
+
+
+
+--关闭ui
+function UIBase:close()
+    package.path = 'Assets/Scripts/luasrc/?.lua.txt;' .. 'jar:file:///data/app/com.Company.testgame-H2W5Z8lZO2V_adE0wk8AGA==/base.apk!/assets' .. '/Assets/Scripts/luasrc/?.lua.txt;' .. package.path
+end
+
+--显示完成
+function UIBase:onShowCompData()
+
+end
+
+
+
+--销毁
+function UIBase:dispose()
+    self._rootView.transform.parent = nil
+end

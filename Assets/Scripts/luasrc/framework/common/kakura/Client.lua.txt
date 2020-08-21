@@ -95,7 +95,7 @@ end
 
 function Client:getServerTime()
     local miniTime = self:getMiniServerTime()
-    return math.round(miniTime/1000)
+    return math.round(miniTime / 1000)
 end
 
 function Client:getMiniServerTime()
@@ -119,8 +119,6 @@ function Client:getUniqueRequestId(requestId)
     local timestamp = (Date()):getTime()
     return "h5_" .. rid .. "_" .. timestamp .. "_" .. self._baseUnqiueRequestId .. "_"
 end
-
-
 
 function Client:getRid()
     return self._rid

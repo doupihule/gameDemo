@@ -156,8 +156,6 @@ function UserInfo.parseUrl()
     return obj
 end
 
-
-
 PlatformIdType = class('PlatformIdType')
 PlatformIdType.test = "9173";
 PlatformIdType.qqbrowser = "ogqq";

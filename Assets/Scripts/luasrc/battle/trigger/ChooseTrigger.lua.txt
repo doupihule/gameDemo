@@ -112,7 +112,7 @@ function ChooseTrigger.chooseSkillToOut(targetRole, out)
     end
     local i = 0
 
-        for i, skill in ipairs(targetRole.normalSkills) do
+    for i, skill in ipairs(targetRole.normalSkills) do
         if skill.isActive and skill.leftSkillCd <= 0 then
             tempArr = ChooseTrigger._initSkillChoose(targetRole, skill)
             if #tempArr > 0 then
@@ -127,7 +127,7 @@ function ChooseTrigger.chooseSkillToOut(targetRole, out)
     end
     if out[1] == -2 then
         out[1] = -1
-        out[2] = targetRole.normalSkills[#targetRole.normalSkills ]
+        out[2] = targetRole.normalSkills[#targetRole.normalSkills]
         ChooseTrigger._initSkillChoose(targetRole, out[2])
     end
     return
@@ -166,7 +166,9 @@ ChooseTrigger.choose_campoutself = 4;
 ChooseTrigger.choose_hitself = 5;
 ChooseTrigger.choose_campwithdied = 11;
 function ChooseTrigger.getSkillTargetRole(instance, skill, targetData, out, usedDisInstance, soucePos, outArea)
-    if outArea == nil then       outArea = false    end
+    if outArea == nil then
+        outArea = false
+    end
     local rangeType = targetData.targetRange
     local chooseType = targetData.targetGroup
     local targetArr = nil
@@ -237,13 +239,13 @@ function ChooseTrigger.getSkillTargetRole(instance, skill, targetData, out, used
             ChooseTrigger.chooseRoleByRect(usedDisInstance, rangeParams[1], rangeParams[2], rangeParams[3], rangeParams[4], targetArr, -1, out, nil, soucePos)
         elseif rangeType == ChooseTrigger.RANGE_FULLSCREEN then
             if targetArr then
-                TableUtils.insertAtoB(targetArr,out)
+                TableUtils.insertAtoB(targetArr, out)
             end
         else
-            TableUtils.insertAtoB(targetArr,out)
+            TableUtils.insertAtoB(targetArr, out)
         end
     else
-        TableUtils.insertAtoB(targetArr,out)
+        TableUtils.insertAtoB(targetArr, out)
     end
     ChooseTrigger.initArrpriority(out)
     ChooseTrigger.excludeUnChooseRole(instance, out)
@@ -283,7 +285,7 @@ end
 
 function ChooseTrigger.chooseByTargetType(useArr, targetType)
     local len = #useArr
-    for i = len, 1,-1 do
+    for i = len, 1, -1 do
         local role = useArr[i]
         role.tempSortValue = 100
         for s, tempInfo in ipairs(targetType) do
@@ -299,7 +301,7 @@ function ChooseTrigger.chooseByTargetType(useArr, targetType)
         end
         role.tempSortPriority = role.tempSortValue
     end
-    table.sort( useArr,ChooseTrigger.sortByTmepValueAdd)
+    table.sort(useArr, ChooseTrigger.sortByTmepValueAdd)
     return useArr
 end
 
@@ -443,8 +445,8 @@ function ChooseTrigger.excludeUnChooseRole(attacker, targetArr)
         return
     end
     local len = #targetArr
-    for i = len, 1,-1 do
-        local targetRole = targetArr[i ]
+    for i = len, 1, -1 do
+        local targetRole = targetArr[i]
         if not ChooseTrigger.checkCanChoose(attacker, targetRole) then
             table.spliceArray(targetArr, i, 1)
         end
@@ -459,23 +461,23 @@ function ChooseTrigger.chooseRoleBy_2(attacker, useArr)
     for i, instance in ipairs(useArr) do
         instance.tempSortValue = RandomUtis.getUintRandom(BattleFunc.battleRandomIndex)
     end
-    table.sort(useArr,ChooseTrigger.sortByTmepValueAdd)
+    table.sort(useArr, ChooseTrigger.sortByTmepValueAdd)
     return useArr
 end
 
 function ChooseTrigger.chooseRoleBy_3(attacker, useArr)
-    table.sort(useArr,ChooseTrigger.sortByHpAdd)
+    table.sort(useArr, ChooseTrigger.sortByHpAdd)
     return useArr
 end
 
 function ChooseTrigger.chooseRoleBy_4(attacker, useArr)
-    table.sort(useArr,ChooseTrigger.sortByHpReduce)
+    table.sort(useArr, ChooseTrigger.sortByHpReduce)
     return useArr
 end
 
 function ChooseTrigger.chooseRoleBy_5(attacker, useArr)
     ChooseTrigger.comparePos = attacker.pos
-    table.sort(useArr,ChooseTrigger.sortByFrontFormation)
+    table.sort(useArr, ChooseTrigger.sortByFrontFormation)
     return useArr
 end
 
@@ -488,17 +490,17 @@ end
 
 function ChooseTrigger.chooseRoleBy_6(attacker, useArr)
     ChooseTrigger.comparePos = attacker.pos
-    table.sort(useArr,ChooseTrigger.sortByBackFormation)
+    table.sort(useArr, ChooseTrigger.sortByBackFormation)
     return useArr
 end
 
 function ChooseTrigger.chooseRoleBy_7(attacker, useArr)
-    for i, role2  in ipairs(useArr) do
+    for i, role2 in ipairs(useArr) do
         local dx = role2.pos.x - attacker.pos.x
         local dz = role2.pos.z - attacker.pos.z
         role2.tempSortValue = dx * dx + dz * dz
     end
-    table.sort(useArr,ChooseTrigger.sortByTmepValueAdd)
+    table.sort(useArr, ChooseTrigger.sortByTmepValueAdd)
     return useArr
 end
 
@@ -508,7 +510,7 @@ function ChooseTrigger.chooseRoleBy_8(attacker, useArr)
         local dz = role2.pos.z - attacker.pos.z
         role2.tempSortValue = dx * dx + dz * dz
     end
-    table.sort(useArr,ChooseTrigger.sortByTmepValueReduce)
+    table.sort(useArr, ChooseTrigger.sortByTmepValueReduce)
     return useArr
 end
 
@@ -518,17 +520,17 @@ function ChooseTrigger.chooseRoleBy_9(attacker, useArr)
             instance.tempSortPriority = instance.tempSortPriority + 1
         end
     end
-    table.sort(useArr,ChooseTrigger.sortByPriority)
+    table.sort(useArr, ChooseTrigger.sortByPriority)
     return useArr
 end
 
 function ChooseTrigger.chooseRoleBy_10(attacker, useArr)
-    table.sort(useArr,ChooseTrigger.sortByHpReducePercent)
+    table.sort(useArr, ChooseTrigger.sortByHpReducePercent)
     return useArr
 end
 
 function ChooseTrigger.chooseRoleBy_11(attacker, useArr)
-    table.sort(useArr,ChooseTrigger.sortByHpAddPercent)
+    table.sort(useArr, ChooseTrigger.sortByHpAddPercent)
     return useArr
 end
 
@@ -538,7 +540,7 @@ function ChooseTrigger.getTargetRoleByBuff(def, buffData, outArr)
 end
 
 function ChooseTrigger.sortByPriority(r1, r2)
-    return r1.tempSortPriority - r2.tempSortPriority  < 0 and true or false
+    return r1.tempSortPriority - r2.tempSortPriority < 0 and true or false
 end
 
 function ChooseTrigger.sortByHpAdd(r1, r2)
@@ -552,7 +554,7 @@ function ChooseTrigger.sortByHpAdd(r1, r2)
             return true
         end
     end
-    return disPri  < 0 and true or false
+    return disPri < 0 and true or false
 end
 
 function ChooseTrigger.sortByHpReduce(r1, r2)
@@ -566,7 +568,7 @@ function ChooseTrigger.sortByHpReduce(r1, r2)
             return false
         end
     end
-    return disPri  < 0 and true or false
+    return disPri < 0 and true or false
 end
 
 function ChooseTrigger.sortByHpReducePercent(r1, r2)
@@ -580,7 +582,7 @@ function ChooseTrigger.sortByHpReducePercent(r1, r2)
             return false
         end
     end
-    return disPri  > 0 and true or false
+    return disPri > 0 and true or false
 end
 
 function ChooseTrigger.sortByHpAddPercent(r1, r2)
@@ -594,7 +596,7 @@ function ChooseTrigger.sortByHpAddPercent(r1, r2)
             return true
         end
     end
-    return disPri  < 0 and true or false
+    return disPri < 0 and true or false
 end
 
 function ChooseTrigger.sortByFrontFormation(r1, r2)
@@ -638,9 +640,9 @@ end
 function ChooseTrigger.sortByTmepValueReduce(r1, r2)
     local disPri = r1.tempSortPriority - r2.tempSortPriority
     if disPri == 0 then
-        return r2.tempSortValue - r1.tempSortValue  > 0 and true or false
+        return r2.tempSortValue - r1.tempSortValue > 0 and true or false
     end
-    return disPri   < 0 and true or false
+    return disPri < 0 and true or false
 end
 
 function ChooseTrigger.sortByRandom(r1, r2)

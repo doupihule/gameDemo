@@ -9,7 +9,7 @@ function FuncManager.init(callback, thisobj)
         BaseFunc.onConfigGroupLoadComplete()
         BaseFunc.onTranslateGroupLoadComplete()
         ErrCodeManager.getInstance():initConfig()
-        doJsApplyFunc(callback,thisobj)
+        doJsApplyFunc(callback, thisobj)
     end
 
     onZipComeplete()
