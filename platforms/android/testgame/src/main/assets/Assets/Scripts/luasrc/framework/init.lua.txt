@@ -1,0 +1,23 @@
+--
+-- Author: XD
+-- Date: 2020-04-11 16:47:35
+--
+local packageName = "framework."
+require(packageName .. "engine.GlobalEnv")
+require(packageName .. "utils.init")
+require(packageName .. "components.init")
+require(packageName .. "common.init")
+require(packageName .. "consts.init")
+require(packageName .. "engine.EngineExpand")
+require(packageName .. "entity.TimeEntity")
+require(packageName .. "entity.WaitEntity")
+
+require(packageName .. "event.init")
+require(packageName .. "manager.init")
+require(packageName .. "model.CountsCommonModel")
+require(packageName .. "native.NativeBridge")
+require(packageName .. "func.init")
+require(packageName .. "platform.init")
+
+require(packageName .. "server.SingleCommonServer")
+

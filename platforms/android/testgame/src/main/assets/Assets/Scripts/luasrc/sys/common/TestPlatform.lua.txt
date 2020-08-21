@@ -1,0 +1,17 @@
+TestPlatform = class('TestPlatform')
+TestPlatform.dev = { platform = "dev",
+                     upgrade_path = "web_cn",
+                     vms_url = "https://overtake-dev.fantasyfancy.com:8443", vms_version = 1 };
+TestPlatform.test = { platform = "test",
+                      upgrade_path = "web_cn",
+                      vms_url = "https://gunner-test-vms.fantasyfancy.com:8604/",
+                      vms_version = 1 };
+
+function TestPlatform.getPlatform()
+    Global.isCDN = true
+    if (UserInfo.isWeb()) then
+        Global.isCDN = false
+        return TestPlatform.dev
+    end
+    return TestPlatform.test
+end

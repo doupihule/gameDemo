@@ -1,0 +1,41 @@
+ManifestFileVersion: 0
+CRC: 2225391148
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 82932b9938cbee33ab2ac0c72c2ae8b2
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 01bd5aa1e4b1c3aab91f2fb40ac790ce
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4188c0b12306c1342bebc4b1e5bc4620, type: 3}
+- Class: 114
+  Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+Assets:
+- Assets/UI/Prefabs/main/GameMainUI.prefab
+Dependencies:
+- C:/work/unity/gameDemo/Assets/AssetsBoundles/uiimage

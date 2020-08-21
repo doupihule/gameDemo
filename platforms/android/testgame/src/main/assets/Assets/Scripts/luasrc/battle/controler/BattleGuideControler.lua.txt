@@ -1,0 +1,8 @@
+BattleGuideControler = class('BattleGuideControler')
+
+function BattleGuideControler:ctor(controler)
+    self.controler = controler
+    --self.battleUI = self.controler.battleUI
+end
+
+

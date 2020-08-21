@@ -10,3 +10,6 @@
 /Assets/Scripts/luasrc/.idea
 /Assets/Scripts/luasrc/lualib
 /Assets/Scripts/.idea
+/platforms/android/testgame/.gradle
+/platforms/android/testgame/.idea
+/platforms/android/testgame/build

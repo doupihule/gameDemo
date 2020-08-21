@@ -1,0 +1,87 @@
+LuaBaseView = class("LuaBaseView")
+
+--lua对应的c对象map表 所有的__cobject 对应的是c#里的gameObject 而不是transform. 确保统一性  用getChild函数会做一层封装.返回的是luabaseView. 会自动对c-lua做一层绑定关系.保证结构的统一性
+--[[
+   {cobj:luaobj}
+   扩展属性 x,y,z  __cobject
+   x,y,z只能访问. 要修改坐标必须用setPos set3dpos
+   transform 拿到transfrom的引用
+   getChildAt 里面的index 下标是从0开始的. 这个一定要注意. 因为是直接读取的c#对象
+   __canvasGroupComp        --透明度容器管理
+]]
+
+local cobjToLuaMap = {}
+
+local luaCount=0;
+--对应的c#对象 Object  LuaBaseView 一定要赋值c#里面的组件
+LuaBaseView.__cobject = nil
+
+
+--构造器函数 子类必须继承
+function LuaBaseView:ctor()
+    luaCount = luaCount+1;
+    self._luaId =luaCount;
+    self.x = 0;
+    self.y = 0;
+    self.z = 0;
+    --绑定ui的几个基础函数 addchild  removechild removeSelf
+    UITools.bindUIFunc(self)
+
+end
+
+--设置要绑定的c对象
+function LuaBaseView:setCObject(cobj)
+    self.__cobject = cobj;
+    --获取transform的引用
+    self.transform = cobj.transform;
+    local tempPos = cobj.transform.anchoredPosition;
+    --如果是2d对象
+    if(tempPos)then
+        self.x = tempPos.x;
+        self.y = tempPos.y;
+    else
+        --否则是3d对象
+        tempPos = cobj.transform.localPosition;
+        self.x = tempPos.x;
+        self.y = tempPos.y;
+        self.z = tempPos.z;
+    end
+
+    --目前只持有图片和文本的引用.可能都为空 .目的是为了设置透明度或者color. 理论上这2着只能同时有一个存在
+    self.__imageComp = cobj:GetComponent("Image");
+    self.__textComp = cobj:GetComponent("Text");
+    return self
+end
+
+
+--给cobj 绑定一个lua对象 这里必须是cobj对象.
+function LuaBaseView.bindOneCObjet(cobj)
+    local luaobj = cobjToLuaMap[cobj];
+    --这里最好不好判断是否存在cobject.因为会存在一次取c# 属性查找的过程.会有性能问题
+    --if cobj.__cobject then
+    --    return cobj
+    --end
+
+    if(not luaobj) then
+        luaobj = LuaBaseView.new();
+        luaobj:setCObject(cobj);
+        cobjToLuaMap[cobj] = luaobj
+    end
+    return luaobj;
+end
+
+
+--一定会有销毁函数
+function LuaBaseView:dispose()
+    self:removeSelf()
+    --销毁c和lua的绑定关系
+    cobjToLuaMap[self.__cobject] = nil
+    self.__cobject = nil
+    self.__imageComp =nil
+    self.__textComp =nil
+    --销毁透明容器组
+    self.__canvasGroupComp = nil
+    self.transform = nil
+end
+
+return LuaBaseView

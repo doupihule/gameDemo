@@ -1,0 +1,27 @@
+BattleConditionData = class('BattleConditionData')
+
+function BattleConditionData:ctor(id)
+    self._id = id
+    self.cfgData = BattleFunc.getInstance():getCfgDatas("Condition", id)
+    self.type = self.cfgData.type
+end
+
+function BattleConditionData:setData(skill)
+    local tempArr = self.cfgData.params
+    if not self.conditionLogicalParams then
+        self.conditionLogicalParams = {}
+    end
+    if tempArr then
+        self.conditionLogicalParams = {}
+        local tagStr = "Condition:" .. self._id
+        local i = 0
+        for i, temp in ipairs(tempArr) do
+            if not self.conditionLogicalParams[i] then
+                self.conditionLogicalParams[i] = {}
+            end
+            for s, vv in ipairs(temp) do
+                self.conditionLogicalParams[i ][s] = skill:getSkillValue(vv, tagStr)
+            end
+        end
+    end
+end

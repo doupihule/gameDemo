@@ -1,0 +1,36 @@
+FrameRateManager = class('FrameRateManager')
+function FrameRateManager:ctor(...)
+    FrameRateManager.super.ctor(self, unpack({ ... }))
+    self.num = 0;
+    self.lowFrameFPS = 30;
+    self.highFrameFPS = 60;
+    self.readRate = 10;
+    self.mulplite = 1.5;
+end
+
+function FrameRateManager:ctor()
+end
+function FrameRateManager.getInstance()
+    if not FrameRateManager._instance then
+        FrameRateManager._instance = FrameRateManager.new()
+    end
+    return FrameRateManager._instance
+end
+
+function FrameRateManager:updateFrame()
+    self.num = self.num + 1
+    if self.num % self.highFrameFPS * self.readRate == 0 then
+        local nowTime = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
+        local disTime = nowTime - self._lastTime
+        if disTime > self.readRate * 10 * self.mulplite then
+            UserInfo.platform:setGameFrame()
+        else
+            self._lastTime = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
+        end
+    end
+end
+
+function FrameRateManager:initData()
+    self.num = 0
+    self._lastTime = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
+end

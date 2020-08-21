@@ -1,0 +1,214 @@
+PassiveSkillTrigger = class('PassiveSkillTrigger')
+function PassiveSkillTrigger.runOnePassiveGlobalAttr(passive, attrMap, targtRole, way)
+    if way == nil then
+        way = 1
+    end
+    if not attrMap then
+        attrMap = passive.skillLogicalParams
+    end
+    local onwer = passive.owner
+    local tempArr = BattleFunc.getOneTempArr()
+    for i, attrInfo in ipairs(attrMap) do
+        local attrId = attrInfo[1]
+        local fixValue = attrInfo[2] * way
+        local percentValue = attrInfo[3] * way
+        local useType = attrInfo[4]
+        local compareValue = attrInfo[5]
+        table.clearArray(tempArr)
+        ChooseTrigger.getRoleByType(onwer, useType, compareValue, tempArr)
+        local s = 0
+        for s, tempInstance in ipairs(tempArr) do
+            if not targtRole or tempInstance == targtRole then
+                tempInstance.attrData:updateOneAttr(attrId, fixValue, percentValue, tempInstance.attrData.extraAttr)
+            end
+        end
+    end
+    BattleFunc.cacheOneTempArr(tempArr)
+end
+
+function PassiveSkillTrigger.runAllPassiveGlobalAttr(globalAttr, targetRole, way)
+    if way == nil then
+        way = 1
+    end
+    for i, info in ipairs(globalAttr) do
+        PassiveSkillTrigger.runOnePassiveGlobalAttr(info.passive, info.attr, targetRole, way)
+    end
+end
+
+function PassiveSkillTrigger.useSelfPassiveAttr(instance, passive, way, outRecount)
+    if way == nil then
+        way = 1
+    end
+    if outRecount == nil then
+        outRecount = false
+    end
+    local type = passive.cfgData.effectType
+    if type ~= BattleConst.passive_effect_attr then
+        return
+    end
+    local effectParams = passive.skillLogicalParams
+    local s = 0
+    for s, tempAttr in ipairs(effectParams) do
+        local attrId = tempAttr[1]
+        instance.attrData:updateOneAttr(attrId, tempAttr[2] * way, tempAttr[3] * way, instance.attrData.extraAttr, outRecount)
+    end
+end
+
+function PassiveSkillTrigger.runOnePassiveSkill(attacker, skill, p1, p2, p3, p4)
+    local type = skill.cfgData.effectType
+    local func = PassiveSkillTrigger["runPassiveSkill_" .. type]
+    if skill.cfgData.cdTime then
+        skill.leftSkillCd = BattleFunc.getInstance():turnMinisecondToframe(tonumber(skill.cfgData.cdTime))
+    end
+    if not func then
+        LogsManager.errorTag("PassiveSkillCfgError", "错误的被动技能效果类型,id:", skill._skillId, "effecttype:", type)
+        return 0
+    else
+        return func(attacker, skill, p1, p2, p3, p4)
+    end
+end
+
+function PassiveSkillTrigger.runPassiveSkill_1(attacker, skill)
+    PassiveSkillTrigger.useSkillActions(attacker, skill, nil)
+    return nil
+end
+
+function PassiveSkillTrigger.runPassiveSkill_2(attacker, skill)
+    if attacker.controler.gameMode == BattleConst.battle_game_mode_boss then
+        return
+    end
+    local params = skill.skillLogicalParams[1]
+    attacker.controler.refreshControler:setFormationWeight(params[1], params[2] / 10000)
+end
+
+function PassiveSkillTrigger.runPassiveSkill_3(attacker, skill)
+end
+function PassiveSkillTrigger.runPassiveSkill_4(attacker, skill)
+    attacker.attrData:changeOneTempAttr(BattleConst.attr_final_damage, skill.skillLogicalParams[1][1], 0)
+    return skill.skillLogicalParams[1][1]
+end
+
+function PassiveSkillTrigger.runPassiveSkill_5(attacker, skill, useArr, targetSkillAction)
+    return PassiveSkillTrigger.useSkillActions(attacker, skill, targetSkillAction)
+end
+
+function PassiveSkillTrigger.runPassiveSkill_6(attacker, skill, useArr, targetSkillAction, buffData)
+    local tempArr = skill.skillLogicalParams
+    local addValue = 0
+    local i = 0
+    for i, info in ipairs(tempArr) do
+        local type = info[1]
+        local params = info[2]
+        if type == 1 then
+            if buffData._id == tostring(params) then
+                addValue = addValue + info[3]
+                break
+            end
+        elseif type == 2 then
+            if buffData.logicType == params then
+                addValue = addValue + info[3]
+                break
+            end
+        elseif type == 3 then
+            if buffData.group == params then
+                addValue = addValue + info[3]
+                break
+            end
+        end
+    end
+    attacker.attrData:changeOneTempAttr(BattleConst.attr_final_damage, addValue, 0)
+    return addValue
+end
+
+function PassiveSkillTrigger.runPassiveSkill_7(attacker, skill)
+    attacker.attrData:changeOneTempAttr(BattleConst.attr_final_damage, skill.skillLogicalParams[1][1], 0)
+end
+
+function PassiveSkillTrigger.runPassiveSkill_8(attacker, skill)
+    attacker.attrData:changeOneTempAttr(BattleConst.attr_final_betreated, skill.skillLogicalParams[1][1], 0)
+end
+
+function PassiveSkillTrigger.runPassiveSkill_9(attacker, skill)
+    attacker.attrData:changeOneTempAttr(BattleConst.attr_final_relief, skill.skillLogicalParams[1][1], 0)
+end
+
+function PassiveSkillTrigger.runPassiveSkill_10(attacker, skill)
+    local tempArr = skill.skillLogicalParams
+    local tempOnceAttr = attacker.attrData.tempOnceAttr
+    for i, info in ipairs(tempArr) do
+        local id = info[1]
+        attacker.attrData:changeOneTempAttr(id, info[2], info[3])
+    end
+    return tempOnceAttr
+end
+
+function PassiveSkillTrigger.runPassiveSkill_11(attacker, skill, useArr, skillAction, outArr)
+    local paramsArr = skill.skillLogicalParams
+    if not outArr then
+        LogsManager.errorTag("passiveerror_11", "被动技能效果参数错误,skillId:", skill._skillId)
+        return
+    end
+    table.clearArray(outArr)
+    for i, tempInfo in ipairs(paramsArr) do
+        local id = tempInfo[1]
+        local delayFrame = BattleFunc.getInstance():turnMinisecondToframe(tempInfo[2])
+        local act = skill:getActionById(id)
+        if not act then
+            act = SkillActionData.new(id, skill.owner, skillAction.skill, delayFrame, 1, 1, 0, 0, skill)
+        end
+        table.insert(outArr, act)
+    end
+    return outArr
+end
+
+function PassiveSkillTrigger.useSkillActions(attacker, skill, targetSkillAction)
+    if targetSkillAction == nil then
+        targetSkillAction = nil
+    end
+    local tempArr = skill.skillLogicalParams
+    for i, tempInfo in ipairs(tempArr) do
+        local id = tempInfo[1]
+        local delayFrame = BattleFunc.getInstance():turnMinisecondToframe(tempInfo[2])
+        local act = skill:getActionById(id)
+        local useSkill = attacker.currentSkill and attacker.currentSkill or skill
+        if not act then
+            if targetSkillAction then
+                act = SkillActionData.new(id, skill.owner, targetSkillAction.skill, delayFrame, 1, 1, 0, 0, skill)
+            else
+                act = SkillActionData.new(id, skill.owner, useSkill, delayFrame, 1, 1, 0, 0, skill)
+            end
+        end
+        if targetSkillAction ~= nil then
+            if act.chooseTartgetCfg == nil then
+                if #targetSkillAction.tempChooseArr > 0 then
+                    TableUtils.copyOneArr(targetSkillAction.tempChooseArr, act.tempChooseArr)
+                    act.chooseTartgetCfg = targetSkillAction.chooseTartgetCfg
+                else
+                    local tempSkill = targetSkillAction.skill
+                    if #tempSkill.tempChooseArr > 0 then
+                        TableUtils.copyOneArr(tempSkill.tempChooseArr, act.tempChooseArr)
+                    end
+                    act.chooseTartgetCfg = tempSkill.chooseTartgetCfg
+                end
+            end
+        end
+        if delayFrame > 0 then
+            attacker.controler:setCallBack(delayFrame, attacker.checkSkillEffect, attacker, act)
+        else
+            attacker:checkSkillEffect(act)
+        end
+    end
+end
+
+function PassiveSkillTrigger.runPassiveSkill_101(attacker, skill)
+end
+function PassiveSkillTrigger.runPassiveSkill_102(attacker, skill)
+end
+function PassiveSkillTrigger.runPassiveSkill_103(attacker, skill)
+end
+function PassiveSkillTrigger.runPassiveSkill_104(attacker, skill)
+end
+function PassiveSkillTrigger.runPassiveSkill_105(attacker, skill)
+end
+function PassiveSkillTrigger.runPassiveSkill_106(attacker, skill)
+end

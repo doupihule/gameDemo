@@ -1,0 +1,12 @@
+--
+-- Author: XD
+-- Date: 2020-04-11 16:47:35
+--
+local packageName = "sys.model."
+
+--controler 
+require(packageName .. "BaseModel")
+require(packageName .. "UserModel")
+require(packageName .. "UserExtModel")
+require(packageName .. "CountsModel")
+require(packageName .. "SwitchModel")

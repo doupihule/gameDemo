@@ -1,0 +1,21 @@
+WhiteListFunc = class('WhiteListFunc', BaseFunc)
+function WhiteListFunc:ctor(...)
+    self.whiteList = {};
+end
+
+function WhiteListFunc.getInstance()
+    if not WhiteListFunc._instance then
+        WhiteListFunc._instance = WhiteListFunc.new()
+    end
+    return WhiteListFunc._instance
+end
+
+WhiteListFunc.TYPE_REGISTER = 1;
+WhiteListFunc.TYPE_LOGIN = 2;
+function WhiteListFunc:getCfgsPathArr()
+    return { { name = "WhiteList_json" } }
+end
+
+function WhiteListFunc:getWhiteList(type)
+
+end

@@ -1,0 +1,167 @@
+PerformanceControler = class('PerformanceControler')
+
+function PerformanceControler:ctor(controler)
+    self._effectCacheMap = {};
+    self.effectMaxNumsMap = {};
+    self.controler = controler;
+
+end
+
+function PerformanceControler:getCacheEffect(cacheId)
+    local name = cacheId
+    local arr = self._effectCacheMap[name]
+    local maxLength = self.effectMaxNumsMap[cacheId] or 3
+    if not arr or #arr < maxLength then
+        return nil
+    end
+    local eff = table.shiftArray(arr)
+    self.controler:clearCallBack(eff)
+    if eff._followTarget then
+        TableUtils.removeValue(eff._followTarget._followEffGroup, eff)
+    end
+    return eff
+end
+
+function PerformanceControler:setCacheEffect(effect, name)
+    local arr = self._effectCacheMap[name]
+    if not arr then
+        arr = {}
+        self._effectCacheMap[name] = arr
+    end
+    table.insert(arr, effect)
+end
+
+function PerformanceControler:removeCacheEffect(effect)
+    local name = effect.viewName
+    local arr = self._effectCacheMap[name]
+    if not arr then
+        return
+    end
+    TableUtils.removeValue(arr, effect)
+end
+
+function PerformanceControler:clearAllCacheEffect()
+    for i in pairs(self._effectCacheMap) do
+        table.clearArray(self._effectCacheMap)
+    end
+end
+
+function PerformanceControler:getEffectLength(effect, index)
+    if index == nil then
+        index = 0
+    end
+    local frame = -1;
+    if frame == -1 then
+        if PerformanceControler._effectLength[effect] then
+            return PerformanceControler._effectLength[effect]
+        end
+        return 60
+    end
+    return frame * BattleFunc.battleViewFrameScale
+end
+
+PerformanceControler._effectLength = { effect_huangniao_skill01_AOE = 240, effect_foxi_attack_hit = 30 };
+PerformanceControler._effectLabelCache = {
+    normal = { nums = 5, views = {} },
+    crit = { nums = 5, views = {} },
+    miss = { nums = 5, views = {} },
+    trit = { nums = 5, views = {} },
+    tritCrit = { nums = 5, views = {} },
+    hudun = { nums = 5, views = {} } };
+function PerformanceControler:createNumEff(type, value, targetInstance)
+    local txtCount = targetInstance.txtUpdateCount
+    local data = { type = type, value = value, targetInstance = targetInstance }
+    if txtCount == 0 then
+        self:setTxtShowBack(data)
+    else
+        self.controler:setCallBack(txtCount, self.setTxtShowBack, self, data)
+    end
+    targetInstance:addTxtCreateTime()
+end
+
+function PerformanceControler:setTxtShowBack(data)
+    local type = data.type
+    local value = data.value
+    local targetInstance = data.targetInstance
+    local info = PerformanceControler._effectLabelCache[type]
+    local viewArr = info.views
+    local maxNums = info.nums
+    local targetItem = nil
+    local x = targetInstance.pos.x
+    local y = (targetInstance._myView.y + (10- targetInstance.cfgData.size[1])*BattleFunc.yCoordinateWay )
+    if #viewArr > maxNums then
+        targetItem = table.shiftArray(viewArr)
+        self.controler.tweenControler:clearOneTween(targetItem)
+    else
+        targetItem = BattleDamageLabel.new()
+        targetItem["__tempParams"] = {}
+    end
+    targetItem:setValue(type, value)
+    targetItem:setPos(x,y)
+    local param = targetItem["__tempParams"]
+    param.x = x
+    param.y = y - 100 * BattleFunc.yCoordinateWay
+    self.controler.layerControler.a23:addChild(targetItem)
+    table.insert(viewArr, targetItem)
+    self.controler.tweenControler:setTweenByView(30, targetItem, param, BattleConst.TWEEN_MOVE, self.onLabelTweenComplete, self, targetItem)
+end
+
+function PerformanceControler:onLabelTweenComplete(label)
+    label:removeSelf()
+end
+
+function PerformanceControler:isRunWithSkillPause()
+    return true
+end
+
+function PerformanceControler:showBlackScreen(targetRole, lastFrame, useArr)
+    if lastFrame == nil then
+        lastFrame = 0
+    end
+    if not self.blackScreen.parent then
+        self.controler.layerControler.a22:addChild(self.blackScreen)
+    end
+    self:hideBlackScreen()
+    local allArr = self.controler:getAllInstanceArr()
+    for i, instance in ipairs(allArr) do
+        if not instance:isRunWithSkillPause() then
+            instance:stopAction()
+        else
+            instance:setZorderOffset(BattleFunc.zorder_blackScreen)
+        end
+    end
+    self.controler:forceSortChildren()
+    self.controler.isSkillPause = true
+    self.blackScreen:setPos( -self.controler.layerControler.a2.x - 300,0)
+    self.controler:clearCallBack(self, self.hideBlackScreen)
+    self.blackScreen:setViewActive(true)
+    if lastFrame > 0 then
+        self.controler:setCallBack(lastFrame, self.hideBlackScreen, self)
+    end
+end
+
+function PerformanceControler:hideBlackScreen()
+    self.controler.isSkillPause = false
+    self.blackScreen:setViewActive(false)
+    local allArr = self.controler:getAllInstanceArr()
+    local i = 0
+    for i, instance in ipairs(allArr) do
+        instance:resumeAction()
+        instance:setZorderOffset(0)
+    end
+    self.controler:forceSortChildren()
+end
+
+PerformanceControler._tempPos = nil
+function PerformanceControler:onBattleWin(fromx, fromy)
+end
+function PerformanceControler:flyResourceAnimation(resId, fromx, fromy, value, delayFrame, fromCtn)
+end
+
+function PerformanceControler:onItemTweenEnd(targetItem)
+    targetItem:removeSelf()
+    local params = targetItem["_cacheParams"]
+    local id = params._tempType
+    local value = params._tempValue
+    PoolTools.cacheItem(targetItem.name, targetItem)
+end

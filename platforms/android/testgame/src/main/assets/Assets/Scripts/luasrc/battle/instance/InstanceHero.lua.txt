@@ -1,0 +1,104 @@
+InstanceHero = class('InstanceHero', InstanceLogical)
+
+function InstanceHero:ctor(controler)
+    InstanceHero.super.ctor(self, controler)
+    self._leftReliveFrame = 0;
+    self.classModel = BattleConst.model_role
+end
+
+function InstanceHero:onDataChange(changeData)
+    InstanceHero.super.onDataChange(self, changeData)
+    local hasPassiveChange = false
+    local tempPrassArr = BattleFunc.getOneTempArr()
+    local tempPassiveData = BattleFunc.getOneTempArr()
+    if changeData.passiveSkills then
+        for i,level in pairs(changeData.passiveSkills) do
+            if level > 0 then
+                local skill = self:getSkillById(i, BattleConst.skill_kind_passive)
+                if skill then
+                    hasPassiveChange = true
+                    if skill.isActive then
+                        PassiveSkillTrigger.useSelfPassiveAttr(self, skill, -1, true)
+                    end
+                    skill:updateLevel(v)
+                    table.insert(tempPrassArr, skill)
+                end
+            end
+        end
+    end
+    if (changeData.level or changeData.advance) or hasPassiveChange then
+        local oldHp = 0
+        if changeData.level ~= nil then
+            oldHp = self:getMaxHp()
+        end
+        self.attrData:updateData(self._data)
+        if changeData.level ~=nil then
+            local addHp = self:getMaxHp() - oldHp
+            if addHp > 0 then
+                if self.hp == 0 then
+                    BattleLogsManager.battleEcho("死亡状态升级不回血")
+                else
+                    self:changeHp(addHp)
+                end
+            end
+        end
+        PassiveSkillTrigger.runAllPassiveGlobalAttr(self.controler.globalPassiveAttrMap, self, 1)
+        if hasPassiveChange then
+            local s = 0
+            for s, v in ipairs(tempPrassArr) do
+                PassiveSkillTrigger.useSelfPassiveAttr(self, skill, 1, false)
+                self.controler:insterGlobalPassive(v)
+            end
+        end
+    end
+    BattleFunc.cacheOneTempArr(tempPrassArr)
+    BattleFunc.cacheOneTempArr(tempPassiveData)
+    if changeData.normalSkills then
+        for i ,level in pairs(changeData.normalSkills) do
+            if level > 0 then
+                local skill = self:getSkillById(i, BattleConst.skill_kind_noraml)
+                if skill then
+                    skill:updateLevel(level)
+                end
+            end
+        end
+    end
+    if changeData.energySkill and changeData.energySkill.level then
+        self.energySkill:updateLevel(changeData.energySkill.level)
+    end
+end
+
+function InstanceHero:onCheckGiveEnergySkill(isAuto)
+    if isAuto == nil then
+        isAuto = false
+    end
+    local energySkill = self.energySkill
+    if not BattleDebugTool.isNoHeroCd() then
+        if self.energy < self.maxEnergy then
+            return false
+        end
+        if not energySkill.isActive then
+            return false
+        end
+        if self.ctrlBuffBit & BuffTrigger.ctrlBuffBit > 0 then
+            return false
+        end
+        if isAuto then
+            if not self:checkIsInAttackDis() then
+                return false
+            end
+        end
+        local tempArr = energySkill.tempChooseArr
+        ChooseTrigger.getSkillTargetRole(self, energySkill, energySkill.chooseTartgetCfg, tempArr)
+        if #tempArr == 0 then
+            WindowManager.ShowTip(TranslateFunc.getInstance():getTranslate("#tid_battle_emptyskill"))
+            return false
+        end
+        if energySkill.leftSkillCd > 0 then
+            return false
+        end
+    end
+    self:interruptSkill(self)
+    self:giveOutSkill(energySkill)
+    return true
+end

@@ -1,0 +1,65 @@
+BattleSceneManager = class('BattleSceneManager')
+function BattleSceneManager:ctor(...)
+    BattleSceneManager.super.ctor(self,...)
+    self._battestate = 0;
+end
+
+function BattleSceneManager.getInstance()
+    if not BattleSceneManager._instance then
+        BattleSceneManager._instance = BattleSceneManager.new()
+    end
+    return BattleSceneManager._instance
+end
+
+function BattleSceneManager:ctor()
+end
+function BattleSceneManager:enterBattle(data, ctn, ui)
+    self._battestate = 1
+    self.autoBattleControler = BattleLogicalControler.new(ctn, ui)
+    self.autoBattleControler:setData(data)
+end
+
+function BattleSceneManager:replayBattle()
+    local battleui = self.autoBattleControler.battleUI
+    if self.autoBattleControler then
+        self.autoBattleControler:exitBattle()
+    end
+    battleui:setData({ isShowTalk = 2 })
+end
+
+function BattleSceneManager:onClickRoleSkill(rid)
+    local control = self:getCurrentBattleControler()
+    control:onClickRole(rid)
+end
+
+function BattleSceneManager:useProp(propId)
+end
+function BattleSceneManager:getCurrentBattleControler()
+    if self.bossBattleControler then
+        return self.bossBattleControler
+    end
+    return self.autoBattleControler
+end
+
+function BattleSceneManager:setGamePlayOrPause(value)
+    self:getCurrentBattleControler():setGamePlayOrPause(value)
+end
+
+function BattleSceneManager:onTouchClick(e)
+
+end
+
+function BattleSceneManager:exitBattle()
+    self._battestate = 0
+    if self.autoBattleControler then
+        self.autoBattleControler:exitBattle()
+        self.autoBattleControler = nil
+    end
+end
+
+function BattleSceneManager:getCurModelArrByLevel()
+    return {}
+end
+
+function BattleSceneManager:recvMsg(e)
+end

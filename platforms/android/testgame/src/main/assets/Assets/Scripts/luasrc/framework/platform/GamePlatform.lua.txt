@@ -1,0 +1,695 @@
+GamePlatform = class('GamePlatform')
+
+function GamePlatform:aldSendEvent(eventId, eventData)
+    if eventData == nil then
+        eventData = {}
+    end
+
+
+end
+
+function GamePlatform:ctor()
+    self.appId = "";
+    self.userInfoData = nil;
+    self.channelUserId = "";
+    self._isSubPackage = false;
+    self._isPhotosAlbum = false;
+    self._shareTime = 0;
+    self._speShareTime = 0;
+    self._isLastSpeShare = false;
+    self._isShare = false;
+    self._videoLoaded = false;
+    self.curReqGlobalCount = 0;
+    self.maxReqGlobalCount = 5;
+    self.isOutTime = false;
+    self.versionCheckResult = 1;
+    self._leftWaitTask = 2;
+    self.inviteBy = "";
+    self.shareInfo = "";
+    self.isPlayVideo = false;
+    self.isDoWxThings = false;
+    self.isHaveRecord = false;
+    self.loadAdvFailed = true;
+    self.advHasShow = false;
+    self.isHide = false;
+    self.videoState = 0;
+    self.clientInfoReqCount = 0;
+    self.global_url_review = '';
+    self._reloginCount = 0;
+    self.RECORD_TYPE_AUTO = 1;
+    self.RECORD_TYPE_MANUAL = 2;
+    self._canShareVideoRt = nil;
+    self:setGameFrame()
+end
+
+function GamePlatform:initPlatform()
+end
+function GamePlatform:reqServerList(callBack, thisObject)
+
+end
+
+function GamePlatform:reqVMS()
+
+end
+
+function GamePlatform:checkVMSBack(result)
+end
+
+function GamePlatform:checkVersion()
+end
+
+function GamePlatform:checkVersionCallback(result)
+
+end
+
+function GamePlatform:addUpdateListener()
+end
+
+function GamePlatform:reqGlobal(params, isInit)
+    if isInit == nil then
+        isInit = false
+    end
+    self._reloginCount = self._reloginCount + 1
+    local url = Global.global_url .. '&ver=' .. Global.version
+    self._globalParams = params
+    if not params["params"] then
+        params["params"] = {}
+    end
+    local onHttpErrorBack = function(data)
+        if Global.checkUserCloudStorage() then
+            if self._reLoginBackParams then
+                WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("tid_net_error"), self.getWxInfo, self)
+            else
+                self:doSingleErrorBack()
+            end
+        else
+            ErrCodeManager.getInstance():setErr(ErrorCode.sys_error)
+        end
+    end
+
+    local httpBackFunc = function(data)
+        if (not data or type(data) == "string") or not data[0 + 1] then
+            onHttpErrorBack(data)
+            return
+        end
+        local currPlatform = data[0 + 1]
+        data = currPlatform.result.data
+        if self._reLoginBackParams then
+            self:onReLoginBack(data)
+            return
+        end
+        LogsManager.echo('=====================ald相关')
+        if UserInfo.isWX() and data.channelUserId then
+
+        end
+        if data.sceneId then
+            Global.sceneId = data.sceneId
+        end
+        if not currPlatform.result then
+            onHttpErrorBack(data)
+            return
+        end
+        if data.adParam then
+            if data.adParam.appId then
+                self.appId = data.adParam.appId
+            end
+            if data.adParam.adUnitId then
+                self._videoId = data.adParam.adUnitId
+            end
+            if data.adParam.adBannerId then
+                BannerComp._bannerId = data.adParam.adBannerId
+            end
+            if data.adParam.adInterstitialId then
+                InterstitialAdComp._interstitialId = data.adParam.adInterstitialId
+            end
+        end
+        self.loginToken = data.loginToken
+        if Global.checkUserCloudStorage() then
+            GameHttpControler.getInstance().loginToken = data.loginToken
+            self:doSingleGlobalBack(currPlatform.result.data)
+            return
+        end
+        -- [ts2lua]currPlatform.result.data下标访问可能不正确
+        if currPlatform.result.data["isNewAccount"] then
+            UserInfo.isNewAccount = true
+        end
+        if UserInfo.isWX() then
+            UserInfo.wxVersionType = data.version_type
+        end
+        local secList = data.secList
+        local len = #secList
+        local pData = nil
+        local i = 0
+        repeat
+            local secData = secList[i + 1]
+            if secData.mainSec == 1 then
+                pData = secList[i + 1]
+                break
+            end
+            i = i + 1
+        until not (i < len)
+        if not pData then
+            LogsManager.errorTag("globalServerError", "global请求异常")
+            WindowManager.setPopupTip(1, TranslateFunc.getInstance():getTranslate("#tid_net_error"), self.onGlobalError, self)
+            return
+        end
+        PackConfigManager.getInstance():setPlatform(pData)
+        self:getLoginResult()
+    end
+
+    local webParams = {}
+    if Global.checkUserCloudStorage() then
+        url = Global.global_url
+        params.params.game = GameConsts.gameCode
+        params.params.platform = PackConfigManager.getInstance():getPlatform().platform
+        params.params.version = Global.version
+        webParams.errorCall = onHttpErrorBack
+    end
+    -- [ts2lua]params下标访问可能不正确
+    -- [ts2lua]params["params"]下标访问可能不正确
+    params["params"]["deviceId"] = Global.deviceId
+    HttpMessage.getInstance():send(url, params, httpBackFunc, self, "post", webParams)
+end
+
+function GamePlatform:onReLoginBack(data)
+    GameHttpControler.getInstance().loginToken = data and data.loginToken
+    LogsManager.echo("data.loginToken", data.loginToken)
+    local params = self._reLoginBackParams
+    self._reLoginBackParams = nil
+    doJsCallFunc(params.callBack, params.thisObj, data)
+end
+
+function GamePlatform:onGlobalError()
+    self:reqGlobal(self._globalParams)
+end
+
+function GamePlatform:getLoginResult()
+end
+function GamePlatform:sendKakuraInit()
+end
+
+function GamePlatform:reRequestGlobal(callBack, thisObj)
+    if callBack == nil then
+        callBack = nil
+    end
+    if thisObj == nil then
+        thisObj = nil
+    end
+    if callBack then
+        self._reLoginBackParams = { callBack = callBack, thisObj = thisObj }
+    end
+    self:getWxInfo()
+end
+
+function GamePlatform:doSingleErrorBack()
+    if self._reloginCount == 1 then
+        LogsManager.echo("第一次登入失败尝试重新登入")
+        self:getWxInfo()
+        return
+    end
+    self:doSingleGlobalBack({ sendTime = 0, uid = "nologin" }, true)
+end
+
+function GamePlatform:doSingleGlobalBack(data, isError)
+    if isError == nil then
+        isError = false
+    end
+    if data.switch then
+        GameSwitch.coverServerSwitchMap(data.switch)
+        if data.switch.CLOUD_URL and (UserInfo.platform.global_url_review == "" or UserInfo.platform.global_url_review ~= data.switch.CLOUD_URL) then
+            Global.global_url = data.switch.CLOUD_URL
+            UserInfo.platform.global_url_review = Global.global_url
+            self:reqGlobal(self._globalParams)
+            return
+        end
+        if data.switch.FORCE_UPDATE then
+            VersionManager.versionStatus = tonumber(data.switch.FORCE_UPDATE)
+        end
+    end
+    if data.lvsUrl and data.lvsUrl ~= "" then
+        Global.global_url = data.lvsUrl
+    end
+    self:doCoverVersion(data.onlineVersion)
+    local isFirstLogin = Client.getInstance().globalLoginBackData == nil
+    local resultData = data
+    Client.getInstance().hasLoginComplete = not isError
+    Client.getInstance().globalLoginBackData = resultData
+    if resultData.channelUserId then
+        UserInfo.channelUserId = resultData.channelUserId
+    end
+    KariqiShareManager.kariquLogin()
+    if data and (data.user and data.user.isTestAccount or data.isTestAccount) then
+        LogsManager.sendErrorToPlatform("发送客户端错误日志", LogsManager.errorTage_clientLog, 200, "sendClientError")
+        LogsManager.setLogGroupVisible(true)
+    end
+    if data ~= nil and self:checkHasUserData(data.user) then
+        self:checkHasUpdateData(data.user)
+    end
+    if isFirstLogin then
+        self:addUpdateListener()
+    else
+        if not isError then
+            local userdata = UserModel.getInstance():getData()
+            if userdata then
+                userdata.uid = data.uid
+                userdata._id = data.uid
+            end
+        end
+        Client.getInstance():onReloginBack(data, isError)
+    end
+end
+
+function GamePlatform:checkHasUserData(userData)
+    if not userData then
+        return false
+    end
+    if userData.uid or userData.sendTime ~= nil then
+        return true
+    end
+    return false
+end
+
+function GamePlatform:compareData(data)
+    if not Global.checkUserCloudStorage() then
+        return
+    end
+    local localData = CacheManager.getInstance():getGlobalCache(StorageCode.getStorage_userinfo())
+    if not localData or localData == "0" then
+        if self:checkHasUserData(data.user) then
+            localData = data.user
+            LogsManager.echo("_线上服务器有数据,本地没数据")
+        else
+            localData = ModelToServerMap.initBuildUserData()
+        end
+        if not localData.sendTime then
+            localData.sendTime = 0
+        end
+    else
+        localData = TableUtils.safelyJsonParse(localData)
+        if(not localData) then
+            localData = ModelToServerMap.initBuildUserData()
+        end
+    end
+    local userData = data.user
+    if self:checkHasUserData(userData) then
+        self:checkHasUpdateData(userData)
+        local deleteData = TableUtils.findNullKey(userData, {})
+        if not TableUtils.isEmptyTable(deleteData) then
+            local params = { clientDirty = { u = {}, d = deleteData } }
+            Client.getInstance():send("349", params, nil, nil)
+            LogsManager.errorTag("dataNullValue", "玩家数据有空字段," .. TableUtils.safelyJsonStringfy(deleteData))
+        end
+    else
+        userData = localData
+    end
+    if not localData.sendTime then
+        localData.sendTime = 0
+    end
+    SingleCommonServer._lastBackUpData = {}
+    TableUtils.deepCopy(userData, SingleCommonServer._lastBackUpData)
+    if userData.sendTime < localData.sendTime then
+        local isUserLocalData = true
+        if userData.sendTime > 0 and localData.sendTime > 0 then
+            local dt = localData.sendTime - userData.sendTime
+            if dt > 1 * 365 * 24 * 3600 then
+                LogsManager.errorTag("userDataError", "用户时间戳错误,", localData.sendTime)
+                isUserLocalData = false
+            end
+        end
+        LogsManager.warn("userData:", "本地缓存的数据比服务器的数据新,采用本地数据")
+        if isUserLocalData then
+            userData = localData
+        end
+    end
+    TableUtils.adjustEmptyArr(userData)
+    userData.uid = data.uid
+    userData._id = data.uid
+    userData.isNewAccount = data.isNewAccount
+    local resultData = data
+    resultData.user = userData
+    if not userData.firstRunSystemInfo then
+        userData.firstRunSystemInfo = Global.firstRunSystemInfo
+    else
+        Global.firstRunSystemInfo = userData.firstRunSystemInfo
+    end
+    if resultData.switch and not Global.checkIsSingleMode() then
+        GameSwitch.coverServerSwitchMap(resultData.switch)
+    end
+end
+
+function GamePlatform:checkHasUpdateData(userData)
+    local hasUpdateData = nil
+    if userData and userData.uid then
+        hasUpdateData = userData.hasUpdateData
+    else
+        hasUpdateData = false
+    end
+    SingleCommonServer.hasUpdateAllData = hasUpdateData
+end
+
+function GamePlatform:doCoverVersion(serverVersion)
+    if not serverVersion then
+        return
+    end
+    Global.version = tostring(serverVersion)
+end
+
+function GamePlatform:getVersionName()
+    return "version.json"
+end
+
+function GamePlatform:getWX()
+    return ControlConst.emptyTable
+end
+
+function GamePlatform:registerAd()
+end
+function GamePlatform:removeLoginBtn()
+end
+function GamePlatform:createSpeLoginBtn(posX, posY, btnW, btnH, callBack, thisObject)
+    local tempFunc = function()
+        if callBack then
+            doJsCallFunc(callBack, thisObject, { userInfo = { nickName = UserInfo.channelUserId } })
+        end
+    end
+
+    LogsManager.echo("xd 没有授权系统,直接2秒后授权成功")
+    TimerManager.getInstance():add(tempFunc, self, 2000, 1)
+end
+
+function GamePlatform:setSystemInfo()
+end
+function GamePlatform:getSystemInfo()
+end
+function GamePlatform:getLaunchOptionsSync(callback, thisObj)
+    doJsCallFunc(callback, thisObj)
+end
+
+function GamePlatform:getWxInfo()
+end
+function GamePlatform:initPlatformData()
+end
+function GamePlatform:getNetwork()
+end
+function GamePlatform:sharePage()
+end
+function GamePlatform:showVideoAd(successCallBack, closeCallBack, thisObj, extraData)
+
+
+end
+
+function GamePlatform:loadVideoAd()
+end
+function GamePlatform:setUserComeFrom()
+end
+function GamePlatform:createLoginButton(callBack, thisObject)
+    if callBack then
+        doJsCallFunc(callBack, thisObject)
+    end
+end
+
+function GamePlatform:login(type)
+end
+function GamePlatform:loginOut()
+    Global.isGameDestory = true
+end
+
+function GamePlatform:share(id, extraData, callback, thisObj)
+
+
+end
+
+function GamePlatform:shareDynamicAppMessage(data, shareCallBack, activityId)
+end
+function GamePlatform:onShareComplete(shareResult)
+end
+function GamePlatform:sendToDesktop(callback)
+end
+function GamePlatform:pay(id, name, price, count, type)
+end
+function GamePlatform:registerRecord()
+end
+function GamePlatform:recordStart(callback, thisObj, endCallback, durT, recordTimeRange, recordType)
+
+
+end
+
+function GamePlatform:recordStop(recordType)
+    if recordType == nil then
+        recordType = self.RECORD_TYPE_AUTO
+    end
+
+
+end
+
+function GamePlatform:shareVideo(callBack, thisObj)
+
+
+end
+
+function GamePlatform:recordPause()
+end
+function GamePlatform:recordResume()
+end
+function GamePlatform:createMoreGamesButton()
+end
+function GamePlatform:showMoreGamesModal(data)
+end
+
+function GamePlatform:jumpToPayXCX(data, succCall, failCall, thisObj)
+
+
+end
+
+function GamePlatform:changeLeftTask(value, tag)
+end
+
+function GamePlatform:isCanShareVideo()
+    return false
+end
+
+function GamePlatform:initChannelUserId(cuid)
+    if not cuid then
+        LogsManager.errorTag(nil, "没有设置uid")
+        return
+    end
+    self.channelUserId = cuid
+    CacheManager.getInstance():setRid(cuid)
+end
+
+function GamePlatform:getUserInfoAndReq()
+end
+function GamePlatform:vibrate(isLong, callBack, thisObject)
+    if callBack then
+        doJsCallFunc(callBack, thisObject, true)
+    end
+end
+
+function GamePlatform:vibrateByCount(count)
+    local myThis = self
+    local index = 0
+    myThis:vibrate(false)
+    index = index + 1
+    if count <= 1 then
+        return
+    end
+
+    TimerManager.getInstance():registObjUpdate( function()
+        myThis:vibrate(false)
+        index = index + 1
+        if index >= count then
+            TimerManager.getInstance():deleteObjUpdate(nil,nil,self);
+        end
+    end,self)
+
+end
+
+function GamePlatform:setVersionCheckResult(num)
+    self.versionCheckResult = num
+    LogsManager.echo("versionCheckResult:", num)
+end
+
+function GamePlatform:getVersionCheckResult()
+    return self.versionCheckResult
+end
+
+function GamePlatform:turnChannelUserInfo(userInfo)
+    self.platformUserInfo = { name = userInfo.nickName, headImage = userInfo.avatarUrl, sex = userInfo.gender, province = userInfo.province, city = userInfo.city, country = userInfo.country }
+    local userData = UserModel.getInstance():getData()
+    if self.platformUserInfo.name then
+        userData.name = self.platformUserInfo.name
+        userData.userInfo = self.platformUserInfo
+        UserInfo.userSex = self.platformUserInfo.sex
+    end
+end
+
+function GamePlatform:setGameFrame()
+    if GameConsts.gameFrameRate == 30 then
+        LogsManager.echo("zm setGameFrame: ")
+    end
+    if BattleFunc["initFrameDates"] then
+        BattleFunc["initFrameDates"]()
+    end
+end
+
+function GamePlatform:testSystemInfoSync()
+end
+function GamePlatform:showGameClubBtn(posX, posY, btnW, btnH)
+end
+function GamePlatform:hideGameClubBtn()
+end
+function GamePlatform:destroyGameClubBtn()
+end
+function GamePlatform:openCustomerService(isShowCard)
+
+end
+
+function GamePlatform:showPopTip(title, content, extraData)
+end
+
+function GamePlatform:showFlyTip(title, icon)
+    if icon == nil then
+        icon = "none"
+    end
+
+
+end
+
+function GamePlatform:loadSubPackage(packageName, callback, thisObj, isShowPop)
+    if isShowPop == nil then
+        isShowPop = false
+    end
+
+
+end
+
+function GamePlatform:jumpToMiniProgram(data)
+end
+function GamePlatform:initPhysics3D(message)
+    MainModule.getInstance():changeShowMainTask(-1, MainModule.task_subpackage, "has use physics")
+end
+
+function GamePlatform:compareVersion(v1, v2)
+end
+
+function GamePlatform:canUseJump()
+
+end
+
+function GamePlatform:addToDesktop(thisObj, successCall, failCall, channelParams)
+
+end
+
+function GamePlatform:addToFavorite(thisObj, successCall, failCall, channelParams)
+
+
+end
+
+function GamePlatform:canAddToDesktop()
+
+end
+
+function GamePlatform:canAddToFavorite()
+
+end
+
+function GamePlatform:canCreateDisPlayPbject()
+    return false
+end
+
+function GamePlatform:createDisplayObject(type, width, height, x, y)
+
+end
+
+function GamePlatform:canSetRankInfo()
+    return false
+end
+
+function GamePlatform:setUseRankInfo(data)
+end
+function GamePlatform:isFromFavourite()
+    return true
+end
+
+function GamePlatform:canAdv()
+    return true
+end
+
+function GamePlatform:canShareVideo()
+
+end
+
+function GamePlatform:canShare()
+    return true
+end
+
+function GamePlatform:showAntiAddtionView()
+    return false
+end
+
+function GamePlatform:getLaunchOptions()
+
+    return self._launchOptions
+end
+
+function GamePlatform:setLoadingProgress(num)
+end
+function GamePlatform:hideLoadingProgress()
+end
+function GamePlatform:afterVideoLoadCallBack()
+end
+function GamePlatform:initCityName()
+
+end
+
+function GamePlatform:initCityNameCallBack(data)
+
+end
+
+function GamePlatform:initCityNameErrorCallBack(error)
+end
+
+function GamePlatform:isAuthorized()
+
+end
+
+function GamePlatform:registFocusEvent()
+    self.hideT = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
+    self.showT = self.hideT
+end
+
+function GamePlatform:onGetFocus()
+    LogsManager.echo("获取焦点")
+    self.isHide = false
+    self.showT = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
+    Message.getInstance():send(MsgCMD.GAME_ONSHOW)
+    StatisticsManager.getInstance():onEvent(StatisticsCommonConst.ON_SHOW)
+    StatisticsManager.addLoadingOutTime(self.showT - self.hideT)
+end
+
+function GamePlatform:onLoseFocus()
+    self.isHide = true
+    self.hideT = CS.GameUtils.CommonUtil.GetTimeMiniStamp()
+    LogsManager.echo('>>OnHide成功回调', self.hideT)
+    Message.getInstance():send(MsgCMD.GAME_ONHIDE)
+    StatisticsManager.getInstance():onEvent(StatisticsCommonConst.ON_HIDE, { onlineTime = self.hideT - self.showT, hideView = GameUtils.decryptStr(WindowManager.getCurrentWindowName()) })
+end
+
+function GamePlatform:isCasingPackage()
+    return false
+end
+
+function GamePlatform:getChildChannelKey()
+    if self:isCasingPackage() then
+        return "other"
+    else
+        return "main"
+    end
+end
+
+function GamePlatform:getPackageName()
+    return "qhmx." .. GameConsts.gameCode .. ".game"
+end
+
+function GamePlatform:recvMsg(cmd, data)
+end

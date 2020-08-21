@@ -1,0 +1,16 @@
+--
+-- Author: XD
+-- Date: 2020-04-11 16:47:35
+--
+local packageName = "framework.consts."
+require(packageName .. "ButtonConst")
+require(packageName .. "ControlConst")
+require(packageName .. "JumpCommonConst")
+require(packageName .. "LogsErrorCode")
+require(packageName .. "ModelToServerMapCommon")
+require(packageName .. "SceneReference")
+require(packageName .. "StatisticsCommonConst")
+require(packageName .. "TranslateCommonConst")
+require(packageName .. "WindowCommonCfgs")
+
+

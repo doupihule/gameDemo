@@ -1,0 +1,188 @@
+WindowManager = class('WindowManager')
+
+WindowManager.tipsContent = {};
+WindowManager.tipsObject = {};
+WindowManager.expandTipsContent = {};
+WindowManager.expandTipsObject = {};
+WindowManager.tipsCount = 0;
+WindowManager.updateTipsContent = {};
+WindowManager.updateTipsObject = {};
+WindowManager.updateTipsCount = 0;
+WindowManager.maskCount = 0;
+WindowManager.maskAlpha = 0;
+WindowManager.isShowUpdateTip = false;
+WindowManager._currentWindowName = "";
+WindowManager._allWindowMap = {};
+WindowManager.UIInstance = {};
+function WindowManager.OpenUI(UIName, params)
+    if params == nil then
+        params = nil
+    end
+    WindowManager.SwitchUIAPI(UIName, nil, nil, params)
+end
+
+function WindowManager.SwitchUI(openUINames, closeUINames, ...)
+    WindowManager.SwitchUIAPI(openUINames, nil, closeUINames, ...)
+end
+
+function WindowManager.SwitchUIAPI(openUINames, rootNodes, closeUINames, ...)
+    WindowManager.SwitchMaskUI(true)
+
+end
+
+function WindowManager.SwitchUIComplete(openUINames, rootNodes, closeUINames, args)
+
+end
+
+function WindowManager.createModalView(ctn, alpha)
+
+    return nil
+end
+
+function WindowManager:adjustUI(view)
+end
+
+function WindowManager.setPopupTip(type, content, callBack, thisObj, titleName, closeBack)
+end
+
+function WindowManager.ShowExpandTip(data, timeout)
+    if timeout == nil then
+        timeout = 1500
+    end
+    WindowManager.expandTipComplete({ data = data, timeout = timeout })
+end
+
+function WindowManager.expandTipComplete(args)
+end
+
+function WindowManager.ShowTip(text, timeout)
+end
+
+function WindowManager.TipComplete(args)
+
+end
+
+function WindowManager.ShowUpdateTip(text, timeout)
+end
+
+function WindowManager.UpdateTipComplete(args)
+
+end
+
+function WindowManager.CloseUIAPI(UIName)
+
+end
+
+function WindowManager.CloseUI(UIName)
+    WindowManager.SwitchUIAPI(nil, nil, UIName)
+end
+
+function WindowManager.isUIOpened(UIName)
+end
+
+function WindowManager.getUIByName(UIName)
+end
+
+function WindowManager.OpenGuideUI(UIName, params)
+
+end
+
+function WindowManager.GuideUIComplete(UIName, params)
+end
+
+function WindowManager.CloseGuideUI(UIName)
+
+end
+
+function WindowManager.OpenSubGuideUI(node, UIName, params)
+
+end
+
+function WindowManager.SubGuideUIComplete(node, UIName, params)
+
+end
+
+function WindowManager.CloseSubGuideUI(node, UIName)
+end
+
+function WindowManager.OpenSubUI(UIName, rootNode, params)
+end
+
+function WindowManager.CloseSubUI(UIName, rootNode)
+end
+
+WindowManager.uiMaker = LoadingUI;
+function WindowManager.ShowLoadingUI(args)
+end
+
+function WindowManager.LoadingUIAtlasComplete()
+
+end
+
+function WindowManager.CloseLoadingUI()
+end
+
+function WindowManager.SwitchUIFromLoading(openUIName, params)
+end
+
+function WindowManager.SwitchMaskUI(isOpen, alpha)
+
+end
+
+function WindowManager.CloseMaskUI()
+end
+
+function WindowManager.initMaskUI()
+end
+
+function WindowManager.getWindowCtn(winName)
+
+end
+
+function WindowManager.checkCacheWindow(winName)
+end
+
+function WindowManager.getWindowCfgs(winName)
+end
+
+function WindowManager.getUILoadGroup(winName)
+end
+
+function WindowManager.getUIClass(winName)
+
+end
+
+function WindowManager.getUIPackage(winName)
+end
+
+function WindowManager.openAdvMask()
+
+end
+
+function WindowManager.closeAdvMask()
+end
+
+function WindowManager._insertWindow(view)
+
+end
+
+function WindowManager.updateUiVisible()
+
+end
+
+function WindowManager._removeOneWindow(windowName)
+end
+
+function WindowManager.isUICached(windowName)
+
+end
+
+function WindowManager.getCurrentWindowName()
+end
+
+function WindowManager.getCurrentWindow()
+end
+
+function WindowManager.getallWindowMap()
+    return WindowManager._allWindowMap
+end

@@ -1,0 +1,20 @@
+KakuraMessage = class('KakuraMessage')
+function KakuraMessage:ctor(...)
+    self.defaultAesKey = "ilo24wEFS*^^*2Ewilo24wEFS*^^*2Ew";
+    self.headlength = 13;
+    self._lastSendTime = 0;
+end
+
+KakuraMessage.MESSAGE_NO_ENC = 32;
+KakuraMessage.MESSAGE_FIX_ENC_NO_COMPRESS = 11;
+KakuraMessage.MESSAGE_DYNAMIC_ENC_NO_COMPRESS = 12;
+KakuraMessage.MESSAGE_HAS_ENC = 1;
+function KakuraMessage:ctor()
+end
+function KakuraMessage.getInstance()
+    if not KakuraMessage._instance then
+        KakuraMessage._instance = KakuraMessage.new()
+    end
+    return KakuraMessage._instance
+end
+

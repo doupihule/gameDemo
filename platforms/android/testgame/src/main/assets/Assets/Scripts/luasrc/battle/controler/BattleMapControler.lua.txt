@@ -1,0 +1,131 @@
+BattleMapControler = class('BattleMapControler')
+
+function BattleMapControler:ctor(controler)
+    self._areaWidth = 256;
+    self._pickNums = 4;
+    self._allMapCount = 5;
+    self._mapX = 0;
+    self._mapY = 0;
+    self._smallMapCount = 0;
+    self.startMapIndex = 1;
+    self._maxSceneWidth = 768 * 2;
+    self.controler = controler
+end
+
+function BattleMapControler:setData(sceneId)
+    local sceneInfo = BattleFunc.getInstance():getCfgDatas("Scene", sceneId)
+    local backInfo = sceneInfo.background
+    local mapName = backInfo[1]
+    self.mapName = mapName
+    local mapStartIndex = tonumber(backInfo[2])
+    self.startMapIndex = mapStartIndex
+    local startOffest = tonumber(backInfo[3])
+    self._maxSceneWidth = sceneInfo.long
+    self:setMapSize()
+    local ctn1 = UITools.createUICtn("battleMapCtn");
+    ctn1:setPos(-ScreenAdapterTools.sceneOffsetX - ScreenAdapterTools.UIOffsetX - startOffest,0)
+    self.controler.layerControler.a1:addChild(ctn1)
+    self._mapInfo = { anchor = 0, infoArr = {},
+                      decorateArr = {},
+                      ctn = ctn1,
+                      initY = (ScreenAdapterTools.maxHeight - ScreenAdapterTools.designHeight) / 2,
+                       }
+    for i = 1, self._pickNums,1 do
+        self:createOneView(mapName, i, mapStartIndex, self._mapInfo)
+        mapStartIndex = (mapStartIndex + 1 > self._allMapCount and 1  or  mapStartIndex + 1 )
+    end
+    self:createDecoration(sceneInfo.Decoration, mapName, ctn1)
+end
+
+function BattleMapControler:setMapSize()
+    self._pickNums = math.ceil(self._maxSceneWidth / self._areaWidth / 2) + 1
+    print("puckNum",self._pickNums,"self._maxSceneWidth",self._maxSceneWidth,self._areaWidth);
+    self.controler.layerControler:setSceneInfo()
+end
+
+function BattleMapControler:createDecoration(arr, firstName, ctn)
+    for i, item in ipairs(arr) do
+        local info = BattleFunc.getInstance():getCfgDatas("Decoration", item[1])
+        local path = "map/" .. firstName .. "/" .. info.pic
+        local imageUrl1 = nil
+        imageUrl1 = "Assets/Images/map/" .. firstName .. "/" .. info.pic
+        local image = UITools.createUIImage(imageUrl1,ResourceConst.boundle_map);
+        image:setScale(info.scale / 10000, info.scale / 10000)
+        ctn:addChild(image)
+        table.insert(self._mapInfo.decorateArr, { view = image })
+        local xpos ;
+        if self.startMapIndex ~= 1 then
+            local missWidth = (self.startMapIndex - 1) * 256 * 2
+            if tonumber(item[2]) - missWidth < 0 then
+                xpos = 256 * 9 - missWidth + tonumber(item[2])
+            else
+                xpos = tonumber(item[2]) - missWidth
+            end
+        else
+            xpos = tonumber(item[2])
+        end
+        print("itemypos",item[3],xpos,imageUrl1)
+        image:setPos(xpos,tonumber(item[3]))
+    end
+end
+
+function BattleMapControler:destoryOneLayer(mapInfo)
+    local infoArr = mapInfo.infoArr
+    for i, v in ipairs(infoArr) do
+        local view = v.view
+        view:removeSelf()
+        view:dispose()
+    end
+    local decorateArr = mapInfo.decorateArr
+    local i = 0
+    mapInfo.ctn:removeSelf()
+end
+
+function BattleMapControler:createOneView(firstName, index, mapId, mpInfo)
+    local imageUrl1 = nil
+    local name = nil
+    local path = nil
+    name = firstName .. "_0" .. mapId
+    path = "map/" .. firstName .. "/" .. name
+    imageUrl1 = "Assets/Images/map/" .. firstName .. "/" .. name
+    local image = UITools.createUIImage(imageUrl1,"map");
+    mpInfo.ctn:addChild(image)
+    local posIndex = (index - 1) * 2
+    local xpos = posIndex * self._areaWidth - self._smallMapCount * 256
+    print("createOneView",posIndex,index,self._areaWidth,self._smallMapCount,"xpos",xpos);
+    if mapId == 5 then
+        self._smallMapCount = self._smallMapCount + 1
+    end
+
+    image:setViewPivot(0,1);
+    image:setPos(xpos,0);
+    local viewInfo = { view = image }
+    table.insert(mpInfo.infoArr, viewInfo)
+
+end
+
+function BattleMapControler:onMapMove(targety, pos)
+    if pos == nil then
+        pos = 0
+    end
+    self._mapY = targety
+    self:updateOneLayer(self._mapInfo, targety, pos)
+end
+
+function BattleMapControler:updateOneLayer(mapInfo, targety, pos)
+    if targety == nil then
+        targety = 0
+    end
+    mapInfo.ctn:setPos(mapInfo.ctn.x + pos,mapInfo.ctn.y)
+    --mapInfo.ctn.x = mapInfo.ctn.x + pos
+end
+
+function BattleMapControler:destoryMap()
+    self:destoryOneLayer(self._mapInfo)
+end
+
+function BattleMapControler:dispose()
+    self:destoryMap()
+    self._mapInfo = nil
+    self.controler = nil
+end

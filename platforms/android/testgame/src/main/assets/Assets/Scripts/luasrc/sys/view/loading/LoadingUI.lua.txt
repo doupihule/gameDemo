@@ -1,0 +1,163 @@
+LoadingUI = class('LoadingUI')
+
+function LoadingUI.getInstance()
+    return LoadingUI._instance;
+end
+
+function LoadingUI:ctor()
+    self.progress = 0;
+    self.isShowWxInfo = false;
+    self.alphaFlag = 1;
+    LoadingUI._instance =  self
+    self:initView()
+    self.mainbg.mouseThrough = false
+    self.mainbg.mouseEnabled = true
+end
+
+function LoadingUI:showLoading()
+    if self.mainbg then
+        WindowManager.topUILayer:addChild(self.mainbg)
+    end
+    if WindowManager.topUILayer.numChildren > 0 then
+        WindowManager.topUILayer.mouseEnabled = true
+    end
+end
+
+function LoadingUI:hideLoading()
+    if self.mainbg then
+        WindowManager.topUILayer:removeChild(self.mainbg)
+    end
+    if WindowManager.topUILayer.numChildren == 0 then
+        WindowManager.topUILayer.mouseEnabled = false
+    end
+end
+
+function LoadingUI:initView()
+    if not self.mainbg then
+        self.mainbg = UITools.createUIImage("static/loading_bp_beijing.png")
+        self.mainbg:setViewSize(768,1400)
+        self.mainbg:setPos(ScreenAdapterTools.width / 2 - ScreenAdapterTools.maxWidth / 2,ScreenAdapterTools.height / 2 - ScreenAdapterTools.maxHeight / 2)
+        local title = UITools.createUIImage("static/loading_image_logo.png")
+        title:setPos(ScreenAdapterTools.width / 2 - ScreenAdapterTools.maxWidth / 2,280+ScreenAdapterTools.UIOffsetY);
+        self.mainbg:addChildren(title)
+    end
+    if not self.clientVersionTxt then
+        self.clientVersionTxt = LabelTools.createLabel("client_version:1.0.1",134,16);
+        --self.clientVersionTxt.text =
+        --self.clientVersionTxt.width = 134
+        --self.clientVersionTxt.height = 16
+        --self.clientVersionTxt.right = 10 + self:getHorizontalOffset()
+        --self.clientVersionTxt.bottom = 12 + self:getVerticalOffset()
+        --self.clientVersionTxt.color = "#ffffff"
+        --self.clientVersionTxt.stroke = 1
+        --self.clientVersionTxt.strokeColor = "#000000"
+        self.mainbg:addChild(self.clientVersionTxt)
+    end
+    if not self.profgBg then
+        --self.profgBg = UITools.createUIImage("static/loading_image_jindudi.png")
+        --self.profgBg.sizeGrid = "17,39,7,28"
+        --self.profgBg.width = 578
+        --self.profgBg.centerX = 0
+        --self.profgBg.bottom = 43 + self:getVerticalOffset()
+        --self.mainbg:addChild(self.profgBg)
+        --self.profg = UITools.createUIImage("static/loading_image_jindu.png")
+        --self.profgBg:addChild(self.profg)
+        --self.profg.sizeGrid = "16,33,10,25"
+        --self.profg.width = 0
+    end
+    if not self.loadingtips then
+        self.loadingtips = LabelTools.createLabel("资源加载加载中，请稍后...",640,31,20,4,false,1);
+        self.loadingtips:setPos(-33,-37.5)
+        self.profgBg:addChild(self.loadingtips)
+    end
+    if not self.loadingstar then
+        self.loadingstar = UITools.createUICtn("loadingstar")
+        self.loadingstar:setPos(-26,-22);
+        self.profgBg:addChild(self.loadingstar)
+        self.loadingicon = UITools.createUIImage("static/loading_image_jindudiche.png")
+        self.loadingicon:setPos(15,-27);
+        self.loadingstar:addChild(self.loadingicon)
+    end
+end
+
+function LoadingUI:setData()
+    self.clientVersionTxt.text = "client_version:" .. Global.client_version
+    self.progress = 0
+    self.profg.width = 0
+    self:onLoop()
+    TimerManager.getInstance():registObjUpdate(self.onLoop,self);
+    self.alphaFlag = 1
+end
+
+function LoadingUI:loadingFlash()
+
+    if self.loadingtips.alpha >= 0.95 then
+        self.alphaFlag = 1
+    end
+    if self.loadingtips.alpha <= 0.05 then
+        self.alphaFlag = 0
+    end
+end
+
+function LoadingUI:onLoop()
+    if self.progress + 1 < 95 then
+        self.progress = self.progress + 1
+    end
+    if self.progress >= 100 then
+        self.progress = 100
+        TimerManager.getInstance().removeByObject(self);
+    end
+    if self.profg then
+        self.profg.width = 574 * self.progress * 0.01
+    end
+    if self.loadingstar then
+        local starX = -13 + self.progress * 0.01 * 574
+        self.loadingstar.x = -13 + self.progress * 0.01 * 574
+        if self.loadingicon then
+            self.loadingicon.rotation = self.progress * 0.01 * 360
+        end
+    end
+end
+
+function LoadingUI:setProgress(progress)
+    print("Loading Progress is : " .. progress)
+    self.progress = tonumber((progress * 100):toFixed(2))
+    self:onLoop()
+end
+
+function LoadingUI:addProgress(progress)
+    self.progress = self.progress + progress
+end
+
+function LoadingUI:getProgress()
+    return self.progress
+end
+
+function LoadingUI:recvMsg(cmd, data)
+    local switch = {
+
+    }
+    local casef = switch[cmd]
+    if not casef then
+        casef = switch["default"]
+    end
+    if casef then
+        casef()
+    end
+end
+
+function LoadingUI:getVerticalOffset()
+    local offset = 1400 - ScreenAdapterTools.height * 0.5
+    if offset < 0 then
+        offset = 0
+    end
+    return offset
+end
+
+function LoadingUI:getHorizontalOffset()
+    local offset = 768 - ScreenAdapterTools.width * 0.5
+    if offset < 0 then
+        offset = 0
+    end
+    return offset
+end

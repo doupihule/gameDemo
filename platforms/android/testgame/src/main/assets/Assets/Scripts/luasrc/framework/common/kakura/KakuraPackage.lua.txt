@@ -1,0 +1,1 @@
+KakuraPackage = class('KakuraPackage')

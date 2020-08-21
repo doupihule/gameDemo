@@ -1,0 +1,369 @@
+BaseFunc = class('BaseFunc')
+BaseFunc.isMergeConfig = true;
+BaseFunc._globalConfigsName = "json/globalCfgs.json";
+BaseFunc._globalConfigsReviewName = "jsonreview/globalCfgs.json";
+BaseFunc._translateCfgsName = "json/translateCfgs.json";
+BaseFunc._globalConfigMap = {};
+BaseFunc._translateConfigs = {};
+BaseFunc.globalCfgsHasLoad = false;
+BaseFunc.hasInit = false;
+BaseFunc.SWITCH_CONFIG_HOT = "SWITCH_CONFIG_HOT";
+BaseFunc._changeCfgs = {};
+BaseFunc.exportType_Old = 1;
+BaseFunc.exportType_New = 2;
+BaseFunc.exportType = BaseFunc.exportType_New;
+BaseFunc.streamType_DelHead = 1;
+BaseFunc.streamType_ShortHead = 2;
+BaseFunc.hotCfg = {};
+BaseFunc.initAllCfgs = {};
+function BaseFunc.onConfigGroupLoadComplete()
+    if not BaseFunc.isMergeConfig then
+        return
+    end
+    BaseFunc.globalCfgsHasLoad = true
+    local congfigName = BaseFunc._globalConfigsName
+    BaseFunc._globalConfigMap = require("cfg.globalCfgs")
+    local hotCfg = GameSwitch.getSwitchMap()[BaseFunc.SWITCH_CONFIG_HOT]
+    if hotCfg and hotCfg ~= "" then
+        local rt,meg = pcall(TableUtils.safelyJsonParse,hotCfg);
+        if not rt then
+            LogsManager.errorTag("confighoterror", "热更的配表格式错误", hotCfg)
+        end
+        try_catch(function()
+            hotCfg = TableUtils.safelyJsonParse(hotCfg)
+            BaseFunc.hotCfg = hotCfg
+            if BaseFunc.exportType == BaseFunc.exportType_Old then
+                TableUtils.deepMerge(BaseFunc._globalConfigMap, hotCfg)
+            end
+        end,
+                function(e)
+                    -- [ts2lua]window下标访问可能不正确
+                    LogsManager.errorTag("confighoterror", "热更的配表格式错误", hotCfg)
+                end
+        )
+    end
+    BaseFunc.onTranslateGroupLoadComplete();
+    Message.getInstance():send(MsgCMD.LOAD_JSONCOMPLETE)
+end
+
+function BaseFunc.setCfgExportType(type)
+    BaseFunc.exportType = type
+end
+
+function BaseFunc.onTranslateGroupLoadComplete()
+    if not BaseFunc.isMergeConfig then
+        return
+    end
+    BaseFunc._translateConfigs =  {}
+    local cfgsArr = BaseFunc._globalConfigMap
+    local translateKey = "Translate"
+    local translatekeyLen = #translateKey
+    for path in pairs(cfgsArr) do
+        if string.sub(path, 1, translatekeyLen) == translateKey then
+            TranslateFunc.getInstance():insertOneCfgs(path)
+        end
+    end
+end
+
+function BaseFunc.turnPath(path)
+    local endStr = "_json"
+    if string.sub(path, #path - #endStr + 1, #path) == endStr then
+        path = string.sub(path, 1, #path - #endStr)
+    end
+    return path
+end
+
+function BaseFunc.getGlobalCfg(configKey, ignoreNoExist)
+    if ignoreNoExist == nil then
+        ignoreNoExist = false
+    end
+    configKey = BaseFunc.turnPath(configKey)
+    local translateKey = "Translate"
+    local translatekeyLen = #translateKey
+    local resultTb = nil
+    if string.sub(configKey, 1, translatekeyLen) == translateKey then
+        resultTb = BaseFunc._translateConfigs[configKey]
+        if not resultTb then
+            resultTb = BaseFunc._globalConfigMap[configKey]
+        end
+    else
+        resultTb = BaseFunc._globalConfigMap[configKey]
+    end
+    if not resultTb then
+        if BaseFunc.hotCfg and BaseFunc.hotCfg[configKey] then
+            resultTb = BaseFunc.hotCfg[configKey]
+        end
+    end
+    if not resultTb then
+        if not ignoreNoExist then
+            LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "没有这个表:" .. configKey)
+        end
+        return {}
+    end
+    return resultTb
+end
+
+function BaseFunc:ctor()
+    self.hasInit = false;
+    self._allCfgs = {}
+    self:startLoadCfg()
+    Message.getInstance():add(MsgCMD.LOAD_JSONCOMPLETE, self)
+end
+
+function BaseFunc:startLoadCfg()
+    if BaseFunc.globalCfgsHasLoad then
+        self:onGloablCfgLoadComplete()
+    end
+end
+
+function BaseFunc:onGloablCfgLoadComplete()
+    if self.hasInit then
+        return
+    end
+    self.hasInit = true
+    local cfgsArr = self:getCfgsPathArr()
+    local translateKey = "Translate"
+    local translatekeyLen = #translateKey
+    local i = 0
+    for i, pathInfo in ipairs(cfgsArr) do
+        if type(pathInfo) == "string" then
+            pathInfo = { name = pathInfo }
+        end
+        local path = nil
+        local name = pathInfo.name
+        local ignoreNoExist = pathInfo.ignoreNoExist
+        if not pathInfo.path or pathInfo.path == "" then
+            path = name
+        else
+            path = pathInfo.path .. "/" .. name
+        end
+        if pathInfo.translate or string.sub(path, 1, translatekeyLen) == translateKey then
+            local ins = TranslateFunc.getInstance()
+            ins:insertOneCfgs(BaseFunc.turnPath(name))
+            ins:insertOneCfgs(name)
+        end
+        self:insertOneCfgs(name, ignoreNoExist)
+        self:insertOneCfgs(BaseFunc.turnPath(name), ignoreNoExist)
+    end
+end
+
+function BaseFunc:insertOneCfgs(path, ignoreNoExist)
+    if ignoreNoExist == nil then
+        ignoreNoExist = false
+    end
+    path = BaseFunc.turnPath(path)
+    if BaseFunc.isMergeConfig then
+        local cfg = BaseFunc.getGlobalCfg(path, ignoreNoExist)
+        self._allCfgs[path] = cfg
+    end
+end
+
+function BaseFunc:getCfgsPathArr()
+    return {}
+end
+
+function BaseFunc:getAllCfgData(cfgsName, ignoreError)
+    if ignoreError == nil then
+        ignoreError = false
+    end
+    cfgsName = BaseFunc.turnPath(cfgsName)
+    local cfgs = self._allCfgs[cfgsName]
+    if not cfgs then
+        if not ignoreError then
+            LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "对应的配表没找到,请检查配置:" .. cfgsName)
+        end
+        return {}
+    end
+    if BaseFunc.exportType == BaseFunc.exportType_New then
+        local itemData = cfgs.d
+        if not itemData or table.length(itemData) == 0 then
+            BaseFunc._changeCfgs[cfgsName] = {}
+            if BaseFunc.hotCfg and BaseFunc.hotCfg[cfgsName] then
+                cfgs = BaseFunc.hotCfg and BaseFunc.hotCfg[cfgsName]
+                if cfgs then
+                    BaseFunc._changeCfgs[cfgsName] = cfgs
+                    return cfgs
+                end
+            end
+            return {}
+        end
+        if not BaseFunc.initAllCfgs[cfgsName] then
+            for key in pairs(itemData) do
+                self:setOneChangeData(cfgsName, key)
+            end
+            BaseFunc.initAllCfgs[cfgsName] = true
+        end
+        cfgs = BaseFunc._changeCfgs[cfgsName]
+    end
+    return cfgs
+end
+
+function BaseFunc:getCfgDatas(cfgsName, id, ignoreError)
+    if ignoreError == nil then
+        ignoreError = false
+    end
+    cfgsName = BaseFunc.turnPath(cfgsName)
+    local cfgs = self._allCfgs[cfgsName]
+    if not cfgs then
+        if not ignoreError then
+            LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "配表还没有加载成功:" .. cfgsName)
+        end
+        return {}
+    end
+    local data = self:changeDataById(cfgsName, id, ignoreError)
+    if not data then
+        if not ignoreError then
+            LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "请找策划,配表名字:" .. cfgsName .. "对应的id找不到" .. id)
+        end
+        return {}
+    end
+    return data
+end
+
+function BaseFunc:changeDataById(cfgsName, id, ignoreError)
+    if ignoreError == nil then
+        ignoreError = false
+    end
+    local data = nil
+    if BaseFunc.exportType == BaseFunc.exportType_Old then
+        data = self._allCfgs[cfgsName][id]
+    else
+        if BaseFunc._changeCfgs[cfgsName] and BaseFunc._changeCfgs[cfgsName][id] then
+            data = BaseFunc._changeCfgs[cfgsName][id]
+        else
+            self:setOneChangeData(cfgsName, id, ignoreError)
+            data = BaseFunc._changeCfgs[cfgsName] and BaseFunc._changeCfgs[cfgsName][id]
+        end
+    end
+    return data
+end
+
+function BaseFunc:setOneChangeData(cfgsName, id, ignoreError)
+    if ignoreError == nil then
+        ignoreError = false
+    end
+    local cfgs = self._allCfgs[cfgsName]
+    local type = tonumber(cfgs.t)
+    local key = cfgs.m
+    local mkey = cfgs.k
+    local itemData = cfgs.d
+    if BaseFunc._changeCfgs[cfgsName] and BaseFunc._changeCfgs[cfgsName][id] then
+        return
+    end
+    if not BaseFunc._changeCfgs[cfgsName] then
+        BaseFunc._changeCfgs[cfgsName] = {}
+    end
+    local curInfo = itemData and itemData[id]
+    if not curInfo then
+        if (BaseFunc.hotCfg and BaseFunc.hotCfg[cfgsName]) and BaseFunc.hotCfg[cfgsName][id] then
+            BaseFunc._changeCfgs[cfgsName][id] = BaseFunc.hotCfg[cfgsName][id]
+            return
+        end
+    end
+    if not curInfo and not ignoreError then
+        -- [ts2lua]window下标访问可能不正确
+        LogsManager.errorTag("configError", "请找策划,配表名字:" .. cfgsName .. "对应的id" .. id .. "没有配置")
+        return
+    end
+    if not curInfo then
+        return
+    end
+    local info = {}
+    local outInfo = {}
+    local mulKey = nil
+    local addNum = 1
+    if type == BaseFunc.streamType_DelHead then
+        if mkey then
+            for item,itemInfo in pairs(curInfo) do
+                local info2 = {}
+                info2[key[1]] = id
+                mulKey = item
+                info2[key[2]] = mulKey
+                addNum = 2
+                for i, value in ipairs(itemInfo) do
+                    if  value ~= ""  then
+                        info2[key[i + addNum]] = value
+                    end
+
+                end
+                outInfo[mulKey] = info2
+            end
+            BaseFunc._changeCfgs[cfgsName][id] = outInfo
+        else
+            info[key[1]] = id
+            for i, value in ipairs(curInfo) do
+                if  value ~= "" then
+                    info[key[i + addNum]] = value
+                end
+            end
+            BaseFunc._changeCfgs[cfgsName][id] = info
+        end
+    elseif type == BaseFunc.streamType_ShortHead then
+        if mkey then
+            for item,itemInfo in pairs(curInfo) do
+                local info2 = {}
+                info2[key[1]] = id
+                mulKey = item
+                info2[key[2]] = mulKey
+                addNum = 2
+                for index,value in pairs(itemInfo) do
+                    info2[key[tonumber(index)]] = value
+                end
+                outInfo[mulKey] = info2
+            end
+            BaseFunc._changeCfgs[cfgsName][id] = outInfo
+        else
+            info[key[1]] = id
+            for index,value in pairs(curInfo) do
+                local value = curInfo[index]
+                info[key[tonumber(index) ]] = value
+            end
+            BaseFunc._changeCfgs[cfgsName][id] = info
+        end
+    end
+    if (BaseFunc.hotCfg and BaseFunc.hotCfg[cfgsName]) and BaseFunc.hotCfg[cfgsName][id] then
+        TableUtils.deepMerge(BaseFunc._changeCfgs[cfgsName][id], BaseFunc.hotCfg[cfgsName][id])
+    end
+end
+
+function BaseFunc:getCfgDatasByKey(cfgsName, id, key1, ignoreError)
+    if ignoreError == nil then
+        ignoreError = false
+    end
+    cfgsName = BaseFunc.turnPath(cfgsName)
+    local data = self:getCfgDatas(cfgsName, id, ignoreError)
+    local resultValue = data[key1]
+    if resultValue == nil then
+        if not ignoreError then
+            LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "请找策划,配表名字:" .. cfgsName .. "对应的id" .. id .. "字段" .. key1 .. "没有配置")
+        end
+    end
+    return resultValue
+end
+
+function BaseFunc:getCfgDatasByMultyKey(cfgsName, id, key1, key2, ignoreError)
+    if ignoreError == nil then
+        ignoreError = false
+    end
+    local data = self:getCfgDatas(cfgsName, id, ignoreError)
+    local key1Data = data[key1]
+    if not key1Data then
+        if not ignoreError then
+            LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "请找策划,配表名字:" .. cfgsName .. "对应的id" .. id .. "字段" .. key1 .. "没有配置")
+        end
+        return nil
+    end
+    local resultValue = key1Data[key2]
+    if not resultValue then
+        if not ignoreError then
+            LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "请找策划,配表名字:" .. cfgsName .. "对应的id" .. id .. "字段" .. key1 .. "_" .. key2 .. "没有配置")
+        end
+    end
+    return resultValue
+end
+
+function BaseFunc:recvMsg(cmd, data)
+    if cmd == MsgCMD.LOAD_JSONCOMPLETE  then
+        self:onGloablCfgLoadComplete()
+    end
+end

@@ -1,0 +1,16 @@
+WindowCommonCfgs = class('WindowCommonCfgs')
+WindowCommonCfgs.INTERJUMPVIEW = "InterJumpUI";
+WindowCommonCfgs.JUMPEXITVIEW = "JumpExitUI";
+WindowCommonCfgs.MAINJUMPZHISEVIEW = "MainJumpZhiseUI";
+WindowCommonCfgs.JUMPLISTZHISEVIEW = "JumpListZhiseUI";
+WindowCommonCfgs.ORIGINALVIEW = "OriginalAdvUI";
+WindowCommonCfgs.MainJumpKariquView = "MainJumpKariquUI";
+WindowCommonCfgs.ResultJumpDoubleView = "ResultJumpDoubleUI";
+WindowCommonCfgs.ResultJumpView = "ResultJumpUI";
+WindowCommonCfgs.ChangeDataView = "ChangeDataUI";
+function WindowCommonCfgs.getWindowcfgs()
+    if not WindowCommonCfgs._windowcfgs then
+        WindowCommonCfgs._windowcfgs = {}
+    end
+    return WindowCommonCfgs._windowcfgs
+end

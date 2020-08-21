@@ -1,0 +1,8 @@
+WaitEntity = class('WaitEntity')
+function WaitEntity:ctor(...)
+    self.cmd = 0;
+    self.time = 0;
+end
+
+function WaitEntity:ctor()
+end

@@ -1,0 +1,4 @@
+JumpCommonConst = class('JumpCommonConst')
+JumpCommonConst.JUMP_LIST_SOFT_UI = 1;
+JumpCommonConst.JUMP_LIST_SOLID_UI = 2;
+JumpCommonConst.MAIN_SIDE = "主界面侧边栏";

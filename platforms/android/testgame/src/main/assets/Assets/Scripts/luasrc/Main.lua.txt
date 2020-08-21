@@ -1,0 +1,51 @@
+package.cpath = package.cpath .. ';C:/Users/doupi/.WebStorm2019.3/config/plugins/intellij-emmylua/classes/debugger/emmy/windows/x64/?.dll'
+--local dbg = require('emmy_core')
+--dbg.tcpConnect('localhost', 9966)
+unpack = unpack or table.unpack
+require("framework.init")
+require("sys.init")
+require("battle.init")
+
+
+
+BaseFunc.onConfigGroupLoadComplete()
+
+--在c端调用
+__startGame= function()
+    GlobalEnv.initStage()
+    --@xd_test测试代码
+    --local img = UITools.createUIImage("Assets/UI/UIRes/common/common_icon_jinbi","uiimage");
+    --GlobalEnv.uiRoot:addChild(img);
+    --local size = img:getViewRect();
+    --
+    --local label = LabelTools.createLabel("this<color=#FF0000>testaaa</color> istezst",100,100,20,5,true,3,1.1);
+    --LabelTools.setLabelWrap(label,0);
+    --GlobalEnv.uiRoot:addChild(label);
+    --label:setPos(100,200);g
+    --UITools.setViewColor(label,1,0,0,1);
+    --LabelTools.setShade(label,5,5,1,1,1,0);
+
+    --local aa= {2,1,3,1,1}
+    --local sortFun = function(a,b)
+    --    if(a==b) then
+    --        return false
+    --    end
+    --    return sanyuan(a-b<0,false,true)
+    --end
+    --table.sort(aa,sortFun)
+    --
+    --print(TableUtils.safelyJsonStringfy(aa),"__a",aa[1],aa[2],aa[3],aa[4])
+
+    --local sp = BattleRoleView.new("role_06",1,0);
+    --GlobalEnv.uiRoot:addChild(sp);
+    --sp:setPos(10,10);
+    --sp:play("idle",true,true);
+    --
+    --sp.currentAni:setViewAlpha(0.1)
+    --GlobalEnv.uiRoot:setViewAlpha(0.2)
+
+    --准备进入游戏
+    MainModule.new();
+
+end
+

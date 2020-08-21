@@ -1,0 +1,46 @@
+ManifestFileVersion: 0
+CRC: 837466331
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 6ce4a11a669a05c623d6225300e6dfc5
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ea5a42e0fd8ea905efa7aa926a3b8944
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Images/map/scene_battle03/scene_battle03_05.png
+- Assets/Images/map/scene_battle03/scene_battle03_03.png
+- Assets/Images/map/scene_battle03/scene_battle03_02.png
+- Assets/Images/map/scene_battle02/decoration_battle02_08.png
+- Assets/Images/map/scene_battle01/scene_battle01_03.png
+- Assets/Images/map/scene_battle02/decoration_battle02_07.png
+- Assets/Images/map/scene_battle02/decoration_battle02_06.png
+- Assets/Images/map/scene_battle02/scene_battle02_02.png
+- Assets/Images/map/scene_battle01/scene_battle01_04.png
+- Assets/Images/map/scene_battle02/decoration_battle02_04.png
+- Assets/Images/map/scene_battle01/decoration_battle01_05.png
+- Assets/Images/map/scene_battle01/decoration_battle01_02.png
+- Assets/Images/map/scene_battle02/scene_battle02_01.png
+- Assets/Images/map/scene_battle01/decoration_battle01_01.png
+- Assets/Images/map/scene_battle02/decoration_battle02_02.png
+- Assets/Images/map/scene_battle01/decoration_battle01_04.png
+- Assets/Images/map/scene_battle01/scene_battle01_05.png
+- Assets/Images/map/scene_battle01/decoration_battle01_06.png
+- Assets/Images/map/scene_battle01/decoration_battle01_03.png
+- Assets/Images/map/scene_battle01/scene_battle01_02.png
+- Assets/Images/map/scene_battle02/scene_battle02_03.png
+- Assets/Images/map/scene_battle02/decoration_battle02_01.png
+- Assets/Images/map/scene_battle02/scene_battle02_05.png
+- Assets/Images/map/scene_battle03/scene_battle03_01.png
+- Assets/Images/map/scene_battle02/decoration_battle02_03.png
+- Assets/Images/map/scene_battle02/decoration_battle02_05.png
+- Assets/Images/map/scene_battle02/scene_battle02_04.png
+- Assets/Images/map/scene_battle01/scene_battle01_01.png
+- Assets/Images/map/scene_battle03/scene_battle03_04.png
+Dependencies: []

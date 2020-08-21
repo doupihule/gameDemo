@@ -1,0 +1,5 @@
+UserEvent = class('UserEvent')
+function UserEvent:ctor()
+end
+UserEvent.USER_EVET_COIN_CHANGE_TWEEN = "USER_EVET_COIN_CHANGE_TWEEN";
+UserEvent.USER_SP_CHANGE = "USER_SP_CHANGE";

@@ -1,0 +1,36 @@
+ModelToServerMap = class('ModelToServerMap')
+function ModelToServerMap:ctor()
+end
+ModelToServerMap.modelToServerMap = {};
+function ModelToServerMap.initModelToServerMap()
+    ModelToServerMap.modelToServerMap = {
+        { key = "user", model = UserModel },
+        { key = "switches", model = SwitchModel },
+        { key = "userExt", model = UserExtModel },
+        { key = "roles", model = RolesModel },
+        { key = "counts", model = CountsModel },
+        { key = "talentSkills", model = TalentSkillsModel },
+        { key = "sign", model = SevenDayModel },
+        { key = "dailyGold", model = DailyGoldModel },
+        { key = "pieces", model = PiecesModel },
+        { key = "fog", model = FogModel } }
+end
+
+function ModelToServerMap.initBuildUserData()
+    local bornSp = GlobalParamsFunc.getInstance():getDataNum('bornSp')
+    LogsManager.echo("krma. 构造初始数据")
+    local homeId = GlobalParamsFunc.getInstance():getDataNum("bornHomeId")
+    local baseRoleId = GlobalParamsFunc.getInstance():getDataNum("bornRoleId")
+    local baseRole = { id = baseRoleId, level = 1, inLine = 1 }
+    local baseHome = { id = homeId, level = 1, inLine = 0 }
+    local data = { coin = GlobalParamsFunc.getInstance():getDataNum("bornCoin"), giftGold = GlobalParamsFunc.getInstance():getDataNum("bornGold"),
+                   hasUpdateData = false, userExt = { loginTime = Client.getInstance():getServerTime(),
+                                                      logoutTime = 3000000000, sp = bornSp, upSpTime = Client.getInstance():getServerTime(),
+                                                      lastSaveTime = Client.getInstance():getMiniServerTime(),
+                                                      registTime = Client.getInstance():getServerTime() },
+                   roles = { baseRoleId = baseRole }, sendTime = 0
+    }
+
+    data.roles[homeId] = baseHome
+    return data
+end

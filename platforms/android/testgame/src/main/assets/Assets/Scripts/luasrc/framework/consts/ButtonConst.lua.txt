@@ -1,0 +1,8 @@
+ButtonConst = class('ButtonConst')
+ButtonConst.BUTTON_TYPE_1 = "BUTTON_TYPE_1";
+ButtonConst.BUTTON_TYPE_2 = "BUTTON_TYPE_2";
+ButtonConst.BUTTON_TYPE_3 = "BUTTON_TYPE_3";
+ButtonConst.BUTTON_TYPE_4 = "BUTTON_TYPE_4";
+ButtonConst.BUTTON_TYPE_5 = "BUTTON_TYPE_5";
+ButtonConst.BUTTON_TYPE_6 = "BUTTON_TYPE_6";
+ButtonConst.BUTTON_TYPE_7 = "BUTTON_TYPE_7";

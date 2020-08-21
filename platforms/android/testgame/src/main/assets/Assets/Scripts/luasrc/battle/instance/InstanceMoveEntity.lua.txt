@@ -1,0 +1,57 @@
+InstanceMoveEntity = class('InstanceMoveEntity')
+
+function InstanceMoveEntity:ctor(target, spd, callFunc, thisObj, expandParams)
+    self.spd = 0;
+    self.moveFrame = 0;
+    self.totalFrame = 0;
+    self.isGrid = false;
+    if spd == nil then
+        spd = 0
+    end
+    self.target = target
+    self.spd = spd
+    self.callFunc = callFunc
+    self.thisObj = thisObj
+    self.expandParams = expandParams
+    self.offsetPos = VectorTools.createVector3()
+    self.initSpeed = VectorTools.createVector3()
+end
+
+function InstanceMoveEntity:initData()
+end
+function InstanceMoveEntity:updateTargetPos()
+    if not self.followTarget then
+        return
+    end
+    self.target.x = self.followTarget.pos.x + self.offsetPos.x
+    self.target.y = self.followTarget.pos.y + self.offsetPos.y
+    self.target.z = self.followTarget.pos.z + self.offsetPos.z
+end
+
+function InstanceMoveEntity:getSpeedRadio()
+    if self.totalFrame <= 0 then
+        return 1
+    end
+    local raidio = 1.5 - self.moveFrame / self.totalFrame
+    if raidio < 0.5 then
+        raidio = 0.5
+    end
+    return 1
+end
+
+function InstanceMoveEntity:dispose()
+    self.callFunc = nil
+    self.thisObj = nil
+    self.target = nil
+    self.expandParams = nil
+    self.moveFrame = 0
+    self.totalFrame = 0
+end
+
+function InstanceMoveEntity:reset()
+    self.callFunc = nil
+    self.thisObj = nil
+    self.expandParams = nil
+    self.moveFrame = 0
+    self.totalFrame = 0
+end

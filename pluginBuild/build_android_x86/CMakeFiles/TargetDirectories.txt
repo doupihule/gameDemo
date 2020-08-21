@@ -1,0 +1,3 @@
+C:/work/unity/gameDemo/pluginBuild/build_android_x86/CMakeFiles/xlua.dir
+C:/work/unity/gameDemo/pluginBuild/build_android_x86/CMakeFiles/edit_cache.dir
+C:/work/unity/gameDemo/pluginBuild/build_android_x86/CMakeFiles/rebuild_cache.dir

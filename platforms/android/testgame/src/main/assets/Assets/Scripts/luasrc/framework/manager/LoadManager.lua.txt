@@ -1,0 +1,45 @@
+LoadManager = class('LoadManager')
+
+function LoadManager:ctor()
+    self._reloadCount = 0;
+    self._maxReloadcount = 1;
+    self._isTestError = false;
+    self._timeCode = 0;
+    self._timeCount = 0;
+    self._startLoadTime = 0;
+    self._loadCacheArr = {}
+    self._hasCacheMap = {}
+
+end
+
+function LoadManager.getInstance()
+    if not LoadManager._instance then
+        LoadManager._instance = LoadManager.new()
+    end
+    return LoadManager._instance
+end
+
+function LoadManager:loadPacgeAndRes(subPackageGroup, url, complete, progress, type, isInsert, isLoading, priority, cache, group, ignoreCache, useWorkerLoader)
+    if (not subPackageGroup or #subPackageGroup == 0) or UserInfo.isWeb() then
+        self:load(url, complete, progress, type, isInsert, isLoading, priority, cache, group, ignoreCache, useWorkerLoader)
+    else
+        local thisObj = self
+        local onSubBack = function()
+            thisObj:load(url, complete, progress, type, isInsert, isLoading, priority, cache, group, ignoreCache, useWorkerLoader)
+        end
+
+        SubPackageManager.load(subPackageGroup, onSubBack, self)
+    end
+end
+
+function LoadManager:load(url, complete, progress, type, isInsert, isLoading, priority, cache, group, ignoreCache, useWorkerLoader)
+
+end
+
+function LoadManager:create(url, complete, progress, type, isInsert, isLoading, constructParams, propertyParams, priority)
+
+end
+
+function LoadManager:createPackAndRes(subPackageGroup, url, complete, progress, type, isInsert, isLoading, constructParams, propertyParams, priority)
+
+end

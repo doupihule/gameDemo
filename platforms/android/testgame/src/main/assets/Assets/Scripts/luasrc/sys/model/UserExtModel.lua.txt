@@ -1,0 +1,271 @@
+UserExtModel = class('UserExtModel', BaseModel)
+
+function UserExtModel:ctor()
+    UserExtModel.super.ctor(self)
+    self.curSp = 0;
+    self.upSpTime = 0;
+    Message.getInstance():add(MsgCMD.GAME_ONHIDE, self)
+    Message.getInstance():add(MsgCMD.GAME_ONSHOW, self)
+end
+
+function UserExtModel.getInstance()
+    if not UserExtModel._instance then
+        UserExtModel._instance = UserExtModel.new()
+    end
+    return UserExtModel._instance
+end
+
+function UserExtModel:initData(d)
+    UserExtModel.super.initData(self, d)
+end
+
+function UserExtModel:updateData(d)
+    UserExtModel.super.updateData(self, d)
+    if ((d.sp or d.sp == 0) or d.upSpTime) or d.upSpTime == 0 then
+        Message.getInstance():send(UserEvent.USER_SP_CHANGE)
+    end
+    if d.maxStage or d.maxStage == 0 then
+        Message.getInstance():send(GameMainEvent.GAMEMAIN_EVENT_STAGE)
+    end
+end
+
+function UserExtModel:deleteData(d)
+    UserExtModel.super.deleteData(self, d)
+end
+
+function UserExtModel:getIsClickInvite()
+    return self._data.shareButtonClick or 0
+end
+
+function UserExtModel:checkIsGotKefuAward()
+    local isGot = false
+    if self._data and self._data.customReward then
+        isGot = true
+    end
+    return isGot
+end
+
+function UserExtModel:getMaxLevel()
+    return tonumber(self._data.maxStage) or 0
+end
+
+function UserExtModel:getBoxGetCount(index)
+    -- [ts2lua]self._data.getBoxCount下标访问可能不正确
+    return self._data.getBoxCount and self._data.getBoxCount[index]
+end
+
+function UserExtModel:getIsBox()
+    return self._data.getBoxCount
+end
+
+function UserExtModel:updateLogoutTime()
+    UserExtServer.updateLogoutTime()
+end
+
+function UserExtModel:getRateId()
+    if self._data.bannerChanceId then
+        return self._data.bannerChanceId
+    end
+    return 1
+end
+
+function UserExtModel:getIsShowGiftInGame()
+    if not GameUtils.canGift then
+        return false
+    end
+    local level = self:getMaxLevel()
+    if level < GlobalParamsFunc.getInstance():getDataNum("secretBagStartPVP") then
+        return false
+    end
+    local rate = GlobalParamsFunc.getInstance():getDataByTwoId("secretBagTouchRound", "arr")
+    local num = string.split(rate[0 + 1], ",")
+    local winTimes = self._data.playCount or 0
+    if winTimes == 0 then
+        return false
+    end
+    if winTimes <= tonumber(num[1 + 1]) then
+        return true
+    end
+    return false
+end
+
+function UserExtModel:getPlayCount()
+    return self._data.playCount or 0
+end
+
+function UserExtModel:recvMsg(cmd, data)
+    local switch = {
+        [MsgCMD.GAME_ONHIDE] = function()
+            self:updateLogoutTime()
+        end,
+        [MsgCMD.GAME_ONSHOW] = function()
+        end
+    }
+    local casef = switch[cmd]
+    if not casef then
+        casef = switch["default"]
+    end
+    if casef then
+        casef()
+    end
+end
+
+function UserExtModel:getTurnableOccurCount()
+    return self._data.turnableOccurCount or 0
+end
+
+function UserExtModel:getFreeAdvanceCount(roleId)
+    -- [ts2lua]self._data.freeAdvanceCount下标访问可能不正确
+    if (not self._data or not self._data.freeAdvanceCount) or not self._data.freeAdvanceCount[roleId] then
+        return 0
+    end
+    -- [ts2lua]self._data.freeAdvanceCount下标访问可能不正确
+    return self._data.freeAdvanceCount[roleId]
+end
+
+function UserExtModel:getLastFreshPower()
+    if not self._data.sp and self._data.sp ~= 0 then
+        self._data.sp = GlobalParamsFunc.getInstance():getDataNum('bornSp')
+    end
+    return self._data.sp or 0
+end
+
+function UserExtModel:getLastPowerFreshTime()
+    if not self._data.upSpTime then
+        self._data.upSpTime = Client.getInstance():getServerTime()
+    end
+    return self._data.upSpTime
+end
+
+function UserExtModel:changeSp(num, islose)
+    if islose == nil then
+        islose = false
+    end
+    self.curSp = self:getLastFreshPower()
+    self.upSpTime = self:getLastPowerFreshTime()
+    self:calcSp()
+    if self.curSp + num < 0 and not islose then
+        self.curSp = 0
+        return
+    end
+    if self.curSp + num < 0 and islose then
+        num = -self.curSp
+    end
+    self.curSp = self.curSp + num
+    self:calcSp()
+end
+
+function UserExtModel:calcSp()
+    local recoveTime = GlobalParamsFunc.getInstance():getDataNum('spRestoreTime')
+    local max = GlobalParamsFunc.getInstance():getDataNum('maxSp')
+    if self.curSp < max then
+        local times = math.floor((Client.getInstance():getServerTime() - self.upSpTime) / recoveTime)
+        if times <= 0 then
+            return
+        end
+        if self.curSp + times > max then
+            self.curSp = max
+            self.upSpTime = Client.getInstance():getServerTime()
+        else
+            self.curSp = self.curSp + times
+            self.upSpTime = self.upSpTime + times * recoveTime
+        end
+    else
+        self.upSpTime = Client.getInstance():getServerTime()
+    end
+end
+
+function UserExtModel:getNowSp()
+    return self.curSp
+end
+
+function UserExtModel:getUpTime()
+    return self.upSpTime
+end
+
+function UserExtModel:getNextPowerRestoreTime()
+    return GlobalParamsFunc.getInstance():getDataNum('spRestoreTime') - math.floor((Client.getInstance():getServerTime() - UserExtModel.getInstance():getLastPowerFreshTime()) % GlobalParamsFunc.getInstance():getDataNum('spRestoreTime'))
+end
+
+function UserExtModel:getCurrentSp()
+    local maxSp = GlobalParamsFunc.getInstance():getDataNum('maxSp')
+    local nowPower = UserExtModel.getInstance():getLastFreshPower() + math.floor((Client.getInstance():getServerTime() - UserExtModel.getInstance():getLastPowerFreshTime()) / GlobalParamsFunc.getInstance():getDataNum('spRestoreTime'))
+    if UserExtModel.getInstance():getLastFreshPower() > maxSp then
+        nowPower = UserExtModel.getInstance():getLastFreshPower()
+    elseif nowPower > maxSp then
+        nowPower = maxSp
+    end
+    return nowPower
+end
+
+function UserExtModel:getTalentSkillUpgradeNum()
+    return self._data.talentSkillUpgradeNum or 0
+end
+
+function UserExtModel:getTalentFreeUpgradeCount()
+    return self._data.talentFreeUpgradeCount or 0
+end
+
+function UserExtModel:getIsFreeUpgradeTalentInGame()
+    local talentUpgradeNum = UserExtModel.getInstance():getTalentSkillUpgradeNum()
+    if talentUpgradeNum < GlobalParamsFunc.getInstance():getDataNum("talentVideoLevelUpOpenNub") then
+        return false
+    end
+    local rate = string.split(GlobalParamsFunc.getInstance():getDataByTwoId("talentVideoLevelUpShowInterval", "arr")[0 + 1], ",")
+    local freeUpgradeCount = self:getTalentFreeUpgradeCount()
+    if freeUpgradeCount <= tonumber(rate[1 + 1]) then
+        return true
+    end
+    return false
+end
+
+function UserExtModel:getOfflineTime()
+    return self._data.offlineTime or 0
+end
+
+function UserExtModel:getLoginTime()
+    return self._data.loginTime
+end
+
+function UserExtModel:getLastOfflineTime()
+    return self._data.lastOfflineTime or UserModel.getInstance():getLastSendTime()
+end
+
+function UserExtModel:calcuOfflineReward()
+    local levelInfo = LevelFunc.getInstance():getLevelInfoById(UserExtModel.getInstance():getMaxLevel()).offLineGiveGold[0 + 1]
+    local talentBuff = TalentSkillsModel.getInstance():getBuff()
+    local offlineTime = UserExtModel.getInstance():getOfflineTime()
+    offlineTime = math.min(GlobalParamsFunc.getInstance():getDataNum('offLineMaxTime'), offlineTime)
+    local goldTime = math.ceil(offlineTime / GlobalParamsFunc.getInstance():getDataNum('offLineMinutesNub'))
+    local reward = string.split(levelInfo, ',')
+    return { reward[1], math.round(reward[1 + 1] * goldTime * 10000 / 10000) }
+end
+
+function UserExtModel:getEverydayInvite()
+    return self._data.everydayInvite or 0
+end
+
+function UserExtModel:getEnterFogFlag()
+    return self._data.enterFogFlag or 0
+end
+
+function UserExtModel:getRoleForce()
+    return tonumber(self._data.force) or 0
+end
+
+function UserExtModel:checkFirstEnterFog()
+    return self._data.dailyFirstEnterFog or 0
+end
+
+function UserExtModel:checkIsTurnableShow()
+    local isShow = false
+    local luckyPlateLevel = GlobalParamsFunc.getInstance():getDataNum("luckyPlateLevel")
+    local curMaxLevel = UserExtModel.getInstance():getMaxLevel()
+    if tonumber(curMaxLevel) + 1 >= luckyPlateLevel then
+        local freeType = ShareOrTvManager.getInstance():getShareOrTvType(ShareTvOrderFunc.SHARELINE_TURNABLE)
+        if freeType ~= ShareOrTvManager.TYPE_QUICKRECEIVE then
+            isShow = true
+        end
+    end
+    return isShow
+end

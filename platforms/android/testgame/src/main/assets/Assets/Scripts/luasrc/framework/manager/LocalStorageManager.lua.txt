@@ -1,0 +1,16 @@
+LocalStorageManager = class('LocalStorageManager')
+function LocalStorageManager.setItem(key, value)
+
+end
+
+function LocalStorageManager.getItem(key)
+
+end
+
+function LocalStorageManager.removeItem(key)
+
+end
+
+function LocalStorageManager.clearStorage()
+
+end

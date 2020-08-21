@@ -1,0 +1,282 @@
+BattleFunc = class('BattleFunc', BaseFunc)
+BattleFunc.debugValue = "0";
+BattleFunc.idToShowMap = {};
+BattleFunc.zorder_blackScreen = 2000 * 10;
+BattleFunc.enterSpeed = 2.5;
+BattleFunc.battleCenterY = 560;
+BattleFunc.battleWaitFrame = 30;
+BattleFunc.firstWavePos = 200;
+BattleFunc.otherWavePos = 400;
+BattleFunc.defaultShadeWidth = 120;
+BattleFunc.defaultScale = 0.25;
+BattleFunc.critDamgeRatio = 2;
+BattleFunc.minDamageRatio = 0.01;
+BattleFunc.airArmyHigh = 270;
+BattleFunc.airArmyStartXLocation = 220;
+BattleFunc.landArmyStartXLocation = 220;
+BattleFunc.landArmyStartYLocation = { 0, 20, -20, 40, -40, 60, -60 };
+BattleFunc.warRoleXoffest = { 0, 100, 200 };
+BattleFunc.pylonStartXLocation = 350;
+BattleFunc.pylonTwoLocation = 30;
+BattleFunc.buildingAutoReduceHp = 160;
+BattleFunc.buildAutoFrame = 30;
+BattleFunc.deadLastFrame = 20;
+BattleFunc.diedShockCount = 3;
+
+--引擎y坐标系方向 1是从上到下 -1表示从下到上. 2d游戏统一坐标系从上到下 最后y坐标反向
+BattleFunc.yCoordinateWay = -1;
+
+function BattleFunc.getPropStyle(id)
+    local info = BattleFunc.idToShowMap[id]
+    if not info then
+        return BattleConst.PROPSTYLE_RATIO
+    end
+    return info.display
+end
+
+BattleFunc.moveSpeed = 1;
+BattleFunc.battleRandomIndex = 3;
+BattleFunc.angletoRad = math.pi / 180;
+BattleFunc.radtoAngle = 180 / math.pi;
+BattleFunc.miToPixel = 640 / 18;
+BattleFunc.pixelToMi = 18 / 640;
+BattleFunc.twopi = math.pi * 2;
+BattleFunc.halfpi = math.pi / 2;
+BattleFunc.defaultRoleYpos = 0;
+BattleFunc.battleViewFrameScale = 2;
+BattleFunc.miniSecondToFrame = 60 / 1000;
+BattleFunc.frameToMiniSecode = 1000 / 60;
+BattleFunc.originPoint = VectorTools.createVector3();
+BattleFunc.tempObject = {};
+BattleFunc.tempObject2 = {};
+BattleFunc.tempObject3 = {};
+BattleFunc.tempObject4 = {};
+BattleFunc.tempRect = { x = 0, y = 0, width = 0, height = 0 };
+BattleFunc.tempRect2 = { x = 0, y = 0, width = 0, height = 0 };
+BattleFunc.tempCircle = { r = 0, x = 0, y = 0 };
+BattleFunc.tempPoint = VectorTools.createVector3(0, 0, 0);
+BattleFunc.tempPoint2 = VectorTools.createVector3(0, 0, 0);
+BattleFunc.tempPoint3 = VectorTools.createVector3(0, 0, 0);
+BattleFunc.tempPoint4 = VectorTools.createVector3(0, 0, 0);
+BattleFunc.tempClickPoint = VectorTools.createVector2(0, 0);
+BattleFunc.EFFECT_NOALLOW = 1;
+BattleFunc.emptyArr = {};
+BattleFunc._cacheTempArr = {};
+function BattleFunc.getOneTempArr()
+    if #BattleFunc._cacheTempArr == 0 then
+        return {}
+    end
+    return table.shiftArray(BattleFunc._cacheTempArr)
+end
+
+function BattleFunc.cacheOneTempArr(value)
+    table.clearArray(value)
+    table.insert(BattleFunc._cacheTempArr, value)
+end
+
+BattleFunc.tempArr_passive = {};
+BattleFunc.waveMaxFrame = 60 * 60;
+BattleFunc.bossMaxFrame = 60 * 60;
+BattleFunc.CreateRoleIndex = {};
+BattleFunc.curBattleType = 1;
+function BattleFunc.getInstance()
+    if not BattleFunc._instance then
+        BattleFunc._instance = BattleFunc.new()
+        BattleFunc.initGlobalParams()
+    end
+    return BattleFunc._instance
+end
+
+function BattleFunc:getCfgsPathArr()
+    return { "AttributeList", "Role", "RoleUpdate", "Scene", "Decoration", "Skill", "SkillUpdate", "Buff", "Condition", "SkillEffect", "Target", "RoleAct", "Level", "LevelWave", "PassiveSkill", "AoeEffect", "Bullet", "TranslateLevel", "TranslateMonster", "Lottery" }
+end
+
+function BattleFunc:ctor()
+    BattleFunc.super.ctor(self)
+    self._cacheCfgMap = { baseAttr = {}, addAttr = {}, advanceAttr = {}, rebornAttr = {} };
+end
+
+function BattleFunc:getRoleInfoData(id, level)
+    return self:getCfgDatasByKey("Role", id, level)
+end
+
+function BattleFunc:turnMinisecondToframe(minisecond)
+    return math.floor(tonumber(minisecond) * BattleFunc.miniSecondToFrame)
+end
+
+function BattleFunc:turnSpeedToFrame(secondSpeed)
+    return secondSpeed / GameConsts.gameFrameRate
+end
+
+function BattleFunc:getShadeScale(instanceWid)
+    local scale = instanceWid / BattleFunc.defaultShadeWidth
+    if scale > 1 then
+        scale = 1
+    elseif scale < 0.3 then
+        scale = 0.3
+    end
+    return scale
+end
+
+function BattleFunc:turnAddSpeedToFrame(secondAddSpeed)
+    return secondAddSpeed / GameConsts.gameFrameRate / GameConsts.gameFrameRate
+end
+
+function BattleFunc:createRoleSpine(roleId, level, type, targetScale, isShowShade, isForceModifyBody)
+    if targetScale == nil then
+        targetScale = 0.25
+    end
+    if isShowShade == nil then
+        isShowShade = true
+    end
+    if isForceModifyBody == nil then
+        isForceModifyBody = false
+    end
+    local cfgs = self:getCfgDatas("Role", roleId)
+    local spineName = cfgs.spine[1]
+    local roleUpdateInfo = self:getCfgDatasByKey("RoleUpdate", roleId, level)
+    local index = roleUpdateInfo.body or 0
+    if isForceModifyBody then
+        index = 9
+    end
+    local animode = index == 0 and 0 or 1
+    local sp = BattleRoleView.new(spineName, targetScale, index)
+    if isShowShade then
+        local size = roleUpdateInfo.size
+        local width = tonumber(size[2])
+        local shadeScale = self:getShadeScale(width)
+        sp:setShade(shadeScale)
+    end
+    sp:play(BattleConst.LABEL_IDLE, true)
+    return sp
+end
+
+function BattleFunc:countPlayerAttr(outMap, heroId, heroInfo, userData)
+    if not self._cacheAttrData then
+        self._cacheAttrData = AttributeExtendData.new(heroId, heroInfo, BattleConst.LIFE_PLAYER, userData)
+    else
+        self._cacheAttrData:resetData(heroId, heroInfo, BattleConst.LIFE_PLAYER, userData)
+    end
+    for i ,v in pairs(self._cacheAttrData.finalAttr) do
+        outMap[i] = v
+    end
+    return outMap
+end
+
+function BattleFunc:turnPropArrToTable(propArr, outTable)
+    if not outTable then
+        outTable = {}
+    end
+    if not propArr then
+        LogsManager.errorTag("properror", "没有传入属性数据")
+        return outTable
+    end
+    local i = 0
+    for i, info in ipairs(propArr) do
+        if type(info) == "string" then
+            info = string.split(info, ",")
+        end
+        local id = info[ 1]
+        if not outTable[id] then
+            outTable[id] = { 0, 0 }
+        end
+        outTable[id][1] = outTable[id][1] + (tonumber(info[2]) or 0 )
+        outTable[id][2] = outTable[id][2] + (tonumber(info[3]) or 0)
+    end
+    return outTable
+end
+
+function BattleFunc:getCacheBaseAttr(attrId)
+    if not self._cacheCfgMap.baseAttr[attrId] then
+        self._cacheCfgMap.baseAttr[attrId] = self:turnPropArrToTable(self:getCfgDatasByKey("BaseAttribute", attrId, "baseAttribute"))
+    end
+    return self._cacheCfgMap.baseAttr[attrId]
+end
+
+function BattleFunc:getCacheAddAttr(attrId)
+    if not self._cacheCfgMap.addAttr[attrId] then
+        self._cacheCfgMap.addAttr[attrId] = self:turnPropArrToTable(self:getCfgDatasByKey("BaseAttribute", attrId, "attributeAdd"))
+    end
+    return self._cacheCfgMap.addAttr[attrId]
+end
+
+function BattleFunc:getCacheAdvanceAttr(roleId, advance)
+    local key = roleId .. "_" .. advance
+    if not self._cacheCfgMap.advanceAttr[key] then
+        self._cacheCfgMap.advanceAttr[key] = self:turnPropArrToTable(self:getCfgDatasByMultyKey("RoleAdvance", roleId, advance, "attr"))
+    end
+    return self._cacheCfgMap.advanceAttr[key]
+end
+
+function BattleFunc:getCacheRebornAttr(rebornTimes)
+    local key = rebornTimes
+    if not self._cacheCfgMap.rebornAttr[key] then
+        self._cacheCfgMap.rebornAttr[key] = self:turnPropArrToTable(self:getCfgDatasByKey("RebornAttribute", tostring(rebornTimes), "attribute"))
+    end
+    return self._cacheCfgMap.rebornAttr[key]
+end
+
+function BattleFunc:getPosByFromation(zhenwei)
+    return 1
+end
+
+function BattleFunc:getSkillValueByParams(key, _skillId, level, skillParams, tag)
+    if string.find(key, "_") == nil then
+        return tonumber(key)
+    end
+    if not skillParams then
+        skillParams = self:getCfgDatasByMultyKey("SkillUpdate", _skillId, tostring(level), "params", true)
+        if not skillParams then
+            return tonumber(key)
+        end
+    end
+    local tempArr = string.split(key, "_")
+    -- [ts2lua]skillParams下标访问可能不正确
+    local arr1 = skillParams[tonumber(tempArr[1]) ]
+    if not arr1 then
+        LogsManager.errorTag("SkillCfgsError", "参数配置错误,skillId:", _skillId, "skilllv:", level, "key:", key, tag)
+        return 0
+    end
+    -- [ts2lua]arr1下标访问可能不正确
+    local rt = arr1[tonumber(tempArr[2])]
+    if rt == nil then
+        LogsManager.errorTag("SkillCfgsError", "参数配置错误,skillId:", _skillId, "skilllv:", level, "key:", key, tag)
+        return 0
+    end
+    rt = tonumber(rt)
+    if number.isNan(rt) then
+        LogsManager.errorTag("battleError", "错误的技能参数数据,skillId:", _skillId, "skilllv:", level, tag)
+        return 0
+    end
+    return rt
+end
+
+function BattleFunc.initGlobalParams()
+    BattleFunc.critDamgeRatio = GlobalParamsFunc.getInstance():getDataNum("baseCritDamage") / 10000
+    BattleFunc.minDamageRatio = GlobalParamsFunc.getInstance():getDataNum("minDamage") / 10000
+    BattleFunc.battleCenterY = GlobalParamsFunc.getInstance():getDataNum("battleCenterY")
+    BattleFunc.battleUpY = BattleFunc.battleCenterY - 180
+    BattleFunc.battleDownY = BattleFunc.battleCenterY + 180
+    local cfg = BattleFunc.getInstance():getAllCfgData("AttributeList")
+    BattleFunc.reducedUnitArr = string.split(GlobalParamsFunc.getInstance():getDataString("reducedUnit"), ",")
+    BattleFunc.airArmyHigh = GlobalParamsFunc.getInstance():getDataNum("airArmyHigh")
+    BattleFunc.landArmyStartYLocation = GlobalParamsFunc.getInstance():getDataArray("landArmyStartYLocation")
+    BattleFunc.airArmyStartXLocation = GlobalParamsFunc.getInstance():getDataNum("airArmyStartXLocation")
+    BattleFunc.landArmyStartXLocation = GlobalParamsFunc.getInstance():getDataNum("landArmyStartXLocation")
+    BattleFunc.pylonTwoLocation = GlobalParamsFunc.getInstance():getDataNum("pylonTwoLocation")
+    BattleFunc.pylonStartXLocation = GlobalParamsFunc.getInstance():getDataNum("pylonStartXLocation")
+    BattleFunc.diedShockCount = GlobalParamsFunc.getInstance():getDataNum("deadShock")
+    local buildAutoHp = GlobalParamsFunc.getInstance():getDataArray("buildingAutoReduceHp")
+    BattleFunc.warRoleXoffest = GlobalParamsFunc.getInstance():getDataArray("fogBattleColumns")
+    BattleFunc.buildAutoFrame = BattleFunc.getInstance():turnMinisecondToframe(tonumber(buildAutoHp[1]))
+    BattleFunc.deadLastFrame = BattleFunc.getInstance():turnMinisecondToframe(GlobalParamsFunc.getInstance():getDataNum("pylonStartXLocation"))
+    BattleFunc.buildingAutoReduceHp = tonumber(buildAutoHp[2])
+    BattleFunc.idToShowMap = cfg
+    BattleFunc.initFrameDates()
+end
+
+function BattleFunc.initFrameDates()
+    BattleFunc.battleViewFrameScale = GameConsts.gameFrameRate / 30
+    BattleFunc.miniSecondToFrame = GameConsts.gameFrameRate / 1000
+    BattleFunc.frameToMiniSecode = 1000 / GameConsts.gameFrameRate
+end

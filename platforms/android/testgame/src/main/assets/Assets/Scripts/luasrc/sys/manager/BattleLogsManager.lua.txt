@@ -1,0 +1,39 @@
+BattleLogsManager = class('BattleLogsManager')
+
+BattleLogsManager.isShowBattleLog = true;
+function BattleLogsManager.getInstance()
+    if not BattleLogsManager._instance then
+        BattleLogsManager._instance = BattleLogsManager.new()
+    end
+    return BattleLogsManager._instance
+end
+
+function BattleLogsManager.battleEcho(message, ...)
+    if not BattleLogsManager.isShowBattleLog then
+        return
+    end
+    LogsManager.echo(message, ...)
+end
+
+function BattleLogsManager.battleWarn(message, ...)
+    if not BattleLogsManager.isShowBattleLog then
+        return
+    end
+    LogsManager.warn(message, ...)
+end
+
+function BattleLogsManager.debugByRole(roleId, message, ...)
+    if not BattleLogsManager.debugRoleIDs then
+        return
+    end
+    if #BattleLogsManager.debugRoleIDs > 0 then
+        if table.findArrValue(BattleLogsManager.debugRoleIDs, roleId) == -1 then
+            return
+        end
+    end
+    BattleLogsManager.battleEcho(message, ...)
+end
+
+function BattleLogsManager.battleError(...)
+    LogsManager.errorTag(...)
+end

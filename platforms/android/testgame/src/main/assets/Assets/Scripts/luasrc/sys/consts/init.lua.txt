@@ -1,0 +1,23 @@
+--
+-- Author: XD
+-- Date: 2014-01-11 16:47:35
+--
+
+local packageName = "sys.consts."
+require(packageName .. "BattleConst")
+require(packageName .. "GameConsts")
+require(packageName .. "ResourceConst")
+require(packageName .. "ChannelConst")
+require(packageName .. "GameSwitchConst")
+
+require(packageName .. "ModelToServerMap")
+
+require(packageName .. "GuideConst")
+require(packageName .. "PoolCode")
+require(packageName .. "StorageCode")
+require(packageName .. "TranslateConst")
+require(packageName .. "PoolCode")
+require(packageName .. "MsgCMD")
+require(packageName .. "WindowCfgs")
+
+

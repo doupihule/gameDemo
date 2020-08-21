@@ -1,0 +1,10 @@
+NotifyManager = class('NotifyManager')
+NotifyManager.notifyFlag = false;
+function NotifyManager:ctor()
+end
+function NotifyManager.onServerNotify(serverInfo)
+    print("=================get server push info ==========================", serverInfo)
+    local method = serverInfo.method
+    Message.getInstance():send(NotifyEvent.methodToEventMap[tostring(method)], serverInfo)
+    NotifyManager.notifyFlag = false
+end

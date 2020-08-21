@@ -1,0 +1,201 @@
+GameSwitch = class('GameSwitch')
+GameSwitch.SWITCH_GM_DEBUG = "SWITCH_GM_DEBUG";
+GameSwitch.SWITCH_CD_DEBUG = "SWITCH_CD_DEBUG";
+GameSwitch.SWITCH_DISABLE_ADV = "SWITCH_DISABLE_ADV";
+GameSwitch.SWITCH_LOG_PANEL = "SWITCH_LOG_PANEL";
+GameSwitch.SWITCH_LOG_PANEL_DISABLE = "SWITCH_LOG_PANEL_DISABLE";
+GameSwitch.SWITCH_DISABLE_SHARE_NEW = "SWITCH_DISABLE_SHARE_NEW";
+GameSwitch.SWITCH_DISABLE_INVITE_FIGHT = "SWITCH_DISABLE_INVITE_FIGHT";
+GameSwitch.SWITCH_DISABLE_SENDERRORLOG = "SWITCH_DISABLE_SENDERRORLOG";
+GameSwitch.SWITCH_DISABLE_MERGEFILES = "SWITCH_DISABLE_MERGEFILES";
+GameSwitch.SWITCH_DISABLE_SUBPACKAGE = "SWITCH_DISABLE_SUBPACKAGE";
+GameSwitch.SWITCH_DISABLE_ALIYUN = "SWITCH_DISABLE_ALIYUN";
+GameSwitch.SWITCH_DISABLE_KEFU = "SWITCH_DISABLE_KEFU";
+GameSwitch.SWITCH_DISABLE_SHARE_LOCAL = "SWITCH_DISABLE_SHARE_LOCAL";
+GameSwitch.SWITCH_DISABLE_ZIP = "SWITCH_DISABLE_ZIP";
+GameSwitch.SWITCH_DISABLE_MAKEDIR = "SWITCH_DISABLE_MAKEDIR";
+GameSwitch.SCREEN_AD_DELAY = "SCREEN_AD_DELAY";
+GameSwitch.ORIGIN_AD_DELAY = "ORIGIN_AD_DELAY";
+GameSwitch.BANNER_ID = "BANNER_ID";
+GameSwitch.VIDEO_ID = "VIDEO_ID";
+GameSwitch.ORIGIN_ID = "ORIGIN_ID";
+GameSwitch.ORIGIN_ICON_ID = "ORIGIN_ICON_ID";
+GameSwitch.SCREEN_ID = "SCREEN_ID";
+GameSwitch.INTERVAL_TIME = "INTERVAL_TIME";
+GameSwitch.MAX_TIME = "MAX_TIME";
+GameSwitch.ORIGIN_TIME = "ORIGIN_TIME";
+GameSwitch.SWITCH_DISABLE_REDPACKET = "SWITCH_DISABLE_REDPACKET";
+GameSwitch.SWITCH_LOCAL_RES = "SWITCH_LOCAL_RES";
+GameSwitch.SWITCH_DISABLE_INTERSTITIALAD = "SWITCH_DISABLE_INTERSTITIALAD";
+GameSwitch.SWITCH_DISABLE_QUICKBANNER = "SWITCH_DISABLE_QUICKBANNER";
+GameSwitch.SWITCH_DISABLE_LEADBANNER = "SWITCH_DISABLE_LEADBANNER";
+GameSwitch.SWITCH_DISABLE_MYSTERIOUSGIFT = "SWITCH_DISABLE_MYSTERIOUSGIFT";
+GameSwitch.SWITCH_MYSTERIOUSGIFT_TYPE = "SWITCH_MYSTERIOUSGIFT_TYPE";
+GameSwitch.SWITCH_DISABLE_SHOWJUMP = "SWITCH_DISABLE_SHOWJUMP";
+GameSwitch.SWITCH_DISABLE_SHOWJUMP_DRAWER_VIEW = "SWITCH_DISABLE_SHOWJUMP_DRAWER_VIEW";
+GameSwitch.SWITCH_DISABLE_LOG = "SWITCH_DISABLE_LOG";
+GameSwitch.SWITCH_DISABLE_LOG_GROUP = "SWITCH_DISABLE_LOG_GROUP";
+GameSwitch.SWITCH_UPDATE_USERDATA_CD = "SWITCH_UPDATE_USERDATA_CD";
+GameSwitch.SWITCH_QUICKBANNER_TYPE = "SWITCH_QUICKBANNER_TYPE";
+GameSwitch.SWITCH_INTERSTITIAL_TYPE = "SWITCH_INTERSTITIAL_TYPE";
+GameSwitch.SWITCH_INTERSTITIAL_OPPO_TYPE = "SWITCH_INTERSTITIAL_OPPO_TYPE";
+GameSwitch.RECOMMEN_BANNER_ID = "RECOMMEN_BANNER_ID";
+GameSwitch.RECOMMEN_PORTAL_ID = "RECOMMEN_PORTAL_ID";
+GameSwitch.SWITCH_DISABLE_LANGDINGPAGE = "SWITCH_DISABLE_LANGDINGPAGE";
+GameSwitch.SWITCH_DISABLE_ORIGIN = "SWITCH_DISABLE_ORIGIN";
+GameSwitch.SWITCH_DISIBLE_CHARGE = "SWITCH_DISIBLE_CHARGE";
+GameSwitch.SWITCH_DISIBLE_RECOMMEND_BAIDU = "SWITCH_DISIBLE_RECOMMEND_BAIDU";
+GameSwitch.SWITCH_DISABLE_LOWDEVICE = "SWITCH_DISABLE_LOWDEVICE";
+GameSwitch.SWITCH_INTER_JUMP = "SWITCH_INTER_JUMP";
+GameSwitch.SWITCH_DISABLE_REVIEW = "SWITCH_DISABLE_REVIEW";
+GameSwitch.SWITCH_ALL_IN_WHITE_LIST = "SWITCH_ALL_IN_WHITE_LIST";
+GameSwitch.SWITCH_DRAWER_TYPE = "SWITCH_DRAWER_TYPE";
+GameSwitch.SWITCH_BTN_MOVE = "SWITCH_BTN_MOVE";
+GameSwitch.SWITCH_BLACK_IP_CITY = "SWITCH_BLACK_IP_CITY";
+GameSwitch.SWITCH_BLACK_IP_FAIL_TYPE = "SWITCH_BLACK_IP_FAIL_TYPE";
+GameSwitch.LOGS_ERRORTAG_GROP = "LOGS_ERRORTAG_GROP";
+GameSwitch.SWITCH_DISABLE_BAIDU_HUTUI = "SWITCH_DISABLE_BAIDU_HUTUI";
+GameSwitch.SWITCH_SUBSCRIBE_MESSAGE = "SWITCH_SUBSCRIBE_MESSAGE";
+GameSwitch.SWITCH_DISABLE_SHAREVIDEO = "SWITCH_DISABLE_SHAREVIDEO";
+GameSwitch.SWITCH_OPPO_REVIEW = "SWITCH_OPPO_REVIEW";
+GameSwitch.SWITCH_DISABLE_NATIVE_AUTOCLICK = "SWITCH_DISABLE_NATIVE_AUTOCLICK";
+GameSwitch.SWITCH_REMOVE_JUMPED_APP = "SWITCH_REMOVE_JUMPED_APP";
+GameSwitch.SWITCH_FORCE_UPDATE = "SWITCH_FORCE_UPDATE";
+GameSwitch.SWITCH_TURNURL_PLAT = "SWITCH_TURNURL_PLAT";
+GameSwitch.SWITCH_COIN_WARNING = "SWITCH_COIN_WARNING";
+GameSwitch.SWITCH_NATIVE_VEDIO_TYPE = "SWITCH_NATIVE_VEDIO_TYPE";
+GameSwitch.SWITCH_DISABLE_HOTFIX = "SWITCH_DISABLE_HOTFIX";
+GameSwitch.SWITCH_ORIGIN_ICON_REFRESH_SECOND = "SWITCH_ORIGIN_ICON_REFRESH_SECOND";
+GameSwitch.SWITCH_MONEY_NOTENOUGH_OPEN_TURNABLE = "SWITCH_MONEY_NOTENOUGH_OPEN_TURNABLE";
+GameSwitch.SWITCH_SIGN_METHOD = "SWITCH_SIGN_METHOD";
+GameSwitch._switchMap = {
+    SWITCH_BATTLE_INFO=1
+}
+GameSwitch._hasInitSwitch = false;
+GameSwitch._switchCondition = {};
+function GameSwitch.getSwitchMap()
+    if not GameSwitch._hasInitSwitch then
+        GameSwitch.initSwitch()
+    end
+    return GameSwitch._switchMap
+end
+
+function GameSwitch.initSwitch()
+    TableUtils.deepMerge(GameSwitch._switchMap, GameSwitchConst._switchMap)
+    GameSwitch._hasInitSwitch = true
+end
+
+function GameSwitch:ctor()
+end
+function GameSwitch.checkOnOff(key)
+    if GameSwitch.checkCondition(GameSwitch._switchCondition[key]) then
+        if tonumber(GameSwitch.getSwitchMap()[key]) == 1 or GameSwitch.getSwitchMap()[key] == true then
+            resultValue = true
+        else
+            resultValue = false
+        end
+        return resultValue
+    end
+    return false
+end
+
+function GameSwitch.coverServerSwitchMap(map)
+    for i in pairs(map) do
+        GameSwitch._switchMap[i] = map[i]
+    end
+    LogsManager.setLogGroupVisible(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL))
+    DeviceTools.checkBySwitch()
+    local channelData = ChannelConst.getChannelConst(UserInfo.platformId)
+    if map[GameSwitch.VIDEO_ID] then
+        channelData.adVideoId = map[GameSwitch.VIDEO_ID]
+    end
+    if map[GameSwitch.BANNER_ID] then
+        channelData.adBannerId = map[GameSwitch.BANNER_ID]
+    end
+    if map.TTADSDK_ID then
+        channelData.appSid = map.TTADSDK_ID
+    end
+    if map.FULLVIDEO_ID then
+        channelData.adFullVideoId = map.FULLVIDEO_ID
+    end
+    LogsManager.checkGM()
+    GameUtils.canShare = not GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_SHARE_NEW)
+    GameUtils.canVideo = not GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ADV)
+    GameUtils.isReview = GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_REVIEW)
+    for i in pairs(map) do
+        LogsManager.echo("服务器返回的开关覆盖结果   ", i, " : ", map[i + 1])
+    end
+end
+
+function GameSwitch.coverServerSwitchConditionMap(map)
+    if not map then
+        return
+    end
+    for i in pairs(map) do
+        GameSwitch._switchCondition[i] = map[i]
+    end
+end
+
+function GameSwitch.setOnOff(key, value)
+    GameSwitch.getSwitchMap()[key] = value
+end
+
+function GameSwitch.getSwitchState(key)
+    return GameSwitch.getSwitchMap()[key]
+end
+
+function GameSwitch.checkCondition(value)
+    if (not value or value == "") or value == " " then
+        return true
+    end
+    local resultBo = false
+    local groupArr = string.split(value, ";")
+    local i = 0
+    repeat
+        local tempValue = groupArr[i + 1]
+        if tempValue and tempValue ~= "" then
+            local tempArr = string.split(tempValue, ",")
+            local condition1 = tonumber(tempArr[0 + 1])
+            local conditionVersionNums = GameSwitch.countVersionToNumber(tempArr[1 + 1])
+            local clientVersionNums = GameSwitch.countVersionToNumber(Global.client_version)
+            local tempRt = nil
+            if condition1 == 1 then
+                tempRt = conditionVersionNums > clientVersionNums
+            elseif condition1 == 2 then
+                tempRt = conditionVersionNums >= clientVersionNums
+            elseif condition1 == 3 then
+                tempRt = conditionVersionNums == clientVersionNums
+            elseif condition1 == 4 then
+                tempRt = conditionVersionNums <= clientVersionNums
+            elseif condition1 == 5 then
+                tempRt = conditionVersionNums < clientVersionNums
+            end
+            if tempRt then
+                return true
+            end
+        end
+        i = i + 1
+    until not (i < #groupArr)
+    return false
+end
+
+function GameSwitch.countVersionToNumber(version)
+    if version then
+        local tempArr = string.split(version, ".")
+        local resultNum = 0
+        local len = #tempArr
+        for i = len,1,-1 do
+            resultNum = resultNum + math.pow(1000, len - i ) * tonumber(tempArr[i ])
+        end
+        repeat
+
+            i = i - 1
+        until not (i >= 0)
+        return resultNum
+    end
+    return 0
+end
+
+function GameSwitch.setWhiteListSwitch()
+    BannerAdManager.setBannerSwitch()
+end

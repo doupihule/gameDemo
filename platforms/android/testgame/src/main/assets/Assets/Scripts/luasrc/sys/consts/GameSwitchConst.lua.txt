@@ -1,0 +1,5 @@
+GameSwitchConst = class('GameSwitchConst')
+GameSwitchConst.SWITCH_LAND_DEATH = "SWITCH_LAND_DEATH";
+GameSwitchConst.SWITCH_BATTLE_INFO = "SWITCH_BATTLE_INFO";
+GameSwitchConst.SWITCH_BATTLE_DEBUGLEVEL = "SWITCH_BATTLE_DEBUGLEVEL";
+GameSwitchConst._switchMap = { [GameSwitchConst.SWITCH_LAND_DEATH] = 0 };

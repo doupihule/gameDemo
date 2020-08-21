@@ -1,0 +1,105 @@
+WindowCfgs = class('WindowCfgs')
+function WindowCfgs:ctor()
+end
+WindowCfgs.UISHOWTYPE_SCALEIN = 1;
+WindowCfgs.UISHOWTYPE_FADEIN = 2;
+WindowCfgs.UILAYER = "uilayer";
+WindowCfgs.TOPLAYER = "toplayer";
+WindowCfgs.HIGHLAYER = "highlayer";
+WindowCfgs.DEBUGLAYER = "debugLayer";
+WindowCfgs.LoadingUI = "LoadingControler";
+WindowCfgs.ReqLoadingUI = "ReqLoadingUI";
+WindowCfgs.AlertUILocal = "AlertUILocal";
+WindowCfgs.AlertUI = "AlertUI";
+WindowCfgs.TestOpListUI = "TestOpListUI";
+WindowCfgs.LoginUI = "LoginUI";
+WindowCfgs.GuideUI = "GuideUI";
+WindowCfgs.TipsUI = "TipsUI";
+WindowCfgs.TalkFrameUI = "TalkFrameUI";
+WindowCfgs.JumpListUI = "JumpListUI";
+WindowCfgs.ResultJumpUI = "ResultJumpUI";
+WindowCfgs.ResultJumpDoubleUI = "ResultJumpDoubleUI";
+WindowCfgs.GameMainUI = "GameMainUI";
+WindowCfgs.BattleUI = "BattleUI";
+WindowCfgs.BattleResultUI = "BattleResultUI";
+WindowCfgs.RoleInfoUI = "RoleInfoUI";
+WindowCfgs.OfflineIncomeUI = "OfflineIncomeUI";
+WindowCfgs.TurnableUI = "TurnableUI";
+WindowCfgs.MainJumpZhiseUI = "MainJumpZhiseUI";
+WindowCfgs.JumpListZhiseUI = "JumpListZhiseUI";
+WindowCfgs.FreeResourceUI = "FreeResourceUI";
+WindowCfgs.FlatItemUI = "FlatItemUI";
+WindowCfgs.HomeUpgradeUI = "HomeUpgradeUI";
+WindowCfgs.BattleDetailUI = "BattleDetailUI";
+WindowCfgs.RoleInLineUI = "RoleInLineUI";
+WindowCfgs.RoleItemUI = "RoleItemUI";
+WindowCfgs.RoleLineItemUI = "RoleLineItemUI";
+WindowCfgs.SevenDaysUI = "SevenDaysUI";
+WindowCfgs.BoxInfoUI = "BoxInfoUI";
+WindowCfgs.UnlockRoleUI = "UnlockRoleUI";
+WindowCfgs.DailyGoldUI = "DailyGoldUI";
+WindowCfgs.ComRewardDoubleUI = "ComRewardDoubleUI";
+WindowCfgs.AirDropDetailUI = "AirDropDetailUI";
+WindowCfgs.BattleFullEnergyUI = "BattleFullEnergyUI";
+WindowCfgs.InviteUI = "InviteUI";
+WindowCfgs.InviteListUI = "InviteListUI";
+WindowCfgs.RoleDetailUI = "RoleDetailUI";
+WindowCfgs.RoleEquipmentUI = "RoleEquipmentUI";
+WindowCfgs.EquipItemUI = "EquipItemUI";
+WindowCfgs.EquipComposeUI = "EquipComposeUI";
+WindowCfgs.EvoPreviewUI = "EvoPreviewUI";
+WindowCfgs.EvoRewardUI = "EvoRewardUI";
+WindowCfgs.EquipPieceGetUI = "EquipPieceGetUI";
+WindowCfgs.RoleBarrageUI = "RoleBarrageUI";
+WindowCfgs.CartoonPicUI = "CartoonPicUI";
+WindowCfgs.FogCartoonPicUI = "FogCartoonPicUI";
+WindowCfgs.FogInitRoleUI = "FogInitRoleUI";
+WindowCfgs.FogRoleItemUI = "FogRoleItemUI";
+WindowCfgs.FogMainUI = "FogMainUI";
+WindowCfgs.FogVideoEnterUI = "FogVideoEnterUI";
+WindowCfgs.FogBusUI = "FogBusUI";
+WindowCfgs.FogBagItemUI = "FogBagItemUI";
+WindowCfgs.FogBagUI = "FogBagUI";
+WindowCfgs.FogBagItemDetailUI = "FogBagItemDetailUI";
+WindowCfgs.FogMultiRewardUI = "FogMultiRewardUI";
+WindowCfgs.FogShopUI = "FogShopUI";
+WindowCfgs.FogBusinessmanUI = "FogBusinessmanUI";
+WindowCfgs.FogComRewardUI = "FogComRewardUI";
+WindowCfgs.FogChooseUI = "FogChooseUI";
+WindowCfgs.FogAnswerUI = "FogAnswerUI";
+WindowCfgs.FogHandinUI = "FogHandinUI";
+WindowCfgs.FogBoxUI = "FogBoxUI";
+WindowCfgs.FogBagItemFullLevelUI = "FogBagItemFullLevelUI";
+WindowCfgs.FogFreeActUI = "FogFreeActUI";
+WindowCfgs.FogRoleLineItemUI = "FogRoleLineItemUI";
+WindowCfgs.FogUserRoleUI = "FogUserRoleUI";
+WindowCfgs.FogObstacleUI = "FogObstacleUI";
+WindowCfgs.FogNpcTalkUI = "FogNpcTalkUI";
+WindowCfgs.FogDoorUI = "FogDoorUI";
+WindowCfgs.FogTipUI = "FogTipUI";
+WindowCfgs.FogStartWarUI = "FogStartWarUI";
+WindowCfgs.FogResultUI = "FogResultUI";
+WindowCfgs.FogResultRewardUI = "FogResultRewardUI";
+WindowCfgs.FogRewardItemUI = "FogRewardItemUI";
+WindowCfgs.FogShopItemDetailUI = "FogShopItemDetailUI";
+WindowCfgs.FogBattleStartAlertUI = "FogBattleStartAlertUI";
+WindowCfgs.SettingUI = "SettingUI";
+WindowCfgs.commonCfgs = { modal = 1, modalAlpha = 0.3, parent = WindowCfgs.UILAYER, offset = { 0, 0 }, full = false, group = {}, sound = true, autoClose = false, style = 0, cache = false };
+function WindowCfgs.getWindowcfgs()
+    if not WindowCfgs._windowcfgs then
+        WindowCfgs._windowcfgs = {
+            [WindowCfgs.LoadingUI] ={modal = 1, path = LoadingUI, modalAlpha =0, position = 8, offset ={0, -100}},
+            [WindowCfgs.ReqLoadingUI] ={modal = 1, path = ReqLoadingUI, parent =WindowCfgs.TOPLAYER, autoClose = true, modalAlpha =0.01},
+            [WindowCfgs.AlertUILocal] ={modal = 1, path = AlertUILocal, parent =WindowCfgs.HIGHLAYER, autoClose = true, modalAlpha =0.01},
+            [WindowCfgs.TestOpListUI] ={modal = 1, path = TestOpListUI, parent =WindowCfgs.HIGHLAYER, autoClose = true, modalAlpha =0.01, group ={"gameui/test/TestOpList.scene"}},
+            [WindowCfgs.LoginUI] ={modal = 1, path = LoginUI, parent =WindowCfgs.TOPLAYER, modalAlpha = 0.01, group ={"gameui/login/Login.scene"}, subPackage ={"uisource", "atlas_source"}},
+            [WindowCfgs.TipsUI] ={modal = 1, path = TipsUI, modalAlpha =0.01},
+            [WindowCfgs.ResultJumpUI] ={modal = 1, path = ResultJumpUI, modalAlpha =0.01, group ={"gameui/jump/ResultJump.scene"}, subPackage ={"uisource", "atlas_source"}},
+            [WindowCfgs.ResultJumpDoubleUI] ={modal = 1, path = ResultJumpDoubleUI, modalAlpha =0.01, group ={"gameui/jump/ResultJumpDouble.scene"}, subPackage ={"uisource", "atlas_source"}},
+            [WindowCfgs.JumpListUI] ={modal = 1, path = JumpListUI, modalAlpha =0.01, group ={"gameui/jump/JumpList.scene"}, subPackage ={"uisource", "atlas_source"}},
+            [WindowCfgs.GameMainUI] ={path = GameMainUI, group ={"native/GameMain.scene"}, subPackage ={"uisource", "atlas_source"}, full = true},
+            [WindowCfgs.BattleUI] ={path = BattleUI, group ={"gameui/battle/Battle.scene"}, subPackage ={"uisource", "atlas_source"}, full = true},
+        }
+    end
+    return WindowCfgs._windowcfgs
+end

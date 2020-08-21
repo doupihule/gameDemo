@@ -1,0 +1,36 @@
+BattleStatisticsControler = class('BattleStatisticsControler')
+
+function BattleStatisticsControler:ctor(controler)
+    self.killNums = 0;
+    self.totalDmage = 0;
+    self.totalCoin = 0;
+    self.controler = controler
+end
+
+function BattleStatisticsControler:setData()
+end
+function BattleStatisticsControler:onKillRole(value)
+    if value == nil then
+        value = 1
+    end
+    self.killNums = self.killNums + value
+end
+
+function BattleStatisticsControler:onDmage(value)
+    if value == nil then
+        value = 0
+    end
+    self.totalDmage = self.totalDmage + value
+end
+
+function BattleStatisticsControler:startSendStatistics()
+end
+function BattleStatisticsControler:onGetCoin(value)
+    if value == nil then
+        value = 1
+    end
+    self.totalCoin = self.totalCoin + value
+end
+
+function BattleStatisticsControler:updateDemageTarget()
+end

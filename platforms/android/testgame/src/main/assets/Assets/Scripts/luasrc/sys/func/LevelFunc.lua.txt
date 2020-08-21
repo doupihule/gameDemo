@@ -1,0 +1,47 @@
+LevelFunc = class('LevelFunc', BaseFunc)
+
+function LevelFunc.getInstance()
+    if not LevelFunc._instance then
+        LevelFunc._instance = LevelFunc.new()
+    end
+    return LevelFunc._instance
+end
+
+function LevelFunc:getCfgsPathArr()
+    return {   "Level" ,"LevelWave","TranslateGlobal","Scene","BattleAddition" }
+end
+
+function LevelFunc:getAllLevelInfo()
+    return self:getAllCfgData("Level");
+end
+function LevelFunc:getLevelInfoByTwoId(id1,id2)
+    return self:getCfgDatasByKey("Level", id1, id2);
+end
+
+function LevelFunc:getLevelInfoById(id1)
+    local  level=tonumber(id1);
+    local maxLevel = self:getMaxLevel()
+    if(level>maxLevel)then
+        level = maxLevel;
+    end
+    return self:getCfgDatas("Level",tostring(level));
+end
+function LevelFunc:getMaxLevel()
+    if(not self.maxLevel)then
+        local levelList =self:getAllCfgData("Level");
+        local maxLevel =0;
+        for i, v in pairs(levelList) do
+            local tempLevel = tonumber(i);
+            if(tempLevel> maxLevel) then
+                maxLevel = tempLevel
+            end
+        end
+        self.maxLevel = maxLevel;
+    end
+    return self.maxLevel
+end
+
+
+function LevelFunc:getBattleAddtionoByTwoId(id1,id2)
+    return self:getCfgDatasByKey("BattleAddition", id1, id2);
+end
