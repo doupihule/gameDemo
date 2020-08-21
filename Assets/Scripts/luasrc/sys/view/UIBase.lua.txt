@@ -1,4 +1,4 @@
-UIBase = class("UIBase")
+UIBase = class("UIBase",LuaBaseView)
 
 
 --所有的ui的__cobject指向 对应ui的gameObject
@@ -12,9 +12,15 @@ function UIBase:setData(...)
 end
 
 
+--重写 bangdingcui
+function UIBase:bindOneCObjet(cui)
+    UIBase.super.bindOneCObjet(cui);
+end
+
+
 --关闭ui
 function UIBase:close()
-
+    package.path = 'Assets/Scripts/luasrc/?.lua.txt;'..'jar:file:///data/app/com.Company.testgame-H2W5Z8lZO2V_adE0wk8AGA==/base.apk!/assets'..'/Assets/Scripts/luasrc/?.lua.txt;'..package.path
 end
 
 --显示完成

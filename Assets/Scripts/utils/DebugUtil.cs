@@ -54,24 +54,24 @@ namespace GameUtils
         private static Dictionary<Type, string> type2string = new Dictionary<Type, string>()
         {
             { Type.Lua, "Lua : " },
-
+            { Type.Data, "Data : " },
             //{ Type.Render, "Render : " },
 #if !UNITY_EDITOR
-            //{ Type.AssetBundle, "AssetBundle : " },
-            //{ Type.Resource, "Resource : " },
+            { Type.AssetBundle, "AssetBundle : " },
+            { Type.Resource, "Resource : " },
 #else
-            //{ Type.AssetBundle, "AssetBundle : " },
-            //{ Type.Resource, "Resource : " },
+            { Type.AssetBundle, "AssetBundle : " },
+            { Type.Resource, "Resource : " },
 #endif
            
-            //{ Type.AsyncSocket, "AsyncSocket : " },
-            //{ Type.Network, "Network : " },
-            //{ Type.Protocol, "Protocol : " },
-            //{ Type.NetAlert, "NetAlert : " },
-            //{ Type.Cipher, "Cipher : " },
-            //{ Type.Compress, "Compress : " },
+            { Type.AsyncSocket, "AsyncSocket : " },
+            { Type.Network, "Network : " },
+            { Type.Protocol, "Protocol : " },
+            { Type.NetAlert, "NetAlert : " },
+            { Type.Cipher, "Cipher : " },
+            { Type.Compress, "Compress : " },
 
-            //{ Type.UI, "UI : " },
+            { Type.UI, "UI : " },
 
             { Type.Special, "Special : " },
             { Type.Important, "Important : " },
@@ -91,11 +91,11 @@ namespace GameUtils
 
         public static void Log( Type type, string message )
         {
-            if ( DebugMode && type2string.ContainsKey( type ) )
+            //if ( DebugMode && type2string.ContainsKey( type ) )
             {
                 Debug.Log( string.Concat( type2string[type], message ) );
 
-                WriteToFile( message, LogType.Log );
+               // WriteToFile( message, LogType.Log );
             }
         }
 

@@ -53,12 +53,14 @@ namespace Resource
 #elif UNITY_STANDALONE
             assetPath =  Application.dataPath +"/../../Assets/";
 #else
-            assetPath = Application.dataPath +"/";
+            DebugUtils.Log(DebugUtils.Type.Data, "path:Application.persistentDataPath " + Application.persistentDataPath+ ",Application.dataPath:" + Application.dataPath);
+            assetPath = Application.streamingAssetsPath +"/Assets/";
             //assetPath = string.Concat( Application.persistentDataPath, "/", GameConstants.SERVER_URL_BRANCH, "/GameResources/" );
 #endif
             bytesLuaTxtPath = string.Concat( assetPath, BYTES_PATH, "{0}.byte" );
-
-			SetVersionNumber ();
+            DebugUtils.Log(DebugUtils.Type.Data, "path:Application.persistentDataPath " + Application.persistentDataPath + ",Application.dataPath:" + Application.dataPath + ",assetPath:"+ assetPath);
+            //SetVersionNumber ();
+           
 
             //if( !Directory.Exists( assetPath + BUNDLE_PATH ) )
             //{

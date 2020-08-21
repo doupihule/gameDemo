@@ -17,15 +17,16 @@ public class Main : MonoBehaviour
     void Awake()
     {
         instance = this;
+        ResourceManager.Instance.Init(this.gameObject);
+        
         XLuaBridge.Init();
         LuaTable globalEnv = XLuaBridge.GetInstance().XLuaGetLuaInstance("GlobalEnv");
         GameObject b = GameObject.Find("uiRoot");
         globalEnv.Set("_uiRoot", b);
         globalEnv.Set("_stage", this.gameObject);
-        ResourceManager.Instance.Init(this.gameObject);
 
         //GameObject a = ResourceManager.Instance.LoadAsset<GameObject>("Assets/UI/Prefabs/main/GameMainUI.prefab", "Assets/UI/Prefabs/main/GameMainUI.prefab", "mainab");
-        
+
         ////= (GameObject)Resources.Load("UI/Prefabs/GameMainUI");
         //GameObject ui = Instantiate(a);
         ////把ui添加到舞台

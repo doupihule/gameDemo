@@ -39,12 +39,17 @@ namespace XLua
             if( xLuaBridge == null )
             {
                 luaEnv = new LuaEnv();  //all lua behaviour shared one luaenv only!
+                
+                luaEnv.AddLoader(LoadByteAsset);
                 xLuaBridge = new XLuaBridge();
+                xLuaBridge.scriptEnv = luaEnv.Global;
 #if UNITY_EDITOR
-                luaEnv.DoString("package.path = 'Assets/Scripts/luasrc/?.lua.txt;'..package.path");
+                luaEnv.DoString("package.path = 'Assets/Scripts/luasrc/?.lua.txt;'..'" + Application.streamingAssetsPath + "'..'/Assets/Scripts/luasrc/?.lua.txt;'..package.path");
 #else
-                luaEnv.DoString("package.path = 'Assets/Scripts/luasrc/?.lua.txt;../Assets/Scripts/luasrc/?.lua.txt;'..package.path");
+                luaEnv.DoString("package.path = 'Assets/Scripts/luasrc/?.lua.txt;'..'" + Application.streamingAssetsPath + "'..'/Assets/Scripts/luasrc/?.lua.txt;'..package.path");
 #endif
+                luaEnv.DoString("print('package.path:'..package.path)");
+                DebugUtils.Log(DebugUtils.Type.Lua, "package.path = 'Assets/Scripts/luasrc/?.lua.txt;'..'" + Application.streamingAssetsPath + "'..'/Assets/Scripts/luasrc/?.lua.txt;'..package.path");
                 luaEnv.DoString("require 'Main'");
             }
             else
@@ -52,6 +57,15 @@ namespace XLua
                 DebugUtils.LogError( DebugUtils.Type.Lua, "Initialize XLuaBridge again!" );
             }
             return xLuaBridge;
+        }
+
+        private static byte[] myLuaLoad(ref string filepath)
+        {
+            TextAsset luaAsset = ResourceManager.Instance.LoadAsset<TextAsset>(filepath, filepath, "scriptab");
+            if (filepath.Contains("Main")){
+                DebugUtils.Log(DebugUtils.Type.Lua, "myLuaLoader" + luaAsset.bytes.ToString());
+            }
+            return luaAsset.bytes;
         }
 
         public static XLuaBridge GetInstance()
@@ -63,8 +77,8 @@ namespace XLua
 
         public void Awake()
         {
-            scriptEnv = luaEnv.Global;
-            luaEnv.AddLoader(LoadByteAsset);
+            //scriptEnv = luaEnv.Global;
+            //luaEnv.AddLoader(LoadByteAsset);
         }
 
         // Update is called once per frame
@@ -199,10 +213,12 @@ namespace XLua
         public static byte[] LoadByteAsset(ref string path)
         {
             byte[] datas = null;
+            path = path.Replace(".", "/");
+            string luaPath = string.Concat("Assets/Scripts/luasrc/", path, ".lua.txt");
 #if UNITY_EDITOR
             if ( Constants.GameConstants.LoadAssetByEditor )
             {
-                string luaPath = string.Concat( "Assets/Shared/Scripts/Lua/", path, ".lua.txt" );
+                
                 TextAsset ta = UnityEditor.AssetDatabase.LoadAssetAtPath<TextAsset>( luaPath );
                 DebugUtils.Assert( ta != null, "The lua file cannot be found! path is " + luaPath );
                 datas = ta.bytes;
@@ -210,9 +226,15 @@ namespace XLua
             else
 #endif
             {
-                string decryptStr = File.ReadAllText( string.Format( ResourceManager.bytesLuaTxtPath, path ), System.Text.Encoding.UTF8 );
-                string byteStr = AESUtil.AESDecrypt( decryptStr ); //解密
-                datas = System.Text.Encoding.UTF8.GetBytes( byteStr );
+                TextAsset luaAsset = ResourceManager.Instance.LoadAsset<TextAsset>(luaPath, luaPath, "scriptab");
+                if (luaPath.Contains("Main"))
+                {
+                    DebugUtils.Log(DebugUtils.Type.Lua, "myLuaLoader" + luaAsset.bytes.ToString());
+                }
+                datas = luaAsset.bytes;
+                //string decryptStr = File.ReadAllText( string.Format( ResourceManager.bytesLuaTxtPath, path ), System.Text.Encoding.UTF8 );
+                //string byteStr = AESUtil.AESDecrypt( decryptStr ); //解密
+                //datas = System.Text.Encoding.UTF8.GetBytes( byteStr );
             }
             DebugUtils.Assert( datas != null, "The lua file cannot be found! path is " + path );
 
