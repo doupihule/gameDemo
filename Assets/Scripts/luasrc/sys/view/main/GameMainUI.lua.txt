@@ -4,37 +4,13 @@
 -- http://opensource.org/licenses/MIT
 -- Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
-GameMainUI = class("GameMainUI", UIBase)
-function GameMainUI:start()
-    print("lua start...")
-
-end
-
-function GameMainUI:OnAwake()
-    self.testButton:GetComponent("Button").onClick:AddListener(function(a)
-        print("clicked, test Button", a)
-    end)
-
-    local sp = DisplayUtils.createSpine("role_01");
-    UITools.bindUIFunc(self);
-    self:addChild(sp)
-    UITools.setPos(sp, 100, 200)
-
-end
-
-function GameMainUI:Init()
-    LogsManager.echo("gameUI init")
-end
+local GameMainUI = class("GameMainUI", UIBase)
 
 function GameMainUI:setData(data)
     GameMainUI.super.setData(self, data);
-end
-
-function GameMainUI:Clear()
-    --Clear Start--Clear End
-end
-
-function GameMainUI:OnDestroy()
+    LogsManager.echo("------------GameMainUIInit");
+    self.label_1:setText("gameMainui")
+    self.btn_test.label_1:setText("gameMainui2")
 end
 
 return GameMainUI

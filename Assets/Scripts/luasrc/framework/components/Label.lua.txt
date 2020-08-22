@@ -7,7 +7,7 @@ function Label:ctor(cobj)
     self.uiType = UICompConst.comp_label
     Label.super.ctor(self)
     if not cobj then
-        cobj = ResourceManager.loadUIPrefab(ResourceConst.baseLabelPrefeb, ResourceConst.boundle_base);
+        cobj = ResourceManager.loadUIPrefab(ResourceConst.baseLabelPrefeb, ResourceConst.boundle_ui);
     end
     self:setCObject(cobj);
 

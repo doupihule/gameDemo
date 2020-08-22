@@ -19,6 +19,8 @@ __startGame = function()
     --UITools.setViewColor(label,1,0,0,1);
     label:setShade(5,5,1,1,1,0);
 
+
+
     --local aa= {2,1,3,1,1}
     --local sortFun = function(a,b)
     --    if(a==b) then
@@ -39,7 +41,7 @@ __startGame = function()
     --GlobalEnv.uiRoot:setViewAlpha(0.2)
 
     --准备进入游戏
-    --MainModule.new();
+    MainModule.new();
 
 end
 

@@ -1,12 +1,10 @@
 UIBase = class("UIBase", LuaBaseView)
 
-
-
-
---所有的ui的__cobject指向 对应ui的gameObject
-UIBase.__cobject = nil
 --对应的window配置
 UIBase.windowCfgs = nil
+--窗口名称
+UIBase.windowName = nil
+
 
 --设置数据
 function UIBase:setData(...)
@@ -15,8 +13,8 @@ end
 
 
 --重写 bangdingcui
-function UIBase:bindOneCObjet(cui)
-    UIBase.super.bindOneCObjet(cui);
+function UIBase:setCObject(cui)
+    UIBase.super.setCObject(self,cui);
     self:bindChild(cui, nil,"");
 end
 
@@ -25,6 +23,10 @@ function UIBase:bindChild(cuiobj, parentLuaInstance,  path)
     --只绑定有特殊命名格式的组件.
     local transform = cuiobj.transform;
     local childCount = transform.childCount
+    LogsManager.echo("--childCount",childCount);
+    if childCount ==0 then
+        return
+    end
     for i = childCount, 1, -1 do
         local childTransform = transform:GetChild(i - 1)
         local name = childTransform.name;
@@ -51,34 +53,44 @@ function UIBase:bindChild(cuiobj, parentLuaInstance,  path)
                 --如果是容器
             elseif uiType == UICompConst.comp_ctn then
                 targetLuaInstance = luaui.Container.new(childObj)
-                self:bindChild(targetLuaInstance,targetLuaInstance,path..name);
             end
+
             targetLuaInstance:setName(name);
             if self[name] ~= nil then
                 LogsManager.errorTag("uierror","有子对象名字重复了"..path..".".. name)
             end
-            self[name] = targetLuaInstance;
-            if parent then
-                parent[name] = targetLuaInstance;
-            end
 
+            self[name] = targetLuaInstance;
+            --如果有parent存在 那么可以通过链式的方式访问 比如 a.ctn_1.label;
+            if parentLuaInstance then
+                parentLuaInstance[name] = targetLuaInstance;
+            end
+            --scroll 和list 不需要绑定子对象
+            if uiType ~= UICompConst.comp_scroll and uiType ~= UICompConst.comp_list then
+                self:bindChild(childObj,targetLuaInstance,path..name);
+            end
+        else
+            LogsManager.echo("这个对象不需要访问")
         end
 
     end
 
 end
 
+function UIBase:setWindowName(value)
+    self.windowName = value;
+    self:setName(value);
+end
 
-function UIBase:mapChildObj(cobj, uiType,className)
-
+--打开ui设置数据
+function UIBase:setData(params)
 
 end
 
 
-
 --关闭ui
 function UIBase:close()
-    package.path = 'Assets/Scripts/luasrc/?.lua.txt;' .. 'jar:file:///data/app/com.Company.testgame-H2W5Z8lZO2V_adE0wk8AGA==/base.apk!/assets' .. '/Assets/Scripts/luasrc/?.lua.txt;' .. package.path
+    WindowManager.CloseUIAPI(self.windowName);
 end
 
 --显示完成
@@ -90,5 +102,6 @@ end
 
 --销毁
 function UIBase:dispose()
-    self._rootView.transform.parent = nil
+    UIBase.super.dispose(self);
+    Message.getInstance():removeObjEvents(self);
 end

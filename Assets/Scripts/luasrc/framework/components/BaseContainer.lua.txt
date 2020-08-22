@@ -5,7 +5,7 @@ function BaseContainer:ctor(cobj)
     BaseContainer.super.ctor(self)
     self.uiType = UICompConst.comp_btn;
     if not cobj then
-        cobj = ResourceManager.loadUIPrefab(ResourceConst.baseContainerPrefeb, ResourceConst.boundle_base);
+        cobj = ResourceManager.loadUIPrefab(ResourceConst.baseContainerPrefeb, ResourceConst.boundle_ui);
     end
     self:setCObject(cobj);
 end

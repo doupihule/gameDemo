@@ -21,7 +21,9 @@ function MainModule:ctor()
     Message.getInstance():add(MsgCMD.VIDEO_STOP, self)
     Message.getInstance():add(MsgCMD.VIDEO_PLAY, self)
     self:onLoginResult({ user = {} });
-    BattleSceneManager.getInstance():enterBattle({ levelId = "2" }, WindowManager.commonUILayer, WindowManager.commonUILayer);
+    --BattleSceneManager.getInstance():enterBattle({ levelId = "2" }, WindowManager.commonUILayer, WindowManager.commonUILayer);
+
+    local ui = WindowManager.switchUI(WindowCfgs.GameMainUI);
 
 end
 
@@ -176,7 +178,7 @@ function MainModule:initLayer()
     end
 
     if UserInfo.isWeb() then
-        WindowManager.ShowLoadingUI(nil)
+        WindowManager.showLoadingUI()
     else
         TimerManager.getInstance():add(delayShowLoading, nil, 10, 1)
     end

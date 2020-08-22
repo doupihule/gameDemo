@@ -108,12 +108,12 @@ function BattleDamageLabel:updateLabel(key, x, y, label)
 
     end
     if not label then
-        label = UITools.createUIImage(imageUrl, ResourceConst.boundle_ui);
+        label = UITools.createUIImage(imageUrl, ResourceConst.boundle_uiimage);
         label:setViewPivot(0, 0.5)
         self:addChild(label)
     else
         label:setViewActive(true)
-        UITools.setImageUrl(label, imageUrl, ResourceConst.boundle_ui, true)
+        UITools.setImageUrl(label, imageUrl, ResourceConst.boundle_uiimage, true)
     end
 
     label:setPos(x, y)

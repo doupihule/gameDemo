@@ -1,3 +1,8 @@
 local Button = class("Label", LuaBaseView)
 luaui.Button = Button;
+function Button:ctor(cobj)
+    Button.super.ctor(self,cobj);
+    self.uiType = UICompConst.comp_btn;
+    self:setCObject(cobj);
+end
 return Button

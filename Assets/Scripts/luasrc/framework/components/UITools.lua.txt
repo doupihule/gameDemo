@@ -201,7 +201,7 @@ function UITools.removeChildren  (self)
 end
 
 --获取子对象后最好建一个变量自己存起来.不要频繁调用.  原则上所有的调用c#的接口都不要频繁使用
---index 下标是从0开始的. 这点一定要注意
+--index 下标是从0开始的. 这点一定要注意 这个和c的index保持一致
 function UITools.getChildAt (self, index)
     local transform = UITools.getViewRectTransform(self)
     local childTransform = transform:GetChild(index)
@@ -311,7 +311,7 @@ function UITools.createUIImage(url, boundlename)
     local imgCtn = luaui.Image.new(name);
     --默认是boundleui
     if not boundlename then
-        boundlename = ResourceConst.boundle_ui
+        boundlename = ResourceConst.boundle_uiimage
     end
     UITools.setImageUrl(imgCtn, url, boundlename, true);
     --设置名字是为了好方便在uieditor里面查看

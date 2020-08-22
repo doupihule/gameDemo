@@ -24,7 +24,7 @@ function LabelTools.createLabel(str, wid, hei, fontSize, align, supportRichText,
     if supportRichText == nil then
         supportRichText = false
     end
-    local instance = ResourceManager.loadUIPrefab(ResourceConst.baseLabelPrefeb, ResourceConst.boundle_base);
+    local instance = ResourceManager.loadUIPrefab(ResourceConst.baseLabelPrefeb, ResourceConst.boundle_ui);
     local label = luaui.Label.new(instance);
     label:setText(str);
     label:setFontSize(fontSize);
