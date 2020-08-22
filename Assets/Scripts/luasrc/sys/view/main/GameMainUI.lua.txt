@@ -11,6 +11,11 @@ function GameMainUI:setData(data)
     LogsManager.echo("------------GameMainUIInit");
     self.label_1:setText("gameMainui")
     self.btn_test.label_1:setText("gameMainui2")
+    self.btn_test:setClickFunc(self.ontestClick,self,"bbb")
+end
+
+function GameMainUI:ontestClick(params)
+    LogsManager.echo("GameMainUITestClick",params)
 end
 
 return GameMainUI
