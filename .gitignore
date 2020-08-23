@@ -13,3 +13,4 @@
 /platforms/android/testgame/.gradle
 /platforms/android/testgame/.idea
 /platforms/android/testgame/build
+/Assets/Scripts/luasrc/lualib.meta
