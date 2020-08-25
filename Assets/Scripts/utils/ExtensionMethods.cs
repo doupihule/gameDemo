@@ -13,11 +13,9 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using XLua;
 
 namespace GameUtils
 {
-    [LuaCallCSharp]
     public static class ExtensionMethods
     {
         public static Component[] GetComponentsInChildrenExtension( this Component c, string t, bool includeInactive = false )
@@ -309,19 +307,7 @@ namespace GameUtils
             pos = uiCamera.ScreenToWorldPoint( screenPos );
             return pos;
         }
-        public static GameObject InstantiateGameObject( this GameObject obj, GameObject parentObj, bool shouldRegister = false )
-        {
-            GameObject go = GameObject.Instantiate( obj );
-            go.transform.parent = parentObj.transform;
-            go.transform.localPosition = Vector3.zero;
-            go.transform.localScale = Vector3.one;
-            go.transform.localRotation = Quaternion.identity;
-            if ( shouldRegister )
-            {
-                CSRegisterObject.RegisterObject( go );
-            }
-            return go;
-        }
+        
 
         //设置成置灰状态
         public static void SetDisabled( this Image s, bool isActive )
@@ -335,33 +321,6 @@ namespace GameUtils
 
 
 
-        public static void Destroy( this GameObject g, bool immediately = false )
-        {
-            CSRegisterObject.UnRegisterObject( g );
-
-            if ( immediately )
-            {
-                GameObject.Destroy( g );
-            }
-            else
-            {
-                GameObject.DestroyImmediate( g );
-            }
-        }
-
-        public static void Destroy( this UnityEngine.Object g, bool immediately = false )
-        {
-            CSRegisterObject.UnRegisterObject( g );
-
-            if ( immediately )
-            {
-                UnityEngine.Object.Destroy( g );
-            }
-            else
-            {
-                UnityEngine.Object.DestroyImmediate( g );
-            }
-        }
 
         public static GameObject GetGameObject( UnityEngine.Object go )
         {

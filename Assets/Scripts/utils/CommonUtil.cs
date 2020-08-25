@@ -4,10 +4,8 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
-using XLua;
 namespace GameUtils
 {
-    [LuaCallCSharp]
     public class CommonUtil
     {
         public static string GetPlatformString()

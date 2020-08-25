@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System.Collections;
-using XLua;
 using Resource;
 using System.Collections.Generic;
 using UnityEngine.Profiling;
@@ -36,13 +35,6 @@ public class GameResourceCacheObjects
     {
         cacheParentObject = new GameObject( "CacheParentObjects" );
         MonoBehaviour.DontDestroyOnLoad( cacheParentObject );
-        LuaTable PreloadingManager = XLuaBridge.GetInstance().XLuaDoFile( "Managers/", "PreloadingManager", "PreloadingManager" );
-        PreloadingManager.SetInPath<GameResourceCacheObjects>( "CSGameResourceCacheObjects", Instance );
-        finishCall = PreloadingManager.Get<System.Action>( "OnLoadFinish" );
-        destroyCall = PreloadingManager.Get<System.Action>( "Destroy" );
-        System.Action Init = PreloadingManager.Get<System.Action>( "Init" );
-        if ( Init != null )
-            Init();
     }
 
     public void Destroy()

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using XLua;
 using System;
 
 public class MouseInputState : MonoBehaviour
@@ -12,10 +11,10 @@ public class MouseInputState : MonoBehaviour
     private float moveTimer = 0;
     public int state = 0;
     private Action<float> setSpeed = null;
-    public void SetLuaTable(LuaTable FourSoulsUIController)
-    {
-        setSpeed = FourSoulsUIController.Get<Action<float>>("SetSpeed");
-    }
+    //public void SetLuaTable(LuaTable FourSoulsUIController)
+    //{
+    //    setSpeed = FourSoulsUIController.Get<Action<float>>("SetSpeed");
+    //}
     // Update is called once per frame
     void Update()
     {

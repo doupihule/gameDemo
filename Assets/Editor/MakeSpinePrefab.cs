@@ -8,7 +8,6 @@
 
 using System.Collections.Generic;
 using System;
-using XLua;
 using System.Reflection;
 using System.Linq;
 using UnityEditor;
@@ -46,8 +45,6 @@ public static class MakeSpinePrefab
                 continue;
             }
 
-            
-           
             string tempMaterialPath = sourcepath + "/" + spineName + "/" + spineName + "_Material.mat";
             string dataAeestName = sourcepath + "/" + spineName + "/" + spineName + "_SkeletonData.asset";
             if (!File.Exists(dataAeestName))

@@ -8,11 +8,9 @@ using UnityEngine.SceneManagement;
 using Constants;
 using UObject = UnityEngine.Object;
 using GameUtils;
-using XLua;
 
 namespace Resource
 {
-    [LuaCallCSharp]
     public class ResourceManager
     {
         private static ResourceManager instance;
@@ -42,8 +40,6 @@ namespace Resource
         public Dictionary<string, Material> spriteRendererMaterialDic;
         private Shader customspriteRendererShader;
 
-        public LuaTable luaLoadResource { set; private get; }
-        public LuaTable multiLanguageHelper { set; private get; }
 
         public void Init( GameObject go )
         {
@@ -415,26 +411,27 @@ namespace Resource
         /// <returns></returns>
         public string[] GetBundleInfo( string name )
         {
-            Func<string, string> getBundleNameByName = luaLoadResource.Get<Func<string, string>>( "SharpGetBundleInfo" );
-            string bundleInfo = getBundleNameByName( name );
-            string[] infos = bundleInfo.Split( '#' );
+            //Func<string, string> getBundleNameByName = luaLoadResource.Get<Func<string, string>>( "SharpGetBundleInfo" );
+            //string bundleInfo = getBundleNameByName( name );
+            string[] infos = null;
             return infos;
         }
         public string GetString( string id )
         {
-            if( multiLanguageHelper == null )
-            {
-                return "";
-            }
-            else
-            {
-                if ( string.IsNullOrEmpty( id ) )
-                    return "";
-                if ( id == "-1" )
-                    return "";
-                Func<string, string> getString = multiLanguageHelper.Get<Func<string, string>>( "GetString" );
-                return getString( id );
-            }
+            return "";
+            //if( multiLanguageHelper == null )
+            //{
+            //    return "";
+            //}
+            //else
+            //{
+            //    if ( string.IsNullOrEmpty( id ) )
+            //        return "";
+            //    if ( id == "-1" )
+            //        return "";
+            //    Func<string, string> getString = multiLanguageHelper.Get<Func<string, string>>( "GetString" );
+            //    return getString( id );
+            //}
         }
 
 #endregion
