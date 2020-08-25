@@ -12,36 +12,48 @@ BaseFunc.onConfigGroupLoadComplete()
 __startGame = function()
     GlobalEnv.initStage()
     --@xd_test测试代码
-    local label = LabelTools.createLabel("this<color=#FF0000>testaaa</color> istezst",100,100,20,5,true,3,1.1);
-    label:setLabelWrap(0);
-    GlobalEnv.uiRoot:addChild(label);
-    --label:setPos(100,200);g
-    --UITools.setViewColor(label,1,0,0,1);
-    label:setShade(5,5,1,1,1,0);
-
-
-
-    --local aa= {2,1,3,1,1}
-    --local sortFun = function(a,b)
-    --    if(a==b) then
-    --        return false
-    --    end
-    --    return sanyuan(a-b<0,false,true)
-    --end
-    --table.sort(aa,sortFun)
-    --
-    --print(TableUtils.safelyJsonStringfy(aa),"__a",aa[1],aa[2],aa[3],aa[4])
-
-    --local sp = BattleRoleView.new("role_06",1,0);
-    --GlobalEnv.uiRoot:addChild(sp);
-    --sp:setPos(10,10);
-    --sp:play("idle",true,true);
-    --
-    --sp.currentAni:setViewAlpha(0.1)
-    --GlobalEnv.uiRoot:setViewAlpha(0.2)
+    --local label = LabelTools.createLabel("this<color=#FF0000>testaaa</color> istezst",100,100,20,5,true,3,1.1);
+    --label:setLabelWrap(0);
+    --GlobalEnv.uiRoot:addChild(label);
+    --label:setShade(5,5,1,1,1,0);
 
     --准备进入游戏
     MainModule.new();
 
-end
 
+    --@xd_test 性能测试
+    --local  testNums = 10000000;
+    --local t1 = os.clock();
+    --local s=0;
+    --for i = 1, testNums do
+    --    s = s+1;
+    --end
+    --local t2 = os.clock();
+    --print("testNumsadd:",t2-t1);
+    --
+    --local str = ""
+    --for i = 1, testNums do
+    --    str = "i"..i;
+    --end
+    --local t3 = os.clock();
+    --print("testStringadd:",t3-t2);
+    --
+    --local tempFunc = function () end
+    --
+    --for i = 1, testNums do
+    --    tempFunc()
+    --end
+    --local t4 = os.clock();
+    --print("testFunc:",t4-t3);
+    --
+    --
+    --local maghaer = CS.Resource.ResourceManager.Instance
+    --for i = 1, testNums do
+    --    maghaer:Dispose();
+    --end
+    --local t5 = os.clock();
+    --print("callNative:",t5-t4);
+
+
+
+end
