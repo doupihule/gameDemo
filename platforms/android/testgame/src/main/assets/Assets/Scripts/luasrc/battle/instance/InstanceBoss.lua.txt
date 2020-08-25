@@ -1,4 +1,0 @@
-InstanceBoss = class('InstanceBoss', InstanceMonster)
-function InstanceBoss:ctor(controler)
-    InstanceBoss.super.ctor(self, controler)
-end

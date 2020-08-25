@@ -1,9 +1,0 @@
-LogsErrorCode = class('LogsErrorCode')
-LogsErrorCode.CONFIG_ERROR = "configError";
-LogsErrorCode.FILE_ERROR = "fileError";
-LogsErrorCode.WINDOW_ERROR = "windowError";
-LogsErrorCode.ALIYUN_SENDERROR = "AliyunSendError";
-LogsErrorCode.WX_SDK_ERROR = "wx_sdk_error";
-LogsErrorCode.BATTLE_ERROR = "BATTLE_ERROR";
-LogsErrorCode.MEMORY_WARN = "memory_warn";
-LogsErrorCode.BATTLE_RES_ERROR = 'battleResError';

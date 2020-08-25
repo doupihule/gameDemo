@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 1170622580
+CRC: 759372069
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 5e7325877b973ba3f1844eef0af4aa5f
+    Hash: 68e280dde130d78764fcf618f0ff87e5
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
@@ -33,6 +33,7 @@ Assets:
 - Assets/Scripts/luasrc/framework/engine/GlobalEnv.lua.txt
 - Assets/Scripts/luasrc/battle/data/SkillActionData.lua.txt
 - Assets/Scripts/luasrc/framework/utils/number.lua.txt
+- Assets/Scripts/luasrc/framework/components/Image.lua.txt
 - Assets/Scripts/luasrc/battle/controler/BattleMapControler.lua.txt
 - Assets/Scripts/luasrc/battle/instance/InstanceMoveMultyEntity.lua.txt
 - Assets/Scripts/luasrc/framework/event/NativeToJSEvent.lua.txt
@@ -49,6 +50,7 @@ Assets:
 - Assets/Scripts/luasrc/framework/manager/WaitManager.lua.txt
 - Assets/Scripts/luasrc/battle/controler/BattleStatisticsControler.lua.txt
 - Assets/Scripts/luasrc/sys/event/init.lua.txt
+- Assets/Scripts/luasrc/framework/components/Button.lua.txt
 - Assets/Scripts/luasrc/framework/common/GameSwitch.lua.txt
 - Assets/Scripts/luasrc/framework/manager/TimerManager.lua.txt
 - Assets/Scripts/luasrc/framework/manager/WindowManager.lua.txt
@@ -68,6 +70,7 @@ Assets:
 - Assets/Scripts/luasrc/framework/components/init.lua.txt
 - Assets/Scripts/luasrc/battle/data/BattleConditionData.lua.txt
 - Assets/Scripts/luasrc/framework/utils/Equation.lua.txt
+- Assets/Scripts/luasrc/framework/consts/UICompConst.lua.txt
 - Assets/Scripts/luasrc/framework/components/UITools.lua.txt
 - Assets/Scripts/luasrc/sys/model/CountsModel.lua.txt
 - Assets/Scripts/luasrc/sys/func/DataResourceFunc.lua.txt
@@ -118,7 +121,6 @@ Assets:
 - Assets/Scripts/luasrc/framework/consts/ControlConst.lua.txt
 - Assets/Scripts/luasrc/battle/controler/BattleGuideControler.lua.txt
 - Assets/Scripts/luasrc/framework/utils/StringUtils.lua.txt
-- Assets/Scripts/luasrc/sys/view/UIBase.lua.txt
 - Assets/Scripts/luasrc/sys/consts/GMConst.lua.txt
 - Assets/Scripts/luasrc/framework/event/NotifyEvent.lua.txt
 - Assets/Scripts/luasrc/framework/func/init.lua.txt
@@ -129,6 +131,8 @@ Assets:
 - Assets/Scripts/luasrc/battle/data/BattleAoeData.lua.txt
 - Assets/Scripts/luasrc/framework/manager/CacheManager.lua.txt
 - Assets/Scripts/luasrc/battle/trigger/SkillExpandTrigger.lua.txt
+- Assets/Scripts/luasrc/framework/components/Scroll.lua.txt
+- Assets/Scripts/luasrc/framework/components/Label.lua.txt
 - Assets/Scripts/luasrc/battle/instance/InstancePerformance.lua.txt
 - Assets/Scripts/luasrc/framework/utils/numEncrypt.lua.txt
 - Assets/Scripts/luasrc/battle/controler/CameraControler.lua.txt
@@ -140,6 +144,7 @@ Assets:
 - Assets/Scripts/luasrc/sys/event/BattleEvent.lua.txt
 - Assets/Scripts/luasrc/framework/consts/LogsErrorCode.lua.txt
 - Assets/Scripts/luasrc/framework/platform/AdVideoManager.lua.txt
+- Assets/Scripts/luasrc/framework/components/List.lua.txt
 - Assets/Scripts/luasrc/framework/utils/DeviceTools.lua.txt
 - Assets/Scripts/luasrc/framework/platform/GamePlatform.lua.txt
 - Assets/Scripts/luasrc/battle/controler/BattleTweenControler.lua.txt
@@ -193,6 +198,7 @@ Assets:
 - Assets/Scripts/luasrc/sys/consts/GuideConst.lua.txt
 - Assets/Scripts/luasrc/framework/consts/ModelToServerMapCommon.lua.txt
 - Assets/Scripts/luasrc/sys/func/init.lua.txt
+- Assets/Scripts/luasrc/framework/components/UIBase.lua.txt
 - Assets/Scripts/luasrc/framework/server/SingleCommonServer.lua.txt
 - Assets/Scripts/luasrc/sys/common/init.lua.txt
 - Assets/Scripts/luasrc/cfg/globalCfgs.lua.txt
