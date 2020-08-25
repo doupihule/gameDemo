@@ -96,13 +96,13 @@ namespace Resource
 
         public void Dispose()
         {
-            instance = null;
+            //instance = null;
 
-            if( goDonwloadManager != null )
-            {
-                GameObject.Destroy( goDonwloadManager );
-                goDonwloadManager = null;
-            }
+            //if( goDonwloadManager != null )
+            //{
+            //    GameObject.Destroy( goDonwloadManager );
+            //    goDonwloadManager = null;
+            //}
 
             //if( cacheBundleNameList != null )
             //{
@@ -110,7 +110,7 @@ namespace Resource
             //    cacheBundleNameList = null;
             //}
 
-            SceneManager.sceneLoaded -= OnSceneLoadComplete;
+            //SceneManager.sceneLoaded -= OnSceneLoadComplete;
         }
 
         private void SetVersionNumber()

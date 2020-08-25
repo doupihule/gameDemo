@@ -20,10 +20,10 @@ public class Main : MonoBehaviour
         ResourceManager.Instance.Init(this.gameObject);
         
         XLuaBridge.Init();
-        LuaTable globalEnv = XLuaBridge.GetInstance().XLuaGetLuaInstance("GlobalEnv");
-        GameObject b = GameObject.Find("uiRoot");
-        globalEnv.Set("_uiRoot", b);
-        globalEnv.Set("_stage", this.gameObject);
+        //LuaTable globalEnv = XLuaBridge.GetInstance().XLuaGetLuaInstance("GlobalEnv");
+        //GameObject b = GameObject.Find("uiRoot");
+        //globalEnv.Set("_uiRoot", b);
+        //globalEnv.Set("_stage", this.gameObject);
 
         //GameObject a = ResourceManager.Instance.LoadAsset<GameObject>("Assets/UI/Prefabs/main/GameMainUI.prefab", "Assets/UI/Prefabs/main/GameMainUI.prefab", "mainab");
 
@@ -35,9 +35,9 @@ public class Main : MonoBehaviour
         //SkeletonGraphic bb;
         //bb.AnimationState.TimeScale = 0;
         //bb.unscaledTime
-        timerManager = XLuaBridge.GetInstance().XLuaGetLuaInstance("TimerManager.getInstance()");
-        luaUpdate = timerManager.Get<Action<LuaTable>>("updateFrame");
-        luaUpdateLate = timerManager.Get<Action<LuaTable>>("updateFrameLate");
+        //timerManager = XLuaBridge.GetInstance().XLuaGetLuaInstance("TimerManager.getInstance()");
+        //luaUpdate = timerManager.Get<Action<LuaTable>>("updateFrame");
+        //luaUpdateLate = timerManager.Get<Action<LuaTable>>("updateFrameLate");
 
         XLuaBridge.GetInstance().XLuaDoString("__startGame()","chunk");
         //Spine.AnimationState sss;
@@ -52,10 +52,10 @@ public class Main : MonoBehaviour
     }
     void Update()
     {
-        luaUpdate(timerManager);
+        //luaUpdate(timerManager);
     }
     void LateUpdate()
     {
-        luaUpdateLate(timerManager);
+        //luaUpdateLate(timerManager);
     }
 }
