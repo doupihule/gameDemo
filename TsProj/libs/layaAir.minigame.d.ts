@@ -471,8 +471,6 @@ declare module laya.vv.mini {
 }
 
 declare module Laya {
-    class MiniAdpter extends laya.wx.mini.MiniAdpter {
-    }
     class BMiniAdapter extends laya.bd.mini.BMiniAdapter {
     }
     class KGMiniAdapter extends laya.mi.mini.KGMiniAdapter {

@@ -358,6 +358,7 @@ export default class ChatDialogUI extends ui.gameui.task.ChatDialogUI implements
 	close() {
 
 	}
+
 }
 
 
