@@ -1,5 +1,3 @@
-import FogLogicalControler from "./FogLogicalControler";
-import LogsManager from "../../../framework/manager/LogsManager";
 import FogControler from "./FogControler";
 
 
@@ -15,8 +13,8 @@ export class FogLayerControler {
 	 * 	}
 	 * 	a3:
 	 * }
-	 * 	
-	 * 
+	 *
+	 *
 	 */
 
 	/**游戏的根容器 */
@@ -37,7 +35,7 @@ export class FogLayerControler {
 	a23: Laya.Sprite;
 	/**遮罩层 */
 	a24: Laya.Sprite;
-	
+
 
 	public rootCtn: Laya.Sprite;
 
@@ -53,14 +51,12 @@ export class FogLayerControler {
 		this.a3 = new Laya.Sprite();
 
 
-
 		this.a2Offset = new Laya.Sprite();
 
 		this.a21 = new Laya.Sprite();
 		this.a22 = new Laya.Sprite();
 		this.a23 = new Laya.Sprite();
 		this.a24 = new Laya.Sprite();
-
 
 
 		rootCtn.addChild(this.a);

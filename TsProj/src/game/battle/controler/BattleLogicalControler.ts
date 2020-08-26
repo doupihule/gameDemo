@@ -1,4 +1,4 @@
-import { BattleLayerControler } from './BattleLayerControler';
+import {BattleLayerControler} from './BattleLayerControler';
 import BattleControler from "./BattleControler";
 import IMessage from "../../sys/interfaces/IMessage";
 import RefreshControler from "./RefreshControler";
@@ -18,7 +18,6 @@ import BattleConst from "../../sys/consts/BattleConst";
 import SoundManager from "../../../framework/manager/SoundManager";
 import InstanceBasic from "../instance/InstanceBasic";
 import BattleStatisticsControler from "./BattleStatisticsControler";
-import UserInfo from "../../../framework/common/UserInfo";
 import InstanceLife from "../instance/InstanceLife";
 import BattleRoleView from "../view/BattleRoleView";
 import InstanceLogical from '../instance/InstanceLogical';
@@ -32,20 +31,16 @@ import BattleSkillData from '../data/BattleSkillData';
 import ChooseTrigger from '../trigger/ChooseTrigger';
 import LogsManager from '../../../framework/manager/LogsManager';
 import ResourceConst from '../../sys/consts/ResourceConst';
-import BattleDebugTool from './BattleDebugTool';
 import PassiveSkillData from '../data/PassiveSkillData';
 import PassiveSkillTrigger from '../trigger/PassiveSkillTrigger';
 import BattleGuideControler from './BattleGuideControler';
-import ScreenAdapterTools from '../../../framework/utils/ScreenAdapterTools';
 import Client from '../../../framework/common/kakura/Client';
 import InstanceHome from '../instance/InstanceHome';
 import GlobalParamsFunc from '../../sys/func/GlobalParamsFunc';
 import WindowManager from '../../../framework/manager/WindowManager';
-import { WindowCfgs } from '../../sys/consts/WindowCfgs';
+import {WindowCfgs} from '../../sys/consts/WindowCfgs';
 import RolesModel from '../../sys/model/RolesModel';
-import DisplayUtils from '../../../framework/utils/DisplayUtils';
 import RoleBuffBar from '../view/RoleBuffBar';
-import RolesFunc from '../../sys/func/RolesFunc';
 import ConditionTrigger from '../trigger/ConditionTrigger';
 import FogFunc from '../../sys/func/FogFunc';
 import FogEventData from '../../fog/data/FogEventData';
@@ -53,12 +48,11 @@ import FogModel from '../../sys/model/FogModel';
 import GameConsts from '../../sys/consts/GameConsts';
 
 
-
 /**
  * 战斗控制器  控制战斗流程刷新. 以及所有对象的创建缓存销毁
- * 
- * 
- * 
+ *
+ *
+ *
  */
 export default class BattleLogicalControler extends BattleControler implements IMessage {
 	/**战斗数据 */
@@ -66,8 +60,6 @@ export default class BattleLogicalControler extends BattleControler implements I
 
 	//游戏模式 分自动战斗或者boss战
 	public gameMode: number = BattleConst.battle_game_mode_auto;
-
-
 
 
 	//关卡对应的配置数据
@@ -105,9 +97,9 @@ export default class BattleLogicalControler extends BattleControler implements I
 	 * 存储起来是为了提升性能. 计算属性的时候 把这个一起算进去效率会更高. 也更容易管理
 	 * [
 	 * 	{attr:[],passive:skill },
-	 * 	
+	 *
 	 * ]
-	 * 
+	 *
 	 */
 	public globalPassiveAttrMap: any[]
 
@@ -134,6 +126,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 	public helpRoleId: any;
 	public helpRoleCd: any;
 	public helpRoleLeftCd: any
+
 	public constructor(ctn: any, ui: any, gameMode: number = 1) {
 		super(ctn);
 		this.gameMode = gameMode;
@@ -158,9 +151,9 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this.guideControler = new BattleGuideControler(this);
 		this.passive = null;
 		//全局属性加成
-		this.globalAttrMap = {
-		}
+		this.globalAttrMap = {}
 	}
+
 	//设置数据
 	public setData(data) {
 		//初始化统计控制器
@@ -179,11 +172,13 @@ export default class BattleLogicalControler extends BattleControler implements I
 		//摄像头初始化位置
 		this.cameraControler.updateCtnPos();
 	}
+
 	//普通地图
 	setNormalMap() {
 		this.levelCfgData = LevelFunc.instance.getLevelInfoById(this.battleData.levelId);
 		this.mapControler.setData(this.levelCfgData.sceneId || "1")
 	}
+
 	//远征地图
 	setWarMap() {
 		var mapId;
@@ -195,6 +190,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		}
 		this.mapControler.setData(mapId || "1");
 	}
+
 	//初始化游戏
 	initGame() {
 		this.cameraControler.setData();
@@ -202,6 +198,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		Message.instance.send(BattleEvent.BATTLEEVENT_BATTLESTART);
 		Laya.timer.frameLoop(1, this, this.onceUpdateFrame);
 	}
+
 	//重写逐帧刷新
 	protected updateFrame() {
 		if (this._isGamePause) {
@@ -214,6 +211,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this.freshHelpRoleCd();
 
 	}
+
 	/**刷新助阵英雄的cd */
 	public freshHelpRoleCd() {
 		if (this.helpRoleLeftCd < 0) return;
@@ -223,6 +221,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this.helpRoleLeftCd -= 1;
 
 	}
+
 	//当有角色移动时
 	public oneRoleMove(instance: InstanceLife) {
 		if (instance.camp == 1) {
@@ -235,6 +234,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 			}
 		}
 	}
+
 	/**有角色死亡时，重新选取一遍最前边的位置 */
 	public checkAllRolePos() {
 		this.frontPos1 = this.myHome.pos.x;
@@ -245,6 +245,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 			}
 		}
 	}
+
 	//播放音效, lastTime 持续时间,表示多久后关闭 -1表示永久循环 0表示只播放一次
 	public playSound(soundName: string, lastTime: number = -1) {
 		// BattleLogsManager.battleEcho("battle play sound",soundName,lastTime)
@@ -274,10 +275,9 @@ export default class BattleLogicalControler extends BattleControler implements I
 	//---------------------------------------创建和销毁模块------------------------------------------------------
 
 
-
 	//创建一个instance
 	/**
-	 * 
+	 *
 	 * @param data  数据
 	 * @param cacheId 缓存id
 	 * @param model  对应的模块 , role ,monster,effect,bullet
@@ -345,19 +345,18 @@ export default class BattleLogicalControler extends BattleControler implements I
 
 	//预缓存一个特效 .默认120秒后重新缓存
 	public preCreateEffect(name: string, frame: number = 10) {
-		var eff = this.createEffect({ id: name, index: 0 });
+		var eff = this.createEffect({id: name, index: 0});
 		eff.setLastFrame(frame);
 		//把这个特效放到天边去
 		eff.setPos(10000, 100000, 10000);
 	}
 
 
-
-	//创建一个子弹 
+	//创建一个子弹
 	public createBullet(id: string, owner: InstanceLogical, skillAction: SkillActionData, x: number, y: number, rotation: number, targetRole, offz: number = 0) {
 		var cacheId = PoolCode.POOL_BUTTLE + id;
 		var resname = BattleFunc.instance.getCfgDatasByKey("Bullet", id, "model", true);
-		var data = { id: id };
+		var data = {id: id};
 		var cacheItem: InstanceBullet = this.createInstance(data, cacheId, BattleConst.model_bullet, InstanceBullet, resname, x, y, owner.pos.z + offz, BattleFunc.defaultScale * owner.cfgScale);
 		cacheItem.setOwner(owner, skillAction, rotation, targetRole);
 		cacheItem.setZorderOffset(owner.zorderOffset);
@@ -424,7 +423,6 @@ export default class BattleLogicalControler extends BattleControler implements I
 		cacheItem.setLifeType(lifeType);
 		//给这个角色执行全局被动
 		PassiveSkillTrigger.runAllPassiveGlobalAttr(this.globalPassiveAttrMap, cacheItem, 1);
-		
 
 
 		if (camp == BattleConst.ROLEGROUP_ENEMY) {
@@ -432,7 +430,6 @@ export default class BattleLogicalControler extends BattleControler implements I
 		} else {
 			cacheItem.setViewWay(1);
 		}
-
 
 
 		//拿到这个角色的所有被动
@@ -491,6 +488,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this.oneRoleMove(cacheItem);
 		return cacheItem;
 	}
+
 	public createHome(id: string, data: any, lifeType: number, camp: number, offestX = 0, offestY = 0) {
 		//角色的缓存id
 		var cacheId = PoolCode.POOL_HOME + id + "_" + lifeType + "_" + camp;
@@ -576,7 +574,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 				}
 			}
 		}
-		
+
 		//需要重算一下所有属性
 		if (cacheItem.attrData.hasDataChange) {
 			cacheItem.attrData.countAllAttr();
@@ -589,6 +587,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 
 		return cacheItem;
 	}
+
 	//创建召唤物
 	public createSummoned(id: string, data: any, x: number, z: number, fromRole: InstanceLogical, liveFrame: number = -1) {
 		var cacheId = PoolCode.POOL_MONSTER + id + "_" + data.level + "_" + data.starLevel;
@@ -615,7 +614,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		cacheItem.setLiveFrame(liveFrame);
 		//给这个角色执行全局被动
 		PassiveSkillTrigger.runAllPassiveGlobalAttr(this.globalPassiveAttrMap, cacheItem, 1);
-		
+
 		//拿到这个角色的所有被动
 		var passiveSkills = cacheItem.passiveSkills;
 		if (passiveSkills) {
@@ -632,6 +631,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this.oneRoleMove(cacheItem);
 		return cacheItem;
 	}
+
 	//创建一个buff区域
 	public createBuffBar(camp: number, instance: InstanceLife) {
 		var cacheItem: RoleBuffBar = PoolTools.getItem(PoolCode.POOL_BUFFBAR + camp);
@@ -641,6 +641,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		cacheItem.setData(instance, this.layerControler.a23);
 		return cacheItem;
 	}
+
 	//创建一个血条
 	public createHealthBar(camp: number, instance: InstanceLife) {
 		var cacheItem: RoleHealthBar = PoolTools.getItem(PoolCode.POOL_HPBAR + camp);
@@ -650,6 +651,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		cacheItem.setData(instance, this.layerControler.a23);
 		return cacheItem;
 	}
+
 	/**创建基地技能容器 */
 	public createSkillContent(skillArr, parent) {
 		var cacheId = PoolCode.POOL_PLAYERCONTENT;
@@ -668,9 +670,6 @@ export default class BattleLogicalControler extends BattleControler implements I
 		return item;
 
 	}
-
-
-
 
 
 	//创建一个技能数据.后面会为缓存做准备
@@ -695,7 +694,6 @@ export default class BattleLogicalControler extends BattleControler implements I
 		sp.scale(1, 1);
 		return sp;
 	}
-
 
 
 	//销毁一个实例
@@ -739,7 +737,6 @@ export default class BattleLogicalControler extends BattleControler implements I
 		//清除这个对象注册的所有回调
 		this.clearCallBack(instance);
 	}
-
 
 
 	//销毁一个怪物
@@ -791,6 +788,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 			}
 		}
 	}
+
 	/**
 	 * 创建我方角色
 	 * @param id 角色id
@@ -810,12 +808,13 @@ export default class BattleLogicalControler extends BattleControler implements I
 			if (j != 0) {
 				offestX = data.startSite[j];
 			}
-			this.createRole(id, { level: level, starLevel: starLevel, type: type }, data.kind, BattleConst.ROLEGROUP_MYSELF, offestX);
+			this.createRole(id, {
+				level: level,
+				starLevel: starLevel,
+				type: type
+			}, data.kind, BattleConst.ROLEGROUP_MYSELF, offestX);
 		}
 	}
-
-
-
 
 
 	//----------------------------外部接口--------------------------------------
@@ -823,6 +822,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 	public setPosX(posX) {
 		return posX
 	}
+
 	//获取坐标 输出到 outpos.x ,outpos.x,outpos.z
 	public getPosByTypeAndCamp(camp: number, type: number, outpos: Laya.Vector3, offestX, offestY, xIndex = 1) {
 
@@ -871,7 +871,8 @@ export default class BattleLogicalControler extends BattleControler implements I
 			}
 			var index1 = BattleFunc.CreateRoleIndex[BattleConst.LIFE_LANDHERO] || 0;
 			targetY = BattleFunc.battleCenterY + Number(BattleFunc.landArmyStartYLocation[index1]) + offestY;
-		};
+		}
+		;
 		if (isNaN(targetY)) {
 			LogsManager.errorTag("无效的z坐标", "无效的z坐标")
 		}
@@ -879,6 +880,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		outpos.z = targetY;
 		return outpos;
 	}
+
 	//根据id获取role
 	public getRoleById(id: string) {
 		for (var i = 0; i < this.campArr_1.length; i++) {
@@ -895,7 +897,6 @@ export default class BattleLogicalControler extends BattleControler implements I
 		}
 		return null
 	}
-
 
 
 	//点击某个角色技能
@@ -927,7 +928,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 			}
 		}
 		var attrInfo = TableUtils.deepCopy(passive.skillLogicalParams, []);
-		var map = { attr: attrInfo, passive: passive };
+		var map = {attr: attrInfo, passive: passive};
 		this.globalPassiveAttrMap.push(map);
 		PassiveSkillTrigger.runOnePassiveGlobalAttr(map.passive, map.attr);
 		return true;
@@ -952,6 +953,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 			}
 		}
 	}
+
 	/**清除所有角色 */
 	clearAllRole() {
 		var arr = this.campArr_1;
@@ -963,6 +965,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 			}
 		}
 	}
+
 	/**迷雾模式等战斗开始后再加当我出生的触发 */
 	public addAllTiggerOnBorn() {
 		var camp1 = this.campArr_1;
@@ -992,12 +995,14 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this.setGamePlayOrPause(false);
 
 	}
+
 	/**显示迷雾复活 */
 	public showFogRevive() {
 		this.setGamePlayOrPause(true);
-		WindowManager.OpenUI(WindowCfgs.FogBattleReviveUI, { controler: this })
+		WindowManager.OpenUI(WindowCfgs.FogBattleReviveUI, {controler: this})
 
 	}
+
 	/**执行迷雾复活 */
 	public fogRevive() {
 		this.reviveCount += 1;
@@ -1020,15 +1025,17 @@ export default class BattleLogicalControler extends BattleControler implements I
 	/**显示复活 */
 	public showBattleRevive(type) {
 		this.setGamePlayOrPause(true);
-		WindowManager.OpenUI(WindowCfgs.BattleReviveUI, { controler: this, reviveType: type })
+		WindowManager.OpenUI(WindowCfgs.BattleReviveUI, {controler: this, reviveType: type})
 
 	}
+
 	/**执行超时复活 */
 	public overTimeRevive() {
 		this.inOverTimeRevive = true;
 		var passiveData: PassiveSkillData = new PassiveSkillData(BattleFunc.overTimePassiveSkill, 1, this.myHome, BattleConst.skill_kind_passive);
 		this.insterGlobalPassive(passiveData);
 	}
+
 	/**执行失败复活 */
 	public defeatRevive() {
 		this.inDefeatRevive = true;
@@ -1096,7 +1103,6 @@ export default class BattleLogicalControler extends BattleControler implements I
 		BattleFunc.CreateRoleIndex = {}
 
 	}
-
 
 
 }

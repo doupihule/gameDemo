@@ -16,7 +16,6 @@ import LogsManager from "../../../framework/manager/LogsManager";
 import LevelFunc from "../func/LevelFunc";
 import SceneReference from "../../../framework/consts/SceneReference";
 import WhiteListFunc from "../../../framework/func/WhiteListFunc";
-import GuideManager from "../manager/GuideManager";
 import UserEvent from "../event/UserEvent";
 import SevenDayServer from "../server/SevenDayServer";
 import UserExtServer from "../server/UserExtServer";
@@ -33,6 +32,7 @@ export default class UserModel extends BaseModel {
 		}
 		return this._instance;
 	}
+
 	incomeCoin = {};
 
 	//获取用户的rid
@@ -68,7 +68,7 @@ export default class UserModel extends BaseModel {
 		if (d.coin || d.coin == 0 || d.giftGold || d.giftGold == 0 || d.gold || d.gold == 0) {
 			Message.instance.send(GameMainEvent.GAMEMAIN_EVENT_FRESHMONEY);
 			if (coinFlag) {
-				Message.instance.send(UserEvent.USER_EVET_COIN_CHANGE_TWEEN, { oldNum: oldNum })
+				Message.instance.send(UserEvent.USER_EVET_COIN_CHANGE_TWEEN, {oldNum: oldNum})
 			}
 		}
 		if (d.fogCoin || d.fogCoin == 0) {
@@ -103,6 +103,7 @@ export default class UserModel extends BaseModel {
 	getUserHead() {
 		return this._data.userInfo.headImage;
 	}
+
 	/**临时处理后续删除 */
 	setNameAndImg(userInfo: any) {
 		if (userInfo["name"]) {
@@ -129,6 +130,7 @@ export default class UserModel extends BaseModel {
 	getGold() {
 		return BigNumUtils.sum((this._data.gold || "0"), (this._data.giftGold || "0"));
 	}
+
 	getGiftGold() {
 		return this._data.giftGold || "0";
 	}
@@ -188,6 +190,7 @@ export default class UserModel extends BaseModel {
 		}
 		return 0;
 	}
+
 	/**获取迷雾最大层数 */
 	getMaxFogLayer() {
 		if (this._data.userExt && this._data.userExt.maxFogLayer) {
@@ -204,8 +207,7 @@ export default class UserModel extends BaseModel {
 				if (info && info[type + "PurchaseTime"]) {
 					time += Number(info[type + "PurchaseTime"]);
 				}
-			}
-			else {
+			} else {
 				for (var id in this._data.market) {
 					var info = this._data.market[id];
 					if (info && info[type + "PurchaseTime"]) {
@@ -231,6 +233,7 @@ export default class UserModel extends BaseModel {
 		}
 		return "1";
 	}
+
 	//判断当前关卡是否已经能复活过
 	isLandDeathRevive(levelId): boolean {
 		if (this._data && this._data.levels && this._data.levels[levelId] && this._data.levels[levelId].deathRevive && this._data.levels[levelId].expireTime > Client.instance.serverTime) {
@@ -325,6 +328,7 @@ export default class UserModel extends BaseModel {
 
 
 	private refuseAuth: string = "refuseWxAuth";
+
 	/**记录是否已经拒绝授权 */
 	setRefuseAuth() {
 		CacheManager.instance.setLocalCache(this.refuseAuth, true);
@@ -420,6 +424,7 @@ export default class UserModel extends BaseModel {
 		var backData = Client.instance.doDummyServerBack(null, upData, null);
 		SingleCommonServer.startSaveClientData();
 	}
+
 	getLogoutTime() {
 		return this._data.userExt.logoutTime;
 	}
@@ -447,10 +452,12 @@ export default class UserModel extends BaseModel {
 		return levelInfo.minCar || 1;
 
 	}
+
 	/** 返回banner序列 */
 	getBannerOrder() {
 		return this._data.leadBanner || 0;
 	}
+
 	isSceneBlack() {
 		return this._data.sceneBlack ? this._data.sceneBlack : 0;
 	}
@@ -474,9 +481,11 @@ export default class UserModel extends BaseModel {
 		}
 		return landNum;
 	}
+
 	getLastSendTime() {
 		return this._data.lastSendTime * 1000;
 	}
+
 	//获取邀请奖励领取状态
 	getInviteRewardStatus(id) {
 		if (!this._data.inviteReward || !this._data.inviteReward[id]) {
@@ -484,6 +493,7 @@ export default class UserModel extends BaseModel {
 		}
 		return this._data.inviteReward[id];
 	}
+
 	//获取首个邀请奖励没有领取的index
 	getFirstNoGetInviteReward() {
 		var data = InviteFunc.instance.getAll();
@@ -496,6 +506,7 @@ export default class UserModel extends BaseModel {
 		}
 		return 0;
 	}
+
 	//判断是否有没有领取的奖励
 	checkNoGetInviteReward() {
 		var shareNum = Object.keys(UserGlobalModel.instance.getInviteInfo()).length;
@@ -516,6 +527,7 @@ export default class UserModel extends BaseModel {
 		}
 		return false;
 	}
+
 	//获取局外商店列表
 	getFogShopGoodsList() {
 		var goodLsit = [];
@@ -536,6 +548,7 @@ export default class UserModel extends BaseModel {
 		}
 		return goodLsit;
 	}
+
 	//获取局外商店的过期时间
 	getFogShopExpireTime() {
 		var data = this.getData();
@@ -546,6 +559,7 @@ export default class UserModel extends BaseModel {
 		var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameUtils.getNextRefreshTByTime(4);
 		return expireTime;
 	}
+
 	//获取迷雾商店种商品得状态
 	getFogShopStatus(index) {
 		var data = this.getData();
@@ -560,6 +574,7 @@ export default class UserModel extends BaseModel {
 		}
 		return data.fogOuterShop.goods[index].status;
 	}
+
 	//获取局外商店
 	getFogShopGoods() {
 		var goodLsit = [];
@@ -570,6 +585,7 @@ export default class UserModel extends BaseModel {
 
 		return data.fogOuterShop.goods;
 	}
+
 	/**获取迷雾币数 */
 	getFogCoinNum() {
 		var data = this.getData();

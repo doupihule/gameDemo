@@ -22,7 +22,7 @@ export default class Global {
 	static isGameDestory: boolean = false;
 
 	public static phoneSys: string = "";
-	
+
 	public static isPhoneBangs: boolean = false;
 	public static gameMode_single: string = "single";
 	public static gameMode_network: string = "network";
@@ -30,7 +30,20 @@ export default class Global {
 	public static updateUserDataDelay: number = 10000
 	//游戏模式  single是单机模式, network是联网模式
 	public static gameMode: string = Global.gameMode_single;
-	private static PHONE_BANGS: any = { "iPhone X": 45, "PACM00": 36, "ANE-AL00": 52, "COL-AL10": 52, "JSN-AL00a": 52, "V1813BA": 52, "PBEM00": 52, "vivo Z3x": 52, "MI 9": 50, "LYA-AL00": 52, "TL00": 52, "GM1910": 52 };
+	private static PHONE_BANGS: any = {
+		"iPhone X": 45,
+		"PACM00": 36,
+		"ANE-AL00": 52,
+		"COL-AL10": 52,
+		"JSN-AL00a": 52,
+		"V1813BA": 52,
+		"PBEM00": 52,
+		"vivo Z3x": 52,
+		"MI 9": 50,
+		"LYA-AL00": 52,
+		"TL00": 52,
+		"GM1910": 52
+	};
 
 
 	private static _deviceId: string;//设备id，由时间戳+ 五位随机数生成
@@ -39,14 +52,13 @@ export default class Global {
 	static windowHeight: number = 1136;
 
 	static sceneId; //场景值
-	static currentSceneId:string;  //当前的场景
-	static firstRunSystemInfo:any = {};	//首次启动数据
+	static currentSceneId: string;  //当前的场景
+	static firstRunSystemInfo: any = {};	//首次启动数据
 	//wx、tt、qq对应的客户端版本号、基础库版本号
 	public static wxVersion: string = "";
 	public static SDKVersion: string = "";
 	/**判断是否为开发者工具 */
 	public static isDevTools: boolean = false;
-
 
 
 	public static setPhoneSys(sysInfo: any): void {
@@ -55,8 +67,7 @@ export default class Global {
 
 		if (phoneModel.indexOf("iPhone") > -1 || phoneModel.indexOf("iPad") > -1) {
 			this.phoneSys = "iphone";
-		}
-		else if (phoneModel.indexOf("Android"))
+		} else if (phoneModel.indexOf("Android"))
 			this.phoneSys = "android";
 
 
@@ -100,8 +111,6 @@ export default class Global {
 	}
 
 
-
-
 	/**获取当前操作系统 */
 	public static getOs() {
 		if (Laya.Browser.onAndroid) {
@@ -124,6 +133,7 @@ export default class Global {
 	}
 
 	public static _isAuthorized: boolean = false;
+
 	/**是否已授权用户信息 */
 	static isAuthorized() {
 		if (!this._isAuthorized) {
@@ -197,13 +207,14 @@ export default class Global {
 			LogsManager.echo("yrc111 reCheckBar top:", top, "    this.height:", ScreenAdapterTools.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools.toolBarWidth)
 		}
 	}
+
 	//判断是否是单机
 	public static checkIsSingleMode() {
 		return this.gameMode == this.gameMode_single;
 	}
 
 	//判断是否使用云存储
-	public static checkUserCloudStorage(){
+	public static checkUserCloudStorage() {
 		return this.gameMode == this.gameMode_single;
 		// return false;
 	}

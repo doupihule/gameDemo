@@ -5,7 +5,6 @@ import BattleFunc from "../../sys/func/BattleFunc";
 import LogsManager from "../../../framework/manager/LogsManager";
 import BattleConst from "../../sys/consts/BattleConst";
 import InstanceBasic from "./InstanceBasic";
-import DisplayUtils from "../../../framework/utils/DisplayUtils";
 import PoolCode from "../../sys/consts/PoolCode";
 import InstanceEffect from "./InstanceEffect";
 import SkillExpandTrigger from "../trigger/SkillExpandTrigger";
@@ -124,7 +123,6 @@ export default class InstanceMove extends InstanceBasic {
 	}
 
 
-
 	//重写执行逻辑函数
 	public doAiLogical() {
 		this.checkMoveEnd();
@@ -144,6 +142,7 @@ export default class InstanceMove extends InstanceBasic {
 
 		this.speed.z = this.setSpeed(this.speed.z, this.addSpeed.z, this.dragForce.z);
 	}
+
 	//设置速度=速度*阻力系数+加速度
 	setSpeed(speedSpace, addSpead, force) {
 		//阻力
@@ -152,6 +151,7 @@ export default class InstanceMove extends InstanceBasic {
 		speedSpace += addSpead;
 		return speedSpace;
 	}
+
 	//重写运动函数 主要是更新坐标
 	movePos() {
 		//stand状态不执行
@@ -175,8 +175,6 @@ export default class InstanceMove extends InstanceBasic {
 		// this.speed.y =0;
 		// this.pos.y = this.landPos;
 	}
-
-
 
 
 	//运动到目标点 ,只针对平面运动,一般是x,y. movePointType 禁止外部调用
@@ -229,6 +227,7 @@ export default class InstanceMove extends InstanceBasic {
 
 		this.checkMoveEnd()
 	}
+
 	//计算运动速度
 	protected countMoveSpeed() {
 		var temp: Laya.Vector3 = BattleFunc.tempPoint;
@@ -249,7 +248,6 @@ export default class InstanceMove extends InstanceBasic {
 	}
 
 
-
 	//根据传递的entity 运动
 	moveToOnePointByEntity(enetity: InstanceMoveEntity, movePointType: number = 1, isGrid: Boolean = false) {
 		var x = enetity.target.x, y = enetity.target.y;
@@ -260,7 +258,6 @@ export default class InstanceMove extends InstanceBasic {
 		this.moveToOnePoint(x, y, enetity.target.z, enetity.spd, enetity.callFunc, enetity.thisObj, enetity.callParams, enetity.expandParams, movePointType);
 
 	}
-
 
 
 	//按一组点去运动
@@ -280,7 +277,6 @@ export default class InstanceMove extends InstanceBasic {
 		}
 		this.moveToOnePointByEntity(param, InstanceMove.moveType_multyPoint, false);
 	}
-
 
 
 	//判断是否到达终点
@@ -384,26 +380,25 @@ export default class InstanceMove extends InstanceBasic {
 	}
 
 
-
 	//-----------------------------创建特效相关----------------------------------------
 	//-----------------------------创建特效相关----------------------------------------
 	//-----------------------------创建特效相关----------------------------------------
 	//创建特效挪到move里面是因为子弹也需要用到这里面的逻辑
 	//特效：  
-    /**
-     *   0   特效名, 
-     *   1   动作序列(默认1),
-     *   2   偏移方式(1,数值,2万分比),
-     *   3   偏移x值,
-     *   4   偏移y值,
-     *   5   显示层级1地面,2角色后面,3角色前面,4所有角色前面 , 5显示在角色前面并跟随
-     *   6   朝向(-1,永远朝左,0 跟随目标的朝向旋转,1永远朝右);
+	/**
+	 *   0   特效名,
+	 *   1   动作序列(默认1),
+	 *   2   偏移方式(1,数值,2万分比),
+	 *   3   偏移x值,
+	 *   4   偏移y值,
+	 *   5   显示层级1地面,2角色后面,3角色前面,4所有角色前面 , 5显示在角色前面并跟随
+	 *   6   朝向(-1,永远朝左,0 跟随目标的朝向旋转,1永远朝右);
          7   播放延迟
          8   循环总时长,
          9   循环开始时间,
          10  循环结束时间,
 		 11  特效总帧数;
-    */
+	 */
 	public createEffByParams(effectParamsArr: any[], isFollow: boolean = false, isLoop: boolean = false, expandParams: any = null, aniSpeed: number = 1) {
 		if (!effectParamsArr || effectParamsArr.length == 0) {
 			return;
@@ -432,6 +427,7 @@ export default class InstanceMove extends InstanceBasic {
 			this.delayCreateEffByParams(params);
 		}
 	}
+
 	private static _defaultViewSize: number[] = [0, 0]
 
 	//延迟创建特效片
@@ -514,14 +510,11 @@ export default class InstanceMove extends InstanceBasic {
 	//清除所有的跟随特效
 	public clearAllFollowEffect() {
 		//销毁所有的特效
-		for (var i = this._followEffGroup.length-1; i >=0; i--) {
+		for (var i = this._followEffGroup.length - 1; i >= 0; i--) {
 			this.controler.destoryEffect(this._followEffGroup[i]);
 		}
 		this._followEffGroup.length = 0;
 	}
-
-
-
 
 
 }

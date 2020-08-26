@@ -10,7 +10,6 @@ export default class FogConst {
 	static FOG_STATUS_COST_FREE_COUNT_LIMIT = 6;
 
 
-
 	//FogMultiRewardUI界面类型
 	static VIEW_TYPE_ITEM_EXCHANGE = 1;//道具满级折算零件
 	static VIEW_TYPE_BOX_REWARD = 2;//宝箱奖励

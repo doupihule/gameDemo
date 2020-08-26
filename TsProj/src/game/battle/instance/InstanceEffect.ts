@@ -14,6 +14,7 @@ export default class InstanceEffect extends InstanceBasic {
 		this.classModel = BattleConst.model_effect;
 		this._followOffset = new Laya.Vector3();
 	}
+
 	public effectName: string;
 	//跟随目标
 	public _followTarget: any;
@@ -40,11 +41,13 @@ export default class InstanceEffect extends InstanceBasic {
 		this._myView.scale(1, 1, true);
 
 	}
+
 	//设置时间缩放
 	public setIgnoreScale() {
 		this.ignoreTimeScale = this.expandParams.ignoreScale;
 		this.setAniPlaySpeed(this._aniPlaySpeed);
 	}
+
 	//设置持续帧数,指定帧数后销毁自己
 	public setLastFrame(frame: number) {
 		this.controler.clearCallBack(this, this.delayClearSelf);
@@ -81,6 +84,7 @@ export default class InstanceEffect extends InstanceBasic {
 		}
 
 	}
+
 	//更新zorder
 	private _updateZorderByTarget() {
 		//如果是
@@ -91,11 +95,13 @@ export default class InstanceEffect extends InstanceBasic {
 		}
 		this.updateViewZorder();
 	}
+
 	public setFollowOffest(ofx: number, ofy: number, ofz: number) {
 		this._followOffset.x = ofx
 		this._followOffset.y = ofy
 		this._followOffset.z = ofz
 	}
+
 	//设置跟随目标
 	public setFollowTarget(target: InstanceBasic, ofx: number, ofy: number, ofz: number, layer: number, withTargetWay: number = 0) {
 		this._followTarget = target;
@@ -129,7 +135,9 @@ export default class InstanceEffect extends InstanceBasic {
 
 
 	}
+
 	private _tweenParams: any;
+
 	//缓动特效
 	private doTweenAniScale() {
 		if (this.expandParams.type != SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT) {
@@ -201,7 +209,6 @@ export default class InstanceEffect extends InstanceBasic {
 		}
 		this._followTarget = null;
 	}
-
 
 
 }

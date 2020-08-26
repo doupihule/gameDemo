@@ -7,7 +7,7 @@ import ShareOrTvManager from "../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "./ShareTvOrderFunc";
 import GameUtils from "../../../utils/GameUtils";
 import RolesFunc from "./RolesFunc";
-import DataResourceFunc, { DataResourceType } from "./DataResourceFunc";
+import {DataResourceType} from "./DataResourceFunc";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
 import ResourceConst from "../consts/ResourceConst";
 import UserModel from "../model/UserModel";
@@ -22,13 +22,11 @@ import WindowManager from "../../../framework/manager/WindowManager";
 import TimerManager from "../../../framework/manager/TimerManager";
 import ScreenAdapterTools from "../../../framework/utils/ScreenAdapterTools";
 import StringUtils from "../../../framework/utils/StringUtils";
-import InstanceMoveMultyEntity from "../../battle/instance/InstanceMoveMultyEntity";
 import FogPropTrigger from "../../fog/trigger/FogPropTrigger";
 import Message from "../../../framework/common/Message";
 import FogEvent from "../event/FogEvent";
 import TaskServer from "../server/TaskServer";
 import WorkModel from "../model/WorkModel";
-
 
 
 /*
@@ -82,28 +80,29 @@ export default class FogFunc extends BaseFunc {
 	//存储所有配表
 	getCfgsPathArr() {
 		return [
-			{ name: "Layer_json" },
-			{ name: "EventsGroup_json" },
-			{ name: "GlobalEvents_json" },
-			{ name: "BusUpGrade_json" },
-			{ name: "Item_json" },
-			{ name: "ItemUpGrade_json" },
-			{ name: "DropGroup_json" },
-			{ name: "Event_json" },
-			{ name: "Shop_json" },
-			{ name: "Box_json" },
-			{ name: "ShopCell_json" },
-			{ name: "Goods_json" },
-			{ name: "Enemy_json" },
-			{ name: "RandomName_json" },
-			{ name: "NpcArray_json" },
-			{ name: "Ai_json" },
-			{ name: "TranslateEvent_json" },
-			{ name: "MarkReward_json" },
-			{ name: "TranslateGoods_json" },
+			{name: "Layer_json"},
+			{name: "EventsGroup_json"},
+			{name: "GlobalEvents_json"},
+			{name: "BusUpGrade_json"},
+			{name: "Item_json"},
+			{name: "ItemUpGrade_json"},
+			{name: "DropGroup_json"},
+			{name: "Event_json"},
+			{name: "Shop_json"},
+			{name: "Box_json"},
+			{name: "ShopCell_json"},
+			{name: "Goods_json"},
+			{name: "Enemy_json"},
+			{name: "RandomName_json"},
+			{name: "NpcArray_json"},
+			{name: "Ai_json"},
+			{name: "TranslateEvent_json"},
+			{name: "MarkReward_json"},
+			{name: "TranslateGoods_json"},
 		];
 
 	}
+
 	private static _instance: FogFunc;
 	//总层数
 	private allLayer;
@@ -123,6 +122,7 @@ export default class FogFunc extends BaseFunc {
 	public static fogBusSpeed;
 	//远征基地技能
 	public static warHomeSkillCd;
+
 	static get instance() {
 		if (!this._instance) {
 			this._instance = new FogFunc();
@@ -130,6 +130,7 @@ export default class FogFunc extends BaseFunc {
 		}
 		return this._instance;
 	}
+
 	//初始化全局参数. 策划配置的数需要转化.而且为了访问方便.
 	public static initGlobalParams() {
 		this.fogRoleScale = GlobalParamsFunc.instance.getDataNum("fogRoleScale") / 10000
@@ -154,10 +155,12 @@ export default class FogFunc extends BaseFunc {
 		}
 		return this.allLayer;
 	}
+
 	//获取迷雾街区开启等级
 	getFogOpenLevel() {
 		return GlobalParamsFunc.instance.getDataNum("fogStreetUnlock") || 1;
 	}
+
 	//判断迷雾街区功能是否开启
 	checkFogOpen() {
 		var fogStreetUnlock = this.getFogOpenLevel();
@@ -169,6 +172,7 @@ export default class FogFunc extends BaseFunc {
 
 		return [false, fogStreetUnlock];
 	}
+
 	//获取迷雾街区的进入状态:1 功能未开启 2 可以直接进入 3 可以免费进入 4 可以视频进入  5 不可进入
 	getFogEnterStatus() {
 		//判断功能是否解锁
@@ -206,6 +210,7 @@ export default class FogFunc extends BaseFunc {
 			return FogConst.FOG_STATUS_COST_VIDEO_COUNT;
 		}
 	}
+
 	/**获取大巴车最大等级 */
 	getBusMaxLevel() {
 		if (!this.busMaxLevel) {
@@ -213,31 +218,39 @@ export default class FogFunc extends BaseFunc {
 		}
 		return this.busMaxLevel;
 	}
+
 	/**根据id获取大巴车数据*/
 	public getBusAttribute(id): any {
 		return this.getCfgDatasByKey("BusUpGrade_json", id, "attribute");
 	}
+
 	/**根据id获取道具info*/
 	public getItemInfo(id: String): any {
 		return this.getCfgDatas("Item_json", id);
 	}
+
 	/**根据id和level获取道具UPinfo*/
 	public getItemUpGradeInfo(id, level): any {
 		return this.getCfgDatasByKey("ItemUpGrade_json", id, level);
 	}
+
 	/**根据id获取掉落奖励*/
 	public getDropGroupReward(id: String): any {
 		return this.getCfgDatasByKey("DropGroup_json", id, "reward");
 	}
+
 	public getShopInfos(id: String): any {
 		return this.getCfgDatasByKey("Shop_json", id, "shopCells");
 	}
+
 	public getShopCells(id: String): any {
 		return this.getCfgDatasByKey("ShopCell_json", id, "shopCells");
 	}
+
 	public getGoodsInfo(id: String): any {
 		return this.getCfgDatas("Goods_json", id);
 	}
+
 	/**随机商店的商品 */
 	genFogShop(shopId) {
 		var goods = [];
@@ -260,9 +273,10 @@ export default class FogFunc extends BaseFunc {
 
 		return goods;
 	}
+
 	/**
-     * 判断是否是数组类型
-     */
+	 * 判断是否是数组类型
+	 */
 	isArray(obj) {
 		return (typeof obj == 'object') && obj.constructor == Array;
 	}
@@ -270,19 +284,23 @@ export default class FogFunc extends BaseFunc {
 	public getEventInfo(id, id1): any {
 		return this.getCfgDatasByKey("Event_json", id, id1);
 	}
+
 	public getEventInfoById(id): any {
 		return this.getCfgDatas("Event_json", id);
 	}
+
 	//获取迷雾币道具得icon
 	getFogItemIcon(itemId) {
 		var itemInfo = FogFunc.instance.getItemInfo(itemId);
 		return "uisource/fogitemicon/fogitemicon/" + itemInfo.icon + ".png";
 	}
+
 	//获取碎片icon
 	getEquipIcon(pieceId) {
 		var pieceInfo = RolesFunc.instance.getCfgDatas("EquipMaterial", pieceId);
 		return "uisource/equipicon/equipicon/" + pieceInfo.icon + ".png";
 	}
+
 	getResourceShowInfo(reward, isSmall = false, moneyExtPer = 1) {
 		var result;
 
@@ -296,7 +314,7 @@ export default class FogFunc extends BaseFunc {
 		if (typeof (reward) == "string") {
 			reward = reward.split(",")
 		}
-		type=Number(reward[0])
+		type = Number(reward[0])
 		switch (Number(reward[0])) {
 			//碎片
 			case DataResourceType.PIECE:
@@ -329,7 +347,8 @@ export default class FogFunc extends BaseFunc {
 			case DataResourceType.GOLD:
 				itemName = TranslateFunc.instance.getTranslate("#tid_gold_name");
 				itemIcon = "uisource/video/video/video_image_zuanshi.png";
-				itemNum = Math.floor(Number(reward[1]) * moneyExtPer);;
+				itemNum = Math.floor(Number(reward[1]) * moneyExtPer);
+				;
 				if (isSmall) {
 					itemScale = 0.5;
 				} else {
@@ -423,7 +442,7 @@ export default class FogFunc extends BaseFunc {
 			desc: itemDesc,
 			scale: itemScale,
 			userNum: userNum,
-			type:type
+			type: type
 		}
 		return result;
 
@@ -550,7 +569,7 @@ export default class FogFunc extends BaseFunc {
 		}
 		if (totalSp != 0) {
 			UserExtModel.instance.changeSp(totalSp);
-			upData["userExt"] = { "sp": UserExtModel.instance.getNowSp() };
+			upData["userExt"] = {"sp": UserExtModel.instance.getNowSp()};
 		}
 		if (totalComp != 0) {
 			fog["comp"] = FogModel.instance.getCompNum() + totalComp;
@@ -561,7 +580,7 @@ export default class FogFunc extends BaseFunc {
 			upData["fog"] = fog;
 		}
 		if (point != 0) {
-			TaskServer.updateTaskPoint({ point: point }, null, null, false)
+			TaskServer.updateTaskPoint({point: point}, null, null, false)
 		}
 		if (repute != 0) {
 			upData["work"] = {
@@ -572,7 +591,7 @@ export default class FogFunc extends BaseFunc {
 		if (Object.keys(pieceTab).length != 0) {
 			var pieces = {};
 			for (var id in pieceTab) {
-				pieces[id] = { count: PiecesModel.instance.getPieceCount(id) + pieceTab[id] };
+				pieces[id] = {count: PiecesModel.instance.getPieceCount(id) + pieceTab[id]};
 			}
 			upData["pieces"] = pieces;
 		}
@@ -595,10 +614,12 @@ export default class FogFunc extends BaseFunc {
 
 		return upData;
 	}
+
 	/**获取地图上的icon显示 */
 	getMapIcon(icon) {
 		return "fog/fog/" + icon + ".png";
 	}
+
 	//根据多组数组获得fog数据变更
 	getFogUpDataByMultiArr(rewardArr = [], isAdd = true) {
 		var upData = {};
@@ -680,7 +701,7 @@ export default class FogFunc extends BaseFunc {
 				UserExtModel.instance.changeSp(-totalSp);
 			}
 
-			upData["userExt"] = { "sp": UserExtModel.instance.getNowSp() };
+			upData["userExt"] = {"sp": UserExtModel.instance.getNowSp()};
 		}
 		if (totalComp != 0) {
 			if (isAdd) {
@@ -703,9 +724,9 @@ export default class FogFunc extends BaseFunc {
 			var pieces = {};
 			for (var id in pieceTab) {
 				if (isAdd) {
-					pieces[id] = { count: PiecesModel.instance.getPieceCount(id) + Number(pieceTab[id]) };
+					pieces[id] = {count: PiecesModel.instance.getPieceCount(id) + Number(pieceTab[id])};
 				} else {
-					pieces[id] = { count: PiecesModel.instance.getPieceCount(id) - Number(pieceTab[id]) };
+					pieces[id] = {count: PiecesModel.instance.getPieceCount(id) - Number(pieceTab[id])};
 				}
 			}
 			upData["pieces"] = pieces;
@@ -737,10 +758,12 @@ export default class FogFunc extends BaseFunc {
 
 		return upData;
 	}
+
 	//获取宝箱info
 	public getBoxInfo(id: String): any {
 		return this.getCfgDatas("Box_json", id);
 	}
+
 	//根据道具id获取能折算的零件
 	getExchangeCompByItem(itemArr = []) {
 		var compNum = 0;
@@ -757,23 +780,28 @@ export default class FogFunc extends BaseFunc {
 
 		return compNum;
 	}
+
 	getRandomNameById(id) {
 		return this.getCfgDatasByKey("RandomName_json", id, "nameType");
 	}
+
 	//获取随机名字
 	getRandomName() {
 		var randomNames = this.getAllCfgData("RandomName_json");
 		var rand = GameUtils.getRandomInt(1, Object.keys(randomNames).length);
 		return TranslateFunc.instance.getTranslate(this.getRandomNameById(rand), "TranslateRandomName");
 	}
+
 	getEnemyCfg(id) {
 		return this.getCfgDatas("Enemy_json", id);
 	}
+
 	//获取敌人的名字
 	getEnemyName() {
 		var enemyName = this.getRandomName();
 		return enemyName;
 	}
+
 	//获取敌人的阵容
 	getEnemyLine(enemyId, type) {
 		var enemyArr = [];
@@ -828,9 +856,9 @@ export default class FogFunc extends BaseFunc {
 	}
 
 	/**
-		 * 获取敌人最高等级的角色
-		 * @param line  阵容
-		 */
+	 * 获取敌人最高等级的角色
+	 * @param line  阵容
+	 */
 	getEnemyHighRole(line) {
 		var highId;
 		var highLevel;
@@ -847,6 +875,7 @@ export default class FogFunc extends BaseFunc {
 		}
 		return highId;
 	}
+
 	/**获取和传入战力最接近的敌人NpcId */
 	getNpcEnemyIdByForce(force) {
 		var cfg = this.getAllCfgData("NpcArray");
@@ -865,6 +894,7 @@ export default class FogFunc extends BaseFunc {
 		}
 		return npcId;
 	}
+
 	//获取npc阵容配置
 	public getNpcArrayInfo(id: String): any {
 		return this.getCfgDatas("NpcArray_json", id);
@@ -884,14 +914,17 @@ export default class FogFunc extends BaseFunc {
 		}
 		return result
 	}
+
 	/**根据方向获取车的图片 */
 	getBusImgByRotate(rotate) {
 		return "fog/fog/fogstreet_bus0" + rotate + ".png"
 	}
+
 	/**根据方向获取出口的图片 */
 	getExitImgByRotate(rotate) {
 		return "fog/fog/fogstreet_box_exit_0" + rotate + ".png"
 	}
+
 	/**根据地块获取地图块的图片 */
 	getMapImgBySign(name, xIndex, yIndex) {
 		var url = "fog/fog/" + name;
@@ -918,6 +951,7 @@ export default class FogFunc extends BaseFunc {
 		url += "_0" + index + ".png";
 		return url;
 	}
+
 	/**获取雾的前缀 */
 	getMaskImgFrontBySign(xIndex, yIndex) {
 		var name = "fog/fog/fogstreet_fog";
@@ -1008,18 +1042,15 @@ export default class FogFunc extends BaseFunc {
 			toPosX = 90;
 			toPosY = Laya.stage.height - 100;
 			cacheItem.scale(0.7, 0.7);
-		}
-		else if (resId == DataResourceType.COMP) {
+		} else if (resId == DataResourceType.COMP) {
 			toPosX = 20;
 			toPosY = 10 + ScreenAdapterTools.toolBarWidth;
 			cacheItem.scale(0.4, 0.4);
-		}
-		else if (resId == DataResourceType.ACT) {
+		} else if (resId == DataResourceType.ACT) {
 			toPosX = 200;
 			toPosY = 10 + ScreenAdapterTools.toolBarWidth;
 			cacheItem.scale(0.4, 0.4);
-		}
-		else {
+		} else {
 			if (toPos) {
 				toPosX = toPos.x;
 				toPosY = toPos.y;
@@ -1052,6 +1083,7 @@ export default class FogFunc extends BaseFunc {
 			TimerManager.instance.add(this.delayFlyItem, this, 10, 1, false, [cacheItem, callBack, thisObj]);
 		}
 	}
+
 	delayFlyItem(cacheItem, callBack = null, thisObj = null) {
 		var initX = cacheItem["cacheParams"].initX;
 		var initY = cacheItem["cacheParams"].initY;
@@ -1063,17 +1095,22 @@ export default class FogFunc extends BaseFunc {
 		cacheItem.x = initX;
 		cacheItem.y = initY;
 
-		Laya.Tween.to(cacheItem, { x: initX + toPosX - globalX, y: initY + toPosY - globalY }, 600, null, Laya.Handler.create(this, () => {
+		Laya.Tween.to(cacheItem, {
+			x: initX + toPosX - globalX,
+			y: initY + toPosY - globalY
+		}, 600, null, Laya.Handler.create(this, () => {
 			this.onItemTweenEnd(cacheItem);
 			callBack && callBack.call(this);
 		}));
 	}
+
 	//缓动结束 移除icon
 	onItemTweenEnd(cacheItem) {
 		cacheItem.removeSelf();
 		Laya.Tween.clearAll(cacheItem);
 		PoolTools.cacheItem(cacheItem.name, cacheItem);
 	}
+
 	//闪烁效果
 	resTwinkleTween(resId, count = 3, callBack = null, thisObj = null) {
 		var obj = WindowManager.getUIByName("FogMainUI");
@@ -1081,11 +1118,9 @@ export default class FogFunc extends BaseFunc {
 		var tweenItem;
 		if (resId == DataResourceType.COMP) {
 			tweenItem = obj.conImg;
-		}
-		else if (resId == DataResourceType.ACT) {
+		} else if (resId == DataResourceType.ACT) {
 			tweenItem = obj.actImg;
-		}
-		else if (resId == DataResourceType.FOGITEM) {
+		} else if (resId == DataResourceType.FOGITEM) {
 			tweenItem = obj.bagBtn;
 		}
 
@@ -1093,8 +1128,8 @@ export default class FogFunc extends BaseFunc {
 		var index = 1;
 		for (var i = 1; i <= count; i++) {
 			TimerManager.instance.setTimeout(() => {
-				Laya.Tween.to(tweenItem, { alpha: 0 }, 300, null, Laya.Handler.create(this, () => {
-					Laya.Tween.to(tweenItem, { alpha: 1 }, 300, null, Laya.Handler.create(this, () => {
+				Laya.Tween.to(tweenItem, {alpha: 0}, 300, null, Laya.Handler.create(this, () => {
+					Laya.Tween.to(tweenItem, {alpha: 1}, 300, null, Laya.Handler.create(this, () => {
 						index++;
 						if (index == count) {
 							Laya.Tween.clearAll(tweenItem);
@@ -1105,6 +1140,7 @@ export default class FogFunc extends BaseFunc {
 			}, this, (i - 1) * 600);
 		}
 	}
+
 	//获得道具动画
 	getFogItemTween(resId = DataResourceType.FOGITEM, itemId, fromX = null, fromY = null, delay = 0, fromUI = null) {
 		//默认是FogMain界面
@@ -1131,6 +1167,7 @@ export default class FogFunc extends BaseFunc {
 			fogMainUI.itemName.text = "";
 		}, this);
 	}
+
 	//获得货币动画
 	getFogResTween(resId, value, fromX = null, fromY = null, delay = 0, fromUI = null) {
 		//默认是FogMain界面
@@ -1151,13 +1188,14 @@ export default class FogFunc extends BaseFunc {
 		//资源文本滚动
 		this.resTxtTween(resId, value);
 	}
+
 	//数字跳动
 	resTxtTween(resId, value) {
 		var thisObj = WindowManager.getUIByName("FogMainUI");
 
 		if (resId == DataResourceType.COMP) {
 			thisObj.conNum.scaleX = thisObj.conNum.scaleY = 1;
-			Laya.Tween.to(thisObj.conNum, { scaleX: 1.3, scaleY: 1.3 }, 100, null, Laya.Handler.create(this, () => {
+			Laya.Tween.to(thisObj.conNum, {scaleX: 1.3, scaleY: 1.3}, 100, null, Laya.Handler.create(this, () => {
 				thisObj.conNum.text = StringUtils.getCoinStr(FogModel.instance.getCompNum() + "");
 				thisObj.conNum.color = "#02a43c";
 				//刷新大巴车购买红点
@@ -1169,10 +1207,9 @@ export default class FogFunc extends BaseFunc {
 				thisObj.conNum.color = "#000000";
 			}, this, 600);
 
-		}
-		else if (resId == DataResourceType.ACT) {
+		} else if (resId == DataResourceType.ACT) {
 			thisObj.actNum.scaleX = thisObj.actNum.scaleY = 1;
-			Laya.Tween.to(thisObj.actNum, { scaleX: 1.3, scaleY: 1.3 }, 100, null, Laya.Handler.create(this, () => {
+			Laya.Tween.to(thisObj.actNum, {scaleX: 1.3, scaleY: 1.3}, 100, null, Laya.Handler.create(this, () => {
 				thisObj.actNum.text = StringUtils.getCoinStr(FogModel.instance.getActNum() + "");
 				thisObj.actNum.color = "#02a43c";
 			}));
@@ -1182,6 +1219,7 @@ export default class FogFunc extends BaseFunc {
 			}, this, 600);
 		}
 	}
+
 	//飘奖励
 	flyResTween(rewardArr, fromX = null, fromY = null, fromUI = null) {
 		var resId;
@@ -1195,12 +1233,10 @@ export default class FogFunc extends BaseFunc {
 			if (resId == DataResourceType.FOGITEM) {
 				FogFunc.instance.getFogItemTween(resId, value, fromX, fromY, index * 150, fromUI);
 				index++;
-			}
-			else if (resId == DataResourceType.ACT || resId == DataResourceType.COMP) {
+			} else if (resId == DataResourceType.ACT || resId == DataResourceType.COMP) {
 				FogFunc.instance.getFogResTween(resId, value, fromX, fromY, index * 150, fromUI);
 				index++;
-			}
-			else {
+			} else {
 				oherRewardArr.push(rewardArr[i]);
 			}
 		}
@@ -1209,6 +1245,7 @@ export default class FogFunc extends BaseFunc {
 			this.getOtherFogRewardTween(oherRewardArr[i], i, fromX, fromY, fromUI);
 		}
 	}
+
 	createResItem(reward, index, fromUI = null) {
 		//底框
 		var item = new Laya.Image("uisource/expedition/expedition/expedition_image_di.png");
@@ -1287,7 +1324,7 @@ export default class FogFunc extends BaseFunc {
 		//播放item动画：在地图左上侧弹出；如果同时获得多个奖励，的弹出多个弹出条，按顺序向下排列
 		TimerManager.instance.setTimeout(() => {
 			//出现
-			Laya.Tween.to(item, { x: 0 }, 100, null, Laya.Handler.create(this, () => {
+			Laya.Tween.to(item, {x: 0}, 100, null, Laya.Handler.create(this, () => {
 				//飘资源
 				var fromx;
 				var fromy;
@@ -1307,7 +1344,7 @@ export default class FogFunc extends BaseFunc {
 				var toPosY = toPosGlobal.y;
 
 				this.flyToMainIcon(Number(reward[0]), Number(reward[1]), fromx, fromy, 0,
-					fromUI, { "x": toPosX, "y": toPosY }, () => {
+					fromUI, {"x": toPosX, "y": toPosY}, () => {
 						this.txtTween(item, userNum, addResNum);
 					}, this);
 			}));
@@ -1319,7 +1356,7 @@ export default class FogFunc extends BaseFunc {
 		var resNum = item.getChildByName("resNum") as Laya.Text;
 		var addNum = item.getChildByName("addNum") as Laya.Text;
 		resNum.scaleX = resNum.scaleY = 1;
-		Laya.Tween.to(resNum, { scaleX: 1.3, scaleY: 1.3 }, 100, null, Laya.Handler.create(this, () => {
+		Laya.Tween.to(resNum, {scaleX: 1.3, scaleY: 1.3}, 100, null, Laya.Handler.create(this, () => {
 			resNum.text = StringUtils.getCoinStr(userNum);
 			resNum.color = "#02a43c";
 			addNum.visible = false;
@@ -1329,12 +1366,13 @@ export default class FogFunc extends BaseFunc {
 			resNum.color = "#000000";
 		}, this, 600);
 		TimerManager.instance.setTimeout(() => {
-			Laya.Tween.to(item, { x: -50 }, 100, null, Laya.Handler.create(this, () => {
+			Laya.Tween.to(item, {x: -50}, 100, null, Laya.Handler.create(this, () => {
 				Laya.Tween.clearAll(item);
 				item.removeSelf();
 			}));
 		}, this, 800);
 	}
+
 	//将奖励数组转换成table： rewardArr:[[], [], []]
 	vertRewardArrToTable(rewardArr) {
 		var reward = {};
@@ -1408,6 +1446,7 @@ export default class FogFunc extends BaseFunc {
 
 		return reward;
 	}
+
 	//将奖励Table转换成数组
 	vertRewardTableToArr(reward) {
 		var rewardArr = [];
@@ -1421,8 +1460,7 @@ export default class FogFunc extends BaseFunc {
 							rewardArr.push([resId, id, items[id]]);
 						}
 					}
-				}
-				else {
+				} else {
 					rewardArr.push([resId, reward[resId]]);
 				}
 			}
@@ -1430,6 +1468,7 @@ export default class FogFunc extends BaseFunc {
 
 		return rewardArr;
 	}
+
 	//道具总积分
 	getItemScore() {
 		var score = 0;
@@ -1445,10 +1484,12 @@ export default class FogFunc extends BaseFunc {
 
 		return score;
 	}
+
 	//事件总积分
 	getEventScore() {
 		return FogModel.instance.getCountsById(FogConst.fog_finish_event_score);
 	}
+
 	//获得总积分
 	getScore() {
 		// 总积分 = 本局最大层数 * A + 本局累计获得局内代币数量 * B + 本局道具总积分 + 本局事件总积分
@@ -1493,6 +1534,7 @@ export default class FogFunc extends BaseFunc {
 
 		return [rewardCoin, rewardFogCoin];
 	}
+
 	//判断是否有满级的道具
 	hasItemFullLevel() {
 		var itemArr = [];
@@ -1516,6 +1558,7 @@ export default class FogFunc extends BaseFunc {
 
 		return [false];
 	}
+
 	getRandomRoleId(index) {
 		var roleId = "";
 		//从随机池中取前两个角色
@@ -1538,6 +1581,7 @@ export default class FogFunc extends BaseFunc {
 		return roleId;
 
 	}
+
 	//初始化迷雾开场用的角色
 	initFogRoles() {
 		var roleIdResultList = [];
@@ -1561,8 +1605,7 @@ export default class FogFunc extends BaseFunc {
 			for (var i = 0; i < roleIdList.length; i++) {
 				roleIdResultList.push(roleIdList[i]);
 			}
-		}
-		else if (firstRoleId != "" && secondRoleId == "") {
+		} else if (firstRoleId != "" && secondRoleId == "") {
 			roleIdList = FogModel.instance.randomRoleIdList(2, [firstRoleId]);
 			if (roleIdList.length > 0) {
 				var tempArr = [];
@@ -1576,11 +1619,9 @@ export default class FogFunc extends BaseFunc {
 				}
 				roleIdResultList = tempArr;
 			}
-		}
-		else if (firstRoleId != "" && secondRoleId != "") {
+		} else if (firstRoleId != "" && secondRoleId != "") {
 			roleIdResultList.push(FogModel.instance.randomRoleIdList(1, [firstRoleId, secondRoleId])[0]);
-		}
-		else {
+		} else {
 			roleIdResultList = FogModel.instance.randomRoleIdList(3);
 		}
 

@@ -2,26 +2,27 @@ import BaseFunc from "../../../framework/func/BaseFunc";
 
 export default class SupplyBoxFunc extends BaseFunc {
 
-    getCfgsPathArr() {
-        return [
-            { name: "LevelBox_json" },
-        ];
-    }
-    static _instance: SupplyBoxFunc;
-    static get instance() {
-        if (!this._instance) {
-            this._instance = new SupplyBoxFunc();
-        }
-        return this._instance;
-    }
+	getCfgsPathArr() {
+		return [
+			{name: "LevelBox_json"},
+		];
+	}
 
-    private _dataArr: any[] = null;
+	static _instance: SupplyBoxFunc;
+	static get instance() {
+		if (!this._instance) {
+			this._instance = new SupplyBoxFunc();
+		}
+		return this._instance;
+	}
 
-    getInfo() {
-        return this.getAllCfgData("LevelBox_json");
-    }
+	private _dataArr: any[] = null;
 
-    getInfoByArenaId(arenaId) {
-        return this.getCfgDatas("LevelBox_json", arenaId);
-    }
+	getInfo() {
+		return this.getAllCfgData("LevelBox_json");
+	}
+
+	getInfoByArenaId(arenaId) {
+		return this.getCfgDatas("LevelBox_json", arenaId);
+	}
 }

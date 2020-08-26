@@ -3,26 +3,21 @@ import LogsManager from "../../../framework/manager/LogsManager";
 import GameConsts from "../consts/GameConsts";
 import BattleConst from "../consts/BattleConst";
 import GlobalParamsFunc from "./GlobalParamsFunc";
-import TableUtils from "../../../framework/utils/TableUtils";
-import { FORMERR } from "dns";
 import AttributeExtendData from "../../battle/data/AttributeExtendData";
 import GameSwitch from "../../../framework/common/GameSwitch";
-import DisplayUtils from "../../../framework/utils/DisplayUtils";
 import UserInfo from "../../../framework/common/UserInfo";
-import ResourceManager from "../../../framework/manager/ResourceManager";
 import BattleRoleView from "../../battle/view/BattleRoleView";
 import UserExtModel from "../model/UserExtModel";
 import ShareOrTvManager from "../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "./ShareTvOrderFunc";
 import WindowManager from "../../../framework/manager/WindowManager";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
-import { WindowCfgs } from "../consts/WindowCfgs";
-import { DataResourceType } from "./DataResourceFunc";
+import {WindowCfgs} from "../consts/WindowCfgs";
+import {DataResourceType} from "./DataResourceFunc";
 import UserModel from "../model/UserModel";
 import RolesModel from "../model/RolesModel";
 import FogFunc from "./FogFunc";
 import RolesFunc from "./RolesFunc";
-
 
 
 export default class BattleFunc extends BaseFunc {
@@ -62,9 +57,9 @@ export default class BattleFunc extends BaseFunc {
 	public static critDamgeRatio: number = 2;
 	//最低伤害比例
 	public static minDamageRatio: number = 0.01;
-	
+
 	//迷雾战斗复活恢复的能量
-	public static fogBattleRecover:number=0.1;
+	public static fogBattleRecover: number = 0.1;
 
 	//大数单位.战斗也缓存一个.提高读取效率
 	public static reducedUnitArr: string[];
@@ -93,9 +88,10 @@ export default class BattleFunc extends BaseFunc {
 	//角色死亡微振动次数
 	public static diedShockCount: number = 3;
 
-	public static leftAniTime:number=5;
+	public static leftAniTime: number = 5;
 	/**超时复活的被动 */
 	public static overTimePassiveSkill;
+
 	//返回属性的样式 1是数值型 2是比例型
 	static getPropStyle(id: string) {
 		var info = this.idToShowMap[id]
@@ -142,11 +138,10 @@ export default class BattleFunc extends BaseFunc {
 	public static tempObject4: any = {};
 
 	//临时矩形
-	public static tempRect: any = { x: 0, y: 0, width: 0, height: 0 };
-	public static tempRect2: any = { x: 0, y: 0, width: 0, height: 0 };
+	public static tempRect: any = {x: 0, y: 0, width: 0, height: 0};
+	public static tempRect2: any = {x: 0, y: 0, width: 0, height: 0};
 	//临时的圆
-	public static tempCircle: any = { r: 0, x: 0, y: 0 };
-
+	public static tempCircle: any = {r: 0, x: 0, y: 0};
 
 
 	//记录一个临时点 战斗逻辑中间使用的过渡点
@@ -164,12 +159,14 @@ export default class BattleFunc extends BaseFunc {
 	/**从战斗返回主界面 */
 	static fromBattleMain;
 	static _cacheTempArr: any[] = [];
+
 	static getOneTempArr(): any[] {
 		if (this._cacheTempArr.length == 0) {
 			return []
 		}
 		return this._cacheTempArr.shift()
 	}
+
 	//缓存一个tempArr 把长度设置为0
 	static cacheOneTempArr(value: any[]) {
 		value.length = 0;
@@ -195,6 +192,7 @@ export default class BattleFunc extends BaseFunc {
 	static curBattleType = 1;
 	/**当前战斗状态 */
 	static curGameState;
+
 	static get instance() {
 		if (!this._instance) {
 			this._instance = new BattleFunc();
@@ -216,7 +214,6 @@ export default class BattleFunc extends BaseFunc {
 		super();
 
 	}
-
 
 
 	//获取角色对应的数据
@@ -255,7 +252,7 @@ export default class BattleFunc extends BaseFunc {
 	// type 1是小兵, 2是英雄 
 	// isForceModifyBody  是否需要强制修改角色的皮肤为9
 	//tag表示当前动画 在哪个ui. 用来做统计筛选的
-	public createRoleSpine(roleId: string, level, type, targetScale: number = 0.25, isShowShade = true, isForceModifyBody = false,uiTag="") {
+	public createRoleSpine(roleId: string, level, type, targetScale: number = 0.25, isShowShade = true, isForceModifyBody = false, uiTag = "") {
 		var cfgs = this.getCfgDatas("Role", roleId);
 		var spineName = cfgs.spine[0];
 		var roleUpdateInfo = this.getCfgDatasByKey("RoleUpdate", roleId, level);
@@ -265,7 +262,7 @@ export default class BattleFunc extends BaseFunc {
 		}
 
 		var animode = index == 0 && 0 || 1
-		var sp = new BattleRoleView(spineName, targetScale, index,uiTag);
+		var sp = new BattleRoleView(spineName, targetScale, index, uiTag);
 		if (isShowShade) {
 			var size = roleUpdateInfo.size;
 			var width = Number(size[1]);
@@ -277,6 +274,7 @@ export default class BattleFunc extends BaseFunc {
 		return sp;
 
 	}
+
 	//---------------------------------------------计算属性相关----------------------------------------
 	//---------------------------------------------计算属性相关----------------------------------------
 	//---------------------------------------------计算属性相关----------------------------------------
@@ -307,7 +305,10 @@ export default class BattleFunc extends BaseFunc {
 
 	//把配表数组转化成 table,  [ ["1","200","300"] ,....]-> { "1":[200,300], "2":[300,400],... } 注意所有的属性id必须是字符串
 	public turnPropArrToTable(propArr, outTable = null) {
-		if (!outTable) { outTable = {} };
+		if (!outTable) {
+			outTable = {}
+		}
+		;
 		if (!propArr) {
 			LogsManager.errorTag("properror", "没有传入属性数据")
 			return outTable;
@@ -329,13 +330,10 @@ export default class BattleFunc extends BaseFunc {
 	}
 
 
-
-
-
 	//--------------------------------------------------------------------------------------------------------------
 	//--------------------------------------缓存数据-----------------------------------------------------------------
 	//--------------------------------------------------------------------------------------------------------------
-	private _cacheCfgMap: any = { baseAttr: {}, addAttr: {}, advanceAttr: {}, rebornAttr: {} }
+	private _cacheCfgMap: any = {baseAttr: {}, addAttr: {}, advanceAttr: {}, rebornAttr: {}}
 
 	//获取缓存的baseAttr. 是为了提高性能节省内存,避免重复copy
 	public getCacheBaseAttr(attrId: string) {
@@ -345,6 +343,7 @@ export default class BattleFunc extends BaseFunc {
 		return this._cacheCfgMap.baseAttr[attrId]
 
 	}
+
 	//获取缓存的addAttr
 	public getCacheAddAttr(attrId: string) {
 		if (!this._cacheCfgMap.addAttr[attrId]) {
@@ -353,6 +352,7 @@ export default class BattleFunc extends BaseFunc {
 		return this._cacheCfgMap.addAttr[attrId]
 
 	}
+
 	//获取缓存的 advance
 	public getCacheAdvanceAttr(roleId: string, advance: string) {
 		var key = roleId + "_" + advance;
@@ -431,9 +431,9 @@ export default class BattleFunc extends BaseFunc {
 		this.buildAutoFrame = BattleFunc.instance.turnMinisecondToframe(Number(buildAutoHp[0]))
 		this.deadLastFrame = BattleFunc.instance.turnMinisecondToframe(GlobalParamsFunc.instance.getDataNum("pylonStartXLocation"))
 		this.buildingAutoReduceHp = Number(buildAutoHp[1]);
-		this.fogBattleRecover = GlobalParamsFunc.instance.getDataNum("fogResurrectionEnergy")/10000;
-		this.leftAniTime=GlobalParamsFunc.instance.getDataNum("battleEndWarnTime")/1000;
-		this.overTimePassiveSkill=GlobalParamsFunc.instance.getDataNum("battleOvertimeBuff");
+		this.fogBattleRecover = GlobalParamsFunc.instance.getDataNum("fogResurrectionEnergy") / 10000;
+		this.leftAniTime = GlobalParamsFunc.instance.getDataNum("battleEndWarnTime") / 1000;
+		this.overTimePassiveSkill = GlobalParamsFunc.instance.getDataNum("battleOvertimeBuff");
 
 		this.idToShowMap = cfg;
 		this.initFrameDates();
@@ -448,7 +448,6 @@ export default class BattleFunc extends BaseFunc {
 				GameSwitch.switchMap.SWITCH_BATTLE_DEBUGLEVEL = str;
 			}
 		}
-
 
 
 	}
@@ -468,7 +467,7 @@ export default class BattleFunc extends BaseFunc {
 			if (freeType == ShareOrTvManager.TYPE_QUICKRECEIVE) {
 				WindowManager.ShowTip(TranslateFunc.instance.getTranslate("#tid_battle_noenoughsp"));
 			} else {
-				WindowManager.OpenUI(WindowCfgs.FreeResourceUI, { type: DataResourceType.SP });
+				WindowManager.OpenUI(WindowCfgs.FreeResourceUI, {type: DataResourceType.SP});
 			}
 			return true;
 		}
@@ -486,6 +485,7 @@ export default class BattleFunc extends BaseFunc {
 		}
 		return false;
 	}
+
 	/**进入战斗引导 */
 	IshowGuide_204() {
 		//大于一关就不引导进入游戏了 并且没有进行过该步引导  该步是第四步
@@ -494,6 +494,7 @@ export default class BattleFunc extends BaseFunc {
 		}
 		return false;
 	}
+
 	//检测迷雾街区功能开启引导
 	IshowGuide_501() {
 		if (UserModel.instance.getMainGuide() < 9 && UserModel.instance.getMaxBattleLevel() >= FogFunc.instance.getFogOpenLevel()) {
@@ -501,6 +502,7 @@ export default class BattleFunc extends BaseFunc {
 		}
 		return false;
 	}
+
 	IshowUnlockGuide() {
 		var isShow = false;
 		var curLevel = UserExtModel.instance.getMaxLevel();

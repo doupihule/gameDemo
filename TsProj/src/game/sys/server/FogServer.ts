@@ -1,17 +1,15 @@
-import { DataResourceType } from "../func/DataResourceFunc";
+import {DataResourceType} from "../func/DataResourceFunc";
 import FogModel from "../model/FogModel";
 import SingleCommonServer from "../../../framework/server/SingleCommonServer";
 import Client from "../../../framework/common/kakura/Client";
 import FogFunc from "../func/FogFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
 import BigNumUtils from "../../../framework/utils/BigNumUtils";
 import GameHttpControler from "../../../framework/common/GameHttpControler";
 import Method from "../common/kakura/Method";
 import FogConst from "../consts/FogConst";
 import WindowManager from "../../../framework/manager/WindowManager";
-import { WindowCfgs } from "../consts/WindowCfgs";
+import {WindowCfgs} from "../consts/WindowCfgs";
 import StatisticsManager from "../manager/StatisticsManager";
-import { isatty } from "tty";
 import TaskServer from "./TaskServer";
 import TaskConditionTrigger from "../trigger/TaskConditionTrigger";
 import FogPropTrigger from "../../fog/trigger/FogPropTrigger";
@@ -43,6 +41,7 @@ export default class FogServer {
 		SingleCommonServer.startSaveClientData();
 
 	}
+
 	/**初始化格子数据 */
 	static initCellInfo(data, callBack = null, thisObj = null, isAsyc = false) {
 		var upData = {};
@@ -69,6 +68,7 @@ export default class FogServer {
 			SingleCommonServer.startSaveClientData();
 		}
 	}
+
 	/**设置全局事件 */
 	static setGlobalEvent(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -81,6 +81,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	/**初始化事件 */
 	static initCellEvent(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -93,6 +94,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	/**删除格子上的事件 */
 	static delCellEvent(data, callBack = null, thisObj = null, isAsyc = false) {
 		var deData = {};
@@ -111,6 +113,7 @@ export default class FogServer {
 			SingleCommonServer.startSaveClientData();
 		}
 	}
+
 	/**添加格子上的事件 */
 	static addCellEvent(data, callBack = null, thisObj = null, isAsyc = false) {
 		var upData = {};
@@ -169,6 +172,7 @@ export default class FogServer {
 			SingleCommonServer.startSaveClientData();
 		}
 	}
+
 	/**开启格子 */
 	static openCell(data, callBack = null, thisObj = null, isAsyc = false) {
 		var upData = {};
@@ -183,6 +187,7 @@ export default class FogServer {
 			SingleCommonServer.startSaveClientData();
 		}
 	}
+
 	/**删除格子上的数据 */
 	static delCellInfo(data, callBack = null, thisObj = null, isAsyc = false) {
 		var deData = {};
@@ -197,6 +202,7 @@ export default class FogServer {
 			SingleCommonServer.startSaveClientData();
 		}
 	}
+
 	//初始设置阵容
 	static setInline(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -223,6 +229,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	//升级大巴车
 	static upgradeBus(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -251,6 +258,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	/**设置bus的位置 */
 	static setBusPos(data, callBack = null, thisObj = null, isAsyc = true) {
 		var upData = {};
@@ -268,6 +276,7 @@ export default class FogServer {
 			SingleCommonServer.startSaveClientData();
 		}
 	}
+
 	//更新局内商店数据
 	static updateShopGoods(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -345,6 +354,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	//黑市商店领取或者购买
 	static businessBuy(data, callBack = null, thisObj = null) {
 		var deData = {};
@@ -382,6 +392,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	//二选一事件选择奖励
 	static chooseReward(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -394,13 +405,13 @@ export default class FogServer {
 		upData = FogFunc.instance.getFogUpdata(reward, cost);
 
 
-
 		var backData = Client.instance.doDummyServerBack(null, upData, deData);
 		if (callBack) {
 			callBack.call(thisObj, backData);
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	//消耗行动力继续答题
 	static continueAnswer(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -419,6 +430,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	//上交东西
 	static handIn(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -434,6 +446,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	//领取奖励
 	static getReward(data, callBack = null, thisObj = null, isAsyc = true) {
 		var upData = {};
@@ -452,6 +465,7 @@ export default class FogServer {
 			SingleCommonServer.startSaveClientData();
 		}
 	}
+
 	//扣除行动力
 	static costAct(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -470,6 +484,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	//获得免费行动力
 	static getFreeAct(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -494,6 +509,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	/**同步战力 */
 	static syncForce(data, callBack = null, thisObj = null) {
 		var params: any = {
@@ -501,6 +517,7 @@ export default class FogServer {
 		}
 		GameHttpControler.instance.sendRequest(Method.Fog_syncForce, params, callBack, thisObj);
 	}
+
 	/**获取敌人列表 */
 	static getEnemyList(data, callBack = null, thisObj = null) {
 		var params: any = {
@@ -509,6 +526,7 @@ export default class FogServer {
 		}
 		GameHttpControler.instance.sendRequest(Method.Fog_randomEnemy, params, callBack, thisObj);
 	}
+
 	/**退出迷雾 */
 	static exitGame() {
 		var deData = {};
@@ -528,8 +546,9 @@ export default class FogServer {
 		SingleCommonServer.startSaveClientData();
 		FogFunc.fogEndCellSign = null
 	}
+
 	/**设置最高层 */
-	static setMaxLayer(){
+	static setMaxLayer() {
 		var upData = {};
 		var layer = FogModel.instance.getCurLayer() + 1;
 		var allLayer = FogFunc.instance.getAllLayer();
@@ -545,6 +564,7 @@ export default class FogServer {
 		var backData = Client.instance.doDummyServerBack(null, upData, null);
 		SingleCommonServer.startSaveClientData();
 	}
+
 	/**进入下一层 */
 	static enterNextLayer(data, callBack = null, thisObj = null) {
 		var deData = {};
@@ -574,9 +594,13 @@ export default class FogServer {
 		if (callBack) {
 			callBack.call(thisObj, backData);
 		}
-		TaskServer.updateTaskProcess({ logicType: TaskConditionTrigger.taskCondition_fogHighLayer, count: layer }, null, null, false)
+		TaskServer.updateTaskProcess({
+			logicType: TaskConditionTrigger.taskCondition_fogHighLayer,
+			count: layer
+		}, null, null, false)
 		SingleCommonServer.startSaveClientData();
 	}
+
 	/**消耗行动力带走角色 */
 	static takenRole(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -603,6 +627,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	/**更新敌人状态 */
 	static updateEnemyState(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -619,6 +644,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	//保存玩家类敌人数据
 	static savePlayerEnemyData(data = {}, callBack = null, thisObj = null) {
 		var upData = {};
@@ -641,7 +667,7 @@ export default class FogServer {
 				tempEnemyTab = data[id];
 				var enemyDetail = {};
 				enemyDetail["roles"] = tempEnemyTab.roles;
-				enemyDetail["userExt"] = { "force": tempEnemyTab.userExt.force };
+				enemyDetail["userExt"] = {"force": tempEnemyTab.userExt.force};
 				enemyDetail["name"] = FogFunc.instance.getEnemyName();
 				enemy[id] = enemyDetail;
 			}
@@ -656,6 +682,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	//保存fog奖励数据
 	static saveFogReward(data, callBack = null, thisObj = null, isAsyc = true) {
 		var upData = {};
@@ -752,7 +779,7 @@ export default class FogServer {
 				}
 				itemData[itemId] = num;
 				//获得局内道具打点
-				StatisticsManager.ins.onEvent(StatisticsManager.FOG_ITEM_GET, { "itemId": itemId });
+				StatisticsManager.ins.onEvent(StatisticsManager.FOG_ITEM_GET, {"itemId": itemId});
 			}
 			reward[DataResourceType.FOGITEM] = itemData;
 		}
@@ -771,9 +798,10 @@ export default class FogServer {
 
 		//判断道具是否满级
 		if (levelFullItemArr.length != 0) {
-			WindowManager.OpenUI(WindowCfgs.FogBagItemFullLevelUI, { "item": levelFullItemArr });
+			WindowManager.OpenUI(WindowCfgs.FogBagItemFullLevelUI, {"item": levelFullItemArr});
 		}
 	}
+
 	/**更新次数 */
 	static updateFogCount(data, callBack = null, thisObj = null, isAsyc = false) {
 		var upData = {};
@@ -790,6 +818,7 @@ export default class FogServer {
 			SingleCommonServer.startSaveClientData();
 		}
 	}
+
 	/**删除某个的次数 */
 	static delFogCount(data, callBack = null, thisObj = null, isAsyc = false) {
 		var deData = {};
@@ -806,6 +835,7 @@ export default class FogServer {
 			SingleCommonServer.startSaveClientData();
 		}
 	}
+
 	//道具满级兑换
 	static exchangeComp(data, callBack = null, thisObj = null) {
 		var upData = {};
@@ -835,6 +865,7 @@ export default class FogServer {
 		}
 		SingleCommonServer.startSaveClientData();
 	}
+
 	/**道具消耗 */
 	static itemCost(data, callBack = null, thisObj = null) {
 		var upData = {};

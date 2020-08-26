@@ -5,8 +5,6 @@ import RefreshControler from "./RefreshControler";
 import BattleConst from "../../sys/consts/BattleConst";
 import GameConsts from "../../sys/consts/GameConsts";
 import BattleTweenControler from "./BattleTweenControler";
-import InstanceLife from "../instance/InstanceLife";
-import InstanceEffect from "../instance/InstanceEffect";
 import LogsManager from "../../../framework/manager/LogsManager";
 import InstanceLogical from "../instance/InstanceLogical";
 import PerformanceControler from "./PerformanceControler";
@@ -15,8 +13,8 @@ import InstancePlayer from "../instance/InstancePlayer";
 import BattleDebugTool from "./BattleDebugTool";
 
 /**
- * 游戏的控制器 基类. 
- * 是一个中枢. 
+ * 游戏的控制器 基类.
+ * 是一个中枢.
  * 保证游戏所有对象都能通过controler 访问到.
  */
 export default class BattleControler {
@@ -50,14 +48,14 @@ export default class BattleControler {
 	protected _leftFrameDt: number = 0;
 
 	/**
-	 * 
+	 *
 	 * id:{
 	 * 	callBack, 回调函数
 	 * 	thisObj, 回调对象
 	 * 	params,  额外的回调参数
 	 * 	frame,  剩余时间  -1表示无限时间 >0表示剩余帧数
 	 * }
-	 * 
+	 *
 	 */
 	protected updateCallFuncGroup: any;
 	protected callFuncNums: number = 0;
@@ -77,7 +75,7 @@ export default class BattleControler {
 	 *   }
 	 * 
 	 * }
-	 * 
+	 *
 	 */
 	protected _timeList: any[];
 
@@ -96,8 +94,8 @@ export default class BattleControler {
 	public stillFrame: number = 0;
 
 	//游戏加速倍率 默认是1
-	public updateScale:number =1;
-	private _leftScaleFrame:number =0;	//剩余要追scale的帧数
+	public updateScale: number = 1;
+	private _leftScaleFrame: number = 0;	//剩余要追scale的帧数
 	//战斗调试器
 	public battleDebugTool: BattleDebugTool;
 
@@ -115,18 +113,18 @@ export default class BattleControler {
 		this.tweenControler = new BattleTweenControler(this);
 		this.battleDebugTool = new BattleDebugTool(this);
 		this.updateScale = BattleDebugTool.getBattleAddSped();
-		if(!this.updateScale){
-			this.updateScale =1;
+		if (!this.updateScale) {
+			this.updateScale = 1;
 		}
-		
+
 	}
 
 	protected onceUpdateFrame() {
 
 		/**
-		 * 这里做追帧逻辑. 原因: 计算2帧时间间隔. 如果超过1帧时间 .把时间差记录下来.累积时间差超过1帧会额外做一次逻辑update. 
+		 * 这里做追帧逻辑. 原因: 计算2帧时间间隔. 如果超过1帧时间 .把时间差记录下来.累积时间差超过1帧会额外做一次逻辑update.
 		 * 主要针对特别卡的设备. 比如iphone5s
-		 * 
+		 *
 		 */
 		var currentT = Laya.Browser.now();
 		var dt = currentT - this._lastFrameTime;
@@ -138,19 +136,19 @@ export default class BattleControler {
 		var nums = Math.floor(this._leftFrameDt / this._oneFrameDt);
 		this._leftFrameDt -= nums * this._oneFrameDt;
 		for (var i = 0; i < nums; i++) {
-			
-			if(this.updateScale == 1){
+
+			if (this.updateScale == 1) {
 				this.updateFrame();
-			} else{
-				this._leftScaleFrame +=this.updateScale;
-				var s=0;
-				for(s=0;s<this._leftScaleFrame;s++){
+			} else {
+				this._leftScaleFrame += this.updateScale;
+				var s = 0;
+				for (s = 0; s < this._leftScaleFrame; s++) {
 					this.updateFrame();
 				}
 				this._leftScaleFrame -= s;
 			}
-			
-			
+
+
 		}
 	}
 
@@ -211,6 +209,7 @@ export default class BattleControler {
 		this.sortOneArr(this._allInstanceArr);
 
 	}
+
 	//每一秒更新一次所有对象的zorder
 	private sortOneArr(campArr) {
 		for (var i = 0; i < campArr.length; i++) {
@@ -394,15 +393,16 @@ export default class BattleControler {
 		obj.doApplyOrCall = doApplyOrCall;
 		this._timeList.push(obj);
 	}
+
 	/**
-	 * 设置持续回调 
+	 * 设置持续回调
 	 * @param delay  延迟帧数
 	 * @param interval  间隔帧数
 	 * @param times  执行次数 -1表示永久. 必须手动清除
 	 * @param callBack  回调
 	 * @param thisObj  作用指针
 	 * @param params  回调附带参数
-	 * @param doApplyOrCall 
+	 * @param doApplyOrCall
 	 */
 	public setLastCallBack(delay: number, interval: number, times: number, callBack: any, thisObj: any, params: any = null, endCallBack: any = null, endParams: any = null, doApplyOrCall = false) {
 		if (delay == null || isNaN(delay)) {
@@ -446,7 +446,6 @@ export default class BattleControler {
 			}
 		}
 	}
-
 
 
 	//给外部对象调用一个注册刷新的接口 游戏退出的时候自动销毁这个回调. 所以必须在每次游戏开始的时候 手动注册一次
@@ -493,7 +492,6 @@ export default class BattleControler {
 	public setGamePlayOrPause(value) {
 		this._isGamePause = value;
 	}
-
 
 
 	//销毁游戏 养成习惯,所有的对象都需要有dispose 函数

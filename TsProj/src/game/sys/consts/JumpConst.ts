@@ -1,4 +1,3 @@
-
 export default class JumpConst {
 	static MAIN_SIDE = "主界面侧边栏";
 	static MAIN_BOTTOM = "主界面底部栏";
@@ -27,8 +26,8 @@ export default class JumpConst {
 	/**卡日曲BANNER样式互推 */
 	static JUMP_KARIQU_BANNER: number = 22;
 	/**卡日曲结算界面互推类型 */
-	// static JUMP_KARIQU_RESULT: number = 103;
-	//跳转图标动画 0表示没动画 
+		// static JUMP_KARIQU_RESULT: number = 103;
+		//跳转图标动画 0表示没动画
 	static JUMP_ANI_STYLE_NONE: number = 0;
 	static JUMP_ANI_STYLE_1: number = 1;
 	static JUMP_ANI_STYLE_2: number = 2;

@@ -1,4 +1,3 @@
-
 import FogInstanceMove from "../../fog/instance/FogInstanceMove";
 
 /**
@@ -9,12 +8,14 @@ import FogInstanceMove from "../../fog/instance/FogInstanceMove";
 
 export default class ChapterInstanceMove extends FogInstanceMove {
 	public moveCount = 0;
+
 	public constructor(controler) {
 		super(controler)
 		this.speed = new Laya.Vector3();
 		this.addSpeed = new Laya.Vector3();
 		this.unitVector = new Laya.Vector3();
 	}
+
 	//判断是否到达终点
 	checkMoveEnd() {
 		if (this.movePointType == FogInstanceMove.moveType_none) {

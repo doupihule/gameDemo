@@ -7,6 +7,7 @@
 export default class FogEvent {
 	public constructor() {
 	}
+
 	//事件定义.必须是模块名_event_功能拼音的方式.防止重复
 	static FOGEVENT_ONDATACHANGDE = "FOGEVENT_ONDATACHANGDE"
 

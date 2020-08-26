@@ -15,15 +15,13 @@ import JumpConst from "./game/sys/consts/JumpConst";
 import FrameWorkHandle from "./game/sys/manager/FrameWorkHandle";
 import StatisticsCommonConst from "./framework/consts/StatisticsCommonConst";
 import BaseFunc from "./framework/func/BaseFunc";
-import StringUtils from "./framework/utils/StringUtils";
-import UserInfo, { PlatformIdType } from "./framework/common/UserInfo";
+import UserInfo, {PlatformIdType} from "./framework/common/UserInfo";
 import KariquShareConst from "./framework/consts/KariquShareConst";
 import GameConsts from "./game/sys/consts/GameConsts";
-import KariqiShareManager from "./framework/manager/KariqiShareManager";
 
 class Main {
 	constructor() {
-		BaseFunc.setCfgExportType(BaseFunc.exportType_New)
+		BaseFunc.setCfgExportType(BaseFunc.exportType_New);
 		StatisticsManager.mainStartT = Laya.Browser.now();
 		Laya.init(GameConfig.width, GameConfig.height, Laya["WebGL"]);
 		Laya["Physics"] && Laya["Physics"].enable();
@@ -43,7 +41,7 @@ class Main {
 
 		PackConfigManager.initCfgs();
 		UserInfo.init();
-		if(UserInfo.isSystemIos()){
+		if (UserInfo.isSystemIos()) {
 			UserInfo.adMediaType = PlatformIdType.adMedia_gdt;
 		}
 
@@ -67,8 +65,6 @@ class Main {
 		// LogsManager.echo("__decodeStr:", encodeStr, decodeStr, decodeStr == defaultSha1) ;
 
 
-
-
 		//打开调试面板（通过IDE设置调试模式，或者url地址增加debug=true参数，均可打开调试面板）
 		if (GameConfig.debug || Laya.Utils.getQueryString("debug") == "true") Laya.enableDebugPanel();
 		if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
@@ -76,7 +72,7 @@ class Main {
 		Laya.alertGlobalError = true;
 
 		this.showMainModule();
-		if(UserInfo.isWX()||UserInfo.isTT() ){
+		if (UserInfo.isWX() || UserInfo.isTT()) {
 			JumpManager.setJumpChannel(JumpConst.JUMP_CHANNEL_KARIQU);
 			KariquShareConst.initKariquUrl(GameConsts.kariquUrlMap);
 			JumpManager.setKariquList({
@@ -94,7 +90,7 @@ class Main {
 				},
 
 			});
-		} else{
+		} else {
 			JumpManager.setJumpChannel(JumpConst.JUMP_CHANNEL_FANTASY);
 		}
 
@@ -103,8 +99,9 @@ class Main {
 		// Laya.ResourceVersion.enable("version.json", Laya.Handler.create(this, this.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION);
 		Laya.stage.on(Laya.Event.RESIZE, this, this.onResize);
 	}
+
 	private onResize() {
-		LogsManager.echo("_onResize start___")
+		LogsManager.echo("_onResize start___");
 		LogsManager.echo(Laya.stage.scaleX, Laya.stage.scaleY, "_____scale", Laya.stage.width, Laya.stage.height);
 		LogsManager.echo(Laya.stage.designWidth, Laya.stage.designHeight, "___设计宽高");
 		LogsManager.echo(Laya.stage.clientScaleX, Laya.stage.clientScaleX, "___clientScale");
@@ -133,7 +130,7 @@ class Main {
 
 	/**打点-激活数据上传到阿里云 */
 	checkIsNew() {
-		var isNewStr = StorageCode.storage_isNewPlayer
+		var isNewStr = StorageCode.storage_isNewPlayer;
 		var isNewSta = CacheManager.instance.getFileStorageCache(isNewStr);
 		var isNew = isNewSta == "0" || !isNewSta;
 		StatisticsManager.isNewPlayer = isNew;
@@ -149,7 +146,7 @@ class Main {
 			window["LogsManager"] = LogsManager;
 		}
 		//全局封装一个LogsTools变量, 如果修改了底层源码的地方 全部改用LogsTools,防止因为LogsManager因为被加密导致访问不到
-		window["LogsTools"] = LogsManager
+		window["LogsTools"] = LogsManager;
 
 		if (!window["UserInfo"]) {
 			window["UserInfo"] = UserInfo;
@@ -158,5 +155,6 @@ class Main {
 
 
 }
+
 //激活启动类
 new Main();

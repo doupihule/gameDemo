@@ -8,7 +8,7 @@ export default class TestPlatform {
 		"upgrade_path": "web_cn",
 		"vms_url": "https://overtake-dev.fantasyfancy.com:8443",
 		"vms_version": 1,
-		
+
 	}
 
 	private static test = {
@@ -67,7 +67,7 @@ export default class TestPlatform {
 		"platform": "test",
 		"upgrade_path": "baidu_cn",
 		"vms_url": "https://cloud-test.fantasyfancy.com:8608/",
-		"vms_version":1,
+		"vms_version": 1,
 	}
 	// private static tt = {
 	// 	"platform": "tt",

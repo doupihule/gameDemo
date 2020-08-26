@@ -4,7 +4,6 @@ import BattleConst from "../../sys/consts/BattleConst";
 import FogInstanceBasic from "./FogInstanceBasic";
 import InstanceMoveEntity from "../../battle/instance/InstanceMoveEntity";
 import InstanceMoveMultyEntity from "../../battle/instance/InstanceMoveMultyEntity";
-import FogLogicalControler from "../controler/FogLogicalControler";
 import FogFunc from "../../sys/func/FogFunc";
 
 /**
@@ -49,6 +48,7 @@ export default class FogInstanceMove extends FogInstanceBasic {
 	protected unitVector: Laya.Vector3;
 	//当前移动状态 1到达边缘 2 进入边缘
 	private moveState = 0;
+
 	public constructor(controler) {
 		super(controler)
 		this.speed = new Laya.Vector3();
@@ -91,12 +91,14 @@ export default class FogInstanceMove extends FogInstanceBasic {
 
 		this.speed.z = this.setSpeed(this.speed.z, this.addSpeed.z);
 	}
+
 	//设置速度=速度*阻力系数+加速度
 	setSpeed(speedSpace, addSpead) {
 		//更新加速度		
 		speedSpace += addSpead;
 		return speedSpace;
 	}
+
 	//重写运动函数 主要是更新坐标
 	movePos() {
 		//stand状态不执行
@@ -151,7 +153,6 @@ export default class FogInstanceMove extends FogInstanceBasic {
 	}
 
 
-
 	//根据传递的entity 运动
 	moveToOnePointByEntity(enetity: InstanceMoveEntity, movePointType: number = 1, isGrid: Boolean = false) {
 		var x = enetity.target.x, y = enetity.target.y;
@@ -182,7 +183,6 @@ export default class FogInstanceMove extends FogInstanceBasic {
 		}
 		this.moveToOnePointByEntity(param, FogInstanceMove.moveType_multyPoint, false);
 	}
-
 
 
 	//判断是否到达终点
@@ -253,6 +253,7 @@ export default class FogInstanceMove extends FogInstanceBasic {
 		}
 		return true;
 	}
+
 	//到达边缘回调
 	enterSide(type) {
 		var callBack, thisObj;
@@ -281,6 +282,7 @@ export default class FogInstanceMove extends FogInstanceBasic {
 			if (callBack) callBack.call(thisObj);
 		}
 	}
+
 	resetMoveState() {
 		//初始化变成站立状态,通知子类改变动作行为
 		this.moveState = 0;

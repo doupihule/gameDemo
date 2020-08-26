@@ -1,6 +1,5 @@
 import BattleLogicalControler from "../controler/BattleLogicalControler";
 import BattleFunc from "../../sys/func/BattleFunc";
-import TimerManager from "../../../framework/manager/TimerManager";
 import LogsManager from "../../../framework/manager/LogsManager";
 import BattleConst from "../../sys/consts/BattleConst";
 
@@ -64,6 +63,7 @@ export default class InstanceBasic {
 	public ignoreTimeScale = false;
 	private leftFrameTime = 0;
 	private laterFrameTime = 0;
+
 	public constructor(controler: any) {
 		//拿到游戏控制器和数据
 		this.controler = controler;
@@ -73,6 +73,7 @@ export default class InstanceBasic {
 		this.rotation = new Laya.Vector3();
 		this.rotationRad = new Laya.Vector3();
 	}
+
 	//设置数据
 	setData(data: any) {
 		this._viewWay = 1;
@@ -86,6 +87,7 @@ export default class InstanceBasic {
 		}
 
 	}
+
 	//设置我自身的时间缩放值
 	setUpTimeScale(scale) {
 		this.upTimeScale = scale;
@@ -93,6 +95,7 @@ export default class InstanceBasic {
 		this.laterFrameTime = 0;
 		this.setAniPlaySpeed(this._aniPlaySpeed)
 	}
+
 	//重置属性 针对复用的情况
 	public resetProperty() {
 		this.updateCount = 0;
@@ -111,6 +114,7 @@ export default class InstanceBasic {
 		//数据发生变化需要刷新视图
 		this.updateView()
 	}
+
 	//更新视图供子类重写
 	updateView() {
 	}
@@ -126,7 +130,8 @@ export default class InstanceBasic {
 		//初始化设置为1倍速
 		this.setAniPlaySpeed(1);
 	}
-	//设置视图2,这个调用一定要在setview之前. 
+
+	//设置视图2,这个调用一定要在setview之前.
 	setView2(view: any) {
 		this._myView2 = view;
 	}
@@ -155,6 +160,7 @@ export default class InstanceBasic {
 		}
 		this.leftFrameTime = this.leftFrameTime - i;
 	}
+
 	//循环外刷新 先所有对象执行updateframe  后 在执行updateFrameLater
 	updateFrameLater() {
 		this.laterFrameTime += this.upTimeScale;
@@ -195,7 +201,6 @@ export default class InstanceBasic {
 			this._myView2.pos(x, y, true);
 		}
 	}
-
 
 
 	//设置旋转角度
@@ -257,7 +262,6 @@ export default class InstanceBasic {
 	}
 
 
-
 	//判断示例是否在使用中
 	checkIsUsing() {
 		return this.useState == BattleConst.instance_use_normal;
@@ -267,6 +271,7 @@ export default class InstanceBasic {
 	public setZorderOffset(value) {
 		this.zorderOffset = value
 	}
+
 	//更新视图的zorder
 	public updateViewZorder() {
 		if (!this._myView) {
@@ -310,9 +315,9 @@ export default class InstanceBasic {
 	//withTargetWay 是否跟随目标的朝向而修改自己的朝向. 比如文字特效就不能修改朝向. -1 永远反向  0 永远跟随目标朝向 1永远朝右
 	//aniSpeed特效播放速度 默认是1
 	public createEfect(effectName: string, aniIndex: number = 0, isLoop: boolean, ofx: number, ofy: number, ofz: number, isFollow: boolean = true, layerIndex: number = 2, withTargetWay: number = 0, frame: number = -1, aniSpeed: number = 1) {
-		var eff = this.controler.createEffect({ id: effectName, index: aniIndex });
+		var eff = this.controler.createEffect({id: effectName, index: aniIndex});
 		//暂定只有非跟随的特效 不做限制
-		if(!isFollow){
+		if (!isFollow) {
 			this.controler.performanceControler.setCacheEffect(eff, eff.cacheId);
 		}
 		if (!this.controler.layerControler) {
@@ -382,6 +387,7 @@ export default class InstanceBasic {
 		this.controler.setCallBack(Math.round((frame + sysFrame) / aniSpeed), this.onSysActionComp, this);
 		return actionLength + sysFrame + frame - endFrame;
 	}
+
 	//第一步完成
 	protected onStartActionComp() {
 		if (!this._myView) return;
@@ -401,7 +407,6 @@ export default class InstanceBasic {
 		this.controler.clearCallBack(this, this.onStartActionComp)
 		this.controler.clearCallBack(this, this.onSysActionComp)
 	}
-
 
 
 	//当被设置到缓存里面了 子类重写
@@ -434,6 +439,7 @@ export default class InstanceBasic {
 		this.useState = BattleConst.instance_use_destory;
 		this.disposeView()
 	}
+
 	//销毁视图对象 如果有特殊销毁.给子类重写,龙骨动画需要手动dispos
 	//如果有缓存需求,也可以让子类重写
 	private disposeView() {

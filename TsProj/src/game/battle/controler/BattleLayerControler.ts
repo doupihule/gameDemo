@@ -1,7 +1,5 @@
 import BattleLogicalControler from "./BattleLogicalControler";
 import ScreenAdapterTools from "../../../framework/utils/ScreenAdapterTools";
-import ResourceConst from "../../sys/consts/ResourceConst";
-import LogsManager from "../../../framework/manager/LogsManager";
 import BattleFunc from "../../sys/func/BattleFunc";
 import BattleConst from "../../sys/consts/BattleConst";
 
@@ -17,8 +15,8 @@ export class BattleLayerControler {
 	 * 	}
 	 * 	a3:
 	 * }
-	 * 	
-	 * 
+	 *
+	 *
 	 */
 
 	/**游戏的根容器 */
@@ -40,7 +38,6 @@ export class BattleLayerControler {
 	controler: BattleLogicalControler;
 
 
-
 	public rootCtn: Laya.Sprite;
 
 	public clickNode: Laya.Sprite;
@@ -60,7 +57,6 @@ export class BattleLayerControler {
 		this.a3 = new Laya.Sprite();
 
 
-
 		this.a2Offset = new Laya.Sprite();
 
 		this.a21 = new Laya.Sprite();
@@ -68,12 +64,10 @@ export class BattleLayerControler {
 		this.a23 = new Laya.Sprite();
 
 
-
 		rootCtn.addChild(this.a);
 		this.a.addChild(this.a1);
 		this.a.addChild(this.a2);
 		this.a.addChild(this.a3);
-
 
 
 		//为了方便坐标好算. 网格的(0,0)点会和 原点有一个相对坐标偏移
@@ -101,15 +95,18 @@ export class BattleLayerControler {
 		this.minX = ScreenAdapterTools.width - this.controler.mapControler._maxSceneWidth + 64;
 		this.sceneWidthRate = this.controler.mapControler._maxSceneWidth / 597;
 	}
+
 	//逐帧刷新函数
 	updateFrame() {
 		//这里主要做震屏
 	}
+
 	onTouchBegin(event) {
 		this._startTouchX = event.stageX;
 		this.isInTouch = true;
 		this.controler.clearCallBack(this);
 	}
+
 	onTouchMove(event) {
 		if (!this._startTouchX) return;
 		this.controler.cameraControler.inControlBg = false;
@@ -130,10 +127,14 @@ export class BattleLayerControler {
 			}
 		}
 	}
+
 	onTouchUp(event) {
 		this._startTouchX = null;
-		this.controler.setCallBack(60 * 5, () => { this.isInTouch = false }, this);
+		this.controler.setCallBack(60 * 5, () => {
+			this.isInTouch = false
+		}, this);
 	}
+
 	/**获取forceX的值 */
 	getTweenEndPos(tempPos) {
 		if (tempPos > this.controler.mapControler._maxSceneWidth) {

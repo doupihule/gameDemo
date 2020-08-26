@@ -1,21 +1,16 @@
 import BaseModel from "./BaseModel";
 import FogFunc from "../func/FogFunc";
-import UserModel from "./UserModel";
 import FogConst from "../consts/FogConst";
 import GlobalParamsFunc from "../func/GlobalParamsFunc";
 import ShareOrTvManager from "../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "../func/ShareTvOrderFunc";
 import WindowManager from "../../../framework/manager/WindowManager";
-import TranslateFunc from "../../../framework/func/TranslateFunc";
-import { WindowCfgs } from "../consts/WindowCfgs";
+import {WindowCfgs} from "../consts/WindowCfgs";
 import Message from "../../../framework/common/Message";
 import FogEvent from "../event/FogEvent";
-import { DataResourceType } from "../func/DataResourceFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
-import LogsErrorCode from "../../../framework/consts/LogsErrorCode";
+import {DataResourceType} from "../func/DataResourceFunc";
 import RolesModel from "./RolesModel";
 import GameUtils from "../../../utils/GameUtils";
-import FogMainUI from "../view/fog/FogMainUI";
 import FogPropTrigger from "../../fog/trigger/FogPropTrigger";
 import TableUtils from "../../../framework/utils/TableUtils";
 import BattleFunc from "../func/BattleFunc";
@@ -31,22 +26,27 @@ export default class FogModel extends BaseModel {
 	public constructor() {
 		super();
 	}
+
 	//单例
 	private static _instance: FogModel;
 	public static enemyArr = [];
+
 	static get instance() {
 		if (!this._instance) {
 			this._instance = new FogModel()
 		}
 		return this._instance;
 	}
+
 	protected _data: SCFogData;
 	/**迷雾战斗心灵鸡汤加的能量值 */
-	public static fogAddEnergy=0;
+	public static fogAddEnergy = 0;
+
 	//初始化数据
 	initData(d: any) {
 		super.initData(d);
 	}
+
 	//更新数据
 	updateData(d: any) {
 		var compNum = FogModel.instance.getCompNum();
@@ -65,32 +65,39 @@ export default class FogModel extends BaseModel {
 			}
 		}
 	}
+
 	//删除数据
 	deleteData(d: any) {
 		super.deleteData(d);
 	}
+
 	getData(): SCFogData {
 		return this._data;
 	}
+
 	/**获取当前层数 */
 	getCurLayer() {
 		var data: SCFogData = this.getData();
 		return Number(data && data.layer) || 0;
 	}
+
 	/**获取零件数 */
 	getCompNum() {
 		var data = this.getData();
 		return Number(data && data.comp) || 0;
 	}
+
 	/**获取行动力数 */
 	getActNum() {
 		var data = this.getData();
 		return Number(data && data.act) || 0;
 	}
+
 	getCellInfo() {
 		var data = this.getData();
 		return data && data.cell || null;
 	}
+
 	/**获取大巴车等级 */
 	getBusLevel() {
 		var data = this.getData();
@@ -99,11 +106,13 @@ export default class FogModel extends BaseModel {
 		}
 		return Math.min(Number(data.bus.level), FogFunc.instance.getBusMaxLevel());
 	}
+
 	/**获取大巴信息 */
 	getBusInfo() {
 		var data = this.getData();
 		return data && data.bus;
 	}
+
 	/**获取角色阵容 */
 	getLine() {
 		var data = this.getData();
@@ -112,6 +121,7 @@ export default class FogModel extends BaseModel {
 		}
 		return data.line;
 	}
+
 	/**获取角色道具列表 */
 	getProp() {
 		var data = this.getData();
@@ -120,10 +130,12 @@ export default class FogModel extends BaseModel {
 		}
 		return data.prop;
 	}
+
 	getCellInfoById(id) {
 		var cell = this.getCellInfo();
 		return cell && cell[id];
 	}
+
 	/**根据类型获取格子id */
 	getCellIdByType(type) {
 		var cell = this.getCellInfo();
@@ -139,11 +151,13 @@ export default class FogModel extends BaseModel {
 		}
 		return null;
 	}
+
 	/**获取全局事件列表 */
 	getGlobalEvent() {
 		var data = this.getData();
 		return data && data.globalEvent;
 	}
+
 	/**获取次数 */
 	getShopCountsById(id) {
 		var data = this.getData();
@@ -171,6 +185,7 @@ export default class FogModel extends BaseModel {
 		}
 		return Number(data.counts[id]);
 	}
+
 	getFogShopGoods(id) {
 		var data = this.getData();
 		var data = this.getData();
@@ -180,6 +195,7 @@ export default class FogModel extends BaseModel {
 
 		return data.cell[id].evt.fogShop;
 	}
+
 	/**获取角色道具数量或者等级 */
 	getPropNum(propId) {
 		var data = this.getData();
@@ -191,9 +207,10 @@ export default class FogModel extends BaseModel {
 		if (propInfo.type == FogPropTrigger.ITEM_TYPE_CANUP) {
 			return Math.min(Number(data.prop[propId]), propInfo.maxLevel);
 		}
-				
+
 		return data.prop[propId];
 	}
+
 	getIsHavePropByType(type) {
 		var data = this.getData();
 		if (!data || !data.prop) {
@@ -210,6 +227,7 @@ export default class FogModel extends BaseModel {
 		}
 		return result;
 	}
+
 	/**获取一个敌人 */
 	getOneEnemy() {
 		var data = this.getData();
@@ -227,6 +245,7 @@ export default class FogModel extends BaseModel {
 		}
 		return target;
 	}
+
 	freshEnemyArr() {
 		FogModel.enemyArr = [];
 		var data = this.getData();
@@ -241,6 +260,7 @@ export default class FogModel extends BaseModel {
 			}
 		}
 	}
+
 	/**获取一个玩家敌人id */
 	getOneEnemyId(isSplice = false) {
 		if (!FogModel.enemyArr || FogModel.enemyArr.length == 0) return null;
@@ -250,6 +270,7 @@ export default class FogModel extends BaseModel {
 		}
 		return id;
 	}
+
 	/**跟进id获取敌人数据 */
 	getEnemyInfoById(id) {
 		var data = this.getData();
@@ -258,6 +279,7 @@ export default class FogModel extends BaseModel {
 		var enemy: SCFogEnemyData = data.enemy[id];
 		return enemy;
 	}
+
 	//判断是否弹出免费行动力
 	checkFreeActShow() {
 		var mobilityAdTimes = GlobalParamsFunc.instance.getDataNum("mobilityAdTimes");
@@ -275,6 +297,7 @@ export default class FogModel extends BaseModel {
 
 		return true;
 	}
+
 	/**获取攻击过的敌人列表 */
 	getUsedEnemyList() {
 		var data = this.getData();
@@ -300,7 +323,7 @@ export default class FogModel extends BaseModel {
 		} else {
 			//弹tip
 			// WindowManager.ShowTip(TranslateFunc.instance.getTranslate("#tid_fog_noenoughact"));		
-			WindowManager.OpenUI(WindowCfgs.FogTipUI, { type: FogConst.FOG_VIEW_TYPE_NOACT });
+			WindowManager.OpenUI(WindowCfgs.FogTipUI, {type: FogConst.FOG_VIEW_TYPE_NOACT});
 		}
 	}
 
@@ -316,6 +339,7 @@ export default class FogModel extends BaseModel {
 
 		return data.reward[type];
 	}
+
 	//获取FogReward数据中的道具和碎片数量
 	getFogRewardNumById(type, id) {
 		var data = this.getData();
@@ -334,6 +358,7 @@ export default class FogModel extends BaseModel {
 
 		return data.reward[type][id];
 	}
+
 	//获取局外奖励
 	getFogOuterReward() {
 		var data = this.getData();
@@ -360,6 +385,7 @@ export default class FogModel extends BaseModel {
 		rewardArr.sort(this.sortFogOuterReward);
 		return rewardArr;
 	}
+
 	//局外奖励数据排序:钻石、金币、装备碎片
 	sortFogOuterReward(a, b) {
 		var indexA = FogFunc.fogOuterRewardType.indexOf(Number(a[0]));
@@ -394,6 +420,7 @@ export default class FogModel extends BaseModel {
 		}
 		return totalNum;
 	}
+
 	randomRoleIdList(count = 3, except = []) {
 		var roleIdList = [];
 
@@ -422,24 +449,26 @@ export default class FogModel extends BaseModel {
 
 		return roleIdList;
 	}
-	getLineRoles(){
+
+	getLineRoles() {
 		var list = [];
-        var data = this.getLine();
-        for (var key in data) {
-            if (data.hasOwnProperty(key)) {
+		var data = this.getLine();
+		for (var key in data) {
+			if (data.hasOwnProperty(key)) {
 				list.push(key);
-            }
-        }
-        return list;
+			}
+		}
+		return list;
 	}
-	randomRole(arr, exceptArr = []){
-		if(arr.length == 0 || arr.length == exceptArr.length){
-            return "";
+
+	randomRole(arr, exceptArr = []) {
+		if (arr.length == 0 || arr.length == exceptArr.length) {
+			return "";
 		}
 
 		var randomArr = [];
-		for(var i = 0 ; i < arr.length; i++){
-            if(exceptArr.indexOf(Number(arr[i])) != -1 || exceptArr.indexOf(String(arr[i])) != -1){
+		for (var i = 0; i < arr.length; i++) {
+			if (exceptArr.indexOf(Number(arr[i])) != -1 || exceptArr.indexOf(String(arr[i])) != -1) {
 				continue;
 			}
 			randomArr.push(String(arr[i]));
@@ -448,53 +477,55 @@ export default class FogModel extends BaseModel {
 		var randomNum = GameUtils.getRandomInt(0, randomArr.length - 1);
 		return randomArr[randomNum];
 	}
-	checkFogRandomRole(){
+
+	checkFogRandomRole() {
 		//迷雾上阵角色
-        var fogRoles = FogModel.instance.getLineRoles();
-        //已解锁角色
+		var fogRoles = FogModel.instance.getLineRoles();
+		//已解锁角色
 		var roles = RolesModel.instance.getUnlockRoles();
 
-		if(fogRoles.length >= roles.length){
+		if (fogRoles.length >= roles.length) {
 			return [false];
 		}
 
 		//从玩家已解锁，但本局迷雾街区尚未获得的角色中随机1个出战
-        var randomRoleId = this.randomRole(roles, fogRoles);
-        if(randomRoleId == ""){
+		var randomRoleId = this.randomRole(roles, fogRoles);
+		if (randomRoleId == "") {
 			return [false];
 		}
 
 		//判断能否看视频或者分享
 		var freeType = ShareOrTvManager.instance.getShareOrTvType(ShareTvOrderFunc.SHARELINE_FOG_BATTLE_ADDROLE);
-        if (freeType == ShareOrTvManager.TYPE_QUICKRECEIVE) {
-            return [false];
+		if (freeType == ShareOrTvManager.TYPE_QUICKRECEIVE) {
+			return [false];
 		}
-		
-		return [true, randomRoleId];	
+
+		return [true, randomRoleId];
 	}
+
 	/**获取迷雾上阵角色 */
-    getFogRoleWithRandom() {
+	getFogRoleWithRandom() {
 		//判断能否随机
 		var result = this.checkFogRandomRole();
 		var list = [];
 		var role = FogModel.instance.getLine();
 		var info;
 
-		if(result[0]){
+		if (result[0]) {
 			var randomRoleId = result[1];
 			info = TableUtils.copyOneTable(BattleFunc.instance.getCfgDatas("Role", randomRoleId));
 			info.level = RolesModel.instance.getRoleLevelById(randomRoleId);
 			info.isRandom = 1;
-            list.push(info);
+			list.push(info);
 		}
-	
-        for (var id in role) {
-            info = TableUtils.copyOneTable(BattleFunc.instance.getCfgDatas("Role", id));
-            info.level = RolesModel.instance.getRoleLevelById(id);
-            list.push(info);
-        }
+
+		for (var id in role) {
+			info = TableUtils.copyOneTable(BattleFunc.instance.getCfgDatas("Role", id));
+			info.level = RolesModel.instance.getRoleLevelById(id);
+			list.push(info);
+		}
 		list.sort(RolesModel.instance.sortRoleQual);
-		
-        return list;
-    }
+
+		return list;
+	}
 }
