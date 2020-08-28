@@ -46,7 +46,7 @@ export default class ChapterLogicControler implements IMessage {
 	private mapOffestY = 0;
 	private _allInstanceArr: any[] = [];
 	public curTarget: any;
-	private curLevelImg: Laya.Image;
+	private curLevelImg: ImageExpand;
 	public doCurLevelCode = 0;
 	public chapMapUI;
 	public isStop = false;
@@ -341,7 +341,7 @@ export default class ChapterLogicControler implements IMessage {
 		var x = data.x;
 		var y = data.y;
 		if (!this.curLevelImg) {
-			this.curLevelImg = new Laya.Image("uisource/common/common/common_image_jiantou.png");
+			this.curLevelImg = ViewTools.createImage("uisource/common/common/common_image_jiantou.png");
 			this.curLevelImg.rotation = 180;
 			this.curLevelImg.anchorX = 0.5;
 			this.chapterLayerControler.a21.addChild(this.curLevelImg)

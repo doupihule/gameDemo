@@ -16,7 +16,7 @@ export default class FogInstanceBus extends FogInstanceMove {
 	private _initWidth: number = 128;
 	private _initHeight: number = 128;
 	//事件ctn，用来展示事件icon
-	private eventCtn: Laya.Image;
+	private eventCtn: ImageExpand;
 	//这个item x方向位置
 	private xIndex = 1;
 	//这个item y方向位置
@@ -26,7 +26,7 @@ export default class FogInstanceBus extends FogInstanceMove {
 	private pathArr = [];
 	private tempPathArr = [];
 	//大巴图片
-	private myBus: Laya.Image;
+	private myBus: ImageExpand;
 	private pathIndex = 0;
 	private myRotate = 0;
 	//是否是新路径
@@ -38,7 +38,7 @@ export default class FogInstanceBus extends FogInstanceMove {
 		super(fogControler);
 		this.width = this._initWidth;
 		this.height = this._initHeight;
-		this.eventCtn = new Laya.Image("");
+		this.eventCtn = ViewTools.createImage("");
 		this.eventCtn.anchorX = 0.5;
 		this.eventCtn.anchorY = 0.5;
 		this.eventCtn.x = this._initWidth / 2;
@@ -60,7 +60,7 @@ export default class FogInstanceBus extends FogInstanceMove {
 	//设置车的spine
 	setBusShow() {
 		if (!this.myBus) {
-			this.myBus = new Laya.Image();
+			this.myBus = ViewTools.createImage();
 			this.myBus.anchorX = 0.5;
 			this.myBus.anchorY = 0.5;
 			this.eventCtn.addChild(this.myBus);

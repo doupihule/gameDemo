@@ -8,6 +8,7 @@ import SkillActionTrigger from "../trigger/SkillActionTrigger";
 import BattleLogsManager from "../../sys/manager/BattleLogsManager";
 import SkillExpandTrigger from "../trigger/SkillExpandTrigger";
 import InstanceBullet from "../instance/InstanceBullet";
+import VectorTools from "../../../framework/utils/VectorTools";
 
 /**
  * 战斗重点aoe对象数据.
@@ -37,7 +38,7 @@ export default class BattleAoeData {
 	}
 
 	//初始坐标
-	public _initTargtPos: Laya.Vector3;
+	public _initTargtPos: any;
 
 	//初始化
 	constructor(id: string) {
@@ -51,7 +52,7 @@ export default class BattleAoeData {
 		}
 
 		this.effectiveTimes = Number(this.cfgData.effectiveTimes);
-		this._initTargtPos = new Laya.Vector3();
+		this._initTargtPos = VectorTools.createVec3();
 
 	}
 

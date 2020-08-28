@@ -11,9 +11,9 @@ export default class ChapterInstanceMove extends FogInstanceMove {
 
 	public constructor(controler) {
 		super(controler)
-		this.speed = new Laya.Vector3();
-		this.addSpeed = new Laya.Vector3();
-		this.unitVector = new Laya.Vector3();
+		this.speed = VectorTools.createVec3();
+		this.addSpeed = VectorTools.createVec3();
+		this.unitVector = VectorTools.createVec3();
 	}
 
 	//判断是否到达终点

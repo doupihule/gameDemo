@@ -22,6 +22,7 @@ import ResourceConst from "../../sys/consts/ResourceConst";
 import RoleBuffBar from "../view/RoleBuffBar";
 import RolesFunc from "../../sys/func/RolesFunc";
 import InstanceMove from "./InstanceMove";
+import ImageExpand from "../../../framework/components/ImageExpand";
 
 // 活物.带生命交互的基类  具备攻防血buff等基类
 export default class InstanceLife extends InstancePerformance {
@@ -130,7 +131,7 @@ export default class InstanceLife extends InstancePerformance {
 	public roleType;
 
 	/**在小地图的小红点/小蓝点 */
-	mapPoint: Laya.Image;
+	mapPoint: ImageExpand;
 
 	constructor(controler) {
 
@@ -993,7 +994,7 @@ export default class InstanceLife extends InstancePerformance {
 				PoolTools.cacheItem(PoolCode.ENEMY_MAP_POINT_POOL, this.mapPoint);
 			}
 		}
-		this.mapPoint && this.mapPoint.parent && this.mapPoint.parent.removeChild(this.mapPoint);
+		this.mapPoint && this.mapPoint.removeSelf();
 		this.mapPoint = null;
 	}
 

@@ -2,9 +2,9 @@ export default class MathUtils {
 	public constructor() {
 	}
 
-	static tempVector3_1 = new Laya.Vector3();
-	static tempVector3_2 = new Laya.Vector3();
-	static tempVector3_3 = new Laya.Vector3();
+	static tempVector3_1 = {x:0,y:0,z:0};
+	static tempVector3_2 = {x:0,y:0,z:0};
+	static tempVector3_3 = {x:0,y:0,z:0};
 
 	//计算2个点的角度(弧度)
 	static countAngle(p1: any, p2: any) {
@@ -60,38 +60,6 @@ export default class MathUtils {
 		return true;
 	}
 
-	//二维向量点积
-	static dot2(a: Laya.Vector2, b: Laya.Vector2) {
-		this.tempVector3_1.x = a.x;
-		this.tempVector3_1.y = a.y;
-		this.tempVector3_2.x = b.x;
-		this.tempVector3_2.y = b.y;
-		return Laya.Vector3.dot(this.tempVector3_1, this.tempVector3_2);
-	}
 
-
-	//二维向量叉积
-	static cross2(a: Laya.Vector2, b: Laya.Vector2, out: Laya.Vector2) {
-		this.tempVector3_1.x = a.x;
-		this.tempVector3_1.y = a.y;
-		this.tempVector3_2.x = b.x;
-		this.tempVector3_2.y = b.y;
-		Laya.Vector3.cross(this.tempVector3_1, this.tempVector3_2, this.tempVector3_3);
-		out.x = this.tempVector3_3.x;
-		out.y = this.tempVector3_3.y;
-		return out;
-	}
-
-	//二维向量差
-	static subtract2(a: Laya.Vector2, b: Laya.Vector2, out: Laya.Vector2) {
-		this.tempVector3_1.x = a.x;
-		this.tempVector3_1.y = a.y;
-		this.tempVector3_2.x = b.x;
-		this.tempVector3_2.y = b.y;
-		Laya.Vector3.subtract(this.tempVector3_1, this.tempVector3_2, this.tempVector3_3);
-		out.x = this.tempVector3_3.x;
-		out.y = this.tempVector3_3.y;
-		return out;
-	}
 
 }

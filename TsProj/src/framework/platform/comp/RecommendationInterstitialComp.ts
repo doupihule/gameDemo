@@ -250,7 +250,6 @@ export class RecommendationInterstitialComp extends TopViewAutoComp {
 
 	/** 子类重写组件显示方法 */
 	protected _compShow() {
-		LogsManager.echo("hlx 推荐插屏 InterstitialAd _compShow", Laya.timer.currTimer);
 		if (!this._interstitialAd) {
 			// 如果不存在实例或者已经展示过一次
 			// 重新加载新的InterstitialAd
@@ -265,10 +264,9 @@ export class RecommendationInterstitialComp extends TopViewAutoComp {
 
 		if (this._interstitialAd && this._loadSuccess) {
 			this._hasShow = true;
-			LogsManager.echo("hlx 推荐插屏 InterstitialAd show", Laya.timer.currTimer);
 			this._interstitialAd.show()
 				.then(() => {
-					LogsManager.echo("hlx 推荐插屏 InterstitialAd广告组件show success", Laya.timer.currTimer);
+					LogsManager.echo("hlx 推荐插屏 InterstitialAd广告组件show success");
 				})
 				.catch(err => {
 					LogsManager.echo("hlx 推荐插屏 InterstitialAd广告组件show error", err);

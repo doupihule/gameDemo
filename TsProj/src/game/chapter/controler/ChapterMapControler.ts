@@ -18,7 +18,7 @@ export default class ChapterMapControler {
 	//一块地图的高度
 	public itemHeight = 1400;
 	//放地图的容器
-	private ctn1: Laya.Sprite;
+	private ctn1: BaseContainer;
 	public offestY = 0;
 
 	constructor(controler) {
@@ -28,7 +28,7 @@ export default class ChapterMapControler {
 	//初始化设置数据 章节id
 	public setData(chapterId) {
 		this.chapterData = ChapterFunc.instance.getCfgDatas("Chapter", chapterId);
-		this.ctn1 = new Laya.Sprite();
+		this.ctn1 = ViewTools.createContainer();
 		this.ctn1.y = -ScreenAdapterTools.sceneOffsetY - ScreenAdapterTools.UIOffsetY;
 		this.controler.chapterLayerControler.a21.y = -ScreenAdapterTools.sceneOffsetY - ScreenAdapterTools.UIOffsetY;
 		this.controler.chapterLayerControler.a1.addChild(this.ctn1);
@@ -44,7 +44,7 @@ export default class ChapterMapControler {
 	createMap() {
 		var name = this.chapterData.sceneName;
 		for (var i = this.allMapCount; i > 0; i--) {
-			var image = new Laya.Image();
+			var image = ViewTools.createImage();
 			var imageUrl1;
 			if (UserInfo.isSystemNative()) {
 				imageUrl1 = "map/" + name + "/" + name + "_0" + i + ".png";
@@ -70,7 +70,7 @@ export default class ChapterMapControler {
 	private destoryOneLayer() {
 		var infoArr: any[] = this.mapArr;
 		for (var i = 0; i < infoArr.length; i++) {
-			var view: Laya.Image = infoArr[i].view;
+			var view: ImageExpand = infoArr[i].view;
 			view.removeSelf();
 			if (UserInfo.isSystemNative()) {
 				//对图片做销毁处理

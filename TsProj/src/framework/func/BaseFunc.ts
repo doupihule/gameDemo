@@ -1,3 +1,5 @@
+import ResourceManager from "../manager/ResourceManager";
+
 export default class BaseFunc implements IMessage {
 
 	//是否是合表的 默认为true, 那么全局只有2个表 globalTranslate 和 global
@@ -38,7 +40,7 @@ export default class BaseFunc implements IMessage {
 		if (GameUtils.isReview) {
 			congfigName = this._globalConfigsReviewName;
 		}
-		this._globalConfigMap = Laya.loader.getRes(congfigName);
+		this._globalConfigMap =ResourceManager.getResTxt(congfigName);
 
 		var hotCfg = GameSwitch.switchMap[this.SWITCH_CONFIG_HOT];
 		if (hotCfg && hotCfg != "") {
@@ -67,7 +69,7 @@ export default class BaseFunc implements IMessage {
 		if (!this.isMergeConfig) {
 			return;
 		}
-		this._translateConfigs = Laya.loader.getRes(this._translateCfgsName) || {};
+		this._translateConfigs =  {};
 		var cfgsArr: string[] = this._globalConfigMap
 		var translateKey = "Translate"
 		var translatekeyLen = translateKey.length;

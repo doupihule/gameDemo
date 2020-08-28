@@ -1,8 +1,10 @@
+import VectorTools from "../../../framework/utils/VectorTools";
+
 export default class InstanceMoveEntity {
 
 	//按照帧给的速度绝对值,到时会把速度根据运动方向分配给x和y速度.游戏中尽量禁止使用tween动画. 
 	spd: number = 0;
-	target: Laya.Vector3;
+	target: {x,y,z};
 	callFunc: any;
 	thisObj: any;
 	expandParams: any;
@@ -11,21 +13,21 @@ export default class InstanceMoveEntity {
 	//预期运动的总帧数,需要通过计算赋值
 	totalFrame: number = 0;
 	//初始速度 
-	initSpeed: Laya.Vector3;
+	initSpeed: {x,y,z};
 	isGrid: boolean = false;
 	callParams: any; 	//回调参数
 	followTarget: any;	//跟随的目标
-	offsetPos: Laya.Vector3;	//偏移坐标
+	offsetPos: {x,y,z};	//偏移坐标
 
 
-	public constructor(target: Laya.Vector3, spd: number = 0, callFunc: any = null, thisObj: any = null, expandParams: any = null) {
+	public constructor(target: {x,y,z}, spd: number = 0, callFunc: any = null, thisObj: any = null, expandParams: any = null) {
 		this.target = target;
 		this.spd = spd;
 		this.callFunc = callFunc;
 		this.thisObj = thisObj;
 		this.expandParams = expandParams;
-		this.offsetPos = new Laya.Vector3();
-		this.initSpeed = new Laya.Vector3();
+		this.offsetPos = VectorTools.createVec3();
+		this.initSpeed = VectorTools.createVec3();
 	}
 
 	//初始化数据

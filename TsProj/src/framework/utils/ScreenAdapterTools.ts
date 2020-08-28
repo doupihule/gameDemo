@@ -1,5 +1,7 @@
 import LogsManager from "../manager/LogsManager";
 import Global from "../../utils/Global";
+import ViewTools from "../components/ViewTools";
+import GlobalEnv from "../engine/GlobalEnv";
 
 export default class ScreenAdapterTools {
 
@@ -126,21 +128,17 @@ export default class ScreenAdapterTools {
 			return;
 		}
 		//创建黑边
-		var image = new Laya.Image("static/global_image_heibian.png");
-		image.anchorX = 1;
-		image.anchorY = 0.5;
-		image.x = this.sceneOffsetX
-		image.y = this.height / 2 + this.UIOffsetY;
-		Laya.stage.addChild(image);
-		image.zOrder = 10000000;
+		var image = ViewTools.createImage("static/global_image_heibian.png");
+		image.setAnchor(1,0.5)
+		image.setPos(this.sceneOffsetX,this.height / 2 + this.UIOffsetY);
+		GlobalEnv.uiRoot.addChild(image);
+		image.setZorder(1000000) ;
 
-		image = new Laya.Image("static/global_image_heibian.png");
-		image.anchorX = 0;
-		image.anchorY = 0.5;
-		image.x = this.sceneOffsetX + this.width
-		image.y = this.height / 2 + this.UIOffsetY;
-		Laya.stage.addChild(image);
-		image.zOrder = 10000000;
+		image = ViewTools.createImage("static/global_image_heibian.png");
+		image.setAnchor(0,0.5)
+		image.setPos(this.sceneOffsetX + this.width,this.height / 2 + this.UIOffsetY);
+		GlobalEnv.uiRoot.addChild(image);
+		image.setZorder(10000000);
 
 	}
 

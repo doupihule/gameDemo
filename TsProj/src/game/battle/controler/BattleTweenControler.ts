@@ -1,6 +1,7 @@
 import BattleLogicalControler from "./BattleLogicalControler";
 import BattleConst from "../../sys/consts/BattleConst";
 import InstanceBasic from "../instance/InstanceBasic";
+import BaseContainer from "../../../framework/components/BaseContainer";
 
 /**
  * 战斗缓存行为控制器
@@ -174,7 +175,7 @@ export default class BattleTweenControler {
 	}
 
 	//直接对view设置一个tween
-	public setTweenByView(frame: number, view: Laya.Sprite, targetParams: any, type: number, callBack = null, thisObj = null, callBackParams: any = null) {
+	public setTweenByView(frame: number, view: BaseContainer, targetParams: any, type: number, callBack = null, thisObj = null, callBackParams: any = null) {
 		this.clearOneTween(view);
 		var startParams: any = {
 			x: view.x, y: view.y, s: view.scale,

@@ -17,13 +17,13 @@ import TranslateFunc from "../../../framework/func/TranslateFunc";
 export default class FogInstanceCell extends FogInstanceBasic {
 
 	//被锁住的遮罩
-	private maskImg: Laya.Image;
+	private maskImg: ImageExpand;
 	//上一次的image.用来做过渡动画
-	private lastMaskImg: Laya.Image;
-	private maskCtn: Laya.Image;
+	private lastMaskImg: ImageExpand;
+	private maskCtn: ImageExpand;
 	//事件ctn，用来展示事件icon
-	public eventCtn: Laya.Image;
-	private signCtn: Laya.Image;
+	public eventCtn: ImageExpand;
+	private signCtn: ImageExpand;
 	//这个item x方向位置
 	public xIndex = 1;
 	//这个item y方向位置
@@ -54,11 +54,11 @@ export default class FogInstanceCell extends FogInstanceBasic {
 	}
 
 	addCtn() {
-		this.eventCtn = new Laya.Image("");
+		this.eventCtn = ViewTools.createImage("");
 		this.eventCtn.anchorX = 0.5;
 		this.eventCtn.anchorY = 0.5;
 		this.fogControler.fogLayerControler.a23.addChild(this.eventCtn);
-		this.maskCtn = new Laya.Image("");
+		this.maskCtn = ViewTools.createImage("");
 		this.maskCtn.anchorX = 0.5;
 		this.maskCtn.anchorY = 0.5;
 		this.fogControler.fogLayerControler.a24.addChild(this.maskCtn);
@@ -66,7 +66,7 @@ export default class FogInstanceCell extends FogInstanceBasic {
 		this.lastMaskImg = this.createImage();
 		this.maskCtn.addChild(this.maskImg);
 		this.maskCtn.addChild(this.lastMaskImg);
-		this.signCtn = new Laya.Image("uisource/expedition/expedition/expedition_image_chahao.png");
+		this.signCtn = ViewTools.createImage("uisource/expedition/expedition/expedition_image_chahao.png");
 		this.signCtn.anchorX = 0.5;
 		this.signCtn.anchorY = 0.5;
 		this.maskCtn.addChild(this.signCtn);
@@ -74,7 +74,7 @@ export default class FogInstanceCell extends FogInstanceBasic {
 	}
 
 	private createImage(url = null) {
-		var img = new Laya.Image(url);
+		var img = ViewTools.createImage(url);
 		img.anchorX = 0.5;
 		img.anchorY = 0.5;
 		img.scale(130 / 128, 130 / 128, true);

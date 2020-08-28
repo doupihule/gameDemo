@@ -24,7 +24,6 @@ export default class InstanceMonster extends InstanceLogical {
 
 	//金币图标目标点
 	private static _goldPos: any
-	private static _tempPos: Laya.Point = new Laya.Point()
 
 	//随机运动的参数
 	/**

@@ -15,6 +15,7 @@ import BattleLogsManager from '../../sys/manager/BattleLogsManager';
 import ChooseTrigger from './ChooseTrigger';
 import SkillExpandTrigger from './SkillExpandTrigger';
 import TableUtils from '../../../framework/utils/TableUtils';
+import VectorTools from "../../../framework/utils/VectorTools";
 
 /**
  * 技能效果生效后做的事
@@ -440,7 +441,7 @@ export default class SkillActionTrigger {
 				x = info[1] * attacker._viewWay + targetRole.pos.x;
 				z = info[2] + targetRole.pos.z;
 			}
-			pointArr.push(new Laya.Vector3(x, 0, z));
+			pointArr.push(VectorTools.createVec3(x, 0, z));
 			expandArr.push(expandParams);
 		}
 		attacker.moveToGroupPoints(pointArr, 0, null, null, expandArr);

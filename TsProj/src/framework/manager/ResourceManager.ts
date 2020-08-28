@@ -2,6 +2,7 @@ import {LoadManager} from "./LoadManager";
 import SubPackageManager from "./SubPackageManager";
 import LogsManager from "./LogsManager";
 import SubPackageConst from "../../game/sys/consts/SubPackageConst";
+import Sprite3DExpand from "../viewcomp/Sprite3DExpand";
 
 
 export default class ResourceManager {
@@ -27,39 +28,7 @@ export default class ResourceManager {
 	//示例:loadMult3dmodel(["role_001","role_101","effect_110"],"scene_battle");
 	// params 自带的回调参数
 	static loadMult3dmodel(models: string[], sceneModel = null, callBack = null, thisObj = null, params = null) {
-		var scenePackName: string;
-		var packs = [];
-		var urls: string[] = [];
-		if (sceneModel) {
-			scenePackName = this.get3dodelPackName(sceneModel);
-			if (this.check3dIsSubpack()) {
-				SubPackageManager.insertDynamicSubPack(scenePackName, this.get3DModelPath(sceneModel) + "/" + scenePackName)
-			}
 
-			urls.push(this.get3dmodelUrl(sceneModel, true));
-			packs.push(scenePackName);
-		}
-
-		for (var i = 0; i < models.length; i++) {
-			var packName = this.get3dodelPackName(models[i]);
-			if (this.check3dIsSubpack()) {
-				SubPackageManager.insertDynamicSubPack(packName, this.get3DModelPath(models[i]) + "/" + packName);
-			}
-
-			urls.push(this.get3dmodelUrl(models[i]));
-			packs.push(packName);
-		}
-
-		//如果是不需要分包的
-		if (!this.check3dIsSubpack()) {
-			packs = [];
-		}
-
-		if (params) {
-			LoadManager.instance.createPackAndRes(packs, urls, Laya.Handler.create(thisObj, callBack, params));
-		} else {
-			LoadManager.instance.createPackAndRes(packs, urls, Laya.Handler.create(thisObj, callBack));
-		}
 	}
 
 	//判断是否3d模块需要分包
@@ -70,17 +39,6 @@ export default class ResourceManager {
 
 	//加载一个3dmodel
 	static load3dmodel(modelName, isScene: boolean, callBack, thisObj, params = null) {
-		var packName = this.get3dodelPackName(modelName);
-		SubPackageManager.insertDynamicSubPack(packName, this.get3DModelPath(modelName) + "/" + packName);
-		//如果是不需要分包的
-		if (!this.check3dIsSubpack()) {
-			packName = null;
-		}
-		if (params) {
-			LoadManager.instance.createPackAndRes(packName, this.get3dmodelUrl(modelName, isScene), Laya.Handler.create(thisObj, callBack, params));
-		} else {
-			LoadManager.instance.createPackAndRes(packName, this.get3dmodelUrl(modelName, isScene), Laya.Handler.create(thisObj, callBack));
-		}
 	}
 
 	//获取一个3dmodel的分包名
@@ -97,53 +55,18 @@ export default class ResourceManager {
 
 	//获取一个3demol的sprite3D对象.根据业务逻辑自己去clone withClone 是否克隆.原则上都需要克隆 默认false;
 	static get3dmodelRes(modelName, isScene: boolean = false, withClone: boolean = false) {
-		var url = this.get3dmodelUrl(modelName, isScene);
-		var res = Laya.Loader.getRes(url);
-		if (!res) {
-			LogsManager.warn("没有这个资源-", modelName);
-		} else {
-			if (withClone && res.clone) {
-				res = res.clone();
-			}
-			this.checkParticalRendeMode(res, modelName);
-		}
-		return res
+		return null
 	}
 
 	private static _checkRenderModeMap: any = {}
 
 	//检查粒子renderMode
-	static checkParticalRendeMode(view: Laya.Sprite3D, modelName: string) {
-		// if(!UserInfo.isTT() ){
-		//     return;
-		// }
-		// //必须是ios系统
-		// if(!UserInfo.isIos()){
-		//     return;
-		// }
-		var partical: any = view as any;
-		if (partical._particleSystem) {
-			var renmode = partical._render.renderMode
-			if (renmode != 0) {
-				if (!this._checkRenderModeMap[modelName]) {
-					this._checkRenderModeMap[modelName] = true;
-					LogsManager.warn("-----------renderMode 为mesh了")
-				}
-				partical._render.renderMode = 0;
-			}
-		}
-		for (var i = 0; i < view.numChildren; i++) {
-			var child = view.getChildAt(i) as Laya.Sprite3D;
-			this.checkParticalRendeMode(child, modelName);
-		}
+	static checkParticalRendeMode(view: Sprite3DExpand, modelName: string) {
 
 	}
 
 	//clone一个粒子
-	static cloneOneSprite(sourceSp: Laya.Sprite3D) {
-		var rt = sourceSp.clone();
-		this.checkParticalRendeMode(sourceSp, sourceSp.name || "test");
-		return rt as Laya.Sprite3D;
+	static cloneOneSprite(sourceSp: Sprite3DExpand) {
 	}
 
 
@@ -156,24 +79,7 @@ export default class ResourceManager {
 	//这个接口废弃
 	static loadSpine(spineName, callBack, thisObj, params = null, needChangeSkin = false) {
 
-		var ani = this.createSpineAni(spineName)
-		if (ani) {
-			if (callBack) callBack.call(thisObj, ani, params)
-		}
 
-		SubPackageManager.insertDynamicSubPack(spineName, this.SPINEPATH + "/" + spineName);
-
-
-		//分包加载完成 后 加载模版
-		var onSubPackComplete = () => {
-			var temp = new Laya.Templet();
-			temp.loadAni(this.SPINEPATH + "/" + spineName + "/" + spineName + ".sk");
-			temp.on(Laya.Event.COMPLETE, this, this.onSpineComplete, [temp, spineName, callBack, thisObj, params, needChangeSkin]);
-			temp.on(Laya.Event.ERROR, this, this.onSpineLoadError, [temp, spineName, callBack, thisObj, params, needChangeSkin]);
-		}
-
-
-		SubPackageManager.loadDynamics(this.getSpineSubpack(spineName), this.getSpinePath(spineName), onSubPackComplete, this);
 	}
 
 	//获取spine对应的分包 因为考虑到如果有组的分包
@@ -211,34 +117,10 @@ export default class ResourceManager {
 	}
 
 
-	private static onSpineLoadError(spineName, callBack, thisObj, params, needChangeSkin) {
-		LogsManager.warn(spineName, "___创建失败")
-	}
-
-	//spine动画加载完成
-	private static onSpineComplete(temp, spineName, callBack, thisObj, params = null, needChangeSkin = false) {
-		this._spineModelMap[spineName] = temp;
-		var ani = this.createSpineAni(spineName)
-		LogsManager.echo(spineName, "___spinename")
-		if (ani) {
-			if (callBack) callBack.call(thisObj, ani, params)
-		} else {
-			LogsManager.warn("创建动画失败");
-		}
-
-	}
-
 
 	// needChangeSkin 是否需要换装 默认false 不换砖. 换装会占用更多的模版内存
 	private static createSpineAni(spineName, needChangeSkin = false) {
-		var tempModel: Laya.Templet = this._spineModelMap[spineName];
-		if (!tempModel) {
-			return null
-		}
-		var t = needChangeSkin ? 1 : 0;
-		var ani: Laya.Skeleton = tempModel.buildArmature(t);
-		// ani.play(0,tru)
-		return ani;
+		return null;
 	}
 
 	//获取一个3d模型的路径 不带Layascene的 model
@@ -258,6 +140,16 @@ export default class ResourceManager {
 		} else {
 			return "3dmodels"
 		}
+	}
+
+	//获取文本资源
+	public  static  getResTxt(path,bounlde = "textab"){
+		return "";
+	}
+
+	//获取文件buffer
+	public  static  getResBuffer(path,boundle:string = "byteab"){
+		return  new  ArrayBuffer(10);
 	}
 
 

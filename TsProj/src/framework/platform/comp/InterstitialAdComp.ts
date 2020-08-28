@@ -394,7 +394,7 @@ export class InterstitialAdComp extends TopViewAutoComp {
 
 	/** 子类重写组件显示方法 */
 	protected _compShow() {
-		LogsManager.echo("hlx InterstitialAd _compShow", Laya.timer.currTimer);
+		LogsManager.echo("hlx InterstitialAd _compShow");
 
 		if (AdVideoManager.instance.isInterstitialLimit()) {
 			LogsManager.echo("hlx InterstitialAd _compShow：插屏广告isInterstitialLimit");
@@ -417,13 +417,13 @@ export class InterstitialAdComp extends TopViewAutoComp {
 
 		if (this._interstitialAd && this._loadSuccess) {
 			this._hasShow = true;
-			LogsManager.echo("hlx InterstitialAd show", Laya.timer.currTimer);
+			LogsManager.echo("hlx InterstitialAd show");
 			if (typeof this._interstitialAd.show == "function") {
 				try {
 					var promise = this._interstitialAd.show()
 					if (UserInfo.isWX() || UserInfo.isTT()) {
 						promise && promise.then(() => {
-							LogsManager.echo("hlx InterstitialAd广告组件show success", Laya.timer.currTimer);
+							LogsManager.echo("hlx InterstitialAd广告组件show success");
 						})
 							.catch(err => {
 								LogsManager.echo("hlx InterstitialAd广告组件show error", JSON.stringify(err));

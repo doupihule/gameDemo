@@ -13,6 +13,9 @@ import ShareTvOrderFunc from "../../sys/func/ShareTvOrderFunc";
 import {WindowCfgs} from "../../sys/consts/WindowCfgs";
 import UserModel from "../../sys/model/UserModel";
 import StatisticsManager from "../../sys/manager/StatisticsManager";
+import ImageExpand from "../../../framework/components/ImageExpand";
+import ViewTools from "../../../framework/components/ViewTools";
+import LabelExpand from "../../../framework/components/LabelExpand";
 //主角  控制超级武器的
 export default class InstancePlayer extends InstanceHero {
 
@@ -99,37 +102,30 @@ export default class InstancePlayer extends InstanceHero {
 		for (var i = 0; i < this.skillArr.length; i++) {
 			var item = this.skillArr[i];
 			var skillInfo = BattleFunc.instance.getCfgDatas("Skill", item);
-			var img: Laya.Image = new Laya.Image();
-			img.skin = "uisource/skill/skill/" + skillInfo.pic + ".png";
-			img.width = img.height = 92;
+			var img: ImageExpand = ViewTools.createImage();
+			img.setSkin( "uisource/skill/skill/" + skillInfo.pic + ".png");
+			img.setSize(92,92);
 			img.x = -i * (img.width + 10);
 			this.skillParnet.addChild(img);
-			var mask: Laya.Image = new Laya.Image("uisource/battle/battle/battle_image_jiangli.png");
-			mask.width = mask.height = 92;
-			mask.sizeGrid = "13,13,13,13"
+			var mask: ImageExpand = ViewTools.createImage("uisource/battle/battle/battle_image_jiangli.png");
+			mask.setSize(92,92)
+			mask.setSizeGrid(13,13,13,13)
 			mask.name = "mask";
 			img.addChild(mask);
 			//如果是免cd 的 显示视频按钮
 			if (this.noCd) {
-				var freeImg: Laya.Image = new Laya.Image();
-				freeImg.skin = ShareOrTvManager.instance.getFreeImgSkin(this.freeType);
-				freeImg.anchorX = 0.5;
-				freeImg.anchorY = 0.5;
+				var freeImg: ImageExpand = ViewTools.createImage();
+				freeImg.setSkin(ShareOrTvManager.instance.getFreeImgSkin(this.freeType))
+				freeImg.setAnchor(0.5,0.5)
 				freeImg.x = img.width / 2;
 				freeImg.y = img.height / 2;
 				freeImg.name = "freeImg"
 				img.addChild(freeImg);
 			} else {
-				var timeTxt: Laya.Label = new Laya.Label();
-				timeTxt.width = 92;
-				timeTxt.height = 49;
+				var timeTxt: LabelExpand= ViewTools.createLabel("",92,49,36);
 				timeTxt.y = 25;
-				timeTxt.font = "Microsoft YaHei";
-				timeTxt.fontSize = 36;
-				timeTxt.valign = "middle";
-				timeTxt.align = "center";
 				timeTxt.name = "timeTxt"
-				timeTxt.color = "#ffffff";
+				timeTxt.setColor(0xff,0xff,0xff)
 				timeTxt.text = Math.ceil(this.normalSkills[i].leftSkillCd / GameConsts.gameFrameRate) + "";
 				img.addChild(timeTxt);
 			}

@@ -3,6 +3,7 @@ import TimerManager from "../../../framework/manager/TimerManager";
 import LogsManager from "../../../framework/manager/LogsManager";
 import ShareOrTvManager from "../../../framework/manager/ShareOrTvManager";
 import UserInfo from "../../../framework/common/UserInfo";
+import BaseContainer from "../../../framework/components/BaseContainer";
 
 
 export default class BattleSceneManager {
@@ -38,7 +39,7 @@ export default class BattleSceneManager {
 	*/
 
 	//进入战斗
-	public enterBattle(data: any, ctn: Laya.Sprite, ui: any) {
+	public enterBattle(data: any, ctn: BaseContainer, ui: any) {
 		this._battestate = 1;
 		this.autoBattleControler = new BattleLogicalControler(ctn, ui);
 		this.autoBattleControler.setData(data);

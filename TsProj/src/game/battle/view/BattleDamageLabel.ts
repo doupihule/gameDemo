@@ -1,12 +1,15 @@
 import BattleConst from "../../sys/consts/BattleConst";
 import BigNumUtils from "../../../framework/utils/BigNumUtils";
 import BattleFunc from "../../sys/func/BattleFunc";
+import BaseContainer from "../../../framework/components/BaseContainer";
+import ImageExpand from "../../../framework/components/ImageExpand";
+import ViewTools from "../../../framework/components/ViewTools";
 
 /**
  * 战斗伤害数字类
  * 超过100000后就按照大数显示
  */
-export default class BattleDamageLabel extends Laya.Sprite {
+export default class BattleDamageLabel extends BaseContainer {
 	constructor() {
 		super();
 		this._childLabels = []
@@ -31,11 +34,11 @@ export default class BattleDamageLabel extends Laya.Sprite {
 
 
 	//头部标签  比如 暴击,闪避
-	private _headLabel: Laya.Image;
-	private _fuhaoLabel: Laya.Image; //符号标签
-	private _bigStrLabel: Laya.Image;    //大数字符标签
+	private _headLabel: ImageExpand;
+	private _fuhaoLabel: ImageExpand; //符号标签
+	private _bigStrLabel: ImageExpand;    //大数字符标签
 
-	private _childLabels: Laya.Image[];
+	private _childLabels: ImageExpand[];
 
 	//设置数据    kind 类型 治疗,伤害,护盾.爆伤,暴击治 value一定是正的. 根据需要拿
 	public setValue(kind: string, value: number) {
@@ -52,7 +55,7 @@ export default class BattleDamageLabel extends Laya.Sprite {
 		if (kind == BattleConst.effect_label_miss) {
 			this._headLabel = this.updateLabel("", 0, 0, this._headLabel);
 			//miss特殊处理. 居中对其坐标为0
-			this._headLabel.anchorX = 0.5;
+			this._headLabel.setAnchor(0.5,0.5);
 		} else {
 			if (value < 1) {
 				value = 1;
@@ -145,19 +148,18 @@ export default class BattleDamageLabel extends Laya.Sprite {
 	}
 
 	//传入key
-	private updateLabel(key, x, y, label: Laya.Image) {
+	private updateLabel(key, x, y, label: ImageExpand) {
 		if (!label) {
-			label = new Laya.Image();
-			label.anchorX = 0;
-			label.anchorY = 0.5
+			label = ViewTools.createImage();
+			label.setAnchor(0,0.5);
 			this.addChild(label);
 		} else {
 			label.visible = true;
 		}
 		if (key == "") {
-			label.skin = this._baseUrl + ".png";
+			label.setSkin( this._baseUrl + ".png");
 		} else {
-			label.skin = this._baseUrl + "_" + key + ".png";
+			label.setSkin(this._baseUrl + "_" + key + ".png");
 		}
 		label.x = x;
 		label.y = y;

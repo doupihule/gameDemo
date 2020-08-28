@@ -38,6 +38,7 @@ import NativeBridge from "../native/NativeBridge";
 import JSToNativeEvent from "../event/JSToNativeEvent";
 import GameHttpControler from "../common/GameHttpControler";
 import BattleFunc from "../../game/sys/func/BattleFunc";
+import GlobalEnv from "../engine/GlobalEnv";
 
 
 export default class GamePlatform implements IMessage {
@@ -924,13 +925,13 @@ export default class GamePlatform implements IMessage {
 		if (count <= 1) {
 			return;
 		}
-		Laya.timer.loop(16, obj, function () {
+		TimerManager.instance.add(function () {
 			myThis.vibrate(false);
 			index++;
 			if (index >= count) {
-				Laya.timer.clearAll(obj);
+				TimerManager.instance.removeByObject(obj);
 			}
-		});
+		},obj)
 	}
 
 
@@ -966,12 +967,6 @@ export default class GamePlatform implements IMessage {
 
 	//设置游戏帧率
 	setGameFrame() {
-		if (GameConsts.gameFrameRate == 30) {
-			Laya.stage.frameRate = Laya.Stage.FRAME_SLOW;
-			LogsManager.echo("zm setGameFrame: ", Laya.stage.frameRate);
-		} else if (GameConsts.gameFrameRate == 60) {
-			Laya.stage.frameRate = Laya.Stage.FRAME_FAST;
-		}
 		//初始化battklefunc 帧率相关数据
 		if (BattleFunc["initFrameDates"]) {
 			BattleFunc["initFrameDates"]();
@@ -1034,46 +1029,7 @@ export default class GamePlatform implements IMessage {
 	}
 
 	initPhysics3D(message) {
-		//同时开始加载lib库
-		if (!GameConsts.isUsePhysics) {
-			MainModule.instance.changeShowMainTask(-1, MainModule.task_subpackage, "not use physics");
-			return;
-		}
-
-		if (window["Physics3D"]) {
-			MainModule.instance.changeShowMainTask(-1, MainModule.task_subpackage, "has use physics");
-			return
-		}
-
-		LogsManager.echo("_startInitPhysics3d--");
-		window["loadLib"]("libs/laya.physics3D.js")
-		var code;
-		var tempFunc = () => {
-
-
-			var physics3D: Function = window["Physics3D"];
-			if (!physics3D) {
-				LogsManager.echo("Physics3D is not init")
-				return;
-			}
-			TimerManager.instance.remove(code);
-			Laya3D["_enbalePhysics"] = true;
-			physics3D(GameConsts.defaultPhysicsMemory * 1024 * 1024,).then(() => {
-				//这里需要重新赋值
-				if (window["__physics3D"]) {
-					Laya3D["_physics3D"] = window["__physics3D"]
-				} else {
-					LogsManager.errorTag("physics", "全局没有找到物理库对象")
-				}
-
-				LogsManager.echo("xd 物理引擎初始化完毕")
-				MainModule.instance.changeShowMainTask(-1, MainModule.task_subpackage, message);
-			})
-		}
-
-		code = TimerManager.instance.add(tempFunc, this, 10, 9999, false);
-		tempFunc();
-
+		MainModule.instance.changeShowMainTask(-1, MainModule.task_subpackage, "not use physics");
 	}
 
 
@@ -1448,17 +1404,17 @@ export default class GamePlatform implements IMessage {
 
 	//注册焦点事件
 	protected registFocusEvent() {
-		this.hideT = Laya.Browser.now();
+		this.hideT = Client.instance.miniserverTime
 		this.showT = this.hideT;
-		Laya.stage.on(Laya.Event.FOCUS, this, this.onGetFocus);
-		Laya.stage.on(Laya.Event.BLUR, this, this.onLoseFocus);
+		// GlobalEnv.uiRoot.on(Laya.Event.FOCUS, this, this.onGetFocus);
+		// GlobalEnv.uiRoot.on(Laya.Event.BLUR, this, this.onLoseFocus);
 	}
 
 	//获取游戏焦点
 	protected onGetFocus() {
 		LogsManager.echo("获取焦点");
 		this.isHide = false;
-		this.showT = Laya.Browser.now();
+		this.showT = Client.instance.miniserverTime
 		Message.instance.send(MsgCMD.GAME_ONSHOW);
 		StatisticsManager.ins.onEvent(StatisticsCommonConst.ON_SHOW);
 		StatisticsManager.addLoadingOutTime(this.showT - this.hideT);
@@ -1467,7 +1423,7 @@ export default class GamePlatform implements IMessage {
 	//失去游戏焦点
 	protected onLoseFocus() {
 		this.isHide = true;
-		this.hideT = Laya.Browser.now()
+		this.hideT = Client.instance.miniserverTime
 		LogsManager.echo('>>OnHide成功回调', this.hideT);
 		Message.instance.send(MsgCMD.GAME_ONHIDE);
 		// 发送阿里云打点日志

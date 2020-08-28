@@ -15,7 +15,7 @@ export default class TimerManager {
 	private _timeMap: any = {};
 
 	constructor() {
-		Laya.timer.frameLoop(1, this, this.tickHandler);
+
 	}
 
 	static get instance(): TimerManager {
@@ -101,7 +101,7 @@ export default class TimerManager {
 	private tickHandler(time: number) {
 		this.onceUpdateFrame();
 		var timeEntity: TimeEntity;
-		var curTime: number = Laya.timer.currTimer;
+		var curTime: number = Client.instance.miniserverTime;
 		var num: number = 0;
 		for (var i in this._timeMap) {
 			timeEntity = this._timeMap[i];
@@ -151,7 +151,7 @@ export default class TimerManager {
 	//做一次刷新
 	private onceUpdateFrame() {
 
-		var currentT = Laya.timer.currTimer;
+		var currentT =Client.instance.miniserverTime;
 		var dt = currentT - this._lastFrameTime;
 		if (dt > this._maxFrameDt) {
 			dt = this._maxFrameDt;
@@ -239,6 +239,7 @@ export default class TimerManager {
 		return false;
 
 	}
+
 
 
 }

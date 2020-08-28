@@ -13,7 +13,7 @@ import ShareTvOrderFunc from "./ShareTvOrderFunc";
 import WindowManager from "../../../framework/manager/WindowManager";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
 import {WindowCfgs} from "../consts/WindowCfgs";
-import {DataResourceType} from "./DataResourceFunc";
+import {DataResourceConst} from "./DataResourceFunc";
 import UserModel from "../model/UserModel";
 import RolesModel from "../model/RolesModel";
 import FogFunc from "./FogFunc";
@@ -129,7 +129,7 @@ export default class BattleFunc extends BaseFunc {
 	static frameToMiniSecode: number = 1000 / 60
 
 	//原点0,0,0 禁止修改
-	public static originPoint: Laya.Vector3 = new Laya.Vector3();
+	public static originPoint: Laya.Vector3 = VectorTools.createVec3();
 
 	//定义一个临时对象.用来存储临时属性的
 	public static tempObject: any = {};
@@ -145,10 +145,10 @@ export default class BattleFunc extends BaseFunc {
 
 
 	//记录一个临时点 战斗逻辑中间使用的过渡点
-	public static tempPoint: Laya.Vector3 = new Laya.Vector3(0, 0, 0);
-	public static tempPoint2: Laya.Vector3 = new Laya.Vector3(0, 0, 0);
-	public static tempPoint3: Laya.Vector3 = new Laya.Vector3(0, 0, 0);
-	public static tempPoint4: Laya.Vector3 = new Laya.Vector3(0, 0, 0);
+	public static tempPoint: Laya.Vector3 = VectorTools.createVec3(0, 0, 0);
+	public static tempPoint2: Laya.Vector3 = VectorTools.createVec3(0, 0, 0);
+	public static tempPoint3: Laya.Vector3 = VectorTools.createVec3(0, 0, 0);
+	public static tempPoint4: Laya.Vector3 = VectorTools.createVec3(0, 0, 0);
 
 	public static tempClickPoint: Laya.Point = new Laya.Point(0, 0);
 
@@ -467,7 +467,7 @@ export default class BattleFunc extends BaseFunc {
 			if (freeType == ShareOrTvManager.TYPE_QUICKRECEIVE) {
 				WindowManager.ShowTip(TranslateFunc.instance.getTranslate("#tid_battle_noenoughsp"));
 			} else {
-				WindowManager.OpenUI(WindowCfgs.FreeResourceUI, {type: DataResourceType.SP});
+				WindowManager.OpenUI(WindowCfgs.FreeResourceUI, {type: DataResourceConst.SP});
 			}
 			return true;
 		}

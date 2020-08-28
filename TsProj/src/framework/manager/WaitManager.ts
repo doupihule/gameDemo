@@ -2,6 +2,8 @@ import WaitEntity from "../entity/WaitEntity";
 import WindowManager from "./WindowManager";
 import ReqLoadingUI from "../../game/sys/view/loading/ReqLoadingUI";
 import ScreenAdapterTools from "../utils/ScreenAdapterTools";
+import TimerManager from "./TimerManager";
+import Client from "../common/kakura/Client";
 
 
 export default class WaitManager {
@@ -21,10 +23,8 @@ export default class WaitManager {
 		// this.waitTimer = new egret.Timer(1000);
 		// this.waitTimer.addEventListener(egret.TimerEvent.TIMER, this.timeCallBack, this);
 		this._waitView = new ReqLoadingUI();
-		this._waitView.width = ScreenAdapterTools.width;
-		this._waitView.height = ScreenAdapterTools.height;
-		Laya.timer.loop(1000, this, this.timeCallBack);
-
+		this._waitView.setSize(ScreenAdapterTools.width,ScreenAdapterTools.height);
+		TimerManager.instance.add(this.timeCallBack,this,1000);
 
 	}
 
@@ -47,11 +47,11 @@ export default class WaitManager {
 			wait = new WaitEntity();
 		}
 		wait.cmd = cmd;
-		wait.time = Laya.timer.currTimer;
+		wait.time = Client.instance.miniserverTime;
 		this.waitList.push(wait);
 		// WindowManager.OpenUI(WindowCfgs.ReqLoadingUI);
 		this.showOrHideWaitView(true);
-		Laya.timer.loop(1000, this, this.timeCallBack);
+		TimerManager.instance.add(this.timeCallBack,this,1000);
 		// if (!this.waitTimer.running) {
 		//     this.waitTimer.start();
 		// }
@@ -89,7 +89,7 @@ export default class WaitManager {
 		if (this.waitList.length <= 0) {
 			// WindowManager.CloseUI(WindowCfgs.ReqLoadingUI);
 			this.showOrHideWaitView(false);
-			Laya.timer.clearAll(this);
+			TimerManager.instance.removeByCallBack(this,this.timeCallBack);
 		}
 	}
 
@@ -98,7 +98,7 @@ export default class WaitManager {
 	 */
 	private timeCallBack(): void {
 		var len: number = this.waitList.length;
-		var nowTime: number = Laya.timer.currTimer;
+		var nowTime: number = Client.instance.miniserverTime;
 		for (var i = 0; i < len;) {
 			if (nowTime - this.waitList[i].time > 20000) {
 				console.log("cmd=" + this.waitList[i].cmd + " request timeout...");
@@ -126,9 +126,7 @@ export default class WaitManager {
 			this._waitView.setData(null);
 		} else {
 			this._waitView.visible = false;
-			if (this._waitView.parent) {
-				this._waitView.parent.removeChild(this._waitView);
-			}
+			this._waitView.removeSelf()
 		}
 	}
 }

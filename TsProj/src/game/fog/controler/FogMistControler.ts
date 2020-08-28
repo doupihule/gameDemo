@@ -106,7 +106,7 @@ export default class FogMistControler {
 	private _tempVectorResultArr: boolean[] = [false, false, false, false];
 
 	// isInit是否是初始化 非初始化需要做渐变缓动 增强表现
-	public turnOneCellView(img: Laya.Image, lastImg: Laya.Image, x: number, y: number, isInit: boolean = false) {
+	public turnOneCellView(img: ImageExpand, lastImg: ImageExpand, x: number, y: number, isInit: boolean = false) {
 		if (!isInit) {
 			Laya.Tween.clearAll(img);
 		}
@@ -214,7 +214,7 @@ export default class FogMistControler {
 	]
 
 	//刷新迷雾
-	private refreshMistByResult(img: Laya.Image, lastImg: Laya.Image, vecUnLockNums: number, x, y, isInit: boolean) {
+	private refreshMistByResult(img: ImageExpand, lastImg: ImageExpand, vecUnLockNums: number, x, y, isInit: boolean) {
 		//这里就根据解锁的数量去判断应该怎么显示
 		//不缺角, 缺1角, 缺2角, 缺对角,缺3角, 缺4角
 		var cloudKey: string;

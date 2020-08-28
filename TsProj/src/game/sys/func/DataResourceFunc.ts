@@ -3,7 +3,7 @@ import ResourceConst from "../consts/ResourceConst";
 import WindowManager from "../../../framework/manager/WindowManager";
 import RolesFunc from "./RolesFunc";
 
-export enum DataResourceType {
+export enum DataResourceConst {
 	COIN = 2,
 	GOLD = 3,
 	SP = 4,
@@ -45,28 +45,28 @@ export default class DataResourceFunc extends BaseFunc {
 		if (dataArr[0]) {
 			switch (Number(dataArr[0])) {
 				//金币
-				case DataResourceType.COIN:
+				case DataResourceConst.COIN:
 					result = {
 						img: ResourceConst.COIN_PNG,
 						num: dataArr[1],
 					};
 					break;
 				//钻石
-				case DataResourceType.GOLD:
+				case DataResourceConst.GOLD:
 					result = {
 						img: ResourceConst.GOLD_PNG,
 						num: dataArr[1],
 					};
 					break;
 				//体力
-				case DataResourceType.SP:
+				case DataResourceConst.SP:
 					result = {
 						img: ResourceConst.SP_PNG,
 						num: dataArr[1],
 					};
 					break;
 				//碎片
-				case DataResourceType.PIECE:
+				case DataResourceConst.PIECE:
 					result = {
 						img: RolesFunc.instance.getEquipIcon(RolesFunc.instance.getCfgDatasByKey("EquipMaterial", dataArr[1], "icon")),
 						id: dataArr[1],
@@ -74,28 +74,28 @@ export default class DataResourceFunc extends BaseFunc {
 					};
 					break;
 				//零件
-				case DataResourceType.COMP:
+				case DataResourceConst.COMP:
 					result = {
 						img: ResourceConst.COMP_PNG,
 						num: dataArr[1],
 					};
 					break;
 				//迷雾币
-				case DataResourceType.FOGCOIN:
+				case DataResourceConst.FOGCOIN:
 					result = {
 						img: ResourceConst.FOGCOIN_PNG,
 						num: dataArr[1],
 					};
 					break;
 				//行动力
-				case DataResourceType.ACT:
+				case DataResourceConst.ACT:
 					result = {
 						img: ResourceConst.ACT_PNG,
 						num: dataArr[1],
 					};
 					break;
 				//迷雾道具
-				case DataResourceType.FOGITEM:
+				case DataResourceConst.FOGITEM:
 					result = {
 						img: RolesFunc.instance.getEquipIcon(RolesFunc.instance.getCfgDatasByKey("EquipMaterial", dataArr[1], "icon")),
 						id: dataArr[1],
@@ -112,9 +112,9 @@ export default class DataResourceFunc extends BaseFunc {
 	}
 
 	showTip(reward) {
-		if (Number(reward[0]) == DataResourceType.COIN) {
+		if (Number(reward[0]) == DataResourceConst.COIN) {
 			WindowManager.ShowTip("获得金币 x" + reward[1])
-		} else if (Number(reward[0]) == DataResourceType.GOLD) {
+		} else if (Number(reward[0]) == DataResourceConst.GOLD) {
 			WindowManager.ShowTip("获得钻石 x" + reward[1])
 		}
 	}

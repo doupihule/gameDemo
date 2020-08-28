@@ -50,25 +50,15 @@ export default class EaseUtils {
 		this._onTouchDownFunc = onTouchDownFunc;
 		this._onTwoMovedFunc = onTwoMovedFunc;
 		this._onTwoTouchDownFunc = onTwoTouchDownFunc;
-		this._touchObject.on(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
-		// this._touchObject.loadImage("uisource/common/login_box.png");
-		this._touchObject.on(Laya.Event.MOUSE_MOVE, this, this.touchMoveHandler);
-		this._touchObject.on(Laya.Event.MOUSE_UP, this, this.touchEndHandler);
-		this._touchObject.on(Laya.Event.MOUSE_OUT, this, this.touchEndHandler);
 		this._touchObject.mouseEnabled = true;
 
 
 		// this._touchObject.addEventListener(Laya.Event.TOUCH_TAP,this.onTouchTap,this);
 	}
 
-	private onTouchTap(event: Laya.Event) {
-		if (this._onClickFunc) {
-			this._onClickFunc.call(this._easeObject, event.stageX, event.stageY);
-		}
-	}
 
 
-	public touchBeginHandler(event: Laya.Event) {
+	public touchBeginHandler(event: any) {
 
 		if (event.touches.length > 1) {
 
@@ -90,7 +80,7 @@ export default class EaseUtils {
 				this._onTwoTouchDownFunc.call(this._easeObject, event.touches[0].stageX, event.touches[0].stageY, event.touches[1].stageX, event.touches[1].stageY);
 			}
 
-			this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
+			// this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
 		} else {
 			this._originX = event.stageX;
 			this._originY = event.stageY;
@@ -106,12 +96,12 @@ export default class EaseUtils {
 				this._onTouchDownFunc.call(this._easeObject, event.stageX, event.stageY);
 			}
 
-			this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
+			// this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
 		}
 
 	}
 
-	private touchMoveHandler(event: Laya.Event) {
+	private touchMoveHandler(event: any) {
 		//如果没有按下的 那么不相应move事件
 		if (event.touches.length > 1) {
 			if (!this._isDragDown) {
@@ -178,7 +168,7 @@ export default class EaseUtils {
 		}
 	}
 
-	private touchEndHandler(event: Laya.Event) {
+	private touchEndHandler(event: any) {
 		if (this._onClickFunc && event.type == "mouseup") {
 			//只有在不移动的情况下 才会执行moveStart
 			if (!this._moveStart) {
@@ -205,12 +195,11 @@ export default class EaseUtils {
 
 		console.log(event.type)
 
-		this._touchObject.on(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
+		// this._touchObject.on(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
 	}
 
 	private startEase(x, y) {
-		Laya.timer.frameLoop(1, this, this.onEase);
-		// egret.startTick(this.onEase, this)
+		// Laya.timer.frameLoop(1, this, this.onEase);
 	}
 
 	private onEase(): boolean {
@@ -230,17 +219,16 @@ export default class EaseUtils {
 	}
 
 	private stopEase() {
-		Laya.timer.clear(this, this.onEase);
-		// egret.stopTick(this.onEase, this);
+		// Laya.timer.clear(this, this.onEase);
 
 	}
 
 
 	dispose(): void {
-		this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
-		this._touchObject.off(Laya.Event.MOUSE_MOVE, this, this.touchMoveHandler);
-		this._touchObject.off(Laya.Event.MOUSE_UP, this, this.touchEndHandler);
-		this._touchObject.off(Laya.Event.MOUSE_OUT, this, this.touchEndHandler);
+		// this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
+		// this._touchObject.off(Laya.Event.MOUSE_MOVE, this, this.touchMoveHandler);
+		// this._touchObject.off(Laya.Event.MOUSE_UP, this, this.touchEndHandler);
+		// this._touchObject.off(Laya.Event.MOUSE_OUT, this, this.touchEndHandler);
 		// this._touchObject.removeEventListener(Laya.Event.TOUCH_TAP, this.onTouchTap, this);
 	}
 }

@@ -123,7 +123,7 @@ export default class Equation {
 		}
 		if (haveArea) {
 			// 检查 point 是否在 定义域内
-			eqObj.inArea = function (p: Laya.Vector3): boolean {
+			eqObj.inArea = function (p: any): boolean {
 				// 有定义域限制
 				if (eqObj.haveArea) {
 					// 是否在X轴
@@ -183,8 +183,8 @@ export default class Equation {
 
 
 	// 判断2个一元一次方程的交点
-	public static pointOf(eqObj1: any, eqObj2: any): Laya.Vector3 {
-		var p: Laya.Vector3;
+	public static pointOf(eqObj1: any, eqObj2: any): any {
+		var p: any;
 
 		// 2条平行线
 		if (eqObj1.a == 0 && eqObj2.a == 0) {
@@ -192,17 +192,17 @@ export default class Equation {
 			// 1条平行线
 			// } else if ( eqObj1.typ == "level" ) {
 		} else if (eqObj1.a == 0) {
-			p = new Laya.Vector3();
+			p = {x:0,y:0,z:0};
 			p.y = -eqObj1.c;
 			p.x = (-eqObj2.c - eqObj2.b * p.y) / eqObj2.a;
 			// 1条平行线
 			// } else if ( eqObj2.typ == "level" ) {
 		} else if (eqObj2.a == 0) {
-			p = new Laya.Vector3();
+			p = {x:0,y:0,z:0};
 			p.y = -eqObj2.c;
 			p.x = (-eqObj1.c - eqObj1.b * p.y) / eqObj1.a;
 		} else if (eqObj1.a != 0 && eqObj2.a != 0) {
-			p = new Laya.Vector3();
+			p = {x:0,y:0,z:0};
 			if (eqObj1.b == 0) {
 				p.x = -eqObj1.c;
 				p.y = (-eqObj2.c - eqObj2.a * p.x) / eqObj2.b;
@@ -231,7 +231,7 @@ export default class Equation {
 
 
 	//平面2点间的距离
-	public static pointDistance(p1: Laya.Vector3, p2: Laya.Vector3): number {
+	public static pointDistance(p1: any, p2: any): number {
 		var dis: number = Math.sqrt((p1.x - p2.x) * (p1.x - p2.x) + (p1.y - p2.y) * (p1.y - p2.y));
 		return dis;
 	}
@@ -274,7 +274,7 @@ export default class Equation {
 	}
 
 	//修正坐标 到直线的距离 小于半径 然后修正到刚好等于半径
-	public static adjustPosByLine(p: Laya.Vector3, dis: number, r: number, ang: number, eq: any): Laya.Vector3 {
+	public static adjustPosByLine(p: any, dis: number, r: number, ang: number, eq: any): any {
 		var angDis: number = ang - eq.angle;
 		var length: number = (r - dis * eq.type) / Math.abs(Math.sin(angDis));
 		p.x -= length * Math.cos(ang);
@@ -293,7 +293,7 @@ export default class Equation {
 	}
 
 	//过点做 目标2点所在直线的垂线 判断垂线和目标直线是否有交点
-	public static checkPointByThreePoint(x, y, linep1: Laya.Vector3, linep2: Laya.Vector3): boolean {
+	public static checkPointByThreePoint(x, y, linep1: any, linep2: any): boolean {
 
 		var line: any = this.creat_1_1_b(linep1.x, linep1.y, linep2.x, linep2.y);
 
@@ -305,7 +305,7 @@ export default class Equation {
 
 
 	//判断1点到已知2点的直接上的最小距离 如果  点与直线没有交点  返回 到直线顶点的最小距离
-	public static pointLineDistance2(x, y, lineP1: Laya.Vector3, lineP2: Laya.Vector3): number {
+	public static pointLineDistance2(x, y, lineP1: any, lineP2: any): number {
 		var line: any = this.creat_1_1_b(lineP1.x, lineP1.y, lineP2.x, lineP2.y);
 		//如果点和直线有交点  那么返回点到直线的距离
 		if (this.checkPlumbPoint(x, y, line)) {
@@ -335,14 +335,14 @@ export default class Equation {
 	}
 
 	//过一点 作已知直线垂线， 求出交点
-	public static getPlumbPoint(x: number, y: number, eq: any): Laya.Vector3 {
+	public static getPlumbPoint(x: number, y: number, eq: any): any {
 		var line: any = this.plumbLine(x, y, eq);
 		return this.pointOf(line, eq);
 	}
 
 
 	//圆与直线交点的求法					圆心				半径	直线	直线方向的角度 类型 1是 正方向交点 -1 是反方向交点	
-	public static roundLinePointof(centrePoint: Laya.Vector3, r: number, eq: any, ang: number, type: number): Laya.Vector3 {
+	public static roundLinePointof(centrePoint: any, r: number, eq: any, ang: number, type: number): any {
 		//圆心到直线距离
 		var dis: number = this.pointLineDistance(centrePoint.x, centrePoint.y, eq);
 
@@ -353,10 +353,10 @@ export default class Equation {
 		var plumb: any = this.plumbLine(centrePoint.x, centrePoint.y, eq);
 
 		//垂线与 已知直线的交点；
-		var point1: Laya.Vector3 = this.pointOf(eq, plumb);
+		var point1: any = this.pointOf(eq, plumb);
 
 		//圆与直线的交点
-		var pointoff: Laya.Vector3 = new Laya.Vector3();
+		var pointoff: any = {x:0,y:0,z:0};
 
 		pointoff.x = point1.x + length * type * Math.cos(ang);
 		pointoff.y = point1.y + length * type * Math.sin(ang);
@@ -365,7 +365,7 @@ export default class Equation {
 	}
 
 	//判断三点的位置关系 中间一点是否在2点之间
-	public static check3PointPos(p1: Laya.Vector3, p2: Laya.Vector3, p3: Laya.Vector3, type: number = 0): boolean {
+	public static check3PointPos(p1: any, p2: any, p3: any, type: number = 0): boolean {
 		var xCheck: boolean;
 		var yCheck: boolean;
 		if (type == 0) {
@@ -410,7 +410,7 @@ export default class Equation {
 
 
 	// 算抛物线方程 参数为 起点 终点 顶点 重力
-	public static creat_2_2(pa: Laya.Vector3, pb: Laya.Vector3, pc: Laya.Vector3, g: number): any {
+	public static creat_2_2(pa: any, pb: any, pc: any, g: number): any {
 		var eqObj: any = {};
 		// 求方程参数
 		// 方程
@@ -518,9 +518,9 @@ export default class Equation {
 
 
 	//横坐标 纵坐标  旋转角度  true正方向旋转（false反方向旋转）  是数学系里面的坐标旋转
-	public static ratoteFormulation(nx: number, ny: number, ang: number, boo: boolean = true, out: Laya.Vector3 = null): Laya.Vector3 {
+	public static ratoteFormulation(nx: number, ny: number, ang: number, boo: boolean = true, out: any = null): any {
 		if (!out) {
-			out = new Laya.Vector3();
+			out = {x:0,y:0,z:0};
 		}
 		var cos: number = Math.cos(ang);
 		var sin: number = Math.sin(ang);
@@ -544,9 +544,9 @@ export default class Equation {
 	}
 
 	//横坐标 纵坐标  旋转角度  true正方向旋转（false反方向旋转）  是数学系里面的坐标旋转  返回的是x 和z
-	public static ratoteFormulationXZ(nx: number, nz: number, ang: number, boo: boolean = true, out: Laya.Vector3 = null): Laya.Vector3 {
+	public static ratoteFormulationXZ(nx: number, nz: number, ang: number, boo: boolean = true, out: any = null): any {
 		if (!out) {
-			out = new Laya.Vector3();
+			out = {x:0,y:0,z:0};
 		}
 		var cos: number = Math.cos(ang);
 		var sin: number = Math.sin(ang);
@@ -696,12 +696,12 @@ export default class Equation {
 	 * @param	r2
 	 * @return
 	 */
-	public static getRadomPointByRadius(r: number = 200, r2: number = 0, a: number = 0, a2: number = Math.PI * 2): Laya.Vector3 {
+	public static getRadomPointByRadius(r: number = 200, r2: number = 0, a: number = 0, a2: number = Math.PI * 2): any {
 		var radomR: number = this.getRadomFromMinMax(r, r2);
 		var ang: number = this.getRadomFromMinMax(a, a2, -2);
 		var xPos: number = radomR * Math.cos(ang);
 		var ypos: number = radomR * Math.sin(ang);
-		return new Laya.Vector3(xPos, ypos);
+		return {x:xPos,y:ypos};
 	}
 
 
@@ -811,8 +811,8 @@ export default class Equation {
 		var sin: number = Math.sin(angle);
 		// var pos0:egret.Point = new egret.Point();
 		// var pos1:egret.Point = this.rotateCalculate(lenX, lenY, sin, cos, true);		//旋转相对坐标	正旋转
-		var vel0: Laya.Vector3 = this.rotateCalculate(b1spdx, b1spdy, sin, cos, true);	//旋转速度
-		var vel1: Laya.Vector3 = this.rotateCalculate(b2spdx, b2spdy, sin, cos, true);
+		var vel0: any = this.rotateCalculate(b1spdx, b1spdy, sin, cos, true);	//旋转速度
+		var vel1: any = this.rotateCalculate(b2spdx, b2spdy, sin, cos, true);
 		//这里运用的是默认的动量守恒定理  只是 质量相等了 所以是简化版
 		var vxTotal: number = (vel0.x - vel1.x);
 		vel0.x = vel1.x;
@@ -822,28 +822,28 @@ export default class Equation {
 
 		// var pos0F:egret.Point = this.rotateCalculate(pos0.x, pos0.y, sin, cos, false);		//把坐标和速度再旋转回来
 		// var pos1F:egret.Point = this.rotateCalculate(pos1.x, pos1.y, sin, cos, false);
-		var vel0F: Laya.Vector3 = this.rotateCalculate(vel0.x, vel0.y, sin, cos, false);
-		var vel1F: Laya.Vector3 = this.rotateCalculate(vel1.x, vel1.y, sin, cos, false);
+		var vel0F: any = this.rotateCalculate(vel0.x, vel0.y, sin, cos, false);
+		var vel1F: any = this.rotateCalculate(vel1.x, vel1.y, sin, cos, false);
 		// ball1.velocity.x = vel0F.x;
 		// ball1.velocity.y = vel0F.y;
 		// ball2.velocity.x = vel1F.x;
 		// ball2.velocity.y = vel1F.y;
-		return [this.convertToValueAndAngle(new Laya.Vector3(vel0F.x, vel0F.y)), this.convertToValueAndAngle(new Laya.Vector3(vel1F.x, vel1F.y))];
+		return [this.convertToValueAndAngle({x:vel0F.x, y:vel0F.y}), this.convertToValueAndAngle({x:vel0F.x, y:vel0F.y})];
 	}
 
 	//转化为向量
 	public static convertToVector(value: number, angle: number) {
-		return new Laya.Vector3(value * Math.cos(angle), value * Math.sin(angle));
+		return {x:value * Math.cos(angle), y:value * Math.sin(angle)};
 	}
 
-	public static convertToValueAndAngle(vector: Laya.Vector3) {
+	public static convertToValueAndAngle(vector: any) {
 		return [Math.sqrt(vector.x * vector.x + vector.y * vector.y), Math.atan2(vector.y, vector.x)];
 	}
 
 	//旋转坐标
-	public static rotateCalculate(xpos: number, ypos: number, sin: number, cos: number, reverse: boolean, resultPoint: any = null): Laya.Vector3 {
+	public static rotateCalculate(xpos: number, ypos: number, sin: number, cos: number, reverse: boolean, resultPoint: any = null): any {
 		if (!resultPoint) {
-			resultPoint = new Laya.Vector3();
+			resultPoint = {x:0,y:0,z:0};
 		}
 		if (reverse) {
 			resultPoint.x = ((xpos * cos) + (ypos * sin));

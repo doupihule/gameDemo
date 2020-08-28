@@ -83,6 +83,21 @@ export default class BaseViewExpand {
 		this.__ctransform.localScale = trans;
 	}
 
+	public  get scale(){
+		return this.scaleTrans.x;
+	}
+
+	public  get rotation(){
+		return this.__ctransform.rotation
+	}
+
+	//设置锚点
+	public  setAnchor(x,y){
+		BaseViewExpand._tempVew2.x = x;
+		BaseViewExpand._tempVew2.y = y;
+		this.__ctransform.pivot = BaseViewExpand._tempVew2 as UnityEngine.Vector2;
+	}
+
 	//获取透明度
 	public  get alpha(){
 		return this._alpha;
@@ -98,16 +113,46 @@ export default class BaseViewExpand {
 		canvasGroup.alpha = value;
 	}
 
+	public  setZorder(value){
+
+	}
 
 	//-------------------------------------------------------------------------------------
 	//---------------------------显示相关-----------------------------------------
 	//-------------------------------------------------------------------------------------
+	//获取parent
+	public  get parent(){
+		return this.__ctransform.parent;
+	}
+
+	private  _visible:boolean =true;
+	public  get visible(){
+		return this._visible;
+	}
+	public  set visible(value){
+		this._visible =value;
+	}
+
+
 	//添加子对象
 	public  addChild(childView:BaseViewExpand,index:number = -1){
 		childView.__ctransform.parent =childView.__ctransform.parent;
 		if (index >=0){
 			childView.__ctransform.SetSiblingIndex(index);
 		}
+	}
+
+	//移除子对象
+	public  removeChild(childView:BaseViewExpand){
+		childView.__ctransform.parent = null;
+	}
+	//移除自己
+	public  removeSelf(){
+		this.__ctransform.parent =null;
+	}
+
+	public  get numChildren(){
+		return this.__ctransform.childCount;
 	}
 
 	//移除所有子对象
@@ -136,12 +181,61 @@ export default class BaseViewExpand {
 	}
 
 
+	//设置颜色 子类重写
+	public  setColor(r,g,b,a){
+
+	}
+
+
+	//2d对象才有这个属性3d对象禁止访问
+	public  get width(){
+		return this.__ctransform.sizeDelta.x;
+	}
+	public  get height(){
+		return this.__ctransform.sizeDelta.y;
+	}
+
+	private  static  _tempVew2 = {x:0,y:0};
+
+	public  setSize(w,h){
+		BaseViewExpand._tempVew2.x = w;
+		BaseViewExpand._tempVew2.y = h;
+		this.__ctransform.sizeDelta =BaseViewExpand._tempVew2 as UnityEngine.Vector2;
+	}
+
 	//设置是否可见
 	public  setActive(value:boolean){
 		this.__cobject.SetActive(value);
 	}
 
 
+	public  get name(){
+		return this.__ctransform.name;
+	}
+
+	public  set name(value:string){
+		this.__ctransform.name = value;
+	}
+
+
+
+	//--触摸事件相关
+	protected  _mouseEnabled:boolean =false;
+	public  set mouseEnabled(value){
+		this._mouseEnabled = value;
+	}
+	public  get mouseEnabled(){
+		return this._mouseEnabled;
+	}
+
+	//是否穿透
+	protected  _mouseThrough:boolean =false;
+	public  set mouseThrough(value){
+		this._mouseThrough = value;
+	}
+	public  get mouseThrough(){
+		return this._mouseThrough;
+	}
 
 
 	//销毁函数

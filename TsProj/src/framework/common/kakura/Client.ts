@@ -198,7 +198,7 @@ export default class Client {
 		}
 		if (result.serverInfo) {
 			this._reqBackTime = result.serverInfo.serverTime;
-			this._serverTime = parseInt(result.serverInfo.serverTime) - Math.floor(Laya.Browser.now());
+			this._serverTime = parseInt(result.serverInfo.serverTime) - Math.floor(this.getNativeTime());
 		}
 	}
 
@@ -356,11 +356,11 @@ export default class Client {
 	 * 获取系统时间
 	 */
 	get serverTime(): number {
-		return Math.floor((this._serverTime + Math.floor(Laya.Browser.now())) * 0.001);
+		return Math.floor((this._serverTime + Math.floor(this.getNativeTime())) * 0.001);
 	}
 
 	get miniserverTime(): number {
-		return this._serverTime + Laya.Browser.now()
+		return this._serverTime + this.getNativeTime()
 	}
 
 
@@ -368,7 +368,7 @@ export default class Client {
 	 * 获取系统时间
 	 */
 	get serverTimeMicro(): number {
-		return this._serverTime + Laya.Browser.now()
+		return this._serverTime + this.getNativeTime()
 	}
 
 	/**
@@ -582,7 +582,7 @@ export default class Client {
 
 	public updateServerTime(value: number) {
 		this._reqBackTime = value;
-		this._serverTime = this._reqBackTime - Laya.Browser.now();
+		this._serverTime = this._reqBackTime - this.getNativeTime();
 	}
 
 
@@ -627,6 +627,13 @@ export default class Client {
 		}
 		return state;
 	}
+
+
+
+	public  getNativeTime(){
+		return 0
+	}
+
 
 
 }

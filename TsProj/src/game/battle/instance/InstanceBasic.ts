@@ -2,6 +2,8 @@ import BattleLogicalControler from "../controler/BattleLogicalControler";
 import BattleFunc from "../../sys/func/BattleFunc";
 import LogsManager from "../../../framework/manager/LogsManager";
 import BattleConst from "../../sys/consts/BattleConst";
+import BaseContainer from "../../../framework/components/BaseContainer";
+import VectorTools from "../../../framework/utils/VectorTools";
 
 /**
  * author:xd
@@ -18,7 +20,7 @@ export default class InstanceBasic {
 
 	zorderOffset: number = 0;		//zorder 显示层级偏移 比如黑屏或者特殊情况 会修改这值
 	//为了考虑后面的横版或者俯视视野的游戏兼容 后面所有的坐标都是伪3D坐标.没有z轴可以不适用 坐标给public属性是因为外部访问频繁.需要提高访问速度.尤其是对战斗复盘的时候
-	pos: Laya.Vector3;
+	pos: {x,y,z};
 	controler: BattleLogicalControler;
 	//自身传入的数据.根据游戏需要 定义.
 	public _data: any;
@@ -26,15 +28,15 @@ export default class InstanceBasic {
 	public dataId: string;
 
 	//当前的网格坐标
-	public gridPos: Laya.Vector3;
+	public gridPos: {x,y,z};
 	public updateCount: number = 0;
 	public cfgData: any;
 	public instanceId: number = 0;
 	private static _instanceCount: number = 0;
 
-	public rotation: Laya.Vector3;
+	public rotation: {x,y,z};
 	//对应的弧度角度角度.目的是为了减少计算量
-	public rotationRad: Laya.Vector3;
+	public rotationRad: {x,y,z};
 
 	//视图缩放系数
 	public viewScale: number = 1;
@@ -67,11 +69,11 @@ export default class InstanceBasic {
 	public constructor(controler: any) {
 		//拿到游戏控制器和数据
 		this.controler = controler;
-		this.pos = new Laya.Vector3();
+		this.pos = VectorTools.createVec3();
 		InstanceBasic._instanceCount++;
 		this.instanceId = InstanceBasic._instanceCount;
-		this.rotation = new Laya.Vector3();
-		this.rotationRad = new Laya.Vector3();
+		this.rotation = VectorTools.createVec3();
+		this.rotationRad = VectorTools.createVec3();
 	}
 
 	//设置数据
@@ -358,7 +360,7 @@ export default class InstanceBasic {
 			ctnIndex = 3
 		}
 
-		var layerCtn: Laya.Sprite3D = this.controler.layerControler["a2" + ctnIndex];
+		var layerCtn: BaseContainer = this.controler.layerControler["a2" + ctnIndex];
 
 
 		layerCtn.addChild(eff.getView())

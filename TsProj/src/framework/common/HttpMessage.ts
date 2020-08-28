@@ -116,53 +116,6 @@ export default class HttpMessage {
 		var method: string = data.method;
 		var format: string = data.webParams.dataFormat
 
-		//这里必须要取随机 .否则在android下会有浏览器缓存导致post请求没有返回值 卡死.
-		// url += "?test="+Client.instance.miniserverTime+  Math.round( Math.random()*100000);
-
-		//@备注:这里需要等待资源加载完毕才能显示这个wait
-		// WaitManager.instance.add(url);
-
-		var hr: Laya.HttpRequest = new Laya.HttpRequest();
-		hr.http.time = 60000;
-		hr.once(Laya.Event.COMPLETE, this, this.onHttpSuccess);
-		hr.once(Laya.Event.ERROR, this, this.onHttpError);
-		this._currentHp = hr;
-
-		var targetStrData: string = params;
-		var sendMethod = "";
-		if (typeof targetStrData != "string") {
-			if (params.method) {
-				sendMethod = params.method
-			}
-			if (params) {
-				//如果已经有了  reqid 那么添加一个标记
-				if (params.reqId) {
-					params.reqId = "req_repeat_" + Global.deviceId + "_" + Client.instance.miniserverTime + "_" + Math.floor(Math.random() * 100000)
-				} else {
-					params.reqId = "req" + Global.deviceId + "_" + Client.instance.miniserverTime + "_" + Math.floor(Math.random() * 100000)
-				}
-
-			}
-
-			targetStrData = JSON.stringify(params);
-		}
-		var shortSendData: string = this.turnShortLogs(targetStrData);
-		LogsManager.echo("http send url is :" + url.slice(0, Math.min(200, url.length)) + "   method :" + sendMethod + "  data is : " + shortSendData)
-		//记录初始时间
-		this.reqTime = Laya.Browser.now();
-
-		var head = null;
-		if (UserInfo.isSystemNative()) {
-			head = ["Content-Type", "application/json;charset=utf-8"]
-		}
-
-		if (method.indexOf("get") > -1) {
-			var dataStr = this.objectToUrlParam(params);
-			hr.send(url, dataStr, method, "text", head);
-		} else if (method.indexOf("post") > -1) {
-			hr.send(url, targetStrData, method, "text", head);
-		}
-
 
 	}
 
@@ -201,54 +154,7 @@ export default class HttpMessage {
 	private _currentOtherHttp: any;
 
 	public sendOtherHttpRequest(url: string, params: any, callBack: Function, thisObject: any, method: string = "get", webParams: any = null, sendCount = 1, addParams: any = null) {
-		var hr: Laya.HttpRequest = new Laya.HttpRequest();
-		hr.http.time = 60000;
-		var startTime = Laya.Browser.now();
-		var onComplete = (data) => {
-			LogsManager.echo("sendOtherHttpRequest cost time:", Laya.Browser.now() - startTime, "url:", url.slice(0, Math.min(100, url.length)));
-			if (callBack) {
-				callBack.call(thisObject, data, addParams)
-			}
 
-		}
-
-		var onError = (error) => {
-			if (sendCount > 1) {
-				error = error.slice(0, 100);
-				LogsManager.errorTag(LogsErrorCode.ALIYUN_SENDERROR, error);
-			} else {
-				if (webParams) {
-					var callback = webParams.errorCall;
-					callback && callback.call(webParams.thisObj);
-				}
-			}
-		}
-
-		hr.once(Laya.Event.COMPLETE, this, onComplete);
-		hr.once(Laya.Event.ERROR, this, onError);
-
-		this._currentOtherHttp = hr;
-
-		var head: any = null
-		if (!UserInfo.isWeb() && webParams && webParams.contentType) {
-			head = ["Content-Type", webParams.contentType]
-		} else {
-			if (UserInfo.isSystemNative()) {
-				head = ["Content-Type", "application/json;charset=UTF-8"]
-			}
-		}
-		// head = ["Content-Type", "application/x-www-form-urlencoded; charset=utf-8"]
-		// console.log("http sendOtherHttpRequest url is :" + url.slice(0,Math.min(200,url.length)) + "  data is : " + JSON.stringify(params) + "   method is :" + method)
-		//记录初始时间
-		// this.reqTime = Laya.Browser.now();
-		// url+= "?test="+Client.instance.miniserverTime+  Math.round( Math.random()*100000);
-
-		if (method.indexOf("get") > -1) {
-			var dataStr = this.objectToUrlParam(params);
-			hr.send(url, dataStr, method, "text", head);
-		} else if (method.indexOf("post") > -1) {
-			hr.send(url, params, method, "text", head);
-		}
 	}
 
 
@@ -315,7 +221,7 @@ export default class HttpMessage {
 		var shortLogs: string = this.turnShortLogs(originData);
 
 		//test或者dev 打印完整的数据日志
-		LogsManager.echo("http callback,url:" + url.slice(0, Math.min(200, url.length)) + " cosTime:" + (Laya.Browser.now() - this.reqTime), "len:", originData.length, "backData:", shortLogs);
+		LogsManager.echo("http callback,url:" + url.slice(0, Math.min(200, url.length)) + " cosTime:" + (Client.instance.miniserverTime - this.reqTime), "len:", originData.length, "backData:", shortLogs);
 		if (callBack) {
 			callBack.call(thisObj, data);
 		}

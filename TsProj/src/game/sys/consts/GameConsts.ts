@@ -2,6 +2,11 @@ import UserInfo from "../../../framework/common/UserInfo";
 
 
 export default class GameConsts {
+	static  GAMEENGING_UNITY:string = "unity";
+
+	//游戏引擎是unity
+	static  gameEngine:string =GameConsts.GAMEENGING_UNITY
+
 	//默认分配的物理内存, 这个值 不能设置大,否则部分设备初始化 物理引擎会报错
 	static defaultPhysicsMemory: number = 16;
 	//游戏帧率
@@ -71,59 +76,7 @@ export default class GameConsts {
 
 	//卡日曲的相关url 在main.ts里面 调用 KariquShareConst.initKariquUrl()
 	static get kariquUrlMap() {
-		if (UserInfo.isWX()) {
-			return {
-				//登录链接
-				KARIQU_LOGIN_URL: "https://wxxyx.17tcw.com:8500/qpgy/login/reqLogin",
-				//保存关卡
-				KARIQU_SAVELEVEL_URL: "https://wxxyx.17tcw.com:8500/qpgy/game/reqSaveUser",
-				//查询配置信息
-				KARIQU_CONFIG_URL: "https://wxxyx.17tcw.com:8500/qpgy/lobby/reqConfig",
-				//游戏埋点
-				KARIQU_GAMESTATIC_URL: "https://xyx3.17tcw.com:8082/collect/pushEvents",
-				//分享图片信息
-				KARIQU_SHAREIMAGEINFO_URL: "https://xyx.17tcw.com:5267/xyx/basic/reqFenxiang",
-				//分享上报数据
-				KARIQU_SHAREBEGIN_URL: "https://xyx.17tcw.com:5201/xyx/statis/reqBeginShare",
-
-				//分享策略配置
-				KARIQU_SHAREMETHOD_URL: "https://wxxyx.17tcw.com:8500/qpgy/game/getShareStrategy",
-				//点击分享链接上报
-				KARIQU_POSTENTERGAME_URL: "https://wxxyx.17tcw.com:8500/qpgy/game/clickShare",
-
-				//卡日曲渠道标签
-				KARIQU_CHANNEL_TITLE: "krq_qpgy",
-
-
-				//设置是否开启banner拉取失败转互推
-				isOpenBannerStyleJump: true
-			}
-		} else if (UserInfo.isTT()) {
-			return {
-				//登录链接
-				KARIQU_LOGIN_URL: "https://wxxyx.17tcw.com:8500/qpgy_douyin/login/reqLogin",
-				//保存关卡
-				KARIQU_SAVELEVEL_URL: "https://wxxyx.17tcw.com:8500/qpgy_douyin/gameV2/reqSaveUser",
-				//查询配置信息
-				KARIQU_CONFIG_URL: "https://wxxyx.17tcw.com:8500/qpgy_douyin/lobby/reqConfig",
-				//游戏埋点
-				KARIQU_GAMESTATIC_URL: "https://xyx3.17tcw.com:8082/collect/pushEvents",
-				//分享图片信息
-				KARIQU_SHAREIMAGEINFO_URL: "https://xyx.17tcw.com:5267/xyx/basic/reqFenxiang",
-				//分享上报数据
-				KARIQU_SHAREBEGIN_URL: "https://xyx.17tcw.com:5201/xyx/statis/reqBeginShare",
-
-				//分享策略配置
-				KARIQU_SHAREMETHOD_URL: "https://wxxyx.17tcw.com:8500/qpgy_douyin/game/getShareStrategy",
-				//点击分享链接上报
-				KARIQU_POSTENTERGAME_URL: "https://wxxyx.17tcw.com:8500/qpgy_douyin/game/clickShare",
-
-				//卡日曲渠道标签
-				KARIQU_CHANNEL_TITLE: "krq_qpgy",
-				//设置是否开启banner拉取失败转互推
-				isOpenBannerStyleJump: true
-			}
-		}
+		return {}
 
 	}
 

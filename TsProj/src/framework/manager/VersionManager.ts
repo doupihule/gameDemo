@@ -1,14 +1,12 @@
 import UserInfo from "../common/UserInfo";
 import LogsManager from "./LogsManager";
-import Global from "../../utils/Global";
 import CacheManager from "./CacheManager";
 import StorageCode from "../../game/sys/consts/StorageCode";
 import FileUtils from "../utils/FileUtils";
-import TimerManager from "./TimerManager";
-import LogsErrorCode from "../consts/LogsErrorCode";
 import SubPackageManager from "./SubPackageManager";
 import SubPackageConst from "../../game/sys/consts/SubPackageConst";
 import GameSwitch from "../common/GameSwitch";
+import ResourceManager from "./ResourceManager";
 
 export default class VersionManager {
 	// 版本状态
@@ -88,7 +86,7 @@ export default class VersionManager {
 		// if(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOCAL_RES)){
 		//     return;
 		// }
-		this.versionJsonObj = Laya.Loader.getRes(this.versionName);
+		this.versionJsonObj = ResourceManager.getResTxt(this.versionName);
 		var subPackData = SubPackageConst.subPackData;
 		for (var i in subPackData) {
 			var info = subPackData[i];
@@ -118,9 +116,7 @@ export default class VersionManager {
 
 			return;
 		}
-		var t1 = Laya.Browser.now();
 		var model;
-		LogsManager.echo("initVersionCost:", Laya.Browser.now() - t1)
 		var cfgModelName = VersionManager.ZIP_MODEL_KEY_CONFIG
 		//初始化
 		this.initOneZipModel(VersionManager.ZIP_MODEL_KEY_CONFIG, "", [VersionManager.ZIP_MODEL_KEY_CONFIG + "/globalCfgs.json"]);
@@ -197,37 +193,7 @@ export default class VersionManager {
 
 	//尝试删除目标文件
 	private tryDeleteTargetFile(targetZipFolder, index = 0) {
-		var thisObj = this;
-		//删除对应的zip文件夹
-		if (FileUtils.existsLocalFile(targetZipFolder)) {
-			try {
-				wx.getFileSystemManager().rmdir({
 
-					dirPath: targetZipFolder,
-					success: () => {
-						LogsManager.echo("删除zip文件夹成功:", targetZipFolder);
-					},
-					fail: (ee) => {
-						//尝试再次删除
-						var errorStr;
-						try {
-							errorStr = JSON.stringify(ee);
-						} catch (e) {
-							errorStr = ee.toString();
-						}
-						LogsManager.errorTag(LogsErrorCode.FILE_ERROR, "_删除目录失败,", targetZipFolder, errorStr, "次数:", index);
-						if (index == 0) {
-							LogsManager.echo("_再次尝试删除目标文件")
-							TimerManager.instance.add(thisObj.tryDeleteTargetFile, thisObj, 20, 1, false, [targetZipFolder, 1])
-						}
-					},
-					recursive: true
-
-				}, true);
-			} catch (e) {
-				LogsManager.errorTag(LogsErrorCode.FILE_ERROR, "_尝试移除文件夹失败", e.toString())
-			}
-		}
 	}
 
 
@@ -269,73 +235,7 @@ export default class VersionManager {
 
 	//版本对比检查
 	public versionFileCheck() {
-		//目前只有微信、头条、QQ做类似的版本检查
-		if (!FileUtils.isUserWXSource()) {
-			return;
-		}
 
-		//动态插入 version.json
-		this.ingoreCheckGroup.push([
-			"version_" + Global.version + ".json"
-		]);
-		var jsonObj = Laya.Loader.getRes(this.versionName);
-		var fileInfoObj = Laya.MiniFileMgr.filesListObj;
-		//缓存文件大于25M时，会将文件大小和文件名上传
-		var isSendMaxLog: boolean = false;
-		var fileSize = fileInfoObj.fileUsedSize;
-		if (fileSize > 25 * 1024 * 1024) {
-			isSendMaxLog = true;
-		}
-		var basePath = Laya.URL.basePath;
-		var newFileKeyMap = {}
-		for (var i in jsonObj) {
-			var newKey = basePath + jsonObj[i];
-			newFileKeyMap[newKey] = true;
-		}
-
-		var onDeleBack = (fileName) => {
-			LogsManager.echo("删除资源成功", fileName);
-		}
-
-		var fileNum = 0;
-		var fileNameStr: string = "";
-		//删除版本管理器里面不存在的资源
-		var platformPath = "/" + UserInfo.platformId + "/"
-		for (var ii in fileInfoObj) {
-			//目前第一版只清理  cdn上面的资源
-			if (!newFileKeyMap[ii]) {
-				if (ii.indexOf(basePath) != -1 || ii.indexOf(platformPath) != -1 || ii.indexOf("172.16.1") != -1) {
-					var isIngoreKey = false;
-					//判断是否是忽略列表里面的文件
-					for (var iii = 0; iii < this.ingoreCheckGroup.length; iii++) {
-						var ingoreKey = this.ingoreCheckGroup[iii];
-						if (ii.indexOf(basePath + ingoreKey) != -1) {
-							isIngoreKey = true;
-						}
-					}
-					if (!isIngoreKey) {
-						var info = fileInfoObj[ii];
-						if (typeof info == "object") {
-							LogsManager.echo("删除旧版本资源:", ii);
-							Laya.MiniFileMgr.deleteFile("", info.readyUrl, new Laya.Handler(null, onDeleBack, [ii]), info.encoding, info.size);
-						}
-
-					} else {
-						LogsManager.echo("忽略删除文件:", ii);
-					}
-
-				}
-			}
-			fileNum++;
-			if (isSendMaxLog) {
-				fileNameStr += "," + FileUtils.getFileNameByUrl(ii);
-			}
-		}
-		if (isSendMaxLog) {
-			LogsManager.echo("allFileName:", fileNameStr);
-			LogsManager.echo("Laya.MiniFileMgr.filesListObj.fileUsedSize:", fileSize, ">fileNum", fileNum);
-			LogsManager.errorTag("LayaFileOverSize");
-		}
 
 	}
 
@@ -395,60 +295,8 @@ export default class VersionManager {
 		stopByNoFile 是否当检测到不存在的问题时停止,
 	*/
 	public checkModelFilesIsRight(modelName: string, stopByNoFile: boolean = false) {
-		var modelInfo = this._modelZipInfo[modelName]
-		if (!modelInfo) {
-			return false;
-		}
-		var fileList = modelInfo.fileList;
-		//需要判断是否每个文件都存在
-		var isRight = true
-		var t1 = Laya.Browser.now();
-		for (var i = 0; i < fileList.length; i++) {
-			var sourceName = fileList[i];
 
-			//这里防止重复判断文件是否存在会造成重复io
-			var fileName = this.cacheUnZipFilePathMap[sourceName]
-			if (!fileName) {
-				fileName = this.turnFilePathByModel(sourceName, modelName);
-				//如果不存在这个文件
-				if (!FileUtils.existsLocalFile(fileName)) {
-					LogsManager.echo("xd 本地不存在这个文件,", sourceName);
 
-					if (!FileUtils.existsLocalFile(fileName)) {
-						//这里在尝试多处理一次
-						isRight = false;
-					} else {
-						LogsManager.echo("xd 二次判断后本地文件有了,", sourceName);
-					}
-					if (stopByNoFile) {
-						return false;
-					}
-					// return false;
-				} else {
-					//缓存这个文件的本地绝对路径
-					this.cacheUnZipFilePathMap[sourceName] = fileName
-				}
-			}
-		}
-		LogsManager.echo("xd zip完整性校验,model:", modelName, "文件数量:", fileList.length, ",_耗时:", Laya.Browser.now() - t1);
-		return isRight;
-
-	}
-
-	/**zip文件加压后 把文件名映射添加到缓存列表里面 */
-	public initUnZipFilePath(model: string) {
-		var modelInfo = this.getZipModel(model);
-		var fileList = modelInfo.fileList;
-		//需要判断是否每个文件都存在
-		var isRight = true
-		var t1 = Laya.Browser.now();
-		for (var i = 0; i < fileList.length; i++) {
-			var sourceName = fileList[i];
-			if (!this.cacheUnZipFilePathMap[sourceName]) {
-				var fileName = this.turnFilePathByModel(sourceName, model);
-				this.cacheUnZipFilePathMap[sourceName] = fileName;
-			}
-		}
 	}
 
 
@@ -476,27 +324,6 @@ export default class VersionManager {
 	*/
 
 	public static getVirtualUrl(path: string) {
-		//如果是走本地路径的  那么直接返回path
-		// if(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOCAL_RES)){
-		//     return Laya.URL.getAdptedFilePath(path);
-		// }
-		//需要先把path做一下转化
-		path = Laya.URL.getAdptedFilePath(path);
-		var obj = VersionManager.instance.versionJsonObj
-		var cacheUnZipFilePathMap = VersionManager.instance.cacheUnZipFilePathMap;
-		var cachePath = cacheUnZipFilePathMap[path]
-		//如果是zip文件 那么直接读取unzip后的文件路径
-		if (cachePath) {
-			return cachePath;
-		}
-
-		if (obj) {
-			var turnPath = obj[path];
-			if (turnPath) {
-				return turnPath;
-			}
-
-		}
 		return path;
 	}
 

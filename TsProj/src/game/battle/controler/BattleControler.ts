@@ -11,6 +11,7 @@ import PerformanceControler from "./PerformanceControler";
 import BattleLogsManager from "../../sys/manager/BattleLogsManager";
 import InstancePlayer from "../instance/InstancePlayer";
 import BattleDebugTool from "./BattleDebugTool";
+import Client from "../../../framework/common/kakura/Client";
 
 /**
  * 游戏的控制器 基类.
@@ -126,7 +127,7 @@ export default class BattleControler {
 		 * 主要针对特别卡的设备. 比如iphone5s
 		 *
 		 */
-		var currentT = Laya.Browser.now();
+		var currentT = Client.instance.miniserverTime
 		var dt = currentT - this._lastFrameTime;
 		if (dt > this._maxFrameDt) {
 			dt = this._maxFrameDt;

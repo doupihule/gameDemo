@@ -39,7 +39,7 @@ export class ButtonUtils {
 	//按钮音效
 	private _clickSound: string;
 	/** 当前按钮动画 */
-	private _buttonTween: Laya.Tween;
+	private _buttonTween: any;
 
 	private shieldTime = 0; //按钮屏蔽点击的时间
 	private isCanClick = true; //当前是否可点击
@@ -83,196 +83,7 @@ export class ButtonUtils {
 		this._callBackParam = args
 	}
 
-	private touchHandler(e: Laya.Event): void {
-		if (!this._isEnable) return;
-		switch (e.type) {
-			case Laya.Event.MOUSE_DOWN:
-				if (this._isTouch) return;
-				if (!this.isCanClick) return;
 
-				this._isTouch = true;
-				switch (this._type) {
-					case ButtonConst.BUTTON_TYPE_1:
-						this._button.scaleX = 0.9;
-						this._button.scaleY = 0.9;
-						break;
-					case ButtonConst.BUTTON_TYPE_2:
-						this._button.scaleX *= 0.9;
-						this._button.scaleY *= 0.9;
-						break;
-					case ButtonConst.BUTTON_TYPE_3:
-						break;
-					case ButtonConst.BUTTON_TYPE_4:
-						// 停止button动画
-						this._buttonTween && this._buttonTween.pause && this._buttonTween.pause();
-						this._button.scaleX *= 0.9;
-						this._button.scaleY *= 0.9;
-						break;
-					case ButtonConst.BUTTON_TYPE_5:
-						this._button.scaleX = 1.1;
-						this._button.scaleY = 1.1;
-						break;
-					case ButtonConst.BUTTON_TYPE_6:
-						// 停止button动画
-						this._buttonTween && this._buttonTween.pause && this._buttonTween.pause();
-						this._button.scaleX *= 0.8;
-						this._button.scaleY *= 0.8;
-						break;
-					case ButtonConst.BUTTON_TYPE_7:
-						// 立体Y唯一式缓动按钮
-						// 如果有tween动画需要移除，并不重新记录按下Y值
-						if (this._buttonTween) {
-							Laya.Tween.clear(this._buttonTween);
-							this._buttonTween = null;
-						} else {
-							this._button._downY = this._button.y;
-						}
-						var clickTargetY = this._button._downY + this._typeParams['diffY'];
-						var downDuration = this._typeParams['downDuration'] ? this._typeParams['downDuration'] : 100;
-						this._buttonTween = Laya.Tween.to(this._button, {y: clickTargetY}, downDuration, null, Laya.Handler.create(this, () => {
-							this._buttonTween = null;
-						}));
-						break;
-				}
-
-				if (this._defUrl && this._defUrl != "") {
-					this._button.skin = this._tapUrl;
-				}
-				if (this._startCallBack) {
-					this.callStartCallBack(e);
-				}
-				if (this._longPress)
-					this.setLongPress();
-				break;
-			case Laya.Event.MOUSE_UP:
-				if (!this._isTouch) return;
-				Message.instance.send(FrameWorkEvent.FRAMEWORKEVENT_BUTTONCLICK);
-				this.delayEnableBtn();
-				this.playClickSound();
-				switch (this._type) {
-					case ButtonConst.BUTTON_TYPE_1:
-						this._button.scaleX = 1;
-						this._button.scaleY = 1;
-						break;
-					case ButtonConst.BUTTON_TYPE_2:
-						this._button.scaleX /= 0.9;
-						this._button.scaleY /= 0.9;
-						break;
-					case ButtonConst.BUTTON_TYPE_3:
-						break;
-					case ButtonConst.BUTTON_TYPE_4:
-						// 停止button动画
-						this._buttonTween && this._buttonTween.resume && this._buttonTween.resume();
-						this._button.scaleX /= 0.9;
-						this._button.scaleY /= 0.9;
-						break;
-					case ButtonConst.BUTTON_TYPE_5:
-						this._button.scaleX = 1;
-						this._button.scaleY = 1;
-						break;
-					case ButtonConst.BUTTON_TYPE_6:
-						// 停止button动画
-						this._buttonTween && this._buttonTween.resume && this._buttonTween.resume();
-						this._button.scaleX /= 0.8;
-						this._button.scaleY /= 0.8;
-						break;
-					case ButtonConst.BUTTON_TYPE_7:
-						// 立体Y唯一式缓动按钮
-						// 松手回到原点
-						this._buttonTween && Laya.Tween.clear(this._buttonTween);
-						var upDuration = this._typeParams['upDuration'] ? this._typeParams['upDuration'] : 300;
-						this._buttonTween = Laya.Tween.to(this._button, {y: this._button._downY}, upDuration, Laya.Ease.backOut, Laya.Handler.create(this, () => {
-							this._buttonTween = null;
-						}));
-						break;
-				}
-				if (this._defUrl && this._defUrl != "") {
-					this._button.skin = this._defUrl;
-				}
-				if (this._isTouch && this._callBack != null) {
-					this._callBack.call(this._thisObj, this._callBackParam);
-				}
-				this._isTouch = false;
-				if (this._endCallBack) {
-					this._endCallBack.call(this._thisObj);
-				}
-
-				if (this._longPress)
-					this.closeLongPress();
-				break;
-			case Laya.Event.MOUSE_OUT:
-				if (!this._isTouch) return;
-				Message.instance.send(FrameWorkEvent.FRAMEWORKEVENT_BUTTONCLICK);
-				this.delayEnableBtn();
-				this._isTouch = false;
-				switch (this._type) {
-					case ButtonConst.BUTTON_TYPE_1:
-						this._button.scaleX = 1;
-						this._button.scaleY = 1;
-						break;
-					case ButtonConst.BUTTON_TYPE_2:
-						this._button.scaleX /= 0.9;
-						this._button.scaleY /= 0.9;
-						break;
-					case ButtonConst.BUTTON_TYPE_3:
-						break;
-					case ButtonConst.BUTTON_TYPE_4:
-						// 开始button动画
-						this._buttonTween && this._buttonTween.resume && this._buttonTween.resume();
-						this._button.scaleX /= 0.9;
-						this._button.scaleY /= 0.9;
-						break;
-					case ButtonConst.BUTTON_TYPE_5:
-						this._button.scaleX = 1;
-						this._button.scaleY = 1;
-						break;
-					case ButtonConst.BUTTON_TYPE_6:
-						// 开始button动画
-						this._buttonTween && this._buttonTween.resume && this._buttonTween.resume();
-						this._button.scaleX /= 0.8;
-						this._button.scaleY /= 0.8;
-						break;
-					case ButtonConst.BUTTON_TYPE_7:
-						// 立体Y唯一式缓动按钮
-						// 松手回到原点
-						this._buttonTween && Laya.Tween.clear(this._buttonTween);
-						var upDuration = this._typeParams['upDuration'] ? this._typeParams['upDuration'] : 300;
-						this._buttonTween = Laya.Tween.to(this._button, {y: this._button._downY}, upDuration, Laya.Ease.backOut, Laya.Handler.create(this, () => {
-							this._buttonTween = null;
-						}));
-
-						// 按下式按钮移动到外面。也判定点击
-						if (this._callBack != null) {
-							this._callBack.call(this._thisObj, this._callBackParam);
-						}
-
-						break;
-				}
-				if (this._defUrl && this._defUrl != "") {
-					this._button.skin = this._defUrl;
-				}
-				if (this._dragCallBack) {
-					this.callDragCallBack(e);
-				}
-				if (this._endCallBack) {
-					this._endCallBack.call(this._thisObj);
-				}
-
-				if (this._longPress)
-					this.closeLongPress();
-				break;
-		}
-	}
-
-	private playClickSound() {
-		if (this._clickSound) {
-			SoundManager.playSE(this._clickSound);
-		} else {
-			if (ResourceConst["BASE_SOUND_CLICK"]) {
-				SoundManager.playSE(ResourceConst["BASE_SOUND_CLICK"]);
-			}
-		}
-	}
 
 	public setTouchEnd(func) {
 		this._endCallBack = func;
@@ -322,29 +133,12 @@ export class ButtonUtils {
 	}
 
 	public removeBtnListener() {
-		this._realButton.offAll(Laya.Event.MOUSE_DOWN)
-		this._realButton.offAll(Laya.Event.MOUSE_OUT)
-		this._realButton.offAll(Laya.Event.MOUSE_UP)
-
-		this._realButton.offAll(Laya.Event.DISPLAY);
-		this._realButton.offAll(Laya.Event.UNDISPLAY);
 		this.removeStageCallback();
 	}
 
 	//注册按钮点击事件
 	public registBtnListener() {
-		this._realButton.on(Laya.Event.MOUSE_DOWN, this, this.touchHandler);
-		this._realButton.on(Laya.Event.MOUSE_UP, this, this.touchHandler);
-		this._realButton.on(Laya.Event.MOUSE_OUT, this, this.touchHandler);
 
-		// 如果按钮为晃动样式
-		if (this._type == ButtonConst.BUTTON_TYPE_4 || this._type == ButtonConst.BUTTON_TYPE_6) {
-			if (this._realButton.displayedInStage) {
-				this.addStageCallback();
-			}
-			this._realButton.on(Laya.Event.DISPLAY, this, this.addStageCallback);
-			this._realButton.on(Laya.Event.UNDISPLAY, this, this.removeStageCallback);
-		}
 	}
 
 	/**
@@ -365,51 +159,16 @@ export class ButtonUtils {
 
 	//呼吸放大1.3倍动画
 	private addButtonTween1() {
-		if (!this._button) {
-			console.log()
-		}
-
-		this._buttonTween = Laya.Tween.to(this._button, {
-			scaleX: 1.3 * this.oldScaleX,
-			scaleY: 1.3 * this.oldScaleY
-		}, 750, Laya.Ease.sineIn, Laya.Handler.create(this, () => {
-			this._buttonTween = Laya.Tween.to(this._button, {
-				scaleX: this.oldScaleX,
-				scaleY: this.oldScaleY
-			}, 750, Laya.Ease.sineOut, Laya.Handler.create(this, () => {
-				this._buttonTween = null
-				this.addButtonTween1();
-			}));
-		}))
 	}
 
 	private addButtonTween() {
-		if (!this._button) {
-			console.log()
-		}
 
-		this._buttonTween = Laya.Tween.to(this._button, {
-			scaleX: 1.1 * this.oldScaleX,
-			scaleY: 1.1 * this.oldScaleY
-		}, 750, Laya.Ease.sineIn, Laya.Handler.create(this, () => {
-			this._buttonTween = Laya.Tween.to(this._button, {
-				scaleX: this.oldScaleX,
-				scaleY: this.oldScaleY
-			}, 750, Laya.Ease.sineOut, Laya.Handler.create(this, () => {
-				this._buttonTween = null
-				this.addButtonTween();
-			}));
-		}))
 	}
 
 	/**
 	 * 移除场景回调
 	 */
 	private removeStageCallback() {
-		if (this._type == ButtonConst.BUTTON_TYPE_4) {
-			Laya.Tween.clearAll(this._button)
-			this._buttonTween = null
-		}
 	}
 
 
@@ -433,7 +192,6 @@ export class ButtonUtils {
 	private _longPress: boolean = false;
 
 	private setLongPress(): void {
-		Laya.timer.once(1000, this, this.onHold);
 	}
 
 	onHold() {
@@ -443,7 +201,6 @@ export class ButtonUtils {
 	}
 
 	private closeLongPress(): void {
-		Laya.timer.clear(this, this.onHold);
 	}
 
 

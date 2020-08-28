@@ -15,6 +15,7 @@ import ShareFunc from "../../game/sys/func/ShareFunc";
 import GlobalParamsFunc from "../../game/sys/func/GlobalParamsFunc";
 import RecordEvent from "../event/RecordEvent";
 import KariqiShareManager from "../manager/KariqiShareManager";
+import Client from "../common/kakura/Client";
 
 
 export default class TTGamePlatform extends WXGamePlatform {
@@ -138,7 +139,7 @@ export default class TTGamePlatform extends WXGamePlatform {
 		LogsManager.echo(res);
 		this._startCallback && this._startCallback.call(this._startThisObj);
 		this._startCallback = null;
-		this._recordStartT = Laya.Browser.now();
+		this._recordStartT = Client.instance.miniserverTime
 
 		//发送录屏开始事件
 		Message.instance.send(RecordEvent.TT_RECORD_EVENT_START, this._recordType);

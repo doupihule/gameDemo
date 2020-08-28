@@ -3,14 +3,14 @@ import TimerManager from "../../../framework/manager/TimerManager";
 
 export class ChapterLayerControler {
 	/**游戏的根容器 */
-	a: Laya.Sprite;
+	a: BaseContainer;
 	/**游戏场景的后景层 */
-	a1: Laya.Sprite;
+	a1: BaseContainer;
 	/**游戏世界元素交互的容器 */
-	a2: Laya.Sprite;
-	a21: Laya.Sprite;
+	a2: BaseContainer;
+	a21: BaseContainer;
 
-	public rootCtn: Laya.Sprite;
+	public rootCtn: BaseContainer;
 	public minY = 0;
 	public maxHeight = 1400;
 	//展示的总长度
@@ -20,13 +20,13 @@ export class ChapterLayerControler {
 	private controler: ChapterLogicControler
 	private timeCode = 0;
 
-	public constructor(controler, rootCtn: Laya.Sprite) {
+	public constructor(controler, rootCtn: BaseContainer) {
 		this.controler = controler;
 		this.rootCtn = rootCtn;
-		this.a = new Laya.Sprite()
-		this.a1 = new Laya.Sprite();
-		this.a2 = new Laya.Sprite();
-		this.a21 = new Laya.Sprite();
+		this.a = ViewTools.createContainer()
+		this.a1 = ViewTools.createContainer();
+		this.a2 = ViewTools.createContainer();
+		this.a21 = ViewTools.createContainer();
 
 		rootCtn.addChild(this.a);
 		this.a.addChild(this.a1);

@@ -119,7 +119,7 @@ export default class JumpListZhiseUI extends ui.gameui.jump.JumpListZhiseUI impl
 		var len = headListData.length;
 		for (var i = 0; i < len; i++) {
 			var itemData = headListData[i];
-			var itemGroup: Laya.Image = JumpManager.createJumpItem(itemData, size1, size1, {from: JumpConst.JUMPLIST}, false, 0, true, 18, "#000000", false);
+			var itemGroup: ImageExpand = JumpManager.createJumpItem(itemData, size1, size1, {from: JumpConst.JUMPLIST}, false, 0, true, 18, "#000000", false);
 			itemGroup.x = i % len * (size1 + 20);
 			itemGroup.y = 14;
 			this.iconPanel1.addChild(itemGroup);
@@ -134,24 +134,24 @@ export default class JumpListZhiseUI extends ui.gameui.jump.JumpListZhiseUI impl
 		for (var i = 0; i < this.listData.length; i++) {
 			var itemData = this.listData[i];
 			// icon组
-			var itemGroup: Laya.Image = new Laya.Image();
+			var itemGroup: ImageExpand = ViewTools.createImage();
 			itemGroup.width = size2;
 			itemGroup.height = size2 + 47;
 			// icon背景
-			var itemBg: Laya.Image = new Laya.Image(ResourceConst.JUMP_ZHISE_ICONBG);
+			var itemBg: ImageExpand = ViewTools.createImage(ResourceConst.JUMP_ZHISE_ICONBG);
 			itemBg.width = size2
 			itemBg.height = itemGroup.height;
 			itemBg.sizeGrid = "25,19,23,22"
 			new ButtonUtils(itemBg, this.clickItem, this, null, null, itemData).setBtnType(ControlConst.BUTTON_TYPE_3);
 			itemGroup.addChild(itemBg)
 			// icon图
-			var imgItem: Laya.Image = new Laya.Image(itemData.Icon);
+			var imgItem: ImageExpand = ViewTools.createImage(itemData.Icon);
 			imgItem.x = imgItem.y = 6;
 			imgItem.width = imgItem.height = size2 - 12;
 			itemGroup.addChild(imgItem)
 			imgItem.mouseEnabled = false;
 			//文本底
-			var labelBg: Laya.Image = new Laya.Image(JumpManager.getZhiseLabelBg());
+			var labelBg: ImageExpand = ViewTools.createImage(JumpManager.getZhiseLabelBg());
 			labelBg.width = imgItem.width;
 			labelBg.height = 47;
 			labelBg.x = imgItem.x;
@@ -178,7 +178,7 @@ export default class JumpListZhiseUI extends ui.gameui.jump.JumpListZhiseUI impl
 				} else {
 					sign = ResourceConst.JUMP_ICON_NEW;
 				}
-				var signImg: Laya.Image = new Laya.Image(sign);
+				var signImg: ImageExpand = ViewTools.createImage(sign);
 				signImg.width = 70;
 				signImg.height = 40;
 				signImg.x = size2 - signImg.width;

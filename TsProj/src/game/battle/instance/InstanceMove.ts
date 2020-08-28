@@ -8,6 +8,7 @@ import InstanceBasic from "./InstanceBasic";
 import PoolCode from "../../sys/consts/PoolCode";
 import InstanceEffect from "./InstanceEffect";
 import SkillExpandTrigger from "../trigger/SkillExpandTrigger";
+import VectorTools from "../../../framework/utils/VectorTools";
 
 /**
  * 游戏中所有可以运动的对象的基类
@@ -30,15 +31,15 @@ export default class InstanceMove extends InstanceBasic {
 	static state_move: string = "move";
 
 	//定义速度
-	public speed: Laya.Vector3;
+	public speed: {x,y,z};
 	//加速度
-	public addSpeed: Laya.Vector3;
-	public dragForce: Laya.Vector3; //阻力系数 
+	public addSpeed: {x,y,z};
+	public dragForce: {x,y,z}; //阻力系数 
 	//当前运动到点类型 0表示不运动.1 表示运动到目标点
 	movePointType: number = 0;
 
 	//定义角速度
-	public rotateSpeed: Laya.Vector3;
+	public rotateSpeed: {x,y,z};
 	protected enbleRotate: boolean = false;
 
 	//运动参数
@@ -54,17 +55,17 @@ export default class InstanceMove extends InstanceBasic {
 	public knockSizeBox: any[];
 
 	//速度方向的单位向量 
-	protected unitVector: Laya.Vector3;
+	protected unitVector: {x,y,z};
 
 	//地面坐标
 	public landPos: number = BattleFunc.defaultRoleYpos;
 
-	public blookSpeed: Laya.Vector3;
+	public blookSpeed: {x,y,z};
 
 	protected isViewShow: boolean = true;
 
 
-	public initRotateCtnPos: Laya.Vector3;
+	public initRotateCtnPos: {x,y,z};
 
 	public _followEffGroup: InstanceEffect[]
 	//配置的缩放值
@@ -72,17 +73,17 @@ export default class InstanceMove extends InstanceBasic {
 
 	public constructor(controler: BattleControler) {
 		super(controler)
-		this.gridPos = new Laya.Vector3();
-		this.speed = new Laya.Vector3();
+		this.gridPos = VectorTools.createVec3();
+		this.speed = VectorTools.createVec3();
 
 		//定义角速度
-		this.rotateSpeed = new Laya.Vector3();
-		this.addSpeed = new Laya.Vector3();
-		this.unitVector = new Laya.Vector3();
-		this.dragForce = new Laya.Vector3(1, 1, 1);
-		this.blookSpeed = new Laya.Vector3(0, 0, 0);
+		this.rotateSpeed = VectorTools.createVec3();
+		this.addSpeed = VectorTools.createVec3();
+		this.unitVector = VectorTools.createVec3();
+		this.dragForce = VectorTools.createVec3(1, 1, 1);
+		this.blookSpeed = VectorTools.createVec3(0, 0, 0);
 		this.isViewShow = true;
-		this.initRotateCtnPos = new Laya.Vector3();
+		this.initRotateCtnPos = VectorTools.createVec3();
 		this._followEffGroup = [];
 	}
 
@@ -182,7 +183,7 @@ export default class InstanceMove extends InstanceBasic {
 	moveToOnePoint(x: number, y: number, z: number = 0, spd: number = 0, callFunc: any = null, thisObj: any = null, callParams = null, expandParams: any = null, movePointType: number = 1) {
 
 		if (!this._moveParams) {
-			this._moveParams = new InstanceMoveEntity(new Laya.Vector3(x, y, z));
+			this._moveParams = new InstanceMoveEntity(VectorTools.createVec3(x, y, z));
 		}
 		this._moveParams.expandParams = expandParams;
 		this._moveParams.followTarget = null;
@@ -205,10 +206,11 @@ export default class InstanceMove extends InstanceBasic {
 			}
 		}
 
-		var temp: Laya.Vector3 = BattleFunc.tempPoint;
+		var temp: {x,y,z} = BattleFunc.tempPoint;
 		//计算目标向量差值
-		Laya.Vector3.subtract(this._moveParams.target, this.pos, temp);
-		var distance = Laya.Vector3.scalarLength(temp);
+
+		VectorTools.subtract(this._moveParams.target, this.pos, temp);
+		var distance = VectorTools.scalarLength(temp);
 		if (this._moveParams.totalFrame > 0 && spd == 0) {
 			spd = distance / this._moveParams.totalFrame;
 		} else {
@@ -230,18 +232,18 @@ export default class InstanceMove extends InstanceBasic {
 
 	//计算运动速度
 	protected countMoveSpeed() {
-		var temp: Laya.Vector3 = BattleFunc.tempPoint;
+		var temp: {x,y,z} = BattleFunc.tempPoint;
 		//计算目标向量差值
-		Laya.Vector3.subtract(this._moveParams.target, this.pos, temp);
+		VectorTools.subtract(this._moveParams.target, this.pos, temp);
 
 		var speed: number = this._moveParams.spd;
 		//向量归一
-		Laya.Vector3.normalize(temp, this.unitVector);
+		VectorTools.normalize(temp, this.unitVector);
 		//计算速度单位向量 乘以速度绝对值
-		Laya.Vector3.scale(this.unitVector, speed, this._moveParams.initSpeed);
+		VectorTools.scale(this.unitVector, speed, this._moveParams.initSpeed);
 		//设置预期运动时间
 		if (this._moveParams.totalFrame == 0) {
-			var distance = Laya.Vector3.scalarLength(temp);
+			var distance = VectorTools.scalarLength(temp);
 			this._moveParams.totalFrame = Math.round(distance / speed);
 		}
 		this.initMove(this._moveParams.initSpeed.x, this._moveParams.initSpeed.y, this._moveParams.initSpeed.z);
@@ -262,7 +264,7 @@ export default class InstanceMove extends InstanceBasic {
 
 	//按一组点去运动
 	// moveToGroupPoints(params:InstanceMoveMultyEntity){
-	moveToGroupPoints(pointArr: Laya.Vector3[], speed: number = 0, callFunc: any = null, thisObj: any = null, expandParams: any[], loopParams: any = null) {
+	moveToGroupPoints(pointArr: {x,y,z}[], speed: number = 0, callFunc: any = null, thisObj: any = null, expandParams: any[], loopParams: any = null) {
 		// this._multyparams = params;
 		if (!this._multyparams) {
 			this._multyparams = new InstanceMoveMultyEntity();

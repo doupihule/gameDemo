@@ -1,6 +1,7 @@
 import BattleLogicalControler from "./BattleLogicalControler";
 import Equation from "../../../framework/utils/Equation";
 import ScreenAdapterTools from "../../../framework/utils/ScreenAdapterTools";
+import VectorTools from "../../../framework/utils/VectorTools";
 
 /**
  * 战斗中的镜头控制器.
@@ -22,7 +23,7 @@ export default class CameraControler {
 	private _shakeParams: any;
 
 
-	public focusPos: Laya.Vector3;
+	public focusPos: any;
 
 	private _followOffset: number = -50;
 
@@ -38,7 +39,7 @@ export default class CameraControler {
 	constructor(controler) {
 		this.controler = controler;
 		this._halfWidth = ScreenAdapterTools.designWidth / 2;
-		this.focusPos = new Laya.Vector3(this._halfWidth, 0, 0);
+		this.focusPos = VectorTools.createVec3(this._halfWidth, 0, 0);
 		this.frontPos1 = 0;
 		this._shakeParams = {frame: 0, style: 1, strength: 1, intervel: 1, x: 0, y: 0};
 	}

@@ -11,6 +11,9 @@ import BattleLogsManager from "../../sys/manager/BattleLogsManager";
 import RoleHealthBar from "../view/RoleHealthBar";
 import BattleRoleView from "../view/BattleRoleView";
 import RoleBuffBar from "../view/RoleBuffBar";
+import ImageExpand from "../../../framework/components/ImageExpand";
+import VectorTools from "../../../framework/utils/VectorTools";
+import ViewTools from "../../../framework/components/ViewTools";
 //life 表现相关类. 比如 震屏, 闪红,  硬直
 export default class InstancePerformance extends InstanceMove {
 
@@ -49,14 +52,14 @@ export default class InstancePerformance extends InstanceMove {
 
 
 	//存储上次瞬移的坐标
-	public lastPos: Laya.Vector3;
+	public lastPos: {x,y,z};
 
 	//阵位排序 根据阵位需要调整的Z坐标
 	public targetZPos: number = 0;
 
 
 	//影子
-	private _shade: Laya.Image;
+	private _shade: ImageExpand;
 
 	//子对象view  只是做表现
 	public _childViewArr: any[];
@@ -95,7 +98,7 @@ export default class InstancePerformance extends InstanceMove {
 	//初始化数据
 	public setData(data) {
 		if (!this.lastPos) {
-			this.lastPos = new Laya.Vector3();
+			this.lastPos = VectorTools.createVec3();
 		}
 		this._sKillSppedUpMap = {};
 		super.setData(data);
@@ -160,7 +163,7 @@ export default class InstancePerformance extends InstanceMove {
 	//创建影子
 	public createShade() {
 
-		this._shade = new Laya.Image();
+		this._shade = ViewTools.createImage();
 		//根据尺寸动态缩放影子
 		var scale = BattleFunc.instance.getShadeScale(this.cfgData.size[1] * this.cfgScale)
 
@@ -168,12 +171,12 @@ export default class InstancePerformance extends InstanceMove {
 
 
 		for (var i = 0; i < this.childViewNums; i++) {
-			var childShade: Laya.Image = this.controler.createShade();
+			var childShade: ImageExpand = this.controler.createShade();
 			childShade.scale(scale, scale);
 			var posOffset = formation[i];
 			var xSpace = this._myView._xSpace;
 			var ySpace = this._myView._ySpace;
-			childShade.pos(xSpace * posOffset[0] + 2, ySpace * posOffset[1] + 3, true);
+			childShade.setPos(xSpace * posOffset[0] + 2, ySpace * posOffset[1] + 3);
 			childShade.scale(scale, scale, true);
 			this._shade.addChild(childShade);
 		}
@@ -667,7 +670,7 @@ export default class InstancePerformance extends InstanceMove {
 		if (this._shade) {
 			this._shade.removeSelf();
 			for (var i = this.totalViewNums - 1; i >= 0; i--) {
-				var childShade = this._shade.getChildAt(i);
+				var childShade:any = this._shade.getChildAt(i,true);
 				PoolTools.cacheItem(PoolCode.POOL_SHADE, childShade);
 				childShade.removeSelf();
 			}

@@ -1,15 +1,19 @@
 import InstanceLife from "../instance/InstanceLife";
 import ResourceConst from "../../sys/consts/ResourceConst";
+import BaseContainer from "../../../framework/components/BaseContainer";
+import ImageExpand from "../../../framework/components/ImageExpand";
+import LabelExpand from "../../../framework/components/LabelExpand";
+import ViewTools from "../../../framework/components/ViewTools";
 
-export default class RoleHealthBar extends Laya.Sprite {
+export default class RoleHealthBar extends BaseContainer {
 
 	//血条
 	public owner: InstanceLife;
-	public srollImage: Laya.Image;
-	public shieldImage: Laya.Image;
-	public backImage: Laya.Image;
+	public srollImage: ImageExpand;
+	public shieldImage: ImageExpand;
+	public backImage: ImageExpand;
 
-	public nameText: Laya.Label;
+	public nameText: LabelExpand;
 
 	private _initWidth: number = 80;
 	private _initHeight: number = 8;
@@ -36,21 +40,18 @@ export default class RoleHealthBar extends Laya.Sprite {
 
 			this.shieldImage = this.createImage(ResourceConst.BATTLE_HEALTH_HUDUN, this._initWidth, this._initHeight);
 
-			this.nameText = new Laya.Label();
+			this.nameText = ViewTools.createLabel("",100,50,18,4,false,1);
 			var nameText = this.nameText;
 
 			this.addChild(nameText);
-			nameText.bold = true;
-			nameText.font = "Microsoft YaHei";
-			nameText.fontSize = 18;
-			nameText.anchorX = 0.5;
-			nameText.anchorY = 0.5;
+			nameText.setFont( "Microsoft YaHei");
+			nameText.setAnchor(0.5,0.5);
 			nameText.x = this.width / 2;
 			nameText.y = -20;
-			nameText.stroke = 2;
-			nameText.strokeColor = "#000000";
 
-			this.srollImage.sizeGrid = "3,3,3,3"
+			nameText.setOutLine(2,2,0xff,0,0,0);
+
+			this.srollImage.setSizeGrid(3,3,3,3);
 			this.addChild(this.backImage);
 			this.addChild(this.srollImage);
 			this.addChild(this.shieldImage);
@@ -66,12 +67,10 @@ export default class RoleHealthBar extends Laya.Sprite {
 
 	//创建图片
 	private createImage(url: string, wid: number, hei: number) {
-		var image = new Laya.Image(url);
-		image.sizeGrid = "1,3,1,3";
-		image.width = wid;
-		image.height = hei;
-		image.anchorX = 0;
-		image.anchorY = 0.5
+		var image = ViewTools.createImage(url);
+		image.setSizeGrid(1,3,1,3);
+		image.setSize(wid,hei);
+		image.setAnchor(0,0.5);
 		image.x = -wid / 2;
 		return image;
 	}
@@ -98,7 +97,8 @@ export default class RoleHealthBar extends Laya.Sprite {
 		if (width > this._initWidth) {
 			width = this._initWidth;
 		}
-		this.srollImage.width = width;
+		this.srollImage.setSize(width,this.srollImage.height) ;
+
 		if (shieldValue > 0) {
 			this.shieldImage.visible = true;
 			var percent2 = shieldValue / this.owner.maxHp;
@@ -108,7 +108,7 @@ export default class RoleHealthBar extends Laya.Sprite {
 			}
 			;
 			var wid2 = Math.round(this._initWidth * percent2);
-			this.shieldImage.width = wid2;
+			this.shieldImage.setSize(wid2,this.shieldImage.height);
 			if (percent + percent2 > 1) {
 				this.shieldImage.x = this._initWidth / 2 - wid2;
 			} else {
@@ -132,7 +132,7 @@ export default class RoleHealthBar extends Laya.Sprite {
 	public dispose() {
 		this.owner = null;
 		this.backImage = null;
-		this.srollImage;
+		this.srollImage= null;
 		this.removeSelf();
 	}
 

@@ -26,13 +26,13 @@ class Main {
 		Laya.init(GameConfig.width, GameConfig.height, Laya["WebGL"]);
 		Laya["Physics"] && Laya["Physics"].enable();
 		Laya["DebugPanel"] && Laya["DebugPanel"].enable();
-		Laya.stage.alignH = "center";
-		Laya.stage.alignV = "middle";
+		GlobalEnv.uiRoot.alignH = "center";
+		GlobalEnv.uiRoot.alignV = "middle";
 
 
-		Laya.stage.bgColor = "#000000";
-		Laya.stage.scaleMode = ScreenAdapterTools.checkScreenFixMode(Laya.Browser.width, Laya.Browser.height);
-		Laya.stage.screenMode = GameConfig.screenMode;
+		GlobalEnv.uiRoot.bgColor = "#000000";
+		GlobalEnv.uiRoot.scaleMode = ScreenAdapterTools.checkScreenFixMode(Laya.Browser.width, Laya.Browser.height);
+		GlobalEnv.uiRoot.screenMode = GameConfig.screenMode;
 		//兼容微信不支持加载scene后缀场景
 		Laya.URL.exportSceneToJson = GameConfig.exportSceneToJson;
 		//初始化全就
@@ -97,16 +97,16 @@ class Main {
 		DisplayUtils.adjustLabelPos();
 		//激活资源版本控制，version.json由IDE发布功能自动生成，如果没有也不影响后续流程
 		// Laya.ResourceVersion.enable("version.json", Laya.Handler.create(this, this.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION);
-		Laya.stage.on(Laya.Event.RESIZE, this, this.onResize);
+		GlobalEnv.uiRoot.on(Laya.Event.RESIZE, this, this.onResize);
 	}
 
 	private onResize() {
 		LogsManager.echo("_onResize start___");
-		LogsManager.echo(Laya.stage.scaleX, Laya.stage.scaleY, "_____scale", Laya.stage.width, Laya.stage.height);
-		LogsManager.echo(Laya.stage.designWidth, Laya.stage.designHeight, "___设计宽高");
-		LogsManager.echo(Laya.stage.clientScaleX, Laya.stage.clientScaleX, "___clientScale");
+		LogsManager.echo(GlobalEnv.uiRoot.scaleX, GlobalEnv.uiRoot.scaleY, "_____scale", GlobalEnv.uiRoot.width, GlobalEnv.uiRoot.height);
+		LogsManager.echo(GlobalEnv.uiRoot.designWidth, GlobalEnv.uiRoot.designHeight, "___设计宽高");
+		LogsManager.echo(GlobalEnv.uiRoot.clientScaleX, GlobalEnv.uiRoot.clientScaleX, "___clientScale");
 
-		LogsManager.echo(Laya.stage.clientScaleX, Laya.stage.clientScaleY, "___clientScale");
+		LogsManager.echo(GlobalEnv.uiRoot.clientScaleX, GlobalEnv.uiRoot.clientScaleY, "___clientScale");
 		LogsManager.echo("_clientWidthhei_:", Laya.Browser.clientWidth, Laya.Browser.clientHeight, "_width,hei:", Laya.Browser.width, Laya.Browser.height);
 		LogsManager.echo("_onResize end___")
 	}

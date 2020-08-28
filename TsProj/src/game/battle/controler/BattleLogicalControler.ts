@@ -46,6 +46,9 @@ import FogFunc from '../../sys/func/FogFunc';
 import FogEventData from '../../fog/data/FogEventData';
 import FogModel from '../../sys/model/FogModel';
 import GameConsts from '../../sys/consts/GameConsts';
+import TimerManager from "../../../framework/manager/TimerManager";
+import ImageExpand from "../../../framework/components/ImageExpand";
+import ViewTools from "../../../framework/components/ViewTools";
 
 
 /**
@@ -141,7 +144,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this.battleUI = ui;
 		//初始化全局光环类的被动
 		this.globalPassiveAttrMap = [];
-		var time = Laya.Browser.now()
+		var time = Client.instance.miniserverTime
 		BattleLogsManager.battleEcho("battle 设置随机种子:", time, "用来做复盘用")
 		RandomUtis.setOneRandomYinzi(time, BattleFunc.battleRandomIndex);
 		this.refreshControler = new RefreshControler(this);
@@ -196,7 +199,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this.cameraControler.setData();
 		this.refreshControler.initData();
 		Message.instance.send(BattleEvent.BATTLEEVENT_BATTLESTART);
-		Laya.timer.frameLoop(1, this, this.onceUpdateFrame);
+		TimerManager.instance.registObjUpdate(this.onceUpdateFrame,this);
 	}
 
 	//重写逐帧刷新
@@ -684,14 +687,13 @@ export default class BattleLogicalControler extends BattleControler implements I
 
 	//创建影子 
 	public createShade() {
-		var sp: Laya.Image = PoolTools.getItem(PoolCode.POOL_SHADE);
+		var sp: ImageExpand = PoolTools.getItem(PoolCode.POOL_SHADE);
 		if (!sp) {
-			sp = new Laya.Image(ResourceConst.BATTLE_SHADE);
-			sp.anchorX = 0.5
-			sp.anchorY = 0.5
+			sp = ViewTools.createImage(ResourceConst.BATTLE_SHADE);
+			sp.setAnchor(0.5,0.5)
 		}
 		sp.visible = true;
-		sp.scale(1, 1);
+		sp.setScale(1, 1);
 		return sp;
 	}
 
@@ -824,7 +826,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 	}
 
 	//获取坐标 输出到 outpos.x ,outpos.x,outpos.z
-	public getPosByTypeAndCamp(camp: number, type: number, outpos: Laya.Vector3, offestX, offestY, xIndex = 1) {
+	public getPosByTypeAndCamp(camp: number, type: number, outpos: any, offestX, offestY, xIndex = 1) {
 
 		var targetX = 0;
 		var targetY;
@@ -1078,7 +1080,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 	//销毁游戏
 	dispose() {
 		BattleLogsManager.battleEcho("退出战斗----");
-		Laya.timer.clear(this, this.onceUpdateFrame);
+		TimerManager.instance.deleteObjUpdate(null,this.onceUpdateFrame,this);
 		this.tweenControler.dispose();
 		this.statistControler.startSendStatistics();
 		//销毁所有对象 

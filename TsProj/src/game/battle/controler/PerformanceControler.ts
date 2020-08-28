@@ -9,11 +9,15 @@ import InstanceEffect from "../instance/InstanceEffect";
 import TableUtils from "../../../framework/utils/TableUtils";
 import PoolTools from "../../../framework/utils/PoolTools";
 import BattleDamageLabel from "../view/BattleDamageLabel";
-import DataResourceFunc, {DataResourceType} from "../../sys/func/DataResourceFunc";
+import DataResourceFunc, {DataResourceConst} from "../../sys/func/DataResourceFunc";
+
 import TimerManager from "../../../framework/manager/TimerManager";
 import BattleLogsManager from "../../sys/manager/BattleLogsManager";
 import SkeletonExpand from "../../../framework/viewcomp/SkeletonExpand";
 import GameConsts from "../../sys/consts/GameConsts";
+import BaseContainer from "../../../framework/components/BaseContainer";
+import ImageExpand from "../../../framework/components/ImageExpand";
+import ViewTools from "../../../framework/components/ViewTools";
 
 /**
  * 战斗表现控制器
@@ -27,7 +31,7 @@ export default class PerformanceControler {
 	//视图表现控制器
 	public controler: BattleLogicalControler;
 	//黑屏
-	blackScreen: Laya.Image;
+	blackScreen: ImageExpand;
 
 	//特效缓存表;   {effectName:[effectInstance,...]}
 	//主要用来 控制特效同时出现的数量. 提高性能
@@ -42,13 +46,12 @@ export default class PerformanceControler {
 	constructor(controler: any) {
 		this.controler = controler;
 		this._effectCacheMap = {}
-		this.blackScreen = new Laya.Image(ResourceConst.COMMON_IMAGE_HEIDI);
+		this.blackScreen = ViewTools.createImage(ResourceConst.COMMON_IMAGE_HEIDI);
 		this.blackScreen.alpha = 1
-		this.blackScreen.width = ScreenAdapterTools.maxWidth * 2
-		this.blackScreen.height = ScreenAdapterTools.maxHeight * 2
+		this.blackScreen.setSize(ScreenAdapterTools.maxWidth * 2,ScreenAdapterTools.maxHeight * 2);
 		this.blackScreen.x = -ScreenAdapterTools.UIOffsetX - 300
 		this.blackScreen.y = -ScreenAdapterTools.UIOffsetY - 300
-		this.blackScreen.zOrder = BattleFunc.zorder_blackScreen;
+		this.blackScreen.setZorder( BattleFunc.zorder_blackScreen );
 
 		this.blackScreen.visible = false;
 	}
@@ -250,13 +253,13 @@ export default class PerformanceControler {
 
 	//资源坐标缓存
 	private static _resourcePointCache = {
-		[DataResourceType.COIN]: new Laya.Point(90, 10),
-		[DataResourceType.GOLD]: new Laya.Point(254, 10),
-		[DataResourceType.SP]: new Laya.Point(35, 35),
+		[DataResourceConst.COIN]: {x:90, y:10},
+		[DataResourceConst.GOLD]: {x:254, y:10},
+		[DataResourceConst.SP]: {x:35, y:35}
 	}
 
 
-	private static _tempPos: Laya.Point = new Laya.Point();
+	private static _tempPos: any = {x:0,y:0};
 
 	//战斗结束
 	public onBattleWin(fromx, fromy) {
@@ -273,50 +276,11 @@ export default class PerformanceControler {
 	 * @param value 资源值
 	 * @param fromCtn 从哪个容器来的坐标
 	 */
-	public flyResourceAnimation(resId, fromx, fromy, value, delayFrame: number = 0, fromCtn: Laya.Sprite = null) {
+	public flyResourceAnimation(resId, fromx, fromy, value, delayFrame: number = 0, fromCtn: BaseContainer = null) {
 
 		BattleLogsManager.battleEcho("获得资源:", resId, "value:", value);
 
-		//获取金币icon
-		var iconPath = DataResourceFunc.instance.getIconById(resId);
 
-		var cacheItem = PoolTools.getItem(iconPath);
-		if (!cacheItem) {
-			cacheItem = new Laya.Image(iconPath);
-			cacheItem["_cacheParams"] = {};
-		}
-		var resPos: Laya.Point = PerformanceControler._resourcePointCache[resId]
-		if (!resPos) {
-			resPos = new Laya.Point(35, 35);
-			PerformanceControler._resourcePointCache[resId] = resPos
-		}
-		var group: Laya.Sprite = this.controler.battleUI.ui.group_player;
-		//把自身坐标转化为相对坐标
-		var tempPos = PerformanceControler._tempPos;
-		tempPos.x = fromx
-		tempPos.y = fromy
-		if (!fromCtn) {
-			fromCtn = this.controler.layerControler.a22
-		}
-		fromCtn.localToGlobal(tempPos);
-		cacheItem.name = iconPath;
-		group.globalToLocal(tempPos);
-		cacheItem.pos(tempPos.x, tempPos.y, true);
-		group.addChild(cacheItem);
-		var tweenParams = cacheItem["_cacheParams"]
-		tweenParams.x = resPos.x
-		tweenParams.y = resPos.y
-		//存储临时变量
-		tweenParams._tempValue = value
-		tweenParams._tempType = resId;
-
-		//做缓动
-		if (delayFrame) {
-			TimerManager.instance.add(this.delayFlyItem, this, delayFrame * 1000 / 60, 1, false, [cacheItem]);
-		} else {
-			TimerManager.instance.add(this.delayFlyItem, this, 10, 1, false, [cacheItem]);
-			// this.delayFlyItem(cacheItem);
-		}
 
 	}
 
@@ -325,7 +289,7 @@ export default class PerformanceControler {
 	}
 
 	//缓动结束 移除icon
-	private onItemTweenEnd(targetItem: Laya.Image) {
+	private onItemTweenEnd(targetItem: ImageExpand) {
 		targetItem.removeSelf();
 		var params = targetItem["_cacheParams"]
 		var id = params._tempType;

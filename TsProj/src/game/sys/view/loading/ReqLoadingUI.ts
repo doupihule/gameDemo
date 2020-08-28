@@ -1,22 +1,24 @@
+import BaseContainer from "../../../../framework/components/BaseContainer";
+import ViewTools from "../../../../framework/components/ViewTools";
+
 ;
 
-export default class ReqLoadingUI extends Laya.View {
+export default class ReqLoadingUI extends BaseContainer {
 	public static res = null;
-	private rollAsset = new Laya.Label("loading...");
+	private rollAsset;
 
 	constructor() {
 		super();
+		this.rollAsset = ViewTools.createLabel("loading...");
 		this.rollAsset.color = "#ffffff";
-		this.rollAsset.font = "Microsoft YaHei";
 		this.rollAsset.fontSize = 24;
-		this.rollAsset.x = Laya.stage.width - 150;
-		this.rollAsset.y = Laya.stage.height - 50;
+		this.rollAsset.x = GlobalEnv.uiRoot.width - 150;
+		this.rollAsset.y = GlobalEnv.uiRoot.height - 50;
 		this.addChild(this.rollAsset);
 
 		this.mouseEnabled = true;
 		this.mouseThrough = false;
-		this.width = 640;
-		this.height = 1136;
+		this.setSize(640,1136);
 	}
 
 	public setData(data): void {

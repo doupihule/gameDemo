@@ -754,7 +754,7 @@ export class BannerComp extends TopViewAutoComp {
 
 	/** 子类重写组件显示方法 */
 	protected _compShow() {
-		LogsManager.echo("hlx banner _compShow", Laya.timer.currTimer);
+		LogsManager.echo("hlx banner _compShow");
 		if (!this._bannerAd) {
 			// 如果不存在实例或者已经展示过一次
 			// 重新加载新的banner
@@ -774,7 +774,7 @@ export class BannerComp extends TopViewAutoComp {
 			// 显示前修改位置及大小
 			this.channgeStyle();
 
-			LogsManager.echo("hlx banner show", Laya.timer.currTimer);
+			LogsManager.echo("hlx banner show");
 			var promise = this._bannerAd.show()
 			if (typeof promise === 'object' && promise.then) {
 				var tempBanner = this._bannerAd
@@ -790,7 +790,7 @@ export class BannerComp extends TopViewAutoComp {
 				}
 
 				promise.then(() => {
-					LogsManager.echo("hlx banner广告组件show success", Laya.timer.currTimer);
+					LogsManager.echo("hlx banner广告组件show success");
 					if (UserInfo.isQQGame() && thisObj._status == TopViewAutoComp.STATUS_HIDE) {
 						// thisObj.hide(true)
 						sureHide();

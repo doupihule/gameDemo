@@ -13,6 +13,7 @@ import CommonEvent from "../event/CommonEvent";
 import Message from "../common/Message";
 import KariqiShareManager from "./KariqiShareManager";
 import BannerStyleJumpComp from "../platform/comp/BannerStyleJumpComp";
+import BaseViewExpand from "../components/BaseViewExpand";
 
 
 /**banner */
@@ -179,7 +180,7 @@ export default class BannerAdManager {
 		return null;
 	}
 
-	static turnToShowUIJump(parent: Laya.View) {
+	static turnToShowUIJump(parent: BaseViewExpand) {
 
 	}
 
@@ -192,86 +193,17 @@ export default class BannerAdManager {
 
 	/**添加诱导性banner */
 	static addLeadBanner(obj, pos1, pos2) {
-		// var times = FuncGlobalParams.getInstance().getDataByTwoId("bannerPopupTimeDelay", "num");
-		// obj.bottom = 62;
-		// if (GameUtils.canLeadBanner) {
-		//     Laya.timer.once(times, this, () => {
-		//         AdVideoManager.instance.showBanner();
-		//         obj.bottom = pos2;
-		//         LogsManager.echo("openBanner----------")
-		//     });
-		// }
 	}
 
 	/**隐藏诱导性banner */
 	static hideLeadBanner() {
-		// if (GameUtils.canLeadBanner) {
-		//     AdVideoManager.instance.hideBanner();
-		//     Laya.timer.clearAll(this);
-		//     LogsManager.echo("closeBanner----------")
-		// }
 	}
 
 	/**
 	 * 神秘礼包banner
 	 */
 	static addGiftBanner(parent, onErrorCallback = null, callbackObj = null, hideType = TopViewAutoComp.HIDE_TYPE_DESTROY, orderType = null, style = null) {
-		if (GameUtils.canGift) {
-			if (UserInfo.isWX()) {
-				var thisObj = this;
-				if (orderType == null) {
-					orderType = Number(GameSwitch.getSwitchState(GameSwitch.SWITCH_MYSTERIOUSGIFT_TYPE));
-				}
-				switch (orderType) {
-					case BannerAdManager.BANNER_ORDER_TYPE_AD:
-						// banner>推荐
-						BannerComp.create(parent, () => {
-							RecommendationBannerComp.create(parent, onErrorCallback, callbackObj, hideType);
-						}, thisObj, hideType, style);
-						break;
-					case BannerAdManager.BANNER_ORDER_TYPE_RECOMMEND:
-						// 推荐>banner
-						RecommendationBannerComp.create(parent, () => {
-							BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style);
-						}, thisObj, hideType);
-						break;
-					case BannerAdManager.BANNER_ORDER_TYPE_ORDER:
-						// 按序列显示
-						var type = BannerAdManager.BANNER_TYPE_AD;
-						var orderCfg = GlobalParamsFunc.instance.getDataArray("selectBannerList");
-						var bannerOrder = UserModel.instance.getBannerOrder();
 
-						if (orderCfg) {
-							bannerOrder = bannerOrder % (orderCfg.length)
-							type = Number(orderCfg[bannerOrder]);
-						}
-						if (type == BannerAdManager.BANNER_TYPE_AD) {
-							// banner>推荐
-							LogsManager.echo('banner order type: banner>推荐', type);
-							BannerComp.create(parent, () => {
-								RecommendationBannerComp.create(parent, onErrorCallback, callbackObj, hideType);
-							}, thisObj, hideType, style);
-						} else if (type == BannerAdManager.BANNER_TYPE_RECOMMEND) {
-							// 推荐>banner
-							LogsManager.echo('banner order type: 推荐>banner', type);
-							RecommendationBannerComp.create(parent, () => {
-								BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style);
-							}, thisObj, hideType);
-						} else {
-							LogsManager.errorTag('banner_type_error', 'banner_type_error:' + type);
-						}
-						// 更新序列
-						BannerOrRecommendServer.BannerOrRecommendSend();
-						break;
-					case BannerAdManager.BANNER_ORDER_TYPE_JUST_BANNER:
-						// banner
-						BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style);
-						break;
-				}
-			} else {
-				BannerComp.create(parent, onErrorCallback, callbackObj, hideType, style);
-			}
-		}
 		return null;
 	}
 

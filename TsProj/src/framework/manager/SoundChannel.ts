@@ -10,7 +10,6 @@ export default class SoundChannel {
 	}
 
 	public constructor() {
-		this._audio = wx.createInnerAudioContext();
 	}
 
 	/**播放音乐 */
@@ -31,28 +30,11 @@ export default class SoundChannel {
 	}
 
 	/**设置播放数据，src和次数 */
-	public setData(url: string, loops?: number, complete?: Laya.Handler, soundClass?: any, startTime?: number) {
+	public setData(url: string, loops?: number, complete?: any, soundClass?: any, startTime?: number) {
 		if (this._url == url) {
 			return;
 		}
-		// var formatPath = Laya.URL.formatURL(url);
-		// var fileInfo = Laya.MiniFileMgr.getFileInfo(formatPath);
-		// if (fileInfo && fileInfo.md5) {
-		//     this._nativePath = Laya.MiniFileMgr.getFileNativePath(fileInfo.md5);
-		//     this._audio.src = this._nativePath || fileInfo.readyUrl;
-		// } else{
-		//     this._audio.src = url;
-		// }
 
-		var formatPath = VersionManager.getVirtualUrl(url);
-		this._audio.src = formatPath;
-		this._url = url;
-		this._loops = loops;
-		this._audio.loop = this._loops == 0;
-		if (!startTime) {
-			startTime = 0;
-		}
-		this._audio.startTime = startTime
 	}
 
 	/**设置音量 */

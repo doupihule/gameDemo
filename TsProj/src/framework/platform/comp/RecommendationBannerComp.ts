@@ -269,7 +269,6 @@ export class RecommendationBannerComp extends TopViewAutoComp {
 
 	/** 子类重写组件显示方法 */
 	protected _compShow() {
-		LogsManager.echo("hlx recommend banner _compShow", Laya.timer.currTimer);
 		if (!this._bannerAd) {
 			// 如果不存在实例或者已经展示过一次
 			// 重新加载新的banner
@@ -282,17 +281,6 @@ export class RecommendationBannerComp extends TopViewAutoComp {
 		}
 		if (this._bannerAd && this._loadSuccess) {
 			this._isShowBanner = true;
-			LogsManager.echo("hlx recommend banner show", Laya.timer.currTimer);
-			this._bannerAd.show()
-				.then(() => {
-					LogsManager.echo("hlx 推荐广告组件show success", Laya.timer.currTimer);
-				})
-				.catch(err => {
-					LogsManager.echo("hlx 推荐广告组件show error", err);
-					this._doBannerCallBack();
-				});
-			;
-			StatisticsManager.ins.onEvent(StatisticsCommonConst.RECOMMEND_BANNER_EXPOSURENUM);
 		} else {
 			LogsManager.echo("hlx redommend banner comp show 没有达到条件：loadSuccess ", this._loadSuccess);
 		}

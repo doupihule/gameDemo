@@ -51,7 +51,7 @@ export default class WXGamePlatform extends GamePlatform {
 		//定义微信平台为分包模式
 		this._isSubPackage = true;
 
-		this.listenTime = Laya.Browser.now();
+		this.listenTime = Client.instance.miniserverTime
 		LogsManager.echo('构造platform');
 
 	}
@@ -1225,7 +1225,7 @@ export default class WXGamePlatform extends GamePlatform {
 				}
 				thisObj._hasCheckUpdateListener = true;
 				// 新的版本下载失败
-				LogsManager.echo("新版本下载失败", "costTime :", Laya.timer.currTimer - timer);
+				LogsManager.echo("新版本下载失败", "costTime :", Client.instance.miniserverTime - timer);
 				MainModule.instance.changeShowMainTask(-1, MainModule.task_updateListerner, "task_updateListerner back");
 			})
 		} else {
@@ -1276,11 +1276,11 @@ export default class WXGamePlatform extends GamePlatform {
 	private addOnShowListener() {
 		var myThis = this;
 		// 首次注册初始化showT
-		this.showT = Laya.Browser.now();
+		this.showT = Client.instance.miniserverTime
 		LogsManager.echo('wx_listener 初始化onShow showT：', this.showT);
 		if (!(UserInfo.isOppo() || UserInfo.isVivo())) {
 			this.getWX().onShow((res) => {
-				var nowTime = Laya.Browser.now()
+				var nowTime = Client.instance.miniserverTime
 				LogsManager.echo('>>OnShow成功回调', nowTime, JSON.stringify(res));
 				if (!this.isHide || !myThis.hideT) {
 					if (this.listenTime) {
@@ -1320,14 +1320,11 @@ export default class WXGamePlatform extends GamePlatform {
 	//下载分包资源
 	startDownloadSubPackage() {
 		//如果不使用物理引擎 return
-		if (!GameConsts.isUsePhysics) {
-			MainModule.instance.changeShowMainTask(-1, MainModule.task_subpackage, "xd wx-loadSubpackage,quick");
-			return;
-		}
+		MainModule.instance.changeShowMainTask(-1, MainModule.task_subpackage, "xd wx-loadSubpackage,quick");
 		if (window["Physics3D"]) {
 			//这里需要重新赋值
 			if (window["__physics3D"]) {
-				Laya3D["_physics3D"] = window["__physics3D"]
+				window["Laya3D"]["_physics3D"] = window["__physics3D"]
 			}
 			LogsManager.echo("__已经拥有3D库了表示不会走到这里;")
 			MainModule.instance.changeShowMainTask(-1, MainModule.task_subpackage, "xd wx-loadSubpackage,quick");

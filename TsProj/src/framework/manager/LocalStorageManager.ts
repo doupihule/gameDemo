@@ -32,25 +32,6 @@ export default class LocalStorageManager {
 		if (UserInfo.isSystemNative()) {
 			return this.nativeGetItem(key);
 		}
-
-		if (FileUtils.isUserWXSource()) {
-			try {
-				var value1: string = window["wx"].getStorageSync(key)
-				if (value1) {
-					return value1;
-				} else {
-					return "0";
-				}
-			} catch (e) {
-				return "0"
-			}
-		} else {
-			var value: string = localStorage.getItem(key)
-			if (value) {
-				return value;
-			}
-			return "0";
-		}
 	}
 
 	public static removeItem(key: string): void {

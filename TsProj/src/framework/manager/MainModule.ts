@@ -4,7 +4,6 @@ import Global from "../../utils/Global";
 import WindowManager from "./WindowManager";
 import {WindowCfgs} from "../../game/sys/consts/WindowCfgs";
 import ScreenAdapterTools from "../utils/ScreenAdapterTools";
-import UtilsServer from "../../game/sys/server/UtilsServer";
 import UserInfo from "../common/UserInfo";
 import FuncManager from "./FuncManager";
 import Client from "../common/kakura/Client";
@@ -12,7 +11,6 @@ import Method from "../../game/sys/common/kakura/Method";
 import GameSwitch from "../common/GameSwitch";
 import KakuraClient from "../common/kakura/KakuraClient";
 import Message from "../common/Message";
-import GameConfig from "../../GameConfig";
 import IMessage from "../../game/sys/interfaces/IMessage";
 import UserModel from "../../game/sys/model/UserModel";
 import {LoadManager} from "./LoadManager";
@@ -30,6 +28,9 @@ import FrameWorkEvent from "../event/FrameWorkEvent";
 import ModelToServerMapCommon from "../consts/ModelToServerMapCommon";
 import KariqiShareManager from './KariqiShareManager';
 import KariquShareConst from '../consts/KariquShareConst';
+import ResourceManager from "./ResourceManager";
+import ViewTools from "../components/ViewTools";
+import GlobalEnv from "../engine/GlobalEnv";
 
 ;
 
@@ -52,9 +53,7 @@ export default class MainModule implements IMessage {
 		MainModule.instance = this;
 
 
-		GameConfig.startScene && Laya.Scene.open(GameConfig.startScene);
-		Laya.SoundManager.useAudioMusic = false;
-		Laya.MouseManager.multiTouchEnabled = false;
+
 		SoundManager.init();
 		this.initLayer();
 		this.onLoadingUIComplete();
@@ -66,7 +65,7 @@ export default class MainModule implements IMessage {
 
 	//Loading页面显示后开始加载资源
 	private onLoadingUIComplete(): void {
-		this.timeLock = Laya.timer.currTimer;
+		this.timeLock = Client.instance.miniserverTime;
 		this.reqVMS();
 	}
 
@@ -76,140 +75,21 @@ export default class MainModule implements IMessage {
 	}
 
 	public checkSystem() {
-		// if (FileUtils.isUserWXSource()) {
-		//     Global.resource_url += UserInfo.platformId + "/";
-		//     Global.nocdn_resource_url += UserInfo.platformId + "/";
-		// }
-		//获取版本的名字.  不同渠道 返回的不一样
-		var versionName = UserInfo.platform.getVersionName();
-		if (Global.resource_url && Global.isCDN) {
-			Laya.URL.basePath = Global.resource_url;
-			// versionName = `version_${Global.version}.json`;
-			// Laya.URL.basePath = "http://192.168.1.112:8080/";//测试用地址，本地
-			//versionName = "version.json";//测试用地址，本地
-		}
-		VersionManager.instance.versionName = versionName;
-		LogsManager.echo("xd cdnurl:", Global.resource_url);
-		LogsManager.echo("yrc reqvms suc", Laya.URL.basePath)
-		LogsManager.echo("yrc req versionName:", versionName);
-		//用test.json去验证cdn是否可用
-		LoadManager.instance.load(versionName, Laya.Handler.create(this, () => {
-			VersionManager.instance.initVersionData();
-			//这里以后走自己的文件映射版本控制.不走laya的了
-			this.onVersionLoaded();
-		}))
-	}
-
-	useNocndResourceUrl() {
 
 	}
 
-	onVersionLoaded(): void {
 
-		//版本文件检查,是否需要删除旧版本的文件
-		VersionManager.instance.versionFileCheck();
-
-		//激活大小图映射，加载小图的时候，如果发现小图在大图合集里面，则优先加载大图合集，而不是小图
-		Laya.AtlasInfoManager.enable("fileconfig.json", Laya.Handler.create(this, this.onConfigLoaded));
-		//等待配表加载完成后才能进行后续的事情
-
-		FuncManager.init(() => {
-			if (Global.checkUserCloudStorage()) {
-				this.onLoginResult(Client.instance.globalLoginBackData)
-				UserInfo.platform.getLoginResult();
-			}
-			this.sysCallback();
-		}, this);
-
-	}
-
-	onConfigLoaded(): void {
-		this.changeShowMainTask(-1, MainModule.task_configsloaded, "onConfigLoaded");
-	}
 
 	private sysCallback() {
-		LogsManager.echo(" ======--VMSTIME--======== " + (Laya.timer.currTimer - this.timeLock))
-		//联网模式 是在确认版本之后才开始登入
-		if (!Global.checkUserCloudStorage()) {
-			UserInfo.platform.getWxInfo();
-		}
 
-
-		//开始加载合并文件
-		this.loadMergeFiles();
 
 		// 初始化平台参数
 		UserInfo.platform.initPlatformData();
 	}
 
-	private changeByte(name) {
-		var buffer = Laya.Loader.getRes(name);
-		var byte: Laya.Byte = new Laya.Byte(buffer);
-		if (byte.length > 4) {
-			FileUtils.decodeBinAssets(byte);
-		}
-
-		Laya.Loader.clearRes(name);
-	}
-
-	//加载
-	private loadMergeFiles() {
-		//如果是不使用文件合并功能 web版 或者是zip版本
-		if (GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_MERGEFILES) || UserInfo.isWeb()) {
-			this.onMergeFileBack();
-		} else {
-			LogsManager.echo("xd----使用文件合并功能,注意开发模式下 可以禁掉文件合并功能.防止版本使用冲突")
-			var zipList = [
-				{url: "mergefiles/mergeBin.bin", type: "arraybuffer"},
-				{url: "mergefiles/mergeJson.bin", type: "arraybuffer"},
-			]
-			var times = Laya.Browser.now();
-
-			var onZipLoad = () => {
-				LogsManager.echo("krma. onZipLoad onZipLoad onZipLoad onZipLoad onZipLoad")
-				LoadManager.instance.load(zipList, Laya.Handler.create(this, () => {
-					this.changeByte("mergefiles/mergeBin.bin");
-					this.changeByte("mergefiles/mergeJson.bin");
-					this.onMergeFileBack();
-					LogsManager.echo("xd  合并文件下载解析总耗时-----------", Laya.Browser.now() - times);
-				}));
-			}
-
-			//如果是使用zip功能的
-			if (FileUtils.checkIsUseZip()) {
-				//需要先加载对应的zip
-				LoadZipManager.instance.loadZip("mergefiles.zip", VersionManager.ZIP_MODEL_KEY_MERGEFILES, new Laya.Handler(this, onZipLoad), null);
-			} else {
-				//如果合并文件是走分包的  等分包下载完成在去执行这个
-				if (SubPackageManager.getModelFileStyle(SubPackageConst.packName_mergefiles) == SubPackageConst.PATH_STYLE_SUBPACK) {
-					SubPackageManager.loadSubPackage(SubPackageConst.packName_mergefiles, onZipLoad, this, true);
-				} else {
-					onZipLoad();
-				}
-
-			}
-
-		}
-	}
-
-	//合并文件返回
-	private onMergeFileBack() {
-		this.changeShowMainTask(-1, MainModule.task_mergeFileBack, "onMergeFileBack")
-
-
-	}
-
 
 	public loginResult() {
-		//3.311请求接口，获取用户信息
-		LogsManager.echo(" ======--GlobalTIME--======== " + (Laya.timer.currTimer - this.timeLock))
-		if (Global.isNotGuide()) {
-			// StatisticsManager.ins.onEvent(StatisticsManager.NEW_LOADING_5_7);
-		} else {
-			// StatisticsManager.ins.onEvent(StatisticsManager.LOADING_5_7);
-		}
 		Client.instance.send(Method.User_login, {}, this.onLoginResult, this);
-
 	}
 
 	public onLoginResult(result: any) {
@@ -220,10 +100,7 @@ export default class MainModule implements IMessage {
 			serverData = result.data
 		} else {
 			UserInfo.platform.compareData(result);
-
 		}
-
-		// GameConfig.startScene && Laya.Scene.open(GameConfig.startScene);
 		if (serverData.config) {
 			Client.instance.heartBeatInterval = result.data.config.heartBeatInterval;
 			//覆盖服务器来回的开关参数
@@ -309,79 +186,53 @@ export default class MainModule implements IMessage {
 	}
 
 
-	/**根据点击链接后的不同状态，弹tip */
-	showInviteTip(shareStatus) {
-		// var shareStatus = UserModel.instance.getShareStatus();
-		if (!shareStatus) return;
-		switch (Number(shareStatus)) {
-			case 2:
-				//房间不存在
-				WindowManager.ShowTip("房间已解散");
-				break;
-			case 3:
-				//比赛已经开始
-				WindowManager.ShowTip("比赛已经开始");
-				break;
-			case 4:
-				//参赛人数已满
-				WindowManager.ShowTip("参赛人数已满");
-				break;
-		}
-	}
-
-	//重新启动
-	public reStartGame(): void {
-
-	}
-
 
 	//初始化UI层
 	private initLayer(): void {
-		WindowManager.rootLayer = new Laya.Sprite();
+		WindowManager.rootLayer = ViewTools.createContainer();
 		WindowManager.rootLayer.x += ScreenAdapterTools.sceneOffsetX;
 		WindowManager.rootLayer.y += ScreenAdapterTools.sceneOffsetY;
-		Laya.stage.addChild(WindowManager.rootLayer);
-		WindowManager.commonUILayer = new Laya.Sprite();
-		WindowManager.commonUILayer.size(ScreenAdapterTools.width, ScreenAdapterTools.height);
+		GlobalEnv.uiRoot.addChild(WindowManager.rootLayer);
+		WindowManager.commonUILayer = ViewTools.createContainer();
+		WindowManager.commonUILayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
 		WindowManager.rootLayer.addChild(WindowManager.commonUILayer);
 
-		WindowManager.topUILayer = new Laya.Sprite();
-		WindowManager.topUILayer.size(ScreenAdapterTools.width, ScreenAdapterTools.height);
+		WindowManager.topUILayer = ViewTools.createContainer();
+		WindowManager.topUILayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
 		WindowManager.topUILayer.mouseEnabled = true;
 		WindowManager.topUILayer.mouseThrough = true
 		WindowManager.rootLayer.addChild(WindowManager.topUILayer);
 
 
-		WindowManager.guideLayer = new Laya.Sprite();
-		WindowManager.guideLayer.size(ScreenAdapterTools.width, ScreenAdapterTools.height);
+		WindowManager.guideLayer = ViewTools.createContainer();
+		WindowManager.guideLayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
 		WindowManager.rootLayer.addChild(WindowManager.guideLayer);
 		WindowManager.guideLayer.mouseEnabled = true;
 		WindowManager.guideLayer.mouseThrough = true;
 		WindowManager.guideLayer.visible = false;
 
 
-		WindowManager.highLayer = new Laya.Sprite();
-		WindowManager.highLayer.size(ScreenAdapterTools.width, ScreenAdapterTools.height);
+		WindowManager.highLayer = ViewTools.createContainer();
+		WindowManager.highLayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
 		WindowManager.rootLayer.addChild(WindowManager.highLayer);
 
-		WindowManager.toolsLayer = new Laya.Sprite();
+		WindowManager.toolsLayer = ViewTools.createContainer();
 		WindowManager.rootLayer.addChild(WindowManager.toolsLayer);
 
-		WindowManager.maskLayer = new Laya.Sprite();
-		WindowManager.maskLayer.size(ScreenAdapterTools.width, ScreenAdapterTools.height);
+		WindowManager.maskLayer = ViewTools.createContainer();
+		WindowManager.maskLayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
 		WindowManager.rootLayer.addChild(WindowManager.maskLayer);
 
-		WindowManager.tipsLayer = new Laya.Sprite();
-		WindowManager.tipsLayer.size(ScreenAdapterTools.width, ScreenAdapterTools.height);
+		WindowManager.tipsLayer = ViewTools.createContainer();
+		WindowManager.tipsLayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
 		WindowManager.tipsLayer.mouseEnabled = false;
 		WindowManager.tipsLayer.mouseThrough = true;
 		WindowManager.rootLayer.addChild(WindowManager.tipsLayer);
 
 		//最顶层2级容器（越高级优先级越高）
-		WindowManager.debugLayer = new Laya.Sprite();
+		WindowManager.debugLayer = ViewTools.createContainer();
 		WindowManager.rootLayer.addChild(WindowManager.debugLayer);
 		LogsManager.initLogPanel();
-		LogsManager.addTouchShow(Laya.stage);
 
 		if (UserInfo.isWeb()) {
 			var urlParam = window.location.href.indexOf('test=1') > 0;
@@ -425,8 +276,6 @@ export default class MainModule implements IMessage {
 	}
 
 	private gameClose() {
-		UtilsServer.exitGame({}, () => {
-		}, this);
 	}
 
 	/**开始播放BGM */

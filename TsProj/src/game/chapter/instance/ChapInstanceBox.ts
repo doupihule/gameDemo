@@ -11,14 +11,14 @@ import TimerManager from "../../../framework/manager/TimerManager";
 import ChapterServer from "../../sys/server/ChapterServer";
 import TweenAniManager from "../../sys/manager/TweenAniManager";
 import ScreenAdapterTools from "../../../framework/utils/ScreenAdapterTools";
-import {DataResourceType} from "../../sys/func/DataResourceFunc";
+import {DataResourceConst} from "../../sys/func/DataResourceFunc";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
 import ShareTvOrderFunc from "../../sys/func/ShareTvOrderFunc";
 
 /**章节宝箱 */
 export default class ChapInstanceBox extends FogInstanceBasic {
-	private boxImg: Laya.Image;
-	private redImg: Laya.Image;
+	private boxImg: ImageExpand;
+	private redImg: ImageExpand;
 	private boxIndex: number;
 	public type: number;
 	private reward: any[];
@@ -27,7 +27,7 @@ export default class ChapInstanceBox extends FogInstanceBasic {
 	private timeCode = 0;
 	public viewWay: number;
 	private boxId: any;
-	private boxParent: Laya.Image;
+	private boxParent: ImageExpand;
 
 	constructor(fogControler) {
 		super(fogControler);
@@ -35,19 +35,19 @@ export default class ChapInstanceBox extends FogInstanceBasic {
 		this.anchorY = 1;
 		this.width = 200;
 		this.height = 200;
-		this.boxImg = new Laya.Image();
+		this.boxImg = ViewTools.createImage();
 		this.boxImg.anchorX = 0.5;
 		this.boxImg.anchorY = 0.5;
 		this.boxImg.width = 79;
 		this.boxImg.height = 95;
 		this.boxImg.x = this.width / 2;
 		this.boxImg.y = this.height - this.boxImg.height / 2;
-		this.boxParent = new Laya.Image();
+		this.boxParent = ViewTools.createImage();
 		this.boxParent.anchorX = 0.5;
 		this.boxParent.anchorY = 1;
 		this.boxParent.width = 200;
 		this.boxParent.height = 200;
-		this.redImg = new Laya.Image(ResourceConst.COMMON_REDPOINT);
+		this.redImg = ViewTools.createImage(ResourceConst.COMMON_REDPOINT);
 		this.redImg.x = this.boxImg.x + this.boxImg.width / 2;
 		this.redImg.y = this.boxImg.y - this.boxImg.height / 2;
 		this.boxParent.x = this.width / 2;
@@ -108,14 +108,14 @@ export default class ChapInstanceBox extends FogInstanceBasic {
 		var ui = this.fogControler.chapMapUI
 		for (var i = 0; i < this.reward.length; i++) {
 			var item = this.reward[i].split(",")
-			if (Number(item[0]) == DataResourceType.COIN) {
+			if (Number(item[0]) == DataResourceConst.COIN) {
 				target = ui.coinImg
 				txt = ui.coinNum
-			} else if (Number(item[0]) == DataResourceType.GOLD) {
+			} else if (Number(item[0]) == DataResourceConst.GOLD) {
 				target = ui.goldImg
 				txt = ui.goldNum
 
-			} else if (Number(item[0]) == DataResourceType.SP) {
+			} else if (Number(item[0]) == DataResourceConst.SP) {
 				target = ui.spImg
 				txt = ui.powerCountLab
 			}

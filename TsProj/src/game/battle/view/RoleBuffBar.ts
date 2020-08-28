@@ -1,13 +1,16 @@
 import InstanceLife from "../instance/InstanceLife";
 import PoolTools from "../../../framework/utils/PoolTools";
 import PoolCode from "../../sys/consts/PoolCode";
+import BaseContainer from "../../../framework/components/BaseContainer";
+import ImageExpand from "../../../framework/components/ImageExpand";
+import ViewTools from "../../../framework/components/ViewTools";
 
-export default class RoleBuffBar extends Laya.Sprite {
+export default class RoleBuffBar extends BaseContainer {
 
 	public owner: InstanceLife;
-	public srollImage: Laya.Image;
-	public shieldImage: Laya.Image;
-	public backImage: Laya.Image;
+	public srollImage: ImageExpand;
+	public shieldImage: ImageExpand;
+	public backImage: ImageExpand;
 
 	private _initWidth: number = 80;
 	private _initHeight: number = 8;
@@ -65,9 +68,9 @@ export default class RoleBuffBar extends Laya.Sprite {
 					}
 					if (!flag) {
 						if (buffIconList.length < this.maxIcon) {
-							var cacheItem: Laya.Image = PoolTools.getItem(PoolCode.POOL_BUFFICON + buffInfo.icon[1]);
+							var cacheItem: ImageExpand = PoolTools.getItem(PoolCode.POOL_BUFFICON + buffInfo.icon[1]);
 							if (!cacheItem) {
-								cacheItem = new Laya.Image("uisource/bufficon/bufficon/" + buffInfo.icon[1] + ".png");
+								cacheItem = ViewTools.createImage("uisource/bufficon/bufficon/" + buffInfo.icon[1] + ".png");
 							}
 							this.addChild(cacheItem);
 							cacheItem.x = 25 * (buffIconList.length - this.maxIcon / 2);

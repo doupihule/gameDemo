@@ -1,3 +1,4 @@
+declare var Md5;
 export default class LogsManager {
 
 
@@ -7,21 +8,10 @@ export default class LogsManager {
 	private static maxCancheLength: number = 1000;
 	private static _sendCache = {};
 
-	static logGroup: Laya.Image;
-	static scroller: Laya.List;
-	// static logCollection: eui.ArrayCollection;
-	static logPanel: Laya.Image;
 	static updateFlag = false;
 	static autoDisableFlag = false;
 	static idTimeout: number = null;
 	static autoFlag = true;
-	static autoBtn: Laya.Label;
-	static disposeAccountBtn: Laya.Label;
-	static disposeAccountSureBtn: Laya.Label;
-	static disposeAccountCancelBtn: Laya.Label;
-	static statBtn: Laya.Label;
-	static infoLabel: Laya.Label;
-	static txt: Laya.Text;
 	static statVis: boolean = false;
 	private static sendMaxLength = 10000;
 	private static _aliyunLogsUrl: string = "https://client-error-log.cn-beijing.log.aliyuncs.com/logstores/client_error_log/track?APIVersion=0.6.0&"
@@ -29,8 +19,6 @@ export default class LogsManager {
 	private static _aliyunActiveUrl: string = "https://client-business-log.cn-beijing.log.aliyuncs.com/logstores/client_active_log/track?APIVersion=0.6.0&"//打点数据-激活数据
 	private static _aliyunLoadingUrl: string = "https://client-business-log.cn-beijing.log.aliyuncs.com/logstores/client_loading_log/track?APIVersion=0.6.0&"//打点数据-记录时长
 
-
-	static GMBtn: Laya.Label;
 
 	//系统界别的报错. 比如空属性
 	static errorTag_sysError: string = "sys";
@@ -274,7 +262,7 @@ export default class LogsManager {
 			rid: UserModel.instance.getUserRid(),
 			device: Global.deviceModel,
 			circleId: this.getCircleId(),
-			t: Laya.Browser.now()
+			t: Client.instance.miniserverTime
 		}
 		if (eventData) {
 			//打点上报，这两个参数要单独发
@@ -401,17 +389,6 @@ export default class LogsManager {
 		if (LogsManager.logsArr.length > LogsManager.maxCancheLength) {
 			LogsManager.logsArr.splice(0, 1);
 		}
-		if (LogsManager.logPanel) {
-			if (!LogsManager.updateFlag && LogsManager.logPanel.visible) {
-				Laya.timer.once(500, this, () => {
-					if (LogsManager.updateFlag && LogsManager.logPanel.visible) {
-						LogsManager.refreshLog();
-					}
-					LogsManager.updateFlag = false;
-				});
-				LogsManager.updateFlag = true;
-			}
-		}
 	}
 
 	//获取最近指定行数的日志,0表示返回所有日志，是倒着数的
@@ -500,10 +477,6 @@ export default class LogsManager {
 
 		}
 		resultStr = timeStr + " " + resultStr;
-		// 最多截取1000个打印字符
-		// if (resultStr.length > 1000) {
-		// 	resultStr = resultStr.slice(0, 1000)
-		// }
 		if (!isError) {
 			this.insterOneLogs(resultStr);
 		}
@@ -518,139 +491,9 @@ export default class LogsManager {
 		return "[" + title + time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds() + " ] "
 	}
 
-	private static getFunctionName(func) {
-		var name;
-		if (typeof func == 'function' || typeof func == 'object') {
-			name = ('' + func);
-			name = name.match(/function\s*([\w\$]*)\s*\(/);
-		}
-		return name && name[1];
-	}
 
 	static initLogPanel() {
-		LogsManager.logGroup = new Laya.Image();
-		LogsManager.logPanel = new Laya.Image();
-		LogsManager.scroller = new Laya.List()
-		var background = new Laya.Sprite();
-		var logBtn = new Laya.Label("Log");
 
-		LogsManager.autoBtn = new Laya.Label("Auto");
-		LogsManager.disposeAccountBtn = new Laya.Label("清除数据（慎点）");
-		LogsManager.disposeAccountSureBtn = new Laya.Label("确认清除数据（慎点）");
-		LogsManager.disposeAccountCancelBtn = new Laya.Label("不清除数据了");
-		LogsManager.statBtn = new Laya.Label("stat");
-		LogsManager.infoLabel = new Laya.Label("uid");
-		LogsManager.infoLabel.fontSize = 20;
-		LogsManager.infoLabel.color = "#ffffff";
-
-
-		logBtn.fontSize = LogsManager.disposeAccountBtn.fontSize = LogsManager.autoBtn.fontSize = LogsManager.statBtn.fontSize = 20;
-		logBtn.color = LogsManager.disposeAccountBtn.color = LogsManager.autoBtn.color = LogsManager.statBtn.color = "#ffffff";
-		// logBtn.bgColor = LogsManager.disposeAccountBtn.bgColor = LogsManager.autoBtn.bgColor = LogsManager.statBtn.color = "#000000";
-		LogsManager.disposeAccountSureBtn.fontSize = LogsManager.disposeAccountCancelBtn.fontSize = 60;
-		LogsManager.disposeAccountSureBtn.bold = LogsManager.disposeAccountCancelBtn.bold = true;
-		LogsManager.disposeAccountSureBtn.color = LogsManager.disposeAccountCancelBtn.color = "#ff0000";
-		LogsManager.txt = new Laya.Text()
-		var logGroup = LogsManager.logGroup;
-		var logPanel = LogsManager.logPanel;
-		var txt = LogsManager.txt;
-		const
-			Text = Laya.Text,
-			Event = Laya.Event;
-		txt.overflow = Text.SCROLL;
-		txt.text = LogsManager.setLogTxt();
-		txt.wordWrap = true
-		txt.size(540, 540);
-		txt.fontSize = 20;
-		txt.color = "#ffffff";
-		// 不用重复打印初始化前的日志
-		// console.log(LogsManager.txt.text);
-		txt.on(Event.MOUSE_DOWN, this, startScrollText);
-
-		var thisObj = this
-
-		/* 开始滚动文本 */
-		function startScrollText(e) {
-			const Event = Laya.Event;
-
-			LogsManager.prevX = txt.mouseX;
-			LogsManager.prevY = txt.mouseY;
-
-			Laya.stage.on(Event.MOUSE_MOVE, this, scrollText);
-			Laya.stage.on(Event.MOUSE_UP, this, finishScrollText);
-		}
-
-		/* 停止滚动文本 */
-		function finishScrollText(e) {
-			const Event = Laya.Event;
-
-			Laya.stage.off(Event.MOUSE_MOVE, this, scrollText);
-			Laya.stage.off(Event.MOUSE_UP, this, finishScrollText);
-		}
-
-		/* 鼠标滚动文本 */
-		function scrollText(e) {
-			const Event = Laya.Event;
-
-			var nowX = txt.mouseX;
-			var nowY = txt.mouseY;
-
-			txt.scrollX += LogsManager.prevX - nowX;
-			txt.scrollY += LogsManager.prevY - nowY;
-
-			LogsManager.prevX = nowX;
-			LogsManager.prevY = nowY;
-		}
-
-		logPanel.addChild(background);
-		logPanel.addChild(txt);
-		logGroup.addChild(logPanel);
-		logGroup.addChild(logBtn);
-		logGroup.addChild(LogsManager.autoBtn);
-		logGroup.addChild(LogsManager.disposeAccountBtn);
-		logGroup.addChild(LogsManager.disposeAccountSureBtn);
-		logGroup.addChild(LogsManager.disposeAccountCancelBtn);
-		logGroup.addChild(LogsManager.statBtn);
-		logGroup.addChild(LogsManager.infoLabel);
-
-		WindowManager.debugLayer.addChild(logGroup);
-		logGroup.mouseThrough = true;
-
-
-		//画矩形
-		background.graphics.drawRect(0, 30, 640, 540, 0);
-		var touchGroup: Laya.Sprite = new Laya.Sprite();
-		// touchGroup.graphics.drawRect(0, Global.stageHeight * 0.5+50, 100, 100, "0xff0000");			
-		touchGroup.width = 150;
-		touchGroup.height = 50;
-		touchGroup.x = 490;
-		touchGroup.y = 0;
-		WindowManager.debugLayer.addChild(touchGroup);
-		touchGroup.on(Laya.Event.CLICK, this, this.touchHandler);
-		background.alpha = 0.8;
-		logBtn.x += 30;
-		LogsManager.autoBtn.x += 100;
-		LogsManager.disposeAccountBtn.x += 300;
-		LogsManager.disposeAccountSureBtn.x += 60;
-		LogsManager.disposeAccountSureBtn.y += 400;
-		LogsManager.disposeAccountCancelBtn.x += 60;
-		LogsManager.disposeAccountCancelBtn.y += 480;
-		LogsManager.statBtn.x += 100;
-		LogsManager.statBtn.y += 20;
-		LogsManager.infoLabel.x += 180;
-		txt.y += 30;
-		logPanel.y += 15;
-		logGroup.y += 100;
-		logPanel.visible = false;
-		LogsManager.setLogGroupVisible(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL));
-		logBtn.on(Laya.Event.CLICK, this, this.showLogPanel);
-		LogsManager.autoBtn.on(Laya.Event.CLICK, this, this.autoSwitch);
-		LogsManager.disposeAccountBtn.on(Laya.Event.CLICK, this, this.sureDisposeAccount);
-		LogsManager.disposeAccountSureBtn.on(Laya.Event.CLICK, SingleCommonServer, SingleCommonServer.disposeAccount);
-		LogsManager.disposeAccountCancelBtn.on(Laya.Event.CLICK, this, this.cancelDisposeAccount);
-		LogsManager.statBtn.on(Laya.Event.CLICK, this, this.statSwitch);
-		//先把清档选项按钮隐藏
-		this.cancelDisposeAccount();
 	}
 
 
@@ -658,91 +501,11 @@ export default class LogsManager {
 		return;
 	}
 
-	private static setLogTxt() {
-		var alltxt = "";
-		for (var i = 0; i < LogsManager.logsArr.length; i++) {
-			alltxt += LogsManager.logsArr[i].label + "\n"
-		}
-		return alltxt;
-	}
-
-	private static showLogPanel() {
-		if (LogsManager.logPanel.visible) {
-			LogsManager.logPanel.visible = false;
-		} else {
-			LogsManager.logPanel.visible = true;
-			LogsManager.autoDisableFlag = false;
-			LogsManager.refreshLog();
-		}
-	}
-
-	private static autoSwitch() {
-		if (LogsManager.autoBtn.text == "Auto")
-			LogsManager.autoBtn.text = "Locked";
-		else
-			LogsManager.autoBtn.text = "Auto";
-		LogsManager.autoFlag = !LogsManager.autoFlag;
-	}
-
-	//弹框确认是否真的清档
-	private static sureDisposeAccount() {
-		LogsManager.disposeAccountSureBtn.visible = true;
-		LogsManager.disposeAccountCancelBtn.visible = true;
-	}
-
-	//不清档了  隐藏确定和取消按钮
-	private static cancelDisposeAccount() {
-		LogsManager.disposeAccountSureBtn.visible = false;
-		LogsManager.disposeAccountCancelBtn.visible = false;
-	}
-
-	private static statSwitch() {
-		this.statVis = !this.statVis;
-		if (this.statVis) {
-			Laya.Stat.show(0, 100);
-		} else {
-			Laya.Stat.hide();
-		}
-	}
 
 	static addTouchShow(target: any) {
-		// if (egret.Capabilities.runtimeType == egret.RuntimeType.WXGAME) {
-		// egret.Logger.logLevel = egret.Logger.OFF;
-		// target.addEventListener(egret.TouchEvent.TOUCH_TAP, this.touchHandler, this);
-		// }
 	}
 
-	private static _prevTime: number = 0;
-	private static _count: number = 0;
 
-	private static touchHandler(evt: Laya.Event) {
-		if (LogsManager.logGroup.visible) return;
-		var time: number = Laya.Browser.now();
-		if (time - this._prevTime < 200) {
-			this._prevTime = time;
-			this._count++;
-			if (this._count == 6) {
-				this.sendErrorToPlatform("发送客户端错误日志", this.errorTage_clientLog, 200, "sendClinetError");
-				this.isOpenLogsDebug = true;
-			} else if (this._count >= 10) {
-				this._count = 0;
-				LogsManager.setLogGroupVisible(true);
-				WindowManager.ShowTip("请不要频繁点击");
-			}
-		} else {
-			this._count = 0;
-		}
-		this._prevTime = time;
-	}
-
-	private static refreshLog() {
-		var txt = LogsManager.txt;
-		txt.text = LogsManager.setLogTxt();
-		if (LogsManager.autoFlag)
-			Laya.timer.once(30, this, () => {
-				txt.scrollY = txt.maxScrollY
-			});
-	}
 
 	/**收到服务器push消息时，发送客户端日志，并显示log日志 */
 	public static sendAndShowLog() {
@@ -752,67 +515,18 @@ export default class LogsManager {
 
 
 	public static setLogGroupVisible(visible) {
-		if (visible) {
-			this.isOpenLogsDebug = true;
-		}
-		if (GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_LOG)) {
-			if (WindowManager.debugLayer.numChildren > 0) {
-				WindowManager.debugLayer.removeChildAt(0);
-				WindowManager.debugLayer.mouseEnabled = false;
-				WindowManager.debugLayer.mouseThrough = true;
-			}
-		}
-		if (visible && !GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL_DISABLE)) {
-			// if (game.GameSwitch.checkOnOff(game.GameSwitch.SWITCH_LOG_PANEL)) //若已经显示
-			if (LogsManager.logGroup.visible) //若已经显示
-				return
-			GameSwitch.setOnOff(GameSwitch.SWITCH_LOG_PANEL, 1);//显示
-			LogsManager.infoLabel.text = "rid:" + UserModel.instance.getUserRid() + "\nGlobalVer:" + Global.version;
-			LogsManager.echo("console show");
-			LogsManager.logGroup.visible = true;
-			LogsManager.autoDisableFlag = true;//开启自动隐藏
-			if (LogsManager.idTimeout) {//若已有定时器自动隐藏，定时器关闭
-				TimerManager.instance.remove(LogsManager.idTimeout);
-				LogsManager.idTimeout = null;
-			}
-			LogsManager.idTimeout = TimerManager.instance.add(() => {//定时触发
-				if (LogsManager.autoDisableFlag) {//自动隐藏开关未关闭
-					LogsManager.setLogGroupVisible(false);
-				}
-			}, this, 20000);
-		} else {
-			// if (!game.GameSwitch.checkOnOff(game.GameSwitch.SWITCH_LOG_PANEL)) //若已经隐藏
-			if (!LogsManager.logGroup.visible) //若已经隐藏
-				return
-			LogsManager.autoDisableFlag = false;//重置自动隐藏
-			GameSwitch.setOnOff(GameSwitch.SWITCH_LOG_PANEL, 0);//隐藏
-			LogsManager.echo("console hide");
-			LogsManager.logGroup.visible = false;
-			LogsManager.idTimeout = null;
-		}
+
 
 	}
 
 	public static getCircleId() {
 		if (!this._circleId) {
-			this._circleId = Global.deviceId + "_" + Laya.Browser.now() + Math.floor(Math.random() * 100000);
+			this._circleId = Global.deviceId + "_" + Client.instance.miniserverTime + Math.floor(Math.random() * 100000);
 		}
 		return this._circleId;
 	}
 }
 
-class LabelRenderer extends Laya.Box {
-	private label: Laya.Label;
-
-	public setLabel(txt: string) {
-		this.label = new Laya.Label();
-		this.size(50, 30)
-		this.addChild(this.label);
-		this.mouseThrough = false
-		this.label.text = txt;
-		this.label.fontSize = 20;
-	}
-}
 
 
 import GameSwitch from "../common/GameSwitch";
@@ -826,6 +540,5 @@ import HttpMessage from "../common/HttpMessage";
 import UserInfo from "../common/UserInfo";
 import DeviceTools from "../utils/DeviceTools";
 import GameConsts from "../../game/sys/consts/GameConsts";
-import SingleCommonServer from "../server/SingleCommonServer";
 import LogsErrorCode from "../consts/LogsErrorCode";
 import Client from "../common/kakura/Client";

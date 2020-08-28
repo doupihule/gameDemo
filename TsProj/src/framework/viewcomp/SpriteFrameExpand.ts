@@ -1,8 +1,11 @@
 import TimerManager from "../manager/TimerManager";
 import LogsManager from "../manager/LogsManager";
+import BaseContainer from "../components/BaseContainer";
+import ViewTools from "../components/ViewTools";
+import ImageExpand from "../components/ImageExpand";
 
 //序列帧动画扩展
-export default class SpriteFrameExpand extends Laya.Sprite {
+export default class SpriteFrameExpand extends BaseContainer {
 
 	//缓存的帧数据
 	/**
@@ -17,7 +20,7 @@ export default class SpriteFrameExpand extends Laya.Sprite {
 	private static _cacheFrameData: any = {};
 
 	//子对象
-	private _childView: Laya.Image;
+	private _childView: ImageExpand;
 
 	private _imagePath: string;
 	private _imageHead: string;
@@ -61,18 +64,17 @@ export default class SpriteFrameExpand extends Laya.Sprite {
 	//创建 序列帧扩展 type 1表示标准格式的序列帧配置 2表示精简格式的序列帧配置
 	constructor() {
 		super();
-		this._childView = new Laya.Image();
+		this._childView = ViewTools.createImage("");
 		this.addChild(this._childView);
-		this.on(Laya.Event.DISPLAY, this, this.onAddToStage);
-		this.on(Laya.Event.UNDISPLAY, this, this.onRemoveStage);
+		// this.on(Laya.Event.DISPLAY, this, this.onAddToStage);
+		// this.on(Laya.Event.UNDISPLAY, this, this.onRemoveStage);
 	}
 
 	//设置数据
 	public setFrameData(imagePath: string, imageHead: string, labelsArr: any[] = null, anchorX: number = 0.5, anchorY: number = 0.5, type: number = 1, offsetMap: any = null) {
 		this._imageHead = imageHead;
 		this._imagePath = imagePath;
-		this._childView.anchorX = anchorX;
-		this._childView.anchorY = anchorY;
+
 		this._fullPath = imagePath + imageHead;
 		this._labelMapData = {};
 		this._offsetMap = offsetMap
@@ -217,7 +219,7 @@ export default class SpriteFrameExpand extends Laya.Sprite {
 		}
 		//设置皮肤
 		var frameIndex = group[index]
-		this._childView.skin = this._fullPath + frameIndex + ".png";
+		this._childView.setSkin( this._fullPath + frameIndex + ".png");
 		if (offset) {
 			var posArr = offset[frameIndex];
 			if (posArr) {

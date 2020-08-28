@@ -1,4 +1,4 @@
-export default class FogInstanceBasic extends Laya.Image {
+export default class FogInstanceBasic extends ImageExpand {
 
 	public cacheId;
 	public fogControler;
@@ -13,7 +13,7 @@ export default class FogInstanceBasic extends Laya.Image {
 		this.anchorX = 0.5;
 		this.anchorY = 0.5;
 		this.fogControler = fogControler;
-		this.pos = new Laya.Vector3();
+		this.pos = VectorTools.createVec3();
 
 	}
 

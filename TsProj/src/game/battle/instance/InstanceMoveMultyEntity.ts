@@ -7,7 +7,7 @@ export default class InstanceMoveMultyEntity {
 	 */
 	currentStep: number = 0; //当前运动到的点的位置,
 	totalStep: number; 		//总长度
-	pointArr: Laya.Vector3[]; 	// 点的数组
+	pointArr: {x,y,z}[]; 	// 点的数组
 	spd: number;
 	callFunc;
 	thisObj;
@@ -26,7 +26,7 @@ export default class InstanceMoveMultyEntity {
 	 * @loopParams 默认为空
 	 * 	@@ loopNums = 0 表示无线循环 ,对应的loopNums表示单程循环次数
 	 */
-	public initData(pointArr: Laya.Vector3[], speed: number = 0, callFunc: any = null, thisObj: any = null, loopParams: any = null, isGrid = false) {
+	public initData(pointArr: {x,y,z}[], speed: number = 0, callFunc: any = null, thisObj: any = null, loopParams: any = null, isGrid = false) {
 		this.pointArr = pointArr;
 		this.spd = speed;
 		this.callFunc = callFunc;

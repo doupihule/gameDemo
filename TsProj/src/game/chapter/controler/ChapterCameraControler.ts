@@ -27,7 +27,7 @@ export default class ChapterCameraControler {
 	constructor(controler) {
 		this.controler = controler;
 		this._halfHeight = ScreenAdapterTools.designHeight / 2;
-		this.focusPos = new Laya.Vector3(0, 0, 0);
+		this.focusPos = VectorTools.createVec3(0, 0, 0);
 		this.frontPos1 = 0;
 	}
 

@@ -3,10 +3,14 @@ import Global from "../../../../utils/Global";
 import WindowManager from "../../../../framework/manager/WindowManager";
 import {WindowCfgs} from "../../consts/WindowCfgs";
 import TableUtils from "../../../../framework/utils/TableUtils";
+import BaseContainer from "../../../../framework/components/BaseContainer";
+import ViewTools from "../../../../framework/components/ViewTools";
+import UIBaseView from "../../../../framework/components/UIBaseView";
+import LabelExpand from "../../../../framework/components/LabelExpand";
 
 ;
 
-export default class AlertUILocal extends Laya.View {
+export default class AlertUILocal extends UIBaseView {
 	public static res: string = null;
 
 	static instance: AlertUILocal = null;
@@ -15,14 +19,14 @@ export default class AlertUILocal extends Laya.View {
 	private _thisObj: any = null;
 	private _cacheDataArr: any[];
 
-	private bgCover: Laya.Sprite = null;        //底板透明黑遮罩
-	private contentBg: Laya.Sprite = null;      //弹窗底
-	private titleLab: Laya.Text = null;     //弹窗标题
-	private msgLab: Laya.Text = null;       //内容
-	private sureBtn: Laya.Sprite = null;        //确认按钮底
-	private sureLab: Laya.Text = null;      //确认按钮文本
-	private cancleBtn: Laya.Sprite = null;       //取消按钮
-	private cancleLab: Laya.Text = null;      //取消按钮文本
+	private bgCover: BaseContainer = null;        //底板透明黑遮罩
+	private contentBg: BaseContainer = null;      //弹窗底
+	private titleLab: LabelExpand = null;     //弹窗标题
+	private msgLab: LabelExpand = null;       //内容
+	private sureBtn: BaseContainer = null;        //确认按钮底
+	private sureLab: LabelExpand = null;      //确认按钮文本
+	private cancleBtn: BaseContainer = null;       //取消按钮
+	private cancleLab: LabelExpand = null;      //取消按钮文本
 	//按钮中心位置
 	private btncenterX: number = 0;
 	//按钮偏移
@@ -45,7 +49,7 @@ export default class AlertUILocal extends Laya.View {
 		var contentBgX = (stageWidth - contentBgWidth) / 2;
 		var contentBgY = (stageHeight - contentBgHeight) / 2;
 		if (this.bgCover == null) {
-			this.bgCover = new Laya.Sprite();
+			this.bgCover = ViewTools.createContainer();
 			var path = [
 				["moveTo", 0, 0], //起点左上角
 				["lineTo", stageWidth, 0],//画到右上角
@@ -54,16 +58,13 @@ export default class AlertUILocal extends Laya.View {
 				["closePath"] //闭合路径
 			];
 			//绘制矩形
-			this.bgCover.graphics.drawPath(0, 0, path, {fillStyle: "#000000"});
-			this.bgCover.alpha = 0.5;
-			this.addChild(this.bgCover);
-			// this.bgCover.on(Laya.Event.CLICK, this, (e: Laya.Event) => {
-			//     e.stopPropagation();
-			// })
+			// this.bgCover.graphics.drawPath(0, 0, path, {fillStyle: "#000000"});
+			// this.bgCover.alpha = 0.5;
+			// this.addChild(this.bgCover);
 		}
 		if (this.contentBg == null) {
 			var splitY = 70;
-			this.contentBg = new Laya.Sprite();
+			this.contentBg = ViewTools.createContainer();
 			var path = [
 				["moveTo", 0, 0],
 				["lineTo", contentBgWidth, 0],
@@ -77,41 +78,29 @@ export default class AlertUILocal extends Laya.View {
 				["closePath"]
 			];
 			//绘制矩形
-			this.contentBg.graphics.drawPath(contentBgX, contentBgY, path, {fillStyle: "#111a1b"}, {
-				"strokeStyle": "#202f30",
-				"lineWidth": "3"
-			});
-			this.addChild(this.contentBg);
+			// this.contentBg.graphics.drawPath(contentBgX, contentBgY, path, {fillStyle: "#111a1b"}, {
+			// 	"strokeStyle": "#202f30",
+			// 	"lineWidth": "3"
+			// });
+			// this.addChild(this.contentBg);
 		}
 		if (this.titleLab == null) {
-			this.titleLab = new Laya.Text();
-			this.titleLab.x = contentBgX;
-			this.titleLab.y = contentBgY + 15;
-			this.titleLab.width = contentBgWidth;
-			this.titleLab.height = 45;
-			this.titleLab.fontSize = 45;
-			this.titleLab.color = "#b8fff7";
-			this.titleLab.align = "center";
-			this.titleLab.text = "提示";
+			this.titleLab = ViewTools.createLabel("提示",contentBgWidth,45,45);
+			this.titleLab.setPos(contentBgX,contentBgY + 15);
+			this.titleLab.setColor(0xb8,0xff,0xf7,0xff);
 			this.addChild(this.titleLab);
 		}
 		if (this.msgLab == null) {
-			this.msgLab = new Laya.Text();
+			this.msgLab = ViewTools.createLabel("",contentBgWidth - 100,130,24);
 			this.msgLab.x = contentBgX + 50;
 			this.msgLab.y = contentBgY + 75;
-			this.msgLab.width = contentBgWidth - 100;
-			this.msgLab.height = 130;
-			this.msgLab.fontSize = 24;
-			this.msgLab.color = "#ffffff";
-			this.msgLab.align = "center";
-			this.msgLab.valign = "middle";
-			this.msgLab.wordWrap = true;
-			this.msgLab.leading = 10;
+			this.msgLab.setPos(contentBgX + 50,contentBgY + 75);
+			this.msgLab.setColor(0xff,0xff,0xff,0xff)
+			this.msgLab.setWrapStyle();
 			this.addChild(this.msgLab);
 		}
 		this.btncenterX = contentBgX + 200;
 		if (this.sureBtn == null) {
-
 			this.sureBtn = this.createBtn("确定", this.touchHandler, this, this.btncenterX, contentBgY + 206);
 		}
 
@@ -126,10 +115,9 @@ export default class AlertUILocal extends Laya.View {
 	}
 
 	private createBtn(str: string, func: any, thisObj: any, x, y) {
-		var sp = new Laya.Sprite();
-		sp = new Laya.Sprite();
-		sp.width = 166;
-		sp.height = 50;
+		var sp = ViewTools.createContainer();
+		sp = ViewTools.createContainer();
+		sp.setSize(166,50);
 		var path = [
 			["moveTo", 0, 0],
 			["lineTo", 166, 0],
@@ -138,25 +126,13 @@ export default class AlertUILocal extends Laya.View {
 			["closePath"]
 		];
 		//绘制矩形
-		sp.graphics.drawPath(0, 0, path, {fillStyle: "#111a1b"}, {"strokeStyle": "#202f30", "lineWidth": "2"});
-		sp.x = x;
-		sp.y = y;
+		// sp.graphics.drawPath(0, 0, path, {fillStyle: "#111a1b"}, {"strokeStyle": "#202f30", "lineWidth": "2"});
+		sp.setPos(x,y);
 		this.addChild(sp);
-		if (func) {
-			sp.on(Laya.Event.CLICK, thisObj, func);
-		}
 
-		var label: Laya.Text;
-		label = new Laya.Text();
-		label.x = 0;
-		label.y = 10;
-		label.width = 166;
-		label.height = 30;
-		label.fontSize = 30;
-		label.color = "#e1fcf5";
-		label.align = "center";
-		label.valign = "middle";
-		label.text = str;
+		var label=  ViewTools.createLabel(str,166,30,30);
+		this.titleLab.setPos(0,10);
+		label.setColor(0xe1,0xfc,0xf5,0xff);
 		sp.addChild(label);
 		return sp;
 	}

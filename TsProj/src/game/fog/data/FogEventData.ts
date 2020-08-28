@@ -20,15 +20,15 @@ import StringUtils from "../../../framework/utils/StringUtils";
 export default class FogEventData {
 
 	public eventId;
-	private ctn: Laya.Image;
+	private ctn: ImageExpand;
 	public owner: FogInstanceCell;
 	public cfgData;
 	//spineCtn
-	public spineCtn: Laya.Image;
+	public spineCtn: ImageExpand;
 	//icon容器
-	private iconCtn: Laya.Image;
+	private iconCtn: ImageExpand;
 	//文本容器
-	private txtCtn: Laya.Image;
+	private txtCtn: ImageExpand;
 	//逻辑类型
 	public logicType;
 	//触发方式
@@ -61,16 +61,16 @@ export default class FogEventData {
 	}
 
 	addCtn() {
-		this.iconCtn = new Laya.Image("");
+		this.iconCtn = ViewTools.createImage("");
 		this.iconCtn.anchorX = 0.5;
 		this.iconCtn.anchorY = 0.5;
 		this.ctn.addChild(this.iconCtn);
-		this.spineCtn = new Laya.Image("");
+		this.spineCtn = ViewTools.createImage("");
 		this.ctn.addChild(this.spineCtn);
 		this.spineCtn.anchorX = 0.5;
 		this.spineCtn.anchorY = 1;
 		this.spineCtn.y = 20;
-		this.txtCtn = new Laya.Image("");
+		this.txtCtn = ViewTools.createImage("");
 		this.txtCtn.x = -FogFunc.itemWidth / 2;
 		this.txtCtn.y = -FogFunc.itemHeight / 2;
 		this.ctn.addChild(this.txtCtn);

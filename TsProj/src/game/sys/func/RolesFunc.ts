@@ -7,7 +7,7 @@ import TimerManager from "../../../framework/manager/TimerManager";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
 import ShareOrTvManager from "../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "./ShareTvOrderFunc";
-import {DataResourceType} from "./DataResourceFunc";
+import {DataResourceConst} from "./DataResourceFunc";
 import UserModel from "../model/UserModel";
 import PiecesModel from "../model/PiecesModel";
 import BigNumUtils from "../../../framework/utils/BigNumUtils";
@@ -267,14 +267,14 @@ export default class RolesFunc extends BaseFunc {
 	 * @param parnet 容器 类型是Image
 	 * @param id  角色id
 	 */
-	addStarImg(parnet: Laya.Image, id, width = 44, height = 43, star = null) {
+	addStarImg(parnet: ImageExpand, id, width = 44, height = 43, star = null) {
 		var unlock = GlobalParamsFunc.instance.getDataNum("equipUnlock")
 		if (UserModel.instance.getMaxBattleLevel() < unlock) {
 			return;
 		}
 		if (parnet.numChildren == 0) {
 			for (var i = 0; i < 5; i++) {
-				var img: Laya.Image = new Laya.Image("uisource/common/common/equip_image_xing2.png");
+				var img: ImageExpand = ViewTools.createImage("uisource/common/common/equip_image_xing2.png");
 				img.width = width;
 				img.height = height;
 				img.x = i * width;
@@ -286,7 +286,7 @@ export default class RolesFunc extends BaseFunc {
 			starLevel = RolesModel.instance.getRoleStarLevel(id);
 		}
 		for (var i = 0; i < parnet.numChildren; i++) {
-			var item = parnet.getChildAt(i) as Laya.Image;
+			var item = parnet.getChildAt(i) as ImageExpand;
 			if (i < starLevel) {
 				item.skin = "uisource/common/common/equip_image_xing1.png";
 			} else {
@@ -308,17 +308,17 @@ export default class RolesFunc extends BaseFunc {
 		var cost = this.getCfgDatasByKey("Equip", equipId, "cost");
 		for (var i = 0; i < cost.length; i++) {
 			var costItem = cost[i].split(",");
-			if (Number(costItem[0]) == DataResourceType.COIN && !ignoreCost) {
+			if (Number(costItem[0]) == DataResourceConst.COIN && !ignoreCost) {
 				if (!BigNumUtils.compare(UserModel.instance.getCoin(), costItem[1])) {
 					result = RolesFunc.STATE_NOEQUIP;
 					break;
 				}
-			} else if (Number(costItem[0]) == DataResourceType.GOLD && !ignoreCost) {
+			} else if (Number(costItem[0]) == DataResourceConst.GOLD && !ignoreCost) {
 				if (!BigNumUtils.compare(UserModel.instance.getCoin(), costItem[1])) {
 					result = RolesFunc.STATE_NOEQUIP;
 					break;
 				}
-			} else if (Number(costItem[0]) == DataResourceType.PIECE) {
+			} else if (Number(costItem[0]) == DataResourceConst.PIECE) {
 				var count = PiecesModel.instance.getPieceCount(costItem[1]);
 				if (count < Number(costItem[2])) {
 					result = RolesFunc.STATE_NOEQUIP;

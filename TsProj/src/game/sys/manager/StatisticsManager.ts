@@ -27,18 +27,6 @@ export default class StatisticsManager {
 
 	}
 
-	private _event_with_switch = {
-		// [GameSwitch.SWITCH_DISABLE_BANNER_LOG]: [
-		// 	StatisticsManager.GROUP_Video,
-		// ],
-	};
-
-	setAccount(accountId, level, gameServer, accountType, age, accountName, gender) {
-		if (UserInfo.isWeb()) {
-			// TalkingData.setAccount(accountId, level, gameServer, accountType, age, accountName, gender)
-		}
-	}
-
 	/**loading完成 开始玩 打点计时 */
 	static onLoadingLog() {
 		if (this.isLoadingLog) return;

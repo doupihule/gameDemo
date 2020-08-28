@@ -9,84 +9,63 @@ import MainModule from "../../../../framework/manager/MainModule";
 import {ButtonUtils} from "../../../../framework/utils/ButtonUtils";
 import StorageCode from "../../consts/StorageCode";
 import UserInfo from "../../../../framework/common/UserInfo";
+import UIBaseView from "../../../../framework/components/UIBaseView";
+import ButtonExpand from "../../../../framework/components/ButtonExpand";
+import LabelExpand from "../../../../framework/components/LabelExpand";
 
-export default class LoginUI extends ui.gameui.login.LoginUI {
+export default class LoginUI extends UIBaseView {
 	public static res = ["gameui/Login.scene",
 		// "common/common_bg_bg.png",
 	];
 	private _saveAccount: string;
 	public static instance: LoginUI;
+	public  btn_login:ButtonExpand;
+	public  label_account:LabelExpand;
+	public  label_password:LabelExpand;
 
 	constructor() {
 		super();
 		LoginUI.instance = this;
-		// LoadManager.instance.load([BaseFunc._globalConfigsName], Laya.Handler.create(this, ()=>{
-		//     BaseFunc.onConfigGroupLoadComplete();
-		//     BaseFunc.onTranslateGroupLoadComplete();
-		//     ErrCodeManager.ins.initConfig();
-		// }), null, Laya.Loader.JSON);
 
-		new ButtonUtils(this.loginbtn, this.onLoginClick, this);
+		new ButtonUtils(this.btn_login, this.onLoginClick, this);
 
-		// this.loginbtn.clickHandler = Laya.Handler.create(this, this.onLoginClick, null, false);
-		// var name = "role_1002"
-		// var indexArr = [0];
-		// for (var i = 0; i < indexArr.length; i++) {
-		//     var role = new BattleRoleView(name, 0.5, indexArr[i]);
-		//     var xIndex = i % 2;
-		//     var yIndex = Math.floor(i / 2)
-		//     this.addChild(role);
-		//     role.x = 150 * (xIndex + 1);
-		//     role.y = 200 * (yIndex + 1)+200;
-		//     role.play("idle", true);
-		//     role.stop();
-		//     TimerManager.instance.setTimeout(() => {
-		//         role.resume()
-		//     }, this, 3000)
-		// }
 	}
 
 	public setData(): void {
 		this._saveAccount = CacheManager.instance.getGlobalCache(StorageCode.storage_acount);
 		if (this._saveAccount && this._saveAccount != "0" && this._saveAccount.length > 0) {
-			this.account.text = this._saveAccount;
+			this.label_account.text = this._saveAccount;
 		}
 	}
 
 	private onLoginClick(): void {
-		var account: string = this.account.text;
-		var inviteId: string = this.invite.text;
-		var shareInfo: string = this.shareInfo.text;
+		var label: string = this.label_account.text;
 		// var re = /^[0-9a-zA-Z]*$/g;  //判断字符串是否为数字和字母组合
-		if (account == "") {
-			console.log("please input you account");
+		if (label == "") {
+			console.log("please input you label_account");
 			return;
 		} else {
-			this._saveAccount = account;
-			CacheManager.instance.setGlobalCache(StorageCode.storage_acount, account);
-			console.log("login account>>>>" + account)
+			this._saveAccount = label;
+			CacheManager.instance.setGlobalCache(StorageCode.storage_acount, label);
+			console.log("login label_account>>>>" + label)
 		}
 
 
-		this.sendLogin(account, inviteId, shareInfo);
+		this.sendLogin(label);
 		WindowManager.CloseUI(WindowCfgs.LoginUI);
-		// WindowManager.OpenUI(WindowCfgs.GameMainUI);
-		// BattleSceneManager.instance.enterBattle({});
 
 	}
 
-	private sendLogin(account: string, inviteId: string, shareInfo: string) {
+	private sendLogin(account: string) {
 		var params: any = {
 			"method": Method.global_Account_loginTest,
 			"params": {
 				"passport": account,
-				"password": this.password.text,
+				"password": this.label_password.text,
 				"device": Global.deviceModel,
 				"comeFrom": UserInfo.LoginSceneInfo
 			}
 		};
-		UserInfo.platform.inviteBy = inviteId;
-		UserInfo.platform.shareInfo = shareInfo;
 		UserInfo.platform.reqGlobal(params);
 	}
 

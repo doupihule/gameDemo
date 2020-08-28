@@ -21,8 +21,6 @@ export default class GameConfig {
 	}
 
 	static init() {
-		var reg: Function = Laya.ClassUtils.regClass;
-		reg("app/MainScene.ts", MainScene);
 	}
 }
 GameConfig.init();

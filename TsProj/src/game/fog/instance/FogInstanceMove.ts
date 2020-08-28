@@ -51,9 +51,9 @@ export default class FogInstanceMove extends FogInstanceBasic {
 
 	public constructor(controler) {
 		super(controler)
-		this.speed = new Laya.Vector3();
-		this.addSpeed = new Laya.Vector3();
-		this.unitVector = new Laya.Vector3();
+		this.speed = VectorTools.createVec3();
+		this.addSpeed = VectorTools.createVec3();
+		this.unitVector = VectorTools.createVec3();
 	}
 
 	//初始化站立状态(也就是闲置)
@@ -118,7 +118,7 @@ export default class FogInstanceMove extends FogInstanceBasic {
 	moveToOnePoint(x: number, y: number, z: number = 0, spd: number = 0, callFunc: any = null, thisObj: any = null, callParams = null, expandParams: any = null, movePointType: number = 1) {
 
 		if (!this._moveParams) {
-			this._moveParams = new InstanceMoveEntity(new Laya.Vector3(x, y, z));
+			this._moveParams = new InstanceMoveEntity(VectorTools.createVec3(x, y, z));
 		}
 		if (!spd || spd == 0) {
 			spd = BattleFunc.moveSpeed;

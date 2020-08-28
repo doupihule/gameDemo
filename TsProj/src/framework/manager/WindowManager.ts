@@ -12,23 +12,26 @@ import UserInfo from "../common/UserInfo";
 import AlertNewLocalUI from "../view/tip/AlertNewLocalUI";
 import PoolTools from "../utils/PoolTools";
 import JumpManager from "./JumpManager";
+import BaseContainer from "../components/BaseContainer";
+import ViewTools from "../components/ViewTools";
+import TimerManager from "./TimerManager";
 
 export default class WindowManager {
 
 
-	private static _currentFullWindow: Laya.Sprite;
+	private static _currentFullWindow: BaseContainer;
 
-	public static rootLayer: Laya.Sprite
+	public static rootLayer: BaseContainer
 
-	public static commonUILayer: Laya.Sprite;
-	public static topUILayer: Laya.Sprite;
-	public static guideLayer: Laya.Sprite;        //引导层 会盖住topuilayer.
-	public static highLayer: Laya.Sprite;           //部分特殊的界面需要盖住引导层级
-	public static toolsLayer: Laya.Sprite;  //组件层 比如头条录屏按钮.  部分常驻的组件按钮放这一层. 这个界面的宽高不做特殊设置. 不阻挡点击事件穿透.
-	public static maskLayer: Laya.Sprite;       //点击屏蔽遮罩层
-	public static tipsLayer: Laya.Sprite;       //tip层，不允许开启触摸捕捉
+	public static commonUILayer: BaseContainer;
+	public static topUILayer: BaseContainer;
+	public static guideLayer: BaseContainer;        //引导层 会盖住topuilayer.
+	public static highLayer: BaseContainer;           //部分特殊的界面需要盖住引导层级
+	public static toolsLayer: BaseContainer;  //组件层 比如头条录屏按钮.  部分常驻的组件按钮放这一层. 这个界面的宽高不做特殊设置. 不阻挡点击事件穿透.
+	public static maskLayer: BaseContainer;       //点击屏蔽遮罩层
+	public static tipsLayer: BaseContainer;       //tip层，不允许开启触摸捕捉
 	//调试层级.最高. 比如日志窗口
-	public static debugLayer: Laya.Sprite;
+	public static debugLayer: BaseContainer;
 
 	public static tipsContent = [];
 	public static tipsObject = [];
@@ -44,13 +47,12 @@ export default class WindowManager {
 	public static maskAlpha = 0;
 
 	public static isShowUpdateTip = false;
-	private static _currentWindow: Laya.Sprite;
+	private static _currentWindow: BaseContainer;
 	private static _currentWindowName: string = "";
 	private static _allWindowMap: any[] = [];
 	public static UIInstance = {};
 
 	public static OpenUI(UIName: string, params = null) {
-		// LogsManager.echo("WindowManager OpenUI:", UIName);
 		WindowManager.SwitchUIAPI(UIName, null, null, params);
 	}
 
@@ -108,10 +110,7 @@ export default class WindowManager {
 
 		}
 
-		LoadManager.instance.loadPacgeAndRes(packArr, resAll, Laya.Handler.create(WindowManager, (openUINames, rootNodes, closeUINames, params) => {
-				LoadManager.instance.create(res3DAll, Laya.Handler.create(WindowManager, WindowManager.SwitchUIComplete, [openUINames, rootNodes, closeUINames, args]));
-			},
-			[openUINames, rootNodes, closeUINames, args]), null, null, true);
+		WindowManager.SwitchUIComplete(openUINames, rootNodes, closeUINames, args);
 	}
 
 	private static SwitchUIComplete(openUINames: any, rootNodes: any, closeUINames: any, args) {
@@ -184,25 +183,24 @@ export default class WindowManager {
 	}
 
 	//创建模态
-	private static createModalView(ctn: Laya.Sprite, alpha: number = 1) {
+	private static createModalView(ctn: BaseContainer, alpha: number = 1) {
 		if (alpha == null) {
 			alpha = 0.3;
 		}
-		var modalView = new Laya.Sprite();
-		modalView.graphics.drawRect(0, 0, ScreenAdapterTools.width, ScreenAdapterTools.height, "#000000", null, 0);
-		modalView.width = ScreenAdapterTools.width;
-		modalView.height = ScreenAdapterTools.height;
+		var modalView = ViewTools.createContainer();
+		// modalView.graphics.drawRect(0, 0, ScreenAdapterTools.width, ScreenAdapterTools.height, "#000000", null, 0);
+		// modalView.width = ScreenAdapterTools.width;
+		// modalView.height = ScreenAdapterTools.height;
 		modalView.mouseEnabled = true;
 		modalView.mouseThrough = false;
 		modalView.alpha = alpha;
-		ctn.addChildAt(modalView, 0);
+		ctn.addChild(modalView, 0);
 		return modalView
 	}
 
 
-	public adjustUI(view: Laya.Sprite) {
-		view.width = ScreenAdapterTools.width;
-		view.height = ScreenAdapterTools.height;
+	public adjustUI(view: BaseContainer) {
+		view.setSize(ScreenAdapterTools.width,ScreenAdapterTools.height);
 		view.mouseEnabled = true;
 	}
 
@@ -262,20 +260,18 @@ export default class WindowManager {
 			this.tipsCount++;
 			tip.setData(args.data);
 			WindowManager.tipsLayer.addChild(tip);
-			Laya.timer.once(args.timeout, this, () => {
+			TimerManager.instance.add( () => {
 				this.tipsCount--;
 				WindowManager.expandTipsObject.push(tip);
 				WindowManager.tipsLayer.removeChild(tip);
 				if (this.expandTipsContent.length > 0) {
 					WindowManager.expandTipComplete(this.expandTipsContent.shift());
 				}
-			});
+			},this,args.timeout,1);
 		}
 	}
 
 	public static ShowTip(text, timeout = 1500) {
-		// var subPackage = this.getUIPackage(WindowCfgs.TipsUI);
-		// LoadManager.instance.loadPacgeAndRes(subPackage, this.getUILoadGroup(WindowCfgs.TipsUI), Laya.Handler.create(WindowManager, WindowManager.TipComplete, [{ text: text, timeout: timeout }]));
 		WindowManager.TipComplete({text: text, timeout: timeout});
 
 	}
@@ -295,66 +291,31 @@ export default class WindowManager {
 			this.tipsCount++;
 			tip.setData(args.text);
 			WindowManager.tipsLayer.addChild(tip);
-			Laya.timer.once(args.timeout, this, () => {
+			TimerManager.instance.add(() => {
 				this.tipsCount--;
 				WindowManager.tipsObject.push(tip);
 				WindowManager.tipsLayer.removeChild(tip);
 				if (this.tipsContent.length > 0) {
 					WindowManager.TipComplete(this.tipsContent.shift());
 				}
-			});
+			},this,args.timeout,1)
 		}
 	}
 
-	public static ShowUpdateTip(text, timeout = 1500) {
-		//暂时废弃
-		if (WindowManager.isShowUpdateTip)
-			LoadManager.instance.load(this.getUILoadGroup(WindowCfgs.TipsUI), Laya.Handler.create(WindowManager, WindowManager.UpdateTipComplete, [{
-				text: text,
-				timeout: timeout
-			}]));
-	}
 
-	private static UpdateTipComplete(args) {
-		if (this.updateTipsCount >= 1) {
-			this.updateTipsContent.push(args);
-		} else {
-			var tip;
-			if (WindowManager.updateTipsObject.length > 0) {
-				tip = WindowManager.updateTipsObject.pop();
-			} else {
-				tip = this.getUIClass(WindowCfgs.TipsUI);
-				tip.width = ScreenAdapterTools.width;
-				tip.height = ScreenAdapterTools.height;
-			}
-			this.updateTipsCount++;
-			tip.setData(args.text);
-			WindowManager.commonUILayer.addChild(tip);
-			Laya.timer.once(args.timeout, this, () => {
-				this.updateTipsCount--;
-				WindowManager.updateTipsObject.push(tip);
-				WindowManager.commonUILayer.removeChild(tip);
-				if (this.updateTipsContent.length > 0) {
-					WindowManager.TipComplete(this.updateTipsContent.shift());
-				}
-			});
-		}
-	}
 
 	public static CloseUIAPI(UIName: string) {
 		if (WindowManager.UIInstance[UIName] != null) {
 			LogsManager.echo("WindowManager CloseUI:", UIName);
 			var uiView = WindowManager.UIInstance[UIName]
 			uiView.onClose && uiView.onClose();
-			var parent: Laya.Sprite = uiView.parent
+			var parent: BaseContainer = uiView.parent
 			if (parent) {
 				parent.removeChild(uiView)
 				if (parent.numChildren == 0) {
 					parent.mouseEnabled = false;
 				}
 			}
-
-
 		}
 	}
 
@@ -386,41 +347,19 @@ export default class WindowManager {
 		// WindowManager.rootLayer.addChild(WindowManager.guideLayer);
 		WindowManager.guideLayer.visible = true
 		var loadRes = this.getUILoadGroup(UIName);
-		if (loadRes && loadRes.length > 0) {
-			var subPackage = this.getUIPackage(UIName);
-			LoadManager.instance.loadPacgeAndRes(subPackage, loadRes, Laya.Handler.create(WindowManager, (UIName, params) => {
-					var res3D = WindowManager.getWindowCfgs(UIName).group3d;
-					if (res3D == null)
-						WindowManager.GuideUIComplete(UIName, params);
-					else
-						Laya.loader.create(res3D, Laya.Handler.create(WindowManager, WindowManager.GuideUIComplete, [UIName, params]));
-				},
-				[UIName, params]), null, null, true);
-		} else {
-			if (WindowManager.UIInstance[UIName] == null) {
-				WindowManager.UIInstance[UIName] = WindowManager.getUIClass(UIName);
-				WindowManager.UIInstance[UIName].width = ScreenAdapterTools.width;
-				WindowManager.UIInstance[UIName].height = ScreenAdapterTools.height;
-			}
-
-			WindowManager.UIInstance[UIName].mouseEnabled = true;
-			WindowManager.UIInstance[UIName].setData(params);
-			WindowManager.guideLayer.addChild(WindowManager.UIInstance[UIName]);
-		}
-	}
-
-	private static GuideUIComplete(UIName, params) {
 		if (WindowManager.UIInstance[UIName] == null) {
 			WindowManager.UIInstance[UIName] = WindowManager.getUIClass(UIName);
 			WindowManager.UIInstance[UIName].width = ScreenAdapterTools.width;
 			WindowManager.UIInstance[UIName].height = ScreenAdapterTools.height;
 		}
+
 		WindowManager.UIInstance[UIName].mouseEnabled = true;
-		Laya.timer.callLater(this, () => {
-			WindowManager.UIInstance[UIName].setData(params);
-			WindowManager.guideLayer.addChild(WindowManager.UIInstance[UIName]);
-		});
+		WindowManager.guideLayer.addChild(WindowManager.UIInstance[UIName]);
+		WindowManager.UIInstance[UIName].setData(params);
+
+
 	}
+
 
 	public static CloseGuideUI(UIName: string) {
 		GuideManager.ins.nowGuideId = null;
@@ -438,20 +377,7 @@ export default class WindowManager {
 	}
 
 	public static OpenSubGuideUI(node, UIName: string, params) {
-		var loadGroup = WindowManager.getUILoadGroup(UIName);
-		if (loadGroup && loadGroup.length > 0) {
-			var subPackage = this.getUIPackage(UIName);
-			LoadManager.instance.loadPacgeAndRes(subPackage, loadGroup, Laya.Handler.create(WindowManager, (node, UIName, params) => {
-					var res3D = WindowManager.getWindowCfgs(UIName).group3d;
-					if (res3D == null)
-						WindowManager.SubGuideUIComplete(node, UIName, params);
-					else
-						LoadManager.instance.create(res3D, Laya.Handler.create(WindowManager, WindowManager.SubGuideUIComplete, [node, UIName, params]), null, null, true);
-				},
-				[node, UIName, params]), null, null, true);
-		} else {
-			WindowManager.SubGuideUIComplete(node, UIName, params);
-		}
+		WindowManager.SubGuideUIComplete(node, UIName, params);
 	}
 
 	private static SubGuideUIComplete(node, UIName, params) {
@@ -470,8 +396,6 @@ export default class WindowManager {
 			WindowManager.UIInstance[UIName].onClose && WindowManager.UIInstance[UIName].onClose();
 			node.removeChild(WindowManager.UIInstance[UIName]);
 		}
-		// if (!WindowManager.guideLayer.numChildren) WindowManager.guideLayer.visible = false;
-		// node.removeChild(WindowManager.guideLayer);
 	}
 
 
@@ -494,7 +418,7 @@ export default class WindowManager {
 
 	//********************************加载界面****************************************/
 	public static loadingUI: LoadingUI;
-	private static loadingHandler: Laya.Handler;
+	private static loadingHandler: any;
 
 	public static ShowLoadingUI(args): void {
 		WindowManager.loadingHandler = args;
@@ -516,7 +440,7 @@ export default class WindowManager {
 		WindowManager.loadingUI.setData();
 
 		if (WindowManager.loadingHandler != null) {
-			WindowManager.loadingHandler.run();
+			WindowManager.loadingHandler()
 		}
 	}
 
@@ -531,10 +455,11 @@ export default class WindowManager {
 	public static SwitchUIFromLoading(openUIName: string, params) {
 		if (LoadingUI.instance)
 			LoadingUI.instance.addProgress(100);
-		Laya.timer.once(100, this, () => {
+		TimerManager.instance.add(() => {
 			WindowManager.SwitchUI(openUIName, WindowCfgs.LoadingUI, params);
-		});
+		},this,100,1);
 	}
+
 
 	public static SwitchMaskUI(isOpen, alpha = 0) {
 		var UIName = "maskUI";
@@ -557,7 +482,6 @@ export default class WindowManager {
 		} else {
 			this.maskCount--;
 			if (this.maskCount <= 0) {
-				// LogsManager.echo("krma. closeMask");
 				this.maskCount = 0;
 				if (WindowManager.UIInstance[UIName] != null) {
 					WindowManager.UIInstance[UIName].onClose && WindowManager.UIInstance[UIName].onClose();
@@ -568,9 +492,9 @@ export default class WindowManager {
 				this.maskAlpha = 0;
 			}
 		}
-		Laya.timer.clear(this, this.CloseMaskUI);
+		TimerManager.instance.removeByCallBack(this,this.CloseMaskUI);
 		if (this.maskCount > 0) {
-			Laya.timer.once(5000, this, this.CloseMaskUI);
+			TimerManager.instance.add(this.CloseMaskUI,this,5000,1);
 		}
 	}
 
@@ -587,13 +511,12 @@ export default class WindowManager {
 	}
 
 	static initMaskUI() {
-		var mask = new Laya.Image();
-		var background = new Laya.Sprite();
+		var mask = ViewTools.createContainer();;
+		var background = ViewTools.createContainer();
 
 		mask.addChild(background);
 
 		//画矩形
-		background.graphics.drawRect(0, 0, ScreenAdapterTools.width, ScreenAdapterTools.height, 0);
 		background.alpha = 1;
 
 		return mask;
@@ -640,7 +563,7 @@ export default class WindowManager {
 		if (obj.modal == null) {
 			obj.modal = 1;
 		}
-		if (obj.modalAlpha == undefined || obj.modalAlpha == null) {
+		if ( obj.modalAlpha == null) {
 			obj.modalAlpha = 0.6;
 		}
 		if (!obj.parent) {

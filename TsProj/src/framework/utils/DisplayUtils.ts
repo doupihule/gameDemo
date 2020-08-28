@@ -2,40 +2,18 @@ import ScreenAdapterTools from "./ScreenAdapterTools";
 import GameConsts from "../../game/sys/consts/GameConsts";
 import Sprite3DExpand from "../viewcomp/Sprite3DExpand";
 import SkeletonExpand from "../viewcomp/SkeletonExpand";
-import ResourceManager from "../manager/ResourceManager";
 import SpriteFrameExpand from "../viewcomp/SpriteFrameExpand";
+import BaseContainer from "../components/BaseContainer";
+import GlobalEnv from "../engine/GlobalEnv";
 
 export default class DisplayUtils {
-	public static swapChildrenAt(parent: Laya.Node, index1: number, index2: number) {
-		var child1 = parent.getChildAt(index1);
-		var child2 = parent.getChildAt(index2);
-		parent.setChildIndex(child1, index2);
-		parent.setChildIndex(child2, index1);
-	}
 
 	public static camera;
 
 	/**传入资源url以及父物体获取当前加载对象，并添加摄像机 */
 	public static getModelByUrl(url, parentObj, isClone = false) {
-		var goal: Laya.Sprite3D;
-		if (isClone) {
-			goal = Laya.loader.getRes(url).clone();
-		} else {
-			goal = Laya.loader.getRes(url);
 
-		}
-		ResourceManager.checkParticalRendeMode(goal, url);
-		var camera: Laya.Camera;
-		camera = goal.getChildByName("main_camera") as Laya.Camera;
-		var extraAdd = 0;
-		camera.orthographic = true;
-		camera.orthographicVerticalSize = 2;
-		var x = (ScreenAdapterTools.UIOffsetX + ScreenAdapterTools.sceneOffsetX) * Laya.stage.clientScaleX;
-		var y = (ScreenAdapterTools.UIOffsetY + ScreenAdapterTools.sceneOffsetY) * Laya.stage.clientScaleY
-		camera.viewport = new Laya.Viewport(x, y, ScreenAdapterTools.designWidth * Laya.stage.clientScaleX, ScreenAdapterTools.designHeight * Laya.stage.clientScaleY);
-		parentObj.addChild(camera);
-		camera.clearFlag = Laya.BaseCamera.CLEARFLAG_DEPTHONLY;
-		return goal;
+		return null;
 	}
 
 	public static adjustLabelPos() {
@@ -45,70 +23,22 @@ export default class DisplayUtils {
 
 	//创建一个摄像机
 	public static createCamera(clearFlag: number = 2) {
-		var camera = new Laya.Camera();
-		var sx = Laya.stage.clientScaleX;
-		var sy = Laya.stage.clientScaleY;
-		camera.viewport = new Laya.Viewport((ScreenAdapterTools.UIOffsetX + ScreenAdapterTools.sceneOffsetX) * sx, ScreenAdapterTools.UIOffsetY * sy, ScreenAdapterTools.designWidth * sx, ScreenAdapterTools.designHeight * sy);
-		camera.clearFlag = clearFlag;
-		return camera;
+		return null;
 	}
 
 	//创建3D场景 是否启用带物理引擎的scene
 	public static createScene3D(usePhysics: boolean = false) {
 		var scene
-		if (!usePhysics && GameConsts.isUsePhysics) {
-			Laya3D["_enbalePhysics"] = false
-			scene = new Laya.Scene3D();
-			Laya3D["_enbalePhysics"] = true;
-		} else {
-			scene = new Laya.Scene3D();
-		}
+
 		return scene;
 	}
 
 
-	//设置一个模型所有子对象的renderquene
-	public static setViewRenderQuene(view: Laya.Sprite3D, value) {
-		var a: Laya.MeshSprite3D = view as Laya.MeshSprite3D;
-		var b: Laya.SkinnedMeshSprite3D = view as Laya.SkinnedMeshSprite3D;
-		if (a.meshRenderer && a.meshRenderer.material) {
-			a.meshRenderer.material.renderQueue = value
-		}
-		if (b.skinnedMeshRenderer && b.skinnedMeshRenderer.material) {
-			b.skinnedMeshRenderer.material.renderQueue = value;
-		}
-		for (var i = 0; i < view.numChildren; i++) {
-			var child = view.getChildAt(i);
-			this.setViewRenderQuene(child as Laya.Sprite3D, value);
-		}
 
-	}
-
-	/**
-	 *
-	 * @param modelName  模型名字 比如role_1; 原则上战斗中不要这样使用. 会降低一定性能.多嵌套一层. 只适合系统层的开发
-	 * @param showViewArr 需要显示的子对象名字.默认为空表是全部显示,否则按照传入的数组显示.可以多级显示,["child1.child12", "child2","child3",... ];
-	 *  显示会显示某个路径以及这个路径的所有子对象 ,比如 child2 会显示child2以及所有子对象
-	 * @param callBack 模型加载成功后的回调.
-	 * @param thisObj
-	 * @param args 回调附带参数
-	 *  返回一个sprite3D对象. 目前是可以非阻塞的进行其他的流程
-	 */
-	public static createSpriteExpand(modelName: string, showViewArr = null, callBack = null, thisObj = null, args: any[] = null) {
-		var sp = new Sprite3DExpand(modelName);
-		sp.startLoadModel(modelName, callBack, thisObj, args)
-		sp.setShowViewArr(showViewArr);
-		return sp;
-	}
-
-	//创建动态特效
-	public static createEffectExpand(modelName: string, showViewArr = null, callBack = null, thisObj = null, args: any[] = null) {
-
-	}
 
 	//创建动画扩展 aniName 动画短名,  aniMode 动画模式 0 不支持换装, 1,2支持换装, 原则上只使用1,
 	public static createSkeletonExpand(aniName: string, aniMode = 0, completeFunc = null, thisObj = null, expandParams = null) {
-		var ske = new SkeletonExpand(null, aniMode);
+		var ske = new SkeletonExpand();
 		ske.completeBackFunc = completeFunc;
 		ske.completeThisObj = thisObj;
 		ske.completeExpandParams = expandParams;
@@ -162,7 +92,7 @@ export default class DisplayUtils {
 	};
 
 	//设置图片的颜色形变 r,g,b  -1,1,  offrgb  (-255,255);
-	static setViewColorTransform(view: Laya.Sprite, r = 1, g = 1, b = 1, a = 1, offr = 0, offg = 0, offb = 0, offa = 0) {
+	static setViewColorTransform(view: BaseContainer, r = 1, g = 1, b = 1, a = 1, offr = 0, offg = 0, offb = 0, offa = 0) {
 		var matrixArr = [
 			r, 0, 0, 0, offr,
 			0, g, 0, 0, offg,
@@ -170,28 +100,27 @@ export default class DisplayUtils {
 			0, 0, 0, a, offa,
 		]
 
-		view.filters = [new Laya.ColorFilter(matrixArr)];
+		// view.filters = [new Laya.ColorFilter(matrixArr)];
 	}
 
 	//设置颜色 滤镜效果
-	static setViewMatrixFilter(view: Laya.Sprite, r1, r2, r3, r4, offr, g1, g2, g3, g4, offg, b1, b2, b3, b4, offb, a1, a2, a3, a4, offa) {
+	static setViewMatrixFilter(view: BaseContainer, r1, r2, r3, r4, offr, g1, g2, g3, g4, offg, b1, b2, b3, b4, offb, a1, a2, a3, a4, offa) {
 		var matrixArr = [
 			r1, r2, r3, r4, offr,
 			g1, g2, g3, g4, offg,
 			b1, b2, b3, b4, offb,
 			a1, a2, a3, a4, offa,
 		]
-		view.filters = [new Laya.ColorFilter(matrixArr)];
+		// view.filters = [new Laya.ColorFilter(matrixArr)];
 	}
 
 	//设置颜色滤镜 根据矩阵数组. 这个是为了节省内存. 防止有大量数组创建
 	static setViewMatrixByMatirx(view, matrix: any[]) {
-		view.filters = [new Laya.ColorFilter(matrix)];
 	}
 
-	static localToLocalPos(p1Pos: Laya.Point, sp1: Laya.Sprite, sp2: Laya.Sprite) {
-		sp1.localToGlobal(p1Pos);
-		sp2.globalToLocal(p1Pos);
+	static localToLocalPos(p1Pos: any, sp1: BaseContainer, sp2: BaseContainer) {
+		// sp1.localToGlobal(p1Pos);
+		// sp2.globalToLocal(p1Pos);
 		return p1Pos
 	}
 
@@ -245,7 +174,7 @@ export default class DisplayUtils {
 	/**设置panel的滚动
 	 * isScroll：true 可以滚动 false 禁止滚动
 	 */
-	public static setPanelScrollVisbie(panel: Laya.Panel, isScroll) {
+	public static setPanelScrollVisbie(panel: any, isScroll) {
 		if (panel.vScrollBar) {
 			panel.vScrollBar.touchScrollEnable = isScroll;
 		}

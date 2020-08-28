@@ -1,3 +1,5 @@
+import Client from "../common/kakura/Client";
+
 export default class TimeEntity {
 	static TimeCode: number = 0;
 
@@ -17,7 +19,7 @@ export default class TimeEntity {
 		this.callBack = callBack;
 		this.thisObject = thisObject;
 		this.maxCount = maxCount;
-		this.oldTime = Laya.timer.currTimer;
+		this.oldTime = Client.instance.miniserverTime;
 		this.args = args || TimeEntity.emptyArr;
 	}
 }

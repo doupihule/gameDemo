@@ -5,6 +5,8 @@ import SubPackageManager from "../../../framework/manager/SubPackageManager";
 import SubPackageConst from "../../sys/consts/SubPackageConst";
 import BattleFunc from "../../sys/func/BattleFunc";
 import UserInfo from "../../../framework/common/UserInfo";
+import ViewTools from "../../../framework/components/ViewTools";
+import ImageExpand from "../../../framework/components/ImageExpand";
 
 export default class BattleMapControler {
 	private controler: BattleLogicalControler
@@ -57,7 +59,7 @@ export default class BattleMapControler {
 		var startOffest = Number(backInfo[2]);
 		this._maxSceneWidth = sceneInfo.long;
 		this.setMapSize();
-		var ctn1 = new Laya.Sprite();
+		var ctn1 = ViewTools.createContainer();
 		ctn1.x = -ScreenAdapterTools.sceneOffsetX - ScreenAdapterTools.UIOffsetX - startOffest;
 		this.controler.layerControler.a1.addChild(ctn1);
 		this._mapInfo = {
@@ -98,8 +100,8 @@ export default class BattleMapControler {
 				imageUrl1 = "map/" + firstName + "/" + firstName + "/" + info.pic + ".png";
 			}
 
-			var image = new Laya.Image();
-			image.scale(info.scale / 10000, info.scale / 10000);
+			var image = ViewTools.createImage();
+			image.setScale(info.scale / 10000, info.scale / 10000);
 			ctn.addChild(image);
 			this._mapInfo.decorateArr.push({view: image})
 			if (this.startMapIndex != 1) {
@@ -113,15 +115,8 @@ export default class BattleMapControler {
 				image.x = Number(item[1]);
 			}
 			image.y = -Number(item[2]);
-			var onMapComplete = () => {
-				image.skin = imageUrl1;
-			}
-			//必须地图组是分包的就直接走;
-			if (SubPackageManager.getPackStyle(SubPackageConst.packName_map) == SubPackageConst.PATH_STYLE_SUBPACK) {
-				SubPackageManager.loadDynamics(firstName, path, onMapComplete, this);
-			} else {
-				onMapComplete();
-			}
+			image.setSkin(imageUrl1)
+
 
 		}
 	}
@@ -130,7 +125,7 @@ export default class BattleMapControler {
 	private destoryOneLayer(mapInfo: any) {
 		var infoArr: any[] = mapInfo.infoArr;
 		for (var i = 0; i < infoArr.length; i++) {
-			var view: Laya.Image = infoArr[i].view;
+			var view: ImageExpand = infoArr[i].view;
 			view.removeSelf();
 			if (UserInfo.isSystemNative()) {
 				view.dispose()
@@ -140,18 +135,13 @@ export default class BattleMapControler {
 		var decorateArr: any[] = mapInfo.decorateArr;
 
 		for (var i = 0; i < decorateArr.length; i++) {
-			var view: Laya.Image = decorateArr[i].view;
+			var view: ImageExpand = decorateArr[i].view;
 			view.removeSelf();
 			if (UserInfo.isSystemNative()) {
 				view.dispose()
 			}
 		}
 
-
-		if (!UserInfo.isSystemNative()) {
-			Laya.loader.clearRes("res/atlas/map/" + this.mapName + "/" + this.mapName + ".atlas")
-			Laya.loader.clearRes("res/atlas/map/" + this.mapName + "/" + this.mapName + ".png")
-		}
 
 
 		mapInfo.ctn.removeSelf();
@@ -166,14 +156,14 @@ export default class BattleMapControler {
 		name = firstName + "_0" + mapId;
 		path = "map/" + firstName + "/" + name;
 
-		var image = new Laya.Image();
+		var image = ViewTools.createImage();
 		if (UserInfo.isSystemNative()) {
 			//读大图、不打包
 			imageUrl1 = "map/" + firstName + "/" + name + ".png";
-			image.scale(1 + 2 / 256, 1);
+			image.setScale(1 + 2 / 256, 1);
 		} else {
 			imageUrl1 = "map/" + firstName + "/" + firstName + "/" + name + ".png";
-			image.scale(2 * (1 + 2 / 128), 2);
+			image.setScale(2 * (1 + 2 / 128), 2);
 		}
 
 		mpInfo.ctn.addChild(image);
@@ -182,21 +172,12 @@ export default class BattleMapControler {
 		if (mapId == 5) {
 			this._smallMapCount += 1;
 		}
-		image.anchorX = 0;
-		image.anchorY = mpInfo.anchor;
+		image.setAnchor(0,mpInfo.anchor);
 		image.x = xpos;
 		image.y = 0;
+		image.setSkin(imageUrl1);
 		var viewInfo = {view: image};
 		mpInfo.infoArr.push(viewInfo);
-		var onMapComplete = () => {
-			image.skin = imageUrl1;
-		}
-		//必须地图组是分包的就直接走;
-		if (SubPackageManager.getPackStyle(SubPackageConst.packName_map) == SubPackageConst.PATH_STYLE_SUBPACK) {
-			SubPackageManager.loadDynamics(firstName, path, onMapComplete, this);
-		} else {
-			onMapComplete();
-		}
 		LogsManager.echo("id:", mapId, "pos:", xpos)
 
 	}

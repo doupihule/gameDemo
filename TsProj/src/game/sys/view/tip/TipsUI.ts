@@ -1,28 +1,28 @@
 import ScreenAdapterTools from "../../../../framework/utils/ScreenAdapterTools";
+import BaseContainer from "../../../../framework/components/BaseContainer";
+import UIBaseView from "../../../../framework/components/UIBaseView";
+import ViewTools from "../../../../framework/components/ViewTools";
+import LabelExpand from "../../../../framework/components/LabelExpand";
 
-export default class TipsUI extends Laya.Sprite {
+export default class TipsUI extends UIBaseView {
 	private showList;
-	private tipsbg: Laya.Sprite;
-	private tips: Laya.Label;
+	private tipsbg: BaseContainer;
+	private tips: LabelExpand;
 
 	public static res = [];
 
 	constructor() {
 		super();
-		this.tipsbg = new Laya.Sprite();
+		this.tipsbg = ViewTools.createContainer();
 		this.tipsbg.alpha = 0.5;
 		this.tipsbg.mouseEnabled = true;
 		this.tipsbg.mouseThrough = false;
-		this.tipsbg.size(543, 97);
+		this.tipsbg.setSize(543, 97);
 		this.tipsbg.y = 1207;
 		this.addChild(this.tipsbg);
-		this.tips = new Laya.Label();
-		this.tips.color = "#ffffff";
-		this.tips.font = "Microsoft YaHei";
-		this.tips.fontSize = 30;
-		this.tips.align = "center";
-		this.tips.anchorX = 0.5;
-		this.tips.pos(this.tipsbg.width / 2, 30);
+		this.tips = ViewTools.createLabel("",100,50,30)
+		this.tips.setColor(0xff,0xff,0xff)
+		this.tips.setPos(this.tipsbg.width / 2, 30);
 		this.tipsbg.addChild(this.tips);
 	}
 
@@ -36,9 +36,8 @@ export default class TipsUI extends Laya.Sprite {
 		this.tipsbg.alpha = 0;
 		Laya.Tween.to(this.tipsbg, {alpha: 1, y: ScreenAdapterTools.designHeight * 0.5 - 100}, 500);
 		this.tips.text = data;
-		this.tipsbg.width = (this.tips.width + 100) > 455 ? (this.tips.width + 100) : 455;
-		this.tipsbg.graphics.clear();
-		this.tipsbg.graphics.drawRect(0, 0, this.tipsbg.width, 97, "#000000");
+		var wid = (this.tips.width + 100) > 455 ? (this.tips.width + 100) : 455;
+		this.tipsbg.setSize(wid,this.tipsbg.height);
 		this.tipsbg.x = ScreenAdapterTools.width / 2 - this.tipsbg.width / 2;
 		this.tips.x = this.tipsbg.width * 0.5;
 		Laya.timer.once(1000, this, () => {

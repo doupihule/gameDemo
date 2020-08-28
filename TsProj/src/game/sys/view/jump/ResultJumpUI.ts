@@ -57,7 +57,7 @@ export default class ResultJumpUI extends ui.gameui.jump.ResultJumpUI implements
 		this.iconPanel.removeChildren();
 		for (var i = 0; i < data.length; i++) {
 			var itemData = data[i];
-			var imgItem: Laya.Image = JumpManager.createJumpItem(itemData, this.imgWidth, this.imgWidth, {from: this.extraData.from}, true);
+			var imgItem: ImageExpand = JumpManager.createJumpItem(itemData, this.imgWidth, this.imgWidth, {from: this.extraData.from}, true);
 			imgItem.x = i * (this.imgWidth + this.spaceX);
 			this.iconPanel.addChild(imgItem);
 		}

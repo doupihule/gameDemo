@@ -4,6 +4,7 @@ import BattleConst from "../../sys/consts/BattleConst";
 import BattleFunc from "../../sys/func/BattleFunc";
 import InstanceLife from "./InstanceLife";
 import SkillExpandTrigger from "../trigger/SkillExpandTrigger";
+import VectorTools from "../../../framework/utils/VectorTools";
 
 /**
  * 游戏中的特效基类
@@ -12,14 +13,14 @@ export default class InstanceEffect extends InstanceBasic {
 	public constructor(controler: BattleControler) {
 		super(controler);
 		this.classModel = BattleConst.model_effect;
-		this._followOffset = new Laya.Vector3();
+		this._followOffset = VectorTools.createVec3();
 	}
 
 	public effectName: string;
 	//跟随目标
 	public _followTarget: any;
 
-	private _followOffset: Laya.Vector3;
+	private _followOffset: {x,y,z};
 
 	//所在的层级 1后景  2和角色平级, 3前景
 	public layerIndex: number = 2;
@@ -143,7 +144,6 @@ export default class InstanceEffect extends InstanceBasic {
 		if (this.expandParams.type != SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT) {
 			return
 		}
-		Laya.Tween.clearAll(this._myView);
 		this.expandParams.totalFrame = this.expandParams.frame
 		var targetRole: InstanceLife = this.expandParams.role
 		this.expandParams.sourceX = targetRole.pos.x

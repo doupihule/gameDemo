@@ -108,7 +108,7 @@ export default class JumpListUI extends ui.gameui.jump.JumpListUI implements IMe
 		for (var i = 0; i < headNums; i++) {
 			var itemData = headListData[i + startIndex];
 
-			var itemGroup: Laya.Image = JumpManager.createJumpItem(itemData, size1, size1, {from: JumpConst.JUMPLIST}, false, 0, false);
+			var itemGroup: ImageExpand = JumpManager.createJumpItem(itemData, size1, size1, {from: JumpConst.JUMPLIST}, false, 0, false);
 			itemGroup.x = (i % 4) * (size1 + 20) + 10;
 			itemGroup.y = Math.floor(i / 4) * (size1 + 10) + 5;
 			this.iconPanel1.addChild(itemGroup);
@@ -125,14 +125,14 @@ export default class JumpListUI extends ui.gameui.jump.JumpListUI implements IMe
 			var itemData = this.listData[i];
 
 			// icon组
-			var itemGroup: Laya.Image = new Laya.Image();
+			var itemGroup: ImageExpand = ViewTools.createImage();
 			itemGroup.width = size2;
 			itemGroup.height = size2 + 80;
 			// itemGroup.x = (i % 2) * (size2 + 30 + 18);
 			// itemGroup.y = Math.floor(i / 2) * (size2 + 80 + 20);
 
 			// icon背景
-			var itemBg: Laya.Image = new Laya.Image(ResourceConst.JUMP_ICON_REMENTUIJIAN_PNG);
+			var itemBg: ImageExpand = ViewTools.createImage(ResourceConst.JUMP_ICON_REMENTUIJIAN_PNG);
 			// itemBg. = new egret.Rectangle(10, 10, 10, 10);
 			itemBg.width = size2
 			itemBg.height = size2 + 40;
@@ -143,7 +143,7 @@ export default class JumpListUI extends ui.gameui.jump.JumpListUI implements IMe
 			itemGroup.addChild(itemBg)
 
 			// icon图
-			var imgItem: Laya.Image = new Laya.Image(itemData.Icon);
+			var imgItem: ImageExpand = ViewTools.createImage(itemData.Icon);
 			imgItem.x = imgItem.y = 15;
 			imgItem.width = imgItem.height = size2 - 30;
 			itemGroup.addChild(imgItem)

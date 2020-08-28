@@ -14,7 +14,7 @@ import LevelFunc from "../../sys/func/LevelFunc";
 export default class ChapInstanceEnemy extends FogInstanceBasic {
 
 	private nameTxt: Laya.Label;
-	private passSign: Laya.Image;
+	private passSign: ImageExpand;
 	private levelId;
 ;
 	public levelName: string;
@@ -37,7 +37,7 @@ export default class ChapInstanceEnemy extends FogInstanceBasic {
 
 		this.addChild(this.nameTxt);
 		new ButtonUtils(this, this.onClickItem, this);
-		this.passSign = new Laya.Image("native/main/main/main_image_yishangzhen.png");
+		this.passSign = ViewTools.createImage("native/main/main/main_image_yishangzhen.png");
 		var txt = new Laya.Label(TranslateFunc.instance.getTranslate("#tid_chapter_finishLevel"));
 		txt.width = 130;
 		txt.height = 48;
