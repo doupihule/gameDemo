@@ -1,0 +1,131 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const csharp_1 = require("csharp");
+const puerts_1 = require("puerts");
+const ViewTools_1 = require("./ViewTools");
+class BaseViewExpand {
+    constructor() {
+        this.positionTrans = { x: 0, y: 0, z: 0 };
+        //旋转
+        this.rotationTrans = { x: 0, y: 0, z: 0 };
+        // 缩放
+        this.scaleTrans = { x: 0, y: 0, z: 0 };
+        this._alpha = 1;
+        this.uitype = "base";
+    }
+    setCObject(cobj) {
+        this.__cobject = cobj;
+        this.__ctransform = cobj.transform;
+    }
+    //-------------------------------------------------------------------------------------
+    //---------------------------坐标旋转缩放透明度-----------------------------------------
+    //-------------------------------------------------------------------------------------
+    set x(value) {
+        this.positionTrans.x = value;
+    }
+    set y(value) {
+        this.positionTrans.y = value;
+    }
+    set z(value) {
+        this.positionTrans.z = value;
+    }
+    get x() {
+        return this.positionTrans.x;
+    }
+    get y() {
+        return this.positionTrans.y;
+    }
+    get z() {
+        return this.positionTrans.z;
+    }
+    //设置2d坐标
+    setPos(x, y) {
+        this.positionTrans.x = x;
+        this.positionTrans.y = y;
+        this.__ctransform.anchoredPosition = this.positionTrans;
+    }
+    //设置3d坐标
+    set3dPos(x, y, z) {
+        this.positionTrans.x = x;
+        this.positionTrans.y = y;
+        this.positionTrans.z = z;
+        this.__ctransform.localPosition = this.positionTrans;
+    }
+    //设置2d旋转
+    set2dRotation(value) {
+        this.rotationTrans.z = value;
+        this.__ctransform.eulerAngles = this.rotationTrans;
+    }
+    //设置缩放
+    setScale(sx, sy, sz = 1) {
+        var trans = this.scaleTrans;
+        trans.x = sx;
+        trans.y = sy;
+        trans.z = sz;
+        this.__ctransform.localScale = trans;
+    }
+    //获取透明度
+    get alpha() {
+        return this._alpha;
+    }
+    //设置透明度
+    set alpha(value) {
+        var canvasGroup = this.__canvasGroupComp;
+        if (!canvasGroup) {
+            canvasGroup = this.__cobject.AddComponent(puerts_1.$typeof(csharp_1.UnityEngine.CanvasGroup));
+            this.__canvasGroupComp = canvasGroup;
+        }
+        canvasGroup.alpha = value;
+    }
+    //-------------------------------------------------------------------------------------
+    //---------------------------显示相关-----------------------------------------
+    //-------------------------------------------------------------------------------------
+    //添加子对象
+    addChild(childView, index = -1) {
+        childView.__ctransform.parent = childView.__ctransform.parent;
+        if (index >= 0) {
+            childView.__ctransform.SetSiblingIndex(index);
+        }
+    }
+    //移除所有子对象
+    removeChildren() {
+        var trans = this.__ctransform;
+        var childNums = trans.childCount;
+        for (var s = childNums - 1; s >= 0; s--) {
+            var childTrans = trans.GetChild(s);
+            childTrans.SetParent(null);
+        }
+    }
+    //获取子对象
+    getChildAt(index, withBinding = false) {
+        var childTrans = this.__ctransform.GetChild(index);
+        //绑定lua和c对象
+        if (childTrans) {
+            //如果是需要bangding对象的
+            if (withBinding) {
+                return ViewTools_1.default.autoBindingCObj(childTrans.gameObject);
+            }
+            return childTrans;
+        }
+        return null;
+    }
+    //2d对象才有这个属性3d对象禁止访问
+    get width() {
+        return this.__ctransform.sizeDelta.x;
+    }
+    get height() {
+        return this.__ctransform.sizeDelta.y;
+    }
+    //设置是否可见
+    setActive(value) {
+        this.__cobject.SetActive(value);
+    }
+    //销毁函数
+    dispose() {
+        this.__ctransform = null;
+        this.__cobject = null;
+        this.__canvasGroupComp = null;
+    }
+}
+exports.default = BaseViewExpand;
+//# sourceMappingURL=BaseViewExpand.js.map

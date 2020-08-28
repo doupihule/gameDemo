@@ -19,7 +19,7 @@ UICompConst.classMap = {
     ctn = "Container",
     label ="Label",
     input = "Input",
-    list = "List";
-    spine = "Spine";
+    list = "List",
+    spine = "Spine",
 
 }

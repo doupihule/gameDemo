@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BaseContainer_1 = require("./BaseContainer");
+class LabelExpand extends BaseContainer_1.default {
+    constructor(cobj) {
+        super(cobj);
+    }
+}
+exports.default = LabelExpand;
+//# sourceMappingURL=LabelExpand.js.map

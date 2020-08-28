@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BaseViewExpand_1 = require("./BaseViewExpand");
+const UICompConst_1 = require("../consts/UICompConst");
+//按钮
+class ButtonExpand extends BaseViewExpand_1.default {
+    constructor(cobj) {
+        super();
+        this.uitype = UICompConst_1.default.comp_btn;
+        if (cobj) {
+            this.setCObject(cobj);
+        }
+    }
+}
+exports.default = ButtonExpand;
+//# sourceMappingURL=ButtonExpand.js.map

@@ -16,3 +16,5 @@
 /Assets/Scripts/luasrc/lualib.meta
 /Build
 /pluginBuild/build_lj64
+/TsProj/.idea
+/TsProj/output

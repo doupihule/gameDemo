@@ -1,0 +1,73 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BaseViewExpand_1 = require("./BaseViewExpand");
+const UICompConst_1 = require("../consts/UICompConst");
+const LogsManager_1 = require("../manager/LogsManager");
+const ButtonExpand_1 = require("./ButtonExpand");
+const ImageExpand_1 = require("./ImageExpand");
+const ListExpand_1 = require("./ListExpand");
+const BaseContainer_1 = require("./BaseContainer");
+const LabelExpand_1 = require("./LabelExpand");
+const SpineGraphicExpand_1 = require("./SpineGraphicExpand");
+class ViewTools {
+    //自动绑定cobj
+    static autoBindingCObj(cobj) {
+        var baseView = ViewTools.cobjMap.get(cobj);
+        if (!baseView) {
+            baseView = this.getBaseViewByCobj(cobj);
+            if (baseView) {
+                ViewTools.cobjMap.set(cobj, baseView);
+            }
+        }
+        return baseView;
+    }
+    //绑定c对象和 baseview
+    static bindCobjToBaseView(cobj, baseView) {
+        ViewTools.cobjMap.set(cobj, baseView);
+    }
+    //清理c对象和baseview
+    static clearCobjToBaseView(cobj) {
+        ViewTools.cobjMap.delete(cobj);
+    }
+    //forceBinding 是否强制绑定.主要是针对没有定义名字的对象. 比如有时也需要通过getChildAt获取
+    static getBaseViewByCobj(cobj, forceBinding = false) {
+        var name = cobj.name;
+        var uiType = name.split("_")[0];
+        var viewClassName = UICompConst_1.default.classMap[uiType];
+        if (!viewClassName) {
+            if (forceBinding) {
+                LogsManager_1.default.echo("这个对象没有指定合法命名", name);
+                return new BaseViewExpand_1.default();
+            }
+            return null;
+        }
+        else {
+            //如果是按钮
+            if (uiType == UICompConst_1.default.comp_btn) {
+                return new ButtonExpand_1.default(cobj);
+            }
+            else if (uiType == UICompConst_1.default.comp_img) {
+                return new ImageExpand_1.default(cobj);
+            }
+            else if (uiType == UICompConst_1.default.comp_ctn) {
+                return new BaseContainer_1.default(cobj);
+            }
+            else if (uiType == UICompConst_1.default.comp_label) {
+                return new LabelExpand_1.default(cobj);
+            }
+            else if (uiType == UICompConst_1.default.comp_list) {
+                return new ListExpand_1.default(cobj);
+            }
+            else if (uiType == UICompConst_1.default.comp_input) {
+                return new LabelExpand_1.default(cobj);
+            }
+            else if (uiType == UICompConst_1.default.comp_spine) {
+                return new SpineGraphicExpand_1.default(null, null, cobj);
+            }
+        }
+        return null;
+    }
+}
+exports.default = ViewTools;
+ViewTools.cobjMap = new Map();
+//# sourceMappingURL=ViewTools.js.map

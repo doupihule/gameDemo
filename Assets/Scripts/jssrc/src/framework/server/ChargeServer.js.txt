@@ -1,0 +1,40 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const Client_1 = require("../common/kakura/Client");
+const UserModel_1 = require("../../game/sys/model/UserModel");
+const BigNumUtils_1 = require("../utils/BigNumUtils");
+const SingleCommonServer_1 = require("./SingleCommonServer");
+/*
+user
+ */
+class ChargeServer {
+    //获取充值奖励
+    static getChargeReward(list, callback, thisObj) {
+        var reward = list;
+        var upData = {};
+        for (var key in reward) {
+            var result = reward[key].split(",");
+            switch (Number(result[0])) {
+                case 2: //COIN
+                    var coinNum = result[1];
+                    if (coinNum) {
+                        upData["coin"] = BigNumUtils_1.default.sum(UserModel_1.default.instance.getCoin(), coinNum);
+                    }
+                    break;
+                case 3: //GOLD
+                    var goldNum = Number(result[1]);
+                    if (goldNum) {
+                        upData["giftGold"] = UserModel_1.default.instance.getGold() + goldNum;
+                    }
+                    break;
+            }
+        }
+        var backData = Client_1.default.instance.doDummyServerBack(null, upData, null);
+        if (callback) {
+            callback.call(thisObj, backData);
+        }
+        SingleCommonServer_1.default.startSaveClientData();
+    }
+}
+exports.default = ChargeServer;
+//# sourceMappingURL=ChargeServer.js.map

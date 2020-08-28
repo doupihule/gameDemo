@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BaseViewExpand_1 = require("./BaseViewExpand");
+class SpineGraphicExpand extends BaseViewExpand_1.default {
+    constructor(name, boundlePath, cobj) {
+        super();
+    }
+}
+exports.default = SpineGraphicExpand;
+//# sourceMappingURL=SpineGraphicExpand.js.map

@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BaseViewExpand_1 = require("./BaseViewExpand");
+class BaseContainer extends BaseViewExpand_1.default {
+    constructor(cobj) {
+        super();
+        if (cobj) {
+            this.setCObject(cobj);
+        }
+        else {
+        }
+    }
+}
+exports.default = BaseContainer;
+//# sourceMappingURL=BaseContainer.js.map
