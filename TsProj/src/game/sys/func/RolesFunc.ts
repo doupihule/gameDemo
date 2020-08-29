@@ -7,9 +7,7 @@ import TimerManager from "../../../framework/manager/TimerManager";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
 import ShareOrTvManager from "../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "./ShareTvOrderFunc";
-import {DataResourceConst} from "./DataResourceFunc";
 import UserModel from "../model/UserModel";
-import PiecesModel from "../model/PiecesModel";
 import BigNumUtils from "../../../framework/utils/BigNumUtils";
 import BattleConst from "../consts/BattleConst";
 
@@ -262,72 +260,7 @@ export default class RolesFunc extends BaseFunc {
 		return enemyArr;
 	}
 
-	/**
-	 * 添加星级图片
-	 * @param parnet 容器 类型是Image
-	 * @param id  角色id
-	 */
-	addStarImg(parnet: ImageExpand, id, width = 44, height = 43, star = null) {
-		var unlock = GlobalParamsFunc.instance.getDataNum("equipUnlock")
-		if (UserModel.instance.getMaxBattleLevel() < unlock) {
-			return;
-		}
-		if (parnet.numChildren == 0) {
-			for (var i = 0; i < 5; i++) {
-				var img: ImageExpand = ViewTools.createImage("uisource/common/common/equip_image_xing2.png");
-				img.width = width;
-				img.height = height;
-				img.x = i * width;
-				parnet.addChild(img);
-			}
-		}
-		var starLevel = star;
-		if (!starLevel) {
-			starLevel = RolesModel.instance.getRoleStarLevel(id);
-		}
-		for (var i = 0; i < parnet.numChildren; i++) {
-			var item = parnet.getChildAt(i) as ImageExpand;
-			if (i < starLevel) {
-				item.skin = "uisource/common/common/equip_image_xing1.png";
-			} else {
-				item.skin = "uisource/common/common/equip_image_xing2.png";
-			}
-		}
-	}
 
-	/**
-	 * 获取装备状态
-	 * @param roleId
-	 * @param equipId
-	 */
-	getEquipState(roleId, equipId, ignoreCost = false) {
-		var isHave = RolesModel.instance.getIsHaveEquip(roleId, equipId);
-		if (isHave) return RolesFunc.STATE_OWN;
-		var result = RolesFunc.STATE_CANCOMPOSE;
-		//判断碎片和钱是否足够
-		var cost = this.getCfgDatasByKey("Equip", equipId, "cost");
-		for (var i = 0; i < cost.length; i++) {
-			var costItem = cost[i].split(",");
-			if (Number(costItem[0]) == DataResourceConst.COIN && !ignoreCost) {
-				if (!BigNumUtils.compare(UserModel.instance.getCoin(), costItem[1])) {
-					result = RolesFunc.STATE_NOEQUIP;
-					break;
-				}
-			} else if (Number(costItem[0]) == DataResourceConst.GOLD && !ignoreCost) {
-				if (!BigNumUtils.compare(UserModel.instance.getCoin(), costItem[1])) {
-					result = RolesFunc.STATE_NOEQUIP;
-					break;
-				}
-			} else if (Number(costItem[0]) == DataResourceConst.PIECE) {
-				var count = PiecesModel.instance.getPieceCount(costItem[1]);
-				if (count < Number(costItem[2])) {
-					result = RolesFunc.STATE_NOEQUIP;
-					break;
-				}
-			}
-		}
-		return result;
-	}
 
 	/**获取某装备的要求星级 */
 	getEquipStar(role, equip) {

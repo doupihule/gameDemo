@@ -49,7 +49,7 @@ export default class RoleHealthBar extends BaseContainer {
 			nameText.x = this.width / 2;
 			nameText.y = -20;
 
-			nameText.setOutLine(2,2,0xff,0,0,0);
+			nameText.setOutLine(2,2,0,0,0);
 
 			this.srollImage.setSizeGrid(3,3,3,3);
 			this.addChild(this.backImage);

@@ -14,8 +14,6 @@ import FogPropTrigger from "../trigger/FogPropTrigger";
 import FogMistControler from "./FogMistControler";
 import StatisticsManager from "../../sys/manager/StatisticsManager";
 import TimerManager from "../../../framework/manager/TimerManager";
-import TaskServer from "../../sys/server/TaskServer";
-import TaskConditionTrigger from "../../sys/trigger/TaskConditionTrigger";
 
 /**迷雾格子地图控制器 */
 export default class FogCellMapControler {
@@ -369,19 +367,7 @@ export default class FogCellMapControler {
 
 	/**显示出口 */
 	showExit() {
-		var curlayer = FogModel.instance.getCurLayer() + 1;
-		var allLayer = FogFunc.instance.getAllLayer();
-		//到达最后一层了，通关
-		if (curlayer >= allLayer) {
-			TaskServer.updateTaskProcess({
-				logicType: TaskConditionTrigger.taskCondition_fogHighLayer,
-				count: allLayer
-			}, null, null, false)
-			FogServer.setMaxLayer();
-			WindowManager.OpenUI(WindowCfgs.FogTipUI, {type: FogConst.FOG_VIEW_TYPE_PASS_SUCCESS})
-		} else {
-			WindowManager.OpenUI(WindowCfgs.FogTipUI, {type: FogConst.FOG_VIEW_TYPE_NEXTLAYER})
-		}
+
 	}
 
 	//进入下一层

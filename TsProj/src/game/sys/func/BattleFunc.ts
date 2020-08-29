@@ -13,11 +13,11 @@ import ShareTvOrderFunc from "./ShareTvOrderFunc";
 import WindowManager from "../../../framework/manager/WindowManager";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
 import {WindowCfgs} from "../consts/WindowCfgs";
-import {DataResourceConst} from "./DataResourceFunc";
 import UserModel from "../model/UserModel";
 import RolesModel from "../model/RolesModel";
 import FogFunc from "./FogFunc";
 import RolesFunc from "./RolesFunc";
+import DataResourceConst from "../consts/DataResourceConst";
 
 
 export default class BattleFunc extends BaseFunc {
@@ -129,7 +129,7 @@ export default class BattleFunc extends BaseFunc {
 	static frameToMiniSecode: number = 1000 / 60
 
 	//原点0,0,0 禁止修改
-	public static originPoint: Laya.Vector3 = VectorTools.createVec3();
+	public static originPoint: {x,y,z} = {x:0,y:0,z:0}
 
 	//定义一个临时对象.用来存储临时属性的
 	public static tempObject: any = {};
@@ -145,12 +145,12 @@ export default class BattleFunc extends BaseFunc {
 
 
 	//记录一个临时点 战斗逻辑中间使用的过渡点
-	public static tempPoint: Laya.Vector3 = VectorTools.createVec3(0, 0, 0);
-	public static tempPoint2: Laya.Vector3 = VectorTools.createVec3(0, 0, 0);
-	public static tempPoint3: Laya.Vector3 = VectorTools.createVec3(0, 0, 0);
-	public static tempPoint4: Laya.Vector3 = VectorTools.createVec3(0, 0, 0);
+	public static tempPoint: {x,y,z} =  {x:0,y:0,z:0};
+	public static tempPoint2: {x,y,z} = {x:0,y:0,z:0};
+	public static tempPoint3: {x,y,z} = {x:0,y:0,z:0};
+	public static tempPoint4: {x,y,z} = {x:0,y:0,z:0};
 
-	public static tempClickPoint: Laya.Point = new Laya.Point(0, 0);
+	public static tempClickPoint: {x,y} = {x:0,y:0};
 
 	/**特效不独立 */
 	public static EFFECT_NOALLOW = 1;

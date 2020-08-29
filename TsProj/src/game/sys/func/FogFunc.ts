@@ -2,17 +2,14 @@ import BaseFunc from "../../../framework/func/BaseFunc";
 import GlobalParamsFunc from "./GlobalParamsFunc";
 import UserExtModel from "../model/UserExtModel";
 import FogModel from "../model/FogModel";
-import CountsModel from "../model/CountsModel";
 import ShareOrTvManager from "../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "./ShareTvOrderFunc";
 import GameUtils from "../../../utils/GameUtils";
 import RolesFunc from "./RolesFunc";
-import {DataResourceConst} from "./DataResourceFunc";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
 import ResourceConst from "../consts/ResourceConst";
 import UserModel from "../model/UserModel";
 import BigNumUtils from "../../../framework/utils/BigNumUtils";
-import PiecesModel from "../model/PiecesModel";
 import LogsManager from "../../../framework/manager/LogsManager";
 import FogConst from "../consts/FogConst";
 import RolesModel from "../model/RolesModel";
@@ -25,8 +22,7 @@ import StringUtils from "../../../framework/utils/StringUtils";
 import FogPropTrigger from "../../fog/trigger/FogPropTrigger";
 import Message from "../../../framework/common/Message";
 import FogEvent from "../event/FogEvent";
-import TaskServer from "../server/TaskServer";
-import WorkModel from "../model/WorkModel";
+import DataResourceConst from "../consts/DataResourceConst";
 
 
 /*
@@ -175,40 +171,7 @@ export default class FogFunc extends BaseFunc {
 
 	//获取迷雾街区的进入状态:1 功能未开启 2 可以直接进入 3 可以免费进入 4 可以视频进入  5 不可进入
 	getFogEnterStatus() {
-		//判断功能是否解锁
-		var result = this.checkFogOpen();
-		if (!result[0]) {
-			return FogConst.FOG_STATUS_NOT_OPEN;
-		}
-
-		//判断是否有保存的数据
-		var fogs = FogModel.instance.getData();
-		if (Object.keys(fogs).length != 0 && Object.keys(FogModel.instance.getLine()).length != 0) {
-			return FogConst.FOG_STATUS_ENTER;
-		}
-
-		//判断是否有免费次数
-		var userFogStreetCount = CountsModel.instance.getCountsById(CountsModel.fogStreetCount);
-		var fogStreetTimes = GlobalParamsFunc.instance.getDataNum("fogStreetTimes");
-		if (userFogStreetCount < fogStreetTimes) {
-			return FogConst.FOG_STATUS_COST_FREE_COUNT;
-		} else if (userFogStreetCount == fogStreetTimes && CountsModel.instance.getCountsById(CountsModel.fogStreetVideoCount) == 0) {
-			return FogConst.FOG_STATUS_COST_FREE_COUNT_LIMIT;
-		}
-		//判断是否有视频次数
-		var userFogStreetVideoCount = CountsModel.instance.getCountsById(CountsModel.fogStreetVideoCount);
-		var fogStreetVideoTimes = GlobalParamsFunc.instance.getDataNum("fogStreetVideoTimes");
-		if (userFogStreetVideoCount >= fogStreetVideoTimes) {
-			return FogConst.FOG_STATUS_NO_ENTER;
-		}
-
-		//判断能否视频
-		var freeType = ShareOrTvManager.instance.getShareOrTvType(ShareTvOrderFunc.SHARELINE_FOG_VIDEO_START);
-		if (freeType == ShareOrTvManager.TYPE_QUICKRECEIVE) {
-			return FogConst.FOG_STATUS_NO_ENTER;
-		} else {
-			return FogConst.FOG_STATUS_COST_VIDEO_COUNT;
-		}
+		return 2;
 	}
 
 	/**获取大巴车最大等级 */
@@ -302,317 +265,16 @@ export default class FogFunc extends BaseFunc {
 	}
 
 	getResourceShowInfo(reward, isSmall = false, moneyExtPer = 1) {
-		var result;
 
-		var itemName;
-		var itemIcon;
-		var itemNum = 0;
-		var itemDesc = "";
-		var itemScale = 1;
-		var userNum;
-		var type;
-		if (typeof (reward) == "string") {
-			reward = reward.split(",")
-		}
-		type = Number(reward[0])
-		switch (Number(reward[0])) {
-			//碎片
-			case DataResourceConst.PIECE:
-				var pieceId = reward[1];
-				var pieceInfo = RolesFunc.instance.getCfgDatas("EquipMaterial", pieceId);
-				itemName = TranslateFunc.instance.getTranslate(pieceInfo.name, "TranslateEquip");
-				itemIcon = FogFunc.instance.getEquipIcon(pieceId);
-				itemNum = reward[2] || 0;
-				if (isSmall) {
-					itemScale = 0.5;
-				} else {
-					itemScale = 1.1;
-				}
-				userNum = PiecesModel.instance.getPieceCount(pieceId);
-				break;
-			//金币
-			case DataResourceConst.COIN:
-				itemName = TranslateFunc.instance.getTranslate("#tid_coin_name");
-				itemIcon = "uisource/video/video/video_image_lixianjinbi.png";
-				itemNum = Math.floor(Number(reward[1]) * moneyExtPer);
-				itemScale = 1;
-				if (isSmall) {
-					itemScale = 0.5;
-				} else {
-					itemScale = 1;
-				}
-				userNum = UserModel.instance.getCoin();
-				break;
-			//钻石
-			case DataResourceConst.GOLD:
-				itemName = TranslateFunc.instance.getTranslate("#tid_gold_name");
-				itemIcon = "uisource/video/video/video_image_zuanshi.png";
-				itemNum = Math.floor(Number(reward[1]) * moneyExtPer);
-				;
-				if (isSmall) {
-					itemScale = 0.5;
-				} else {
-					itemScale = 1.1;
-				}
-				userNum = UserModel.instance.getGold();
-				break;
-			//活跃度
-			case DataResourceConst.TASKPOINT:
-				itemName = TranslateFunc.instance.getTranslate("#tid_gold_name");
-				itemIcon = "uisource/task/task/task_icon_huoyuedu.png";
-				itemNum = reward[1];
-				if (isSmall) {
-					itemScale = 0.5;
-				} else {
-					itemScale = 1.1;
-				}
-				userNum = "";
-				break;
-			//体力
-			case DataResourceConst.SP:
-				itemName = TranslateFunc.instance.getTranslate("#tid_sp_name");
-				itemIcon = "native/main/main/main_icon_tili.png";
-				itemNum = reward[1];
-				if (isSmall) {
-					itemScale = 0.5;
-				} else {
-					itemScale = 1.1;
-				}
-				userNum = UserExtModel.instance.getNowSp();
-				break;
-			//行动力
-			case DataResourceConst.ACT:
-				itemName = TranslateFunc.instance.getTranslate("#tid_act_name");
-				itemIcon = ResourceConst.ACT_PNG;
-				itemNum = reward[1];
-				itemScale = 0.7;
-				userNum = FogModel.instance.getActNum();
-				break;
-			//零件
-			case DataResourceConst.COMP:
-				itemName = TranslateFunc.instance.getTranslate("#tid_comp_name");
-				itemIcon = ResourceConst.COMP_PNG;
-				itemNum = reward[1];
-				itemScale = 0.6;
-				userNum = FogModel.instance.getCompNum();
-				break;
-			//迷雾币
-			case DataResourceConst.FOGCOIN:
-				itemName = TranslateFunc.instance.getTranslate("#tid_fogcoin_name");
-				itemIcon = ResourceConst.FOGCOIN_PNG;
-				itemNum = reward[1];
-				if (isSmall) {
-					itemScale = 0.3;
-				} else {
-					itemScale = 0.7;
-				}
-				userNum = UserModel.instance.getFogCoinNum();
-				break;
-			//迷雾街区道具
-			case DataResourceConst.FOGITEM:
-				var itemInfo = FogFunc.instance.getItemInfo(reward[1]);
-				itemName = TranslateFunc.instance.getTranslate(itemInfo.name, "TranslateItem");
-				itemDesc = TranslateFunc.instance.getTranslate(itemInfo.desc, "TranslateItem");
-				itemIcon = FogFunc.instance.getFogItemIcon(reward[1]);
-				itemNum = reward[2] || 0;
-				if (isSmall) {
-					itemScale = 0.3;
-				} else {
-					itemScale = 0.7;
-				}
-				userNum = FogModel.instance.getPropNum(reward[1]);
-				break;
-			//名声
-			case DataResourceConst.REPUTE:
-				itemName = "";
-				itemIcon = ResourceConst.REPUTE_PNG;
-				itemNum = reward[1];
-				if (isSmall) {
-					itemScale = 1;
-				} else {
-					itemScale = 1.5;
-				}
-				userNum = WorkModel.instance.getReputeNum();
-				break;
-		}
-		result = {
-			name: itemName,
-			icon: itemIcon,
-			num: itemNum,
-			desc: itemDesc,
-			scale: itemScale,
-			userNum: userNum,
-			type: type
-		}
-		return result;
+		return null;
 
 	}
 
 	//根据获得和消耗获取最终的upData数据
 	getFogUpdata(reward = [], cost = [], doubleRate = 1, moneyAddPer = 1) {
-		var upData = {};
-		var fog = {};
-		var totalCoin = "0";
-		var totalGold = "0";
-		var totalFogCoin = 0;
-		var totalSp = 0;
-		var totalComp = 0;
-		var totalAct = 0;
-		var pieceTab = {};
-		var propTab = {};
-		var point = 0;
-		var repute = 0;
-		//购买获得
-		var tempReward;
-		var rewardArr = reward;
-		for (var i = 0; i < rewardArr.length; i++) {
-			tempReward = rewardArr[i];
-			if (typeof (tempReward) == "string") {
-				tempReward = tempReward.split(",");
-			}
-			switch (Number(tempReward[0])) {
-				//钻石
-				case DataResourceConst.GOLD:
-					totalGold = BigNumUtils.sum(totalGold, Math.floor(Number(tempReward[1]) * doubleRate * moneyAddPer));
-					break;
-				//金币   
-				case DataResourceConst.COIN:
-					totalCoin = BigNumUtils.sum(totalCoin, Math.floor(Number(tempReward[1]) * doubleRate * moneyAddPer));
-					break;
-				//迷雾币    
-				case DataResourceConst.FOGCOIN:
-					totalFogCoin += Number(tempReward[1]) * doubleRate
-					break;
-				//体力    
-				case DataResourceConst.SP:
-					totalSp += Number(tempReward[1]) * doubleRate;
-					break;
-				//零件    
-				case DataResourceConst.COMP:
-					totalComp += Number(tempReward[1]) * doubleRate;
-					break;
-				//行动力   
-				case DataResourceConst.ACT:
-					totalAct += Number(tempReward[1]) * doubleRate;
-					break;
-				//碎片
-				case DataResourceConst.PIECE:
-					var piece = pieceTab[tempReward[1]] ? pieceTab[tempReward[1]] : 0;
-					pieceTab[tempReward[1]] = piece + Number(tempReward[2]) * doubleRate;
-					break;
-				//迷雾街区道具
-				case DataResourceConst.FOGITEM:
-					var propNum = propTab[tempReward[1]] ? propTab[tempReward[1]] : 0;
-					propTab[tempReward[1]] = propNum + Number(tempReward[2]) * doubleRate;
-					break;
-				//活跃度
-				case DataResourceConst.TASKPOINT:
-					point += Number(tempReward[1]);
-					break;
-				//名声
-				case DataResourceConst.REPUTE:
-					repute += Number(tempReward[1]);
-					break;
-			}
-		}
-
-		//货币消耗
-		if (cost.length != 0) {
-			var costArr = cost;
-			//货币消耗
-			switch (Number(costArr[0])) {
-				//钻石
-				case DataResourceConst.GOLD:
-					totalGold = BigNumUtils.substract(totalGold, Number(costArr[1]));
-					break;
-				//金币   
-				case DataResourceConst.COIN:
-					totalCoin = BigNumUtils.substract(totalCoin, Number(costArr[1]));
-					break;
-				//迷雾币    
-				case DataResourceConst.FOGCOIN:
-					totalFogCoin -= Number(costArr[1]);
-					break;
-				//零件    
-				case DataResourceConst.COMP:
-					totalComp -= Number(costArr[1]);
-					break;
-				//行动力    
-				case DataResourceConst.ACT:
-					totalAct -= Number(costArr[1]);
-					break;
-				//迷雾道具    
-				case DataResourceConst.FOGITEM:
-					var costNum = propTab[costArr[1]] ? propTab[costArr[1]] : 0;
-					propTab[costArr[1]] = costNum - Number(costArr[2]);
-					break;
-				//碎片  
-				case DataResourceConst.PIECE:
-					var pieceId = costArr[1];
-					var costNum = pieces[pieceId] ? propTab[pieceId] : 0;
-					if (Number(costArr[2]) != 0) {
-						pieceTab[pieceId] = costNum - Number(costArr[2]);
-					}
-					break;
-			}
-
-		}
-
-		if (totalCoin != "0") {
-			upData["coin"] = BigNumUtils.sum(UserModel.instance.getCoin(), totalCoin);
-		}
-		if (totalGold != "0") {
-			upData["giftGold"] = BigNumUtils.sum(UserModel.instance.getGold(), totalGold);
-		}
-		if (totalFogCoin != 0) {
-			upData["fogCoin"] = UserModel.instance.getFogCoinNum() + totalFogCoin;
-		}
-		if (totalSp != 0) {
-			UserExtModel.instance.changeSp(totalSp);
-			upData["userExt"] = {"sp": UserExtModel.instance.getNowSp()};
-		}
-		if (totalComp != 0) {
-			fog["comp"] = FogModel.instance.getCompNum() + totalComp;
-			upData["fog"] = fog;
-		}
-		if (totalAct != 0) {
-			fog["act"] = FogModel.instance.getActNum() + totalAct;
-			upData["fog"] = fog;
-		}
-		if (point != 0) {
-			TaskServer.updateTaskPoint({point: point}, null, null, false)
-		}
-		if (repute != 0) {
-			upData["work"] = {
-				repute: WorkModel.instance.getReputeNum() + repute
-			};
-		}
-
-		if (Object.keys(pieceTab).length != 0) {
-			var pieces = {};
-			for (var id in pieceTab) {
-				pieces[id] = {count: PiecesModel.instance.getPieceCount(id) + pieceTab[id]};
-			}
-			upData["pieces"] = pieces;
-		}
-		if (Object.keys(propTab).length != 0) {
-			var prop = {};
-			var propInfo;
-			for (var id in propTab) {
-				propInfo = FogFunc.instance.getItemInfo(id);
-				if (propInfo.type == FogPropTrigger.ITEM_TYPE_CANUP) {
-					prop[id] = Math.min(FogModel.instance.getPropNum(id) + Number(propTab[id]), propInfo.maxLevel);
-				} else {
-					prop[id] = FogModel.instance.getPropNum(id) + Number(propTab[id]);
-				}
-
-			}
-			fog["prop"] = prop;
-			upData["fog"] = fog;
-		}
 
 
-		return upData;
+		return null;
 	}
 
 	/**获取地图上的icon显示 */
@@ -622,141 +284,8 @@ export default class FogFunc extends BaseFunc {
 
 	//根据多组数组获得fog数据变更
 	getFogUpDataByMultiArr(rewardArr = [], isAdd = true) {
-		var upData = {};
-		var tempReward;
-		var totalCoin = "0";
-		var totalGold = "0";
-		var totalFogCoin = 0;
-		var totalSp = 0;
-		var totalComp = 0;
-		var totalAct = 0;
-		var pieceTab = {};
-		var propTab = {};
-		var fog = {};
-		for (var i = 0; i < rewardArr.length; i++) {
-			tempReward = rewardArr[i];
-			switch (Number(tempReward[0])) {
-				//钻石
-				case DataResourceConst.GOLD:
-					totalGold = BigNumUtils.sum(totalGold, tempReward[1]);
-					break;
-				//金币   
-				case DataResourceConst.COIN:
-					totalCoin = BigNumUtils.sum(totalCoin, tempReward[1]);
-					break;
-				//迷雾币    
-				case DataResourceConst.FOGCOIN:
-					totalFogCoin += Number(tempReward[1]);
-					break;
-				//体力    
-				case DataResourceConst.SP:
-					totalSp += Number(tempReward[1]);
-					break;
-				//零件    
-				case DataResourceConst.COMP:
-					totalComp += Number(tempReward[1]);
-					break;
-				//行动力   
-				case DataResourceConst.ACT:
-					totalAct += Number(tempReward[1]);
-					break;
-				//碎片
-				case DataResourceConst.PIECE:
-					var piece = pieceTab[tempReward[1]] ? pieceTab[tempReward[1]] : 0;
-					pieceTab[tempReward[1]] = piece + Number(tempReward[2]);
-					break;
-				//迷雾街区道具
-				case DataResourceConst.FOGITEM:
-					var propNum = propTab[tempReward[1]] ? propTab[tempReward[1]] : 0;
-					propTab[tempReward[1]] = propNum + Number(tempReward[2]);
-					break;
-			}
-		}
-		if (totalCoin != "0") {
-			if (isAdd) {
-				upData["coin"] = BigNumUtils.sum(UserModel.instance.getCoin(), totalCoin);
-			} else {
-				upData["coin"] = BigNumUtils.substract(UserModel.instance.getCoin(), totalCoin);
-			}
-		}
-		if (totalGold != "0") {
-			if (isAdd) {
-				upData["giftGold"] = BigNumUtils.sum(UserModel.instance.getCoin(), totalGold);
-			} else {
-				upData["giftGold"] = BigNumUtils.substract(UserModel.instance.getCoin(), totalGold);
-			}
-		}
-		if (totalFogCoin != 0) {
-			if (isAdd) {
-				upData["fogCoin"] = UserModel.instance.getFogCoinNum() + totalFogCoin;
-			} else {
-				upData["fogCoin"] = UserModel.instance.getFogCoinNum() - totalFogCoin;
-			}
 
-		}
-		if (totalSp != 0) {
-			if (isAdd) {
-				UserExtModel.instance.changeSp(totalSp);
-			} else {
-				UserExtModel.instance.changeSp(-totalSp);
-			}
-
-			upData["userExt"] = {"sp": UserExtModel.instance.getNowSp()};
-		}
-		if (totalComp != 0) {
-			if (isAdd) {
-				fog["comp"] = FogModel.instance.getCompNum() + totalComp;
-			} else {
-				fog["comp"] = FogModel.instance.getCompNum() - totalComp;
-			}
-
-			upData["fog"] = fog;
-		}
-		if (totalAct != 0) {
-			if (isAdd) {
-				fog["act"] = FogModel.instance.getActNum() + totalAct;
-			} else {
-				fog["act"] = FogModel.instance.getActNum() - totalAct;
-			}
-			upData["fog"] = fog;
-		}
-		if (Object.keys(pieceTab).length != 0) {
-			var pieces = {};
-			for (var id in pieceTab) {
-				if (isAdd) {
-					pieces[id] = {count: PiecesModel.instance.getPieceCount(id) + Number(pieceTab[id])};
-				} else {
-					pieces[id] = {count: PiecesModel.instance.getPieceCount(id) - Number(pieceTab[id])};
-				}
-			}
-			upData["pieces"] = pieces;
-		}
-		if (Object.keys(propTab).length != 0) {
-			var prop = {};
-			var propInfo;
-			var num1, num2;
-			for (var id in propTab) {
-				if (isAdd) {
-					num1 = FogModel.instance.getPropNum(id) + Number(propTab[id]);
-					propInfo = this.getItemInfo(id);
-					//可升级道具
-					if (propInfo.type == FogPropTrigger.ITEM_TYPE_CANUP) {
-						if (num1 > propInfo.maxLevel) {
-							num1 = propInfo.maxLevel;
-						}
-					}
-					prop[id] = num1;
-				} else {
-					num2 = FogModel.instance.getPropNum(id) - Number(propTab[id]);
-
-					prop[id] = Math.max(num2, 0);
-				}
-			}
-			fog["prop"] = prop;
-			upData["fog"] = fog;
-		}
-
-		return upData;
+		return null;
 	}
 
 	//获取宝箱info
@@ -1012,439 +541,40 @@ export default class FogFunc extends BaseFunc {
 
 	//飘资源
 	flyToMainIcon(resId, value, fromx, fromy, delay: number = 0, fromCtn = null, toPos = null, callBack = null, thisObj = null) {
-		LogsManager.echo("获得资源:", resId, "value:", value, fromx, fromy);
 
-		//获取金币icon
-		var iconPath = FogFunc.instance.getResourceIcon([resId, value]);
-		var cacheItem = PoolTools.getItem(iconPath);
-		if (!cacheItem) {
-			cacheItem = ViewTools.createImage(iconPath);
-			cacheItem["cacheParams"] = {};
-		}
-
-		if (!fromCtn) {
-			fromCtn = WindowManager.getUIByName("FogMainUI");
-		}
-
-		var tempPos = BattleFunc.tempClickPoint;
-		tempPos.x = fromx;
-		tempPos.y = fromy;
-		cacheItem.name = iconPath;
-		cacheItem.pos(tempPos.x, tempPos.y, true);
-
-		fromCtn.addChild(cacheItem);
-		cacheItem.visible = false;
-
-
-		var toPosX;
-		var toPosY;
-		if (resId == DataResourceConst.FOGITEM) {
-			toPosX = 90;
-			toPosY = GlobalEnv.uiRoot.height - 100;
-			cacheItem.scale(0.7, 0.7);
-		} else if (resId == DataResourceConst.COMP) {
-			toPosX = 20;
-			toPosY = 10 + ScreenAdapterTools.toolBarWidth;
-			cacheItem.scale(0.4, 0.4);
-		} else if (resId == DataResourceConst.ACT) {
-			toPosX = 200;
-			toPosY = 10 + ScreenAdapterTools.toolBarWidth;
-			cacheItem.scale(0.4, 0.4);
-		} else {
-			if (toPos) {
-				toPosX = toPos.x;
-				toPosY = toPos.y;
-			} else {
-				var fogMainUI = WindowManager.getUIByName("FogMainUI");
-				var toTempPos = BattleFunc.tempClickPoint;
-				toTempPos.x = fromx;
-				toTempPos.y = fromy;
-				var toPosGlobal = fogMainUI.fogRewardGroup.localToGlobal(toTempPos, false, fogMainUI);
-				toPosX = toPosGlobal.x;
-				toPosY = toPosGlobal.y;
-			}
-			cacheItem.scale(0.7, 0.7);
-		}
-
-		var thisGlobalPos = fromCtn.localToGlobal(tempPos);//坐标转换
-		var tweenParams = cacheItem["cacheParams"];
-		tweenParams.x = toPosX;
-		tweenParams.y = toPosY;
-		tweenParams.globalX = thisGlobalPos.x;
-		tweenParams.globalY = thisGlobalPos.y;
-		tweenParams.initX = fromx;
-		tweenParams.initY = fromy;
-
-
-		//做缓动    
-		if (delay) {
-			TimerManager.instance.add(this.delayFlyItem, this, delay, 1, false, [cacheItem, callBack, thisObj]);
-		} else {
-			TimerManager.instance.add(this.delayFlyItem, this, 10, 1, false, [cacheItem, callBack, thisObj]);
-		}
 	}
 
-	delayFlyItem(cacheItem, callBack = null, thisObj = null) {
-		var initX = cacheItem["cacheParams"].initX;
-		var initY = cacheItem["cacheParams"].initY;
-		var toPosX = cacheItem["cacheParams"].x;
-		var toPosY = cacheItem["cacheParams"].y;
-		var globalX = cacheItem["cacheParams"].globalX;
-		var globalY = cacheItem["cacheParams"].globalY;
-		cacheItem.visible = true;
-		cacheItem.x = initX;
-		cacheItem.y = initY;
 
-		Laya.Tween.to(cacheItem, {
-			x: initX + toPosX - globalX,
-			y: initY + toPosY - globalY
-		}, 600, null, Laya.Handler.create(this, () => {
-			this.onItemTweenEnd(cacheItem);
-			callBack && callBack.call(this);
-		}));
-	}
 
-	//缓动结束 移除icon
-	onItemTweenEnd(cacheItem) {
-		cacheItem.removeSelf();
-		Laya.Tween.clearAll(cacheItem);
-		PoolTools.cacheItem(cacheItem.name, cacheItem);
-	}
 
 	//闪烁效果
 	resTwinkleTween(resId, count = 3, callBack = null, thisObj = null) {
-		var obj = WindowManager.getUIByName("FogMainUI");
 
-		var tweenItem;
-		if (resId == DataResourceConst.COMP) {
-			tweenItem = obj.conImg;
-		} else if (resId == DataResourceConst.ACT) {
-			tweenItem = obj.actImg;
-		} else if (resId == DataResourceConst.FOGITEM) {
-			tweenItem = obj.bagBtn;
-		}
-
-		tweenItem.alpha = 1;
-		var index = 1;
-		for (var i = 1; i <= count; i++) {
-			TimerManager.instance.setTimeout(() => {
-				Laya.Tween.to(tweenItem, {alpha: 0}, 300, null, Laya.Handler.create(this, () => {
-					Laya.Tween.to(tweenItem, {alpha: 1}, 300, null, Laya.Handler.create(this, () => {
-						index++;
-						if (index == count) {
-							Laya.Tween.clearAll(tweenItem);
-							callBack && callBack.call(thisObj);
-						}
-					}));
-				}));
-			}, this, (i - 1) * 600);
-		}
 	}
 
 	//获得道具动画
 	getFogItemTween(resId = DataResourceConst.FOGITEM, itemId, fromX = null, fromY = null, delay = 0, fromUI = null) {
-		//默认是FogMain界面
-		var fogMainUI = WindowManager.getUIByName("FogMainUI");
-		if (!fromUI) {
-			fromUI = fogMainUI;
-		}
 
-		//飘到背包位置，然后在背包按钮上方显示道具名字，并播放背包图标闪烁效果
-		if ((fromX || fromX == 0) && (fromY || fromY == 0)) {
-			FogFunc.instance.flyToMainIcon(resId, itemId, fromX, fromY, delay, fromUI);
-		} else {
-			FogFunc.instance.flyToMainIcon(resId, itemId, 0.4 * GlobalEnv.uiRoot.width, 0.5 * GlobalEnv.uiRoot.height, delay, fromUI);
-		}
-
-
-		//显示道具名字
-		var itemInfo = FogFunc.instance.getItemInfo(itemId);
-		var fogMainUI = WindowManager.getUIByName("FogMainUI");
-		fogMainUI.itemName.text = TranslateFunc.instance.getTranslate(itemInfo.name, "TranslateItem");
-
-		//背包图标闪烁
-		this.resTwinkleTween(resId, 3, () => {
-			fogMainUI.itemName.text = "";
-		}, this);
 	}
 
 	//获得货币动画
 	getFogResTween(resId, value, fromX = null, fromY = null, delay = 0, fromUI = null) {
-		//默认是FogMain界面
-		var fogMainUI = WindowManager.getUIByName("FogMainUI");
-		if (!fromUI) {
-			fromUI = fogMainUI;
-		}
-		//飘到顶部资源栏行动力的位置，然后播放资源图标闪烁+资源数字跳动效果。
-		if ((fromX || fromX == 0) && (fromY || fromY == 0)) {
-			FogFunc.instance.flyToMainIcon(resId, value, fromX, fromY, delay, fromUI);
-		} else {
-			FogFunc.instance.flyToMainIcon(resId, value, 0.4 * GlobalEnv.uiRoot.width, 0.5 * GlobalEnv.uiRoot.height, delay, fromUI);
-		}
 
-		//资源图标闪烁
-		this.resTwinkleTween(resId);
-
-		//资源文本滚动
-		this.resTxtTween(resId, value);
 	}
 
-	//数字跳动
-	resTxtTween(resId, value) {
-		var thisObj = WindowManager.getUIByName("FogMainUI");
-
-		if (resId == DataResourceConst.COMP) {
-			thisObj.conNum.scaleX = thisObj.conNum.scaleY = 1;
-			Laya.Tween.to(thisObj.conNum, {scaleX: 1.3, scaleY: 1.3}, 100, null, Laya.Handler.create(this, () => {
-				thisObj.conNum.text = StringUtils.getCoinStr(FogModel.instance.getCompNum() + "");
-				thisObj.conNum.color = "#02a43c";
-				//刷新大巴车购买红点
-				Message.instance.send(FogEvent.FOGEVENT_REFRESH_BUS);
-			}));
-
-			TimerManager.instance.setTimeout(() => {
-				thisObj.conNum.scaleX = thisObj.conNum.scaleY = 1;
-				thisObj.conNum.color = "#000000";
-			}, this, 600);
-
-		} else if (resId == DataResourceConst.ACT) {
-			thisObj.actNum.scaleX = thisObj.actNum.scaleY = 1;
-			Laya.Tween.to(thisObj.actNum, {scaleX: 1.3, scaleY: 1.3}, 100, null, Laya.Handler.create(this, () => {
-				thisObj.actNum.text = StringUtils.getCoinStr(FogModel.instance.getActNum() + "");
-				thisObj.actNum.color = "#02a43c";
-			}));
-			TimerManager.instance.setTimeout(() => {
-				thisObj.actNum.scaleX = thisObj.actNum.scaleY = 1;
-				thisObj.actNum.color = "#000000";
-			}, this, 600);
-		}
-	}
 
 	//飘奖励
 	flyResTween(rewardArr, fromX = null, fromY = null, fromUI = null) {
-		var resId;
-		var value;
-		var index = 0;
-		var oherRewardArr = [];
-		//行动力、零件、迷雾道具展示
-		for (var i = 0; i < rewardArr.length; i++) {
-			resId = Number(rewardArr[i][0]);
-			value = Number(rewardArr[i][1]);
-			if (resId == DataResourceConst.FOGITEM) {
-				FogFunc.instance.getFogItemTween(resId, value, fromX, fromY, index * 150, fromUI);
-				index++;
-			} else if (resId == DataResourceConst.ACT || resId == DataResourceConst.COMP) {
-				FogFunc.instance.getFogResTween(resId, value, fromX, fromY, index * 150, fromUI);
-				index++;
-			} else {
-				oherRewardArr.push(rewardArr[i]);
-			}
-		}
-		//局外奖励展示
-		for (var i = 0; i < oherRewardArr.length; i++) {
-			this.getOtherFogRewardTween(oherRewardArr[i], i, fromX, fromY, fromUI);
-		}
+
 	}
 
-	createResItem(reward, index, fromUI = null) {
-		//底框
-		var item = ViewTools.createImage("uisource/expedition/expedition/expedition_image_di.png");
-		item.width = 149;
-		item.height = 46;
-		item.x = -50;
-		item.y = index * (item.height + 38);
 
-		//资源图标
-		var result = this.getResourceShowInfo(reward, true);
-		var resImg = ViewTools.createImage(result["icon"]);
-		var userNum = result["userNum"];
-		var addResNum = result["num"];
-		resImg.scaleX = resImg.scaleY = result["scale"];
-		resImg.x = resImg.y = 25;
-		resImg.anchorX = resImg.anchorY = 0.5;
-		resImg.name = "resImg";
-		item.addChild(resImg);
-
-		//当前资源文本
-		var resNum = new Laya.Text();
-		resNum.fontSize = 22;
-		resNum.color = "#000000";
-		resNum.bold = true;
-		resNum.x = 54;
-		resNum.y = 18;
-		var showNum;
-		if (Number(reward[0]) == DataResourceConst.COIN || Number(reward[0]) == DataResourceConst.GOLD) {
-			showNum = BigNumUtils.substract(userNum, addResNum);
-		} else {
-			showNum = userNum - addResNum < 0 ? 0 : userNum - addResNum;
-		}
-		resNum.text = StringUtils.getCoinStr(showNum);
-		resNum.name = "resNum";
-		item.addChild(resNum);
-
-		//获得资源增加
-		var addNum = new Laya.Text();
-		addNum.fontSize = 22;
-		addNum.color = "#02a43c";
-		addNum.bold = true;
-		addNum.x = 39.5;
-		addNum.y = 54;
-		addNum.name = "addNum";
-		addNum.text = " + " + StringUtils.getCoinStr(addResNum);
-		item.addChild(addNum);
-
-		var thisObj = WindowManager.getUIByName("FogMainUI");
-		if (fromUI) {
-			thisObj = fromUI;
-		}
-
-		var fogRewardGroup = ViewTools.createImage();
-		fogRewardGroup.x = 0;
-		fogRewardGroup.y = 210;
-		thisObj.addChild(fogRewardGroup);
-		fogRewardGroup.addChild(item);
-
-		return [item, userNum, addResNum];
-	}
-
-	//局外奖励展示
-	getOtherFogRewardTween(reward, index, fromX = null, fromY = null, fromCtn = null) {
-		//默认FogMain界面
-		var fromUI = WindowManager.getUIByName("FogMainUI");
-		if (fromCtn) {
-			fromUI = fromCtn;
-		}
-
-		//创建局外奖励item
-		var result = this.createResItem(reward, index, fromUI);
-		var item = result[0];
-		var userNum = result[1];
-		var addResNum = result[2];
-
-		//播放item动画：在地图左上侧弹出；如果同时获得多个奖励，的弹出多个弹出条，按顺序向下排列
-		TimerManager.instance.setTimeout(() => {
-			//出现
-			Laya.Tween.to(item, {x: 0}, 100, null, Laya.Handler.create(this, () => {
-				//飘资源
-				var fromx;
-				var fromy;
-				if ((fromX || fromX == 0) && (fromY || fromY == 0)) {
-					fromx = fromX;
-					fromy = fromY;
-				} else {
-					fromx = 0.4 * GlobalEnv.uiRoot.width;
-					fromy = 0.5 * GlobalEnv.uiRoot.height;
-				}
-
-				var toTempPos = BattleFunc.tempClickPoint;
-				toTempPos.x = item.x;
-				toTempPos.y = item.y;
-				var toPosGlobal = item.localToGlobal(toTempPos, false, fromUI);
-				var toPosX = toPosGlobal.x;
-				var toPosY = toPosGlobal.y;
-
-				this.flyToMainIcon(Number(reward[0]), Number(reward[1]), fromx, fromy, 0,
-					fromUI, {"x": toPosX, "y": toPosY}, () => {
-						this.txtTween(item, userNum, addResNum);
-					}, this);
-			}));
-		}, this, index * 100);
-	}
-
-	txtTween(item, userNum, addResNum) {
-		//然后播放数字变化效果。最后弹回消失。
-		var resNum = item.getChildByName("resNum") as Laya.Text;
-		var addNum = item.getChildByName("addNum") as Laya.Text;
-		resNum.scaleX = resNum.scaleY = 1;
-		Laya.Tween.to(resNum, {scaleX: 1.3, scaleY: 1.3}, 100, null, Laya.Handler.create(this, () => {
-			resNum.text = StringUtils.getCoinStr(userNum);
-			resNum.color = "#02a43c";
-			addNum.visible = false;
-		}));
-		TimerManager.instance.setTimeout(() => {
-			resNum.scaleX = resNum.scaleY = 1;
-			resNum.color = "#000000";
-		}, this, 600);
-		TimerManager.instance.setTimeout(() => {
-			Laya.Tween.to(item, {x: -50}, 100, null, Laya.Handler.create(this, () => {
-				Laya.Tween.clearAll(item);
-				item.removeSelf();
-			}));
-		}, this, 800);
-	}
 
 	//将奖励数组转换成table： rewardArr:[[], [], []]
 	vertRewardArrToTable(rewardArr) {
-		var reward = {};
-		var totalCoin = "0";
-		var totalGold = "0";
-		var totalFogCoin = 0;
-		var totalComp = 0;
-		var totalAct = 0;
-		var pieceTab = {};
-		var propTab = {};
-		var tempReward;
-		for (var i = 0; i < rewardArr.length; i++) {
-			tempReward = rewardArr[i];
-			switch (Number(tempReward[0])) {
-				//钻石
-				case DataResourceConst.GOLD:
-					totalGold = BigNumUtils.sum(totalGold, tempReward[1]);
-					break;
-				//金币   
-				case DataResourceConst.COIN:
-					totalCoin = BigNumUtils.sum(totalCoin, tempReward[1]);
-					break;
-				//迷雾币    
-				case DataResourceConst.FOGCOIN:
-					totalFogCoin += Number(tempReward[1]);
-					break;
-				//零件    
-				case DataResourceConst.COMP:
-					totalComp += Number(tempReward[1]);
-					break;
-				//行动力   
-				case DataResourceConst.ACT:
-					totalAct += Number(tempReward[1]);
-					break;
-				//碎片
-				case DataResourceConst.PIECE:
-					var piece = pieceTab[tempReward[1]] ? pieceTab[tempReward[1]] : 0;
-					pieceTab[tempReward[1]] = piece + Number(tempReward[2]);
-					break;
-				//迷雾街区道具
-				case DataResourceConst.FOGITEM:
-					var propNum = propTab[tempReward[1]] ? propTab[tempReward[1]] : 0;
-					propTab[tempReward[1]] = propNum + Number(tempReward[2]);
-					break;
-			}
-		}
-
-		if (totalCoin != "0") {
-			reward[DataResourceConst.COIN] = totalCoin;
-		}
-		if (totalGold != "0") {
-			reward[DataResourceConst.GOLD] = totalGold;
-		}
-		if (totalFogCoin != 0) {
-			reward[DataResourceConst.FOGCOIN] = totalFogCoin;
-		}
-		if (totalComp != 0) {
-			reward[DataResourceConst.COMP] = totalComp;
-		}
-		if (totalAct != 0) {
-			reward[DataResourceConst.ACT] = totalAct;
-		}
-
-		if (Object.keys(pieceTab).length != 0) {
-			reward[DataResourceConst.PIECE] = pieceTab;
-		}
-		if (Object.keys(propTab).length != 0) {
-			reward[DataResourceConst.FOGITEM] = propTab;
-		}
 
 
-		return reward;
+		return null;
 	}
 
 	//将奖励Table转换成数组

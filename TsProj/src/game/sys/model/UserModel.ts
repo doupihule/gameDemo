@@ -17,12 +17,8 @@ import LevelFunc from "../func/LevelFunc";
 import SceneReference from "../../../framework/consts/SceneReference";
 import WhiteListFunc from "../../../framework/func/WhiteListFunc";
 import UserEvent from "../event/UserEvent";
-import SevenDayServer from "../server/SevenDayServer";
-import UserExtServer from "../server/UserExtServer";
-import InviteFunc from "../func/InviteFunc";
 import FogEvent from "../event/FogEvent";
 import UserExtModel from "./UserExtModel";
-import TaskServer from "../server/TaskServer";
 
 export default class UserModel extends BaseModel {
 	private static _instance: UserModel;
@@ -394,13 +390,6 @@ export default class UserModel extends BaseModel {
 			// 次日首次登陆，分享计数增加
 			var signAddShareNum = GlobalParamsFunc.instance.getDataNum("shareDayNmb");
 			UserGlobalModel.instance.setShareNum(signAddShareNum);
-			TaskServer.delDailyTask();
-			//设置登录天数
-			SevenDayServer.setLoginStep();
-			//删除每日邀请标识
-			UserExtServer.setEverydayInvite(0);
-			//删除每日进入迷雾标识
-			UserExtServer.setDailyFirstEnterFog(0);
 		}
 		var upData = {};
 		var upUserExtData = {};
@@ -494,39 +483,6 @@ export default class UserModel extends BaseModel {
 		return this._data.inviteReward[id];
 	}
 
-	//获取首个邀请奖励没有领取的index
-	getFirstNoGetInviteReward() {
-		var data = InviteFunc.instance.getAll();
-		var gainStatus;
-		for (var i in data) {
-			gainStatus = UserModel.instance.getInviteRewardStatus(i);
-			if (!gainStatus) {
-				return Number(i);
-			}
-		}
-		return 0;
-	}
-
-	//判断是否有没有领取的奖励
-	checkNoGetInviteReward() {
-		var shareNum = Object.keys(UserGlobalModel.instance.getInviteInfo()).length;
-
-
-		var data = InviteFunc.instance.getAll();
-		var gainStatus;
-		var info;
-		for (var i in data) {
-			info = InviteFunc.instance.getInviteInfo(i)
-			if (Number(info.count) <= Number(shareNum)) {
-				gainStatus = UserModel.instance.getInviteRewardStatus(i);
-				if (!gainStatus) {
-					return true;
-				}
-			}
-
-		}
-		return false;
-	}
 
 	//获取局外商店列表
 	getFogShopGoodsList() {

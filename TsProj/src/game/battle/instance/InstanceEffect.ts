@@ -154,7 +154,7 @@ export default class InstanceEffect extends InstanceBasic {
 		// 把自己插入到数组里面
 
 		//这里暂时不能用tweencontroler去实现缩放.  因为只缩放
-		// Laya.Tween.to(this._myView,this._tweenParams,tweenTime);
+		// TweenTools.tweenTo(this._myView,this._tweenParams,tweenTime);
 	}
 
 	//判断连线跟随目标

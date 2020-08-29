@@ -176,7 +176,7 @@ export default class InstancePerformance extends InstanceMove {
 			var posOffset = formation[i];
 			var xSpace = this._myView._xSpace;
 			var ySpace = this._myView._ySpace;
-			childShade.setPos(xSpace * posOffset[0] + 2, ySpace * posOffset[1] + 3);
+			childShade.set2dPos(xSpace * posOffset[0] + 2, ySpace * posOffset[1] + 3);
 			childShade.scale(scale, scale, true);
 			this._shade.addChild(childShade);
 		}

@@ -86,7 +86,7 @@ export default class AlertUILocal extends UIBaseView {
 		}
 		if (this.titleLab == null) {
 			this.titleLab = ViewTools.createLabel("提示",contentBgWidth,45,45);
-			this.titleLab.setPos(contentBgX,contentBgY + 15);
+			this.titleLab.set2dPos(contentBgX,contentBgY + 15);
 			this.titleLab.setColor(0xb8,0xff,0xf7,0xff);
 			this.addChild(this.titleLab);
 		}
@@ -94,7 +94,7 @@ export default class AlertUILocal extends UIBaseView {
 			this.msgLab = ViewTools.createLabel("",contentBgWidth - 100,130,24);
 			this.msgLab.x = contentBgX + 50;
 			this.msgLab.y = contentBgY + 75;
-			this.msgLab.setPos(contentBgX + 50,contentBgY + 75);
+			this.msgLab.set2dPos(contentBgX + 50,contentBgY + 75);
 			this.msgLab.setColor(0xff,0xff,0xff,0xff)
 			this.msgLab.setWrapStyle();
 			this.addChild(this.msgLab);
@@ -127,11 +127,11 @@ export default class AlertUILocal extends UIBaseView {
 		];
 		//绘制矩形
 		// sp.graphics.drawPath(0, 0, path, {fillStyle: "#111a1b"}, {"strokeStyle": "#202f30", "lineWidth": "2"});
-		sp.setPos(x,y);
+		sp.set2dPos(x,y);
 		this.addChild(sp);
 
 		var label=  ViewTools.createLabel(str,166,30,30);
-		this.titleLab.setPos(0,10);
+		this.titleLab.set2dPos(0,10);
 		label.setColor(0xe1,0xfc,0xf5,0xff);
 		sp.addChild(label);
 		return sp;

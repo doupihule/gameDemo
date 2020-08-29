@@ -5,6 +5,7 @@ import FogInstanceBasic from "./FogInstanceBasic";
 import InstanceMoveEntity from "../../battle/instance/InstanceMoveEntity";
 import InstanceMoveMultyEntity from "../../battle/instance/InstanceMoveMultyEntity";
 import FogFunc from "../../sys/func/FogFunc";
+import VectorTools from "../../../framework/utils/VectorTools";
 
 /**
  * 游戏中所有可以运动的对象的基类
@@ -31,9 +32,9 @@ export default class FogInstanceMove extends FogInstanceBasic {
 	static state_move: string = "move";
 
 	//定义速度
-	public speed: Laya.Vector3;
+	public speed: {x,y,z};
 	//加速度
-	public addSpeed: Laya.Vector3;
+	public addSpeed: {x,y,z};
 	//当前运动到点类型 0表示不运动.1 表示运动到目标点
 	movePointType: number = 0;
 
@@ -45,7 +46,7 @@ export default class FogInstanceMove extends FogInstanceBasic {
 	// 碰撞尺寸
 	public knockSizeBox: any[];
 	//速度方向的单位向量 
-	protected unitVector: Laya.Vector3;
+	protected unitVector: {x,y,z};
 	//当前移动状态 1到达边缘 2 进入边缘
 	private moveState = 0;
 
@@ -129,14 +130,14 @@ export default class FogInstanceMove extends FogInstanceBasic {
 
 		var speed: number = spd;
 
-		var temp: Laya.Vector3 = BattleFunc.tempPoint;
+		var temp: {x,y,z} = BattleFunc.tempPoint;
 		//计算目标向量差值
-		Laya.Vector3.subtract(this._moveParams.target, this.pos, temp);
-		var distance = Laya.Vector3.scalarLength(temp);
+		VectorTools.subtract(this._moveParams.target, this.pos, temp);
+		var distance = VectorTools.scalarLength(temp);
 		//向量归一
-		Laya.Vector3.normalize(temp, this.unitVector);
+		VectorTools.normalize(temp, this.unitVector);
 		//计算速度单位向量 乘以速度绝对值
-		Laya.Vector3.scale(this.unitVector, speed, this._moveParams.initSpeed);
+		VectorTools.scale(this.unitVector, speed, this._moveParams.initSpeed);
 
 		this._moveParams.moveFrame = 0;
 		this._moveParams.callParams = callParams;
@@ -167,7 +168,7 @@ export default class FogInstanceMove extends FogInstanceBasic {
 
 	//按一组点去运动
 	// moveToGroupPoints(params:InstanceMoveMultyEntity){
-	moveToGroupPoints(pointArr: Laya.Vector3[], speed: number = 0, callFunc: any = null, thisObj: any = null, loopParams: any = null) {
+	moveToGroupPoints(pointArr: {x,y,z}[], speed: number = 0, callFunc: any = null, thisObj: any = null, loopParams: any = null) {
 		// this._multyparams = params;
 		if (!this._multyparams) {
 			this._multyparams = new InstanceMoveMultyEntity();
@@ -203,8 +204,8 @@ export default class FogInstanceMove extends FogInstanceBasic {
 		this.speed.y = this._moveParams.initSpeed.y * speedRadio;
 		this.speed.z = this._moveParams.initSpeed.z * speedRadio;
 
-		var distance: number = Laya.Vector3.distance(this._moveParams.target, this.pos);
-		var speedAbs: number = Laya.Vector3.scalarLength(this.speed);
+		var distance: number = VectorTools.distance(this._moveParams.target, this.pos);
+		var speedAbs: number = VectorTools.scalarLength(this.speed);
 		//如果距离小于一个速度绝对值 那么判定到达
 		//有需要可以扩展更复杂的行为,比如添加摩擦力,飞跃行为等等
 		if (!this.moveState && distance >= FogFunc.itemHeight / 2 && distance < (FogFunc.itemHeight / 2 + FogFunc.busHeight / 2) + speedAbs) {

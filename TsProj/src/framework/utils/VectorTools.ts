@@ -36,11 +36,15 @@ export default class VectorTools {
 	}
 
 	static  scalarLength(a:any){
+		return (a.x*a.x+a.y*a.y+a.z*a.z);
+	}
+
+	static  distance(a:any,b:any){
 		return Math.sqrt(a.x*a.x+a.y*a.y+a.z*a.z);
 	}
 
 	static  normalize(a:{x,y,z},out:{x,y,z}){
-		var leng:number = this.scalarLength(a);
+		var leng:number =  this.scalarLength(a);
 		out.x = a.x/leng;
 		out.y = a.y/leng;
 		out.z = a.z/leng;

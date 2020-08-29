@@ -192,7 +192,7 @@ export default class GameUtils {
 	}
 
 
-	static setVector3(vector: Laya.Vector3, x, y, z) {
+	static setVector3(vector: {x,y,z}, x, y, z) {
 		vector.x = x;
 		vector.y = y;
 		vector.z = z;

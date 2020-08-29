@@ -13,6 +13,8 @@ import ResourceConst from "../../consts/ResourceConst";
 import {ui} from "../../../../ui/layaMaxUI";
 import WindowManager from "../../../../framework/manager/WindowManager";
 import {WindowCfgs} from "../../consts/WindowCfgs";
+import ViewTools from "../../../../framework/components/ViewTools";
+import ImageExpand from "../../../../framework/components/ImageExpand";
 
 export default class JumpListUI extends ui.gameui.jump.JumpListUI implements IMessage {
 
@@ -83,100 +85,7 @@ export default class JumpListUI extends ui.gameui.jump.JumpListUI implements IMe
 	}
 
 	private initView() {
-		//初始化列表1
-		var size1 = 120;
-		this.iconPanel1.removeChildren();
-		var headListData = JumpManager.getMokaData(1, 10);
-		if (!headListData) {
-			return;
-		}
-		//按照权重随机
 
-		var len = headListData.length;
-		var startIndex = len - 4;
-		//头部显示的数量原则上最少显示4个
-		var headNums;
-		if (len < 4) {
-			headNums = len;
-		} else {
-			headNums = 4;
-		}
-		if (startIndex < 0) {
-			startIndex = 0;
-		}
-		if (!this.listData) return;
-		for (var i = 0; i < headNums; i++) {
-			var itemData = headListData[i + startIndex];
-
-			var itemGroup: ImageExpand = JumpManager.createJumpItem(itemData, size1, size1, {from: JumpConst.JUMPLIST}, false, 0, false);
-			itemGroup.x = (i % 4) * (size1 + 20) + 10;
-			itemGroup.y = Math.floor(i / 4) * (size1 + 10) + 5;
-			this.iconPanel1.addChild(itemGroup);
-		}
-		this.moveHeight = this.iconPanel1.contentHeight - this.iconPanel1.height;
-		this.iconPanel1.on(Laya.Event.MOUSE_UP, this, this.touchOut);
-
-		//初始化列表2
-		var size2 = 240;
-		this.iconPanel2.removeChildren();
-		this.listData = JumpManager.getMokaData(1, 10, 1);
-		if (!this.listData) return;
-		for (var i = 0; i < this.listData.length; i++) {
-			var itemData = this.listData[i];
-
-			// icon组
-			var itemGroup: ImageExpand = ViewTools.createImage();
-			itemGroup.width = size2;
-			itemGroup.height = size2 + 80;
-			// itemGroup.x = (i % 2) * (size2 + 30 + 18);
-			// itemGroup.y = Math.floor(i / 2) * (size2 + 80 + 20);
-
-			// icon背景
-			var itemBg: ImageExpand = ViewTools.createImage(ResourceConst.JUMP_ICON_REMENTUIJIAN_PNG);
-			// itemBg. = new egret.Rectangle(10, 10, 10, 10);
-			itemBg.width = size2
-			itemBg.height = size2 + 40;
-			itemBg.sizeGrid = "21,22,14,24"
-			// itemBg.x = (i % 2) * (size2 + 30 + 18);
-			// itemBg.y = Math.floor(i / 2) * (size2 + 80 + 20);
-			new ButtonUtils(itemBg, this.clickItem, this, null, null, itemData).setBtnType(ControlConst.BUTTON_TYPE_3);
-			itemGroup.addChild(itemBg)
-
-			// icon图
-			var imgItem: ImageExpand = ViewTools.createImage(itemData.Icon);
-			imgItem.x = imgItem.y = 15;
-			imgItem.width = imgItem.height = size2 - 30;
-			itemGroup.addChild(imgItem)
-			imgItem.mouseEnabled = false;
-			var itemName: Laya.Label = new Laya.Label(itemData.GameName);
-			itemName.fontSize = 18;
-			// itemName.anchorX = 0.5;
-			// itemName.anchorY = 0.5;
-			itemName.x = 15;
-			itemName.y = size2 + 10;
-			itemName.color = "#0000ff"
-			itemGroup.addChild(itemName);
-			itemName.mouseEnabled = false;
-			var numStr: any = Number(this.fakeNumList[i]);
-			if (numStr > 10000) {
-				numStr = Equation.getNumByDecimal(numStr / 10000, 1);
-				numStr = numStr + "万"
-			}
-			var itemLabel: Laya.Label = new Laya.Label(numStr + "人玩");
-			itemLabel.fontSize = 18;
-			// itemLabel.anchorY = 0.5;
-			itemLabel.width = 100;
-			itemLabel.x = 135;
-			itemLabel.y = size2 + 10;
-			itemLabel.color = "#ff0000"
-			itemLabel.align = "right";
-			itemGroup.addChild(itemLabel);
-			this.iconPanel2.addChild(itemGroup);
-			itemGroup.x = i % this.lineCount * (itemGroup.width + 80);
-			itemGroup.y = Math.floor(i / this.lineCount) * (itemGroup.height);
-		}
-		this.moveHeight = this.iconPanel2.contentHeight - this.iconPanel2.height;
-		this.iconPanel2.on(Laya.Event.MOUSE_UP, this, this.touchOut);
 	}
 
 	/**点击图片 */

@@ -2,19 +2,7 @@ import BaseFunc from "../../../framework/func/BaseFunc";
 import ResourceConst from "../consts/ResourceConst";
 import WindowManager from "../../../framework/manager/WindowManager";
 import RolesFunc from "./RolesFunc";
-
-export enum DataResourceConst {
-	COIN = 2,
-	GOLD = 3,
-	SP = 4,
-	PIECE = 5,//碎片
-	ACT = 6,//行动力
-	COMP = 7,//零件
-	FOGITEM = 8, //迷雾道具
-	FOGCOIN = 9,//迷雾币
-	TASKPOINT = 10, //活跃度
-	REPUTE = 11 //声望
-}
+import DataResourceConst from "../consts/DataResourceConst";
 
 export default class DataResourceFunc extends BaseFunc {
 	private static _instance: DataResourceFunc;

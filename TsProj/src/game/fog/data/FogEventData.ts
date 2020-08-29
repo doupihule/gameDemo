@@ -13,6 +13,8 @@ import TranslateFunc from "../../../framework/func/TranslateFunc";
 import FogInstanceCell from "../instance/FogInstanceCell";
 import FogPropTrigger from "../trigger/FogPropTrigger";
 import StringUtils from "../../../framework/utils/StringUtils";
+import ViewTools from "../../../framework/components/ViewTools";
+import ImageExpand from "../../../framework/components/ImageExpand";
 
 /**
  * 迷雾格子的事件
@@ -62,13 +64,11 @@ export default class FogEventData {
 
 	addCtn() {
 		this.iconCtn = ViewTools.createImage("");
-		this.iconCtn.anchorX = 0.5;
-		this.iconCtn.anchorY = 0.5;
+		this.iconCtn.setAnchor(0.5,0.5);
 		this.ctn.addChild(this.iconCtn);
 		this.spineCtn = ViewTools.createImage("");
 		this.ctn.addChild(this.spineCtn);
-		this.spineCtn.anchorX = 0.5;
-		this.spineCtn.anchorY = 1;
+		this.spineCtn.setAnchor(0.5,1)
 		this.spineCtn.y = 20;
 		this.txtCtn = ViewTools.createImage("");
 		this.txtCtn.x = -FogFunc.itemWidth / 2;
@@ -123,7 +123,7 @@ export default class FogEventData {
 					mapIcon = icon[3];
 				}
 			}
-			this.iconCtn.skin = FogFunc.instance.getMapIcon(mapIcon[0]);
+			this.iconCtn.setSkin( FogFunc.instance.getMapIcon(mapIcon[0]) );
 			if (mapIcon[1]) {
 				var scale = Number(mapIcon[1]) / 10000;
 				this.iconCtn.scale(scale, scale);
@@ -144,7 +144,7 @@ export default class FogEventData {
 			}
 		} else {
 			var result = this.showCellOtherUI();
-			this.iconCtn.skin = result["icon"];
+			this.iconCtn.setSkin( result["icon"] );
 			this.iconCtn.scale(result["scale"], result["scale"]);
 		}
 		this.showSpine();
@@ -228,21 +228,15 @@ export default class FogEventData {
 				name = TranslateFunc.instance.getTranslate(this.cfgData.name)
 			}
 			this.enemyName = name;
-			var nameTxt = new Laya.Label(name);
-			nameTxt.width = FogFunc.itemWidth;
-			nameTxt.align = "center";
-			nameTxt.fontSize = 20;
-			nameTxt.color = "#ffffff";
-			nameTxt.stroke = 1;
+			var nameTxt = ViewTools.createLabel(name,FogFunc.itemWidth,50,20);
+			nameTxt.setColor(0xff,0xff,0xff)
+			nameTxt.setOutLine(1,1,0,0,0,);
 			this.txtCtn.addChild(nameTxt);
 			//force=当前值*（1+加成值/10000*当前所在层）
 			force = Math.floor(force * (1 + this.enemyData.powerShow / 10000 * (FogModel.instance.getCurLayer() + 1)))
-			var forceTxt = new Laya.Label("战斗力：" + StringUtils.getCoinStr(force + ""));
-			forceTxt.width = FogFunc.itemWidth;
-			forceTxt.align = "center";
-			forceTxt.fontSize = 20;
-			forceTxt.color = "#feca50";
-			forceTxt.stroke = 1;
+			var forceTxt = ViewTools.createLabel("战斗力：" + StringUtils.getCoinStr(force + ""),FogFunc.itemWidth,50,20);
+			forceTxt.setColor(0xfe,0xca,0x50);
+			forceTxt.setOutLine(1,1,0,0,0) ;
 			this.txtCtn.addChild(forceTxt);
 			forceTxt.y = FogFunc.itemHeight - 20;
 
@@ -253,12 +247,9 @@ export default class FogEventData {
 				aniName = roleInfo.spine[0];
 				scale = roleInfo.scale / 10000 * FogFunc.fogRoleScale;
 				action = "idle"
-				var nameTxt = new Laya.Label();
-				nameTxt.width = FogFunc.itemWidth;
-				nameTxt.align = "center";
-				nameTxt.fontSize = 20;
-				nameTxt.color = "#ffffff";
-				nameTxt.stroke = 1;
+				var nameTxt = ViewTools.createLabel("",FogFunc.itemWidth,50,20);
+				nameTxt.setColor(0xff,0xff,0xff) ;
+				nameTxt.setOutLine(1,1,0,0,0);
 				this.txtCtn.addChild(nameTxt);
 				this.roleName = TranslateFunc.instance.getTranslate(this.cfgData.name, "TranslateEvent", TranslateFunc.instance.getTranslate(roleInfo.name))
 				nameTxt.text = this.roleName

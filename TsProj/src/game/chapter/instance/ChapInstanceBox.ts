@@ -128,7 +128,7 @@ export default class ChapInstanceBox extends FogInstanceBasic {
 		this.boxImg.skin = ResourceConst.CHAPTER_REWARD_BOXCLOSE;
 		this.redImg.visible = false;
 		TimerManager.instance.remove(this.timeCode);
-		Laya.Tween.clearTween(this.boxImg);
+		TweenTools.clearTween(this.boxImg);
 		this.boxImg.rotation = 0;
 		if (this.levelId <= UserModel.instance.getMaxBattleLevel()) {
 			//已解锁
@@ -149,7 +149,7 @@ export default class ChapInstanceBox extends FogInstanceBasic {
 	//销毁函数.
 	public dispose() {
 		TimerManager.instance.remove(this.timeCode);
-		Laya.Tween.clearTween(this.boxImg);
+		TweenTools.clearTween(this.boxImg);
 		this.removeSelf();
 		this.fogControler = null;
 

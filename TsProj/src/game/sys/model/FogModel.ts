@@ -8,12 +8,12 @@ import WindowManager from "../../../framework/manager/WindowManager";
 import {WindowCfgs} from "../consts/WindowCfgs";
 import Message from "../../../framework/common/Message";
 import FogEvent from "../event/FogEvent";
-import {DataResourceType} from "../func/DataResourceFunc";
 import RolesModel from "./RolesModel";
 import GameUtils from "../../../utils/GameUtils";
 import FogPropTrigger from "../../fog/trigger/FogPropTrigger";
 import TableUtils from "../../../framework/utils/TableUtils";
 import BattleFunc from "../func/BattleFunc";
+import DataResourceConst from "../consts/DataResourceConst";
 
 
 /*
@@ -371,7 +371,7 @@ export default class FogModel extends BaseModel {
 		for (var resId in data.reward) {
 			if (FogFunc.fogOuterRewardType.indexOf(Number(resId)) != -1) {
 				var tempReward = data.reward[resId];
-				if (Number(resId) == DataResourceType.FOGITEM || Number(resId) == DataResourceType.PIECE) {
+				if (Number(resId) == DataResourceConst.FOGITEM || Number(resId) == DataResourceConst.PIECE) {
 					for (var id in tempReward) {
 						rewardArr.push([resId, id, tempReward[id]]);
 					}

@@ -1,3 +1,6 @@
+import ImageExpand from "../../../framework/components/ImageExpand";
+import VectorTools from "../../../framework/utils/VectorTools";
+
 export default class FogInstanceBasic extends ImageExpand {
 
 	public cacheId;
@@ -10,8 +13,7 @@ export default class FogInstanceBasic extends ImageExpand {
 	constructor(fogControler) {
 		super();
 
-		this.anchorX = 0.5;
-		this.anchorY = 0.5;
+		this.setAnchor(0.5,0.5)
 		this.fogControler = fogControler;
 		this.pos = VectorTools.createVec3();
 

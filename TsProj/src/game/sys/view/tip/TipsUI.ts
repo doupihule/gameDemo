@@ -3,6 +3,8 @@ import BaseContainer from "../../../../framework/components/BaseContainer";
 import UIBaseView from "../../../../framework/components/UIBaseView";
 import ViewTools from "../../../../framework/components/ViewTools";
 import LabelExpand from "../../../../framework/components/LabelExpand";
+import TweenTools from "../../../../framework/components/TweenTools";
+import TimerManager from "../../../../framework/manager/TimerManager";
 
 export default class TipsUI extends UIBaseView {
 	private showList;
@@ -22,7 +24,7 @@ export default class TipsUI extends UIBaseView {
 		this.addChild(this.tipsbg);
 		this.tips = ViewTools.createLabel("",100,50,30)
 		this.tips.setColor(0xff,0xff,0xff)
-		this.tips.setPos(this.tipsbg.width / 2, 30);
+		this.tips.set2dPos(this.tipsbg.width / 2, 30);
 		this.tipsbg.addChild(this.tips);
 	}
 
@@ -34,15 +36,15 @@ export default class TipsUI extends UIBaseView {
 		//TODO 适配
 		this.tipsbg.y = ScreenAdapterTools.designHeight * 0.5;
 		this.tipsbg.alpha = 0;
-		Laya.Tween.to(this.tipsbg, {alpha: 1, y: ScreenAdapterTools.designHeight * 0.5 - 100}, 500);
+		TweenTools.tweenTo(this.tipsbg, {alpha: 1, y: ScreenAdapterTools.designHeight * 0.5 - 100}, 500);
 		this.tips.text = data;
 		var wid = (this.tips.width + 100) > 455 ? (this.tips.width + 100) : 455;
 		this.tipsbg.setSize(wid,this.tipsbg.height);
 		this.tipsbg.x = ScreenAdapterTools.width / 2 - this.tipsbg.width / 2;
 		this.tips.x = this.tipsbg.width * 0.5;
-		Laya.timer.once(1000, this, () => {
-			Laya.Tween.to(this.tipsbg, {alpha: 0}, 500);
-		})
+		TimerManager.instance.add(() => {
+			TweenTools.tweenTo(this.tipsbg, {alpha: 0}, 500);
+		},this,1000,1);
 	}
 }
 

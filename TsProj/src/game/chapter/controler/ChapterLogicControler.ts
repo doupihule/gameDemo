@@ -26,6 +26,7 @@ import WindowEvent from "../../../framework/event/WindowEvent";
 import GuideManager from "../../sys/manager/GuideManager";
 import GuideConst from "../../sys/consts/GuideConst";
 import StatisticsManager from "../../sys/manager/StatisticsManager";
+import ImageExpand from "../../../framework/components/ImageExpand";
 
 /**章节地图控制器 */
 export default class ChapterLogicControler implements IMessage {
@@ -73,7 +74,7 @@ export default class ChapterLogicControler implements IMessage {
 		this.chapterMapControler.setData(chapterId);
 		this.chapterCameraControler.setData();
 		this.startLevel = ChapterFunc.instance.getUnlockLevelByChapter(this.chapterId);
-		Laya.timer.frameLoop(1, this, this.updateFrame);
+		TimerManager.instance.registObjUpdate(this.updateFrame,this);
 		this.mapOffestY = (this.chapterMapControler.totalMap - this.chapterMapControler.allMapCount) * this.chapterMapControler.itemHeight;
 		this.initGame();
 
@@ -322,9 +323,9 @@ export default class ChapterLogicControler implements IMessage {
 	public handAni(img) {
 		if (WindowManager.getCurrentWindowName() != WindowCfgs.ChapterMapUI) return;
 		img.x = 90;
-		Laya.Tween.to(img, {x: 100}, 200, null, Laya.Handler.create(this, () => {
-			Laya.Tween.to(img, {x: 80}, 200, null, Laya.Handler.create(this, () => {
-				Laya.Tween.to(img, {x: 90}, 200, null, null)
+		TweenTools.tweenTo(img, {x: 100}, 200, null, Laya.Handler.create(this, () => {
+			TweenTools.tweenTo(img, {x: 80}, 200, null, Laya.Handler.create(this, () => {
+				TweenTools.tweenTo(img, {x: 90}, 200, null, null)
 			}))
 		}))
 	}
@@ -349,13 +350,13 @@ export default class ChapterLogicControler implements IMessage {
 		if (!this.curLevelImg.visible) {
 			this.curLevelImg.visible = true;
 		}
-		Laya.Tween.clearTween(this.curLevelImg);
+		TweenTools.clearTween(this.curLevelImg);
 		this.curLevelImg.x = x;
 		this.curLevelImg.y = y;
-		Laya.Tween.to(this.curLevelImg, {y: y + 20}, 200, null, Laya.Handler.create(this, () => {
-			Laya.Tween.to(this.curLevelImg, {y: y}, 200, null, Laya.Handler.create(this, () => {
-				Laya.Tween.to(this.curLevelImg, {y: y - 20}, 200, null, Laya.Handler.create(this, () => {
-					Laya.Tween.to(this.curLevelImg, {y: y}, 200)
+		TweenTools.tweenTo(this.curLevelImg, {y: y + 20}, 200, null, Laya.Handler.create(this, () => {
+			TweenTools.tweenTo(this.curLevelImg, {y: y}, 200, null, Laya.Handler.create(this, () => {
+				TweenTools.tweenTo(this.curLevelImg, {y: y - 20}, 200, null, Laya.Handler.create(this, () => {
+					TweenTools.tweenTo(this.curLevelImg, {y: y}, 200)
 				}))
 
 			}))

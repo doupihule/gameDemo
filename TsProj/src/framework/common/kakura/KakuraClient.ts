@@ -36,7 +36,7 @@ export default class KakuraClient {
 
 	private _isoffline: boolean = false;	//是否被挤掉线了 ,如果是被挤掉线的,那么就不能做自动登入了
 
-	private _websocket: Laya.Socket;
+	private _websocket: any;
 	//初始化成功后的回调
 	private _callback: any = null;
 	private _thisObj: any = null;
@@ -105,22 +105,10 @@ export default class KakuraClient {
 			WaitManager.instance.add(MsgCMD.ROLL_ANI);
 		}
 
-		//每次连接的时候 先关闭套接字
-		this._websocket = new Laya.Socket();
-		this._websocket.on(Laya.Event.MESSAGE, this, this.onReceiveMessage);
-		this._websocket.on(Laya.Event.OPEN, this, this.onSocketOpen);
-		this._websocket.on(Laya.Event.CLOSE, this, this.onSocketClose);
-		this._websocket.on(Laya.Event.ERROR, this, this.onSocketError);
-		this._websocket.connectByUrl(this._url);
 	}
 
 	//销毁连接
 	private destorySocket() {
-		if (this._websocket) {
-			this._websocket.offAll();
-			this._websocket.close();
-			this._websocket = null;
-		}
 		this._webSocketConnet = false;
 	}
 
@@ -168,24 +156,6 @@ export default class KakuraClient {
 
 
 	private requestSocket(con: ConnectObj) {
-		//添加loading 事件拦截
-		if (con.isWait) {
-			WaitManager.instance.add(MsgCMD.ROLL_ANI);
-		}
-		var toSendString: string = con.toSendString();
-		var packData = KakuraMessage.instance.addPackage(con.opcode, con.id, con.uniqueId, toSendString);
-		var requestId: number = con.id;
-		var requestBuffer: string = "";
-		requestBuffer = packData.uniqueReqId + packData.sendData;
-		var byte: Laya.Byte = KakuraMessage.instance.encode(requestBuffer, this._aesKey, packData);
-		LogsManager.echo("kakura,发出数据:", toSendString, con.id);
-
-		this._websocket.send(byte.buffer);
-		//心跳请求不添加超时判断
-		if (con.method != KakuraClient.method_heartBeat) {
-			//添加超时判断 暂定20秒超时
-			this._timeCode = TimerManager.instance.add(this.timerHandler, this, KakuraClient.timeOutMiniSecond, 1);
-		}
 
 	}
 
@@ -297,14 +267,15 @@ export default class KakuraClient {
 		TimerManager.instance.remove(that._timeCode);
 
 		this._timeCount = 0;
-		var byte: Laya.Byte = new Laya.Byte();
-		byte.endian = Laya.Byte.LITTLE_ENDIAN;
-		// that._websocket.readBytes(byte);
-		byte.clear();
-		byte.writeArrayBuffer(evt);
-		byte.pos = 0
-
-		var jsonData: any = KakuraMessage.instance.decode(this._aesKey, byte);
+		// var byte: Laya.Byte = new Laya.Byte();
+		// byte.endian = Laya.Byte.LITTLE_ENDIAN;
+		// // that._websocket.readBytes(byte);
+		// byte.clear();
+		// byte.writeArrayBuffer(evt);;
+		// byte.pos = 0
+		// var jsonData: any = KakuraMessage.instance.decode(this._aesKey, byte)
+		var jsonData:any = {};
+		//@xd_test
 		//如果是初始化请求
 		if (jsonData.result && jsonData.result.initRequestId) {
 			if (jsonData.result.aesKey) {

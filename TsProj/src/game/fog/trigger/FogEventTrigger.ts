@@ -152,33 +152,11 @@ export default class FogEventTrigger {
 
 	//执行第三个事件 本方角色
 	public static runEvent_3(event: FogEventData, cell: FogInstanceCell) {
-		cell.fogControler.checkGuide_1201_finish();
-		WindowManager.OpenUI(WindowCfgs.FogUserRoleUI, {
-			event: event,
-			callBack: FogEventTrigger.freshCellByType.bind(this, {
-				cell: cell,
-				behind: 1,
-				type: FogEventTrigger.Event_logical_Role
-			}),
-			thisObj
-	:
-		this
-	})
-		;
 	}
 
 	//执行第四个事件 拾取奖励
 	public static runEvent_4(event: FogEventData, cell: FogInstanceCell) {
 
-		WindowManager.OpenUI(WindowCfgs.FogMultiRewardUI, {
-			event: event,
-			cell: cell,
-			viewType: FogConst.VIEW_TYPE_REWARD_EVENT,
-			callBack: FogEventTrigger.freshCellByType.bind(this, {cell: cell, behind: 1}),
-			thisObj
-	:
-		this
-	})
 	}
 
 	//执行第五个事件 宝箱
@@ -189,12 +167,6 @@ export default class FogEventTrigger {
 
 	//执行第六个事件 Npc对话
 	public static runEvent_6(event: FogEventData, cell: FogInstanceCell) {
-		WindowManager.OpenUI(WindowCfgs.FogNpcTalkUI, {
-			event: event, callBack: FogEventTrigger.freshCellByType.bind(this, {cell: cell, behind: 1}), thisObj
-	:
-		this
-	})
-		;
 	}
 
 	//执行第七个事件 奖励选择
@@ -214,35 +186,14 @@ export default class FogEventTrigger {
 
 	//执行第十个事件 障碍物
 	public static runEvent_10(event: FogEventData, cell: FogInstanceCell) {
-		WindowManager.OpenUI(WindowCfgs.FogObstacleUI, {
-			event: event, callBack: FogEventTrigger.freshCellByType.bind(this, {cell: cell, behind: 1}), thisObj
-	:
-		this
-	})
-		;
 	}
 
 	//执行第十一个事件 门
 	public static runEvent_11(event: FogEventData, cell: FogInstanceCell) {
-		WindowManager.OpenUI(WindowCfgs.FogDoorUI, {
-			event: event, callBack: FogEventTrigger.freshCellByType.bind(this, {cell: cell, behind: 1}), thisObj
-	:
-		this
-	})
-		;
 	}
 
 	//执行第十二个事件 坏掉的路
 	public static runEvent_12(event: FogEventData, cell: FogInstanceCell) {
-		WindowManager.OpenUI(WindowCfgs.FogObstacleUI, {
-			event: event,
-			callBack: FogEventTrigger.freshCellByType.bind(this, {cell: cell, behind: 1}),
-			noPathCallBack: FogEventTrigger.noFinishEvent.bind(this, {cell: cell}),
-			thisObj
-	:
-		this
-	})
-		;
 	}
 
 	//执行第十三个事件 答题
@@ -257,11 +208,6 @@ export default class FogEventTrigger {
 
 	//执行第十四个事件 上交东西
 	public static runEvent_14(event: FogEventData, cell: FogInstanceCell) {
-		WindowManager.OpenUI(WindowCfgs.FogHandinUI, {
-			event: event,
-			callBack: FogEventTrigger.freshCellByType.bind(this, {cell: cell, behind: 1}),
-			thisObj: this
-		});
 	}
 
 	/**当前事件完成后刷新格子 */

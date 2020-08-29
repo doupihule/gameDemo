@@ -4,14 +4,12 @@ import FogFunc from "../../sys/func/FogFunc";
 import FogModel from "../../sys/model/FogModel";
 import LogsManager from "../../../framework/manager/LogsManager";
 import FogConst from "../../sys/consts/FogConst";
-import {BattleUI} from "../../sys/view/battle/BattleUI";
 import FogServer from "../../sys/server/FogServer";
-import {DataResourceType} from "../../sys/func/DataResourceFunc";
 import BattleLogicalControler from "../../battle/controler/BattleLogicalControler";
-import FogShopUI from "../../sys/view/fog/FogShopUI";
 import BattleConst from "../../sys/consts/BattleConst";
 import PassiveSkillData from "../../battle/data/PassiveSkillData";
 import WindowManager from "../../../framework/manager/WindowManager";
+import DataResourceConst from "../../sys/consts/DataResourceConst";
 
 /**
  *道具触发器
@@ -69,7 +67,6 @@ export default class FogPropTrigger {
 
 	//执行第一个道具 增加战斗能量
 	public static runProp_1(itemData, view) {
-		(view as BattleUI).maxEnergy += Number(itemData.params[0][0])
 	}
 
 	//执行第二个道具 降低特定事件行动力消耗
@@ -111,10 +108,10 @@ export default class FogPropTrigger {
 			//重置开启格子次数
 			FogServer.delFogCount({type: FogConst.FOG_COUNT_OPENCELL})
 			//加一次行动力
-			FogServer.addSourceCount({type: DataResourceType.ACT, count: recoverNum})
+			FogServer.addSourceCount({type: DataResourceConst.ACT, count: recoverNum})
 			//@zm 飘奖励
 			var thisObj = WindowManager.getUIByName("FogMainUI");
-			FogFunc.instance.flyResTween([[DataResourceType.ACT, recoverNum]], cell.x - 40, cell.y + thisObj.cellCtn.y);
+			FogFunc.instance.flyResTween([[DataResourceConst.ACT, recoverNum]], cell.x - 40, cell.y + thisObj.cellCtn.y);
 		}
 	}
 
@@ -131,9 +128,6 @@ export default class FogPropTrigger {
 
 	//执行第五个道具 降低局内商店的商品购买价格
 	public static runProp_5(itemData, view) {
-		var ui = (view as FogShopUI)
-		var params = itemData.params;
-		ui.reducePer *= Number(params[0][0]) / 10000;
 	}
 
 	//执行第六个道具 增加战斗中获得的局内货币

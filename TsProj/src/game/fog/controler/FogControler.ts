@@ -2,12 +2,13 @@ import {FogLayerControler} from "./FogLayerControler";
 import FogFunc from "../../sys/func/FogFunc";
 import BattleControler from "../../battle/controler/BattleControler";
 import FogInstanceBasic from "../instance/FogInstanceBasic";
+import VectorTools from "../../../framework/utils/VectorTools";
 
 
 /**总控制器 */
 export default class FogControler extends BattleControler {
 	public fogLayerControler: FogLayerControler;
-	private tmpPoint = new Laya.Point();
+	private tmpPoint ={x:0,y:0};
 	//所有有运动的instance
 	public _allMoveInstanceArr;
 

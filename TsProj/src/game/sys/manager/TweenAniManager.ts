@@ -24,7 +24,7 @@ export default class TweenAniManager {
 	/**渐现动画 */
 	fadeInAni(thisObj, callback = null, duration = 500, obj = null, firtAlpha = 0, lastAlpha = 1) {
 		thisObj.alpha = firtAlpha;
-		// Laya.Tween.to(thisObj, {alpha: lastAlpha}, duration, null, Laya.Handler.create(obj, () => {
+		// TweenTools.tweenTo(thisObj, {alpha: lastAlpha}, duration, null, Laya.Handler.create(obj, () => {
 			callback && callback.call(obj);
 		// }));
 	}

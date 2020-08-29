@@ -2,6 +2,7 @@ import Equation from "../../../framework/utils/Equation";
 import ScreenAdapterTools from "../../../framework/utils/ScreenAdapterTools";
 import ChapterLogicControler from "./ChapterLogicControler";
 import TimerManager from "../../../framework/manager/TimerManager";
+import VectorTools from "../../../framework/utils/VectorTools";
 
 /**
  * 战斗中的镜头控制器.
@@ -13,7 +14,7 @@ import TimerManager from "../../../framework/manager/TimerManager";
 export default class ChapterCameraControler {
 	public controler: ChapterLogicControler;
 
-	public focusPos: Laya.Vector3;
+	public focusPos: {x,y,z};
 
 	private _halfHeight: number = 0;
 

@@ -9,44 +9,34 @@ import ChapterConst from "../../sys/consts/ChapterConst";
 import BattleFunc from "../../sys/func/BattleFunc";
 import TimerManager from "../../../framework/manager/TimerManager";
 import LevelFunc from "../../sys/func/LevelFunc";
+import ImageExpand from "../../../framework/components/ImageExpand";
+import ViewTools from "../../../framework/components/ViewTools";
+import LabelExpand from "../../../framework/components/LabelExpand";
 
 /**章节怪 */
 export default class ChapInstanceEnemy extends FogInstanceBasic {
 
-	private nameTxt: Laya.Label;
+	private nameTxt: LabelExpand;
 	private passSign: ImageExpand;
 	private levelId;
-;
 	public levelName: string;
 
 	constructor(fogControler) {
 		super(fogControler);
-		this.anchorX = 0.5;
-		this.anchorY = 1;
-		this.width = 200;
-		this.height = 150;
-		this.nameTxt = new Laya.Label("");
-		this.nameTxt.width = 200;
-		this.nameTxt.fontSize = 24;
-		this.nameTxt.font = "Microsoft YaHei";
-		this.nameTxt.color = "#ffffff";
-		this.nameTxt.align = "center";
+		this.setAnchor(0.5,1);
+		this.setSize(200,150);
+		this.nameTxt = ViewTools.createLabel("",200,50,24,4,false,1);
+		this.nameTxt.setFont( "Microsoft YaHei");
+		this.nameTxt.setColor(0xff,0xff,0xff,0xff) ;
 		this.nameTxt.y = this.height + 20;
-		this.nameTxt.stroke = 2;
-		this.nameTxt.bold = true;
+		this.nameTxt.setOutLine(2,2,0xff,0xff,0xff,0xff);
 
 		this.addChild(this.nameTxt);
 		new ButtonUtils(this, this.onClickItem, this);
 		this.passSign = ViewTools.createImage("native/main/main/main_image_yishangzhen.png");
-		var txt = new Laya.Label(TranslateFunc.instance.getTranslate("#tid_chapter_finishLevel"));
-		txt.width = 130;
-		txt.height = 48;
-		txt.fontSize = 22;
-		txt.font = "Microsoft YaHei";
-		txt.color = "#000000";
-		txt.align = "center";
-		txt.valign = "middle";
-		this.passSign.anchorX = 0.5;
+		var txt = ViewTools.createLabel(TranslateFunc.instance.getTranslate("#tid_chapter_finishLevel"),130,48,22,4,false);
+		txt.setFont( "Microsoft YaHei");
+		txt.setColor(0,0,0);
 		this.passSign.x = this.width / 2
 		this.passSign.addChild(txt);
 		this.addChild(this.passSign);

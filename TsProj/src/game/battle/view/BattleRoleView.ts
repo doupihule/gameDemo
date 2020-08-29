@@ -165,7 +165,7 @@ export default class BattleRoleView extends BaseContainer {
 		for (var i = 0; i < formationArr.length; i++) {
 			var posArr = formationArr[i];
 			var view = this._childViewArr[i];
-			view.setPos(posArr[0] * this._xSpace, posArr[1] * this._ySpace);
+			view.set2dPos(posArr[0] * this._xSpace, posArr[1] * this._ySpace);
 			if (this._useShade) {
 				var shaderView = this._shadeViewArr[i];
 				if (!shaderView) {
@@ -238,7 +238,7 @@ export default class BattleRoleView extends BaseContainer {
 	public setChildViewPos(x, y) {
 		for (var i = 0; i < this.currentViewNums; i++) {
 			var childAni = this._childViewArr[i];
-			childAni.setPos(x, y);
+			childAni.set2dPos(x, y);
 		}
 	}
 

@@ -130,13 +130,13 @@ export default class ScreenAdapterTools {
 		//创建黑边
 		var image = ViewTools.createImage("static/global_image_heibian.png");
 		image.setAnchor(1,0.5)
-		image.setPos(this.sceneOffsetX,this.height / 2 + this.UIOffsetY);
+		image.set2dPos(this.sceneOffsetX,this.height / 2 + this.UIOffsetY);
 		GlobalEnv.uiRoot.addChild(image);
 		image.setZorder(1000000) ;
 
 		image = ViewTools.createImage("static/global_image_heibian.png");
 		image.setAnchor(0,0.5)
-		image.setPos(this.sceneOffsetX + this.width,this.height / 2 + this.UIOffsetY);
+		image.set2dPos(this.sceneOffsetX + this.width,this.height / 2 + this.UIOffsetY);
 		GlobalEnv.uiRoot.addChild(image);
 		image.setZorder(10000000);
 

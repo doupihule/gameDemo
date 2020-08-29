@@ -9,6 +9,8 @@ import WindowManager from "../../../framework/manager/WindowManager";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
 import FogEventTrigger from "../trigger/FogEventTrigger";
 import TableUtils from "../../../framework/utils/TableUtils";
+import ViewTools from "../../../framework/components/ViewTools";
+import ImageExpand from "../../../framework/components/ImageExpand";
 
 /**大巴车 */
 export default class FogInstanceBus extends FogInstanceMove {
@@ -36,11 +38,9 @@ export default class FogInstanceBus extends FogInstanceMove {
 
 	constructor(fogControler) {
 		super(fogControler);
-		this.width = this._initWidth;
-		this.height = this._initHeight;
+		this.setSize(this._initWidth,this._initHeight);
 		this.eventCtn = ViewTools.createImage("");
-		this.eventCtn.anchorX = 0.5;
-		this.eventCtn.anchorY = 0.5;
+		this.eventCtn.setAnchor(0.5,0.5);
 		this.eventCtn.x = this._initWidth / 2;
 		this.eventCtn.y = this._initHeight / 2;
 		this.addChild(this.eventCtn);
@@ -61,8 +61,7 @@ export default class FogInstanceBus extends FogInstanceMove {
 	setBusShow() {
 		if (!this.myBus) {
 			this.myBus = ViewTools.createImage();
-			this.myBus.anchorX = 0.5;
-			this.myBus.anchorY = 0.5;
+			this.myBus.setAnchor(0.5,0.5);
 			this.eventCtn.addChild(this.myBus);
 		}
 	}
@@ -77,7 +76,7 @@ export default class FogInstanceBus extends FogInstanceMove {
 			//默认向上
 			this.myRotate = FogConst.FOG_CELL_TURNUP
 		}
-		this.myBus.skin = FogFunc.instance.getBusImgByRotate(this.myRotate)
+		this.myBus.setSkin( FogFunc.instance.getBusImgByRotate(this.myRotate) );
 	}
 
 	/**移动到指定的点 */
@@ -200,7 +199,7 @@ export default class FogInstanceBus extends FogInstanceMove {
 			this.myRotate = FogConst.FOG_CELL_TURNDOWN
 		}
 		if (lastRotate != this.myRotate) {
-			this.myBus.skin = FogFunc.instance.getBusImgByRotate(this.myRotate)
+			this.myBus.setSkin( FogFunc.instance.getBusImgByRotate(this.myRotate) );
 		}
 
 	}

@@ -113,23 +113,7 @@ export default class Global {
 
 	/**获取当前操作系统 */
 	public static getOs() {
-		if (Laya.Browser.onAndroid) {
-			return "Android";
-		} else if (Laya.Browser.onEdge) {
-			return "Edge";
-		} else if (Laya.Browser.onIE) {
-			return "IE";
-		} else if (Laya.Browser.onIOS) {
-			return "IOS";
-		} else if (Laya.Browser.onIPhone) {
-			return "IPhone";
-		} else if (Laya.Browser.onIPad) {
-			return "IPad";
-		} else if (Laya.Browser.onPC) {
-			return "PC";
-		} else {
-			return "UnKnown";
-		}
+		return "unknown";
 	}
 
 	public static _isAuthorized: boolean = false;
@@ -165,7 +149,7 @@ export default class Global {
 			var deviceStr = StorageCode.storage_deviceStr;
 			var deId = CacheManager.instance.getFileStorageCache(deviceStr);
 			if (!deId || deId == "0") {
-				deId = "" + Laya.Browser.now() + "_" + GameUtils.getRandomInt(10000, 99999);
+				deId = "" +  "_" + GameUtils.getRandomInt(10000, 99999);
 				CacheManager.instance.setFileStorageCache(deviceStr, deId);
 			}
 			this._deviceId = deId;

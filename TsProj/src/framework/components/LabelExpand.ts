@@ -24,12 +24,12 @@ export default class LabelExpand extends BaseContainer{
 	}
 
 	//设置描边
-	public setOutLine(xlen, ylen, a, r, g, b){
+	public setOutLine(xlen, ylen,  r, g, b,a=255){
 
 	}
 
 	//设置投影
-	public setShade(xlen, ylen, a, r, g, b){
+	public setShade(xlen, ylen, r, g, b,a:number =255){
 
 	}
 

@@ -108,7 +108,7 @@ export default class FogMistControler {
 	// isInit是否是初始化 非初始化需要做渐变缓动 增强表现
 	public turnOneCellView(img: ImageExpand, lastImg: ImageExpand, x: number, y: number, isInit: boolean = false) {
 		if (!isInit) {
-			Laya.Tween.clearAll(img);
+			TweenTools.clearAll(img);
 		}
 		var lb: Laya.Label = img["__label"];
 		//@xd_test
@@ -135,7 +135,7 @@ export default class FogMistControler {
 			if (isInit) {
 				img.visible = false
 			} else {
-				Laya.Tween.to(img, {alpha: 0}, FogMistControler.tweenTime, null, Laya.Handler.create(this, () => {
+				TweenTools.tweenTo(img, {alpha: 0}, FogMistControler.tweenTime, null, Laya.Handler.create(this, () => {
 					img.visible = false;
 				}))
 			}
@@ -286,9 +286,9 @@ export default class FogMistControler {
 				lastImg.skin = img.skin;
 				// img.alpha = 0.5;
 				img.skin = skinName;
-				// Laya.Tween.to(lastImg,{alpha:0},FogMistControler.tweenTime);
-				Laya.Tween.clearAll(lastImg);
-				Laya.Tween.to(lastImg, {alpha: 0}, FogMistControler.tweenTime, null, Laya.Handler.create(this, () => {
+				// TweenTools.tweenTo(lastImg,{alpha:0},FogMistControler.tweenTime);
+				TweenTools.clearAll(lastImg);
+				TweenTools.tweenTo(lastImg, {alpha: 0}, FogMistControler.tweenTime, null, Laya.Handler.create(this, () => {
 					lastImg.visible = false;
 				}));
 

@@ -1,4 +1,6 @@
 import FogControler from "./FogControler";
+import ViewTools from "../../../framework/components/ViewTools";
+import BaseContainer from "../../../framework/components/BaseContainer";
 
 
 export class FogLayerControler {
@@ -18,45 +20,45 @@ export class FogLayerControler {
 	 */
 
 	/**游戏的根容器 */
-	a: Laya.Sprite;
+	a: BaseContainer;
 	/**游戏场景的后景层 */
-	a1: Laya.Sprite;
+	a1: BaseContainer;
 	/**游戏世界元素交互的容器 */
-	a2: Laya.Sprite;
+	a2: BaseContainer;
 	/**游戏场景的前景层 */
-	a3: Laya.Sprite;
+	a3: BaseContainer;
 	/**游戏容器的偏移层级 */
-	a2Offset: Laya.Sprite;
+	a2Offset: BaseContainer;
 	/**游戏世界元素交互容器的后层,主要是放脚下光环.影子,等需要被角色压住的特效 */
-	a21: Laya.Sprite;
+	a21: BaseContainer;
 	/**游戏世界元素里面的角色所在的容器,主要放角色.主要交互都在这一层 */
-	a22: Laya.Sprite;
+	a22: BaseContainer;
 	/**游戏世界元素里面 的前景特效. 需要挡住角色.但是会被场景的前景挡住 */
-	a23: Laya.Sprite;
+	a23: BaseContainer;
 	/**遮罩层 */
-	a24: Laya.Sprite;
+	a24: BaseContainer;
 
 
-	public rootCtn: Laya.Sprite;
+	public rootCtn: BaseContainer;
 
 	private fogControler: FogControler;
 
 
-	public constructor(fogControler: FogControler, rootCtn: Laya.Sprite) {
+	public constructor(fogControler: FogControler, rootCtn: BaseContainer) {
 		this.fogControler = fogControler;
 		this.rootCtn = rootCtn;
-		this.a = new Laya.Sprite()
-		this.a1 = new Laya.Sprite();
-		this.a2 = new Laya.Sprite();
-		this.a3 = new Laya.Sprite();
+		this.a = ViewTools.createContainer()
+		this.a1 = ViewTools.createContainer();
+		this.a2 = ViewTools.createContainer();
+		this.a3 = ViewTools.createContainer();
 
 
-		this.a2Offset = new Laya.Sprite();
+		this.a2Offset = ViewTools.createContainer();
 
-		this.a21 = new Laya.Sprite();
-		this.a22 = new Laya.Sprite();
-		this.a23 = new Laya.Sprite();
-		this.a24 = new Laya.Sprite();
+		this.a21 = ViewTools.createContainer();
+		this.a22 = ViewTools.createContainer();
+		this.a23 = ViewTools.createContainer();
+		this.a24 = ViewTools.createContainer();
 
 
 		rootCtn.addChild(this.a);

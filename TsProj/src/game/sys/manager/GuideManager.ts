@@ -20,7 +20,7 @@ export default class GuideManager implements IMessage {
 	public noMask = false;
 
 	private static _ins: GuideManager;
-	private point = new Laya.Point(0, 0);
+	private point = {x:0,y:0};
 
 	public recentGuideId;//上一步引导Id
 	public nowGuideId;//当前引导Id
@@ -108,10 +108,6 @@ export default class GuideManager implements IMessage {
 		//     WindowManager.CloseUI(WindowCfgs.SevenDaysUI);
 		// }
 		var guideData = GuideFunc.instance.getGuideInfo(id);
-		Laya.timer.callLater(this, () => {
-			// Message.instance.send(BannerEvent.BANNER_EVENT_SHOWLEADBANNER);
-			// Message.instance.send(BannerEvent.BANNER_EVENT_SHOWQUICKBANNER);
-		})
 		this.nowGuideId = id;
 		LogsManager.echo("krma. GameData.nowGuideId = " + this.nowGuideId);
 		var x = 0;

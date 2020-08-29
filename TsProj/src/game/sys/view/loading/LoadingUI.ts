@@ -4,6 +4,7 @@ import ScreenAdapterTools from "../../../../framework/utils/ScreenAdapterTools";
 import BaseContainer from "../../../../framework/components/BaseContainer";
 import ImageExpand from "../../../../framework/components/ImageExpand";
 import LabelExpand from "../../../../framework/components/LabelExpand";
+import TimerManager from "../../../../framework/manager/TimerManager";
 
 export class LoadingUI implements IMessage {
 	private progress: number = 0;
@@ -79,7 +80,7 @@ export class LoadingUI implements IMessage {
 
 		if (this.progress >= 100) {
 			this.progress = 100;
-			Laya.timer.clearAll(LoadingUI.instance);
+			TimerManager.instance.removeByObject(this);
 		} else {
 		}
 

@@ -636,33 +636,6 @@ export default class JumpManager {
 
 	/**获取结算互推UI */
 	static getJumpUIIns(data: any, extraData, param) {
-		LogsManager.echo("extraData.from2-------------", extraData.from)
-		if (extraData.isDouble) {
-			if (this.jumpDoubleUIs.length > 0) {
-				var item = this.jumpDoubleUIs.shift();
-				item.setFrom(extraData.from);
-				item.initData(data, false);
-				item.setJumpParam && item.setJumpParam(param);
-				return item;
-			}
-			LogsManager.echo("yrc new ResultJumpDoubleUI");
-			var ui2 = new ResultJumpDoubleUI(data, 90, false, extraData);
-			ui2.initData(data, false);
-			return ui2
-		} else {
-			if (this.jumpUIs.length > 0) {
-				var item = this.jumpUIs.shift();
-				item.setFrom(extraData.from);
-				item.initData(data);
-				item.setJumpParam && item.setJumpParam(param);
-				return item;
-			} else {
-				LogsManager.echo("yrc new ResultJumpUI");
-				var ui = new ResultJumpUI(data, extraData, param);
-				ui.initData(data);
-				return ui
-			}
-		}
 
 	}
 
@@ -775,7 +748,7 @@ export default class JumpManager {
 
 	//封装创建一个JumpItem aniStyle 0表示不动 1表示随机原地晃动 并随机换图标 needRedPoint根据渠道，指色是显示new 或热门 梦佳是红点 指色多一点是否显示文字底  isShowBg图片是否有背景，bgextraWidth额外框
 	static createJumpItem(itemData, itemWidth, itemHeight, extraData, needRedPoint = null, aniStyle: number = 0, isShowName = true, txtSize = 15, txtcolor = "#ffffff", isShowLableBg = false, signWidth = 0, signHeight = 0, isShowBg = false, bgextraWidth = 0, txtOffestY = 0) {
-
+		return null;
 	}
 
 	//创建一个随机的跳转item

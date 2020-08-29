@@ -1,4 +1,5 @@
 import FogInstanceMove from "../../fog/instance/FogInstanceMove";
+import VectorTools from "../../../framework/utils/VectorTools";
 
 /**
  * 游戏中所有可以运动的对象的基类
@@ -34,8 +35,8 @@ export default class ChapterInstanceMove extends FogInstanceMove {
 		this.speed.y = this._moveParams.initSpeed.y * speedRadio;
 		this.speed.z = this._moveParams.initSpeed.z * speedRadio;
 
-		var distance: number = Laya.Vector3.distance(this._moveParams.target, this.pos);
-		var speedAbs: number = Laya.Vector3.scalarLength(this.speed);
+		var distance: number = VectorTools.distance(this._moveParams.target, this.pos);
+		var speedAbs: number = VectorTools.scalarLength(this.speed);
 		//如果距离小于一个速度绝对值 那么判定到达
 
 		var whetherEnd: boolean = false;

@@ -35,10 +35,6 @@ export default class ResultJumpUI extends ui.gameui.jump.ResultJumpUI implements
 		// this.initData(data);
 		this.data = data;
 		Message.instance.add(MsgCMD.RETURN_GAMEMAIN, this);
-		this.on(Laya.Event.DISPLAY, this, this.onAddToStage);
-		this.on(Laya.Event.UNDISPLAY, this, this.onRemoveStage);
-		// this.addEventListener(egret.Event.ADDED_TO_STAGE,this.onAddToStage,this )
-		//     this.addEventListener(egret.Event.REMOVED_FROM_STAGE,this.onRemoveStage,this )
 	}
 
 	private onAddToStage() {
@@ -52,17 +48,6 @@ export default class ResultJumpUI extends ui.gameui.jump.ResultJumpUI implements
 
 
 	initData(data: any) {
-		LogsManager.echo("yrc111 ResultJumpUI", data)
-		this.iconPanel.hScrollBarSkin = "";
-		this.iconPanel.removeChildren();
-		for (var i = 0; i < data.length; i++) {
-			var itemData = data[i];
-			var imgItem: ImageExpand = JumpManager.createJumpItem(itemData, this.imgWidth, this.imgWidth, {from: this.extraData.from}, true);
-			imgItem.x = i * (this.imgWidth + this.spaceX);
-			this.iconPanel.addChild(imgItem);
-		}
-		this.iconPanel.on(Laya.Event.MOUSE_OUT, this, this.touchOut);
-		Laya.timer.loop(10, this, this.itemMove);
 	}
 
 	private _itemMoveCode: number = 0;

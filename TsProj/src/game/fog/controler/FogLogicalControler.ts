@@ -1,4 +1,4 @@
-import FogMainUI from "../../sys/view/fog/FogMainUI";
+
 import FogCellMapControler from "./FogCellMapControler";
 import PoolTools from "../../../framework/utils/PoolTools";
 import PoolCode from "../../sys/consts/PoolCode";
@@ -23,11 +23,12 @@ import GuideConst from "../../sys/consts/GuideConst";
 import WindowManager from "../../../framework/manager/WindowManager";
 import {WindowCfgs} from "../../sys/consts/WindowCfgs";
 import WindowEvent from "../../../framework/event/WindowEvent";
+import TimerManager from "../../../framework/manager/TimerManager";
 
 /**迷雾控制器 */
 export default class FogLogicalControler extends FogControler implements IMessage {
 
-	public fogUI: FogMainUI;
+	public fogUI: any;
 	public cellMapControler: FogCellMapControler;
 
 	public fogCellEventControler: FogCellEventControler;
@@ -59,7 +60,7 @@ export default class FogLogicalControler extends FogControler implements IMessag
 		this.fogFindWayControler = new FogFindWayControler(this);
 		this.mistControler = new FogMistControler(this);
 		this.ctn = ctn;
-		this.ctn.on(Laya.Event.MOUSE_DOWN, this, this.onClickView)
+		// this.ctn.on(Laya.Event.MOUSE_DOWN, this, this.onClickView)
 
 
 	}
@@ -77,7 +78,7 @@ export default class FogLogicalControler extends FogControler implements IMessag
 		this.layerCfg = FogFunc.instance.getCfgDatas("Layer", layer);
 		this.fogCellEventControler.setData();
 		this.cellMapControler.setData();
-		Laya.timer.frameLoop(1, this, this.onceUpdateFrame);
+		TimerManager.instance.registObjUpdate(this.onceUpdateFrame,this);
 	}
 
 	/**
@@ -297,8 +298,8 @@ export default class FogLogicalControler extends FogControler implements IMessag
 
 	dispose() {
 		BattleLogsManager.battleEcho("退出迷雾模式----");
-		Laya.timer.clear(this, this.onceUpdateFrame);
-		this.ctn && this.ctn.offAll(Laya.Event.MOUSE_DOWN);
+		// Laya.timer.clear(this, this.onceUpdateFrame);
+		TimerManager.instance.deleteObjUpdate(null,this.onceUpdateFrame,this);
 		this.ctn = null;
 		//销毁所有对象
 		this.destoryInstanceArr(this._allInstanceArr);

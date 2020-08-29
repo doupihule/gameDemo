@@ -4,7 +4,6 @@ import RoleEvent from "../event/RoleEvent";
 import UserModel from "./UserModel";
 import RolesFunc from "../func/RolesFunc";
 import BigNumUtils from "../../../framework/utils/BigNumUtils";
-import {DataResourceType} from "../func/DataResourceFunc";
 import GlobalParamsFunc from "../func/GlobalParamsFunc";
 import UserExtModel from "./UserExtModel";
 import BattleFunc from "../func/BattleFunc";
@@ -12,6 +11,7 @@ import BattleConst from "../consts/BattleConst";
 import TalentFunc from "../func/TalentFunc";
 import TableUtils from "../../../framework/utils/TableUtils";
 import FogModel from "./FogModel";
+import DataResourceConst from "../consts/DataResourceConst";
 
 export default class RolesModel extends BaseModel {
 	// 英雄列表：user.roles
@@ -200,12 +200,12 @@ export default class RolesModel extends BaseModel {
 			for (var i = 0; i < levelPay.length; i++) {
 				var temp = levelPay[i].split(",");
 				switch (Number(temp[0])) {
-					case DataResourceType.COIN:
+					case DataResourceConst.COIN:
 						if (BigNumUtils.compare(UserModel.instance.getCoin(), temp[1])) {
 							canUpgrade = true;
 						}
 						break;
-					case DataResourceType.GOLD:
+					case DataResourceConst.GOLD:
 						if (BigNumUtils.compare(UserModel.instance.getGold(), temp[1])) {
 							canUpgrade = true;
 						}
@@ -232,14 +232,14 @@ export default class RolesModel extends BaseModel {
 		var levelPayArr = levelPay[0].split(",");
 
 
-		if (Number(levelPayArr[0]) == DataResourceType.COIN) {		//金币
+		if (Number(levelPayArr[0]) == DataResourceConst.COIN) {		//金币
 			if (!BigNumUtils.compare(UserModel.instance.getCoin(), BigNumUtils.round(levelPayArr[1]))) {
 				return false;
 			} else {
 				return true;
 			}
 
-		} else if (Number(levelPayArr[0]) == DataResourceType.GOLD) {		//钻石
+		} else if (Number(levelPayArr[0]) == DataResourceConst.GOLD) {		//钻石
 			if (!BigNumUtils.compare(UserModel.instance.getGold(), BigNumUtils.round(levelPayArr[1]))) {
 				return false;
 			} else {
@@ -276,13 +276,13 @@ export default class RolesModel extends BaseModel {
 			var costArr = updateInfo.talentCost[0].split(',');
 
 			switch (Number(costArr[0])) {
-				case DataResourceType.COIN:
+				case DataResourceConst.COIN:
 					if (!BigNumUtils.compare(UserModel.instance.getCoin(), costArr[1])) {
 						return false;
 					} else {
 						return true;
 					}
-				case DataResourceType.GOLD:
+				case DataResourceConst.GOLD:
 
 					if (!BigNumUtils.compare(UserModel.instance.getGold(), costArr[1])) {
 						return false;

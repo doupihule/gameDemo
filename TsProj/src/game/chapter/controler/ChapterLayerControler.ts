@@ -1,5 +1,7 @@
 import ChapterLogicControler from "./ChapterLogicControler";
 import TimerManager from "../../../framework/manager/TimerManager";
+import BaseContainer from "../../../framework/components/BaseContainer";
+import ViewTools from "../../../framework/components/ViewTools";
 
 export class ChapterLayerControler {
 	/**游戏的根容器 */

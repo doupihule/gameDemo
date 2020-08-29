@@ -12,6 +12,8 @@ import WindowManager from "../../../framework/manager/WindowManager";
 import {WindowCfgs} from "../../sys/consts/WindowCfgs";
 import UserModel from "../../sys/model/UserModel";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
+import ImageExpand from "../../../framework/components/ImageExpand";
+import ViewTools from "../../../framework/components/ViewTools";
 
 /**迷雾格子 */
 export default class FogInstanceCell extends FogInstanceBasic {
@@ -46,8 +48,7 @@ export default class FogInstanceCell extends FogInstanceBasic {
 
 	constructor(fogControler) {
 		super(fogControler);
-		this.width = FogFunc.itemWidth;
-		this.height = FogFunc.itemHeight;
+		this.setSize(FogFunc.itemWidth,FogFunc.itemHeight);
 
 		this.classModel = FogConst.model_Cell;
 
@@ -55,28 +56,24 @@ export default class FogInstanceCell extends FogInstanceBasic {
 
 	addCtn() {
 		this.eventCtn = ViewTools.createImage("");
-		this.eventCtn.anchorX = 0.5;
-		this.eventCtn.anchorY = 0.5;
+		this.eventCtn.setAnchor(0.5,0.5);
 		this.fogControler.fogLayerControler.a23.addChild(this.eventCtn);
 		this.maskCtn = ViewTools.createImage("");
-		this.maskCtn.anchorX = 0.5;
-		this.maskCtn.anchorY = 0.5;
+		this.maskCtn.setAnchor(0.5,0.5);
 		this.fogControler.fogLayerControler.a24.addChild(this.maskCtn);
 		this.maskImg = this.createImage();
 		this.lastMaskImg = this.createImage();
 		this.maskCtn.addChild(this.maskImg);
 		this.maskCtn.addChild(this.lastMaskImg);
 		this.signCtn = ViewTools.createImage("uisource/expedition/expedition/expedition_image_chahao.png");
-		this.signCtn.anchorX = 0.5;
-		this.signCtn.anchorY = 0.5;
+		this.signCtn.setAnchor(0.5,0.5);
 		this.maskCtn.addChild(this.signCtn);
 		this.normalIndex = this.fogControler.fogLayerControler.a23.getChildIndex(this.eventCtn);
 	}
 
 	private createImage(url = null) {
 		var img = ViewTools.createImage(url);
-		img.anchorX = 0.5;
-		img.anchorY = 0.5;
+		img.setAnchor(0.5,0.5);
 		img.scale(130 / 128, 130 / 128, true);
 		return img;
 	}
@@ -99,7 +96,7 @@ export default class FogInstanceCell extends FogInstanceBasic {
 		this.maskCtn.y = this.y;
 
 		this.fogControler.saveCellData(this.mySign, this);
-		this.skin = FogFunc.instance.getMapImgBySign(this.fogControler.layerCfg.scene, this.xIndex, this.yIndex)
+		this.setSkin( FogFunc.instance.getMapImgBySign(this.fogControler.layerCfg.scene, this.xIndex, this.yIndex) )
 		this.refreshFogMist(true);
 	}
 
@@ -114,14 +111,14 @@ export default class FogInstanceCell extends FogInstanceBasic {
 		this.myRotate = null;
 		this.myData = null;
 		this.myData = FogModel.instance.getCellInfoById(this.mySign);
-		this.eventCtn.skin = ""
+		this.eventCtn.setSkin("");
 		if (this.myData) {
 			if (Number(this.myData.type) == FogConst.cellType_Start) {
 				FogFunc.fogStartCell = this;
 				this.initMyRotate();
 			} else if (Number(this.myData.type) == FogConst.cellType_End) {
 				this.initMyRotate();
-				this.eventCtn.skin = FogFunc.instance.getExitImgByRotate(this.myRotate)
+				this.eventCtn.setSkin( FogFunc.instance.getExitImgByRotate(this.myRotate) );
 				FogFunc.fogEndCell = this;
 				FogFunc.fogEndCellSign = this.mySign;
 			} else if (Number(this.myData.type) == FogConst.cellType_StartAround) {
@@ -353,7 +350,7 @@ export default class FogInstanceCell extends FogInstanceBasic {
 
 	/**设置格子的层级 */
 	public setOrder(order) {
-		this.eventCtn.zOrder = order;
+		this.eventCtn.setZorder( order );
 		if (order == 0) {
 			this.fogControler.fogLayerControler.a23.setChildIndex(this.eventCtn, this.normalIndex)
 		}

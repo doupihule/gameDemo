@@ -1,5 +1,8 @@
 import BaseContainer from "../../../../framework/components/BaseContainer";
 import ViewTools from "../../../../framework/components/ViewTools";
+import GlobalEnv from "../../../../framework/engine/GlobalEnv";
+import TweenTools from "../../../../framework/components/TweenTools";
+import TimerManager from "../../../../framework/manager/TimerManager";
 
 ;
 
@@ -23,22 +26,22 @@ export default class ReqLoadingUI extends BaseContainer {
 
 	public setData(data): void {
 		this.rollAsset.visible = false;
-		Laya.timer.once(1, this, () => {
+		TimerManager.instance.setTimeout(() => {
 			this.rollAsset.visible = true;
 			this.rollAsset.alpha = 0;
-			Laya.Tween.to(this.rollAsset, {alpha: 1}, 500, null, Laya.Handler.create(this, this.onTween1));
-		});
+			TweenTools.tweenTo(this.rollAsset, {alpha: 1}, 500, null, this.onTween1,this);
+		},this,1);
 	}
 
 	private onTween1(): void {
 		this.rollAsset.alpha = 1;
-		Laya.Tween.to(this.rollAsset, {alpha: 0}, 2000, null, Laya.Handler.create(this, this.onTween2));
-		Laya.Tween.clearTween(this.onTween1);
+		TweenTools.tweenTo(this.rollAsset, {alpha: 0}, 2000, null,this.onTween2,this);
+		TweenTools.clearTween(this.onTween1);
 	}
 
 	private onTween2(): void {
 		this.rollAsset.alpha = 0;
-		Laya.Tween.to(this.rollAsset, {alpha: 1}, 2000, null, Laya.Handler.create(this, this.onTween1));
-		Laya.Tween.clearTween(this.onTween2);
+		TweenTools.tweenTo(this.rollAsset, {alpha: 1}, 2000, null,this.onTween1,this);
+		TweenTools.clearTween(this.onTween2);
 	}
 }

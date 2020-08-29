@@ -53,7 +53,7 @@ export default class BaseViewExpand {
 	}
 
 	//设置2d坐标
-	public  setPos(x:number,y:number){
+	public  set2dPos(x:number,y:number){
 		this.positionTrans.x = x;
 		this.positionTrans.y = y;
 		this.__ctransform.anchoredPosition = this.positionTrans;

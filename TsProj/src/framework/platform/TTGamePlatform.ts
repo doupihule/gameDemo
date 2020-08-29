@@ -149,7 +149,7 @@ export default class TTGamePlatform extends WXGamePlatform {
 	onStopRecord(res: any) {
 		LogsManager.echo("yrc 结束录屏")
 		LogsManager.echo(res);
-		var curT = Laya.Browser.now();
+		var curT = Client.instance.miniserverTime;
 		if (curT - this._recordStartT < 4000) {
 			WindowManager.ShowTip("录屏时间不足，请重新录屏");
 			this._recordStartT = 0;
