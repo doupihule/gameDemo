@@ -4,6 +4,8 @@ import SubPackageConst from "../../sys/consts/SubPackageConst";
 import UserInfo from "../../../framework/common/UserInfo";
 import ChapterFunc from "../../sys/func/ChapterFunc";
 import ChapterLogicControler from "./ChapterLogicControler";
+import BaseContainer from "../../../framework/components/BaseContainer";
+import ViewTools from "../../../framework/components/ViewTools";
 
 export default class ChapterMapControler {
 
@@ -55,34 +57,12 @@ export default class ChapterMapControler {
 			this.ctn1.addChild(image);
 			image.y = (this.allMapCount - i) * this.itemHeight;
 			this.mapArr.push({view: image})
-			var onMapComplete = () => {
-				image.skin = imageUrl1;
-			}
-			if (SubPackageManager.getPackStyle(SubPackageConst.packName_map) == SubPackageConst.PATH_STYLE_SUBPACK) {
-				SubPackageManager.loadDynamics(name, "map/" + name + "/" + name + "_0" + i, onMapComplete, this);
-			} else {
-				onMapComplete();
-			}
+			image.setSkin(imageUrl1);
 		}
 	}
 
 	//销毁地图
 	private destoryOneLayer() {
-		var infoArr: any[] = this.mapArr;
-		for (var i = 0; i < infoArr.length; i++) {
-			var view: ImageExpand = infoArr[i].view;
-			view.removeSelf();
-			if (UserInfo.isSystemNative()) {
-				//对图片做销毁处理
-				view.dispose();
-			}
-
-		}
-		this.ctn1.removeSelf();
-		if (!UserInfo.isSystemNative()) {
-			Laya.loader.clearRes("res/atlas/map/" + this.chapterData.sceneName + "/" + this.chapterData.sceneName + ".atlas")
-			Laya.loader.clearRes("res/atlas/map/" + this.chapterData.sceneName + "/" + this.chapterData.sceneName + ".png")
-		}
 	}
 
 

@@ -6,7 +6,6 @@
  * @Software: WebStorm
  */
 
-import ChangeDataUI from "../view/changeData/ChangeDataUI";
 
 export default class WindowCommonCfgs {
 	// 插屏互推

@@ -18,23 +18,12 @@ import BaseFunc from "./framework/func/BaseFunc";
 import UserInfo, {PlatformIdType} from "./framework/common/UserInfo";
 import KariquShareConst from "./framework/consts/KariquShareConst";
 import GameConsts from "./game/sys/consts/GameConsts";
+import GlobalEnv from "./framework/engine/GlobalEnv";
 
 class Main {
 	constructor() {
 		BaseFunc.setCfgExportType(BaseFunc.exportType_New);
-		StatisticsManager.mainStartT = Laya.Browser.now();
-		Laya.init(GameConfig.width, GameConfig.height, Laya["WebGL"]);
-		Laya["Physics"] && Laya["Physics"].enable();
-		Laya["DebugPanel"] && Laya["DebugPanel"].enable();
-		GlobalEnv.uiRoot.alignH = "center";
-		GlobalEnv.uiRoot.alignV = "middle";
 
-
-		GlobalEnv.uiRoot.bgColor = "#000000";
-		GlobalEnv.uiRoot.scaleMode = ScreenAdapterTools.checkScreenFixMode(Laya.Browser.width, Laya.Browser.height);
-		GlobalEnv.uiRoot.screenMode = GameConfig.screenMode;
-		//兼容微信不支持加载scene后缀场景
-		Laya.URL.exportSceneToJson = GameConfig.exportSceneToJson;
 		//初始化全就
 		this.initWindowEnv();
 		FrameWorkHandle.init();
@@ -65,11 +54,6 @@ class Main {
 		// LogsManager.echo("__decodeStr:", encodeStr, decodeStr, decodeStr == defaultSha1) ;
 
 
-		//打开调试面板（通过IDE设置调试模式，或者url地址增加debug=true参数，均可打开调试面板）
-		if (GameConfig.debug || Laya.Utils.getQueryString("debug") == "true") Laya.enableDebugPanel();
-		if (GameConfig.physicsDebug && Laya["PhysicsDebugDraw"]) Laya["PhysicsDebugDraw"].enable();
-		if (GameConfig.stat) Laya.Stat.show(0, 100);
-		Laya.alertGlobalError = true;
 
 		this.showMainModule();
 		if (UserInfo.isWX() || UserInfo.isTT()) {
@@ -95,25 +79,12 @@ class Main {
 		}
 
 		DisplayUtils.adjustLabelPos();
-		//激活资源版本控制，version.json由IDE发布功能自动生成，如果没有也不影响后续流程
-		// Laya.ResourceVersion.enable("version.json", Laya.Handler.create(this, this.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION);
-		GlobalEnv.uiRoot.on(Laya.Event.RESIZE, this, this.onResize);
 	}
 
 	private onResize() {
-		LogsManager.echo("_onResize start___");
-		LogsManager.echo(GlobalEnv.uiRoot.scaleX, GlobalEnv.uiRoot.scaleY, "_____scale", GlobalEnv.uiRoot.width, GlobalEnv.uiRoot.height);
-		LogsManager.echo(GlobalEnv.uiRoot.designWidth, GlobalEnv.uiRoot.designHeight, "___设计宽高");
-		LogsManager.echo(GlobalEnv.uiRoot.clientScaleX, GlobalEnv.uiRoot.clientScaleX, "___clientScale");
-
-		LogsManager.echo(GlobalEnv.uiRoot.clientScaleX, GlobalEnv.uiRoot.clientScaleY, "___clientScale");
-		LogsManager.echo("_clientWidthhei_:", Laya.Browser.clientWidth, Laya.Browser.clientHeight, "_width,hei:", Laya.Browser.width, Laya.Browser.height);
-		LogsManager.echo("_onResize end___")
 	}
 
 	onVersionLoaded(): void {
-		//激活大小图映射，加载小图的时候，如果发现小图在大图合集里面，则优先加载大图合集，而不是小图
-		Laya.AtlasInfoManager.enable("fileconfig.json", Laya.Handler.create(this, this.onConfigLoaded));
 
 	}
 

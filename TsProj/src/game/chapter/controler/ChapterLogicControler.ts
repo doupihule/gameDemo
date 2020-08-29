@@ -321,46 +321,15 @@ export default class ChapterLogicControler implements IMessage {
 	}
 
 	public handAni(img) {
-		if (WindowManager.getCurrentWindowName() != WindowCfgs.ChapterMapUI) return;
-		img.x = 90;
-		TweenTools.tweenTo(img, {x: 100}, 200, null, Laya.Handler.create(this, () => {
-			TweenTools.tweenTo(img, {x: 80}, 200, null, Laya.Handler.create(this, () => {
-				TweenTools.tweenTo(img, {x: 90}, 200, null, null)
-			}))
-		}))
 	}
 
 	/**宝箱摇晃动画 */
 	public scaleAni(img) {
-		if (WindowManager.getCurrentWindowName() != WindowCfgs.ChapterMapUI) return;
-		TweenAniManager.instance.scaleQipaoAni(img, 1.2, null, null, false);
 	}
 
 	/**当前关卡动画 */
 	public nowLevelAni(data) {
-		if (WindowManager.getCurrentWindowName() != WindowCfgs.ChapterMapUI) return;
-		var x = data.x;
-		var y = data.y;
-		if (!this.curLevelImg) {
-			this.curLevelImg = ViewTools.createImage("uisource/common/common/common_image_jiantou.png");
-			this.curLevelImg.rotation = 180;
-			this.curLevelImg.anchorX = 0.5;
-			this.chapterLayerControler.a21.addChild(this.curLevelImg)
-		}
-		if (!this.curLevelImg.visible) {
-			this.curLevelImg.visible = true;
-		}
-		TweenTools.clearTween(this.curLevelImg);
-		this.curLevelImg.x = x;
-		this.curLevelImg.y = y;
-		TweenTools.tweenTo(this.curLevelImg, {y: y + 20}, 200, null, Laya.Handler.create(this, () => {
-			TweenTools.tweenTo(this.curLevelImg, {y: y}, 200, null, Laya.Handler.create(this, () => {
-				TweenTools.tweenTo(this.curLevelImg, {y: y - 20}, 200, null, Laya.Handler.create(this, () => {
-					TweenTools.tweenTo(this.curLevelImg, {y: y}, 200)
-				}))
 
-			}))
-		}))
 	}
 
 	//总的追帧刷新函数
@@ -441,7 +410,6 @@ export default class ChapterLogicControler implements IMessage {
 
 	dispose() {
 		//销毁所有对象
-		Laya.timer.clear(this, this.updateFrame);
 
 		//销毁所有对象
 		this.destoryInstanceArr(this._allInstanceArr);
