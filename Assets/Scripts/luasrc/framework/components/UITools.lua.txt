@@ -308,7 +308,7 @@ end
 function UITools.createUIImage(url, boundlename)
     local tempArr = string.split(url, "/")
     local name = tempArr[#tempArr]
-    local imgCtn = luaui.Image.new(name);
+    local imgCtn = luaui.Image.new();
     --默认是boundleui
     if not boundlename then
         boundlename = ResourceConst.boundle_uiimage

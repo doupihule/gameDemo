@@ -433,16 +433,63 @@ declare module 'csharp' {
         class Behaviour {
             
         }
-        class Texture {
+        class Sprite extends UnityEngine.Object {
+            public bounds: UnityEngine.Bounds;
+            public rect: UnityEngine.Rect;
+            public border: UnityEngine.Vector4;
+            public texture: UnityEngine.Texture2D;
+            public pixelsPerUnit: number;
+            public associatedAlphaSplitTexture: UnityEngine.Texture2D;
+            public pivot: UnityEngine.Vector2;
+            public packed: boolean;
+            public packingMode: UnityEngine.SpritePackingMode;
+            public packingRotation: UnityEngine.SpritePackingRotation;
+            public textureRect: UnityEngine.Rect;
+            public textureRectOffset: UnityEngine.Vector2;
+            public vertices: UnityEngine.Vector2[];
+            public triangles: number[];
+            public uv: UnityEngine.Vector2[];
+            public GetPhysicsShapeCount():number;
+            public GetPhysicsShapePointCount(shapeIdx: number):number;
+            public GetPhysicsShape(shapeIdx: number, physicsShape: System.Collections.Generic.List$1<UnityEngine.Vector2>):number;
+            public OverridePhysicsShape(physicsShapes: System.Collections.Generic.IList$1<UnityEngine.Vector2[]>):void;
+            public OverrideGeometry(vertices: UnityEngine.Vector2[], triangles: number[]):void;
+            public static Create(texture: UnityEngine.Texture2D, rect: UnityEngine.Rect, pivot: UnityEngine.Vector2, pixelsPerUnit: number, extrude: number, meshType: UnityEngine.SpriteMeshType, border: UnityEngine.Vector4, generateFallbackPhysicsShape: boolean):UnityEngine.Sprite;
+            public static Create(texture: UnityEngine.Texture2D, rect: UnityEngine.Rect, pivot: UnityEngine.Vector2, pixelsPerUnit: number, extrude: number, meshType: UnityEngine.SpriteMeshType, border: UnityEngine.Vector4):UnityEngine.Sprite;
+            public static Create(texture: UnityEngine.Texture2D, rect: UnityEngine.Rect, pivot: UnityEngine.Vector2, pixelsPerUnit: number, extrude: number, meshType: UnityEngine.SpriteMeshType):UnityEngine.Sprite;
+            public static Create(texture: UnityEngine.Texture2D, rect: UnityEngine.Rect, pivot: UnityEngine.Vector2, pixelsPerUnit: number, extrude: number):UnityEngine.Sprite;
+            public static Create(texture: UnityEngine.Texture2D, rect: UnityEngine.Rect, pivot: UnityEngine.Vector2, pixelsPerUnit: number):UnityEngine.Sprite;
+            public static Create(texture: UnityEngine.Texture2D, rect: UnityEngine.Rect, pivot: UnityEngine.Vector2):UnityEngine.Sprite;
             
         }
-        class Mesh {
+        class Material {
+            
+        }
+        class Texture {
             
         }
         class MonoBehaviour {
             
         }
+        class Bounds {
+            
+        }
+        class Vector4 {
+            
+        }
+        class Texture2D {
+            
+        }
+        enum SpritePackingMode { Tight = 0, Rectangle = 1 }
+        enum SpritePackingRotation { None = 0, FlipHorizontal = 1, FlipVertical = 2, Rotate180 = 3, Any = 15 }
+        enum SpriteMeshType { FullRect = 0, Tight = 1 }
+        class Mesh {
+            
+        }
         class Color32 {
+            
+        }
+        class Shader {
             
         }
         
@@ -506,6 +553,19 @@ declare module 'csharp' {
             public static op_Inequality(d1: Function, d2: Function):boolean;
             
         }
+        class UInt16 {
+            
+        }
+        class UInt32 {
+            
+        }
+        type Action$2<T1,T2> = (arg1: T1, arg2: T2) => void;
+        class Int64 {
+            
+        }
+        type Action$3<T1,T2,T3> = (arg1: T1, arg2: T2, arg3: T3) => void;
+        type Action = () => void;
+        var Action: {new (func: () => void): Action;}
         
     }
     namespace System.Collections.Generic {
@@ -571,6 +631,12 @@ declare module 'csharp' {
         interface IComparer$1<T> {
             
         }
+        interface IList$1<T> {
+            
+        }
+        class Dictionary$2<TKey,TValue> {
+            
+        }
         
     }
     namespace System.Collections.ObjectModel {
@@ -615,6 +681,63 @@ declare module 'csharp' {
             
         }
         class StreamingContext {
+            
+        }
+        
+    }
+    namespace UnityEngine.UI {
+        class Image extends UnityEngine.UI.MaskableGraphic {
+            public sprite: UnityEngine.Sprite;
+            public overrideSprite: UnityEngine.Sprite;
+            public type: UnityEngine.UI.Image.Type;
+            public preserveAspect: boolean;
+            public fillCenter: boolean;
+            public fillMethod: UnityEngine.UI.Image.FillMethod;
+            public fillAmount: number;
+            public fillClockwise: boolean;
+            public fillOrigin: number;
+            public eventAlphaThreshold: number;
+            public alphaHitTestMinimumThreshold: number;
+            public useSpriteMesh: boolean;
+            public static defaultETC1GraphicMaterial: UnityEngine.Material;
+            public mainTexture: UnityEngine.Texture;
+            public hasBorder: boolean;
+            public pixelsPerUnit: number;
+            public material: UnityEngine.Material;
+            public minWidth: number;
+            public preferredWidth: number;
+            public flexibleWidth: number;
+            public minHeight: number;
+            public preferredHeight: number;
+            public flexibleHeight: number;
+            public layoutPriority: number;
+            public OnBeforeSerialize():void;
+            public OnAfterDeserialize():void;
+            public SetNativeSize():void;
+            public CalculateLayoutInputHorizontal():void;
+            public CalculateLayoutInputVertical():void;
+            public IsRaycastLocationValid(screenPoint: UnityEngine.Vector2, eventCamera: UnityEngine.Camera):boolean;
+            
+        }
+        class MaskableGraphic {
+            
+        }
+        class Graphic {
+            
+        }
+        enum CanvasUpdate { Prelayout = 0, Layout = 1, PostLayout = 2, PreRender = 3, LatePreRender = 4, MaxUpdateValue = 5 }
+        class Text {
+            
+        }
+        
+    }
+    namespace UnityEngine.UI.Image {
+        enum Type { Simple = 0, Sliced = 1, Tiled = 2, Filled = 3 }
+        enum FillMethod { Horizontal = 0, Vertical = 1, Radial90 = 2, Radial180 = 3, Radial360 = 4 }
+        
+    }
+    namespace UnityEngine.EventSystems {
+        class UIBehaviour {
             
         }
         
@@ -801,18 +924,53 @@ declare module 'csharp' {
         }
         
     }
-    namespace UnityEngine.UI {
-        enum CanvasUpdate { Prelayout = 0, Layout = 1, PostLayout = 2, PreRender = 3, LatePreRender = 4, MaxUpdateValue = 5 }
-        class MaskableGraphic {
-            
-        }
-        class Graphic {
+    namespace Resource {
+        class ResourceManager extends System.Object {
+            public static BUNDLE_PATH: string;
+            public static BYTES_PATH: string;
+            public static TEMP_PATH: string;
+            public static assetPath: string;
+            public static bytesLuaTxtPath: string;
+            public currentSceneName: string;
+            public static gameVersion: string;
+            public static bytesVersion: number;
+            public static bundleVersion: number;
+            public spriteRendererMaterialDic: System.Collections.Generic.Dictionary$2<string, UnityEngine.Material>;
+            public static Instance: Resource.ResourceManager;
+            public Init(go: UnityEngine.GameObject):void;
+            public Dispose():void;
+            public CheckReourceUpdate(checkCallback: System.Action$2<number, number>, versionCallback: System.Action$1<string>):void;
+            public DownloadResources(updateCallback: System.Action$3<bigint, bigint, bigint>):void;
+            public DownloadDispose():void;
+            public UncompressResources(uncompressCallback: System.Action$2<number, number>):void;
+            public RemoveDonwloadObject():void;
+            public InitLoadManager():void;
+            public luaLoadAsset(assetName: string, path: string, bundleName: string):UnityEngine.GameObject;
+            public luaLoadSpriteAsset(assetName: string, path: string, bundleName: string):UnityEngine.Sprite;
+            public FindInBundle(shaderName: string, bundleName: string):UnityEngine.Shader;
+            public GetCustomSpriteRendererMaterial(alphaTexture2d: UnityEngine.Texture2D):UnityEngine.Material;
+            public ReleaseAsset(bundleName: string, assetName: string):void;
+            public UnloadBundleByName(bundleName: string, unloadAllLoadedObjects: boolean):void;
+            public GetBundleInfo(name: string):string[];
+            public GetString(id: string):string;
             
         }
         
     }
-    namespace UnityEngine.EventSystems {
-        class UIBehaviour {
+    namespace GameUtils {
+        class ViewExtensionMethods extends System.Object {
+            public static MouseButtonDown():boolean;
+            public static CameraToRaycastHitObjectClick(c: UnityEngine.Camera, go: UnityEngine.GameObject, onClickHandle: System.Action):boolean;
+            public static SetChildrenLayer(obj: UnityEngine.GameObject, Layer: string):void;
+            public static PlaySounds(obj: UnityEngine.GameObject, isPreloading: boolean, assetName: string, path: string, bundleName: string, delay: number):void;
+            public static ClearSounds(obj: UnityEngine.GameObject):void;
+            public static setObj2dPos(trans: UnityEngine.RectTransform, x: number, y: number):void;
+            public static SetObj3dPos(trans: UnityEngine.Transform, x: number, y: number, z: number):void;
+            public static SetObjRotation(trans: UnityEngine.Transform, x: number, y: number, z: number):void;
+            public static SetObjScale(trans: UnityEngine.Transform, x: number, y: number, z: number):void;
+            public static SetLocalScaleSize(trans: UnityEngine.Transform, scale: number):void;
+            public static SetImageColor(img: UnityEngine.UI.Image, r: number, g: number, b: number, a: number):void;
+            public static SetLabelColor(txt: UnityEngine.UI.Text, r: number, g: number, b: number, a: number):void;
             
         }
         

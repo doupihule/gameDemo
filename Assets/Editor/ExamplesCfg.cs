@@ -11,6 +11,9 @@ using System;
 using UnityEngine;
 using Spine;
 using Spine.Unity;
+using Resource;
+using GameUtils;
+using UnityEngine.UI;
 
 //1、配置类必须打[Configure]标签
 //2、必须放Editor目录
@@ -37,11 +40,19 @@ public class ExamplesCfg
                 typeof(UnityEngine.Object),
                 typeof(Delegate),
                 typeof(CanvasGroup),
+                typeof(Image),
+                typeof(Sprite),
+
                 typeof(Spine.Animation),
                 typeof(Spine.AnimationState),
                 typeof(Spine.Bone),
                 typeof(SkeletonGraphic),
                 typeof(MeshGeneratorBuffers),
+                
+
+                typeof(ResourceManager),
+
+                typeof(ViewExtensionMethods),
             };
         }
     }
