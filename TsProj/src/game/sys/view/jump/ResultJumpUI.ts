@@ -1,4 +1,4 @@
-import {ui} from "../../../../ui/layaMaxUI";
+
 import IMessage from "../../interfaces/IMessage";
 import LogsManager from "../../../../framework/manager/LogsManager";
 import TimerManager from "../../../../framework/manager/TimerManager";
@@ -6,8 +6,9 @@ import Message from "../../../../framework/common/Message";
 import MsgCMD from "../../common/MsgCMD";
 import JumpManager from "../../../../framework/manager/JumpManager";
 import JumpEvent from "../../../../framework/event/JumpEvent";
+import UIBaseView from "../../../../framework/components/UIBaseView";
 
-export default class ResultJumpUI extends ui.gameui.jump.ResultJumpUI implements IMessage {
+export default class ResultJumpUI extends UIBaseView implements IMessage {
 	public static res = [
 		"gameui/ResultJump.scene",
 	];
@@ -29,7 +30,6 @@ export default class ResultJumpUI extends ui.gameui.jump.ResultJumpUI implements
 
 	constructor(data, extraData, param) {
 		super();
-		super.createChildren();
 		ResultJumpUI.instance = this;
 		this.extraData = extraData;
 		// this.initData(data);
@@ -79,20 +79,6 @@ export default class ResultJumpUI extends ui.gameui.jump.ResultJumpUI implements
 
 	/**icon左右移动 */
 	itemMove() {
-		if (this.isTouch) return;
-		var moveX = 1;
-		var curX = this.iconPanel.hScrollBar.value;
-		var moveWidth = this.iconPanel.contentWidth - this.iconPanel.width;
-		if (this.isRight && curX >= moveWidth) {
-			this.isRight = false;
-		}
-		if (!this.isRight && curX <= 0) {
-			this.isRight = true;
-		}
-		if (!this.isRight) {
-			moveX = -1;
-		}
-		this.iconPanel.hScrollBar.value += moveX;
 	}
 
 	/**手指从这里抬起 */

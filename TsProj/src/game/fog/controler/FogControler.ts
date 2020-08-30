@@ -44,13 +44,6 @@ export default class FogControler extends BattleControler {
 
 	//把舞台坐标转化成格子的坐标 1_1
 	public turnStagePosToCellSign(stagex: number, stagey: number) {
-		//先把全局坐标转化成相对坐标
-		this.tmpPoint.x = stagex;
-		this.tmpPoint.y = stagey;
-		var pos = this.fogLayerControler.a22.globalToLocal(this.tmpPoint);
-		var xIndex = Math.floor(pos.x / FogFunc.itemWidth) + 1;
-		var yIndex = FogFunc.row - Math.floor(pos.y / FogFunc.itemHeight);
-		return xIndex + "_" + yIndex;
 	}
 
 	dispose() {

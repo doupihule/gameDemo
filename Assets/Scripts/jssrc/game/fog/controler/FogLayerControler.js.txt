@@ -1,19 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FogLayerControler = void 0;
+const ViewTools_1 = require("../../../framework/components/ViewTools");
 class FogLayerControler {
     constructor(fogControler, rootCtn) {
         this.fogControler = fogControler;
         this.rootCtn = rootCtn;
-        this.a = new Laya.Sprite();
-        this.a1 = new Laya.Sprite();
-        this.a2 = new Laya.Sprite();
-        this.a3 = new Laya.Sprite();
-        this.a2Offset = new Laya.Sprite();
-        this.a21 = new Laya.Sprite();
-        this.a22 = new Laya.Sprite();
-        this.a23 = new Laya.Sprite();
-        this.a24 = new Laya.Sprite();
+        this.a = ViewTools_1.default.createContainer();
+        this.a1 = ViewTools_1.default.createContainer();
+        this.a2 = ViewTools_1.default.createContainer();
+        this.a3 = ViewTools_1.default.createContainer();
+        this.a2Offset = ViewTools_1.default.createContainer();
+        this.a21 = ViewTools_1.default.createContainer();
+        this.a22 = ViewTools_1.default.createContainer();
+        this.a23 = ViewTools_1.default.createContainer();
+        this.a24 = ViewTools_1.default.createContainer();
         rootCtn.addChild(this.a);
         this.a.addChild(this.a1);
         this.a.addChild(this.a2);

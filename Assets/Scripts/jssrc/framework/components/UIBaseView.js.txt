@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class UIBaseView {
+const BaseViewExpand_1 = require("./BaseViewExpand");
+class UIBaseView extends BaseViewExpand_1.default {
 }
 exports.default = UIBaseView;
 //# sourceMappingURL=UIBaseView.js.map

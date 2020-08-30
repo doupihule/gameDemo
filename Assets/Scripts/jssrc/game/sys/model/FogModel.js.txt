@@ -10,12 +10,12 @@ const WindowManager_1 = require("../../../framework/manager/WindowManager");
 const WindowCfgs_1 = require("../consts/WindowCfgs");
 const Message_1 = require("../../../framework/common/Message");
 const FogEvent_1 = require("../event/FogEvent");
-const DataResourceFunc_1 = require("../func/DataResourceFunc");
 const RolesModel_1 = require("./RolesModel");
 const GameUtils_1 = require("../../../utils/GameUtils");
 const FogPropTrigger_1 = require("../../fog/trigger/FogPropTrigger");
 const TableUtils_1 = require("../../../framework/utils/TableUtils");
 const BattleFunc_1 = require("../func/BattleFunc");
+const DataResourceConst_1 = require("../consts/DataResourceConst");
 /*
 * Author: TODO
 * Date:2020-05-23
@@ -324,7 +324,7 @@ class FogModel extends BaseModel_1.default {
         for (var resId in data.reward) {
             if (FogFunc_1.default.fogOuterRewardType.indexOf(Number(resId)) != -1) {
                 var tempReward = data.reward[resId];
-                if (Number(resId) == DataResourceFunc_1.DataResourceType.FOGITEM || Number(resId) == DataResourceFunc_1.DataResourceType.PIECE) {
+                if (Number(resId) == DataResourceConst_1.default.FOGITEM || Number(resId) == DataResourceConst_1.default.PIECE) {
                     for (var id in tempReward) {
                         rewardArr.push([resId, id, tempReward[id]]);
                     }

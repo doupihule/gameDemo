@@ -1,10 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Client_1 = require("../../../framework/common/kakura/Client");
-const GameUtils_1 = require("../../../utils/GameUtils");
 const GlobalParamsFunc_1 = require("../func/GlobalParamsFunc");
 const UserModel_1 = require("../model/UserModel");
-const CountsModel_1 = require("../model/CountsModel");
 const UserExtModel_1 = require("../model/UserExtModel");
 const SingleCommonServer_1 = require("../../../framework/server/SingleCommonServer");
 const BigNumUtils_1 = require("../../../framework/utils/BigNumUtils");
@@ -214,25 +212,6 @@ class UserExtServer {
         }
         userExtData['lastOfflineTime'] = Client_1.default.instance.miniserverTime;
         upData['userExt'] = userExtData;
-        var backData = Client_1.default.instance.doDummyServerBack(null, upData, null);
-        if (callBack) {
-            callBack.call(thisObj, backData);
-        }
-        SingleCommonServer_1.default.startSaveClientData(true);
-    }
-    /**获取宝箱奖励 */
-    static setAutoOpenAirDrop(data = null, callBack = null, thisObj = null) {
-        var upData = {};
-        var countData = {};
-        var count = CountsModel_1.default.instance.getCountsById(CountsModel_1.default.autoOpenAirDrop);
-        if (count == 0) {
-            countData["expireTime"] = GameUtils_1.default.getNextRefreshTByTime(4);
-        }
-        countData["id"] = CountsModel_1.default.autoOpenAirDrop;
-        countData["count"] = count + 1;
-        upData["counts"] = {
-            [CountsModel_1.default.autoOpenAirDrop]: countData
-        };
         var backData = Client_1.default.instance.doDummyServerBack(null, upData, null);
         if (callBack) {
             callBack.call(thisObj, backData);

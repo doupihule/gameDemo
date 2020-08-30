@@ -7,6 +7,7 @@ const FogInstanceBasic_1 = require("./FogInstanceBasic");
 const InstanceMoveEntity_1 = require("../../battle/instance/InstanceMoveEntity");
 const InstanceMoveMultyEntity_1 = require("../../battle/instance/InstanceMoveMultyEntity");
 const FogFunc_1 = require("../../sys/func/FogFunc");
+const VectorTools_1 = require("../../../framework/utils/VectorTools");
 /**
  * 游戏中所有可以运动的对象的基类
  * 如果需要对instance的view进行拖拽, 那么需要在onTouchMove里面 改变的应该是 this.pos.x 而不能直接去设置myview.x,myView.y
@@ -20,9 +21,9 @@ class FogInstanceMove extends FogInstanceBasic_1.default {
         this._myState = "stand";
         //当前移动状态 1到达边缘 2 进入边缘
         this.moveState = 0;
-        this.speed = new Laya.Vector3();
-        this.addSpeed = new Laya.Vector3();
-        this.unitVector = new Laya.Vector3();
+        this.speed = VectorTools_1.default.createVec3();
+        this.addSpeed = VectorTools_1.default.createVec3();
+        this.unitVector = VectorTools_1.default.createVec3();
     }
     //初始化站立状态(也就是闲置)
     initStand() {
@@ -77,7 +78,7 @@ class FogInstanceMove extends FogInstanceBasic_1.default {
     //运动到目标点 ,只针对平面运动,一般是x,y. movePointType 禁止外部调用
     moveToOnePoint(x, y, z = 0, spd = 0, callFunc = null, thisObj = null, callParams = null, expandParams = null, movePointType = 1) {
         if (!this._moveParams) {
-            this._moveParams = new InstanceMoveEntity_1.default(new Laya.Vector3(x, y, z));
+            this._moveParams = new InstanceMoveEntity_1.default(VectorTools_1.default.createVec3(x, y, z));
         }
         if (!spd || spd == 0) {
             spd = BattleFunc_1.default.moveSpeed;
@@ -88,12 +89,12 @@ class FogInstanceMove extends FogInstanceBasic_1.default {
         var speed = spd;
         var temp = BattleFunc_1.default.tempPoint;
         //计算目标向量差值
-        Laya.Vector3.subtract(this._moveParams.target, this.pos, temp);
-        var distance = Laya.Vector3.scalarLength(temp);
+        VectorTools_1.default.subtract(this._moveParams.target, this.pos, temp);
+        var distance = VectorTools_1.default.scalarLength(temp);
         //向量归一
-        Laya.Vector3.normalize(temp, this.unitVector);
+        VectorTools_1.default.normalize(temp, this.unitVector);
         //计算速度单位向量 乘以速度绝对值
-        Laya.Vector3.scale(this.unitVector, speed, this._moveParams.initSpeed);
+        VectorTools_1.default.scale(this.unitVector, speed, this._moveParams.initSpeed);
         this._moveParams.moveFrame = 0;
         this._moveParams.callParams = callParams;
         //设置预期运动时间
@@ -150,8 +151,8 @@ class FogInstanceMove extends FogInstanceBasic_1.default {
         this.speed.x = this._moveParams.initSpeed.x * speedRadio;
         this.speed.y = this._moveParams.initSpeed.y * speedRadio;
         this.speed.z = this._moveParams.initSpeed.z * speedRadio;
-        var distance = Laya.Vector3.distance(this._moveParams.target, this.pos);
-        var speedAbs = Laya.Vector3.scalarLength(this.speed);
+        var distance = VectorTools_1.default.distance(this._moveParams.target, this.pos);
+        var speedAbs = VectorTools_1.default.scalarLength(this.speed);
         //如果距离小于一个速度绝对值 那么判定到达
         //有需要可以扩展更复杂的行为,比如添加摩擦力,飞跃行为等等
         if (!this.moveState && distance >= FogFunc_1.default.itemHeight / 2 && distance < (FogFunc_1.default.itemHeight / 2 + FogFunc_1.default.busHeight / 2) + speedAbs) {

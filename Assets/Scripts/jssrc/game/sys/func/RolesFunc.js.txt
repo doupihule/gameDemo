@@ -10,10 +10,6 @@ const TimerManager_1 = require("../../../framework/manager/TimerManager");
 const TranslateFunc_1 = require("../../../framework/func/TranslateFunc");
 const ShareOrTvManager_1 = require("../../../framework/manager/ShareOrTvManager");
 const ShareTvOrderFunc_1 = require("./ShareTvOrderFunc");
-const DataResourceFunc_1 = require("./DataResourceFunc");
-const UserModel_1 = require("../model/UserModel");
-const PiecesModel_1 = require("../model/PiecesModel");
-const BigNumUtils_1 = require("../../../framework/utils/BigNumUtils");
 const BattleConst_1 = require("../consts/BattleConst");
 class RoleType {
 }
@@ -213,75 +209,6 @@ class RolesFunc extends BaseFunc_1.default {
         }
         enemyArr.splice(6, enemyArr.length - 6);
         return enemyArr;
-    }
-    /**
-     * 添加星级图片
-     * @param parnet 容器 类型是Image
-     * @param id  角色id
-     */
-    addStarImg(parnet, id, width = 44, height = 43, star = null) {
-        var unlock = GlobalParamsFunc_1.default.instance.getDataNum("equipUnlock");
-        if (UserModel_1.default.instance.getMaxBattleLevel() < unlock) {
-            return;
-        }
-        if (parnet.numChildren == 0) {
-            for (var i = 0; i < 5; i++) {
-                var img = new Laya.Image("uisource/common/common/equip_image_xing2.png");
-                img.width = width;
-                img.height = height;
-                img.x = i * width;
-                parnet.addChild(img);
-            }
-        }
-        var starLevel = star;
-        if (!starLevel) {
-            starLevel = RolesModel_1.default.instance.getRoleStarLevel(id);
-        }
-        for (var i = 0; i < parnet.numChildren; i++) {
-            var item = parnet.getChildAt(i);
-            if (i < starLevel) {
-                item.skin = "uisource/common/common/equip_image_xing1.png";
-            }
-            else {
-                item.skin = "uisource/common/common/equip_image_xing2.png";
-            }
-        }
-    }
-    /**
-     * 获取装备状态
-     * @param roleId
-     * @param equipId
-     */
-    getEquipState(roleId, equipId, ignoreCost = false) {
-        var isHave = RolesModel_1.default.instance.getIsHaveEquip(roleId, equipId);
-        if (isHave)
-            return RolesFunc.STATE_OWN;
-        var result = RolesFunc.STATE_CANCOMPOSE;
-        //判断碎片和钱是否足够
-        var cost = this.getCfgDatasByKey("Equip", equipId, "cost");
-        for (var i = 0; i < cost.length; i++) {
-            var costItem = cost[i].split(",");
-            if (Number(costItem[0]) == DataResourceFunc_1.DataResourceType.COIN && !ignoreCost) {
-                if (!BigNumUtils_1.default.compare(UserModel_1.default.instance.getCoin(), costItem[1])) {
-                    result = RolesFunc.STATE_NOEQUIP;
-                    break;
-                }
-            }
-            else if (Number(costItem[0]) == DataResourceFunc_1.DataResourceType.GOLD && !ignoreCost) {
-                if (!BigNumUtils_1.default.compare(UserModel_1.default.instance.getCoin(), costItem[1])) {
-                    result = RolesFunc.STATE_NOEQUIP;
-                    break;
-                }
-            }
-            else if (Number(costItem[0]) == DataResourceFunc_1.DataResourceType.PIECE) {
-                var count = PiecesModel_1.default.instance.getPieceCount(costItem[1]);
-                if (count < Number(costItem[2])) {
-                    result = RolesFunc.STATE_NOEQUIP;
-                    break;
-                }
-            }
-        }
-        return result;
     }
     /**获取某装备的要求星级 */
     getEquipStar(role, equip) {

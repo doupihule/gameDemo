@@ -40,18 +40,8 @@ class EaseUtils {
         this._onTouchDownFunc = onTouchDownFunc;
         this._onTwoMovedFunc = onTwoMovedFunc;
         this._onTwoTouchDownFunc = onTwoTouchDownFunc;
-        this._touchObject.on(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
-        // this._touchObject.loadImage("uisource/common/login_box.png");
-        this._touchObject.on(Laya.Event.MOUSE_MOVE, this, this.touchMoveHandler);
-        this._touchObject.on(Laya.Event.MOUSE_UP, this, this.touchEndHandler);
-        this._touchObject.on(Laya.Event.MOUSE_OUT, this, this.touchEndHandler);
         this._touchObject.mouseEnabled = true;
         // this._touchObject.addEventListener(Laya.Event.TOUCH_TAP,this.onTouchTap,this);
-    }
-    onTouchTap(event) {
-        if (this._onClickFunc) {
-            this._onClickFunc.call(this._easeObject, event.stageX, event.stageY);
-        }
     }
     touchBeginHandler(event) {
         if (event.touches.length > 1) {
@@ -69,7 +59,7 @@ class EaseUtils {
             if (this._onTwoTouchDownFunc) {
                 this._onTwoTouchDownFunc.call(this._easeObject, event.touches[0].stageX, event.touches[0].stageY, event.touches[1].stageX, event.touches[1].stageY);
             }
-            this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
+            // this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
         }
         else {
             this._originX = event.stageX;
@@ -82,7 +72,7 @@ class EaseUtils {
             if (this._onTouchDownFunc) {
                 this._onTouchDownFunc.call(this._easeObject, event.stageX, event.stageY);
             }
-            this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
+            // this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
         }
     }
     touchMoveHandler(event) {
@@ -161,11 +151,10 @@ class EaseUtils {
         }
         this._isDragMoved = false;
         console.log(event.type);
-        this._touchObject.on(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
+        // this._touchObject.on(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
     }
     startEase(x, y) {
-        Laya.timer.frameLoop(1, this, this.onEase);
-        // egret.startTick(this.onEase, this)
+        // Laya.timer.frameLoop(1, this, this.onEase);
     }
     onEase() {
         this._speedX = this._speedX * this._easeNum;
@@ -183,14 +172,13 @@ class EaseUtils {
         return false;
     }
     stopEase() {
-        Laya.timer.clear(this, this.onEase);
-        // egret.stopTick(this.onEase, this);
+        // Laya.timer.clear(this, this.onEase);
     }
     dispose() {
-        this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
-        this._touchObject.off(Laya.Event.MOUSE_MOVE, this, this.touchMoveHandler);
-        this._touchObject.off(Laya.Event.MOUSE_UP, this, this.touchEndHandler);
-        this._touchObject.off(Laya.Event.MOUSE_OUT, this, this.touchEndHandler);
+        // this._touchObject.off(Laya.Event.MOUSE_DOWN, this, this.touchBeginHandler);
+        // this._touchObject.off(Laya.Event.MOUSE_MOVE, this, this.touchMoveHandler);
+        // this._touchObject.off(Laya.Event.MOUSE_UP, this, this.touchEndHandler);
+        // this._touchObject.off(Laya.Event.MOUSE_OUT, this, this.touchEndHandler);
         // this._touchObject.removeEventListener(Laya.Event.TOUCH_TAP, this.onTouchTap, this);
     }
 }

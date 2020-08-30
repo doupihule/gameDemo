@@ -2,8 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const TimerManager_1 = require("../manager/TimerManager");
 const LogsManager_1 = require("../manager/LogsManager");
+const BaseContainer_1 = require("../components/BaseContainer");
+const ViewTools_1 = require("../components/ViewTools");
 //序列帧动画扩展
-class SpriteFrameExpand extends Laya.Sprite {
+class SpriteFrameExpand extends BaseContainer_1.default {
     //创建 序列帧扩展 type 1表示标准格式的序列帧配置 2表示精简格式的序列帧配置
     constructor() {
         super();
@@ -24,17 +26,15 @@ class SpriteFrameExpand extends Laya.Sprite {
         //坐标偏移表
         this._offsetMap = null;
         this._isLoop = false;
-        this._childView = new Laya.Image();
+        this._childView = ViewTools_1.default.createImage("");
         this.addChild(this._childView);
-        this.on(Laya.Event.DISPLAY, this, this.onAddToStage);
-        this.on(Laya.Event.UNDISPLAY, this, this.onRemoveStage);
+        // this.on(Laya.Event.DISPLAY, this, this.onAddToStage);
+        // this.on(Laya.Event.UNDISPLAY, this, this.onRemoveStage);
     }
     //设置数据
     setFrameData(imagePath, imageHead, labelsArr = null, anchorX = 0.5, anchorY = 0.5, type = 1, offsetMap = null) {
         this._imageHead = imageHead;
         this._imagePath = imagePath;
-        this._childView.anchorX = anchorX;
-        this._childView.anchorY = anchorY;
         this._fullPath = imagePath + imageHead;
         this._labelMapData = {};
         this._offsetMap = offsetMap;
@@ -168,7 +168,7 @@ class SpriteFrameExpand extends Laya.Sprite {
         }
         //设置皮肤
         var frameIndex = group[index];
-        this._childView.skin = this._fullPath + frameIndex + ".png";
+        this._childView.setSkin(this._fullPath + frameIndex + ".png");
         if (offset) {
             var posArr = offset[frameIndex];
             if (posArr) {

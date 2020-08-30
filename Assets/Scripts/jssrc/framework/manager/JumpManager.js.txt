@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserInfo_1 = require("../common/UserInfo");
-const TimerManager_1 = require("./TimerManager");
 const JumpConst_1 = require("../../game/sys/consts/JumpConst");
 const GlobalParamsFunc_1 = require("../../game/sys/func/GlobalParamsFunc");
 const Global_1 = require("../../utils/Global");
@@ -11,20 +10,13 @@ const GameConsts_1 = require("../../game/sys/consts/GameConsts");
 const HttpMessage_1 = require("../common/HttpMessage");
 const Client_1 = require("../common/kakura/Client");
 const WindowManager_1 = require("./WindowManager");
-const ScreenAdapterTools_1 = require("../utils/ScreenAdapterTools");
-const LoadManager_1 = require("./LoadManager");
-const ResultJumpUI_1 = require("../../game/sys/view/jump/ResultJumpUI");
 const Message_1 = require("../common/Message");
 const JumpEvent_1 = require("../event/JumpEvent");
-const ButtonUtils_1 = require("../utils/ButtonUtils");
-const ResourceConst_1 = require("../../game/sys/consts/ResourceConst");
 const AdResponse_1 = require("../platform/AdResponse");
 const GameUtils_1 = require("../../utils/GameUtils");
 const JumpFunc_1 = require("../func/JumpFunc");
 const KariqiShareManager_1 = require("./KariqiShareManager");
 const WindowCommonCfgs_1 = require("../consts/WindowCommonCfgs");
-const JumpCommonConst_1 = require("../consts/JumpCommonConst");
-const ResultJumpDoubleUI_1 = require("../../game/sys/view/jump/ResultJumpDoubleUI");
 const SingleCommonServer_1 = require("../server/SingleCommonServer");
 const FullJumpFunc_1 = require("../func/FullJumpFunc");
 const JumpCommonModel_1 = require("../model/JumpCommonModel");
@@ -510,46 +502,6 @@ class JumpManager {
             WindowManager_1.default.OpenUI(WindowCommonCfgs_1.default.MainJumpKariquView);
         }
     }
-    /**
-     * 添加互推条
-     * extraData = {
-     *  posX:
-     *  posY:
-     *  scale:UI的缩放
-     *  isDouble:是多排还是单排
-     *  from:互推界面
-     * }
-     */
-    static addJumpUI(parent, extraData = {}, param = {}) {
-        if (!param.uiType) {
-            param.uiType = JumpCommonConst_1.default.JUMP_LIST_SOFT_UI;
-        }
-        if (!this.checkShow())
-            return;
-        var jumpData;
-        extraData.type = JumpConst_1.default.JUMP_TYPE_JIESUAN;
-        if (param.uiType != JumpCommonConst_1.default.JUMP_LIST_SOLID_UI) {
-            jumpData = this.getMokaDataByType(JumpConst_1.default.JUMP_TYPE_JIESUAN);
-        }
-        else {
-            jumpData = this.getSolidJumpData();
-        }
-        if (jumpData.length <= 0)
-            return;
-        var cfgs = WindowManager_1.default.getWindowCfgs(WindowCommonCfgs_1.default.ResultJumpView);
-        var res = cfgs.group;
-        var subpackage = cfgs.subPackage;
-        var resAll = [];
-        LogsManager_1.default.echo("extraData.from---------------", extraData.from);
-        var tempFunc = () => {
-            this.initJumpUI(parent, jumpData, extraData, param);
-        };
-        if (extraData.isDouble) {
-            var cfgs = WindowManager_1.default.getWindowCfgs(WindowCommonCfgs_1.default.ResultJumpDoubleView);
-            res = res.concat(cfgs.group);
-        }
-        LoadManager_1.LoadManager.instance.loadPacgeAndRes(subpackage, res, Laya.Handler.create(this, tempFunc));
-    }
     /**获取静互推刷新数据 */
     static getSolidJumpData() {
         if (!this.data)
@@ -572,18 +524,6 @@ class JumpManager {
     }
     /**初始化结算的互推，四个结算界面都用这个 */
     static initJumpUI(parent, jumpData, extraData, param) {
-        var from = extraData.from;
-        var jumpUIName = this.jumpUIName;
-        if (extraData.isDouble) {
-            jumpUIName = this.jumpDoubleUIName;
-        }
-        LogsManager_1.default.echo("extraData.from1---------------", from);
-        var jumpUI = this.getJumpUIIns(jumpData, extraData, param);
-        parent.addChild(jumpUI);
-        jumpUI.name = jumpUIName;
-        jumpUI.scaleX = jumpUI.scaleY = (extraData.scale != undefined) ? extraData.scale : 1;
-        jumpUI.x = (extraData.posX != undefined) ? extraData.posX : (extraData.isDouble ? 43 : 25);
-        jumpUI.y = (extraData.posY != undefined) ? extraData.posY : (120 + ScreenAdapterTools_1.default.toolBarWidth);
     }
     /**移除互推UI */
     static removeJumpUI(parent, isDouble = false) {
@@ -593,7 +533,7 @@ class JumpManager {
         }
         var jumpUI = parent.getChildByName(jumpUIName);
         if (jumpUI) {
-            parent.removeChild(jumpUI);
+            jumpUI.removeSelf();
             jumpUI.clearMoveLoop();
             if (isDouble) {
                 this.jumpDoubleUIs.push(jumpUI);
@@ -605,35 +545,6 @@ class JumpManager {
     }
     /**获取结算互推UI */
     static getJumpUIIns(data, extraData, param) {
-        LogsManager_1.default.echo("extraData.from2-------------", extraData.from);
-        if (extraData.isDouble) {
-            if (this.jumpDoubleUIs.length > 0) {
-                var item = this.jumpDoubleUIs.shift();
-                item.setFrom(extraData.from);
-                item.initData(data, false);
-                item.setJumpParam && item.setJumpParam(param);
-                return item;
-            }
-            LogsManager_1.default.echo("yrc new ResultJumpDoubleUI");
-            var ui2 = new ResultJumpDoubleUI_1.default(data, 90, false, extraData);
-            ui2.initData(data, false);
-            return ui2;
-        }
-        else {
-            if (this.jumpUIs.length > 0) {
-                var item = this.jumpUIs.shift();
-                item.setFrom(extraData.from);
-                item.initData(data);
-                item.setJumpParam && item.setJumpParam(param);
-                return item;
-            }
-            else {
-                LogsManager_1.default.echo("yrc new ResultJumpUI");
-                var ui = new ResultJumpUI_1.default(data, extraData, param);
-                ui.initData(data);
-                return ui;
-            }
-        }
     }
     /**停止结算界面的定时器 */
     static stopResultMove() {
@@ -706,61 +617,6 @@ class JumpManager {
      * type:展示类型
      */
     static addMainJump(parent, jumpPos, posArr = [], isNeedSign = false, isShowBg = false, mutualType = null, isShowName = false, txtSize = 15, txtcolor = "ffffff", isShowLableBg = false, signWidth = 0, signHeight = 0, bgextraWidth = 0, isNeedRemove = true, isNeedOpenJumpUI = false) {
-        if (isNeedRemove) {
-            //是否需要移除之前的 用于在不同界面加时，初始化另一界面时旧界面的删除
-            this.removeMainJump();
-            this.mainJumpItems = [];
-        }
-        if (!this.data) {
-            return;
-        }
-        var length = this.data.length;
-        this.curGroup = [];
-        for (var i = 0; i < length; i++) {
-            // 由于data会删除。所以不能记录i。需要记录
-            this.curGroup.push(this.data[i].GameIndex);
-        }
-        //目前往右上角只添加一个icon
-        for (var i = 0; i < posArr.length; i++) {
-            var jumpData;
-            var posItem = posArr[i];
-            var tempMutualType = posItem.mutualType ? posItem.mutualType : mutualType;
-            if (KariqiShareManager_1.default.checkIsKariquChannel()) {
-                jumpData = this.getOneRandomJump(tempMutualType);
-            }
-            else {
-                jumpData = this.getRandomJump(this.curGroup);
-            }
-            if (jumpData) {
-                posItem.width = posItem.width ? posItem.width : 93;
-                var extraData = { from: jumpPos };
-                if (isNeedOpenJumpUI) {
-                    extraData["callBack"] = JumpManager.openJumpListUI;
-                }
-                var mainJumpItem = this.createJumpItem(jumpData, posItem.width, posItem.width, extraData, isNeedSign, JumpConst_1.default.JUMP_ANI_STYLE_1, isShowName, txtSize, txtcolor, isShowLableBg, signWidth, signHeight, isShowBg, bgextraWidth);
-                mainJumpItem.x = posItem.x;
-                mainJumpItem.y = posItem.y;
-                mainJumpItem.anchorX = 0.5;
-                mainJumpItem.anchorY = 0.5;
-                // 互推信息
-                mainJumpItem["__jumpData"] = jumpData;
-                // 互推类型
-                mainJumpItem["__mutualType"] = tempMutualType;
-                // 图标添加舞台回调，播放动画
-                mainJumpItem["__addStageCallback"] = function () {
-                    JumpManager.startMainJumpTween(this);
-                };
-                // 图标移除舞台回调
-                mainJumpItem["__removeStageCallback"] = function () {
-                    JumpManager.stopMainJumpTween(this);
-                };
-                // 添加事件
-                mainJumpItem.on(Laya.Event.DISPLAY, mainJumpItem, mainJumpItem["__addStageCallback"]);
-                mainJumpItem.on(Laya.Event.UNDISPLAY, mainJumpItem, mainJumpItem["__removeStageCallback"]);
-                parent.addChild(mainJumpItem);
-                this.mainJumpItems.push(mainJumpItem);
-            }
-        }
     }
     /**
      * 返回当前需要刷新的items
@@ -769,108 +625,10 @@ class JumpManager {
         return this.mainJumpItems;
     }
     /**
-     * 开始图标动画
-     */
-    static startMainJumpTween(mainJumpItem) {
-        mainJumpItem["__tempTimeCode"] = TimerManager_1.default.instance.setTimeout(this.scaleShake, this, 3000, mainJumpItem);
-    }
-    /**
-     * 暂停图标动画
-     */
-    static stopMainJumpTween(mainJumpItem) {
-        // 重置图标状态
-        mainJumpItem.scaleX = 1;
-        mainJumpItem.scaleY = 1;
-        mainJumpItem.rotation = 0;
-        // 移除延迟函数
-        if (mainJumpItem["__tempTimeCode"]) {
-            TimerManager_1.default.instance.remove(mainJumpItem["__tempTimeCode"]);
-            mainJumpItem["__tempTimeCode"] = null;
-        }
-        // 移除对应的tween动画
-        Laya.Tween.clearAll(mainJumpItem);
-    }
-    /**移除主界面的跳转图标 */
-    static removeMainJump() {
-        for (var i = this.mainJumpItems.length - 1; i >= 0; i--) {
-            var mainJumpItem = this.mainJumpItems[i];
-            if (mainJumpItem) {
-                this.destoreJumpItem(mainJumpItem);
-            }
-        }
-    }
-    static refreshMainJumpImg(mainJumpItem, restart = true) {
-        //如果当前是显示在舞台的才执行
-        if (mainJumpItem.stage) {
-            var img = mainJumpItem.getChildByName("imageIcon");
-            var lastIndex = 0;
-            var jumpData;
-            if (KariqiShareManager_1.default.checkIsKariquChannel()) {
-                jumpData = this.getOneRandomJump(mainJumpItem["__mutualType"]);
-            }
-            else {
-                for (var i = 0; i < this.data.length; i++) {
-                    if (this.data[i].Icon == img.skin) {
-                        lastIndex = this.data[i].GameIndex;
-                        break;
-                    }
-                }
-                if (this.curGroup.indexOf(lastIndex) == -1) {
-                    this.curGroup.push(lastIndex);
-                }
-                else {
-                    LogsManager_1.default.echo("zm.repeat--------------", lastIndex);
-                }
-                jumpData = this.getRandomJump(this.curGroup);
-            }
-            for (var i = 0; i < this.mainJumpItems.length; i++) {
-                if (this.mainJumpItems[i] && this.mainJumpItems[i] == mainJumpItem) {
-                    this.mainJumpItems[i]["__jumpData"] = jumpData;
-                }
-            }
-            var txt = mainJumpItem.getChildByName("imageTxt");
-            if (txt) {
-                txt.text = jumpData.GameName;
-            }
-            img.skin = jumpData.Icon;
-            var lastButtonUtil = img["__lastButtonUtils"];
-            if (lastButtonUtil) {
-                //重置按钮的回调参数
-                var addParam = lastButtonUtil._callBackParam;
-                var newParams = {
-                    jumpData: jumpData,
-                    extraData: addParam.extraData
-                };
-                lastButtonUtil.setCallBackInfo(this.onClickJumpItem, this, newParams);
-            }
-        }
-        if (restart) {
-            this.startMainJumpTween(mainJumpItem);
-        }
-    }
-    /**
      * 晃动图标
      * @param restart 刷新图标后是否重新开始动画
      */
     static scaleShake(mainJumpItem, restart = true) {
-        // 晃动开始 计时器code清除
-        mainJumpItem["__tempTimeCode"] = null;
-        //向左
-        Laya.Tween.to(mainJumpItem, { rotation: -5 }, 300, null, Laya.Handler.create(this, () => {
-            //向右
-            Laya.Tween.to(mainJumpItem, { rotation: 5 }, 600, null, Laya.Handler.create(this, () => {
-                //恢复
-                Laya.Tween.to(mainJumpItem, { rotation: -5 }, 600, null, Laya.Handler.create(this, () => {
-                    //向右
-                    Laya.Tween.to(mainJumpItem, { rotation: 5 }, 600, null, Laya.Handler.create(this, () => {
-                        //恢复
-                        Laya.Tween.to(mainJumpItem, { rotation: 0 }, 300, null, Laya.Handler.create(this, () => {
-                            this.refreshMainJumpImg(mainJumpItem, restart);
-                        }));
-                    }));
-                }));
-            }));
-        }));
     }
     static openJumpListUI(param = null) {
         if (JumpManager.checkShow() && KariqiShareManager_1.default.checkIsKariquChannel()) {
@@ -885,98 +643,7 @@ class JumpManager {
     }
     //封装创建一个JumpItem aniStyle 0表示不动 1表示随机原地晃动 并随机换图标 needRedPoint根据渠道，指色是显示new 或热门 梦佳是红点 指色多一点是否显示文字底  isShowBg图片是否有背景，bgextraWidth额外框
     static createJumpItem(itemData, itemWidth, itemHeight, extraData, needRedPoint = null, aniStyle = 0, isShowName = true, txtSize = 15, txtcolor = "#ffffff", isShowLableBg = false, signWidth = 0, signHeight = 0, isShowBg = false, bgextraWidth = 0, txtOffestY = 0) {
-        var redWidth = 20;
-        var redOffset = 3;
-        var startY = 7;
-        var itemBox = new Laya.Image();
-        itemBox.width = itemWidth + bgextraWidth * 2;
-        itemBox.height = itemHeight + bgextraWidth * 2;
-        //icon背景
-        if (isShowBg) {
-            var itemBg = new Laya.Image(ResourceConst_1.default.JUMP_ITEMBG);
-            itemBg.sizeGrid = "7,7,7,7";
-            itemBg.width = itemWidth + bgextraWidth * 2;
-            itemBg.height = itemHeight + bgextraWidth * 2;
-            itemBox.addChild(itemBg);
-            // itemBg.x = -4;
-            // itemBg.y = -4;
-        }
-        var imgItem = new Laya.Image(itemData.Icon);
-        imgItem.width = itemWidth;
-        imgItem.height = itemHeight;
-        itemBox.addChild(imgItem);
-        imgItem.name = "imageIcon";
-        imgItem.x = bgextraWidth;
-        imgItem.y = bgextraWidth;
-        if (needRedPoint) {
-            if (this.jumpChannel == JumpConst_1.default.JUMP_CHANNEL_ZHISE || KariqiShareManager_1.default.checkIsKariquChannel()) {
-                var sign = new Laya.Image(needRedPoint);
-                itemBox.addChild(sign);
-                sign.width = signWidth;
-                sign.height = signHeight;
-                sign.x = itemWidth + bgextraWidth * 2 - signWidth;
-                sign.y = 0;
-            }
-            else if (this.jumpChannel == JumpConst_1.default.JUMP_CHANNEL_MENGJIA || this.jumpChannel == JumpConst_1.default.JUMP_CHANNEL_FANTASY) {
-                var redImg = new Laya.Image(ResourceConst_1.default.COMMON_REDPOINT);
-                itemBox.addChild(redImg);
-                redImg.width = redImg.height = redWidth;
-                redImg.x = itemWidth + bgextraWidth * 2 - redWidth + redOffset;
-                redImg.y = startY - redOffset;
-            }
-        }
-        //显示文字背景
-        if (isShowLableBg) {
-            if (this.jumpChannel == JumpConst_1.default.JUMP_CHANNEL_ZHISE) {
-                var labelBg = new Laya.Image(this.getZhiseLabelBg());
-                itemBox.addChild(labelBg);
-                labelBg.width = itemWidth + bgextraWidth * 2;
-                labelBg.height = (itemWidth + bgextraWidth * 2) / 3.7;
-                labelBg.x = 0;
-                labelBg.y = itemBox.height;
-            }
-            else if (this.jumpChannel == JumpConst_1.default.JUMP_CHANNEL_KARIQU) {
-                var labelBg = new Laya.Image(this.getZhiseLabelBg(3));
-                itemBox.addChild(labelBg);
-                labelBg.width = itemWidth + bgextraWidth * 2;
-                labelBg.height = (itemWidth + bgextraWidth * 2) / 3.7;
-                labelBg.x = 0;
-                labelBg.y = itemBox.height + txtOffestY;
-            }
-        }
-        if (isShowName) {
-            var nameTxt = new Laya.Label(itemData.GameName);
-            nameTxt.fontSize = txtSize;
-            nameTxt.font = "Microsoft YaHei";
-            itemBox.addChild(nameTxt);
-            if (labelBg) {
-                // 如果有背景，就按背景居中
-                nameTxt.y = labelBg.y;
-                nameTxt.x = 0;
-                nameTxt.height = labelBg.height;
-                nameTxt.width = labelBg.width;
-                nameTxt.valign = "middle";
-            }
-            else {
-                // 如果没有背景固定格式
-                nameTxt.y = itemBox.height + 10 + txtOffestY;
-                nameTxt.x = 3;
-                nameTxt.height = 30;
-                nameTxt.width = itemWidth + bgextraWidth * 2;
-            }
-            nameTxt.align = "center";
-            nameTxt.name = "imageTxt";
-            nameTxt.color = txtcolor;
-            nameTxt.overflow = "hidden";
-        }
-        var sendData = {
-            jumpData: itemData,
-            extraData: extraData
-        };
-        var btnUtil = new ButtonUtils_1.ButtonUtils(imgItem, this.onClickJumpItem, this, null, null, sendData);
-        // 防误触
-        btnUtil.setUnEnableTime(1000);
-        return itemBox;
+        return null;
     }
     //创建一个随机的跳转item
     /**
@@ -994,68 +661,6 @@ class JumpManager {
             return null;
         }
         return this.createJumpItem(jumpData, itemWidth, itemHeight, extraData, needRedPoint, aniStyle);
-    }
-    /**
-     * 随机创建多个不相同的Item，数量不够不补齐
-     */
-    static createManyRandomJumpItem(count, itemWidth, itemHeight, extraData, needRedPoint, aniStyle = 0) {
-        var itemArray = [];
-        if (!this.data) {
-            return itemArray;
-        }
-        var leftIndexArr = [];
-        for (var i = 0; i < this.data.length; i++) {
-            leftIndexArr.push(i);
-        }
-        var jumpData;
-        for (var j = 1; j <= count; j++) {
-            jumpData = this.getRandomJump(leftIndexArr);
-            if (jumpData) {
-                itemArray.push(this.createJumpItem(jumpData, itemWidth, itemHeight, extraData, needRedPoint, aniStyle));
-            }
-        }
-        return itemArray;
-    }
-    //销毁一个跳转的item
-    static destoreJumpItem(itemBox) {
-        // 从parent移除
-        if (itemBox.parent)
-            itemBox.parent.removeChild(itemBox);
-        // 销毁按钮
-        var imageIcon = itemBox.getChildByName("imageIcon");
-        if (imageIcon.__lastButtonUtils) {
-            imageIcon.__lastButtonUtils.destoryButtonUtil();
-            delete imageIcon.__lastButtonUtils;
-        }
-        // 停止动画 不需要手动调用。itemBox 注册了移除舞台的事件会停止动画
-        // JumpManager.stopMainJumpTween(itemBox);
-        // 从实例中删除
-        for (var i = 0; i < this.mainJumpItems.length; i++) {
-            if (itemBox == this.mainJumpItems[i]) {
-                this.mainJumpItems[i] = null;
-            }
-        }
-    }
-    //创建热门item
-    static createHotJumpItem(itemData, itemWidth, itemHeight, extraData, playNums = 1, aniStyle = 0) {
-        var itemBox = this.createJumpItem(itemData, itemWidth, itemHeight, extraData, true, aniStyle);
-        return itemBox;
-    }
-    //点击互推icon
-    static onClickJumpItem(data) {
-        LogsManager_1.default.echo("jumpData----------", data);
-        var jumpData = data.jumpData;
-        data.appId = jumpData.GameAppId;
-        data.path = jumpData.PromoteLink;
-        UserInfo_1.default.platform.jumpToMiniProgram(data);
-        if (KariqiShareManager_1.default.checkIsKariquChannel()) {
-            for (var i = 0; i < this.mainJumpItems.length; i++) {
-                // if (jumpData == this.mainJumpItems[i]["__jumpData"]) {
-                JumpManager.stopMainJumpTween(this.mainJumpItems[i]);
-                this.refreshMainJumpImg(this.mainJumpItems[i]);
-                // }
-            }
-        }
     }
     /**获取指色文本背景色 */
     static getZhiseLabelBg(index = null) {

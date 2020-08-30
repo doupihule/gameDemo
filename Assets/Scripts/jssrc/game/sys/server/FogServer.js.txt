@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const DataResourceFunc_1 = require("../func/DataResourceFunc");
 const FogModel_1 = require("../model/FogModel");
 const SingleCommonServer_1 = require("../../../framework/server/SingleCommonServer");
 const Client_1 = require("../../../framework/common/kakura/Client");
@@ -12,10 +11,9 @@ const FogConst_1 = require("../consts/FogConst");
 const WindowManager_1 = require("../../../framework/manager/WindowManager");
 const WindowCfgs_1 = require("../consts/WindowCfgs");
 const StatisticsManager_1 = require("../manager/StatisticsManager");
-const TaskServer_1 = require("./TaskServer");
-const TaskConditionTrigger_1 = require("../trigger/TaskConditionTrigger");
 const FogPropTrigger_1 = require("../../fog/trigger/FogPropTrigger");
 const UserModel_1 = require("../model/UserModel");
+const DataResourceConst_1 = require("../consts/DataResourceConst");
 /*
 * Author: TODO
 * Date:2020-05-23
@@ -24,22 +22,6 @@ const UserModel_1 = require("../model/UserModel");
 class FogServer {
     /**添加资源 */
     static addSourceCount(data, callBack = null, thisObj = null) {
-        var upData = {};
-        var fog = {};
-        var type = data.type;
-        var count = Number(data.count);
-        if (type == DataResourceFunc_1.DataResourceType.COMP) {
-            fog["comp"] = FogModel_1.default.instance.getCompNum() + count;
-        }
-        else if (type == DataResourceFunc_1.DataResourceType.ACT) {
-            fog["act"] = FogModel_1.default.instance.getActNum() + count;
-        }
-        upData["fog"] = fog;
-        var backData = Client_1.default.instance.doDummyServerBack(null, upData, null);
-        if (callBack) {
-            callBack.call(thisObj, backData);
-        }
-        SingleCommonServer_1.default.startSaveClientData();
     }
     /**初始化格子数据 */
     static initCellInfo(data, callBack = null, thisObj = null, isAsyc = false) {
@@ -496,37 +478,6 @@ class FogServer {
     }
     /**进入下一层 */
     static enterNextLayer(data, callBack = null, thisObj = null) {
-        var deData = {};
-        var upData = {};
-        var dfog = {};
-        dfog["cell"] = 1;
-        dfog["bus"] = {
-            pos: 1
-        };
-        var ufog = {};
-        var layer = FogModel_1.default.instance.getCurLayer() + 1;
-        var allLayer = FogFunc_1.default.instance.getAllLayer();
-        if (layer > allLayer) {
-            layer = allLayer;
-        }
-        var maxLayer = UserModel_1.default.instance.getMaxFogLayer();
-        if (layer > maxLayer) {
-            upData["userExt"] = {
-                maxFogLayer: layer
-            };
-        }
-        ufog["layer"] = layer;
-        deData["fog"] = dfog;
-        upData["fog"] = ufog;
-        var backData = Client_1.default.instance.doDummyServerBack(null, upData, deData);
-        if (callBack) {
-            callBack.call(thisObj, backData);
-        }
-        TaskServer_1.default.updateTaskProcess({
-            logicType: TaskConditionTrigger_1.default.taskCondition_fogHighLayer,
-            count: layer
-        }, null, null, false);
-        SingleCommonServer_1.default.startSaveClientData();
     }
     /**消耗行动力带走角色 */
     static takenRole(data, callBack = null, thisObj = null) {
@@ -622,58 +573,58 @@ class FogServer {
             tempReward = rewardArr[i];
             switch (Number(tempReward[0])) {
                 //钻石
-                case DataResourceFunc_1.DataResourceType.GOLD:
+                case DataResourceConst_1.default.GOLD:
                     totalGold = BigNumUtils_1.default.sum(totalGold, tempReward[1]);
                     break;
-                //金币   
-                case DataResourceFunc_1.DataResourceType.COIN:
+                //金币
+                case DataResourceConst_1.default.COIN:
                     totalCoin = BigNumUtils_1.default.sum(totalCoin, tempReward[1]);
                     break;
-                //迷雾币    
-                case DataResourceFunc_1.DataResourceType.FOGCOIN:
+                //迷雾币
+                case DataResourceConst_1.default.FOGCOIN:
                     totalFogCoin += Number(tempReward[1]);
                     break;
-                //零件    
-                case DataResourceFunc_1.DataResourceType.COMP:
+                //零件
+                case DataResourceConst_1.default.COMP:
                     totalComp += Number(tempReward[1]);
                     break;
-                //行动力   
-                case DataResourceFunc_1.DataResourceType.ACT:
+                //行动力
+                case DataResourceConst_1.default.ACT:
                     totalAct += Number(tempReward[1]);
                     break;
                 //碎片
-                case DataResourceFunc_1.DataResourceType.PIECE:
+                case DataResourceConst_1.default.PIECE:
                     var piece = pieceTab[tempReward[1]] ? pieceTab[tempReward[1]] : 0;
                     pieceTab[tempReward[1]] = piece + Number(tempReward[2]);
                     break;
                 //迷雾街区道具
-                case DataResourceFunc_1.DataResourceType.FOGITEM:
+                case DataResourceConst_1.default.FOGITEM:
                     var propNum = propTab[tempReward[1]] ? propTab[tempReward[1]] : 0;
                     propTab[tempReward[1]] = propNum + Number(tempReward[2]);
                     break;
             }
         }
         if (totalCoin != "0") {
-            reward[DataResourceFunc_1.DataResourceType.COIN] = BigNumUtils_1.default.sum(FogModel_1.default.instance.getFogRewardNum(DataResourceFunc_1.DataResourceType.COIN), totalCoin);
+            reward[DataResourceConst_1.default.COIN] = BigNumUtils_1.default.sum(FogModel_1.default.instance.getFogRewardNum(DataResourceConst_1.default.COIN), totalCoin);
         }
         if (totalGold != "0") {
-            reward[DataResourceFunc_1.DataResourceType.GOLD] = BigNumUtils_1.default.sum(FogModel_1.default.instance.getFogRewardNum(DataResourceFunc_1.DataResourceType.GOLD), totalGold);
+            reward[DataResourceConst_1.default.GOLD] = BigNumUtils_1.default.sum(FogModel_1.default.instance.getFogRewardNum(DataResourceConst_1.default.GOLD), totalGold);
         }
         if (totalFogCoin != 0) {
-            reward[DataResourceFunc_1.DataResourceType.FOGCOIN] = FogModel_1.default.instance.getFogRewardNum(DataResourceFunc_1.DataResourceType.FOGCOIN) + totalFogCoin;
+            reward[DataResourceConst_1.default.FOGCOIN] = FogModel_1.default.instance.getFogRewardNum(DataResourceConst_1.default.FOGCOIN) + totalFogCoin;
         }
         if (totalComp != 0) {
-            reward[DataResourceFunc_1.DataResourceType.COMP] = FogModel_1.default.instance.getFogRewardNum(DataResourceFunc_1.DataResourceType.COMP) + totalComp;
+            reward[DataResourceConst_1.default.COMP] = FogModel_1.default.instance.getFogRewardNum(DataResourceConst_1.default.COMP) + totalComp;
         }
         if (totalAct != 0) {
-            reward[DataResourceFunc_1.DataResourceType.ACT] = FogModel_1.default.instance.getFogRewardNum(DataResourceFunc_1.DataResourceType.ACT) + totalAct;
+            reward[DataResourceConst_1.default.ACT] = FogModel_1.default.instance.getFogRewardNum(DataResourceConst_1.default.ACT) + totalAct;
         }
         if (Object.keys(pieceTab).length != 0) {
             var pieceData = {};
             for (var pieceId in pieceTab) {
-                pieceData[pieceId] = FogModel_1.default.instance.getFogRewardNumById(DataResourceFunc_1.DataResourceType.PIECE, pieceId) + pieceTab[pieceId];
+                pieceData[pieceId] = FogModel_1.default.instance.getFogRewardNumById(DataResourceConst_1.default.PIECE, pieceId) + pieceTab[pieceId];
             }
-            reward[DataResourceFunc_1.DataResourceType.PIECE] = pieceData;
+            reward[DataResourceConst_1.default.PIECE] = pieceData;
         }
         if (Object.keys(propTab).length != 0) {
             var itemData = {};
@@ -681,7 +632,7 @@ class FogServer {
             var num;
             for (var itemId in propTab) {
                 propInfo = FogFunc_1.default.instance.getItemInfo(itemId);
-                num = FogModel_1.default.instance.getFogRewardNumById(DataResourceFunc_1.DataResourceType.FOGITEM, itemId) + propTab[itemId];
+                num = FogModel_1.default.instance.getFogRewardNumById(DataResourceConst_1.default.FOGITEM, itemId) + propTab[itemId];
                 //可升级道具
                 if (propInfo.type == FogPropTrigger_1.default.ITEM_TYPE_CANUP) {
                     if (num > propInfo.maxLevel) {
@@ -693,7 +644,7 @@ class FogServer {
                 //获得局内道具打点
                 StatisticsManager_1.default.ins.onEvent(StatisticsManager_1.default.FOG_ITEM_GET, { "itemId": itemId });
             }
-            reward[DataResourceFunc_1.DataResourceType.FOGITEM] = itemData;
+            reward[DataResourceConst_1.default.FOGITEM] = itemData;
         }
         fog["reward"] = reward;
         upData["fog"] = fog;

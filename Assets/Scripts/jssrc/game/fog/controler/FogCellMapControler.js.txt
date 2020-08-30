@@ -8,14 +8,10 @@ const FogModel_1 = require("../../sys/model/FogModel");
 const FogServer_1 = require("../../sys/server/FogServer");
 const FogEventTrigger_1 = require("../trigger/FogEventTrigger");
 const FogConst_1 = require("../../sys/consts/FogConst");
-const WindowManager_1 = require("../../../framework/manager/WindowManager");
-const WindowCfgs_1 = require("../../sys/consts/WindowCfgs");
 const FogPropTrigger_1 = require("../trigger/FogPropTrigger");
 const FogMistControler_1 = require("./FogMistControler");
 const StatisticsManager_1 = require("../../sys/manager/StatisticsManager");
 const TimerManager_1 = require("../../../framework/manager/TimerManager");
-const TaskServer_1 = require("../../sys/server/TaskServer");
-const TaskConditionTrigger_1 = require("../../sys/trigger/TaskConditionTrigger");
 /**迷雾格子地图控制器 */
 class FogCellMapControler {
     constructor(fogControler) {
@@ -345,20 +341,6 @@ class FogCellMapControler {
     }
     /**显示出口 */
     showExit() {
-        var curlayer = FogModel_1.default.instance.getCurLayer() + 1;
-        var allLayer = FogFunc_1.default.instance.getAllLayer();
-        //到达最后一层了，通关
-        if (curlayer >= allLayer) {
-            TaskServer_1.default.updateTaskProcess({
-                logicType: TaskConditionTrigger_1.default.taskCondition_fogHighLayer,
-                count: allLayer
-            }, null, null, false);
-            FogServer_1.default.setMaxLayer();
-            WindowManager_1.default.OpenUI(WindowCfgs_1.WindowCfgs.FogTipUI, { type: FogConst_1.default.FOG_VIEW_TYPE_PASS_SUCCESS });
-        }
-        else {
-            WindowManager_1.default.OpenUI(WindowCfgs_1.WindowCfgs.FogTipUI, { type: FogConst_1.default.FOG_VIEW_TYPE_NEXTLAYER });
-        }
     }
     //进入下一层
     enterNextLayer() {

@@ -8,6 +8,7 @@ const ChooseTrigger_1 = require("../trigger/ChooseTrigger");
 const SkillActionTrigger_1 = require("../trigger/SkillActionTrigger");
 const BattleLogsManager_1 = require("../../sys/manager/BattleLogsManager");
 const SkillExpandTrigger_1 = require("../trigger/SkillExpandTrigger");
+const VectorTools_1 = require("../../../framework/utils/VectorTools");
 /**
  * 战斗重点aoe对象数据.
  * 主要用来检测aoe敌人
@@ -28,7 +29,7 @@ class BattleAoeData {
             this.chooseTartgetCfg = BattleFunc_1.default.instance.getCfgDatas("Target", String(this.cfgData.target));
         }
         this.effectiveTimes = Number(this.cfgData.effectiveTimes);
-        this._initTargtPos = new Laya.Vector3();
+        this._initTargtPos = VectorTools_1.default.createVec3();
     }
     //更新数据
     setData(skillAction, attacker) {

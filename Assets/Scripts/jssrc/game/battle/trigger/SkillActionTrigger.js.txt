@@ -14,6 +14,7 @@ const BattleLogsManager_1 = require("../../sys/manager/BattleLogsManager");
 const ChooseTrigger_1 = require("./ChooseTrigger");
 const SkillExpandTrigger_1 = require("./SkillExpandTrigger");
 const TableUtils_1 = require("../../../framework/utils/TableUtils");
+const VectorTools_1 = require("../../../framework/utils/VectorTools");
 /**
  * 技能效果生效后做的事
  *
@@ -371,7 +372,7 @@ class SkillActionTrigger {
                 x = info[1] * attacker._viewWay + targetRole.pos.x;
                 z = info[2] + targetRole.pos.z;
             }
-            pointArr.push(new Laya.Vector3(x, 0, z));
+            pointArr.push(VectorTools_1.default.createVec3(x, 0, z));
             expandArr.push(expandParams);
         }
         attacker.moveToGroupPoints(pointArr, 0, null, null, expandArr);

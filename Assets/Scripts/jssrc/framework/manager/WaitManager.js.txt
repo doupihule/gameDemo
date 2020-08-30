@@ -4,6 +4,8 @@ const WaitEntity_1 = require("../entity/WaitEntity");
 const WindowManager_1 = require("./WindowManager");
 const ReqLoadingUI_1 = require("../../game/sys/view/loading/ReqLoadingUI");
 const ScreenAdapterTools_1 = require("../utils/ScreenAdapterTools");
+const TimerManager_1 = require("./TimerManager");
+const Client_1 = require("../common/kakura/Client");
 class WaitManager {
     constructor() {
         this.waitList = [];
@@ -11,9 +13,8 @@ class WaitManager {
         // this.waitTimer = new egret.Timer(1000);
         // this.waitTimer.addEventListener(egret.TimerEvent.TIMER, this.timeCallBack, this);
         this._waitView = new ReqLoadingUI_1.default();
-        this._waitView.width = ScreenAdapterTools_1.default.width;
-        this._waitView.height = ScreenAdapterTools_1.default.height;
-        Laya.timer.loop(1000, this, this.timeCallBack);
+        this._waitView.setSize(ScreenAdapterTools_1.default.width, ScreenAdapterTools_1.default.height);
+        TimerManager_1.default.instance.add(this.timeCallBack, this, 1000);
     }
     static get instance() {
         if (!this._instance) {
@@ -34,11 +35,11 @@ class WaitManager {
             wait = new WaitEntity_1.default();
         }
         wait.cmd = cmd;
-        wait.time = Laya.timer.currTimer;
+        wait.time = Client_1.default.instance.miniserverTime;
         this.waitList.push(wait);
         // WindowManager.OpenUI(WindowCfgs.ReqLoadingUI);
         this.showOrHideWaitView(true);
-        Laya.timer.loop(1000, this, this.timeCallBack);
+        TimerManager_1.default.instance.add(this.timeCallBack, this, 1000);
         // if (!this.waitTimer.running) {
         //     this.waitTimer.start();
         // }
@@ -73,7 +74,7 @@ class WaitManager {
         if (this.waitList.length <= 0) {
             // WindowManager.CloseUI(WindowCfgs.ReqLoadingUI);
             this.showOrHideWaitView(false);
-            Laya.timer.clearAll(this);
+            TimerManager_1.default.instance.removeByCallBack(this, this.timeCallBack);
         }
     }
     /**
@@ -81,7 +82,7 @@ class WaitManager {
      */
     timeCallBack() {
         var len = this.waitList.length;
-        var nowTime = Laya.timer.currTimer;
+        var nowTime = Client_1.default.instance.miniserverTime;
         for (var i = 0; i < len;) {
             if (nowTime - this.waitList[i].time > 20000) {
                 console.log("cmd=" + this.waitList[i].cmd + " request timeout...");
@@ -108,9 +109,7 @@ class WaitManager {
         }
         else {
             this._waitView.visible = false;
-            if (this._waitView.parent) {
-                this._waitView.parent.removeChild(this._waitView);
-            }
+            this._waitView.removeSelf();
         }
     }
 }

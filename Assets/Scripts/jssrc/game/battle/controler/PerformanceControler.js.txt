@@ -7,11 +7,11 @@ const BattleConst_1 = require("../../sys/consts/BattleConst");
 const TableUtils_1 = require("../../../framework/utils/TableUtils");
 const PoolTools_1 = require("../../../framework/utils/PoolTools");
 const BattleDamageLabel_1 = require("../view/BattleDamageLabel");
-const DataResourceFunc_1 = require("../../sys/func/DataResourceFunc");
-const TimerManager_1 = require("../../../framework/manager/TimerManager");
 const BattleLogsManager_1 = require("../../sys/manager/BattleLogsManager");
 const SkeletonExpand_1 = require("../../../framework/viewcomp/SkeletonExpand");
 const GameConsts_1 = require("../../sys/consts/GameConsts");
+const ViewTools_1 = require("../../../framework/components/ViewTools");
+const DataResourceConst_1 = require("../../sys/consts/DataResourceConst");
 /**
  * 战斗表现控制器
  * 控制获得金币效果
@@ -31,13 +31,12 @@ class PerformanceControler {
         };
         this.controler = controler;
         this._effectCacheMap = {};
-        this.blackScreen = new Laya.Image(ResourceConst_1.default.COMMON_IMAGE_HEIDI);
+        this.blackScreen = ViewTools_1.default.createImage(ResourceConst_1.default.COMMON_IMAGE_HEIDI);
         this.blackScreen.alpha = 1;
-        this.blackScreen.width = ScreenAdapterTools_1.default.maxWidth * 2;
-        this.blackScreen.height = ScreenAdapterTools_1.default.maxHeight * 2;
+        this.blackScreen.setSize(ScreenAdapterTools_1.default.maxWidth * 2, ScreenAdapterTools_1.default.maxHeight * 2);
         this.blackScreen.x = -ScreenAdapterTools_1.default.UIOffsetX - 300;
         this.blackScreen.y = -ScreenAdapterTools_1.default.UIOffsetY - 300;
-        this.blackScreen.zOrder = BattleFunc_1.default.zorder_blackScreen;
+        this.blackScreen.setZorder(BattleFunc_1.default.zorder_blackScreen);
         this.blackScreen.visible = false;
     }
     //-------------------------特效缓存模块---------------------------------------------
@@ -205,45 +204,6 @@ class PerformanceControler {
      */
     flyResourceAnimation(resId, fromx, fromy, value, delayFrame = 0, fromCtn = null) {
         BattleLogsManager_1.default.battleEcho("获得资源:", resId, "value:", value);
-        //获取金币icon
-        var iconPath = DataResourceFunc_1.default.instance.getIconById(resId);
-        var cacheItem = PoolTools_1.default.getItem(iconPath);
-        if (!cacheItem) {
-            cacheItem = new Laya.Image(iconPath);
-            cacheItem["_cacheParams"] = {};
-        }
-        var resPos = PerformanceControler._resourcePointCache[resId];
-        if (!resPos) {
-            resPos = new Laya.Point(35, 35);
-            PerformanceControler._resourcePointCache[resId] = resPos;
-        }
-        var group = this.controler.battleUI.ui.group_player;
-        //把自身坐标转化为相对坐标
-        var tempPos = PerformanceControler._tempPos;
-        tempPos.x = fromx;
-        tempPos.y = fromy;
-        if (!fromCtn) {
-            fromCtn = this.controler.layerControler.a22;
-        }
-        fromCtn.localToGlobal(tempPos);
-        cacheItem.name = iconPath;
-        group.globalToLocal(tempPos);
-        cacheItem.pos(tempPos.x, tempPos.y, true);
-        group.addChild(cacheItem);
-        var tweenParams = cacheItem["_cacheParams"];
-        tweenParams.x = resPos.x;
-        tweenParams.y = resPos.y;
-        //存储临时变量
-        tweenParams._tempValue = value;
-        tweenParams._tempType = resId;
-        //做缓动
-        if (delayFrame) {
-            TimerManager_1.default.instance.add(this.delayFlyItem, this, delayFrame * 1000 / 60, 1, false, [cacheItem]);
-        }
-        else {
-            TimerManager_1.default.instance.add(this.delayFlyItem, this, 10, 1, false, [cacheItem]);
-            // this.delayFlyItem(cacheItem);
-        }
     }
     delayFlyItem(cacheItem) {
         this.controler.tweenControler.setTweenByView(45, cacheItem, cacheItem["_cacheParams"], BattleConst_1.default.TWEEN_MOVE, this.onItemTweenEnd, this, cacheItem);
@@ -278,9 +238,9 @@ PerformanceControler._effectLabelCache = {
 //--------------------------------------------------------------------------------------------------------------
 //资源坐标缓存
 PerformanceControler._resourcePointCache = {
-    [DataResourceFunc_1.DataResourceType.COIN]: new Laya.Point(90, 10),
-    [DataResourceFunc_1.DataResourceType.GOLD]: new Laya.Point(254, 10),
-    [DataResourceFunc_1.DataResourceType.SP]: new Laya.Point(35, 35),
+    [DataResourceConst_1.default.COIN]: { x: 90, y: 10 },
+    [DataResourceConst_1.default.GOLD]: { x: 254, y: 10 },
+    [DataResourceConst_1.default.SP]: { x: 35, y: 35 }
 };
-PerformanceControler._tempPos = new Laya.Point();
+PerformanceControler._tempPos = { x: 0, y: 0 };
 //# sourceMappingURL=PerformanceControler.js.map

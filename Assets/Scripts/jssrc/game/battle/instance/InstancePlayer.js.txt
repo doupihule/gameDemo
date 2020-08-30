@@ -13,7 +13,7 @@ const ShareOrTvManager_1 = require("../../../framework/manager/ShareOrTvManager"
 const ShareTvOrderFunc_1 = require("../../sys/func/ShareTvOrderFunc");
 const WindowCfgs_1 = require("../../sys/consts/WindowCfgs");
 const UserModel_1 = require("../../sys/model/UserModel");
-const StatisticsManager_1 = require("../../sys/manager/StatisticsManager");
+const ViewTools_1 = require("../../../framework/components/ViewTools");
 //主角  控制超级武器的
 class InstancePlayer extends InstanceHero_1.default {
     constructor(controler) {
@@ -87,38 +87,31 @@ class InstancePlayer extends InstanceHero_1.default {
         for (var i = 0; i < this.skillArr.length; i++) {
             var item = this.skillArr[i];
             var skillInfo = BattleFunc_1.default.instance.getCfgDatas("Skill", item);
-            var img = new Laya.Image();
-            img.skin = "uisource/skill/skill/" + skillInfo.pic + ".png";
-            img.width = img.height = 92;
+            var img = ViewTools_1.default.createImage();
+            img.setSkin("uisource/skill/skill/" + skillInfo.pic + ".png");
+            img.setSize(92, 92);
             img.x = -i * (img.width + 10);
             this.skillParnet.addChild(img);
-            var mask = new Laya.Image("uisource/battle/battle/battle_image_jiangli.png");
-            mask.width = mask.height = 92;
-            mask.sizeGrid = "13,13,13,13";
+            var mask = ViewTools_1.default.createImage("uisource/battle/battle/battle_image_jiangli.png");
+            mask.setSize(92, 92);
+            mask.setSizeGrid(13, 13, 13, 13);
             mask.name = "mask";
             img.addChild(mask);
             //如果是免cd 的 显示视频按钮
             if (this.noCd) {
-                var freeImg = new Laya.Image();
-                freeImg.skin = ShareOrTvManager_1.default.instance.getFreeImgSkin(this.freeType);
-                freeImg.anchorX = 0.5;
-                freeImg.anchorY = 0.5;
+                var freeImg = ViewTools_1.default.createImage();
+                freeImg.setSkin(ShareOrTvManager_1.default.instance.getFreeImgSkin(this.freeType));
+                freeImg.setAnchor(0.5, 0.5);
                 freeImg.x = img.width / 2;
                 freeImg.y = img.height / 2;
                 freeImg.name = "freeImg";
                 img.addChild(freeImg);
             }
             else {
-                var timeTxt = new Laya.Label();
-                timeTxt.width = 92;
-                timeTxt.height = 49;
+                var timeTxt = ViewTools_1.default.createLabel("", 92, 49, 36);
                 timeTxt.y = 25;
-                timeTxt.font = "Microsoft YaHei";
-                timeTxt.fontSize = 36;
-                timeTxt.valign = "middle";
-                timeTxt.align = "center";
                 timeTxt.name = "timeTxt";
-                timeTxt.color = "#ffffff";
+                timeTxt.setColor(0xff, 0xff, 0xff);
                 timeTxt.text = Math.ceil(this.normalSkills[i].leftSkillCd / GameConsts_1.default.gameFrameRate) + "";
                 img.addChild(timeTxt);
             }
@@ -137,10 +130,6 @@ class InstancePlayer extends InstanceHero_1.default {
         if (this.useSkillGroup[id]) {
             mask.visible = true;
             freeImg.visible = true;
-            StatisticsManager_1.default.ins.onEvent(StatisticsManager_1.default.SHOWTV_LEVELSKILL_SHOW, {
-                id: this.controler.battleData.levelId,
-                skillId: id
-            });
         }
         else {
             mask.visible = false;

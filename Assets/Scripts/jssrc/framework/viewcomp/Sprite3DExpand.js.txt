@@ -1,39 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ResourceManager_1 = require("../manager/ResourceManager");
-const LogsManager_1 = require("../manager/LogsManager");
+const BaseViewExpand_1 = require("../components/BaseViewExpand");
 //动态的3dsprite扩展.  对于一些不需要操作子对象的3d模型来说.这个方法很适合. 非阻塞的创建3d模型
-class Sprite3DExpand extends Laya.Sprite3D {
-    constructor(name) {
-        super(name);
+class Sprite3DExpand extends BaseViewExpand_1.default {
+    constructor() {
+        super();
         this._childMap = [];
     }
     //开始加载model
     startLoadModel(modelName, completeFunc = null, thisObj = null, args = null) {
         this.modelName = modelName;
         if (completeFunc) {
-            this._onCompleteBack = new Laya.Handler(thisObj, completeFunc, args);
+            this._onCompleteBack = completeFunc;
         }
         ResourceManager_1.default.load3dmodel(modelName, false, this.onLoadComplete, this);
     }
     //给一个子对象赋一个包含路径的全名.applyfullname;
     applyChildFullName(view, path = "") {
-        if (path == "") {
-            view["__fullName"] = view.name;
-        }
-        else {
-            view["__fullName"] = path + "." + view.name;
-        }
-        path = view["__fullName"];
-        //根据fullname存储view
-        if (this._childMap[path]) {
-            LogsManager_1.default.errorTag("viewError", "这个对象同层级有对象重名了,路径:", path, "模型:", this.modelName);
-        }
-        this._childMap[path] = view;
-        for (var i = 0; i < view.numChildren; i++) {
-            var child = view.getChildAt(i);
-            this.applyChildFullName(child, path);
-        }
     }
     //获取子对象.根据全路径 必须要等加载完成之后才能获取.否则为空
     getChildViewByFullName(fullname) {
@@ -43,14 +27,10 @@ class Sprite3DExpand extends Laya.Sprite3D {
     onLoadComplete() {
         this.currentView = ResourceManager_1.default.get3dmodelRes(this.modelName, false, true);
         this.addChild(this.currentView);
-        //给子对象赋值全名 第一层子对象 path为空
-        for (var i = 0; i < this.currentView.numChildren; i++) {
-            this.applyChildFullName(this.currentView.getChildAt(i), "");
-        }
         this.showChildView();
         this.doExpandOnShow();
         if (this._onCompleteBack) {
-            this._onCompleteBack.run();
+            this._onCompleteBack();
             this._onCompleteBack = null;
         }
     }

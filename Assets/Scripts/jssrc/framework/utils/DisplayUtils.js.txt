@@ -1,101 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ScreenAdapterTools_1 = require("./ScreenAdapterTools");
-const GameConsts_1 = require("../../game/sys/consts/GameConsts");
-const Sprite3DExpand_1 = require("../viewcomp/Sprite3DExpand");
 const SkeletonExpand_1 = require("../viewcomp/SkeletonExpand");
-const ResourceManager_1 = require("../manager/ResourceManager");
 const SpriteFrameExpand_1 = require("../viewcomp/SpriteFrameExpand");
 class DisplayUtils {
-    static swapChildrenAt(parent, index1, index2) {
-        var child1 = parent.getChildAt(index1);
-        var child2 = parent.getChildAt(index2);
-        parent.setChildIndex(child1, index2);
-        parent.setChildIndex(child2, index1);
-    }
     /**传入资源url以及父物体获取当前加载对象，并添加摄像机 */
     static getModelByUrl(url, parentObj, isClone = false) {
-        var goal;
-        if (isClone) {
-            goal = Laya.loader.getRes(url).clone();
-        }
-        else {
-            goal = Laya.loader.getRes(url);
-        }
-        ResourceManager_1.default.checkParticalRendeMode(goal, url);
-        var camera;
-        camera = goal.getChildByName("main_camera");
-        var extraAdd = 0;
-        camera.orthographic = true;
-        camera.orthographicVerticalSize = 2;
-        var x = (ScreenAdapterTools_1.default.UIOffsetX + ScreenAdapterTools_1.default.sceneOffsetX) * Laya.stage.clientScaleX;
-        var y = (ScreenAdapterTools_1.default.UIOffsetY + ScreenAdapterTools_1.default.sceneOffsetY) * Laya.stage.clientScaleY;
-        camera.viewport = new Laya.Viewport(x, y, ScreenAdapterTools_1.default.designWidth * Laya.stage.clientScaleX, ScreenAdapterTools_1.default.designHeight * Laya.stage.clientScaleY);
-        parentObj.addChild(camera);
-        camera.clearFlag = Laya.BaseCamera.CLEARFLAG_DEPTHONLY;
-        return goal;
+        return null;
     }
     static adjustLabelPos() {
     }
     //创建一个摄像机
     static createCamera(clearFlag = 2) {
-        var camera = new Laya.Camera();
-        var sx = Laya.stage.clientScaleX;
-        var sy = Laya.stage.clientScaleY;
-        camera.viewport = new Laya.Viewport((ScreenAdapterTools_1.default.UIOffsetX + ScreenAdapterTools_1.default.sceneOffsetX) * sx, ScreenAdapterTools_1.default.UIOffsetY * sy, ScreenAdapterTools_1.default.designWidth * sx, ScreenAdapterTools_1.default.designHeight * sy);
-        camera.clearFlag = clearFlag;
-        return camera;
+        return null;
     }
     //创建3D场景 是否启用带物理引擎的scene
     static createScene3D(usePhysics = false) {
         var scene;
-        if (!usePhysics && GameConsts_1.default.isUsePhysics) {
-            Laya3D["_enbalePhysics"] = false;
-            scene = new Laya.Scene3D();
-            Laya3D["_enbalePhysics"] = true;
-        }
-        else {
-            scene = new Laya.Scene3D();
-        }
         return scene;
-    }
-    //设置一个模型所有子对象的renderquene
-    static setViewRenderQuene(view, value) {
-        var a = view;
-        var b = view;
-        if (a.meshRenderer && a.meshRenderer.material) {
-            a.meshRenderer.material.renderQueue = value;
-        }
-        if (b.skinnedMeshRenderer && b.skinnedMeshRenderer.material) {
-            b.skinnedMeshRenderer.material.renderQueue = value;
-        }
-        for (var i = 0; i < view.numChildren; i++) {
-            var child = view.getChildAt(i);
-            this.setViewRenderQuene(child, value);
-        }
-    }
-    /**
-     *
-     * @param modelName  模型名字 比如role_1; 原则上战斗中不要这样使用. 会降低一定性能.多嵌套一层. 只适合系统层的开发
-     * @param showViewArr 需要显示的子对象名字.默认为空表是全部显示,否则按照传入的数组显示.可以多级显示,["child1.child12", "child2","child3",... ];
-     *  显示会显示某个路径以及这个路径的所有子对象 ,比如 child2 会显示child2以及所有子对象
-     * @param callBack 模型加载成功后的回调.
-     * @param thisObj
-     * @param args 回调附带参数
-     *  返回一个sprite3D对象. 目前是可以非阻塞的进行其他的流程
-     */
-    static createSpriteExpand(modelName, showViewArr = null, callBack = null, thisObj = null, args = null) {
-        var sp = new Sprite3DExpand_1.default(modelName);
-        sp.startLoadModel(modelName, callBack, thisObj, args);
-        sp.setShowViewArr(showViewArr);
-        return sp;
-    }
-    //创建动态特效
-    static createEffectExpand(modelName, showViewArr = null, callBack = null, thisObj = null, args = null) {
     }
     //创建动画扩展 aniName 动画短名,  aniMode 动画模式 0 不支持换装, 1,2支持换装, 原则上只使用1,
     static createSkeletonExpand(aniName, aniMode = 0, completeFunc = null, thisObj = null, expandParams = null) {
-        var ske = new SkeletonExpand_1.default(null, aniMode);
+        var ske = new SkeletonExpand_1.default();
         ske.completeBackFunc = completeFunc;
         ske.completeThisObj = thisObj;
         ske.completeExpandParams = expandParams;
@@ -127,7 +52,7 @@ class DisplayUtils {
             0, 0, b, 0, offb,
             0, 0, 0, a, offa,
         ];
-        view.filters = [new Laya.ColorFilter(matrixArr)];
+        // view.filters = [new Laya.ColorFilter(matrixArr)];
     }
     //设置颜色 滤镜效果
     static setViewMatrixFilter(view, r1, r2, r3, r4, offr, g1, g2, g3, g4, offg, b1, b2, b3, b4, offb, a1, a2, a3, a4, offa) {
@@ -137,15 +62,14 @@ class DisplayUtils {
             b1, b2, b3, b4, offb,
             a1, a2, a3, a4, offa,
         ];
-        view.filters = [new Laya.ColorFilter(matrixArr)];
+        // view.filters = [new Laya.ColorFilter(matrixArr)];
     }
     //设置颜色滤镜 根据矩阵数组. 这个是为了节省内存. 防止有大量数组创建
     static setViewMatrixByMatirx(view, matrix) {
-        view.filters = [new Laya.ColorFilter(matrix)];
     }
     static localToLocalPos(p1Pos, sp1, sp2) {
-        sp1.localToGlobal(p1Pos);
-        sp2.globalToLocal(p1Pos);
+        // sp1.localToGlobal(p1Pos);
+        // sp2.globalToLocal(p1Pos);
         return p1Pos;
     }
     //创建序列帧动画  这个数据结构是最标准的.

@@ -2,6 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const LogsManager_1 = require("../manager/LogsManager");
 const Global_1 = require("../../utils/Global");
+const ViewTools_1 = require("../components/ViewTools");
+const GlobalEnv_1 = require("../engine/GlobalEnv");
 class ScreenAdapterTools {
     //是否是刘海设备
     static isNotchDevice() {
@@ -79,20 +81,16 @@ class ScreenAdapterTools {
             return;
         }
         //创建黑边
-        var image = new Laya.Image("static/global_image_heibian.png");
-        image.anchorX = 1;
-        image.anchorY = 0.5;
-        image.x = this.sceneOffsetX;
-        image.y = this.height / 2 + this.UIOffsetY;
-        Laya.stage.addChild(image);
-        image.zOrder = 10000000;
-        image = new Laya.Image("static/global_image_heibian.png");
-        image.anchorX = 0;
-        image.anchorY = 0.5;
-        image.x = this.sceneOffsetX + this.width;
-        image.y = this.height / 2 + this.UIOffsetY;
-        Laya.stage.addChild(image);
-        image.zOrder = 10000000;
+        var image = ViewTools_1.default.createImage("static/global_image_heibian.png");
+        image.setAnchor(1, 0.5);
+        image.set2dPos(this.sceneOffsetX, this.height / 2 + this.UIOffsetY);
+        GlobalEnv_1.default.uiRoot.addChild(image);
+        image.setZorder(1000000);
+        image = ViewTools_1.default.createImage("static/global_image_heibian.png");
+        image.setAnchor(0, 0.5);
+        image.set2dPos(this.sceneOffsetX + this.width, this.height / 2 + this.UIOffsetY);
+        GlobalEnv_1.default.uiRoot.addChild(image);
+        image.setZorder(10000000);
     }
     static setPhoneSys(sysInfo) {
         this.windowWidth = sysInfo.windowWidth;

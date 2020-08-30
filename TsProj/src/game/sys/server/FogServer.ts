@@ -1,4 +1,4 @@
-import {DataResourceConst} from "../func/DataResourceFunc";
+
 import FogModel from "../model/FogModel";
 import SingleCommonServer from "../../../framework/server/SingleCommonServer";
 import Client from "../../../framework/common/kakura/Client";
@@ -10,10 +10,9 @@ import FogConst from "../consts/FogConst";
 import WindowManager from "../../../framework/manager/WindowManager";
 import {WindowCfgs} from "../consts/WindowCfgs";
 import StatisticsManager from "../manager/StatisticsManager";
-import TaskServer from "./TaskServer";
-import TaskConditionTrigger from "../trigger/TaskConditionTrigger";
 import FogPropTrigger from "../../fog/trigger/FogPropTrigger";
 import UserModel from "../model/UserModel";
+import DataResourceConst from "../consts/DataResourceConst";
 
 /*
 * Author: TODO
@@ -23,22 +22,6 @@ import UserModel from "../model/UserModel";
 export default class FogServer {
     /**添加资源 */
     static addSourceCount(data, callBack = null, thisObj = null) {
-        var upData = {};
-        var fog = {};
-        var type = data.type;
-        var count = Number(data.count);
-        if (type == DataResourceConst.COMP) {
-            fog["comp"] = FogModel.instance.getCompNum() + count;
-        } else if (type == DataResourceConst.ACT) {
-            fog["act"] = FogModel.instance.getActNum() + count;
-        }
-
-        upData["fog"] = fog;
-        var backData = Client.instance.doDummyServerBack(null, upData, null);
-        if (callBack) {
-            callBack.call(thisObj, backData);
-        }
-        SingleCommonServer.startSaveClientData();
 
     }
 
@@ -567,38 +550,7 @@ export default class FogServer {
 
     /**进入下一层 */
     static enterNextLayer(data, callBack = null, thisObj = null) {
-        var deData = {};
-        var upData = {};
-        var dfog = {}
-        dfog["cell"] = 1;
-        dfog["bus"] = {
-            pos: 1
-        };
-        var ufog = {}
-        var layer = FogModel.instance.getCurLayer() + 1;
-        var allLayer = FogFunc.instance.getAllLayer();
-        if (layer > allLayer) {
-            layer = allLayer;
-        }
-        var maxLayer = UserModel.instance.getMaxFogLayer();
-        if (layer > maxLayer) {
-            upData["userExt"] = {
-                maxFogLayer: layer
-            }
-        }
-        ufog["layer"] = layer;
-        deData["fog"] = dfog
-        upData["fog"] = ufog
 
-        var backData = Client.instance.doDummyServerBack(null, upData, deData);
-        if (callBack) {
-            callBack.call(thisObj, backData);
-        }
-        TaskServer.updateTaskProcess({
-            logicType: TaskConditionTrigger.taskCondition_fogHighLayer,
-            count: layer
-        }, null, null, false)
-        SingleCommonServer.startSaveClientData();
     }
 
     /**消耗行动力带走角色 */

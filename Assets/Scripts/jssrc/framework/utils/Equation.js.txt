@@ -173,19 +173,19 @@ class Equation {
             // } else if ( eqObj1.typ == "level" ) {
         }
         else if (eqObj1.a == 0) {
-            p = new Laya.Vector3();
+            p = { x: 0, y: 0, z: 0 };
             p.y = -eqObj1.c;
             p.x = (-eqObj2.c - eqObj2.b * p.y) / eqObj2.a;
             // 1条平行线
             // } else if ( eqObj2.typ == "level" ) {
         }
         else if (eqObj2.a == 0) {
-            p = new Laya.Vector3();
+            p = { x: 0, y: 0, z: 0 };
             p.y = -eqObj2.c;
             p.x = (-eqObj1.c - eqObj1.b * p.y) / eqObj1.a;
         }
         else if (eqObj1.a != 0 && eqObj2.a != 0) {
-            p = new Laya.Vector3();
+            p = { x: 0, y: 0, z: 0 };
             if (eqObj1.b == 0) {
                 p.x = -eqObj1.c;
                 p.y = (-eqObj2.c - eqObj2.a * p.x) / eqObj2.b;
@@ -319,7 +319,7 @@ class Equation {
         //垂线与 已知直线的交点；
         var point1 = this.pointOf(eq, plumb);
         //圆与直线的交点
-        var pointoff = new Laya.Vector3();
+        var pointoff = { x: 0, y: 0, z: 0 };
         pointoff.x = point1.x + length * type * Math.cos(ang);
         pointoff.y = point1.y + length * type * Math.sin(ang);
         return pointoff;
@@ -474,7 +474,7 @@ class Equation {
     //横坐标 纵坐标  旋转角度  true正方向旋转（false反方向旋转）  是数学系里面的坐标旋转
     static ratoteFormulation(nx, ny, ang, boo = true, out = null) {
         if (!out) {
-            out = new Laya.Vector3();
+            out = { x: 0, y: 0, z: 0 };
         }
         var cos = Math.cos(ang);
         var sin = Math.sin(ang);
@@ -498,7 +498,7 @@ class Equation {
     //横坐标 纵坐标  旋转角度  true正方向旋转（false反方向旋转）  是数学系里面的坐标旋转  返回的是x 和z
     static ratoteFormulationXZ(nx, nz, ang, boo = true, out = null) {
         if (!out) {
-            out = new Laya.Vector3();
+            out = { x: 0, y: 0, z: 0 };
         }
         var cos = Math.cos(ang);
         var sin = Math.sin(ang);
@@ -631,7 +631,7 @@ class Equation {
         var ang = this.getRadomFromMinMax(a, a2, -2);
         var xPos = radomR * Math.cos(ang);
         var ypos = radomR * Math.sin(ang);
-        return new Laya.Vector3(xPos, ypos);
+        return { x: xPos, y: ypos };
     }
     //保留小数位										保留多少位
     static getNumByDecimal(num, index = 0) {
@@ -751,11 +751,11 @@ class Equation {
         // ball1.velocity.y = vel0F.y;
         // ball2.velocity.x = vel1F.x;
         // ball2.velocity.y = vel1F.y;
-        return [this.convertToValueAndAngle(new Laya.Vector3(vel0F.x, vel0F.y)), this.convertToValueAndAngle(new Laya.Vector3(vel1F.x, vel1F.y))];
+        return [this.convertToValueAndAngle({ x: vel0F.x, y: vel0F.y }), this.convertToValueAndAngle({ x: vel0F.x, y: vel0F.y })];
     }
     //转化为向量
     static convertToVector(value, angle) {
-        return new Laya.Vector3(value * Math.cos(angle), value * Math.sin(angle));
+        return { x: value * Math.cos(angle), y: value * Math.sin(angle) };
     }
     static convertToValueAndAngle(vector) {
         return [Math.sqrt(vector.x * vector.x + vector.y * vector.y), Math.atan2(vector.y, vector.x)];
@@ -763,7 +763,7 @@ class Equation {
     //旋转坐标
     static rotateCalculate(xpos, ypos, sin, cos, reverse, resultPoint = null) {
         if (!resultPoint) {
-            resultPoint = new Laya.Vector3();
+            resultPoint = { x: 0, y: 0, z: 0 };
         }
         if (reverse) {
             resultPoint.x = ((xpos * cos) + (ypos * sin));

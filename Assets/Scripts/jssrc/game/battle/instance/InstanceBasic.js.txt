@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
+const VectorTools_1 = require("../../../framework/utils/VectorTools");
 /**
  * author:xd
  * 游戏中所有对象的基类. 具备坐标.视图.和刷新 逻辑
@@ -32,11 +33,11 @@ class InstanceBasic {
         this.laterFrameTime = 0;
         //拿到游戏控制器和数据
         this.controler = controler;
-        this.pos = new Laya.Vector3();
+        this.pos = VectorTools_1.default.createVec3();
         InstanceBasic._instanceCount++;
         this.instanceId = InstanceBasic._instanceCount;
-        this.rotation = new Laya.Vector3();
-        this.rotationRad = new Laya.Vector3();
+        this.rotation = VectorTools_1.default.createVec3();
+        this.rotationRad = VectorTools_1.default.createVec3();
     }
     //设置数据
     setData(data) {

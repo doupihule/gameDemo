@@ -4,6 +4,7 @@ exports.BattleLayerControler = void 0;
 const ScreenAdapterTools_1 = require("../../../framework/utils/ScreenAdapterTools");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
+const ViewTools_1 = require("../../../framework/components/ViewTools");
 class BattleLayerControler {
     constructor(controler, rootCtn) {
         this.isInTouch = false;
@@ -15,16 +16,16 @@ class BattleLayerControler {
         this.sceneWidthRate = 1;
         this.controler = controler;
         this.rootCtn = rootCtn;
-        this.a = new Laya.Sprite();
+        this.a = ViewTools_1.default.createContainer();
         this.a.x = ScreenAdapterTools_1.default.UIOffsetX;
         this.a.y = ScreenAdapterTools_1.default.UIOffsetY;
-        this.a1 = new Laya.Sprite();
-        this.a2 = new Laya.Sprite();
-        this.a3 = new Laya.Sprite();
-        this.a2Offset = new Laya.Sprite();
-        this.a21 = new Laya.Sprite();
-        this.a22 = new Laya.Sprite();
-        this.a23 = new Laya.Sprite();
+        this.a1 = ViewTools_1.default.createContainer();
+        this.a2 = ViewTools_1.default.createContainer();
+        this.a3 = ViewTools_1.default.createContainer();
+        this.a2Offset = ViewTools_1.default.createContainer();
+        this.a21 = ViewTools_1.default.createContainer();
+        this.a22 = ViewTools_1.default.createContainer();
+        this.a23 = ViewTools_1.default.createContainer();
         rootCtn.addChild(this.a);
         this.a.addChild(this.a1);
         this.a.addChild(this.a2);

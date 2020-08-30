@@ -7,17 +7,7 @@ const RolesModel_1 = require("../model/RolesModel");
 const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const Client_1 = require("../../../framework/common/kakura/Client");
 const GlobalParamsFunc_1 = require("../func/GlobalParamsFunc");
-const CountsModel_1 = require("../model/CountsModel");
-const ShopModel_1 = require("../model/ShopModel");
 const TalentSkillsModel_1 = require("../model/TalentSkillsModel");
-const SevenDayModel_1 = require("../model/SevenDayModel");
-const DailyGoldModel_1 = require("../model/DailyGoldModel");
-const PiecesModel_1 = require("../model/PiecesModel");
-const FogModel_1 = require("../model/FogModel");
-const ChapterModel_1 = require("../model/ChapterModel");
-const TaskModel_1 = require("../model/TaskModel");
-const ChatInfoModel_1 = require("../model/ChatInfoModel");
-const WorkModel_1 = require("../model/WorkModel");
 //本地模块和服务器数据映射表
 class ModelToServerMap {
     constructor() {
@@ -34,18 +24,7 @@ class ModelToServerMap {
             { key: "switches", model: SwitchModel_1.default },
             { key: "userExt", model: UserExtModel_1.default },
             { key: "roles", model: RolesModel_1.default },
-            // { key: "skills", model: SkillModel },	//roles模块
-            { key: "shops", model: ShopModel_1.default },
-            { key: "work", model: WorkModel_1.default },
-            { key: "counts", model: CountsModel_1.default },
             { key: "talentSkills", model: TalentSkillsModel_1.default },
-            { key: "sign", model: SevenDayModel_1.default },
-            { key: "dailyGold", model: DailyGoldModel_1.default },
-            { key: "pieces", model: PiecesModel_1.default },
-            { key: "fog", model: FogModel_1.default },
-            { key: "chapter", model: ChapterModel_1.default },
-            { key: "tasks", model: TaskModel_1.default },
-            { key: "chatInfo", model: ChatInfoModel_1.default },
         ];
     }
     //根据游戏初始化去构造用户数据 根据游戏初始化构造

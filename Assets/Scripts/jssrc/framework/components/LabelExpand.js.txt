@@ -5,6 +5,21 @@ class LabelExpand extends BaseContainer_1.default {
     constructor(cobj) {
         super(cobj);
     }
+    //设置颜色
+    setColor(r, g, b, a = 255) {
+    }
+    //设置换行模式
+    setWrapStyle(xSyle = 0, yStyle = 1) {
+    }
+    //设置字体
+    setFont(name) {
+    }
+    //设置描边
+    setOutLine(xlen, ylen, r, g, b, a = 255) {
+    }
+    //设置投影
+    setShade(xlen, ylen, r, g, b, a = 255) {
+    }
 }
 exports.default = LabelExpand;
 //# sourceMappingURL=LabelExpand.js.map

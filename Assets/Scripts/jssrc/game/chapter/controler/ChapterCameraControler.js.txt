@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Equation_1 = require("../../../framework/utils/Equation");
 const ScreenAdapterTools_1 = require("../../../framework/utils/ScreenAdapterTools");
 const TimerManager_1 = require("../../../framework/manager/TimerManager");
+const VectorTools_1 = require("../../../framework/utils/VectorTools");
 /**
  * 战斗中的镜头控制器.
  * 控制镜头移动.震屏等
@@ -19,7 +20,7 @@ class ChapterCameraControler {
         this.inControlBg = false;
         this.controler = controler;
         this._halfHeight = ScreenAdapterTools_1.default.designHeight / 2;
-        this.focusPos = new Laya.Vector3(0, 0, 0);
+        this.focusPos = VectorTools_1.default.createVec3(0, 0, 0);
         this.frontPos1 = 0;
     }
     //初始化数据

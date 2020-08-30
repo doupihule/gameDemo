@@ -1,11 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("./LogsManager");
-const FileUtils_1 = require("../utils/FileUtils");
 const UserInfo_1 = require("../common/UserInfo");
 const SoundChannel_1 = require("./SoundChannel");
 const SubPackageManager_1 = require("./SubPackageManager");
-const SubPackageConst_1 = require("../../game/sys/consts/SubPackageConst");
 const TimerManager_1 = require("./TimerManager");
 const MusicConst_1 = require("../../game/sys/consts/MusicConst");
 const PoolTools_1 = require("../utils/PoolTools");
@@ -19,9 +16,7 @@ class SoundManager {
         SoundManager.BGM = "";
         SoundManager.BGS = [];
         SoundManager.ME = "";
-        Laya.SoundManager.autoReleaseSound = false;
         var thisObj = this;
-        Laya.SoundManager.autoStopMusic = true;
         Message_1.default.instance.add(MsgCMD_1.default.GAME_ONSHOW, thisObj);
         Message_1.default.instance.add(MsgCMD_1.default.GAME_ONHIDE, thisObj);
     }
@@ -35,43 +30,6 @@ class SoundManager {
      * @param startTime	声音播放起始时间。
      */
     static playBGM(url, startTime) {
-        LogsManager_1.default.echo("playmusic:", url);
-        if (!url) {
-            return;
-        }
-        if (!url && SoundManager.BGM && SoundManager.BGM != "") {
-            url = SoundManager.BGM;
-        }
-        url = this.getSoundUrl(url);
-        //如果是同一个背景音乐 return
-        if (SoundManager.BGM == url) {
-            return;
-        }
-        SoundManager.BGM = url;
-        if (SoundManager.musicSwitch) {
-            if (FileUtils_1.default.isUserWXSource()) {
-                this.loadSound(url, SoundManager.playNewBGM, SoundManager, [url, 0, null, startTime]);
-            }
-            else {
-                this.loadSound(url, Laya.SoundManager.playMusic, Laya.SoundManager, [url, 0, null, startTime]);
-            }
-        }
-    }
-    /**
-     * 播放循环的背景音效。音效可以同时播放多个。
-     * @param url			声音文件地址,不包含任何路径
-     * @param soundClass	使用哪个声音类进行播放，null表示自动选择。
-     * @param startTime		声音播放起始时间。
-     */
-    static playBGS(url, soundClass, startTime) {
-        if (SoundManager.soundSwitch) {
-            url = this.getSoundUrl(url);
-            // LogsManager.echo("krma. playBGS " + url);
-            this.loadSound(url, SoundManager.playNewSound, SoundManager, [url, 0, null, soundClass, startTime]);
-        }
-        else { //TODO 开关关闭时要存起来吗?
-            // SoundManager.BGS.push(url);
-        }
     }
     //获取声音的url
     static getSoundUrl(sound) {
@@ -112,25 +70,6 @@ class SoundManager {
         return false;
     }
     /**
-     * 播放插入曲。只能存在一个，同时与背景音乐冲突，如果在播放背景音乐或插入曲时调用本方法，会先停止之前的背景音乐和插入曲，再播放该插入曲。
-     * @param url		声音文件地址。
-     * @param complete	声音播放完成回调。
-     * @param startTime	声音播放起始时间。
-     */
-    static playME(url, complete, startTime) {
-        SoundManager.ME = url;
-        url = this.getSoundUrl(url);
-        if (SoundManager.musicSwitch) {
-            // LogsManager.echo("krma. playME " + url);
-            if (FileUtils_1.default.isUserWXSource()) {
-                this.loadSound(url, SoundManager.playNewBGM, SoundManager, [url, 1, null, startTime]);
-            }
-            else {
-                this.loadSound(url, Laya.SoundManager.playMusic, Laya.SoundManager, [url, 1, complete, startTime]);
-            }
-        }
-    }
-    /**
      * 播放音效，默认单次。音效可以同时播放多个。
      * @param url			声音文件地址。
      * @param loops			循环次数,0表示无限循环。
@@ -138,73 +77,16 @@ class SoundManager {
      * @param soundClass	使用哪个声音类进行播放，null表示自动选择。
      * @param startTime		声音播放起始时间。
      */
-    static playSE(url, loops = 1, complete, soundClass, startTime) {
+    static playSE(url, loops = 1) {
         if (SoundManager.soundSwitch) {
             url = this.getSoundUrl(url);
             // LogsManager.echo("krma. playSE " + url);
             // startTime = 0.1;
-            this.loadSound(url, SoundManager.playNewSound, SoundManager, [url, loops, complete, soundClass, startTime]);
+            this.loadSound(url, SoundManager.playNewSound, SoundManager, [url, loops]);
         }
     }
     //加载声音
     static loadSound(url, callBack, thisObj, callParams = null) {
-        if (!FileUtils_1.default.isUserWXSource()) {
-            if (callBack) {
-                callBack.apply(thisObj, callParams);
-            }
-            return;
-        }
-        var formatPath = Laya.URL.formatURL(url);
-        var fileInfo = Laya.MiniFileMgr.getFileInfo(formatPath);
-        if (fileInfo) {
-            // LogsManager.echo("__这个声音是缓存:",url)
-            if (callBack) {
-                callBack.apply(thisObj, callParams);
-            }
-            return;
-        }
-        //如果声音加载异常 暂时不做播放了 0是正常
-        var onSoundLoadBack = (issucess) => {
-            // LogsManager.echo("___声音加载完成-",url)
-            if (callBack) {
-                callBack.apply(thisObj, callParams);
-            }
-        };
-        var shortName = this.getSoundShortName(url);
-        var soundStyle = SubPackageManager_1.default.getModelFileStyle(SubPackageConst_1.default.packName_sound);
-        if (soundStyle == SubPackageConst_1.default.PATH_STYLE_SUBPACK) {
-            //如果是baidu. 那么声音作为整包一起下载
-            if (UserInfo_1.default.isBaidu()) {
-                SubPackageManager_1.default.load(SubPackageConst_1.default.packName_sound, onSoundLoadBack, this);
-            }
-            else {
-                SubPackageManager_1.default.loadDynamics(this.getSoundSubPack(shortName), this.getSoundPath(shortName), onSoundLoadBack, this);
-            }
-        }
-        else if (soundStyle == SubPackageConst_1.default.PATH_STYLE_NATIVE) {
-            onSoundLoadBack(false);
-        }
-        else {
-            Laya.MiniFileMgr.downOtherFiles(formatPath, new Laya.Handler(null, onSoundLoadBack), formatPath, true);
-        }
-    }
-    //获取声音的分包 有可能是打组的
-    static getSoundSubPack(shortName) {
-        var groupInfo = SubPackageManager_1.default.getSoundGroupInfo(shortName);
-        if (!groupInfo) {
-            //如果声音是走整包的
-            if (SubPackageConst_1.default.subPackData.sound && SubPackageConst_1.default.subPackData.sound.isWhole) {
-                return SubPackageConst_1.default.packName_sound;
-            }
-            return shortName;
-        }
-        if (SubPackageConst_1.default.subPackData.groupSound) {
-            //如果声音组是走整包
-            if (SubPackageConst_1.default.subPackData.groupSound.isWhole) {
-                return "groupSound";
-            }
-        }
-        return groupInfo.name;
     }
     //获取声音路径
     static getSoundPath(shortName) {
@@ -217,13 +99,6 @@ class SoundManager {
     static stopMusic() {
         SoundManager.BGM = "";
         SoundManager.ME = "";
-        LogsManager_1.default.echo("=============ycn stop music");
-        if (FileUtils_1.default.isUserWXSource()) {
-            SoundManager.stopNewBGM();
-        }
-        else {
-            Laya.SoundManager.stopMusic();
-        }
     }
     static stopAllSound() {
         SoundManager.BGS = "";
@@ -231,22 +106,12 @@ class SoundManager {
         for (var i in this._soundDelayCode) {
             this.clearSoundTimeOut(i);
         }
-        if (FileUtils_1.default.isUserWXSource()) {
-            SoundManager.stopAllNewSound();
-        }
-        else {
-            Laya.SoundManager.stopAllSound();
-        }
+        SoundManager.stopAllNewSound();
     }
     static stopMusicOrSound(url) {
         this.clearSoundTimeOut(url);
         url = this.getSoundUrl(url);
-        if (FileUtils_1.default.isUserWXSource()) {
-            SoundManager.stopNewSound(url);
-        }
-        else {
-            Laya.SoundManager.stopSound(url);
-        }
+        SoundManager.stopNewSound(url);
     }
     /**
      * 设置声音音量。根据参数不同，可以分别设置指定声音（背景音乐或音效）音量或者所有音效（不包括背景音乐）音量。
@@ -255,30 +120,20 @@ class SoundManager {
      */
     static setSoundVol(volume, url) {
         url = this.getSoundUrl(url);
-        if (FileUtils_1.default.isUserWXSource()) {
-            SoundManager.setSoundVolume(volume);
-        }
-        else {
-            Laya.SoundManager.setSoundVolume(volume, url);
-        }
+        SoundManager.setSoundVolume(volume);
     }
     /**
      * 设置背景音乐音量。音量范围从 0（静音）至 1（最大音量）。
      * @param volume	音量。初始值为1。音量范围从 0（静音）至 1（最大音量）。
      */
     static setMusicVol(volume) {
-        if (FileUtils_1.default.isUserWXSource()) {
-            SoundManager._bgvolume = volume;
-            if (this._bgmSoundChannel) {
-                this._bgmSoundChannel.volume = volume;
-            }
-        }
-        else {
-            Laya.SoundManager.setMusicVolume(volume);
+        SoundManager._bgvolume = volume;
+        if (this._bgmSoundChannel) {
+            this._bgmSoundChannel.volume = volume;
         }
     }
     /**播放背景音乐 */
-    static playNewBGM(url, loops, complete, startTime) {
+    static playNewBGM(url, loops) {
         if (!this._bgmSoundChannel) {
             this._bgmSoundChannel = new SoundChannel_1.default();
         }
@@ -296,7 +151,7 @@ class SoundManager {
         }
     }
     /**播放新管理下的音乐 */
-    static playNewSound(url, loops, complete, soundClass, startTime) {
+    static playNewSound(url, loops) {
         var shortName = this.getSoundShortName(url);
         this.clearSoundTimeOut(shortName);
         var soundLength = this.getSoundLength(shortName);
@@ -312,34 +167,15 @@ class SoundManager {
             //指定声音时长后手动停止音效.
             this._soundDelayCode[shortName] = TimerManager_1.default.instance.setTimeout(this.stopNewSound, this, soundLength, url);
         }
-        if (FileUtils_1.default.isUserWXSource()) {
-            var soundChannel = SoundManager.getChannelIns(url);
-            soundChannel.offAll();
-            soundChannel.setData(url, targetLoops, complete, soundClass, startTime);
-            var volume = this._volume;
-            if (this._volumes[url]) {
-                volume = this._volumes[url];
-            }
-            soundChannel.volume = volume;
-            soundChannel.play();
+        var soundChannel = SoundManager.getChannelIns(url);
+        soundChannel.offAll();
+        soundChannel.setData(url, targetLoops);
+        var volume = this._volume;
+        if (this._volumes[url]) {
+            volume = this._volumes[url];
         }
-        else {
-            if (this._soundCountMap[url] == null) {
-                this._soundCountMap[url] = 0;
-            }
-            //10帧之内最多只能有2个同名音效
-            var count = this._soundCountMap[url];
-            if (count >= 2) {
-                return;
-            }
-            // LogsManager.echo("soundurl:"+url,count);
-            this._soundCountMap[url]++;
-            TimerManager_1.default.instance.add(this.delayResumeSoundCount, this, 350, 1, false, [url]);
-            var sound = Laya.SoundManager.playSound(url, targetLoops, complete, soundClass, startTime);
-            if (sound && sound.volume) {
-                sound.volume = this._volume;
-            }
-        }
+        soundChannel.volume = volume;
+        soundChannel.play();
     }
     static delayResumeSoundCount(url) {
         this._soundCountMap[url]--;

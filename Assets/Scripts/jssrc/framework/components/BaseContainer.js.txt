@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseViewExpand_1 = require("./BaseViewExpand");
 class BaseContainer extends BaseViewExpand_1.default {
-    constructor(cobj) {
+    constructor(cobj = null) {
         super();
         if (cobj) {
             this.setCObject(cobj);

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const VectorTools_1 = require("../../../framework/utils/VectorTools");
 class InstanceMoveEntity {
     constructor(target, spd = 0, callFunc = null, thisObj = null, expandParams = null) {
         //按照帧给的速度绝对值,到时会把速度根据运动方向分配给x和y速度.游戏中尽量禁止使用tween动画. 
@@ -14,8 +15,8 @@ class InstanceMoveEntity {
         this.callFunc = callFunc;
         this.thisObj = thisObj;
         this.expandParams = expandParams;
-        this.offsetPos = new Laya.Vector3();
-        this.initSpeed = new Laya.Vector3();
+        this.offsetPos = VectorTools_1.default.createVec3();
+        this.initSpeed = VectorTools_1.default.createVec3();
     }
     //初始化数据
     initData() {

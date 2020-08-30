@@ -3,11 +3,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const BattleConst_1 = require("../../sys/consts/BattleConst");
 const BigNumUtils_1 = require("../../../framework/utils/BigNumUtils");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
+const BaseContainer_1 = require("../../../framework/components/BaseContainer");
+const ViewTools_1 = require("../../../framework/components/ViewTools");
 /**
  * 战斗伤害数字类
  * 超过100000后就按照大数显示
  */
-class BattleDamageLabel extends Laya.Sprite {
+class BattleDamageLabel extends BaseContainer_1.default {
     constructor() {
         super();
         this._childLabels = [];
@@ -27,7 +29,7 @@ class BattleDamageLabel extends Laya.Sprite {
         if (kind == BattleConst_1.default.effect_label_miss) {
             this._headLabel = this.updateLabel("", 0, 0, this._headLabel);
             //miss特殊处理. 居中对其坐标为0
-            this._headLabel.anchorX = 0.5;
+            this._headLabel.setAnchor(0.5, 0.5);
         }
         else {
             if (value < 1) {
@@ -115,19 +117,18 @@ class BattleDamageLabel extends Laya.Sprite {
     //传入key
     updateLabel(key, x, y, label) {
         if (!label) {
-            label = new Laya.Image();
-            label.anchorX = 0;
-            label.anchorY = 0.5;
+            label = ViewTools_1.default.createImage();
+            label.setAnchor(0, 0.5);
             this.addChild(label);
         }
         else {
             label.visible = true;
         }
         if (key == "") {
-            label.skin = this._baseUrl + ".png";
+            label.setSkin(this._baseUrl + ".png");
         }
         else {
-            label.skin = this._baseUrl + "_" + key + ".png";
+            label.setSkin(this._baseUrl + "_" + key + ".png");
         }
         label.x = x;
         label.y = y;

@@ -9,7 +9,6 @@ import InstanceEffect from "../instance/InstanceEffect";
 import TableUtils from "../../../framework/utils/TableUtils";
 import PoolTools from "../../../framework/utils/PoolTools";
 import BattleDamageLabel from "../view/BattleDamageLabel";
-import DataResourceFunc, {DataResourceConst} from "../../sys/func/DataResourceFunc";
 
 import TimerManager from "../../../framework/manager/TimerManager";
 import BattleLogsManager from "../../sys/manager/BattleLogsManager";
@@ -18,6 +17,7 @@ import GameConsts from "../../sys/consts/GameConsts";
 import BaseContainer from "../../../framework/components/BaseContainer";
 import ImageExpand from "../../../framework/components/ImageExpand";
 import ViewTools from "../../../framework/components/ViewTools";
+import DataResourceConst from "../../sys/consts/DataResourceConst";
 
 /**
  * 战斗表现控制器
@@ -256,6 +256,7 @@ export default class PerformanceControler {
 		[DataResourceConst.COIN]: {x:90, y:10},
 		[DataResourceConst.GOLD]: {x:254, y:10},
 		[DataResourceConst.SP]: {x:35, y:35}
+		
 	}
 
 

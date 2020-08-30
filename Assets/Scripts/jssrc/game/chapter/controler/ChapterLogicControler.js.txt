@@ -21,7 +21,6 @@ const Message_1 = require("../../../framework/common/Message");
 const ChapterEvent_1 = require("../../sys/event/ChapterEvent");
 const WindowManager_1 = require("../../../framework/manager/WindowManager");
 const WindowCfgs_1 = require("../../sys/consts/WindowCfgs");
-const TweenAniManager_1 = require("../../sys/manager/TweenAniManager");
 const WindowEvent_1 = require("../../../framework/event/WindowEvent");
 const GuideManager_1 = require("../../sys/manager/GuideManager");
 const GuideConst_1 = require("../../sys/consts/GuideConst");
@@ -56,7 +55,7 @@ class ChapterLogicControler {
         this.chapterMapControler.setData(chapterId);
         this.chapterCameraControler.setData();
         this.startLevel = ChapterFunc_1.default.instance.getUnlockLevelByChapter(this.chapterId);
-        Laya.timer.frameLoop(1, this, this.updateFrame);
+        TimerManager_1.default.instance.registObjUpdate(this.updateFrame, this);
         this.mapOffestY = (this.chapterMapControler.totalMap - this.chapterMapControler.allMapCount) * this.chapterMapControler.itemHeight;
         this.initGame();
     }
@@ -291,46 +290,12 @@ class ChapterLogicControler {
         }
     }
     handAni(img) {
-        if (WindowManager_1.default.getCurrentWindowName() != WindowCfgs_1.WindowCfgs.ChapterMapUI)
-            return;
-        img.x = 90;
-        Laya.Tween.to(img, { x: 100 }, 200, null, Laya.Handler.create(this, () => {
-            Laya.Tween.to(img, { x: 80 }, 200, null, Laya.Handler.create(this, () => {
-                Laya.Tween.to(img, { x: 90 }, 200, null, null);
-            }));
-        }));
     }
     /**宝箱摇晃动画 */
     scaleAni(img) {
-        if (WindowManager_1.default.getCurrentWindowName() != WindowCfgs_1.WindowCfgs.ChapterMapUI)
-            return;
-        TweenAniManager_1.default.instance.scaleQipaoAni(img, 1.2, null, null, false);
     }
     /**当前关卡动画 */
     nowLevelAni(data) {
-        if (WindowManager_1.default.getCurrentWindowName() != WindowCfgs_1.WindowCfgs.ChapterMapUI)
-            return;
-        var x = data.x;
-        var y = data.y;
-        if (!this.curLevelImg) {
-            this.curLevelImg = new Laya.Image("uisource/common/common/common_image_jiantou.png");
-            this.curLevelImg.rotation = 180;
-            this.curLevelImg.anchorX = 0.5;
-            this.chapterLayerControler.a21.addChild(this.curLevelImg);
-        }
-        if (!this.curLevelImg.visible) {
-            this.curLevelImg.visible = true;
-        }
-        Laya.Tween.clearTween(this.curLevelImg);
-        this.curLevelImg.x = x;
-        this.curLevelImg.y = y;
-        Laya.Tween.to(this.curLevelImg, { y: y + 20 }, 200, null, Laya.Handler.create(this, () => {
-            Laya.Tween.to(this.curLevelImg, { y: y }, 200, null, Laya.Handler.create(this, () => {
-                Laya.Tween.to(this.curLevelImg, { y: y - 20 }, 200, null, Laya.Handler.create(this, () => {
-                    Laya.Tween.to(this.curLevelImg, { y: y }, 200);
-                }));
-            }));
-        }));
     }
     //总的追帧刷新函数
     updateFrame() {
@@ -410,7 +375,6 @@ class ChapterLogicControler {
     }
     dispose() {
         //销毁所有对象
-        Laya.timer.clear(this, this.updateFrame);
         //销毁所有对象
         this.destoryInstanceArr(this._allInstanceArr);
         //清空延迟回调

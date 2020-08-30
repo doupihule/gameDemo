@@ -5,8 +5,10 @@ const Global_1 = require("../../../../utils/Global");
 const WindowManager_1 = require("../../../../framework/manager/WindowManager");
 const WindowCfgs_1 = require("../../consts/WindowCfgs");
 const TableUtils_1 = require("../../../../framework/utils/TableUtils");
+const ViewTools_1 = require("../../../../framework/components/ViewTools");
+const UIBaseView_1 = require("../../../../framework/components/UIBaseView");
 ;
-class AlertUILocal extends Laya.View {
+class AlertUILocal extends UIBaseView_1.default {
     constructor() {
         super();
         this._callback = null;
@@ -37,7 +39,7 @@ class AlertUILocal extends Laya.View {
         var contentBgX = (stageWidth - contentBgWidth) / 2;
         var contentBgY = (stageHeight - contentBgHeight) / 2;
         if (this.bgCover == null) {
-            this.bgCover = new Laya.Sprite();
+            this.bgCover = ViewTools_1.default.createContainer();
             var path = [
                 ["moveTo", 0, 0],
                 ["lineTo", stageWidth, 0],
@@ -46,16 +48,13 @@ class AlertUILocal extends Laya.View {
                 ["closePath"] //闭合路径
             ];
             //绘制矩形
-            this.bgCover.graphics.drawPath(0, 0, path, { fillStyle: "#000000" });
-            this.bgCover.alpha = 0.5;
-            this.addChild(this.bgCover);
-            // this.bgCover.on(Laya.Event.CLICK, this, (e: Laya.Event) => {
-            //     e.stopPropagation();
-            // })
+            // this.bgCover.graphics.drawPath(0, 0, path, {fillStyle: "#000000"});
+            // this.bgCover.alpha = 0.5;
+            // this.addChild(this.bgCover);
         }
         if (this.contentBg == null) {
             var splitY = 70;
-            this.contentBg = new Laya.Sprite();
+            this.contentBg = ViewTools_1.default.createContainer();
             var path = [
                 ["moveTo", 0, 0],
                 ["lineTo", contentBgWidth, 0],
@@ -69,36 +68,25 @@ class AlertUILocal extends Laya.View {
                 ["closePath"]
             ];
             //绘制矩形
-            this.contentBg.graphics.drawPath(contentBgX, contentBgY, path, { fillStyle: "#111a1b" }, {
-                "strokeStyle": "#202f30",
-                "lineWidth": "3"
-            });
-            this.addChild(this.contentBg);
+            // this.contentBg.graphics.drawPath(contentBgX, contentBgY, path, {fillStyle: "#111a1b"}, {
+            // 	"strokeStyle": "#202f30",
+            // 	"lineWidth": "3"
+            // });
+            // this.addChild(this.contentBg);
         }
         if (this.titleLab == null) {
-            this.titleLab = new Laya.Text();
-            this.titleLab.x = contentBgX;
-            this.titleLab.y = contentBgY + 15;
-            this.titleLab.width = contentBgWidth;
-            this.titleLab.height = 45;
-            this.titleLab.fontSize = 45;
-            this.titleLab.color = "#b8fff7";
-            this.titleLab.align = "center";
-            this.titleLab.text = "提示";
+            this.titleLab = ViewTools_1.default.createLabel("提示", contentBgWidth, 45, 45);
+            this.titleLab.set2dPos(contentBgX, contentBgY + 15);
+            this.titleLab.setColor(0xb8, 0xff, 0xf7, 0xff);
             this.addChild(this.titleLab);
         }
         if (this.msgLab == null) {
-            this.msgLab = new Laya.Text();
+            this.msgLab = ViewTools_1.default.createLabel("", contentBgWidth - 100, 130, 24);
             this.msgLab.x = contentBgX + 50;
             this.msgLab.y = contentBgY + 75;
-            this.msgLab.width = contentBgWidth - 100;
-            this.msgLab.height = 130;
-            this.msgLab.fontSize = 24;
-            this.msgLab.color = "#ffffff";
-            this.msgLab.align = "center";
-            this.msgLab.valign = "middle";
-            this.msgLab.wordWrap = true;
-            this.msgLab.leading = 10;
+            this.msgLab.set2dPos(contentBgX + 50, contentBgY + 75);
+            this.msgLab.setColor(0xff, 0xff, 0xff, 0xff);
+            this.msgLab.setWrapStyle();
             this.addChild(this.msgLab);
         }
         this.btncenterX = contentBgX + 200;
@@ -113,10 +101,9 @@ class AlertUILocal extends Laya.View {
         WindowManager_1.default.CloseUI(WindowCfgs_1.WindowCfgs.AlertUILocal);
     }
     createBtn(str, func, thisObj, x, y) {
-        var sp = new Laya.Sprite();
-        sp = new Laya.Sprite();
-        sp.width = 166;
-        sp.height = 50;
+        var sp = ViewTools_1.default.createContainer();
+        sp = ViewTools_1.default.createContainer();
+        sp.setSize(166, 50);
         var path = [
             ["moveTo", 0, 0],
             ["lineTo", 166, 0],
@@ -125,24 +112,12 @@ class AlertUILocal extends Laya.View {
             ["closePath"]
         ];
         //绘制矩形
-        sp.graphics.drawPath(0, 0, path, { fillStyle: "#111a1b" }, { "strokeStyle": "#202f30", "lineWidth": "2" });
-        sp.x = x;
-        sp.y = y;
+        // sp.graphics.drawPath(0, 0, path, {fillStyle: "#111a1b"}, {"strokeStyle": "#202f30", "lineWidth": "2"});
+        sp.set2dPos(x, y);
         this.addChild(sp);
-        if (func) {
-            sp.on(Laya.Event.CLICK, thisObj, func);
-        }
-        var label;
-        label = new Laya.Text();
-        label.x = 0;
-        label.y = 10;
-        label.width = 166;
-        label.height = 30;
-        label.fontSize = 30;
-        label.color = "#e1fcf5";
-        label.align = "center";
-        label.valign = "middle";
-        label.text = str;
+        var label = ViewTools_1.default.createLabel(str, 166, 30, 30);
+        this.titleLab.set2dPos(0, 10);
+        label.setColor(0xe1, 0xfc, 0xf5, 0xff);
         sp.addChild(label);
         return sp;
     }

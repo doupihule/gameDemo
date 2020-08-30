@@ -14,6 +14,7 @@ const WindowManager_1 = require("../../../framework/manager/WindowManager");
 const WindowCfgs_1 = require("../../sys/consts/WindowCfgs");
 const UserModel_1 = require("../../sys/model/UserModel");
 const TranslateFunc_1 = require("../../../framework/func/TranslateFunc");
+const ViewTools_1 = require("../../../framework/components/ViewTools");
 /**迷雾格子 */
 class FogInstanceCell extends FogInstanceBasic_1.default {
     constructor(fogControler) {
@@ -24,33 +25,28 @@ class FogInstanceCell extends FogInstanceBasic_1.default {
         this.yIndex = 1;
         //G是当前点到起始点的值
         this.G = 0;
-        this.width = FogFunc_1.default.itemWidth;
-        this.height = FogFunc_1.default.itemHeight;
+        this.setSize(FogFunc_1.default.itemWidth, FogFunc_1.default.itemHeight);
         this.classModel = FogConst_1.default.model_Cell;
     }
     addCtn() {
-        this.eventCtn = new Laya.Image("");
-        this.eventCtn.anchorX = 0.5;
-        this.eventCtn.anchorY = 0.5;
+        this.eventCtn = ViewTools_1.default.createImage("");
+        this.eventCtn.setAnchor(0.5, 0.5);
         this.fogControler.fogLayerControler.a23.addChild(this.eventCtn);
-        this.maskCtn = new Laya.Image("");
-        this.maskCtn.anchorX = 0.5;
-        this.maskCtn.anchorY = 0.5;
+        this.maskCtn = ViewTools_1.default.createImage("");
+        this.maskCtn.setAnchor(0.5, 0.5);
         this.fogControler.fogLayerControler.a24.addChild(this.maskCtn);
         this.maskImg = this.createImage();
         this.lastMaskImg = this.createImage();
         this.maskCtn.addChild(this.maskImg);
         this.maskCtn.addChild(this.lastMaskImg);
-        this.signCtn = new Laya.Image("uisource/expedition/expedition/expedition_image_chahao.png");
-        this.signCtn.anchorX = 0.5;
-        this.signCtn.anchorY = 0.5;
+        this.signCtn = ViewTools_1.default.createImage("uisource/expedition/expedition/expedition_image_chahao.png");
+        this.signCtn.setAnchor(0.5, 0.5);
         this.maskCtn.addChild(this.signCtn);
         this.normalIndex = this.fogControler.fogLayerControler.a23.getChildIndex(this.eventCtn);
     }
     createImage(url = null) {
-        var img = new Laya.Image(url);
-        img.anchorX = 0.5;
-        img.anchorY = 0.5;
+        var img = ViewTools_1.default.createImage(url);
+        img.setAnchor(0.5, 0.5);
         img.scale(130 / 128, 130 / 128, true);
         return img;
     }
@@ -71,7 +67,7 @@ class FogInstanceCell extends FogInstanceBasic_1.default {
         this.maskCtn.x = this.x;
         this.maskCtn.y = this.y;
         this.fogControler.saveCellData(this.mySign, this);
-        this.skin = FogFunc_1.default.instance.getMapImgBySign(this.fogControler.layerCfg.scene, this.xIndex, this.yIndex);
+        this.setSkin(FogFunc_1.default.instance.getMapImgBySign(this.fogControler.layerCfg.scene, this.xIndex, this.yIndex));
         this.refreshFogMist(true);
     }
     //重置寻路信息
@@ -84,7 +80,7 @@ class FogInstanceCell extends FogInstanceBasic_1.default {
         this.myRotate = null;
         this.myData = null;
         this.myData = FogModel_1.default.instance.getCellInfoById(this.mySign);
-        this.eventCtn.skin = "";
+        this.eventCtn.setSkin("");
         if (this.myData) {
             if (Number(this.myData.type) == FogConst_1.default.cellType_Start) {
                 FogFunc_1.default.fogStartCell = this;
@@ -92,7 +88,7 @@ class FogInstanceCell extends FogInstanceBasic_1.default {
             }
             else if (Number(this.myData.type) == FogConst_1.default.cellType_End) {
                 this.initMyRotate();
-                this.eventCtn.skin = FogFunc_1.default.instance.getExitImgByRotate(this.myRotate);
+                this.eventCtn.setSkin(FogFunc_1.default.instance.getExitImgByRotate(this.myRotate));
                 FogFunc_1.default.fogEndCell = this;
                 FogFunc_1.default.fogEndCellSign = this.mySign;
             }
@@ -330,7 +326,7 @@ class FogInstanceCell extends FogInstanceBasic_1.default {
     }
     /**设置格子的层级 */
     setOrder(order) {
-        this.eventCtn.zOrder = order;
+        this.eventCtn.setZorder(order);
         if (order == 0) {
             this.fogControler.fogLayerControler.a23.setChildIndex(this.eventCtn, this.normalIndex);
         }

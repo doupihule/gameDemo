@@ -17,6 +17,7 @@ const ShareFunc_1 = require("../../game/sys/func/ShareFunc");
 const GlobalParamsFunc_1 = require("../../game/sys/func/GlobalParamsFunc");
 const RecordEvent_1 = require("../event/RecordEvent");
 const KariqiShareManager_1 = require("../manager/KariqiShareManager");
+const Client_1 = require("../common/kakura/Client");
 class TTGamePlatform extends WXGamePlatform_1.default {
     constructor() {
         super();
@@ -107,7 +108,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
         LogsManager_1.default.echo(res);
         this._startCallback && this._startCallback.call(this._startThisObj);
         this._startCallback = null;
-        this._recordStartT = Laya.Browser.now();
+        this._recordStartT = Client_1.default.instance.miniserverTime;
         //发送录屏开始事件
         Message_1.default.instance.send(RecordEvent_1.default.TT_RECORD_EVENT_START, this._recordType);
     }
@@ -115,7 +116,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
     onStopRecord(res) {
         LogsManager_1.default.echo("yrc 结束录屏");
         LogsManager_1.default.echo(res);
-        var curT = Laya.Browser.now();
+        var curT = Client_1.default.instance.miniserverTime;
         if (curT - this._recordStartT < 4000) {
             WindowManager_1.default.ShowTip("录屏时间不足，请重新录屏");
             this._recordStartT = 0;

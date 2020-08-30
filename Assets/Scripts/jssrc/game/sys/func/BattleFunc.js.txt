@@ -15,11 +15,11 @@ const ShareTvOrderFunc_1 = require("./ShareTvOrderFunc");
 const WindowManager_1 = require("../../../framework/manager/WindowManager");
 const TranslateFunc_1 = require("../../../framework/func/TranslateFunc");
 const WindowCfgs_1 = require("../consts/WindowCfgs");
-const DataResourceFunc_1 = require("./DataResourceFunc");
 const UserModel_1 = require("../model/UserModel");
 const RolesModel_1 = require("../model/RolesModel");
 const FogFunc_1 = require("./FogFunc");
 const RolesFunc_1 = require("./RolesFunc");
+const DataResourceConst_1 = require("../consts/DataResourceConst");
 class BattleFunc extends BaseFunc_1.default {
     constructor() {
         super();
@@ -265,7 +265,7 @@ class BattleFunc extends BaseFunc_1.default {
                 WindowManager_1.default.ShowTip(TranslateFunc_1.default.instance.getTranslate("#tid_battle_noenoughsp"));
             }
             else {
-                WindowManager_1.default.OpenUI(WindowCfgs_1.WindowCfgs.FreeResourceUI, { type: DataResourceFunc_1.DataResourceType.SP });
+                WindowManager_1.default.OpenUI(WindowCfgs_1.WindowCfgs.FreeResourceUI, { type: DataResourceConst_1.default.SP });
             }
             return true;
         }
@@ -387,7 +387,7 @@ BattleFunc.miniSecondToFrame = 60 / 1000;
 //帧转化成毫秒
 BattleFunc.frameToMiniSecode = 1000 / 60;
 //原点0,0,0 禁止修改
-BattleFunc.originPoint = new Laya.Vector3();
+BattleFunc.originPoint = { x: 0, y: 0, z: 0 };
 //定义一个临时对象.用来存储临时属性的
 BattleFunc.tempObject = {};
 BattleFunc.tempObject2 = {};
@@ -399,11 +399,11 @@ BattleFunc.tempRect2 = { x: 0, y: 0, width: 0, height: 0 };
 //临时的圆
 BattleFunc.tempCircle = { r: 0, x: 0, y: 0 };
 //记录一个临时点 战斗逻辑中间使用的过渡点
-BattleFunc.tempPoint = new Laya.Vector3(0, 0, 0);
-BattleFunc.tempPoint2 = new Laya.Vector3(0, 0, 0);
-BattleFunc.tempPoint3 = new Laya.Vector3(0, 0, 0);
-BattleFunc.tempPoint4 = new Laya.Vector3(0, 0, 0);
-BattleFunc.tempClickPoint = new Laya.Point(0, 0);
+BattleFunc.tempPoint = { x: 0, y: 0, z: 0 };
+BattleFunc.tempPoint2 = { x: 0, y: 0, z: 0 };
+BattleFunc.tempPoint3 = { x: 0, y: 0, z: 0 };
+BattleFunc.tempPoint4 = { x: 0, y: 0, z: 0 };
+BattleFunc.tempClickPoint = { x: 0, y: 0 };
 /**特效不独立 */
 BattleFunc.EFFECT_NOALLOW = 1;
 //空数组 禁止写

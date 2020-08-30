@@ -73,21 +73,9 @@ class KakuraClient {
         if (!this.hasGetUserInfo || !Global_1.default.checkIsSingleMode()) {
             WaitManager_1.default.instance.add(MsgCMD_1.default.ROLL_ANI);
         }
-        //每次连接的时候 先关闭套接字
-        this._websocket = new Laya.Socket();
-        this._websocket.on(Laya.Event.MESSAGE, this, this.onReceiveMessage);
-        this._websocket.on(Laya.Event.OPEN, this, this.onSocketOpen);
-        this._websocket.on(Laya.Event.CLOSE, this, this.onSocketClose);
-        this._websocket.on(Laya.Event.ERROR, this, this.onSocketError);
-        this._websocket.connectByUrl(this._url);
     }
     //销毁连接
     destorySocket() {
-        if (this._websocket) {
-            this._websocket.offAll();
-            this._websocket.close();
-            this._websocket = null;
-        }
         this._webSocketConnet = false;
     }
     /**
@@ -129,23 +117,6 @@ class KakuraClient {
         this.doRequest();
     }
     requestSocket(con) {
-        //添加loading 事件拦截
-        if (con.isWait) {
-            WaitManager_1.default.instance.add(MsgCMD_1.default.ROLL_ANI);
-        }
-        var toSendString = con.toSendString();
-        var packData = KakuraMessage_1.default.instance.addPackage(con.opcode, con.id, con.uniqueId, toSendString);
-        var requestId = con.id;
-        var requestBuffer = "";
-        requestBuffer = packData.uniqueReqId + packData.sendData;
-        var byte = KakuraMessage_1.default.instance.encode(requestBuffer, this._aesKey, packData);
-        LogsManager_1.default.echo("kakura,发出数据:", toSendString, con.id);
-        this._websocket.send(byte.buffer);
-        //心跳请求不添加超时判断
-        if (con.method != KakuraClient.method_heartBeat) {
-            //添加超时判断 暂定20秒超时
-            this._timeCode = TimerManager_1.default.instance.add(this.timerHandler, this, KakuraClient.timeOutMiniSecond, 1);
-        }
     }
     //执行一次请求
     doRequest() {
@@ -239,13 +210,15 @@ class KakuraClient {
         //清除超时定时器
         TimerManager_1.default.instance.remove(that._timeCode);
         this._timeCount = 0;
-        var byte = new Laya.Byte();
-        byte.endian = Laya.Byte.LITTLE_ENDIAN;
-        // that._websocket.readBytes(byte);
-        byte.clear();
-        byte.writeArrayBuffer(evt);
-        byte.pos = 0;
-        var jsonData = KakuraMessage_1.default.instance.decode(this._aesKey, byte);
+        // var byte: Laya.Byte = new Laya.Byte();
+        // byte.endian = Laya.Byte.LITTLE_ENDIAN;
+        // // that._websocket.readBytes(byte);
+        // byte.clear();
+        // byte.writeArrayBuffer(evt);;
+        // byte.pos = 0
+        // var jsonData: any = KakuraMessage.instance.decode(this._aesKey, byte)
+        var jsonData = {};
+        //@xd_test
         //如果是初始化请求
         if (jsonData.result && jsonData.result.initRequestId) {
             if (jsonData.result.aesKey) {

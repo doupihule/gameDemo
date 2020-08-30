@@ -27,7 +27,6 @@ class TimerManager {
          */
         this.updateCallFuncGroup = {};
         this.callFuncNums = 0;
-        Laya.timer.frameLoop(1, this, this.tickHandler);
     }
     static get instance() {
         if (!this._instance) {
@@ -107,7 +106,7 @@ class TimerManager {
     tickHandler(time) {
         this.onceUpdateFrame();
         var timeEntity;
-        var curTime = Laya.timer.currTimer;
+        var curTime = Client_1.default.instance.miniserverTime;
         var num = 0;
         for (var i in this._timeMap) {
             timeEntity = this._timeMap[i];
@@ -135,7 +134,7 @@ class TimerManager {
     }
     //做一次刷新
     onceUpdateFrame() {
-        var currentT = Laya.timer.currTimer;
+        var currentT = Client_1.default.instance.miniserverTime;
         var dt = currentT - this._lastFrameTime;
         if (dt > this._maxFrameDt) {
             dt = this._maxFrameDt;

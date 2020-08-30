@@ -6,8 +6,10 @@ const ResourceConst_1 = require("../../sys/consts/ResourceConst");
 const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const TimerManager_1 = require("../../../framework/manager/TimerManager");
 const UserInfo_1 = require("../../../framework/common/UserInfo");
+const BaseContainer_1 = require("../../../framework/components/BaseContainer");
+const ViewTools_1 = require("../../../framework/components/ViewTools");
 //战中角色视图类封装 嵌套一层容器的原因是为了方便缩放和计算
-class BattleRoleView extends Laya.Sprite {
+class BattleRoleView extends BaseContainer_1.default {
     //tag一个动画标签.代表这个动画是从哪个ui界面或者模块传递进来的. 必须传入. 用来做动画的状态追踪用的
     constructor(viewName, scale = 1, viewIndex = 0, tag = "") {
         super();
@@ -97,15 +99,14 @@ class BattleRoleView extends Laya.Sprite {
         for (var i = 0; i < formationArr.length; i++) {
             var posArr = formationArr[i];
             var view = this._childViewArr[i];
-            view.pos(posArr[0] * this._xSpace, posArr[1] * this._ySpace);
+            view.set2dPos(posArr[0] * this._xSpace, posArr[1] * this._ySpace);
             if (this._useShade) {
                 var shaderView = this._shadeViewArr[i];
                 if (!shaderView) {
-                    shaderView = new Laya.Image(ResourceConst_1.default.BATTLE_SHADE);
+                    shaderView = ViewTools_1.default.createImage(ResourceConst_1.default.BATTLE_SHADE);
                     shaderView.scale(this._shadeScale, this._shadeScale, true);
-                    shaderView.anchorX = 0.5;
-                    shaderView.anchorY = 0.5;
-                    this.addChildAt(shaderView, 0);
+                    shaderView.setAnchor(0.5, 0.5);
+                    this.addChild(shaderView, 0);
                     this._shadeViewArr[i] = shaderView;
                 }
                 shaderView.x = view.x + 2;
@@ -152,16 +153,14 @@ class BattleRoleView extends Laya.Sprite {
     setPlaySpeed(value) {
         for (var i = 0; i < this.currentViewNums; i++) {
             var childAni = this._childViewArr[i];
-            if (childAni.player) {
-                childAni.player.playbackRate = value;
-            }
+            childAni.setPlayerSpeed(value);
         }
     }
     //设置子对象的视图
     setChildViewPos(x, y) {
         for (var i = 0; i < this.currentViewNums; i++) {
             var childAni = this._childViewArr[i];
-            childAni.pos(x, y, true);
+            childAni.set2dPos(x, y);
         }
     }
     //隐藏插槽
@@ -179,11 +178,11 @@ class BattleRoleView extends Laya.Sprite {
             var ani = this._cacheAllAniArr[i].currentAni;
             if (ani["_pause"] != true) {
                 resultArr.push(ani);
-                if (ani.displayedInStage) {
+                if (ani.parent) {
                     runAniNums++;
                 }
                 // 还在激活中的ani 表示这个动画状态是play.还没有调用stop.  displayedInStage是否在舞台: 如果displayedInStage输出为true. 表示这个动画还在进行计算.
-                LogsManager_1.default.echo("还在激活中的ani", this._cacheAllAniArr[i]._viewName, this._cacheAllAniArr[i].tagStr, "是否在舞台:", ani.displayedInStage);
+                LogsManager_1.default.echo("还在激活中的ani", this._cacheAllAniArr[i]._viewName, this._cacheAllAniArr[i].tagStr);
             }
         }
         LogsManager_1.default.echo("当前激活中的动画数量", resultArr.length, "在舞台并计算的动画数量:", runAniNums);

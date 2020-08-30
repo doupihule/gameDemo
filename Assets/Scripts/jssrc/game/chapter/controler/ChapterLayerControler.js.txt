@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChapterLayerControler = void 0;
 const TimerManager_1 = require("../../../framework/manager/TimerManager");
+const ViewTools_1 = require("../../../framework/components/ViewTools");
 class ChapterLayerControler {
     constructor(controler, rootCtn) {
         this.minY = 0;
@@ -12,10 +13,10 @@ class ChapterLayerControler {
         this.timeCode = 0;
         this.controler = controler;
         this.rootCtn = rootCtn;
-        this.a = new Laya.Sprite();
-        this.a1 = new Laya.Sprite();
-        this.a2 = new Laya.Sprite();
-        this.a21 = new Laya.Sprite();
+        this.a = ViewTools_1.default.createContainer();
+        this.a1 = ViewTools_1.default.createContainer();
+        this.a2 = ViewTools_1.default.createContainer();
+        this.a21 = ViewTools_1.default.createContainer();
         rootCtn.addChild(this.a);
         this.a.addChild(this.a1);
         this.a.addChild(this.a2);

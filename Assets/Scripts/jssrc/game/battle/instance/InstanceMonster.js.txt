@@ -23,5 +23,4 @@ class InstanceMonster extends InstanceLogical_1.default {
     }
 }
 exports.default = InstanceMonster;
-InstanceMonster._tempPos = new Laya.Point();
 //# sourceMappingURL=InstanceMonster.js.map

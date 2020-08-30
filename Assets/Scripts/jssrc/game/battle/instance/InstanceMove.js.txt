@@ -8,6 +8,7 @@ const BattleConst_1 = require("../../sys/consts/BattleConst");
 const InstanceBasic_1 = require("./InstanceBasic");
 const PoolCode_1 = require("../../sys/consts/PoolCode");
 const SkillExpandTrigger_1 = require("../trigger/SkillExpandTrigger");
+const VectorTools_1 = require("../../../framework/utils/VectorTools");
 /**
  * 游戏中所有可以运动的对象的基类
  * 如果需要对instance的view进行拖拽, 那么需要在onTouchMove里面 改变的应该是 this.pos.x 而不能直接去设置myview.x,myView.y
@@ -27,16 +28,16 @@ class InstanceMove extends InstanceBasic_1.default {
         this.isViewShow = true;
         //配置的缩放值
         this.cfgScale = 1;
-        this.gridPos = new Laya.Vector3();
-        this.speed = new Laya.Vector3();
+        this.gridPos = VectorTools_1.default.createVec3();
+        this.speed = VectorTools_1.default.createVec3();
         //定义角速度
-        this.rotateSpeed = new Laya.Vector3();
-        this.addSpeed = new Laya.Vector3();
-        this.unitVector = new Laya.Vector3();
-        this.dragForce = new Laya.Vector3(1, 1, 1);
-        this.blookSpeed = new Laya.Vector3(0, 0, 0);
+        this.rotateSpeed = VectorTools_1.default.createVec3();
+        this.addSpeed = VectorTools_1.default.createVec3();
+        this.unitVector = VectorTools_1.default.createVec3();
+        this.dragForce = VectorTools_1.default.createVec3(1, 1, 1);
+        this.blookSpeed = VectorTools_1.default.createVec3(0, 0, 0);
         this.isViewShow = true;
-        this.initRotateCtnPos = new Laya.Vector3();
+        this.initRotateCtnPos = VectorTools_1.default.createVec3();
         this._followEffGroup = [];
     }
     //初始化站立状态(也就是闲置)
@@ -118,7 +119,7 @@ class InstanceMove extends InstanceBasic_1.default {
     //expandParams 
     moveToOnePoint(x, y, z = 0, spd = 0, callFunc = null, thisObj = null, callParams = null, expandParams = null, movePointType = 1) {
         if (!this._moveParams) {
-            this._moveParams = new InstanceMoveEntity_1.default(new Laya.Vector3(x, y, z));
+            this._moveParams = new InstanceMoveEntity_1.default(VectorTools_1.default.createVec3(x, y, z));
         }
         this._moveParams.expandParams = expandParams;
         this._moveParams.followTarget = null;
@@ -142,8 +143,8 @@ class InstanceMove extends InstanceBasic_1.default {
         }
         var temp = BattleFunc_1.default.tempPoint;
         //计算目标向量差值
-        Laya.Vector3.subtract(this._moveParams.target, this.pos, temp);
-        var distance = Laya.Vector3.scalarLength(temp);
+        VectorTools_1.default.subtract(this._moveParams.target, this.pos, temp);
+        var distance = VectorTools_1.default.scalarLength(temp);
         if (this._moveParams.totalFrame > 0 && spd == 0) {
             spd = distance / this._moveParams.totalFrame;
         }
@@ -164,15 +165,15 @@ class InstanceMove extends InstanceBasic_1.default {
     countMoveSpeed() {
         var temp = BattleFunc_1.default.tempPoint;
         //计算目标向量差值
-        Laya.Vector3.subtract(this._moveParams.target, this.pos, temp);
+        VectorTools_1.default.subtract(this._moveParams.target, this.pos, temp);
         var speed = this._moveParams.spd;
         //向量归一
-        Laya.Vector3.normalize(temp, this.unitVector);
+        VectorTools_1.default.normalize(temp, this.unitVector);
         //计算速度单位向量 乘以速度绝对值
-        Laya.Vector3.scale(this.unitVector, speed, this._moveParams.initSpeed);
+        VectorTools_1.default.scale(this.unitVector, speed, this._moveParams.initSpeed);
         //设置预期运动时间
         if (this._moveParams.totalFrame == 0) {
-            var distance = Laya.Vector3.scalarLength(temp);
+            var distance = VectorTools_1.default.scalarLength(temp);
             this._moveParams.totalFrame = Math.round(distance / speed);
         }
         this.initMove(this._moveParams.initSpeed.x, this._moveParams.initSpeed.y, this._moveParams.initSpeed.z);

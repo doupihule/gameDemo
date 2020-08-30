@@ -155,7 +155,7 @@ class Client {
         }
         if (result.serverInfo) {
             this._reqBackTime = result.serverInfo.serverTime;
-            this._serverTime = parseInt(result.serverInfo.serverTime) - Math.floor(Laya.Browser.now());
+            this._serverTime = parseInt(result.serverInfo.serverTime) - Math.floor(this.getNativeTime());
         }
     }
     //更新底层数据
@@ -294,16 +294,16 @@ class Client {
      * 获取系统时间
      */
     get serverTime() {
-        return Math.floor((this._serverTime + Math.floor(Laya.Browser.now())) * 0.001);
+        return Math.floor((this._serverTime + Math.floor(this.getNativeTime())) * 0.001);
     }
     get miniserverTime() {
-        return this._serverTime + Laya.Browser.now();
+        return this._serverTime + this.getNativeTime();
     }
     /**
      * 获取系统时间
      */
     get serverTimeMicro() {
-        return this._serverTime + Laya.Browser.now();
+        return this._serverTime + this.getNativeTime();
     }
     /**
      * 上次请求服务器返回时间，秒
@@ -489,7 +489,7 @@ class Client {
     }
     updateServerTime(value) {
         this._reqBackTime = value;
-        this._serverTime = this._reqBackTime - Laya.Browser.now();
+        this._serverTime = this._reqBackTime - this.getNativeTime();
     }
     //开始重新登入
     startRelogin() {
@@ -524,6 +524,9 @@ class Client {
             state = this.RELOGIN_INTVERL_TIME;
         }
         return state;
+    }
+    getNativeTime() {
+        return 0;
     }
 }
 exports.default = Client;

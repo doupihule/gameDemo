@@ -1,5 +1,4 @@
 import UserInfo, {PlatformIdType} from "../common/UserInfo";
-import TimerManager from "./TimerManager";
 import JumpConst from "../../game/sys/consts/JumpConst";
 import GlobalParamsFunc from "../../game/sys/func/GlobalParamsFunc";
 import Global from "../../utils/Global";
@@ -9,20 +8,13 @@ import GameConsts from "../../game/sys/consts/GameConsts";
 import HttpMessage from "../common/HttpMessage";
 import Client from "../common/kakura/Client";
 import WindowManager from "./WindowManager";
-import ScreenAdapterTools from "../utils/ScreenAdapterTools";
-import {LoadManager} from "./LoadManager";
-import ResultJumpUI from "../../game/sys/view/jump/ResultJumpUI";
 import Message from "../common/Message";
 import JumpEvent from "../event/JumpEvent";
-import {ButtonUtils} from "../utils/ButtonUtils";
-import ResourceConst from "../../game/sys/consts/ResourceConst";
 import {AdResponse} from "../platform/AdResponse";
 import GameUtils from "../../utils/GameUtils";
 import {JumpFunc} from "../func/JumpFunc";
 import KariqiShareManager from "./KariqiShareManager";
 import WindowCommonCfgs from "../consts/WindowCommonCfgs";
-import JumpCommonConst from "../consts/JumpCommonConst";
-import ResultJumpDoubleUI from "../../game/sys/view/jump/ResultJumpDoubleUI";
 import SingleCommonServer from "../server/SingleCommonServer";
 import FullJumpFunc from "../func/FullJumpFunc";
 import JumpCommonModel from "../model/JumpCommonModel";
@@ -601,19 +593,6 @@ export default class JumpManager {
 
 	/**初始化结算的互推，四个结算界面都用这个 */
 	static initJumpUI(parent, jumpData, extraData, param) {
-		var from = extraData.from;
-		var jumpUIName = this.jumpUIName;
-		if (extraData.isDouble) {
-			jumpUIName = this.jumpDoubleUIName;
-		}
-		LogsManager.echo("extraData.from1---------------", from)
-		var jumpUI = this.getJumpUIIns(jumpData, extraData, param);
-
-		parent.addChild(jumpUI);
-		jumpUI.name = jumpUIName;
-		jumpUI.scaleX = jumpUI.scaleY = (extraData.scale != undefined) ? extraData.scale : 1;
-		jumpUI.x = (extraData.posX != undefined) ? extraData.posX : (extraData.isDouble ? 43 : 25);
-		jumpUI.y = (extraData.posY != undefined) ? extraData.posY : (120 + ScreenAdapterTools.toolBarWidth);
 	}
 
 	/**移除互推UI */

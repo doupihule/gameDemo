@@ -5,10 +5,10 @@ const FogModel_1 = require("../../sys/model/FogModel");
 const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const FogConst_1 = require("../../sys/consts/FogConst");
 const FogServer_1 = require("../../sys/server/FogServer");
-const DataResourceFunc_1 = require("../../sys/func/DataResourceFunc");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
 const PassiveSkillData_1 = require("../../battle/data/PassiveSkillData");
 const WindowManager_1 = require("../../../framework/manager/WindowManager");
+const DataResourceConst_1 = require("../../sys/consts/DataResourceConst");
 /**
  *道具触发器
  *
@@ -36,7 +36,6 @@ class FogPropTrigger {
     }
     //执行第一个道具 增加战斗能量
     static runProp_1(itemData, view) {
-        view.maxEnergy += Number(itemData.params[0][0]);
     }
     //执行第二个道具 降低特定事件行动力消耗
     static runProp_2(itemData, view) {
@@ -78,10 +77,10 @@ class FogPropTrigger {
             //重置开启格子次数
             FogServer_1.default.delFogCount({ type: FogConst_1.default.FOG_COUNT_OPENCELL });
             //加一次行动力
-            FogServer_1.default.addSourceCount({ type: DataResourceFunc_1.DataResourceType.ACT, count: recoverNum });
+            FogServer_1.default.addSourceCount({ type: DataResourceConst_1.default.ACT, count: recoverNum });
             //@zm 飘奖励
             var thisObj = WindowManager_1.default.getUIByName("FogMainUI");
-            FogFunc_1.default.instance.flyResTween([[DataResourceFunc_1.DataResourceType.ACT, recoverNum]], cell.x - 40, cell.y + thisObj.cellCtn.y);
+            FogFunc_1.default.instance.flyResTween([[DataResourceConst_1.default.ACT, recoverNum]], cell.x - 40, cell.y + thisObj.cellCtn.y);
         }
     }
     //执行第四个道具 战斗中的全局数值加成
@@ -96,9 +95,6 @@ class FogPropTrigger {
     }
     //执行第五个道具 降低局内商店的商品购买价格
     static runProp_5(itemData, view) {
-        var ui = view;
-        var params = itemData.params;
-        ui.reducePer *= Number(params[0][0]) / 10000;
     }
     //执行第六个道具 增加战斗中获得的局内货币
     static runProp_6(itemData, view) {

@@ -10,13 +10,13 @@ import JumpConst from "../../consts/JumpConst";
 import UserInfo from "../../../../framework/common/UserInfo";
 import ControlConst from "../../../../framework/consts/ControlConst";
 import ResourceConst from "../../consts/ResourceConst";
-import {ui} from "../../../../ui/layaMaxUI";
 import WindowManager from "../../../../framework/manager/WindowManager";
 import {WindowCfgs} from "../../consts/WindowCfgs";
 import ViewTools from "../../../../framework/components/ViewTools";
 import ImageExpand from "../../../../framework/components/ImageExpand";
+import UIBaseView from "../../../../framework/components/UIBaseView";
 
-export default class JumpListUI extends ui.gameui.jump.JumpListUI implements IMessage {
+export default class JumpListUI extends UIBaseView implements IMessage {
 
 	private _itemMoveCode: number = 0;
 
@@ -48,13 +48,6 @@ export default class JumpListUI extends ui.gameui.jump.JumpListUI implements IMe
 
 	constructor() {
 		super();
-		ScreenAdapterTools.alignNotch(this.closeBtn);
-		ScreenAdapterTools.alignNotch(this.midTopGroup);
-		// 动态调整列表长度
-		this.iconPanel2.height += ScreenAdapterTools.height - ScreenAdapterTools.designHeight - ScreenAdapterTools.toolBarWidth
-
-		new ButtonUtils(this.closeBtn, this.close, this);
-		this.iconPanel2.vScrollBarSkin = "";
 	}
 
 
@@ -110,21 +103,6 @@ export default class JumpListUI extends ui.gameui.jump.JumpListUI implements IMe
 
 	/**icon左右移动 */
 	itemMove() {
-		if (!this.isTouch) {
-			var moveY = 1;
-			var curX = this.iconPanel2.hScrollBar.value;
-			var moveHeight = this.iconPanel1.contentHeight - this.iconPanel1.height;
-			if (this.isDown && curX >= moveHeight) {
-				this.isDown = false;
-			}
-			if (!this.isDown && curX <= 0) {
-				this.isDown = true;
-			}
-			if (!this.isDown) {
-				moveY = -1;
-			}
-			this.iconPanel2.hScrollBar.value += moveY;
-		}
 	}
 
 	/**手指从这里抬起 */

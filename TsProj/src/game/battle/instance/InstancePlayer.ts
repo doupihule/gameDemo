@@ -145,10 +145,6 @@ export default class InstancePlayer extends InstanceHero {
 		if (this.useSkillGroup[id]) {
 			mask.visible = true;
 			freeImg.visible = true;
-			StatisticsManager.ins.onEvent(StatisticsManager.SHOWTV_LEVELSKILL_SHOW, {
-				id: this.controler.battleData.levelId,
-				skillId: id
-			})
 		} else {
 			mask.visible = false;
 			freeImg.visible = false;

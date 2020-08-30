@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const Client_1 = require("../common/kakura/Client");
 class TimeEntity {
     constructor(delay, callBack, thisObject, maxCount, args) {
         this.code = 0;
@@ -13,7 +14,7 @@ class TimeEntity {
         this.callBack = callBack;
         this.thisObject = thisObject;
         this.maxCount = maxCount;
-        this.oldTime = Laya.timer.currTimer;
+        this.oldTime = Client_1.default.instance.miniserverTime;
         this.args = args || TimeEntity.emptyArr;
     }
 }

@@ -6,7 +6,6 @@ const RoleEvent_1 = require("../event/RoleEvent");
 const UserModel_1 = require("./UserModel");
 const RolesFunc_1 = require("../func/RolesFunc");
 const BigNumUtils_1 = require("../../../framework/utils/BigNumUtils");
-const DataResourceFunc_1 = require("../func/DataResourceFunc");
 const GlobalParamsFunc_1 = require("../func/GlobalParamsFunc");
 const UserExtModel_1 = require("./UserExtModel");
 const BattleFunc_1 = require("../func/BattleFunc");
@@ -14,6 +13,7 @@ const BattleConst_1 = require("../consts/BattleConst");
 const TalentFunc_1 = require("../func/TalentFunc");
 const TableUtils_1 = require("../../../framework/utils/TableUtils");
 const FogModel_1 = require("./FogModel");
+const DataResourceConst_1 = require("../consts/DataResourceConst");
 class RolesModel extends BaseModel_1.default {
     // 英雄列表：user.roles
     // {
@@ -174,12 +174,12 @@ class RolesModel extends BaseModel_1.default {
             for (var i = 0; i < levelPay.length; i++) {
                 var temp = levelPay[i].split(",");
                 switch (Number(temp[0])) {
-                    case DataResourceFunc_1.DataResourceType.COIN:
+                    case DataResourceConst_1.default.COIN:
                         if (BigNumUtils_1.default.compare(UserModel_1.default.instance.getCoin(), temp[1])) {
                             canUpgrade = true;
                         }
                         break;
-                    case DataResourceFunc_1.DataResourceType.GOLD:
+                    case DataResourceConst_1.default.GOLD:
                         if (BigNumUtils_1.default.compare(UserModel_1.default.instance.getGold(), temp[1])) {
                             canUpgrade = true;
                         }
@@ -201,7 +201,7 @@ class RolesModel extends BaseModel_1.default {
         //判断能否升级
         var levelPay = RolesFunc_1.default.instance.getRoleUpCostById(homeId, roleLevel);
         var levelPayArr = levelPay[0].split(",");
-        if (Number(levelPayArr[0]) == DataResourceFunc_1.DataResourceType.COIN) { //金币
+        if (Number(levelPayArr[0]) == DataResourceConst_1.default.COIN) { //金币
             if (!BigNumUtils_1.default.compare(UserModel_1.default.instance.getCoin(), BigNumUtils_1.default.round(levelPayArr[1]))) {
                 return false;
             }
@@ -209,7 +209,7 @@ class RolesModel extends BaseModel_1.default {
                 return true;
             }
         }
-        else if (Number(levelPayArr[0]) == DataResourceFunc_1.DataResourceType.GOLD) { //钻石
+        else if (Number(levelPayArr[0]) == DataResourceConst_1.default.GOLD) { //钻石
             if (!BigNumUtils_1.default.compare(UserModel_1.default.instance.getGold(), BigNumUtils_1.default.round(levelPayArr[1]))) {
                 return false;
             }
@@ -244,14 +244,14 @@ class RolesModel extends BaseModel_1.default {
             var updateInfo = TalentFunc_1.default.instance.getTalentUpdateInfo(UserExtModel_1.default.instance.getTalentSkillUpgradeNum() + 1);
             var costArr = updateInfo.talentCost[0].split(',');
             switch (Number(costArr[0])) {
-                case DataResourceFunc_1.DataResourceType.COIN:
+                case DataResourceConst_1.default.COIN:
                     if (!BigNumUtils_1.default.compare(UserModel_1.default.instance.getCoin(), costArr[1])) {
                         return false;
                     }
                     else {
                         return true;
                     }
-                case DataResourceFunc_1.DataResourceType.GOLD:
+                case DataResourceConst_1.default.GOLD:
                     if (!BigNumUtils_1.default.compare(UserModel_1.default.instance.getGold(), costArr[1])) {
                         return false;
                     }

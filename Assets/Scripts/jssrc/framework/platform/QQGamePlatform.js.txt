@@ -11,7 +11,7 @@ class QQGamePlatform extends WXGamePlatform_1.default {
     }
     shareAldAppMsg(data, shareCallBack) {
         //阿拉丁分享统计
-        qq.shareAppMessage({
+        window["qq"].shareAppMessage({
             title: data.title,
             imageUrl: data.imgUrl,
             query: data.params,
@@ -28,7 +28,7 @@ class QQGamePlatform extends WXGamePlatform_1.default {
     }
     /**右上角三点分享监听函数 */
     myOnShare(callback) {
-        qq.onShareAppMessage(callback);
+        window["qq"].onShareAppMessage(callback);
     }
     /**
      * 添加到桌面

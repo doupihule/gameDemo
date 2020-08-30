@@ -2,6 +2,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseContainer_1 = require("./BaseContainer");
 class ImageExpand extends BaseContainer_1.default {
+    setColor(r, g, b, a) {
+    }
+    //设置皮肤
+    setSkin(url, boundname = "imagead") {
+    }
+    //设置九宫格信息
+    setSizeGrid(a, b, c, d) {
+    }
 }
 exports.default = ImageExpand;
 //# sourceMappingURL=ImageExpand.js.map

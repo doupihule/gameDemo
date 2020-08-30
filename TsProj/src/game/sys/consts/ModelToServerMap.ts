@@ -5,17 +5,8 @@ import RolesModel from "../model/RolesModel";
 import LogsManager from "../../../framework/manager/LogsManager";
 import Client from "../../../framework/common/kakura/Client";
 import GlobalParamsFunc from "../func/GlobalParamsFunc";
-import CountsModel from "../model/CountsModel";
-import ShopModel from "../model/ShopModel";
 import TalentSkillsModel from "../model/TalentSkillsModel";
-import SevenDayModel from "../model/SevenDayModel";
-import DailyGoldModel from "../model/DailyGoldModel";
-import PiecesModel from "../model/PiecesModel";
 import FogModel from "../model/FogModel";
-import ChapterModel from "../model/ChapterModel";
-import TaskModel from "../model/TaskModel";
-import ChatInfoModel from "../model/ChatInfoModel";
-import WorkModel from "../model/WorkModel";
 
 //本地模块和服务器数据映射表
 export default class ModelToServerMap {
@@ -37,19 +28,8 @@ export default class ModelToServerMap {
 			{key: "switches", model: SwitchModel},	//音乐开关
 			{key: "userExt", model: UserExtModel},	//userExt模块
 			{key: "roles", model: RolesModel},	//roles模块
-			// { key: "skills", model: SkillModel },	//roles模块
-			{key: "shops", model: ShopModel},	//商店模块
-			{key: "work", model: WorkModel},	//工作模块
 
-			{key: "counts", model: CountsModel},//次数
 			{key: "talentSkills", model: TalentSkillsModel}, //天赋技能列表
-			{key: "sign", model: SevenDayModel},//七日登录
-			{key: "dailyGold", model: DailyGoldModel},	//每日钻石模块
-			{key: "pieces", model: PiecesModel},	//碎片
-			{key: "fog", model: FogModel},	//迷雾模式
-			{key: "chapter", model: ChapterModel},	//章节
-			{key: "tasks", model: TaskModel},	//任务
-			{key: "chatInfo", model: ChatInfoModel},	//对话
 
 		]
 	}

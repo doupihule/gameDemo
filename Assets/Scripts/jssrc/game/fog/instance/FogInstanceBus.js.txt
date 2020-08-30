@@ -11,6 +11,7 @@ const WindowManager_1 = require("../../../framework/manager/WindowManager");
 const TranslateFunc_1 = require("../../../framework/func/TranslateFunc");
 const FogEventTrigger_1 = require("../trigger/FogEventTrigger");
 const TableUtils_1 = require("../../../framework/utils/TableUtils");
+const ViewTools_1 = require("../../../framework/components/ViewTools");
 /**大巴车 */
 class FogInstanceBus extends FogInstanceMove_1.default {
     constructor(fogControler) {
@@ -27,11 +28,9 @@ class FogInstanceBus extends FogInstanceMove_1.default {
         this.myRotate = 0;
         //是否是新路径
         this.isNewPath = true;
-        this.width = this._initWidth;
-        this.height = this._initHeight;
-        this.eventCtn = new Laya.Image("");
-        this.eventCtn.anchorX = 0.5;
-        this.eventCtn.anchorY = 0.5;
+        this.setSize(this._initWidth, this._initHeight);
+        this.eventCtn = ViewTools_1.default.createImage("");
+        this.eventCtn.setAnchor(0.5, 0.5);
         this.eventCtn.x = this._initWidth / 2;
         this.eventCtn.y = this._initHeight / 2;
         this.addChild(this.eventCtn);
@@ -49,9 +48,8 @@ class FogInstanceBus extends FogInstanceMove_1.default {
     //设置车的spine
     setBusShow() {
         if (!this.myBus) {
-            this.myBus = new Laya.Image();
-            this.myBus.anchorX = 0.5;
-            this.myBus.anchorY = 0.5;
+            this.myBus = ViewTools_1.default.createImage();
+            this.myBus.setAnchor(0.5, 0.5);
             this.eventCtn.addChild(this.myBus);
         }
     }
@@ -66,7 +64,7 @@ class FogInstanceBus extends FogInstanceMove_1.default {
             //默认向上
             this.myRotate = FogConst_1.default.FOG_CELL_TURNUP;
         }
-        this.myBus.skin = FogFunc_1.default.instance.getBusImgByRotate(this.myRotate);
+        this.myBus.setSkin(FogFunc_1.default.instance.getBusImgByRotate(this.myRotate));
     }
     /**移动到指定的点 */
     moveToTargetPos(target) {
@@ -186,7 +184,7 @@ class FogInstanceBus extends FogInstanceMove_1.default {
             this.myRotate = FogConst_1.default.FOG_CELL_TURNDOWN;
         }
         if (lastRotate != this.myRotate) {
-            this.myBus.skin = FogFunc_1.default.instance.getBusImgByRotate(this.myRotate);
+            this.myBus.setSkin(FogFunc_1.default.instance.getBusImgByRotate(this.myRotate));
         }
     }
     //当到达终点

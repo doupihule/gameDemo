@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const ResourceManager_1 = require("../manager/ResourceManager");
 class BaseFunc {
     constructor() {
         this.hasInit = false;
@@ -18,7 +19,7 @@ class BaseFunc {
         if (GameUtils_1.default.isReview) {
             congfigName = this._globalConfigsReviewName;
         }
-        this._globalConfigMap = Laya.loader.getRes(congfigName);
+        this._globalConfigMap = ResourceManager_1.default.getResTxt(congfigName);
         var hotCfg = GameSwitch_1.default.switchMap[this.SWITCH_CONFIG_HOT];
         if (hotCfg && hotCfg != "") {
             try {
@@ -44,7 +45,7 @@ class BaseFunc {
         if (!this.isMergeConfig) {
             return;
         }
-        this._translateConfigs = Laya.loader.getRes(this._translateCfgsName) || {};
+        this._translateConfigs = {};
         var cfgsArr = this._globalConfigMap;
         var translateKey = "Translate";
         var translatekeyLen = translateKey.length;

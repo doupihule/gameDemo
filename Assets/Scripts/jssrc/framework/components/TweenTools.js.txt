@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class TweenTools {
+    //缓动函数
+    static tweenTo(target, ...args) {
+    }
+    static clearTween(tween) {
+    }
+    static clearAll(obj) {
+    }
+}
+exports.default = TweenTools;
+//# sourceMappingURL=TweenTools.js.map

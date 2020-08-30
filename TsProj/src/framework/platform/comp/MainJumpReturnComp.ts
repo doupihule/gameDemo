@@ -1,10 +1,6 @@
 import IMessage from "../../../game/sys/interfaces/IMessage";
-import Message from "../../common/Message";
 import WindowEvent from "../../event/WindowEvent";
 import JumpManager from "../../manager/JumpManager";
-import WindowManager from "../../manager/WindowManager";
-import MainJumpReturnUI from '../../view/jump/MainJumpReturnUI';
-import ScreenAdapterTools from "../../utils/ScreenAdapterTools";
 
 export default class MainJumpReturnComp implements IMessage {
 	/**
@@ -25,37 +21,10 @@ export default class MainJumpReturnComp implements IMessage {
 	]
 
 	public constructor() {
-		Message.instance.add(WindowEvent.WINDOW_EVENT_SWITCHUIFIN, this);
-		var uiinfo: any = this._uiJumpMap[0];
-		if (!uiinfo.ui) {
-			uiinfo.ui = new MainJumpReturnUI();
-			uiinfo.ui.y = ScreenAdapterTools.height / 2;
-		}
 	}
 
 	//检查ui状态
 	private _checkUIState() {
-		var currentUIName = WindowManager.getCurrentWindowName();
-		for (var i = 0; i < this._uiJumpMap.length; i++) {
-			var uiInfo = this._uiJumpMap[i];
-			var uiCfg = uiInfo.uiCfg;
-			var currentInfo = uiCfg[currentUIName];
-			var returnBtnUI: MainJumpReturnUI = uiInfo.ui
-
-			//如果当前界面不展示退出按钮
-			if (!currentInfo) {
-				returnBtnUI.onRemoveStage();
-			} else {
-				//如果这个ui的状态是显示的
-				if (currentInfo.state == 1) {
-					var ui = WindowManager.getCurrentWindow();
-					ui.addChild(returnBtnUI);
-					returnBtnUI.initData()
-				} else {
-					returnBtnUI.onRemoveStage();
-				}
-			}
-		}
 
 
 	}

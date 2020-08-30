@@ -2,10 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ScreenAdapterTools_1 = require("../../../framework/utils/ScreenAdapterTools");
 const LogsManager_1 = require("../../../framework/manager/LogsManager");
-const SubPackageManager_1 = require("../../../framework/manager/SubPackageManager");
-const SubPackageConst_1 = require("../../sys/consts/SubPackageConst");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const UserInfo_1 = require("../../../framework/common/UserInfo");
+const ViewTools_1 = require("../../../framework/components/ViewTools");
 class BattleMapControler {
     //场景按照mapid整个缓存
     constructor(controler) {
@@ -45,7 +44,7 @@ class BattleMapControler {
         var startOffest = Number(backInfo[2]);
         this._maxSceneWidth = sceneInfo.long;
         this.setMapSize();
-        var ctn1 = new Laya.Sprite();
+        var ctn1 = ViewTools_1.default.createContainer();
         ctn1.x = -ScreenAdapterTools_1.default.sceneOffsetX - ScreenAdapterTools_1.default.UIOffsetX - startOffest;
         this.controler.layerControler.a1.addChild(ctn1);
         this._mapInfo = {
@@ -81,8 +80,8 @@ class BattleMapControler {
             else {
                 imageUrl1 = "map/" + firstName + "/" + firstName + "/" + info.pic + ".png";
             }
-            var image = new Laya.Image();
-            image.scale(info.scale / 10000, info.scale / 10000);
+            var image = ViewTools_1.default.createImage();
+            image.setScale(info.scale / 10000, info.scale / 10000);
             ctn.addChild(image);
             this._mapInfo.decorateArr.push({ view: image });
             if (this.startMapIndex != 1) {
@@ -98,16 +97,7 @@ class BattleMapControler {
                 image.x = Number(item[1]);
             }
             image.y = -Number(item[2]);
-            var onMapComplete = () => {
-                image.skin = imageUrl1;
-            };
-            //必须地图组是分包的就直接走;
-            if (SubPackageManager_1.default.getPackStyle(SubPackageConst_1.default.packName_map) == SubPackageConst_1.default.PATH_STYLE_SUBPACK) {
-                SubPackageManager_1.default.loadDynamics(firstName, path, onMapComplete, this);
-            }
-            else {
-                onMapComplete();
-            }
+            image.setSkin(imageUrl1);
         }
     }
     //销毁地图
@@ -128,10 +118,6 @@ class BattleMapControler {
                 view.dispose();
             }
         }
-        if (!UserInfo_1.default.isSystemNative()) {
-            Laya.loader.clearRes("res/atlas/map/" + this.mapName + "/" + this.mapName + ".atlas");
-            Laya.loader.clearRes("res/atlas/map/" + this.mapName + "/" + this.mapName + ".png");
-        }
         mapInfo.ctn.removeSelf();
     }
     createOneView(firstName, index, mapId, mpInfo) {
@@ -140,15 +126,15 @@ class BattleMapControler {
         var path;
         name = firstName + "_0" + mapId;
         path = "map/" + firstName + "/" + name;
-        var image = new Laya.Image();
+        var image = ViewTools_1.default.createImage();
         if (UserInfo_1.default.isSystemNative()) {
             //读大图、不打包
             imageUrl1 = "map/" + firstName + "/" + name + ".png";
-            image.scale(1 + 2 / 256, 1);
+            image.setScale(1 + 2 / 256, 1);
         }
         else {
             imageUrl1 = "map/" + firstName + "/" + firstName + "/" + name + ".png";
-            image.scale(2 * (1 + 2 / 128), 2);
+            image.setScale(2 * (1 + 2 / 128), 2);
         }
         mpInfo.ctn.addChild(image);
         var posIndex = (index - 1) * 2;
@@ -156,22 +142,12 @@ class BattleMapControler {
         if (mapId == 5) {
             this._smallMapCount += 1;
         }
-        image.anchorX = 0;
-        image.anchorY = mpInfo.anchor;
+        image.setAnchor(0, mpInfo.anchor);
         image.x = xpos;
         image.y = 0;
+        image.setSkin(imageUrl1);
         var viewInfo = { view: image };
         mpInfo.infoArr.push(viewInfo);
-        var onMapComplete = () => {
-            image.skin = imageUrl1;
-        };
-        //必须地图组是分包的就直接走;
-        if (SubPackageManager_1.default.getPackStyle(SubPackageConst_1.default.packName_map) == SubPackageConst_1.default.PATH_STYLE_SUBPACK) {
-            SubPackageManager_1.default.loadDynamics(firstName, path, onMapComplete, this);
-        }
-        else {
-            onMapComplete();
-        }
         LogsManager_1.default.echo("id:", mapId, "pos:", xpos);
     }
     // 当地图发生运动

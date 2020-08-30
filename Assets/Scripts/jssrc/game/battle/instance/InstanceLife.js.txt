@@ -847,7 +847,7 @@ class InstanceLife extends InstancePerformance_1.default {
                 PoolTools_1.default.cacheItem(PoolCode_1.default.ENEMY_MAP_POINT_POOL, this.mapPoint);
             }
         }
-        this.mapPoint && this.mapPoint.parent && this.mapPoint.parent.removeChild(this.mapPoint);
+        this.mapPoint && this.mapPoint.removeSelf();
         this.mapPoint = null;
     }
     showBornAni() {

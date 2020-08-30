@@ -1,0 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class GlobalEnv {
+    static initStage() {
+    }
+}
+exports.default = GlobalEnv;
+//# sourceMappingURL=GlobalEnv.js.map

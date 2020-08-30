@@ -4,6 +4,7 @@ const InstanceBasic_1 = require("./InstanceBasic");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const SkillExpandTrigger_1 = require("../trigger/SkillExpandTrigger");
+const VectorTools_1 = require("../../../framework/utils/VectorTools");
 /**
  * 游戏中的特效基类
  */
@@ -15,7 +16,7 @@ class InstanceEffect extends InstanceBasic_1.default {
         //是否跟随目标修改朝向
         this.withTargetWay = 0;
         this.classModel = BattleConst_1.default.model_effect;
-        this._followOffset = new Laya.Vector3();
+        this._followOffset = VectorTools_1.default.createVec3();
     }
     //设置数据
     setData(data) {
@@ -113,7 +114,6 @@ class InstanceEffect extends InstanceBasic_1.default {
         if (this.expandParams.type != SkillExpandTrigger_1.default.EXPAND_TYLE_LINEEFFECT) {
             return;
         }
-        Laya.Tween.clearAll(this._myView);
         this.expandParams.totalFrame = this.expandParams.frame;
         var targetRole = this.expandParams.role;
         this.expandParams.sourceX = targetRole.pos.x;
@@ -123,7 +123,7 @@ class InstanceEffect extends InstanceBasic_1.default {
         this.checkLineFollowTarget();
         // 把自己插入到数组里面
         //这里暂时不能用tweencontroler去实现缩放.  因为只缩放
-        // Laya.Tween.to(this._myView,this._tweenParams,tweenTime);
+        // TweenTools.tweenTo(this._myView,this._tweenParams,tweenTime);
     }
     //判断连线跟随目标
     checkLineFollowTarget() {

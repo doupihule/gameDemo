@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Equation_1 = require("../../../framework/utils/Equation");
 const ScreenAdapterTools_1 = require("../../../framework/utils/ScreenAdapterTools");
+const VectorTools_1 = require("../../../framework/utils/VectorTools");
 /**
  * 战斗中的镜头控制器.
  * 控制镜头移动.震屏等
@@ -23,7 +24,7 @@ class CameraControler {
         this.inControlBg = false;
         this.controler = controler;
         this._halfWidth = ScreenAdapterTools_1.default.designWidth / 2;
-        this.focusPos = new Laya.Vector3(this._halfWidth, 0, 0);
+        this.focusPos = VectorTools_1.default.createVec3(this._halfWidth, 0, 0);
         this.frontPos1 = 0;
         this._shakeParams = { frame: 0, style: 1, strength: 1, intervel: 1, x: 0, y: 0 };
     }

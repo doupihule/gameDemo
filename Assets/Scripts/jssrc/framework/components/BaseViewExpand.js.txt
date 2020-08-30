@@ -11,6 +11,11 @@ class BaseViewExpand {
         // 缩放
         this.scaleTrans = { x: 0, y: 0, z: 0 };
         this._alpha = 1;
+        this._visible = true;
+        //--触摸事件相关
+        this._mouseEnabled = false;
+        //是否穿透
+        this._mouseThrough = false;
         this.uitype = "base";
     }
     setCObject(cobj) {
@@ -39,7 +44,7 @@ class BaseViewExpand {
         return this.positionTrans.z;
     }
     //设置2d坐标
-    setPos(x, y) {
+    set2dPos(x, y) {
         this.positionTrans.x = x;
         this.positionTrans.y = y;
         this.__ctransform.anchoredPosition = this.positionTrans;
@@ -64,6 +69,18 @@ class BaseViewExpand {
         trans.z = sz;
         this.__ctransform.localScale = trans;
     }
+    get scale() {
+        return this.scaleTrans.x;
+    }
+    get rotation() {
+        return this.__ctransform.rotation;
+    }
+    //设置锚点
+    setAnchor(x, y) {
+        BaseViewExpand._tempVew2.x = x;
+        BaseViewExpand._tempVew2.y = y;
+        this.__ctransform.pivot = BaseViewExpand._tempVew2;
+    }
     //获取透明度
     get alpha() {
         return this._alpha;
@@ -77,15 +94,38 @@ class BaseViewExpand {
         }
         canvasGroup.alpha = value;
     }
+    setZorder(value) {
+    }
     //-------------------------------------------------------------------------------------
     //---------------------------显示相关-----------------------------------------
     //-------------------------------------------------------------------------------------
+    //获取parent
+    get parent() {
+        return this.__ctransform.parent;
+    }
+    get visible() {
+        return this._visible;
+    }
+    set visible(value) {
+        this._visible = value;
+    }
     //添加子对象
     addChild(childView, index = -1) {
         childView.__ctransform.parent = childView.__ctransform.parent;
         if (index >= 0) {
             childView.__ctransform.SetSiblingIndex(index);
         }
+    }
+    //移除子对象
+    removeChild(childView) {
+        childView.__ctransform.parent = null;
+    }
+    //移除自己
+    removeSelf() {
+        this.__ctransform.parent = null;
+    }
+    get numChildren() {
+        return this.__ctransform.childCount;
     }
     //移除所有子对象
     removeChildren() {
@@ -109,6 +149,9 @@ class BaseViewExpand {
         }
         return null;
     }
+    //设置颜色 子类重写
+    setColor(r, g, b, a) {
+    }
     //2d对象才有这个属性3d对象禁止访问
     get width() {
         return this.__ctransform.sizeDelta.x;
@@ -116,9 +159,32 @@ class BaseViewExpand {
     get height() {
         return this.__ctransform.sizeDelta.y;
     }
+    setSize(w, h) {
+        BaseViewExpand._tempVew2.x = w;
+        BaseViewExpand._tempVew2.y = h;
+        this.__ctransform.sizeDelta = BaseViewExpand._tempVew2;
+    }
     //设置是否可见
     setActive(value) {
         this.__cobject.SetActive(value);
+    }
+    get name() {
+        return this.__ctransform.name;
+    }
+    set name(value) {
+        this.__ctransform.name = value;
+    }
+    set mouseEnabled(value) {
+        this._mouseEnabled = value;
+    }
+    get mouseEnabled() {
+        return this._mouseEnabled;
+    }
+    set mouseThrough(value) {
+        this._mouseThrough = value;
+    }
+    get mouseThrough() {
+        return this._mouseThrough;
     }
     //销毁函数
     dispose() {
@@ -128,4 +194,5 @@ class BaseViewExpand {
     }
 }
 exports.default = BaseViewExpand;
+BaseViewExpand._tempVew2 = { x: 0, y: 0 };
 //# sourceMappingURL=BaseViewExpand.js.map

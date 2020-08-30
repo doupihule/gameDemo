@@ -1,4 +1,4 @@
-import {ui} from "../../../../ui/layaMaxUI";
+
 import Client from "../../../../framework/common/kakura/Client";
 import Method from "../../common/kakura/Method";
 import WindowManager from "../../../../framework/manager/WindowManager";

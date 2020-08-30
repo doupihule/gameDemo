@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const GameConfig_1 = require("./GameConfig");
 const Global_1 = require("./utils/Global");
 const LogsManager_1 = require("./framework/manager/LogsManager");
-const ScreenAdapterTools_1 = require("./framework/utils/ScreenAdapterTools");
 const MainModule_1 = require("./framework/manager/MainModule");
 const PackConfigManager_1 = require("./framework/manager/PackConfigManager");
 const StatisticsManager_1 = require("./game/sys/manager/StatisticsManager");
@@ -23,17 +21,6 @@ const GameConsts_1 = require("./game/sys/consts/GameConsts");
 class Main {
     constructor() {
         BaseFunc_1.default.setCfgExportType(BaseFunc_1.default.exportType_New);
-        StatisticsManager_1.default.mainStartT = Laya.Browser.now();
-        Laya.init(GameConfig_1.default.width, GameConfig_1.default.height, Laya["WebGL"]);
-        Laya["Physics"] && Laya["Physics"].enable();
-        Laya["DebugPanel"] && Laya["DebugPanel"].enable();
-        Laya.stage.alignH = "center";
-        Laya.stage.alignV = "middle";
-        Laya.stage.bgColor = "#000000";
-        Laya.stage.scaleMode = ScreenAdapterTools_1.default.checkScreenFixMode(Laya.Browser.width, Laya.Browser.height);
-        Laya.stage.screenMode = GameConfig_1.default.screenMode;
-        //兼容微信不支持加载scene后缀场景
-        Laya.URL.exportSceneToJson = GameConfig_1.default.exportSceneToJson;
         //初始化全就
         this.initWindowEnv();
         FrameWorkHandle_1.default.init();
@@ -58,14 +45,6 @@ class Main {
         // var encodeStr = StringUtils.encodeSign(defaultSha1);
         // var decodeStr = StringUtils.decodeSign(encodeStr)
         // LogsManager.echo("__decodeStr:", encodeStr, decodeStr, decodeStr == defaultSha1) ;
-        //打开调试面板（通过IDE设置调试模式，或者url地址增加debug=true参数，均可打开调试面板）
-        if (GameConfig_1.default.debug || Laya.Utils.getQueryString("debug") == "true")
-            Laya.enableDebugPanel();
-        if (GameConfig_1.default.physicsDebug && Laya["PhysicsDebugDraw"])
-            Laya["PhysicsDebugDraw"].enable();
-        if (GameConfig_1.default.stat)
-            Laya.Stat.show(0, 100);
-        Laya.alertGlobalError = true;
         this.showMainModule();
         if (UserInfo_1.default.isWX() || UserInfo_1.default.isTT()) {
             JumpManager_1.default.setJumpChannel(JumpConst_1.default.JUMP_CHANNEL_KARIQU);
@@ -89,22 +68,10 @@ class Main {
             JumpManager_1.default.setJumpChannel(JumpConst_1.default.JUMP_CHANNEL_FANTASY);
         }
         DisplayUtils_1.default.adjustLabelPos();
-        //激活资源版本控制，version.json由IDE发布功能自动生成，如果没有也不影响后续流程
-        // Laya.ResourceVersion.enable("version.json", Laya.Handler.create(this, this.onVersionLoaded), Laya.ResourceVersion.FILENAME_VERSION);
-        Laya.stage.on(Laya.Event.RESIZE, this, this.onResize);
     }
     onResize() {
-        LogsManager_1.default.echo("_onResize start___");
-        LogsManager_1.default.echo(Laya.stage.scaleX, Laya.stage.scaleY, "_____scale", Laya.stage.width, Laya.stage.height);
-        LogsManager_1.default.echo(Laya.stage.designWidth, Laya.stage.designHeight, "___设计宽高");
-        LogsManager_1.default.echo(Laya.stage.clientScaleX, Laya.stage.clientScaleX, "___clientScale");
-        LogsManager_1.default.echo(Laya.stage.clientScaleX, Laya.stage.clientScaleY, "___clientScale");
-        LogsManager_1.default.echo("_clientWidthhei_:", Laya.Browser.clientWidth, Laya.Browser.clientHeight, "_width,hei:", Laya.Browser.width, Laya.Browser.height);
-        LogsManager_1.default.echo("_onResize end___");
     }
     onVersionLoaded() {
-        //激活大小图映射，加载小图的时候，如果发现小图在大图合集里面，则优先加载大图合集，而不是小图
-        Laya.AtlasInfoManager.enable("fileconfig.json", Laya.Handler.create(this, this.onConfigLoaded));
     }
     onConfigLoaded() {
         //加载IDE指定的场景

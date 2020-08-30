@@ -22,6 +22,7 @@ const GuideConst_1 = require("../../sys/consts/GuideConst");
 const WindowManager_1 = require("../../../framework/manager/WindowManager");
 const WindowCfgs_1 = require("../../sys/consts/WindowCfgs");
 const WindowEvent_1 = require("../../../framework/event/WindowEvent");
+const TimerManager_1 = require("../../../framework/manager/TimerManager");
 /**迷雾控制器 */
 class FogLogicalControler extends FogControler_1.default {
     constructor(ctn, ui) {
@@ -37,7 +38,7 @@ class FogLogicalControler extends FogControler_1.default {
         this.fogFindWayControler = new FogFindWayControler_1.FogFindWayControler(this);
         this.mistControler = new FogMistControler_1.default(this);
         this.ctn = ctn;
-        this.ctn.on(Laya.Event.MOUSE_DOWN, this, this.onClickView);
+        // this.ctn.on(Laya.Event.MOUSE_DOWN, this, this.onClickView)
     }
     addEvent() {
         Message_1.default.instance.add(FogEvent_1.default.FOGEVENT_REFRESH_CELLEVENT, this);
@@ -51,7 +52,7 @@ class FogLogicalControler extends FogControler_1.default {
         this.layerCfg = FogFunc_1.default.instance.getCfgDatas("Layer", layer);
         this.fogCellEventControler.setData();
         this.cellMapControler.setData();
-        Laya.timer.frameLoop(1, this, this.onceUpdateFrame);
+        TimerManager_1.default.instance.registObjUpdate(this.onceUpdateFrame, this);
     }
     /**
      * 存贮格子数据
@@ -251,8 +252,8 @@ class FogLogicalControler extends FogControler_1.default {
     }
     dispose() {
         BattleLogsManager_1.default.battleEcho("退出迷雾模式----");
-        Laya.timer.clear(this, this.onceUpdateFrame);
-        this.ctn && this.ctn.offAll(Laya.Event.MOUSE_DOWN);
+        // Laya.timer.clear(this, this.onceUpdateFrame);
+        TimerManager_1.default.instance.deleteObjUpdate(null, this.onceUpdateFrame, this);
         this.ctn = null;
         //销毁所有对象
         this.destoryInstanceArr(this._allInstanceArr);

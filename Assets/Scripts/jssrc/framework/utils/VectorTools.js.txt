@@ -1,6 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class VectorTools {
+    static createVec2(x = 0, y = 0) {
+        return { x: x, y: y };
+    }
+    static createVec3(x = 0, y = 0, z = 0) {
+        return { x: x, y: y, z: z };
+    }
     //向量乘法
     static multyByNumToSelf(vec, mul) {
         vec.x = vec.x * mul;
@@ -12,7 +18,29 @@ class VectorTools {
         vec.x = vec.x * mul;
         vec.y = vec.y * mul;
         vec.z = vec.z * mul;
-        return new Laya.Vector3(vec.x * mul, vec.y * mul, vec.z * mul);
+        return VectorTools.createVec3(vec.x * mul, vec.y * mul, vec.z * mul);
+    }
+    static subtract(a, b, out) {
+        out.x = a.x - b.x;
+        out.y = a.y - b.y;
+        out.z = a.z - b.z;
+    }
+    static scalarLength(a) {
+        return (a.x * a.x + a.y * a.y + a.z * a.z);
+    }
+    static distance(a, b) {
+        return Math.sqrt(a.x * a.x + a.y * a.y + a.z * a.z);
+    }
+    static normalize(a, out) {
+        var leng = this.scalarLength(a);
+        out.x = a.x / leng;
+        out.y = a.y / leng;
+        out.z = a.z / leng;
+    }
+    static scale(a, scale, out) {
+        out.x = a.x * scale;
+        out.y = a.y * scale;
+        out.z = a.z * scale;
     }
     //向量加法,加到第一个向量上
     static addToSelf(vec, vec2) {
@@ -22,7 +50,7 @@ class VectorTools {
     }
     //向量加法创建新向量
     static added(vec, vec2) {
-        var newVec = new Laya.Vector3(vec.x + vec2.x, vec.y + vec2.y, vec.z + vec2.z);
+        var newVec = VectorTools.createVec3(vec.x + vec2.x, vec.y + vec2.y, vec.z + vec2.z);
         return newVec;
     }
     //向量减法 ,
@@ -33,12 +61,12 @@ class VectorTools {
     }
     //copy一个点
     static copyVector(vec) {
-        return new Laya.Vector3(vec.x, vec.y, vec.z);
+        return VectorTools.createVec3(vec.x, vec.y, vec.z);
     }
 }
 exports.default = VectorTools;
 //原点
-VectorTools.originPoint = new Laya.Vector3();
+VectorTools.originPoint = VectorTools.createVec3();
 //单位向量
-VectorTools.unitPoint = new Laya.Vector3(1, 1, 1);
+VectorTools.unitPoint = VectorTools.createVec3(1, 1, 1);
 //# sourceMappingURL=VectorTools.js.map
