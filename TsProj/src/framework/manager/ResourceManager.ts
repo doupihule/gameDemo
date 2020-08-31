@@ -1,11 +1,17 @@
-import {LoadManager} from "./LoadManager";
+
 import SubPackageManager from "./SubPackageManager";
-import LogsManager from "./LogsManager";
 import SubPackageConst from "../../game/sys/consts/SubPackageConst";
 import Sprite3DExpand from "../viewcomp/Sprite3DExpand";
+import  {Resource,UnityEngine} from "csharp";
+import LogsManager from "./LogsManager";
+import ResourceConst from "../../game/sys/consts/ResourceConst";
 
 
 export default class ResourceManager {
+
+	private static uiPrefabPath:string = "Assets/UI/Prefabs/"
+	private static  spinePrefabPath:string = "Assets/Animation/Prefabs/"
+
 	public constructor() {
 	}
 
@@ -148,9 +154,43 @@ export default class ResourceManager {
 	}
 
 	//获取文件buffer
-	public  static  getResBuffer(path,boundle:string = "byteab"){
+	public  static  getResBuffer(path,boundle:string ){
 		return  new  ArrayBuffer(10);
 	}
+
+	//获取uiprefab
+	public  static loadUIPrefab(name, boundlename:string ){
+		var path =this.uiPrefabPath + name+ ".prefab";
+		var obj =Resource.ResourceManager.Instance.luaLoadAsset(path, path, boundlename);
+		return UnityEngine.Object.Instantiate(obj);
+	}
+
+	public  static  loadSpinePrefab(name, boundlename){
+		var path =this.spinePrefabPath + name+ ".prefab";
+		var obj =Resource.ResourceManager.Instance.luaLoadAsset(path, path, boundlename);
+		if (!obj){
+			LogsManager.errorTag("spineError","没有找到对应的spine:"+name+"_用临时spine替代effect_jidi_attack_hit");
+			name ="effect_jidi_attack_hit";
+			path =this.spinePrefabPath + name+ ".prefab";
+			obj =Resource.ResourceManager.Instance.luaLoadAsset(path, path, boundlename);
+		}
+		return UnityEngine.Object.Instantiate(obj);
+	}
+
+	//获取对应的Sprite对象
+	public  static  loadSprite(imageurl, boundlename:string ){
+		if (!imageurl){
+			LogsManager.errorTag("nullImageUrl","ResourceManager.loadSprite");
+			return null;
+		}
+		var path = imageurl+ "png";
+		var sp =Resource.ResourceManager.Instance.luaLoadAsset(path, path, boundlename);
+		if (!sp){
+			LogsManager.errorTag("spriteError", path +"加载失败");
+		}
+		return UnityEngine.Object.Instantiate(sp);
+	}
+
 
 
 }

@@ -9,6 +9,7 @@ import ListExpand from "./ListExpand";
 import BaseContainer from "./BaseContainer";
 import LabelExpand from "./LabelExpand";
 import SpineGraphicExpand from "./SpineGraphicExpand";
+import ResourceConst from "../../game/sys/consts/ResourceConst";
 export default class ViewTools {
 	static  cobjMap:Map<UnityEngine.GameObject,BaseViewExpand> = new Map<UnityEngine.GameObject, BaseViewExpand>();
 	//自动绑定cobj
@@ -71,8 +72,13 @@ export default class ViewTools {
 		return new BaseContainer();
 	}
 
-	static  createImage(url:string =""){
-		return new ImageExpand(null);
+	//第一次创建图片的时候 必定 调整尺寸
+	static  createImage(url:string ="",boundleName:string = ResourceConst.boundle_uiimage){
+		var img =  new ImageExpand(null);
+		if (url ){
+			img.setSkin(url,boundleName,true)
+		}
+		return img
 	}
 
 	/**

@@ -21,10 +21,11 @@ export default class BaseViewExpand {
 		this.uitype ="base";
 	}
 
-
+	//绑定c对象
 	public  setCObject(cobj:UnityEngine.GameObject){
 		this.__cobject = cobj;
 		this.__ctransform = cobj.transform as UnityEngine.RectTransform;
+		ViewTools.bindCobjToBaseView(cobj,this);
 	}
 
 
@@ -113,9 +114,7 @@ export default class BaseViewExpand {
 		canvasGroup.alpha = value;
 	}
 
-	public  setZorder(value){
 
-	}
 
 	//-------------------------------------------------------------------------------------
 	//---------------------------显示相关-----------------------------------------
@@ -207,7 +206,10 @@ export default class BaseViewExpand {
 	public  setActive(value:boolean){
 		this.__cobject.SetActive(value);
 	}
+	//设置深度
+	public  setZorder(value){
 
+	}
 
 	public  get name(){
 		return this.__ctransform.name;

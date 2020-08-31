@@ -42,6 +42,9 @@ public class ExamplesCfg
                 typeof(CanvasGroup),
                 typeof(Image),
                 typeof(Sprite),
+                typeof(Text),
+                typeof(Outline),
+                typeof(Shadow),
 
                 typeof(Spine.Animation),
                 typeof(Spine.AnimationState),

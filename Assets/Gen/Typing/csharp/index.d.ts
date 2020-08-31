@@ -5,6 +5,88 @@ declare module 'csharp' {
     
     interface $Task<T> {}
     
+    namespace System {
+        class Object {
+            
+        }
+        class ValueType extends System.Object {
+            
+        }
+        class Void extends System.ValueType {
+            
+        }
+        class Single extends System.ValueType {
+            
+        }
+        class Boolean extends System.ValueType {
+            
+        }
+        class String extends System.Object {
+            
+        }
+        class Array extends System.Object {
+            
+        }
+        class Exception extends System.Object {
+            
+        }
+        class Int32 extends System.ValueType {
+            
+        }
+        class Delegate extends System.Object {
+            public Method: System.Reflection.MethodInfo;
+            public Target: any;
+            public static CreateDelegate(type: System.Type, firstArgument: any, method: System.Reflection.MethodInfo, throwOnBindFailure: boolean):Function;
+            public static CreateDelegate(type: System.Type, firstArgument: any, method: System.Reflection.MethodInfo):Function;
+            public static CreateDelegate(type: System.Type, method: System.Reflection.MethodInfo, throwOnBindFailure: boolean):Function;
+            public static CreateDelegate(type: System.Type, method: System.Reflection.MethodInfo):Function;
+            public static CreateDelegate(type: System.Type, target: any, method: string):Function;
+            public static CreateDelegate(type: System.Type, target: System.Type, method: string, ignoreCase: boolean, throwOnBindFailure: boolean):Function;
+            public static CreateDelegate(type: System.Type, target: System.Type, method: string):Function;
+            public static CreateDelegate(type: System.Type, target: System.Type, method: string, ignoreCase: boolean):Function;
+            public static CreateDelegate(type: System.Type, target: any, method: string, ignoreCase: boolean, throwOnBindFailure: boolean):Function;
+            public static CreateDelegate(type: System.Type, target: any, method: string, ignoreCase: boolean):Function;
+            public DynamicInvoke(...args: any[]):any;
+            public Clone():any;
+            public Equals(obj: any):boolean;
+            public GetHashCode():number;
+            public GetObjectData(info: System.Runtime.Serialization.SerializationInfo, context: System.Runtime.Serialization.StreamingContext):void;
+            public GetInvocationList():Function[];
+            public static Combine(a: Function, b: Function):Function;
+            public static Combine(...delegates: Function[]):Function;
+            public static Remove(source: Function, value: Function):Function;
+            public static RemoveAll(source: Function, value: Function):Function;
+            public static op_Equality(d1: Function, d2: Function):boolean;
+            public static op_Inequality(d1: Function, d2: Function):boolean;
+            
+        }
+        type MulticastDelegate = (...args:any[]) => any;
+        var MulticastDelegate: {new (func: (...args:any[]) => any): MulticastDelegate;}
+        type Converter$2<TInput,TOutput> = (input: TInput) => TOutput;
+        type Predicate$1<T> = (obj: T) => boolean;
+        type Action$1<T> = (obj: T) => void;
+        type Comparison$1<T> = (x: T, y: T) => number;
+        class Enum extends System.ValueType {
+            
+        }
+        class Type extends System.Reflection.MemberInfo {
+            
+        }
+        class UInt16 extends System.ValueType {
+            
+        }
+        class UInt32 extends System.ValueType {
+            
+        }
+        type Action$2<T1,T2> = (arg1: T1, arg2: T2) => void;
+        class Int64 extends System.ValueType {
+            
+        }
+        type Action$3<T1,T2,T3> = (arg1: T1, arg2: T2, arg3: T3) => void;
+        type Action = () => void;
+        var Action: {new (func: () => void): Action;}
+        
+    }
     namespace UnityEngine {
         class Debug extends System.Object {
             public static unityLogger: UnityEngine.ILogger;
@@ -125,7 +207,7 @@ declare module 'csharp' {
             public static Exclude(excludeThis: UnityEngine.Vector3, fromThat: UnityEngine.Vector3):UnityEngine.Vector3;
             
         }
-        class Color {
+        class Color extends System.ValueType {
             
         }
         class Object extends System.Object {
@@ -240,6 +322,37 @@ declare module 'csharp' {
             public constructor();
             
         }
+        class Component extends UnityEngine.Object {
+            public transform: UnityEngine.Transform;
+            public gameObject: UnityEngine.GameObject;
+            public tag: string;
+            public constructor();
+            public GetComponent(type: System.Type):UnityEngine.Component;
+            public GetComponent(type: string):UnityEngine.Component;
+            public GetComponentInChildren(t: System.Type, includeInactive: boolean):UnityEngine.Component;
+            public GetComponentInChildren(t: System.Type):UnityEngine.Component;
+            public GetComponentsInChildren(t: System.Type, includeInactive: boolean):UnityEngine.Component[];
+            public GetComponentsInChildren(t: System.Type):UnityEngine.Component[];
+            public GetComponentInParent(t: System.Type):UnityEngine.Component;
+            public GetComponentsInParent(t: System.Type, includeInactive: boolean):UnityEngine.Component[];
+            public GetComponentsInParent(t: System.Type):UnityEngine.Component[];
+            public GetComponents(type: System.Type):UnityEngine.Component[];
+            public GetComponents(type: System.Type, results: System.Collections.Generic.List$1<UnityEngine.Component>):void;
+            public CompareTag(tag: string):boolean;
+            public SendMessageUpwards(methodName: string, value: any, options: UnityEngine.SendMessageOptions):void;
+            public SendMessageUpwards(methodName: string, value: any):void;
+            public SendMessageUpwards(methodName: string):void;
+            public SendMessageUpwards(methodName: string, options: UnityEngine.SendMessageOptions):void;
+            public SendMessage(methodName: string, value: any):void;
+            public SendMessage(methodName: string):void;
+            public SendMessage(methodName: string, value: any, options: UnityEngine.SendMessageOptions):void;
+            public SendMessage(methodName: string, options: UnityEngine.SendMessageOptions):void;
+            public BroadcastMessage(methodName: string, parameter: any, options: UnityEngine.SendMessageOptions):void;
+            public BroadcastMessage(methodName: string, parameter: any):void;
+            public BroadcastMessage(methodName: string):void;
+            public BroadcastMessage(methodName: string, options: UnityEngine.SendMessageOptions):void;
+            
+        }
         class Transform extends UnityEngine.Component {
             public position: UnityEngine.Vector3;
             public localPosition: UnityEngine.Vector3;
@@ -307,44 +420,13 @@ declare module 'csharp' {
             public GetChildCount():number;
             
         }
-        class Quaternion {
+        class Quaternion extends System.ValueType {
             
         }
-        class Matrix4x4 {
+        class Matrix4x4 extends System.ValueType {
             
         }
         enum Space { World = 0, Self = 1 }
-        class Component extends UnityEngine.Object {
-            public transform: UnityEngine.Transform;
-            public gameObject: UnityEngine.GameObject;
-            public tag: string;
-            public constructor();
-            public GetComponent(type: System.Type):UnityEngine.Component;
-            public GetComponent(type: string):UnityEngine.Component;
-            public GetComponentInChildren(t: System.Type, includeInactive: boolean):UnityEngine.Component;
-            public GetComponentInChildren(t: System.Type):UnityEngine.Component;
-            public GetComponentsInChildren(t: System.Type, includeInactive: boolean):UnityEngine.Component[];
-            public GetComponentsInChildren(t: System.Type):UnityEngine.Component[];
-            public GetComponentInParent(t: System.Type):UnityEngine.Component;
-            public GetComponentsInParent(t: System.Type, includeInactive: boolean):UnityEngine.Component[];
-            public GetComponentsInParent(t: System.Type):UnityEngine.Component[];
-            public GetComponents(type: System.Type):UnityEngine.Component[];
-            public GetComponents(type: System.Type, results: System.Collections.Generic.List$1<UnityEngine.Component>):void;
-            public CompareTag(tag: string):boolean;
-            public SendMessageUpwards(methodName: string, value: any, options: UnityEngine.SendMessageOptions):void;
-            public SendMessageUpwards(methodName: string, value: any):void;
-            public SendMessageUpwards(methodName: string):void;
-            public SendMessageUpwards(methodName: string, options: UnityEngine.SendMessageOptions):void;
-            public SendMessage(methodName: string, value: any):void;
-            public SendMessage(methodName: string):void;
-            public SendMessage(methodName: string, value: any, options: UnityEngine.SendMessageOptions):void;
-            public SendMessage(methodName: string, options: UnityEngine.SendMessageOptions):void;
-            public BroadcastMessage(methodName: string, parameter: any, options: UnityEngine.SendMessageOptions):void;
-            public BroadcastMessage(methodName: string, parameter: any):void;
-            public BroadcastMessage(methodName: string):void;
-            public BroadcastMessage(methodName: string, options: UnityEngine.SendMessageOptions):void;
-            
-        }
         class RectTransform extends UnityEngine.Transform {
             public rect: UnityEngine.Rect;
             public anchorMin: UnityEngine.Vector2;
@@ -365,7 +447,7 @@ declare module 'csharp' {
             public SetSizeWithCurrentAnchors(axis: UnityEngine.RectTransform.Axis, size: number):void;
             
         }
-        class Rect {
+        class Rect extends System.ValueType {
             
         }
         class GameObject extends UnityEngine.Object {
@@ -418,6 +500,9 @@ declare module 'csharp' {
         enum SendMessageOptions { RequireReceiver = 0, DontRequireReceiver = 1 }
         enum PrimitiveType { Sphere = 0, Capsule = 1, Cylinder = 2, Cube = 3, Plane = 4, Quad = 5 }
         enum HideFlags { None = 0, HideInHierarchy = 1, HideInInspector = 2, DontSaveInEditor = 4, NotEditable = 8, DontSaveInBuild = 16, DontUnloadUnusedAsset = 32, DontSave = 52, HideAndDontSave = 61 }
+        class Behaviour extends UnityEngine.Component {
+            
+        }
         class CanvasGroup extends UnityEngine.Behaviour {
             public alpha: number;
             public interactable: boolean;
@@ -427,10 +512,10 @@ declare module 'csharp' {
             public IsRaycastLocationValid(sp: UnityEngine.Vector2, eventCamera: UnityEngine.Camera):boolean;
             
         }
-        class Camera {
+        class Camera extends UnityEngine.Behaviour {
             
         }
-        class Behaviour {
+        class MonoBehaviour extends UnityEngine.Behaviour {
             
         }
         class Sprite extends UnityEngine.Object {
@@ -462,110 +547,49 @@ declare module 'csharp' {
             public static Create(texture: UnityEngine.Texture2D, rect: UnityEngine.Rect, pivot: UnityEngine.Vector2):UnityEngine.Sprite;
             
         }
-        class Material {
+        class Material extends UnityEngine.Object {
             
         }
-        class Texture {
+        class Texture extends UnityEngine.Object {
             
         }
-        class MonoBehaviour {
+        class Bounds extends System.ValueType {
             
         }
-        class Bounds {
+        class Vector4 extends System.ValueType {
             
         }
-        class Vector4 {
-            
-        }
-        class Texture2D {
+        class Texture2D extends UnityEngine.Texture {
             
         }
         enum SpritePackingMode { Tight = 0, Rectangle = 1 }
         enum SpritePackingRotation { None = 0, FlipHorizontal = 1, FlipVertical = 2, Rotate180 = 3, Any = 15 }
         enum SpriteMeshType { FullRect = 0, Tight = 1 }
-        class Mesh {
+        class TextGenerator extends System.Object {
             
         }
-        class Color32 {
+        class Font extends UnityEngine.Object {
             
         }
-        class Shader {
+        enum TextAnchor { UpperLeft = 0, UpperCenter = 1, UpperRight = 2, MiddleLeft = 3, MiddleCenter = 4, MiddleRight = 5, LowerLeft = 6, LowerCenter = 7, LowerRight = 8 }
+        enum HorizontalWrapMode { Wrap = 0, Overflow = 1 }
+        enum VerticalWrapMode { Truncate = 0, Overflow = 1 }
+        enum FontStyle { Normal = 0, Bold = 1, Italic = 2, BoldAndItalic = 3 }
+        class TextGenerationSettings extends System.ValueType {
             
         }
-        
-    }
-    namespace System {
-        class Void {
+        class ScriptableObject extends UnityEngine.Object {
             
         }
-        class Single {
+        class Mesh extends UnityEngine.Object {
             
         }
-        class Boolean {
+        class Color32 extends System.ValueType {
             
         }
-        class Object {
+        class Shader extends UnityEngine.Object {
             
         }
-        class String {
-            
-        }
-        class Exception {
-            
-        }
-        class Int32 {
-            
-        }
-        class ValueType {
-            
-        }
-        type Converter$2<TInput,TOutput> = (input: TInput) => TOutput;
-        type Predicate$1<T> = (obj: T) => boolean;
-        type Action$1<T> = (obj: T) => void;
-        type Comparison$1<T> = (x: T, y: T) => number;
-        class Type {
-            
-        }
-        class Delegate extends System.Object {
-            public Method: System.Reflection.MethodInfo;
-            public Target: any;
-            public static CreateDelegate(type: System.Type, firstArgument: any, method: System.Reflection.MethodInfo, throwOnBindFailure: boolean):Function;
-            public static CreateDelegate(type: System.Type, firstArgument: any, method: System.Reflection.MethodInfo):Function;
-            public static CreateDelegate(type: System.Type, method: System.Reflection.MethodInfo, throwOnBindFailure: boolean):Function;
-            public static CreateDelegate(type: System.Type, method: System.Reflection.MethodInfo):Function;
-            public static CreateDelegate(type: System.Type, target: any, method: string):Function;
-            public static CreateDelegate(type: System.Type, target: System.Type, method: string, ignoreCase: boolean, throwOnBindFailure: boolean):Function;
-            public static CreateDelegate(type: System.Type, target: System.Type, method: string):Function;
-            public static CreateDelegate(type: System.Type, target: System.Type, method: string, ignoreCase: boolean):Function;
-            public static CreateDelegate(type: System.Type, target: any, method: string, ignoreCase: boolean, throwOnBindFailure: boolean):Function;
-            public static CreateDelegate(type: System.Type, target: any, method: string, ignoreCase: boolean):Function;
-            public DynamicInvoke(...args: any[]):any;
-            public Clone():any;
-            public Equals(obj: any):boolean;
-            public GetHashCode():number;
-            public GetObjectData(info: System.Runtime.Serialization.SerializationInfo, context: System.Runtime.Serialization.StreamingContext):void;
-            public GetInvocationList():Function[];
-            public static Combine(a: Function, b: Function):Function;
-            public static Combine(...delegates: Function[]):Function;
-            public static Remove(source: Function, value: Function):Function;
-            public static RemoveAll(source: Function, value: Function):Function;
-            public static op_Equality(d1: Function, d2: Function):boolean;
-            public static op_Inequality(d1: Function, d2: Function):boolean;
-            
-        }
-        class UInt16 {
-            
-        }
-        class UInt32 {
-            
-        }
-        type Action$2<T1,T2> = (arg1: T1, arg2: T2) => void;
-        class Int64 {
-            
-        }
-        type Action$3<T1,T2,T3> = (arg1: T1, arg2: T2, arg3: T3) => void;
-        type Action = () => void;
-        var Action: {new (func: () => void): Action;}
         
     }
     namespace System.Collections.Generic {
@@ -634,19 +658,19 @@ declare module 'csharp' {
         interface IList$1<T> {
             
         }
-        class Dictionary$2<TKey,TValue> {
+        class Dictionary$2<TKey,TValue> extends System.Object {
             
         }
         
     }
     namespace System.Collections.ObjectModel {
-        class ReadOnlyCollection$1<T> {
+        class ReadOnlyCollection$1<T> extends System.Object {
             
         }
         
     }
     namespace System.Collections.Generic.List$1 {
-        class Enumerator<T> {
+        class Enumerator<T> extends System.ValueType {
             
         }
         
@@ -664,28 +688,46 @@ declare module 'csharp' {
         enum Axis { Horizontal = 0, Vertical = 1 }
         
     }
-    namespace UnityEngine.SceneManagement {
-        class Scene {
+    namespace System.Reflection {
+        class MemberInfo extends System.Object {
+            
+        }
+        class MethodBase extends System.Reflection.MemberInfo {
+            
+        }
+        class MethodInfo extends System.Reflection.MethodBase {
             
         }
         
     }
-    namespace System.Reflection {
-        class MethodInfo {
+    namespace UnityEngine.SceneManagement {
+        class Scene extends System.ValueType {
             
         }
         
     }
     namespace System.Runtime.Serialization {
-        class SerializationInfo {
+        class SerializationInfo extends System.Object {
             
         }
-        class StreamingContext {
+        class StreamingContext extends System.ValueType {
+            
+        }
+        
+    }
+    namespace UnityEngine.EventSystems {
+        class UIBehaviour extends UnityEngine.MonoBehaviour {
             
         }
         
     }
     namespace UnityEngine.UI {
+        class Graphic extends UnityEngine.EventSystems.UIBehaviour {
+            
+        }
+        class MaskableGraphic extends UnityEngine.UI.Graphic {
+            
+        }
         class Image extends UnityEngine.UI.MaskableGraphic {
             public sprite: UnityEngine.Sprite;
             public overrideSprite: UnityEngine.Sprite;
@@ -719,27 +761,62 @@ declare module 'csharp' {
             public IsRaycastLocationValid(screenPoint: UnityEngine.Vector2, eventCamera: UnityEngine.Camera):boolean;
             
         }
-        class MaskableGraphic {
+        class Text extends UnityEngine.UI.MaskableGraphic {
+            public cachedTextGenerator: UnityEngine.TextGenerator;
+            public cachedTextGeneratorForLayout: UnityEngine.TextGenerator;
+            public mainTexture: UnityEngine.Texture;
+            public font: UnityEngine.Font;
+            public text: string;
+            public supportRichText: boolean;
+            public resizeTextForBestFit: boolean;
+            public resizeTextMinSize: number;
+            public resizeTextMaxSize: number;
+            public alignment: UnityEngine.TextAnchor;
+            public alignByGeometry: boolean;
+            public fontSize: number;
+            public horizontalOverflow: UnityEngine.HorizontalWrapMode;
+            public verticalOverflow: UnityEngine.VerticalWrapMode;
+            public lineSpacing: number;
+            public fontStyle: UnityEngine.FontStyle;
+            public pixelsPerUnit: number;
+            public minWidth: number;
+            public preferredWidth: number;
+            public flexibleWidth: number;
+            public minHeight: number;
+            public preferredHeight: number;
+            public flexibleHeight: number;
+            public layoutPriority: number;
+            public FontTextureChanged():void;
+            public GetGenerationSettings(extents: UnityEngine.Vector2):UnityEngine.TextGenerationSettings;
+            public static GetTextAnchorPivot(anchor: UnityEngine.TextAnchor):UnityEngine.Vector2;
+            public CalculateLayoutInputHorizontal():void;
+            public CalculateLayoutInputVertical():void;
+            public OnRebuildRequested():void;
             
         }
-        class Graphic {
+        class BaseMeshEffect extends UnityEngine.EventSystems.UIBehaviour {
+            
+        }
+        class Shadow extends UnityEngine.UI.BaseMeshEffect {
+            public effectColor: UnityEngine.Color;
+            public effectDistance: UnityEngine.Vector2;
+            public useGraphicAlpha: boolean;
+            public ModifyMesh(vh: UnityEngine.UI.VertexHelper):void;
+            
+        }
+        class Outline extends UnityEngine.UI.Shadow {
+            public ModifyMesh(vh: UnityEngine.UI.VertexHelper):void;
+            
+        }
+        class VertexHelper extends System.Object {
             
         }
         enum CanvasUpdate { Prelayout = 0, Layout = 1, PostLayout = 2, PreRender = 3, LatePreRender = 4, MaxUpdateValue = 5 }
-        class Text {
-            
-        }
         
     }
     namespace UnityEngine.UI.Image {
         enum Type { Simple = 0, Sliced = 1, Tiled = 2, Filled = 3 }
         enum FillMethod { Horizontal = 0, Vertical = 1, Radial90 = 2, Radial180 = 3, Radial360 = 4 }
-        
-    }
-    namespace UnityEngine.EventSystems {
-        class UIBehaviour {
-            
-        }
         
     }
     namespace Spine {
@@ -754,13 +831,13 @@ declare module 'csharp' {
         interface Timeline {
             
         }
-        class ExposedList$1<T> {
+        class ExposedList$1<T> extends System.Object {
             
         }
-        class Skeleton {
+        class Skeleton extends System.Object {
             
         }
-        class Event {
+        class Event extends System.Object {
             
         }
         enum MixPose { Setup = 0, Current = 1, CurrentLayered = 2 }
@@ -798,10 +875,10 @@ declare module 'csharp' {
             public ToString():string;
             
         }
-        class AnimationStateData {
+        class AnimationStateData extends System.Object {
             
         }
-        class TrackEntry {
+        class TrackEntry extends System.Object {
             
         }
         class Bone extends System.Object {
@@ -849,10 +926,10 @@ declare module 'csharp' {
             public ToString():string;
             
         }
-        class BoneData {
+        class BoneData extends System.Object {
             
         }
-        class SkeletonData {
+        class SkeletonData extends System.Object {
             
         }
         
@@ -904,10 +981,10 @@ declare module 'csharp' {
             public UpdateMesh():void;
             
         }
-        class SkeletonDataAsset {
+        class SkeletonDataAsset extends UnityEngine.ScriptableObject {
             
         }
-        class MeshGenerator {
+        class MeshGenerator extends System.Object {
             
         }
         type UpdateBonesDelegate = (animated: Spine.Unity.ISkeletonAnimation) => void;

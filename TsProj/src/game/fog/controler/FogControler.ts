@@ -35,7 +35,7 @@ export default class FogControler extends BattleControler {
 			var instance: FogInstanceBasic = this._allMoveInstanceArr[i];
 			instance.updateFrame()
 		}
-		//重新运动
+		//重新运动b
 		for (var i = len - 1; i >= 0; i--) {
 			var instance: FogInstanceBasic = this._allMoveInstanceArr[i];
 			instance.updateFrameLater()

@@ -10,6 +10,28 @@ export default class ResourceConst {
 	/**指色互推背景 */
 	static JUMP_ZHISE_ICONBG = "uisource/jump/bg-box.png";
 
+	static boundle_ui = "uiab"
+	static boundle_map = "map"
+	static boundle_base = "baseab"
+	static boundle_animation = "animation"
+	static boundle_uiimage = "uiimageab"
+
+	static UIResPath = "Assets/UI/UIRes/"
+
+	static baseLabelPrefeb = "base/BaseLabel";
+	static baseContainerPrefeb = "base/BaseContainer";
+
+	static BATTLE_SHADE = "Assets/UI/UIRes/battle/battle_image_yinying"
+
+	static BATTLE_HEALTH_BACK = "Assets/UI/UIRes/battle/battle_image_xutiaodi"
+	static BATTLE_HEALTH_PROGRESS = "Assets/UI/UIRes/battle/battle_image_xutiao1"
+	static BATTLE_HEALTH_PROGRESS2 = "Assets/UI/UIRes/battle/battle_image_xutiao2"
+	static BATTLE_HEALTH_HUDUN = "Assets/UI/UIRes/battle/battle_image_xutiao3"
+
+	static EFFECT_BORN_LANDROLE = "efect_same_born_01"
+	static BUFFICON_PATH = "Assets/UI/UIRes/bufficon/";
+
+
 	//资源常量
 	static COIN_PNG: string = "native/main/main/main_icon_jinbi.png";
 	static GOLD_PNG: string = "native/main/main/main_icon_zuanshi.png";
@@ -26,14 +48,6 @@ export default class ResourceConst {
 	static CHAPTER_LOCKED_PNG: string = "uisource/hero/hero_icon_suo.png";
 
 
-	//战斗中用的资源
-	static BATTLE_HEALTH_BACK: string = "uisource/battle/battle/battle_image_xutiaodi.png";
-	static BATTLE_HEALTH_PROGRESS: string = "uisource/battle/battle/battle_image_xutiao1.png";
-	static BATTLE_HEALTH_PROGRESS2: string = "uisource/battle/battle/battle_image_xutiao2.png";
-	static BATTLE_HEALTH_HUDUN: string = "uisource/battle/battle/battle_image_xutiao3.png";
-
-	//战斗中的资源
-	static BATTLE_SHADE: string = "uisource/battle/battle/battle_image_yinying.png"
 
 	//通用黑底
 	static COMMON_IMAGE_HEIDI: string = "uisource/common/common/common_image_heidi.png";
@@ -90,8 +104,6 @@ export default class ResourceConst {
 	/**敌方显示在小地图上的小梯形红点资源名 */
 	static ENEMY_MAP_HOME_POINT: string = "uisource/battle/battle/battle_image_difangjidi.png";
 
-	/**地面角色出生特效 */
-	static EFFECT_BORN_LANDROLE: string = "efect_same_born_01";
 	/**通用点击音效 */
 	static BASE_SOUND_CLICK = "click";
 

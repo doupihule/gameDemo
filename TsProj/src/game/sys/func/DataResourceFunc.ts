@@ -30,70 +30,7 @@ export default class DataResourceFunc extends BaseFunc {
 	getDataResourceInfo(dataArr) {
 		var result = {};
 
-		if (dataArr[0]) {
-			switch (Number(dataArr[0])) {
-				//金币
-				case DataResourceConst.COIN:
-					result = {
-						img: ResourceConst.COIN_PNG,
-						num: dataArr[1],
-					};
-					break;
-				//钻石
-				case DataResourceConst.GOLD:
-					result = {
-						img: ResourceConst.GOLD_PNG,
-						num: dataArr[1],
-					};
-					break;
-				//体力
-				case DataResourceConst.SP:
-					result = {
-						img: ResourceConst.SP_PNG,
-						num: dataArr[1],
-					};
-					break;
-				//碎片
-				case DataResourceConst.PIECE:
-					result = {
-						img: RolesFunc.instance.getEquipIcon(RolesFunc.instance.getCfgDatasByKey("EquipMaterial", dataArr[1], "icon")),
-						id: dataArr[1],
-						num: dataArr[2],
-					};
-					break;
-				//零件
-				case DataResourceConst.COMP:
-					result = {
-						img: ResourceConst.COMP_PNG,
-						num: dataArr[1],
-					};
-					break;
-				//迷雾币
-				case DataResourceConst.FOGCOIN:
-					result = {
-						img: ResourceConst.FOGCOIN_PNG,
-						num: dataArr[1],
-					};
-					break;
-				//行动力
-				case DataResourceConst.ACT:
-					result = {
-						img: ResourceConst.ACT_PNG,
-						num: dataArr[1],
-					};
-					break;
-				//迷雾道具
-				case DataResourceConst.FOGITEM:
-					result = {
-						img: RolesFunc.instance.getEquipIcon(RolesFunc.instance.getCfgDatasByKey("EquipMaterial", dataArr[1], "icon")),
-						id: dataArr[1],
-						num: dataArr[2],
-					};
-					break;
 
-			}
-
-		}
 
 		return result;
 

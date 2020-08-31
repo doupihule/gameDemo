@@ -7,6 +7,10 @@ export default class GameConsts {
 	//游戏引擎是unity
 	static  gameEngine:string =GameConsts.GAMEENGING_UNITY
 
+	//UI一米对应项目比例 100;
+	static  uiMitoPixelRatio:number  =100;
+
+
 	//默认分配的物理内存, 这个值 不能设置大,否则部分设备初始化 物理引擎会报错
 	static defaultPhysicsMemory: number = 16;
 	//游戏帧率
