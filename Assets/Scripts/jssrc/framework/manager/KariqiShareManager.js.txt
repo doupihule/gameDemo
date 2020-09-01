@@ -623,4 +623,3 @@ KariqiShareManager._cacheShareVedioMethod = {};
 KariqiShareManager._shareTvResultMap = {};
 //记录当前的分享视频策略  {id:,index:}
 KariqiShareManager.currentShareVedioMethod = null;
-//# sourceMappingURL=KariqiShareManager.js.map

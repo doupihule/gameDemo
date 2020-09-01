@@ -347,8 +347,7 @@ export default class Client {
 	private reloginBack(result) {
 		//如果重连有开关 需要立刻同步下开关
 		if (result.data && result.data.config && result.data.config.switch) {
-			GameSwitch.coverServerSwitchConditionMap(result.data.config.switchCondition)
-			GameSwitch.coverServerSwitchMap(result.data.config.switch)
+			UserInfo.platform.coverServerSwitchMap(result.data.config.switch)
 		}
 	}
 

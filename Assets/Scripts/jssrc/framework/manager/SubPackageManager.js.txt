@@ -286,4 +286,3 @@ SubPackageManager._groupInfoCache = {
 如果是子包.   先走微信加载子包逻辑. 加载完成 后 在走egret的load.
 加载子包失败弹出网络提示. 并重新加载.
  */ 
-//# sourceMappingURL=SubPackageManager.js.map

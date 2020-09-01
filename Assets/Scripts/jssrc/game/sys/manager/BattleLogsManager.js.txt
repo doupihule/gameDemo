@@ -42,4 +42,3 @@ class BattleLogsManager {
 exports.default = BattleLogsManager;
 //是否显示战斗日志
 BattleLogsManager.isShowBattleLog = true;
-//# sourceMappingURL=BattleLogsManager.js.map

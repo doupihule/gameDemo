@@ -69,7 +69,7 @@ class MainModule {
             Client_1.default.instance.heartBeatInterval = result.data.config.heartBeatInterval;
             //覆盖服务器来回的开关参数
             if (result.data.config.switch) {
-                GameSwitch_1.default.coverServerSwitchMap(result.data.config.switch);
+                UserInfo_1.default.platform.coverServerSwitchMap(result.data.config.switch);
                 LogsManager_1.default.echo("yrc gameswitch resultSwitch", result.data.config.switch);
             }
             KakuraClient_1.default.instance.registHeartBeat();
@@ -246,4 +246,3 @@ MainModule.task_onloginResult = "task_onloginResult"; //登入完成
 MainModule.task_mergeFileBack = "task_mergeFileBack"; //文件合并回来
 MainModule.task_kariquLogin = "task_kariquLogin"; //卡日曲登录结果
 MainModule.showMainTask = 6; // 进主界面6个任务, 1,版本检查结束, 2, 312登入初始化完成, 3,fileconfig.json加载完成 4.分包下载完成 ,5.合并文件完成,6卡日曲登录回调 7获取系统信息完成(只有android和ios有)
-//# sourceMappingURL=MainModule.js.map

@@ -207,4 +207,3 @@ WindowCfgs.commonCfgs = {
     style: 0,
     cache: false,
 };
-//# sourceMappingURL=WindowCfgs.js.map

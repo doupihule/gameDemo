@@ -28,4 +28,3 @@ PlaqueConst.Plaque_FogBus = 10;
 PlaqueConst.Plaque_FogBag = 11;
 /**战斗结算 */
 PlaqueConst.Plaque_Result = 12;
-//# sourceMappingURL=PlaqueConst.js.map

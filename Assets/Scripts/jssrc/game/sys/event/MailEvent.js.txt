@@ -4,4 +4,3 @@ class MailEvent {
 }
 exports.default = MailEvent;
 MailEvent.MAIL_LIST_UPDATE = "MAIL_LIST_UPDATE";
-//# sourceMappingURL=MailEvent.js.map

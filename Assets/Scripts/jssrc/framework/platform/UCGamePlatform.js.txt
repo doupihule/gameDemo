@@ -193,4 +193,3 @@ class UCGamePlatform extends WXGamePlatform_1.default {
     }
 }
 exports.default = UCGamePlatform;
-//# sourceMappingURL=UCGamePlatform.js.map

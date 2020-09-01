@@ -10,4 +10,3 @@ class ChapterEvent {
 exports.default = ChapterEvent;
 /**刷新主角移动 */
 ChapterEvent.CHAPTEREVENT_PLAYER_MOVE = "CHAPTEREVENT_PLAYER_MOVE";
-//# sourceMappingURL=ChapterEvent.js.map

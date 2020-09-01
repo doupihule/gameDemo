@@ -549,4 +549,3 @@ class InstancePerformance extends InstanceMove_1.default {
     }
 }
 exports.default = InstancePerformance;
-//# sourceMappingURL=InstancePerformance.js.map

@@ -69,4 +69,3 @@ ChannelConst.ios_master = {
     actionId: "1110605017",
     actionSecret: "5af02f596deff76e6859354f5ad792c2",
 };
-//# sourceMappingURL=ChannelConst.js.map

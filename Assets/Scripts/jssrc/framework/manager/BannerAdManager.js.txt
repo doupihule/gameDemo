@@ -205,4 +205,3 @@ BannerAdManager.BANNER_ORDER_TYPE_RECOMMEND = 2;
 BannerAdManager.BANNER_ORDER_TYPE_ORDER = 3;
 /** BANNER序列类型：只有Banner */
 BannerAdManager.BANNER_ORDER_TYPE_JUST_BANNER = 4;
-//# sourceMappingURL=BannerAdManager.js.map

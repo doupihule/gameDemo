@@ -1,15 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseViewExpand_1 = require("./BaseViewExpand");
+const ResourceManager_1 = require("../manager/ResourceManager");
+const ResourceConst_1 = require("../../game/sys/consts/ResourceConst");
+const csharp_1 = require("csharp");
+const puerts_1 = require("puerts");
 class BaseContainer extends BaseViewExpand_1.default {
     constructor(cobj = null) {
         super();
-        if (cobj) {
-            this.setCObject(cobj);
+        if (!cobj) {
+            cobj = ResourceManager_1.default.loadUIPrefab(ResourceConst_1.default.baseContainerPrefeb, ResourceConst_1.default.boundle_ui);
         }
-        else {
-        }
+        this.setCObject(cobj);
+    }
+    setCObject(cobj) {
+        super.setCObject(cobj);
+        this.__imageComp = cobj.GetComponent(puerts_1.$typeof(csharp_1.UnityEngine.UI.Image));
+    }
+    setColor(r, g, b, a = 255) {
+        // this.__imageComp.color = BaseContainer._tempColor as any;
+        csharp_1.GameUtils.ViewExtensionMethods.SetImageColor(this.__imageComp, r, g, b, a);
+    }
+    dispose() {
+        super.dispose();
+        this.__imageComp = null;
     }
 }
 exports.default = BaseContainer;
-//# sourceMappingURL=BaseContainer.js.map
+BaseContainer._tempColor = { r: 255, g: 255, b: 255, a: 255 };

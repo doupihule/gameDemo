@@ -128,4 +128,3 @@ exports.default = SkillExpandTrigger;
 //技能扩展触发器. 专门用来扩展一些特殊的技能效果.
 //连线特效
 SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT = "1";
-//# sourceMappingURL=SkillExpandTrigger.js.map

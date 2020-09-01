@@ -403,4 +403,3 @@ class ChapterLogicControler {
     }
 }
 exports.default = ChapterLogicControler;
-//# sourceMappingURL=ChapterLogicControler.js.map

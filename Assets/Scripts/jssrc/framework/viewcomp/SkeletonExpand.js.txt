@@ -67,4 +67,3 @@ exports.default = SkeletonExpand;
 SkeletonExpand.cacheAniCompleteMap = {};
 //缓存的纹理
 SkeletonExpand._textureCache = {};
-//# sourceMappingURL=SkeletonExpand.js.map

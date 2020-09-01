@@ -37,4 +37,3 @@ CloudPlatformData.online = {
     "cloud_url": "https://cloud-online.fantasyfancy.com:8544/index.php?mod=jsonrpc",
     "vms_version": 1,
 };
-//# sourceMappingURL=CloudPlatformData.js.map

@@ -9,6 +9,7 @@ const ListExpand_1 = require("./ListExpand");
 const BaseContainer_1 = require("./BaseContainer");
 const LabelExpand_1 = require("./LabelExpand");
 const SpineGraphicExpand_1 = require("./SpineGraphicExpand");
+const ResourceConst_1 = require("../../game/sys/consts/ResourceConst");
 class ViewTools {
     //自动绑定cobj
     static autoBindingCObj(cobj) {
@@ -70,8 +71,13 @@ class ViewTools {
     static createContainer() {
         return new BaseContainer_1.default();
     }
-    static createImage(url = "") {
-        return new ImageExpand_1.default(null);
+    //第一次创建图片的时候 必定 调整尺寸
+    static createImage(url = "", boundleName = ResourceConst_1.default.boundle_uiimage) {
+        var img = new ImageExpand_1.default(null);
+        if (url) {
+            img.setSkin(url, boundleName, true);
+        }
+        return img;
     }
     /**
      *   align 对齐方式 0左上,1中上,2右上,3左中,4中中,5右中,6左下,7中下,8右下 默认4 中中
@@ -85,4 +91,3 @@ class ViewTools {
 }
 exports.default = ViewTools;
 ViewTools.cobjMap = new Map();
-//# sourceMappingURL=ViewTools.js.map

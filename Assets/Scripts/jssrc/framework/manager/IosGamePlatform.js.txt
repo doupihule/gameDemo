@@ -111,4 +111,3 @@ class IosGamePlatform extends AndroidGamePlatform_1.default {
     }
 }
 exports.default = IosGamePlatform;
-//# sourceMappingURL=IosGamePlatform.js.map

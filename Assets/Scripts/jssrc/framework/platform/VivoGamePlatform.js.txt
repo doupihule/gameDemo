@@ -222,4 +222,3 @@ class VivoGamePlatform extends WXGamePlatform_1.default {
     }
 }
 exports.default = VivoGamePlatform;
-//# sourceMappingURL=VivoGamePlatform.js.map

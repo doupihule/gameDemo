@@ -618,4 +618,3 @@ WindowManager._currentWindowName = "";
 WindowManager._allWindowMap = [];
 WindowManager.UIInstance = {};
 WindowManager.uiMaker = LoadingUI_1.LoadingUI;
-//# sourceMappingURL=WindowManager.js.map

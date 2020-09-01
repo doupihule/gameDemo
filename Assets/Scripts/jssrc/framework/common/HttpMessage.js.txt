@@ -232,4 +232,3 @@ HttpMessage.URLLoaderDataFormat = {
     TEXTURE: "texture",
     BINARY: "binary"
 };
-//# sourceMappingURL=HttpMessage.js.map

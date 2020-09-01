@@ -118,4 +118,3 @@ GuideManager.GuideType = {
     None: 3
 };
 GuideManager.maxGuide = 10;
-//# sourceMappingURL=GuideManager.js.map

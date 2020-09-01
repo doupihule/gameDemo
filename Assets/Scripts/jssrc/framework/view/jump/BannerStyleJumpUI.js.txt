@@ -78,4 +78,3 @@ exports.default = BannerStyleJumpUI;
 //每移动一格等待时间
 BannerStyleJumpUI.perWaitFrame = 120;
 BannerStyleJumpUI.perMoveFrame = 30; //每次移动的时间是0.5秒
-//# sourceMappingURL=BannerStyleJumpUI.js.map

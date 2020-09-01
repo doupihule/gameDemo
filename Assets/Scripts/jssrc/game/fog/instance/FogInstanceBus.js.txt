@@ -216,4 +216,3 @@ class FogInstanceBus extends FogInstanceMove_1.default {
     }
 }
 exports.default = FogInstanceBus;
-//# sourceMappingURL=FogInstanceBus.js.map

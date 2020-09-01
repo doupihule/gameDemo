@@ -54,4 +54,3 @@ class MonsterFunc extends BaseFunc_1.default {
 }
 exports.default = MonsterFunc;
 MonsterFunc.monsterIndex = 1;
-//# sourceMappingURL=MonsterFunc.js.map

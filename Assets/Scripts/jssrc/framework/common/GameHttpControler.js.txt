@@ -249,4 +249,3 @@ class GameHttpControler {
 }
 exports.default = GameHttpControler;
 GameHttpControler.tokenErrorCode = "10038";
-//# sourceMappingURL=GameHttpControler.js.map

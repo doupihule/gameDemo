@@ -477,4 +477,3 @@ class UserModel extends BaseModel_1.default {
     }
 }
 exports.default = UserModel;
-//# sourceMappingURL=UserModel.js.map

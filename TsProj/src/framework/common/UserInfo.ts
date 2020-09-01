@@ -48,10 +48,7 @@ export default class UserInfo {
 
 	/**场景值信息 */
 	static get LoginSceneInfo() {
-		if (!Global.firstRunSystemInfo.sceneId) {
-			return "no info"
-		}
-		return SceneReference.getSceneName(Global.firstRunSystemInfo.sceneId) + Global.firstRunSystemInfo.appId;
+		return "no info"
 	}
 
 	//用户openId
@@ -96,25 +93,6 @@ export default class UserInfo {
 	static deviceSys: string;
 
 	static initDeviceSys() {
-		if (this.deviceSys) {
-			return;
-		}
-		if (UserInfo.systemId == "mini") {
-			var rt = Global.getOs();
-			if (rt == "IPad" || rt == "IOS" || rt == "IPhone") {
-				this.deviceSys = "ios";
-			} else if (rt == "Android") {
-				this.deviceSys = "android";
-			} else {
-				this.deviceSys = "window";
-			}
-		} else if (UserInfo.isSystemIos()) {
-			this.deviceSys = "ios";
-		} else if (UserInfo.isSystemAndroid()) {
-			this.deviceSys = "android";
-		} else {
-			this.deviceSys = "window";
-		}
 	}
 
 	//是否是ios设备
@@ -227,10 +205,6 @@ export default class UserInfo {
 		return false;
 	}
 
-	//获取native默认的用户id 目前暂定 systemid+deviceid
-	static getNativeDefaultUid() {
-		return this.systemId + Global.deviceId
-	}
 
 	/**
 	 * 获取url后面参数

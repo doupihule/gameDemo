@@ -26,4 +26,3 @@ class NativeTools {
     }
 }
 exports.default = NativeTools;
-//# sourceMappingURL=NativeTools.js.map

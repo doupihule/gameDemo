@@ -103,4 +103,3 @@ class BattleLayerControler {
     }
 }
 exports.BattleLayerControler = BattleLayerControler;
-//# sourceMappingURL=BattleLayerControler.js.map

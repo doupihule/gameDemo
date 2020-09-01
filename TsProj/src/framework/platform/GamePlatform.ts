@@ -39,6 +39,7 @@ import JSToNativeEvent from "../event/JSToNativeEvent";
 import GameHttpControler from "../common/GameHttpControler";
 import BattleFunc from "../../game/sys/func/BattleFunc";
 import GlobalEnv from "../engine/GlobalEnv";
+import DeviceTools from "../utils/DeviceTools";
 
 
 export default class GamePlatform implements IMessage {
@@ -282,7 +283,7 @@ export default class GamePlatform implements IMessage {
 		}
 		if (result.GameStatic) {
 			//version里面的开关覆盖
-			GameSwitch.coverServerSwitchMap(result.GameStatic)
+			this.coverServerSwitchMap(result.GameStatic)
 		}
 		Global.resource_url = result.resource_url_root + "/" + UserInfo.platformId + "/";
 		;
@@ -524,7 +525,7 @@ export default class GamePlatform implements IMessage {
 
 		//如果是审核服版本 那么重新发送一次globalsever
 		if (data.switch) {
-			GameSwitch.coverServerSwitchMap(data.switch);
+			this.coverServerSwitchMap(data.switch);
 			if (data.switch.CLOUD_URL && (UserInfo.platform.global_url_review == "" || UserInfo.platform.global_url_review != data.switch.CLOUD_URL)) {
 
 				// Global.global_url_review 用于记录审核服主域名【用于区别负载域名】
@@ -696,7 +697,7 @@ export default class GamePlatform implements IMessage {
 		// }
 
 		if (resultData.switch && !Global.checkIsSingleMode()) {
-			GameSwitch.coverServerSwitchMap(resultData.switch);
+			this.coverServerSwitchMap(resultData.switch);
 		}
 
 	}
@@ -1475,5 +1476,51 @@ export default class GamePlatform implements IMessage {
 	}
 
 	inAppPurchase(productId, amount, orderId, callbackUrl) {
+	}
+
+
+	public  coverServerSwitchMap(map){
+		for (var i in map) {
+			GameSwitch._switchMap[i] = map[i];
+		}
+		LogsManager.setLogGroupVisible(GameSwitch.checkOnOff(GameSwitch.SWITCH_LOG_PANEL));
+		DeviceTools.checkBySwitch();
+
+		var channelData = ChannelConst.getChannelConst(UserInfo.platformId);
+		//这里做定向覆盖包数据.
+		if (map[GameSwitch.VIDEO_ID]) {
+			channelData.adVideoId = map[GameSwitch.VIDEO_ID]
+		}
+		if (map[GameSwitch.BANNER_ID]) {
+			channelData.adBannerId = map[GameSwitch.BANNER_ID]
+		}
+		if (map.TTADSDK_ID) {
+			channelData.appSid = map.TTADSDK_ID
+		}
+
+		//全屏视频id
+		if (map.FULLVIDEO_ID) {
+			channelData.adFullVideoId = map.FULLVIDEO_ID
+		}
+
+		//GM开关
+		LogsManager.checkGM();
+		GameUtils.canShare = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_SHARE_NEW);
+		GameUtils.canVideo = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ADV);
+		GameUtils.isReview = GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_REVIEW);
+		for (i in map) {
+			LogsManager.echo("服务器返回的开关覆盖结果   ", i, " : ", map[i]);
+		}
+		var frameRate = GameSwitch.getSwitchState(GameSwitch.SWITCH_GAME_FRAME_RATE)
+		//var frameRate = "60"
+		if (frameRate && frameRate != "0") {
+			var targetRate = Number(frameRate);
+			if (GameConsts.gameFrameRate != targetRate) {
+				GameConsts.gameFrameRate = targetRate
+				LogsManager.echo("设置游戏帧率:", frameRate);
+				UserInfo.platform.setGameFrame();
+			}
+
+		}
 	}
 }

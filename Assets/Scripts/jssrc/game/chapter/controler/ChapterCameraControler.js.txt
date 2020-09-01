@@ -81,4 +81,3 @@ class ChapterCameraControler {
     }
 }
 exports.default = ChapterCameraControler;
-//# sourceMappingURL=ChapterCameraControler.js.map

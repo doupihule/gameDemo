@@ -480,4 +480,3 @@ class AndroidGamePlatform extends GamePlatform_1.default {
     }
 }
 exports.default = AndroidGamePlatform;
-//# sourceMappingURL=AndroidGamePlatform.js.map

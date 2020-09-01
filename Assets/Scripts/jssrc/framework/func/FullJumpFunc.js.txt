@@ -58,4 +58,3 @@ FullJumpFunc.ID_EXIT_SHARE = "8";
 FullJumpFunc.ID_EXIT_UPDATE = "9";
 // 关闭上阵面板时
 FullJumpFunc.ID_EXIT_FORMATE = "10";
-//# sourceMappingURL=FullJumpFunc.js.map

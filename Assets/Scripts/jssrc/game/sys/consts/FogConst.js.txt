@@ -78,4 +78,3 @@ FogConst.fog_free_act_count = 4;
 FogConst.fog_finish_event_score = 5;
 /**迷雾战斗失败数 */
 FogConst.fog_battle_defeat = 6;
-//# sourceMappingURL=FogConst.js.map

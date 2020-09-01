@@ -352,4 +352,3 @@ ScreenAdapterTools.windowWidth = 640;
 ScreenAdapterTools.windowHeight = 1136;
 //刘海的位置 -1 对应左边或者 竖屏上面, 竖屏游戏一定是上边
 ScreenAdapterTools.toolBarWay = -1;
-//# sourceMappingURL=ScreenAdapterTools.js.map

@@ -35,4 +35,3 @@ GameSwitchConst._switchMap = {
     [GameSwitchConst.SWITCH_LAND_DEATH]: 0,
     [GameSwitchConst.SWITCH_BATTLE_SKILLCD]: 0
 };
-//# sourceMappingURL=GameSwitchConst.js.map

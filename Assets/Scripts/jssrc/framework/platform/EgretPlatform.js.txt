@@ -66,4 +66,3 @@ class EgretPlatform extends GamePlatform_1.default {
     }
 }
 exports.default = EgretPlatform;
-//# sourceMappingURL=EgretPlatform.js.map

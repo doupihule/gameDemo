@@ -401,4 +401,3 @@ ShareOrTvManager.ORDER_ID_SHARE = 1;
 /** 配表序列意义：分享录屏 */
 ShareOrTvManager.ORDER_ID_SHAREVIDEO = 2;
 ShareOrTvManager.leadTypeId = null; //当前诱导分享的序列id
-//# sourceMappingURL=ShareOrTvManager.js.map

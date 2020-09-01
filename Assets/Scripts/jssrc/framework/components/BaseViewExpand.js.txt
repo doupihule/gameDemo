@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const csharp_1 = require("csharp");
 const puerts_1 = require("puerts");
+const CS = require('csharp');
 const ViewTools_1 = require("./ViewTools");
 class BaseViewExpand {
     constructor() {
@@ -18,9 +19,11 @@ class BaseViewExpand {
         this._mouseThrough = false;
         this.uitype = "base";
     }
+    //绑定c对象
     setCObject(cobj) {
         this.__cobject = cobj;
         this.__ctransform = cobj.transform;
+        ViewTools_1.default.bindCobjToBaseView(cobj, this);
     }
     //-------------------------------------------------------------------------------------
     //---------------------------坐标旋转缩放透明度-----------------------------------------
@@ -94,8 +97,6 @@ class BaseViewExpand {
         }
         canvasGroup.alpha = value;
     }
-    setZorder(value) {
-    }
     //-------------------------------------------------------------------------------------
     //---------------------------显示相关-----------------------------------------
     //-------------------------------------------------------------------------------------
@@ -168,6 +169,9 @@ class BaseViewExpand {
     setActive(value) {
         this.__cobject.SetActive(value);
     }
+    //设置深度
+    setZorder(value) {
+    }
     get name() {
         return this.__ctransform.name;
     }
@@ -195,4 +199,3 @@ class BaseViewExpand {
 }
 exports.default = BaseViewExpand;
 BaseViewExpand._tempVew2 = { x: 0, y: 0 };
-//# sourceMappingURL=BaseViewExpand.js.map

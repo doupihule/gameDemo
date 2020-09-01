@@ -2,9 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const ScreenAdapterTools_1 = require("../framework/utils/ScreenAdapterTools");
 const LogsManager_1 = require("../framework/manager/LogsManager");
-const UserModel_1 = require("../game/sys/model/UserModel");
 const CacheManager_1 = require("../framework/manager/CacheManager");
-const GameUtils_1 = require("./GameUtils");
 const StorageCode_1 = require("../game/sys/consts/StorageCode");
 class Global {
     static setPhoneSys(sysInfo) {
@@ -20,7 +18,6 @@ class Global {
         for (var i = 0; i < len; i++) {
             var key = keys[i];
             if (phoneModel.indexOf(key) > -1) {
-                LogsManager_1.default.echo("yrc 配置机型", phoneModel, key);
                 this.isPhoneBangs = true;
                 ScreenAdapterTools_1.default.toolBarWidth = 60;
             }
@@ -54,13 +51,6 @@ class Global {
     }
     /**是否已授权用户信息 */
     static isAuthorized() {
-        if (!this._isAuthorized) {
-            var headImg = UserModel_1.default.instance.getUserHead();
-            if (headImg && headImg.indexOf("localres") <= -1) {
-                //判断如果头像不是localRes的，则认为是已经授权过的
-                this._isAuthorized = true;
-            }
-        }
         return this._isAuthorized;
     }
     /**判断是否未经过第一次引导 */
@@ -80,7 +70,7 @@ class Global {
             var deviceStr = StorageCode_1.default.storage_deviceStr;
             var deId = CacheManager_1.default.instance.getFileStorageCache(deviceStr);
             if (!deId || deId == "0") {
-                deId = "" + "_" + GameUtils_1.default.getRandomInt(10000, 99999);
+                deId = "" + "_" + Math.round(Math.random() * 100000);
                 CacheManager_1.default.instance.setFileStorageCache(deviceStr, deId);
             }
             this._deviceId = deId;
@@ -171,4 +161,3 @@ Global.SDKVersion = "";
 /**判断是否为开发者工具 */
 Global.isDevTools = false;
 Global._isAuthorized = false;
-//# sourceMappingURL=Global.js.map

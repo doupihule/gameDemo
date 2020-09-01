@@ -27,4 +27,3 @@ ControlConst.SKIP_ANIM = 'skip_anim';
 ControlConst.VERSION_CHECK_COMPLETE = 'version_check_complete';
 //空表
 ControlConst.emptyTable = {};
-//# sourceMappingURL=ControlConst.js.map

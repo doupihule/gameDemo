@@ -16,9 +16,11 @@ public class Main : MonoBehaviour
     protected Action luaUpdateLate = null;
     void Awake()
     {
-        JSEnvExpand.InitEnv("");
+        
         instance = this;
         ResourceManager.Instance.Init(this.gameObject);
+        //JSEnvExpand.InitEnv("C:/work/unity/gameDemo/TsProj/output/",-1);
+        JSEnvExpand.InitEnv("", -1);
 
     }
     void Update()

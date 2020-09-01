@@ -21,4 +21,3 @@ class GuideFunc extends BaseFunc_1.default {
     }
 }
 exports.default = GuideFunc;
-//# sourceMappingURL=GuideFunc.js.map

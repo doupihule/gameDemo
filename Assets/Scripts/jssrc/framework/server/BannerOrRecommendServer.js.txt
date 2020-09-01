@@ -18,4 +18,3 @@ class BannerOrRecommendServer {
     }
 }
 exports.BannerOrRecommendServer = BannerOrRecommendServer;
-//# sourceMappingURL=BannerOrRecommendServer.js.map

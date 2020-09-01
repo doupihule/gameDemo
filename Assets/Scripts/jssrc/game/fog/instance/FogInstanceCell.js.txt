@@ -350,4 +350,3 @@ class FogInstanceCell extends FogInstanceBasic_1.default {
     }
 }
 exports.default = FogInstanceCell;
-//# sourceMappingURL=FogInstanceCell.js.map

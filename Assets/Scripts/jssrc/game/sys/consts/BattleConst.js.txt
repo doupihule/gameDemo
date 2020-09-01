@@ -154,4 +154,3 @@ BattleConst.REVIVETYPE_OVERTIME = 1;
 BattleConst.REVIVETYPE_DEFEAT = 2;
 /**复活类型：迷雾复活 */
 BattleConst.REVIVETYPE_FOG = 3;
-//# sourceMappingURL=BattleConst.js.map

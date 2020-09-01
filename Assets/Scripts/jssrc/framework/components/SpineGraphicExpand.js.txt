@@ -1,10 +1,73 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseViewExpand_1 = require("./BaseViewExpand");
+const UICompConst_1 = require("../consts/UICompConst");
+const ResourceManager_1 = require("../manager/ResourceManager");
+const csharp_1 = require("csharp");
+const puerts_1 = require("puerts");
 class SpineGraphicExpand extends BaseViewExpand_1.default {
-    constructor(name, boundlePath, cobj) {
+    constructor(name, boundlePath, cobj = null) {
         super();
+        //当前播放速率
+        this.timeScale = 1;
+        this.uitype = UICompConst_1.default.comp_spine;
+        if (!cobj) {
+            cobj = ResourceManager_1.default.loadSpinePrefab(name, boundlePath);
+            ;
+        }
+        this.label = "";
+        this.timeScale = 1;
+        this.setCObject(cobj);
+        this.__spineAniComp = cobj.GetComponent(puerts_1.$typeof(csharp_1.Spine.Unity.SkeletonGraphic));
+        this.__animationState = this.__spineAniComp.AnimationState;
+    }
+    //播放动画
+    play(label, loop, force = false, start = 0, tsvar_end = 0) {
+        if (!force) {
+            if (this.label == label) {
+                return;
+            }
+        }
+        this.label = label;
+        var trackEntity;
+        if (typeof (label) == "number") {
+            trackEntity = this.__animationState.SetAnimationByIndex(0, label, loop);
+        }
+        else {
+            trackEntity = this.__animationState.SetAnimation(0, label, loop);
+        }
+        //如果是指定播放位置的
+        if (tsvar_end > 0) {
+            trackEntity.AnimationStart = start;
+            trackEntity.AnimationEnd = tsvar_end;
+        }
+        //每次播放动画都需要重置下TimeScale;
+        this.__animationState.TimeScale = this.timeScale;
+    }
+    //设置播放速率
+    setTimeScale(value) {
+        if (this.timeScale == value) {
+            return;
+        }
+        this.timeScale = value;
+        this.__animationState.TimeScale = value;
+    }
+    //停止动画
+    stop() {
+        this.__spineAniComp.freeze = true;
+        this.__animationState.TimeScale = 0;
+    }
+    //复原动画
+    resume() {
+        this.__animationState.TimeScale = this.timeScale;
+    }
+    showOrHideSlot(slotName, value) {
+    }
+    //销毁动画
+    dispose() {
+        super.dispose();
+        this.__spineAniComp = null;
+        this.__animationState = null;
     }
 }
 exports.default = SpineGraphicExpand;
-//# sourceMappingURL=SpineGraphicExpand.js.map

@@ -1,4 +1,4 @@
-import SkeletonExpand from "../../../framework/viewcomp/SkeletonExpand";
+
 import DisplayUtils from "../../../framework/utils/DisplayUtils";
 import ResourceManager from "../../../framework/manager/ResourceManager";
 import ResourceConst from "../../sys/consts/ResourceConst";
@@ -8,6 +8,7 @@ import UserInfo from "../../../framework/common/UserInfo";
 import BaseContainer from "../../../framework/components/BaseContainer";
 import ImageExpand from "../../../framework/components/ImageExpand";
 import ViewTools from "../../../framework/components/ViewTools";
+import SpineGraphicExpand from "../../../framework/components/SpineGraphicExpand";
 
 //战中角色视图类封装 嵌套一层容器的原因是为了方便缩放和计算
 export default class BattleRoleView extends BaseContainer {
@@ -18,10 +19,10 @@ export default class BattleRoleView extends BaseContainer {
 
 	public aniScale: number = 1;
 	//当前动画对象
-	public currentAni: SkeletonExpand;
+	public currentAni: SpineGraphicExpand;
 	private _viewIndex: number = 0
 
-	private _childViewArr: SkeletonExpand[]
+	private _childViewArr: SpineGraphicExpand[]
 	private _viewScale: number = 1;
 	//当前的视图数量
 	public currentViewNums: number = 1;
@@ -209,14 +210,14 @@ export default class BattleRoleView extends BaseContainer {
 	//暂停播放
 	public stop() {
 		for (var i = 0; i < this.currentViewNums; i++) {
-			this._childViewArr[i].paused();
+			this._childViewArr[i].stop();
 		}
 	}
 
 	public play(nameOrIndex: any, loop: boolean, force?: boolean, start?: number, end?: number, freshSkin?: boolean, playAudio?: boolean) {
 
 		for (var i = 0; i < this.currentViewNums; i++) {
-			this._childViewArr[i].play(nameOrIndex, loop, force, start, end, freshSkin, playAudio);
+			this._childViewArr[i].play(nameOrIndex, loop, force, start, end);
 		}
 	}
 
@@ -230,7 +231,7 @@ export default class BattleRoleView extends BaseContainer {
 	public setPlaySpeed(value: number) {
 		for (var i = 0; i < this.currentViewNums; i++) {
 			var childAni = this._childViewArr[i];
-			childAni.setPlayerSpeed(value);
+			childAni.setTimeScale(value);
 		}
 	}
 

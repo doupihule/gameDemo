@@ -6,7 +6,6 @@ import ReqLoadingUI from "../view/loading/ReqLoadingUI";
 import GameMainUI from "../view/main/GameMainUI";
 import ResultJumpUI from "../view/jump/ResultJumpUI";
 import {BattleUI} from "../view/battle/BattleUI";
-import GuideUI from "../view/guide/GuideUI";
 import JumpListUI from "../view/jump/JumpListUI";
 
 export class WindowCfgs {

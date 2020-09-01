@@ -1,4 +1,16 @@
 declare var Md5;
+import GameSwitch from "../common/GameSwitch";
+import TimerManager from "./TimerManager";
+import Global from "../../utils/Global";
+import WindowManager from "./WindowManager";
+import UserModel from "../../game/sys/model/UserModel";
+import PackConfigManager from "./PackConfigManager";
+import HttpMessage from "../common/HttpMessage";
+import UserInfo from "../common/UserInfo";
+import DeviceTools from "../utils/DeviceTools";
+import GameConsts from "../../game/sys/consts/GameConsts";
+import LogsErrorCode from "../consts/LogsErrorCode";
+import Client from "../common/kakura/Client";
 export default class LogsManager {
 
 
@@ -353,7 +365,7 @@ export default class LogsManager {
 			platform: PackConfigManager.ins.platform.platform,
 			deviceId: Global.deviceId,
 			device: Global.deviceModel,
-			isNew: StatisticsManager.isNewPlayer ? 1 : 0,
+			isNew: Global.isNew() ? 1 : 0,
 			network: DeviceTools.network,
 			time: time
 		}
@@ -422,28 +434,6 @@ export default class LogsManager {
 		return str;
 	}
 
-	//根据最多能发送的长度截取
-	public static getSureByte(str, allLength) {
-		var lastStr = "";
-		var changeStr = "";
-		var s = "";
-		var enocdeLength = 0;
-		for (var i = str.length - 1; i >= 0; i--) {
-			s = str.charAt(i);
-			enocdeLength = encodeURIComponent(s).length;
-			if (allLength - enocdeLength >= 30) {
-				lastStr += s;
-				allLength -= enocdeLength;
-			} else {
-				break;
-			}
-
-		}
-		for (var i = lastStr.length - 1; i >= 0; i--) {
-			changeStr += lastStr.charAt(i)
-		}
-		return changeStr;
-	}
 
 	//字符串转换
 	private static turnStr(title: string, message: any, optionalParams: any[], isError: boolean = false) {
@@ -529,16 +519,3 @@ export default class LogsManager {
 
 
 
-import GameSwitch from "../common/GameSwitch";
-import TimerManager from "./TimerManager";
-import Global from "../../utils/Global";
-import WindowManager from "./WindowManager";
-import StatisticsManager from "../../game/sys/manager/StatisticsManager";
-import UserModel from "../../game/sys/model/UserModel";
-import PackConfigManager from "./PackConfigManager";
-import HttpMessage from "../common/HttpMessage";
-import UserInfo from "../common/UserInfo";
-import DeviceTools from "../utils/DeviceTools";
-import GameConsts from "../../game/sys/consts/GameConsts";
-import LogsErrorCode from "../consts/LogsErrorCode";
-import Client from "../common/kakura/Client";

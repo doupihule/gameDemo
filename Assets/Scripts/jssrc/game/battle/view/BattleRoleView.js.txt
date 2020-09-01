@@ -136,12 +136,12 @@ class BattleRoleView extends BaseContainer_1.default {
     //暂停播放
     stop() {
         for (var i = 0; i < this.currentViewNums; i++) {
-            this._childViewArr[i].paused();
+            this._childViewArr[i].stop();
         }
     }
     play(nameOrIndex, loop, force, start, end, freshSkin, playAudio) {
         for (var i = 0; i < this.currentViewNums; i++) {
-            this._childViewArr[i].play(nameOrIndex, loop, force, start, end, freshSkin, playAudio);
+            this._childViewArr[i].play(nameOrIndex, loop, force, start, end);
         }
     }
     resume() {
@@ -153,7 +153,7 @@ class BattleRoleView extends BaseContainer_1.default {
     setPlaySpeed(value) {
         for (var i = 0; i < this.currentViewNums; i++) {
             var childAni = this._childViewArr[i];
-            childAni.setPlayerSpeed(value);
+            childAni.setTimeScale(value);
         }
     }
     //设置子对象的视图
@@ -222,4 +222,3 @@ BattleRoleView._childSortFormation = [
     ],
 ];
 BattleRoleView._cacheAllAniArr = [];
-//# sourceMappingURL=BattleRoleView.js.map

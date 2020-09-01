@@ -2,21 +2,19 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const CacheManager_1 = require("../../../framework/manager/CacheManager");
 const GameConsts_1 = require("./GameConsts");
-const PackConfigManager_1 = require("../../../framework/manager/PackConfigManager");
-const UserInfo_1 = require("../../../framework/common/UserInfo");
 class StorageCode {
     constructor() {
     }
     //存储用户名
     static get storage_acount() {
-        if (UserInfo_1.default.isWeb()) {
-            return GameConsts_1.default.gameCode + "_" + PackConfigManager_1.default.ins.platform.platform + "_count";
+        if (this.platformId == "web") {
+            return GameConsts_1.default.gameCode + "_" + this.platformId + "_count";
         }
         return "acount";
     }
     //这里需要做一个判断 如果是dev 那么 userInfo是动态的 拼上 userName .如果是其他平台就是固定的
     static get storage_userinfo() {
-        var key = GameConsts_1.default.gameCode + "_" + PackConfigManager_1.default.ins.platform.platform + "_" + CacheManager_1.default.instance.getGlobalCache(StorageCode.storage_acount) || "";
+        var key = GameConsts_1.default.gameCode + "_" + this.platformId + "_" + CacheManager_1.default.instance.getGlobalCache(StorageCode.storage_acount) || "";
         return "storage_userinfo" + key;
     }
 }
@@ -39,4 +37,3 @@ StorageCode.storage_offlineCoinCount = "offlineCoinCount";
 StorageCode.storage_battleResultCount = "battleResultCount";
 //迷雾战斗结算奖励
 StorageCode.storage_fogBattleResultCount = "fogBattleResultCount";
-//# sourceMappingURL=StorageCode.js.map

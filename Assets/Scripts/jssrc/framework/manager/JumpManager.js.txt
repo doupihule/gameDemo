@@ -916,4 +916,3 @@ link_id:'',//icon获取的path参数中截取mt_link_id的值 });
  timestamp 	Y	当前时间戳
  appkey 	Y	对接sdk统计平台时由梦嘉工作人员提供的appkey，于打点上报时获取，唯一
  */
-//# sourceMappingURL=JumpManager.js.map

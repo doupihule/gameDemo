@@ -43,6 +43,8 @@ exports.default = GameConsts;
 GameConsts.GAMEENGING_UNITY = "unity";
 //游戏引擎是unity
 GameConsts.gameEngine = GameConsts.GAMEENGING_UNITY;
+//UI一米对应项目比例 100;
+GameConsts.uiMitoPixelRatio = 100;
 //默认分配的物理内存, 这个值 不能设置大,否则部分设备初始化 物理引擎会报错
 GameConsts.defaultPhysicsMemory = 16;
 //游戏帧率
@@ -85,4 +87,3 @@ GameConsts.GAME_OFFEST = 13;
  * 把debug包的sha1也设置为合法的sha1串 多个sha1串用 | 分割,不能带空格
  */
 GameConsts.ENCODE_SHA1 = "PhmdlmidmeQmfhmefmfgmOhmejmROmNhmfjmOhmPNmejmfcmjhmihmePmNg|kQmOPmSOmkgmljmcimcgmjemedmejmORmNjmNkmefmecmjimkdmQgmifmei";
-//# sourceMappingURL=GameConsts.js.map

@@ -79,4 +79,3 @@ KakuraMessage.MESSAGE_NO_ENC = 32;
 KakuraMessage.MESSAGE_FIX_ENC_NO_COMPRESS = 11;
 KakuraMessage.MESSAGE_DYNAMIC_ENC_NO_COMPRESS = 12;
 KakuraMessage.MESSAGE_HAS_ENC = 1;
-//# sourceMappingURL=KakuraMessage.js.map

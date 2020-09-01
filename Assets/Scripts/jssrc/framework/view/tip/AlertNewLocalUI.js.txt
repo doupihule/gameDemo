@@ -158,4 +158,3 @@ class AlertNewLocalUI extends UIBaseView_1.default {
 exports.default = AlertNewLocalUI;
 AlertNewLocalUI.res = null;
 AlertNewLocalUI.instance = null;
-//# sourceMappingURL=AlertNewLocalUI.js.map

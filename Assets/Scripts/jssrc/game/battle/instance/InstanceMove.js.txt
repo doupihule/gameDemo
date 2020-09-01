@@ -433,4 +433,3 @@ InstanceMove.moveType_tween = 3;
 InstanceMove.state_stand = "stand";
 InstanceMove.state_move = "move";
 InstanceMove._defaultViewSize = [0, 0];
-//# sourceMappingURL=InstanceMove.js.map

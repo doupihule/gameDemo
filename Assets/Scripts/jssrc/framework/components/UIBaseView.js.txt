@@ -4,4 +4,3 @@ const BaseViewExpand_1 = require("./BaseViewExpand");
 class UIBaseView extends BaseViewExpand_1.default {
 }
 exports.default = UIBaseView;
-//# sourceMappingURL=UIBaseView.js.map

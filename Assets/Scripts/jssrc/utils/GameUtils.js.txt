@@ -360,4 +360,3 @@ GameUtils.canGift = false;
 /**是否是审核模式 */
 GameUtils.isReview = false;
 GameUtils.firestMap = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz0123456789";
-//# sourceMappingURL=GameUtils.js.map

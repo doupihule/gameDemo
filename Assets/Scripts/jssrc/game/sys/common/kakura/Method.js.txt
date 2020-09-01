@@ -36,4 +36,3 @@ Method.PayPurchace_Notify = "2201"; //通知服务器充值
 Method.Fog_syncForce = "401";
 /**迷雾模式：随机用户 */
 Method.Fog_randomEnemy = "403";
-//# sourceMappingURL=Method.js.map

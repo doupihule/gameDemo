@@ -110,4 +110,3 @@ TopViewAutoComp.STATUS_HIDE = 0;
 TopViewAutoComp.HIDE_TYPE_DESTROY = 1;
 /** 组件隐藏状态：隐藏 */
 TopViewAutoComp.HIDE_TYPE_HIDE = 0;
-//# sourceMappingURL=TopViewAutoComp.js.map

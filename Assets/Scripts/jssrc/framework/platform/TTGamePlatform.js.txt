@@ -528,4 +528,3 @@ class TTGamePlatform extends WXGamePlatform_1.default {
     }
 }
 exports.default = TTGamePlatform;
-//# sourceMappingURL=TTGamePlatform.js.map

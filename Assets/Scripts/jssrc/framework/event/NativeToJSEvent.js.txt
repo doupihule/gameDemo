@@ -12,4 +12,3 @@ NativeToJSEvent.TTSDK_BANNER_EVENT = "TTSDK_BANNER_EVENT";
 NativeToJSEvent.SYSTEM_INFO_EVENT = "SYSTEM_INFO_EVENT";
 //内购返回  参数 {status:1成功 ,2取消, 3验证失败 ,data}
 NativeToJSEvent.NATIVE_INAPP_PURCHASE_BACK = "NATIVE_INAPP_PURCHASE_BACK";
-//# sourceMappingURL=NativeToJSEvent.js.map

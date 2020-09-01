@@ -170,4 +170,3 @@ class BattleMapControler {
     }
 }
 exports.default = BattleMapControler;
-//# sourceMappingURL=BattleMapControler.js.map

@@ -78,4 +78,3 @@ StatisticsManager.FOG_EVENT_TRIGGER = { groupId: StatisticsManager.GROUP_FOG, so
 StatisticsManager.FOG_EVENT_COMPLETE = { groupId: StatisticsManager.GROUP_FOG, sortId: 7, name: "fog_event_complete" }; //迷雾街区完成事件的人数/次数
 StatisticsManager.FOG_ITEM_GET = { groupId: StatisticsManager.GROUP_FOG, sortId: 9, name: "fog_item_get" }; //迷雾街区大巴车获得局内道具的人数/次数
 StatisticsManager.FOG_BATTLE_START = { groupId: StatisticsManager.GROUP_FOG, sortId: 10, name: "fog_battle_start" }; //进入战斗的人数/次数
-//# sourceMappingURL=StatisticsManager.js.map

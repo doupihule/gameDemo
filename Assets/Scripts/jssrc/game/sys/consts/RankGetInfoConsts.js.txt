@@ -7,4 +7,3 @@ exports.default = RankGetInfoConsts;
 RankGetInfoConsts.RANK_TYPE_SCORE = 2;
 //排行榜类型：进球数排行
 RankGetInfoConsts.RANK_TYPE_GOAL = 3;
-//# sourceMappingURL=RankGetInfoConsts.js.map

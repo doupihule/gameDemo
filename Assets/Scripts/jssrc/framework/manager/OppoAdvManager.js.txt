@@ -54,4 +54,3 @@ OppoAdvManager.intervalAdv = 3; //插屏广告
 OppoAdvManager.rewardAdv = 4; //激励广告
 OppoAdvManager.origionAndReward = 5; //先原生后激励
 OppoAdvManager.intervalAndReward = 6; //先插屏后激励
-//# sourceMappingURL=OppoAdvManager.js.map

@@ -19,4 +19,3 @@ class TweenAniManager {
     }
 }
 exports.default = TweenAniManager;
-//# sourceMappingURL=TweenAniManager.js.map

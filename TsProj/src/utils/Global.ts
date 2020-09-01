@@ -1,8 +1,6 @@
 import ScreenAdapterTools from "../framework/utils/ScreenAdapterTools";
 import LogsManager from "../framework/manager/LogsManager";
-import UserModel from "../game/sys/model/UserModel";
 import CacheManager from "../framework/manager/CacheManager";
-import GameUtils from "./GameUtils";
 import StorageCode from "../game/sys/consts/StorageCode";
 
 
@@ -76,7 +74,6 @@ export default class Global {
 		for (var i: number = 0; i < len; i++) {
 			var key: string = keys[i];
 			if (phoneModel.indexOf(key) > -1) {
-				LogsManager.echo("yrc 配置机型", phoneModel, key);
 				this.isPhoneBangs = true;
 				ScreenAdapterTools.toolBarWidth = 60;
 			}
@@ -120,13 +117,6 @@ export default class Global {
 
 	/**是否已授权用户信息 */
 	static isAuthorized() {
-		if (!this._isAuthorized) {
-			var headImg: string = UserModel.instance.getUserHead();
-			if (headImg && headImg.indexOf("localres") <= -1) {
-				//判断如果头像不是localRes的，则认为是已经授权过的
-				this._isAuthorized = true;
-			}
-		}
 		return this._isAuthorized;
 	}
 
@@ -149,7 +139,7 @@ export default class Global {
 			var deviceStr = StorageCode.storage_deviceStr;
 			var deId = CacheManager.instance.getFileStorageCache(deviceStr);
 			if (!deId || deId == "0") {
-				deId = "" +  "_" + GameUtils.getRandomInt(10000, 99999);
+				deId = "" +  "_" +  Math.round(Math.random()*100000 );
 				CacheManager.instance.setFileStorageCache(deviceStr, deId);
 			}
 			this._deviceId = deId;

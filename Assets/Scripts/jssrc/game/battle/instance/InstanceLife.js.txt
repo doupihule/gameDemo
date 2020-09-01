@@ -871,4 +871,3 @@ class InstanceLife extends InstancePerformance_1.default {
     }
 }
 exports.default = InstanceLife;
-//# sourceMappingURL=InstanceLife.js.map

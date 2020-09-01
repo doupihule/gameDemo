@@ -19,4 +19,3 @@ class ShareBtnName {
 exports.ShareBtnName = ShareBtnName;
 /**竞技场结算的按钮名字 */
 ShareBtnName.FightShareBtn = "FightResultUI.sharebtn";
-//# sourceMappingURL=CourseType.js.map

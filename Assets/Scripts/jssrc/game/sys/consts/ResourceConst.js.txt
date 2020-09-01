@@ -13,6 +13,21 @@ ResourceConst.JUMP_ICON_HOT = "native/main/main/index_image_remen.png";
 ResourceConst.JUMP_ICON_NEW = "native/main/main/index_image_baokuan.png";
 /**指色互推背景 */
 ResourceConst.JUMP_ZHISE_ICONBG = "uisource/jump/bg-box.png";
+ResourceConst.boundle_ui = "uiab";
+ResourceConst.boundle_map = "map";
+ResourceConst.boundle_base = "baseab";
+ResourceConst.boundle_animation = "animation";
+ResourceConst.boundle_uiimage = "uiimageab";
+ResourceConst.UIResPath = "Assets/UI/UIRes/";
+ResourceConst.baseLabelPrefeb = "base/BaseLabel";
+ResourceConst.baseContainerPrefeb = "base/BaseContainer";
+ResourceConst.BATTLE_SHADE = "Assets/UI/UIRes/battle/battle_image_yinying";
+ResourceConst.BATTLE_HEALTH_BACK = "Assets/UI/UIRes/battle/battle_image_xutiaodi";
+ResourceConst.BATTLE_HEALTH_PROGRESS = "Assets/UI/UIRes/battle/battle_image_xutiao1";
+ResourceConst.BATTLE_HEALTH_PROGRESS2 = "Assets/UI/UIRes/battle/battle_image_xutiao2";
+ResourceConst.BATTLE_HEALTH_HUDUN = "Assets/UI/UIRes/battle/battle_image_xutiao3";
+ResourceConst.EFFECT_BORN_LANDROLE = "efect_same_born_01";
+ResourceConst.BUFFICON_PATH = "Assets/UI/UIRes/bufficon/";
 //资源常量
 ResourceConst.COIN_PNG = "native/main/main/main_icon_jinbi.png";
 ResourceConst.GOLD_PNG = "native/main/main/main_icon_zuanshi.png";
@@ -26,13 +41,6 @@ ResourceConst.REPUTE_PNG = "uisource/work/work/company_icon_mingsheng.png";
 ResourceConst.CHAPTER_INCOME_PNG = "native/main/main_icon_jibi.png";
 ResourceConst.CHAPTER_INGCHAPTER_PNG = "uisource/map/map_image_zhandouzhong.png";
 ResourceConst.CHAPTER_LOCKED_PNG = "uisource/hero/hero_icon_suo.png";
-//战斗中用的资源
-ResourceConst.BATTLE_HEALTH_BACK = "uisource/battle/battle/battle_image_xutiaodi.png";
-ResourceConst.BATTLE_HEALTH_PROGRESS = "uisource/battle/battle/battle_image_xutiao1.png";
-ResourceConst.BATTLE_HEALTH_PROGRESS2 = "uisource/battle/battle/battle_image_xutiao2.png";
-ResourceConst.BATTLE_HEALTH_HUDUN = "uisource/battle/battle/battle_image_xutiao3.png";
-//战斗中的资源
-ResourceConst.BATTLE_SHADE = "uisource/battle/battle/battle_image_yinying.png";
 //通用黑底
 ResourceConst.COMMON_IMAGE_HEIDI = "uisource/common/common/common_image_heidi.png";
 //视频分享常量
@@ -83,8 +91,6 @@ ResourceConst.ENEMY_MAP_SKY_POINT = "uisource/battle/battle/battle_image_difang2
 ResourceConst.SELF_MAP_HOME_POINT = "uisource/battle/battle/battle_image_wofangjidi.png";
 /**敌方显示在小地图上的小梯形红点资源名 */
 ResourceConst.ENEMY_MAP_HOME_POINT = "uisource/battle/battle/battle_image_difangjidi.png";
-/**地面角色出生特效 */
-ResourceConst.EFFECT_BORN_LANDROLE = "efect_same_born_01";
 /**通用点击音效 */
 ResourceConst.BASE_SOUND_CLICK = "click";
 //空投宝箱
@@ -118,4 +124,3 @@ ResourceConst.CHAPTER_REWARD_BOXCLOSE = "fog/fog/fogstreet_box_locked.png";
 ResourceConst.CHAPTER_REWARD_BOXOPEN = "uisource/common/common/level_image_baoxiang.png";
 /**互推退出按钮 */
 ResourceConst.JUMP_RETURNBTN = "native/main/main/index_bt_shou.png";
-//# sourceMappingURL=ResourceConst.js.map

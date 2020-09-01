@@ -39,4 +39,3 @@ DeviceTools.lowDeviceGroup = [];
 DeviceTools._isLowDevice = false;
 DeviceTools._hasCheckDevice = false;
 DeviceTools.network = "none";
-//# sourceMappingURL=DeviceTools.js.map

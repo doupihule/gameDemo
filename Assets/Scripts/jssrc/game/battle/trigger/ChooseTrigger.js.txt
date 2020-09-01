@@ -765,4 +765,3 @@ ChooseTrigger.choose_summoned = 3;
 ChooseTrigger.choose_campoutself = 4; //己方不包括自己
 ChooseTrigger.choose_hitself = 5; //打自己的人
 ChooseTrigger.choose_campwithdied = 11; //己方包括死亡单位
-//# sourceMappingURL=ChooseTrigger.js.map

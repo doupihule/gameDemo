@@ -62,4 +62,3 @@ class LoginUI extends UIBaseView_1.default {
 exports.default = LoginUI;
 LoginUI.res = ["gameui/Login.scene",
 ];
-//# sourceMappingURL=LoginUI.js.map

@@ -1,5 +1,6 @@
-import ImageExpand from "../../../framework/components/ImageExpand";
+
 import VectorTools from "../../../framework/utils/VectorTools";
+import ImageExpand from "../../../framework/components/ImageExpand";
 
 export default class FogInstanceBasic extends ImageExpand {
 
@@ -11,7 +12,7 @@ export default class FogInstanceBasic extends ImageExpand {
 	public viewWay: number;
 
 	constructor(fogControler) {
-		super();
+		super(null);
 
 		this.setAnchor(0.5,0.5)
 		this.fogControler = fogControler;

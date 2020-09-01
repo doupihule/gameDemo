@@ -23,4 +23,3 @@ class NotifyManager {
 }
 exports.default = NotifyManager;
 NotifyManager.notifyFlag = false;
-//# sourceMappingURL=NotifyManager.js.map

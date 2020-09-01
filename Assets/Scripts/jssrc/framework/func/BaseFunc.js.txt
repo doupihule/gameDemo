@@ -402,4 +402,3 @@ const LogsErrorCode_1 = require("../consts/LogsErrorCode");
 const GameSwitch_1 = require("../common/GameSwitch");
 const TableUtils_1 = require("../utils/TableUtils");
 const GameUtils_1 = require("../../utils/GameUtils");
-//# sourceMappingURL=BaseFunc.js.map

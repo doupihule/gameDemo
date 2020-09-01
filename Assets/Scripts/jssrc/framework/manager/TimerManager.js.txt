@@ -215,4 +215,3 @@ class TimerManager {
 exports.default = TimerManager;
 //时区偏移
 TimerManager.timeOurOffset = 8;
-//# sourceMappingURL=TimerManager.js.map

@@ -468,4 +468,3 @@ exports.default = FogModel;
 FogModel.enemyArr = [];
 /**迷雾战斗心灵鸡汤加的能量值 */
 FogModel.fogAddEnergy = 0;
-//# sourceMappingURL=FogModel.js.map

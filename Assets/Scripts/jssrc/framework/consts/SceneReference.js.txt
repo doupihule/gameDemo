@@ -252,4 +252,3 @@ SceneReference["1102"] = "公众号 profile 页服务预览";
 SceneReference["1103"] = "发现栏小程序主入口，「我的小程序」列表"; //（基础库2.2.4版本起废弃）
 SceneReference["1104"] = "微信聊天主界面下拉，「我的小程序」栏"; //（基础库2.2.4版本起废弃）
 SceneReference["1129"] = "微信爬虫访问";
-//# sourceMappingURL=SceneReference.js.map

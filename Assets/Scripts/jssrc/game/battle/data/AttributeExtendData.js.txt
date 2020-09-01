@@ -221,4 +221,3 @@ class AttributeExtendData {
     }
 }
 exports.default = AttributeExtendData;
-//# sourceMappingURL=AttributeExtendData.js.map

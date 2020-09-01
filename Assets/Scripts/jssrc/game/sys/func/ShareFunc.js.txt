@@ -108,4 +108,3 @@ class ShareFunc extends BaseFunc_1.default {
     }
 }
 exports.default = ShareFunc;
-//# sourceMappingURL=ShareFunc.js.map

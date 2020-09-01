@@ -170,4 +170,3 @@ class OppoGamePlatform extends WXGamePlatform_1.default {
     }
 }
 exports.default = OppoGamePlatform;
-//# sourceMappingURL=OppoGamePlatform.js.map

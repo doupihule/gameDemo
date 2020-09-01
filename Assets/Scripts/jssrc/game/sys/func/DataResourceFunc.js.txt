@@ -1,9 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseFunc_1 = require("../../../framework/func/BaseFunc");
-const ResourceConst_1 = require("../consts/ResourceConst");
 const WindowManager_1 = require("../../../framework/manager/WindowManager");
-const RolesFunc_1 = require("./RolesFunc");
 const DataResourceConst_1 = require("../consts/DataResourceConst");
 class DataResourceFunc extends BaseFunc_1.default {
     static get instance() {
@@ -26,68 +24,6 @@ class DataResourceFunc extends BaseFunc_1.default {
     //根据资源字符串返回资源图片和数量
     getDataResourceInfo(dataArr) {
         var result = {};
-        if (dataArr[0]) {
-            switch (Number(dataArr[0])) {
-                //金币
-                case DataResourceConst_1.default.COIN:
-                    result = {
-                        img: ResourceConst_1.default.COIN_PNG,
-                        num: dataArr[1],
-                    };
-                    break;
-                //钻石
-                case DataResourceConst_1.default.GOLD:
-                    result = {
-                        img: ResourceConst_1.default.GOLD_PNG,
-                        num: dataArr[1],
-                    };
-                    break;
-                //体力
-                case DataResourceConst_1.default.SP:
-                    result = {
-                        img: ResourceConst_1.default.SP_PNG,
-                        num: dataArr[1],
-                    };
-                    break;
-                //碎片
-                case DataResourceConst_1.default.PIECE:
-                    result = {
-                        img: RolesFunc_1.default.instance.getEquipIcon(RolesFunc_1.default.instance.getCfgDatasByKey("EquipMaterial", dataArr[1], "icon")),
-                        id: dataArr[1],
-                        num: dataArr[2],
-                    };
-                    break;
-                //零件
-                case DataResourceConst_1.default.COMP:
-                    result = {
-                        img: ResourceConst_1.default.COMP_PNG,
-                        num: dataArr[1],
-                    };
-                    break;
-                //迷雾币
-                case DataResourceConst_1.default.FOGCOIN:
-                    result = {
-                        img: ResourceConst_1.default.FOGCOIN_PNG,
-                        num: dataArr[1],
-                    };
-                    break;
-                //行动力
-                case DataResourceConst_1.default.ACT:
-                    result = {
-                        img: ResourceConst_1.default.ACT_PNG,
-                        num: dataArr[1],
-                    };
-                    break;
-                //迷雾道具
-                case DataResourceConst_1.default.FOGITEM:
-                    result = {
-                        img: RolesFunc_1.default.instance.getEquipIcon(RolesFunc_1.default.instance.getCfgDatasByKey("EquipMaterial", dataArr[1], "icon")),
-                        id: dataArr[1],
-                        num: dataArr[2],
-                    };
-                    break;
-            }
-        }
         return result;
     }
     showTip(reward) {
@@ -100,4 +36,3 @@ class DataResourceFunc extends BaseFunc_1.default {
     }
 }
 exports.default = DataResourceFunc;
-//# sourceMappingURL=DataResourceFunc.js.map

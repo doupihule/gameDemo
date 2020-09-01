@@ -25,4 +25,3 @@ class SupplyBoxFunc extends BaseFunc_1.default {
     }
 }
 exports.default = SupplyBoxFunc;
-//# sourceMappingURL=SupplyBoxFunc.js.map

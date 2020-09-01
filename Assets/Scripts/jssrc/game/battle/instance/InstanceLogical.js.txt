@@ -466,4 +466,3 @@ class InstanceLogical extends InstanceLife_1.default {
     }
 }
 exports.default = InstanceLogical;
-//# sourceMappingURL=InstanceLogical.js.map

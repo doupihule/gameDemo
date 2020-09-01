@@ -286,8 +286,7 @@ class Client {
     reloginBack(result) {
         //如果重连有开关 需要立刻同步下开关
         if (result.data && result.data.config && result.data.config.switch) {
-            GameSwitch_1.default.coverServerSwitchConditionMap(result.data.config.switchCondition);
-            GameSwitch_1.default.coverServerSwitchMap(result.data.config.switch);
+            UserInfo_1.default.platform.coverServerSwitchMap(result.data.config.switch);
         }
     }
     /**
@@ -532,4 +531,3 @@ class Client {
 exports.default = Client;
 //需要更新的数据dirtlist
 Client.temDirtList = {};
-//# sourceMappingURL=Client.js.map

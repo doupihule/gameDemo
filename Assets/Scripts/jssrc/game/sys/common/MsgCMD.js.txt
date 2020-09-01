@@ -40,4 +40,3 @@ class LocalStorageCMD {
 }
 exports.LocalStorageCMD = LocalStorageCMD;
 LocalStorageCMD.EVENTLIST = 'eventlist';
-//# sourceMappingURL=MsgCMD.js.map

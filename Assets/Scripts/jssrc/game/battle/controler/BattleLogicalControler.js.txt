@@ -965,4 +965,3 @@ class BattleLogicalControler extends BattleControler_1.default {
     }
 }
 exports.default = BattleLogicalControler;
-//# sourceMappingURL=BattleLogicalControler.js.map

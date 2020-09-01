@@ -1,10 +1,6 @@
-import ScreenAdapterTools from "./ScreenAdapterTools";
-import GameConsts from "../../game/sys/consts/GameConsts";
-import Sprite3DExpand from "../viewcomp/Sprite3DExpand";
-import SkeletonExpand from "../viewcomp/SkeletonExpand";
+
 import SpriteFrameExpand from "../viewcomp/SpriteFrameExpand";
 import BaseContainer from "../components/BaseContainer";
-import GlobalEnv from "../engine/GlobalEnv";
 
 export default class DisplayUtils {
 
@@ -38,12 +34,8 @@ export default class DisplayUtils {
 
 	//创建动画扩展 aniName 动画短名,  aniMode 动画模式 0 不支持换装, 1,2支持换装, 原则上只使用1,
 	public static createSkeletonExpand(aniName: string, aniMode = 0, completeFunc = null, thisObj = null, expandParams = null) {
-		var ske = new SkeletonExpand();
-		ske.completeBackFunc = completeFunc;
-		ske.completeThisObj = thisObj;
-		ske.completeExpandParams = expandParams;
-		ske.startLoadByShortName(aniName);
-		return ske
+
+		return null
 	}
 
 	//发光矩阵

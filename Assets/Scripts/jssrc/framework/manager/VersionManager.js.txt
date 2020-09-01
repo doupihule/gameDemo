@@ -274,4 +274,3 @@ VersionManager.ZIP_MODEL_KEY_VERSION = "version";
 VersionManager.ZIP_MODEL_KEY_CONFIG = "json";
 VersionManager.ZIP_MODEL_KEY_UICFGS = "uiCfgs";
 VersionManager.ZIP_MODEL_KEY_MERGEFILES = "mergefiles";
-//# sourceMappingURL=VersionManager.js.map

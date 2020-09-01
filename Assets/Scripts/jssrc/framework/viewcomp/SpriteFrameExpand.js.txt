@@ -1,9 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const TimerManager_1 = require("../manager/TimerManager");
-const LogsManager_1 = require("../manager/LogsManager");
 const BaseContainer_1 = require("../components/BaseContainer");
-const ViewTools_1 = require("../components/ViewTools");
 //序列帧动画扩展
 class SpriteFrameExpand extends BaseContainer_1.default {
     //创建 序列帧扩展 type 1表示标准格式的序列帧配置 2表示精简格式的序列帧配置
@@ -228,4 +225,6 @@ exports.default = SpriteFrameExpand;
  *
  */
 SpriteFrameExpand._cacheFrameData = {};
-//# sourceMappingURL=SpriteFrameExpand.js.map
+const TimerManager_1 = require("../manager/TimerManager");
+const LogsManager_1 = require("../manager/LogsManager");
+const ViewTools_1 = require("../components/ViewTools");

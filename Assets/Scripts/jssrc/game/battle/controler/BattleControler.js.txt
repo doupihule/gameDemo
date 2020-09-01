@@ -399,4 +399,3 @@ class BattleControler {
     }
 }
 exports.default = BattleControler;
-//# sourceMappingURL=BattleControler.js.map

@@ -255,4 +255,3 @@ class BattleFormulaTrigger {
 }
 exports.default = BattleFormulaTrigger;
 BattleFormulaTrigger._cacheLogsMap = {};
-//# sourceMappingURL=BattleFormulaTrigger.js.map

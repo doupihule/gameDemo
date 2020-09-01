@@ -8,7 +8,6 @@ const TableUtils_1 = require("../../../framework/utils/TableUtils");
 const PoolTools_1 = require("../../../framework/utils/PoolTools");
 const BattleDamageLabel_1 = require("../view/BattleDamageLabel");
 const BattleLogsManager_1 = require("../../sys/manager/BattleLogsManager");
-const SkeletonExpand_1 = require("../../../framework/viewcomp/SkeletonExpand");
 const GameConsts_1 = require("../../sys/consts/GameConsts");
 const ViewTools_1 = require("../../../framework/components/ViewTools");
 const DataResourceConst_1 = require("../../sys/consts/DataResourceConst");
@@ -87,7 +86,7 @@ class PerformanceControler {
     }
     //获取某个特效动作的长度
     getEffectLength(effect, index = 0) {
-        var frame = SkeletonExpand_1.default.getAniFrame(effect, index);
+        var frame = 60;
         if (frame == -1) {
             if (PerformanceControler._effectLength[effect]) {
                 return PerformanceControler._effectLength[effect];
@@ -243,4 +242,3 @@ PerformanceControler._resourcePointCache = {
     [DataResourceConst_1.default.SP]: { x: 35, y: 35 }
 };
 PerformanceControler._tempPos = { x: 0, y: 0 };
-//# sourceMappingURL=PerformanceControler.js.map

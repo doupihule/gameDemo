@@ -9,4 +9,3 @@ exports.default = WindowEvent;
 WindowEvent.WINDOW_EVENT_SWITCHUISTART = "WINDOW_EVENT_SWITCHUISTART";
 /**界面切换开始 */
 WindowEvent.WINDOW_EVENT_SWITCHUIFIN = "WINDOW_EVENT_SWITCHUIFIN"; /**界面切换结束 */
-//# sourceMappingURL=WindowEvent.js.map

@@ -44,4 +44,3 @@ JumpConst.JUMP_CHANNEL_MENGJIA = 2;
 JumpConst.JUMP_CHANNEL_ZHISE = 3;
 /**互推渠道：卡日曲 */
 JumpConst.JUMP_CHANNEL_KARIQU = 4;
-//# sourceMappingURL=JumpConst.js.map

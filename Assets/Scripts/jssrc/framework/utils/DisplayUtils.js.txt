@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const SkeletonExpand_1 = require("../viewcomp/SkeletonExpand");
 const SpriteFrameExpand_1 = require("../viewcomp/SpriteFrameExpand");
 class DisplayUtils {
     /**传入资源url以及父物体获取当前加载对象，并添加摄像机 */
@@ -20,12 +19,7 @@ class DisplayUtils {
     }
     //创建动画扩展 aniName 动画短名,  aniMode 动画模式 0 不支持换装, 1,2支持换装, 原则上只使用1,
     static createSkeletonExpand(aniName, aniMode = 0, completeFunc = null, thisObj = null, expandParams = null) {
-        var ske = new SkeletonExpand_1.default();
-        ske.completeBackFunc = completeFunc;
-        ske.completeThisObj = thisObj;
-        ske.completeExpandParams = expandParams;
-        ske.startLoadByShortName(aniName);
-        return ske;
+        return null;
     }
     //设置显示对象变暗 (通用对象未激活效果)
     static setViewDark(view) {
@@ -149,4 +143,3 @@ DisplayUtils.darkMatrix = [
     0, 0, 0.3, 0, 0,
     0, 0, 0, 1, 0,
 ];
-//# sourceMappingURL=DisplayUtils.js.map

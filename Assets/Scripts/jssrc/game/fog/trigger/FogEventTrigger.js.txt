@@ -293,4 +293,3 @@ FogEventTrigger.Event_logical_Brokenroad = 12;
 FogEventTrigger.Behind_event_Quick = 1;
 /**后置事件类型：非直接触发 */
 FogEventTrigger.Behind_event_Noquick = 2;
-//# sourceMappingURL=FogEventTrigger.js.map

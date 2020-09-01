@@ -372,4 +372,3 @@ class InstanceBasic {
 }
 exports.default = InstanceBasic;
 InstanceBasic._instanceCount = 0;
-//# sourceMappingURL=InstanceBasic.js.map

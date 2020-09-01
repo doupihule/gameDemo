@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const ImageExpand_1 = require("../../../framework/components/ImageExpand");
 const VectorTools_1 = require("../../../framework/utils/VectorTools");
+const ImageExpand_1 = require("../../../framework/components/ImageExpand");
 class FogInstanceBasic extends ImageExpand_1.default {
     constructor(fogControler) {
-        super();
+        super(null);
         this.setAnchor(0.5, 0.5);
         this.fogControler = fogControler;
         this.pos = VectorTools_1.default.createVec3();
@@ -76,4 +76,3 @@ class FogInstanceBasic extends ImageExpand_1.default {
     }
 }
 exports.default = FogInstanceBasic;
-//# sourceMappingURL=FogInstanceBasic.js.map

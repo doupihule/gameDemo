@@ -179,4 +179,3 @@ class InstancePlayer extends InstanceHero_1.default {
     }
 }
 exports.default = InstancePlayer;
-//# sourceMappingURL=InstancePlayer.js.map

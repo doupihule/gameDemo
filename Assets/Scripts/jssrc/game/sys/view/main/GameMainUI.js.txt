@@ -7,4 +7,3 @@ class GameMainUI extends BaseViewExpand_1.default {
     }
 }
 exports.default = GameMainUI;
-//# sourceMappingURL=GameMainUI.js.map

@@ -13,4 +13,3 @@ class BattleGuideControler {
     }
 }
 exports.default = BattleGuideControler;
-//# sourceMappingURL=BattleGuideControler.js.map

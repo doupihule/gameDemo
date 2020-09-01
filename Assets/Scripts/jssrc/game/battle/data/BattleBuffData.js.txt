@@ -70,4 +70,3 @@ class BattleBuffData {
     }
 }
 exports.default = BattleBuffData;
-//# sourceMappingURL=BattleBuffData.js.map

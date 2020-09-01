@@ -34,4 +34,3 @@ class BezierCurveUtils {
     }
 }
 exports.default = BezierCurveUtils;
-//# sourceMappingURL=BezierCurveUtils.js.map

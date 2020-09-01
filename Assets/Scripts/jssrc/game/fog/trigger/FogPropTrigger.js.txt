@@ -193,4 +193,3 @@ FogPropTrigger.ITEM_TYPE_CANNOTUP = 2;
 FogPropTrigger.ReduceAct_Type_AllEvent = 1;
 FogPropTrigger.ReduceAct_Type_SameLogical = 2;
 FogPropTrigger.ReduceAct_Type_SameEventId = 3;
-//# sourceMappingURL=FogPropTrigger.js.map

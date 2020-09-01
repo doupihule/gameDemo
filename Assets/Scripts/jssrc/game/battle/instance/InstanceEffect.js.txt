@@ -173,4 +173,3 @@ class InstanceEffect extends InstanceBasic_1.default {
     }
 }
 exports.default = InstanceEffect;
-//# sourceMappingURL=InstanceEffect.js.map

@@ -10,4 +10,3 @@ class BattleUI extends UIBaseView_1.default {
     }
 }
 exports.BattleUI = BattleUI;
-//# sourceMappingURL=BattleUI.js.map

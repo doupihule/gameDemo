@@ -424,4 +424,3 @@ BuffTrigger.buffTypeToBit = {
     [19]: 512, [20]: 1024
 };
 BuffTrigger._hasInit = false;
-//# sourceMappingURL=BuffTrigger.js.map

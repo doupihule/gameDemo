@@ -21,4 +21,3 @@ TaskConst.Chat_state_noFinish = 3;
 TaskConst.Chat_state_finish = 4;
 /**已读聊天 */
 TaskConst.Chat_state_read = 5;
-//# sourceMappingURL=TaskConst.js.map

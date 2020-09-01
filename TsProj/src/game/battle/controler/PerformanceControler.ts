@@ -10,9 +10,7 @@ import TableUtils from "../../../framework/utils/TableUtils";
 import PoolTools from "../../../framework/utils/PoolTools";
 import BattleDamageLabel from "../view/BattleDamageLabel";
 
-import TimerManager from "../../../framework/manager/TimerManager";
 import BattleLogsManager from "../../sys/manager/BattleLogsManager";
-import SkeletonExpand from "../../../framework/viewcomp/SkeletonExpand";
 import GameConsts from "../../sys/consts/GameConsts";
 import BaseContainer from "../../../framework/components/BaseContainer";
 import ImageExpand from "../../../framework/components/ImageExpand";
@@ -113,7 +111,7 @@ export default class PerformanceControler {
 
 	//获取某个特效动作的长度
 	public getEffectLength(effect: string, index: number = 0) {
-		var frame = SkeletonExpand.getAniFrame(effect, index);
+		var frame = 60
 		if (frame == -1) {
 			if (PerformanceControler._effectLength[effect]) {
 				return PerformanceControler._effectLength[effect]

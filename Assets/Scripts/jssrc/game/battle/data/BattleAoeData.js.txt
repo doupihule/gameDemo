@@ -150,4 +150,3 @@ exports.default = BattleAoeData;
 BattleAoeData._aloneEffectExpandParams = {
     isAlone: true
 };
-//# sourceMappingURL=BattleAoeData.js.map

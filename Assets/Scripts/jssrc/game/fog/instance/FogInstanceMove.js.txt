@@ -249,4 +249,3 @@ FogInstanceMove.moveType_multyPoint = 2;
 FogInstanceMove.moveType_tween = 3;
 FogInstanceMove.state_stand = "stand";
 FogInstanceMove.state_move = "move";
-//# sourceMappingURL=FogInstanceMove.js.map

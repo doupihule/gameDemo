@@ -145,4 +145,3 @@ BattleDamageLabel._labelCfgs = {
     [BattleConst_1.default.effect_label_hudun]: { w: 13, sw: 30, sh: 20, fuhao: "jian", name: "putong", scale: 1 },
     [BattleConst_1.default.effect_label_miss]: { name: "miss" },
 };
-//# sourceMappingURL=BattleDamageLabel.js.map

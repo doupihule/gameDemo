@@ -190,4 +190,3 @@ FogCellEventControler.Event_ShowType_All = 1;
 FogCellEventControler.Event_ShowType_RandomEvent = 2;
 /**事件随机类型：随机事件组*/
 FogCellEventControler.Event_ShowType_RandomEventGroup = 3;
-//# sourceMappingURL=FogCellEventControler.js.map

@@ -7,7 +7,6 @@ const ShareTvOrderFunc_1 = require("./ShareTvOrderFunc");
 const GlobalParamsFunc_1 = require("./GlobalParamsFunc");
 const UserExtModel_1 = require("../model/UserExtModel");
 const BattleConst_1 = require("../consts/BattleConst");
-const BattleFunc_1 = require("./BattleFunc");
 /**关卡等级相关 */
 class LevelFunc extends BaseFunc_1.default {
     //处理用户配表相关接口.用静态方法
@@ -131,28 +130,5 @@ class LevelFunc extends BaseFunc_1.default {
         var randResult = GameUtils_1.default.getWeightItem(weightArr);
         return randResult[0];
     }
-    checkIsReduceSkillCd(camp, battleAdditionId, roleId) {
-        var value = 0;
-        if (camp == BattleConst_1.default.ROLEGROUP_MYSELF) {
-            if (battleAdditionId && battleAdditionId == BattleConst_1.default.battle_start_homeCd) {
-                var passiveSkillId = LevelFunc.instance.getBattleAddtionoByTwoId(battleAdditionId, "addtionNub");
-                var passiveCfg = BattleFunc_1.default.instance.getCfgDatas("PassiveSkill", passiveSkillId);
-                if (passiveCfg.effectType != BattleConst_1.default.passive_effect_skillcd) {
-                    return;
-                }
-                var effectParams = passiveCfg.effectParams;
-                for (var s = 0; s < effectParams.length; s++) {
-                    var arr = effectParams[s];
-                    var skillId = arr[0];
-                    if (Number(roleId) == Number(skillId)) {
-                        value = arr[1];
-                        break;
-                    }
-                }
-            }
-        }
-        return value;
-    }
 }
 exports.default = LevelFunc;
-//# sourceMappingURL=LevelFunc.js.map

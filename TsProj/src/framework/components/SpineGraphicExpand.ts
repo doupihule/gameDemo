@@ -65,6 +65,9 @@ export default class SpineGraphicExpand extends  BaseViewExpand{
 	public  resume(){
 		this.__animationState.TimeScale = this.timeScale;
 	}
+	public  showOrHideSlot(slotName, value){
+
+	}
 
 	//销毁动画
 	public dispose(){

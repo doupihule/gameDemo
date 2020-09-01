@@ -105,4 +105,3 @@ class AdResponse {
 }
 exports.AdResponse = AdResponse;
 AdResponse.kariquPos = 1;
-//# sourceMappingURL=AdResponse.js.map

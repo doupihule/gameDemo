@@ -1,5 +1,8 @@
 import {UnityEngine, System} from 'csharp'
 import {$ref, $unref, $generic, $promise, $typeof} from 'puerts'
+const CS = require('csharp');
+
+
 import ViewTools from "./ViewTools";
 export default class BaseViewExpand {
 	//对应的c对象

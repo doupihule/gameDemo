@@ -199,4 +199,3 @@ class UserGlobalModel extends BaseModel_1.default {
 exports.default = UserGlobalModel;
 // 新增字段必须在此处进行添加
 UserGlobalModel.dataField = ['shareInfo', 'shareCount'];
-//# sourceMappingURL=UserGlobalModel.js.map

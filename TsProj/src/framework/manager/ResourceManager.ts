@@ -1,10 +1,5 @@
 
-import SubPackageManager from "./SubPackageManager";
-import SubPackageConst from "../../game/sys/consts/SubPackageConst";
-import Sprite3DExpand from "../viewcomp/Sprite3DExpand";
 import  {Resource,UnityEngine} from "csharp";
-import LogsManager from "./LogsManager";
-import ResourceConst from "../../game/sys/consts/ResourceConst";
 
 
 export default class ResourceManager {
@@ -39,7 +34,7 @@ export default class ResourceManager {
 
 	//判断是否3d模块需要分包
 	private static check3dIsSubpack() {
-		return SubPackageManager.getModelFileStyle(SubPackageConst.packName_model3d) == SubPackageConst.PATH_STYLE_SUBPACK;
+		return false
 	}
 
 
@@ -66,14 +61,6 @@ export default class ResourceManager {
 
 	private static _checkRenderModeMap: any = {}
 
-	//检查粒子renderMode
-	static checkParticalRendeMode(view: Sprite3DExpand, modelName: string) {
-
-	}
-
-	//clone一个粒子
-	static cloneOneSprite(sourceSp: Sprite3DExpand) {
-	}
 
 
 	//缓存spine加载完成, 缓存对应的spine缓冲模版
@@ -90,30 +77,12 @@ export default class ResourceManager {
 
 	//获取spine对应的分包 因为考虑到如果有组的分包
 	public static getSpineSubpack(shortName: string) {
-		var groupInfo = SubPackageManager.getSpineGroupInfo(shortName);
-		if (!groupInfo) {
-			return shortName
-		}
-		return groupInfo.name;
+		return ""
 	}
 
 	//获取spine的路径
 	public static getSpinePath(shortName: string) {
-		var subpak = SubPackageConst.subPackData[shortName];
-		var groupInfo = SubPackageManager.getSpineGroupInfo(shortName);
-		//如果是组spine
-		if (groupInfo) {
-			return groupInfo.path + "/" + groupInfo.name + "/" + shortName + "/"
-		}
-		var forderPath;
-		if (!subpak || subpak.style == SubPackageConst.PATH_STYLE_SUBPACK) {
-			forderPath = "spine"
-		} else if (subpak.style == SubPackageConst.PATH_STYLE_NATIVE) {
-			forderPath = "spine_native"
-		} else {
-			forderPath = "spine_cdn"
-		}
-		return forderPath + "/" + shortName + "/"
+		return ""
 	}
 
 
@@ -131,21 +100,7 @@ export default class ResourceManager {
 
 	//获取一个3d模型的路径 不带Layascene的 model
 	public static get3DModelPath(model) {
-		var packName = this.get3dodelPackName(model);
-		var packinfo = SubPackageConst.subPackData[packName];
-		if (!packinfo) {
-			return "3dmodels"
-		}
-		var subStyle = packinfo.style
-		if (subStyle == null) {
-			return "3dmodels";
-		} else if (subStyle == SubPackageConst.PATH_STYLE_CDN) {
-			return "3dcdns";
-		} else if (subStyle == SubPackageConst.PATH_STYLE_NATIVE) {
-			return "3dnatives"
-		} else {
-			return "3dmodels"
-		}
+		return "3dmodels"
 	}
 
 	//获取文本资源
@@ -169,7 +124,7 @@ export default class ResourceManager {
 		var path =this.spinePrefabPath + name+ ".prefab";
 		var obj =Resource.ResourceManager.Instance.luaLoadAsset(path, path, boundlename);
 		if (!obj){
-			LogsManager.errorTag("spineError","没有找到对应的spine:"+name+"_用临时spine替代effect_jidi_attack_hit");
+			window["LogsManager"].errorTag("spineError","没有找到对应的spine:"+name+"_用临时spine替代effect_jidi_attack_hit");
 			name ="effect_jidi_attack_hit";
 			path =this.spinePrefabPath + name+ ".prefab";
 			obj =Resource.ResourceManager.Instance.luaLoadAsset(path, path, boundlename);
@@ -180,13 +135,13 @@ export default class ResourceManager {
 	//获取对应的Sprite对象
 	public  static  loadSprite(imageurl, boundlename:string ){
 		if (!imageurl){
-			LogsManager.errorTag("nullImageUrl","ResourceManager.loadSprite");
+			window["LogsManager"].errorTag("nullImageUrl","ResourceManager.loadSprite");
 			return null;
 		}
 		var path = imageurl+ "png";
 		var sp =Resource.ResourceManager.Instance.luaLoadAsset(path, path, boundlename);
 		if (!sp){
-			LogsManager.errorTag("spriteError", path +"加载失败");
+			window["LogsManager"].errorTag("spriteError", path +"加载失败");
 		}
 		return UnityEngine.Object.Instantiate(sp);
 	}

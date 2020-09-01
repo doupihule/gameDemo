@@ -1667,4 +1667,3 @@ class WXGamePlatform extends GamePlatform_1.default {
     }
 }
 exports.default = WXGamePlatform;
-//# sourceMappingURL=WXGamePlatform.js.map

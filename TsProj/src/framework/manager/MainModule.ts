@@ -106,7 +106,7 @@ export default class MainModule implements IMessage {
 			//覆盖服务器来回的开关参数
 			if (result.data.config.switch) {
 
-				GameSwitch.coverServerSwitchMap(result.data.config.switch)
+				UserInfo.platform.coverServerSwitchMap(result.data.config.switch)
 				LogsManager.echo("yrc gameswitch resultSwitch", result.data.config.switch)
 			}
 

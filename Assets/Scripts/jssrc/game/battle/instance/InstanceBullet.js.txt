@@ -446,4 +446,3 @@ class InstanceBullet extends InstanceMove_1.default {
     }
 }
 exports.default = InstanceBullet;
-//# sourceMappingURL=InstanceBullet.js.map

@@ -23,4 +23,3 @@ UICompConst.classMap = {
     list: "List",
     spine: "Spine",
 };
-//# sourceMappingURL=UICompConst.js.map

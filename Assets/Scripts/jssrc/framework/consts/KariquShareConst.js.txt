@@ -70,4 +70,3 @@ KariquShareConst.KARIQU_ONLINETIME = "onlinetime";
 //是否开启banner样式的互推 默认不开启.根据需要配置.
 //在GameConst.kariquUrlMap里面配置isOpenBannerStyleJump即可. 会把GameConst.kariquUrlMap里面的所有属性全部覆盖到 KariquShareConst里
 KariquShareConst.isOpenBannerStyleJump = false;
-//# sourceMappingURL=KariquShareConst.js.map

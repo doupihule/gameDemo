@@ -87,4 +87,3 @@ class BattleSceneManager {
     }
 }
 exports.default = BattleSceneManager;
-//# sourceMappingURL=BattleSceneManager.js.map

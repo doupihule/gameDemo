@@ -345,4 +345,3 @@ class RolesModel extends BaseModel_1.default {
     }
 }
 exports.default = RolesModel;
-//# sourceMappingURL=RolesModel.js.map

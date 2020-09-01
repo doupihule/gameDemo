@@ -111,4 +111,3 @@ class RoleHealthBar extends BaseContainer_1.default {
     }
 }
 exports.default = RoleHealthBar;
-//# sourceMappingURL=RoleHealthBar.js.map

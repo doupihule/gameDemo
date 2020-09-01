@@ -5,7 +5,6 @@ import ShareTvOrderFunc from "./ShareTvOrderFunc";
 import GlobalParamsFunc from "./GlobalParamsFunc";
 import UserExtModel from "../model/UserExtModel";
 import BattleConst from "../consts/BattleConst";
-import BattleFunc from "./BattleFunc";
 
 /**关卡等级相关 */
 export default class LevelFunc extends BaseFunc {
@@ -153,27 +152,5 @@ export default class LevelFunc extends BaseFunc {
 		return randResult[0];
 	}
 
-	checkIsReduceSkillCd(camp, battleAdditionId, roleId) {
-		var value = 0;
-		if (camp == BattleConst.ROLEGROUP_MYSELF) {
-			if (battleAdditionId && battleAdditionId == BattleConst.battle_start_homeCd) {
-				var passiveSkillId = LevelFunc.instance.getBattleAddtionoByTwoId(battleAdditionId, "addtionNub");
-				var passiveCfg = BattleFunc.instance.getCfgDatas("PassiveSkill", passiveSkillId);
-				if (passiveCfg.effectType != BattleConst.passive_effect_skillcd) {
-					return;
-				}
-				var effectParams = passiveCfg.effectParams;
-				for (var s = 0; s < effectParams.length; s++) {
-					var arr = effectParams[s];
-					var skillId = arr[0];
-					if (Number(roleId) == Number(skillId)) {
-						value = arr[1];
-						break;
-					}
-				}
-			}
-		}
-		return value;
-	}
 
 }

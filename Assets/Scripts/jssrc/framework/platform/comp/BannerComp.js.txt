@@ -940,4 +940,3 @@ BannerComp.lastCreateBannerTime = 0;
 BannerComp.bannerCloseCount = 0;
 //banner注册的回调缓存  [{instane:banner,onLoad,onError } ]
 BannerComp._bannerCallBackCache = [];
-//# sourceMappingURL=BannerComp.js.map

@@ -4,7 +4,6 @@ var path = require('path');
 function copyFileSync( source, target ) {
 
     var targetFile = target;
-    console.log("source:",source,source.indexOf(".js.map"));
     if(source.indexOf(".js.map") != -1){
         return;
     }

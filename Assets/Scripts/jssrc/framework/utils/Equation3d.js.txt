@@ -3,4 +3,3 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class Equation3d {
 }
 exports.default = Equation3d;
-//# sourceMappingURL=Equation3d.js.map

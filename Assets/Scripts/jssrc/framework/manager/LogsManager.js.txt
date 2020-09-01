@@ -1,5 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const GameSwitch_1 = require("../common/GameSwitch");
+const TimerManager_1 = require("./TimerManager");
+const Global_1 = require("../../utils/Global");
+const WindowManager_1 = require("./WindowManager");
+const UserModel_1 = require("../../game/sys/model/UserModel");
+const PackConfigManager_1 = require("./PackConfigManager");
+const HttpMessage_1 = require("../common/HttpMessage");
+const UserInfo_1 = require("../common/UserInfo");
+const DeviceTools_1 = require("../utils/DeviceTools");
+const GameConsts_1 = require("../../game/sys/consts/GameConsts");
+const LogsErrorCode_1 = require("../consts/LogsErrorCode");
+const Client_1 = require("../common/kakura/Client");
 class LogsManager {
     constructor() {
     }
@@ -290,7 +302,7 @@ class LogsManager {
             platform: PackConfigManager_1.default.ins.platform.platform,
             deviceId: Global_1.default.deviceId,
             device: Global_1.default.deviceModel,
-            isNew: StatisticsManager_1.default.isNewPlayer ? 1 : 0,
+            isNew: Global_1.default.isNew() ? 1 : 0,
             network: DeviceTools_1.default.network,
             time: time
         };
@@ -356,28 +368,6 @@ class LogsManager {
         }
         // str = this.getSureByte(str, allLength);
         return str;
-    }
-    //根据最多能发送的长度截取
-    static getSureByte(str, allLength) {
-        var lastStr = "";
-        var changeStr = "";
-        var s = "";
-        var enocdeLength = 0;
-        for (var i = str.length - 1; i >= 0; i--) {
-            s = str.charAt(i);
-            enocdeLength = encodeURIComponent(s).length;
-            if (allLength - enocdeLength >= 30) {
-                lastStr += s;
-                allLength -= enocdeLength;
-            }
-            else {
-                break;
-            }
-        }
-        for (var i = lastStr.length - 1; i >= 0; i--) {
-            changeStr += lastStr.charAt(i);
-        }
-        return changeStr;
     }
     //字符串转换
     static turnStr(title, message, optionalParams, isError = false) {
@@ -467,17 +457,3 @@ LogsManager.prevX = 0;
 LogsManager.prevY = 0;
 //是否打开日志调试
 LogsManager.isOpenLogsDebug = false;
-const GameSwitch_1 = require("../common/GameSwitch");
-const TimerManager_1 = require("./TimerManager");
-const Global_1 = require("../../utils/Global");
-const WindowManager_1 = require("./WindowManager");
-const StatisticsManager_1 = require("../../game/sys/manager/StatisticsManager");
-const UserModel_1 = require("../../game/sys/model/UserModel");
-const PackConfigManager_1 = require("./PackConfigManager");
-const HttpMessage_1 = require("../common/HttpMessage");
-const UserInfo_1 = require("../common/UserInfo");
-const DeviceTools_1 = require("../utils/DeviceTools");
-const GameConsts_1 = require("../../game/sys/consts/GameConsts");
-const LogsErrorCode_1 = require("../consts/LogsErrorCode");
-const Client_1 = require("../common/kakura/Client");
-//# sourceMappingURL=LogsManager.js.map

@@ -1,7 +1,5 @@
 import CacheManager from "../../../framework/manager/CacheManager";
 import GameConsts from "./GameConsts";
-import PackConfigManager from "../../../framework/manager/PackConfigManager";
-import UserInfo from "../../../framework/common/UserInfo";
 
 export default class StorageCode {
 
@@ -18,10 +16,12 @@ export default class StorageCode {
 	//缓存的 zip文件路径 是 一个json串
 	public static storage_zip_file: string = "storage_zip_file"
 
+	public  static  platformId:string;
+
 	//存储用户名
 	public static get storage_acount() {
-		if (UserInfo.isWeb()) {
-			return GameConsts.gameCode + "_" + PackConfigManager.ins.platform.platform + "_count"
+		if (this.platformId == "web") {
+			return GameConsts.gameCode + "_" + this.platformId  + "_count"
 		}
 		return "acount"
 
@@ -36,7 +36,7 @@ export default class StorageCode {
 
 	//这里需要做一个判断 如果是dev 那么 userInfo是动态的 拼上 userName .如果是其他平台就是固定的
 	static get storage_userinfo(): string {
-		var key = GameConsts.gameCode + "_" + PackConfigManager.ins.platform.platform + "_" + CacheManager.instance.getGlobalCache(StorageCode.storage_acount) || "";
+		var key = GameConsts.gameCode + "_" + this.platformId + "_" + CacheManager.instance.getGlobalCache(StorageCode.storage_acount) || "";
 		return "storage_userinfo" + key;
 	}
 

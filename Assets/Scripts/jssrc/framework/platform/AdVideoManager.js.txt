@@ -328,4 +328,3 @@ AdVideoManager.TYPE_ORIGINAL_INTERSTITIAL = 'INTERSTITIAL';
  * 原生广告类型：icon
  */
 AdVideoManager.TYPE_ORIGINAL_ICON = 'ICON';
-//# sourceMappingURL=AdVideoManager.js.map

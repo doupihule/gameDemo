@@ -419,4 +419,3 @@ BattleFunc.bossMaxFrame = 60 * 60;
 BattleFunc.CreateRoleIndex = {};
 /**当前战斗类型 */
 BattleFunc.curBattleType = 1;
-//# sourceMappingURL=BattleFunc.js.map

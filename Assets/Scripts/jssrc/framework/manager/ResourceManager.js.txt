@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const SubPackageManager_1 = require("./SubPackageManager");
-const SubPackageConst_1 = require("../../game/sys/consts/SubPackageConst");
+const csharp_1 = require("csharp");
 class ResourceManager {
     constructor() {
     }
@@ -18,7 +17,7 @@ class ResourceManager {
     }
     //判断是否3d模块需要分包
     static check3dIsSubpack() {
-        return SubPackageManager_1.default.getModelFileStyle(SubPackageConst_1.default.packName_model3d) == SubPackageConst_1.default.PATH_STYLE_SUBPACK;
+        return false;
     }
     //加载一个3dmodel
     static load3dmodel(modelName, isScene, callBack, thisObj, params = null) {
@@ -37,12 +36,6 @@ class ResourceManager {
     static get3dmodelRes(modelName, isScene = false, withClone = false) {
         return null;
     }
-    //检查粒子renderMode
-    static checkParticalRendeMode(view, modelName) {
-    }
-    //clone一个粒子
-    static cloneOneSprite(sourceSp) {
-    }
     //加载一个spine动画  根据spine动画名字作为动态分包 ,回调参数顺序:  callback(ani,params); 会把 动画对象放到回调里面
     //  ani  是 Laya.Skeleton对象
     //这个接口废弃
@@ -50,31 +43,11 @@ class ResourceManager {
     }
     //获取spine对应的分包 因为考虑到如果有组的分包
     static getSpineSubpack(shortName) {
-        var groupInfo = SubPackageManager_1.default.getSpineGroupInfo(shortName);
-        if (!groupInfo) {
-            return shortName;
-        }
-        return groupInfo.name;
+        return "";
     }
     //获取spine的路径
     static getSpinePath(shortName) {
-        var subpak = SubPackageConst_1.default.subPackData[shortName];
-        var groupInfo = SubPackageManager_1.default.getSpineGroupInfo(shortName);
-        //如果是组spine
-        if (groupInfo) {
-            return groupInfo.path + "/" + groupInfo.name + "/" + shortName + "/";
-        }
-        var forderPath;
-        if (!subpak || subpak.style == SubPackageConst_1.default.PATH_STYLE_SUBPACK) {
-            forderPath = "spine";
-        }
-        else if (subpak.style == SubPackageConst_1.default.PATH_STYLE_NATIVE) {
-            forderPath = "spine_native";
-        }
-        else {
-            forderPath = "spine_cdn";
-        }
-        return forderPath + "/" + shortName + "/";
+        return "";
     }
     //获取spineskurl
     static getSpineSkUrl(shortName) {
@@ -86,39 +59,53 @@ class ResourceManager {
     }
     //获取一个3d模型的路径 不带Layascene的 model
     static get3DModelPath(model) {
-        var packName = this.get3dodelPackName(model);
-        var packinfo = SubPackageConst_1.default.subPackData[packName];
-        if (!packinfo) {
-            return "3dmodels";
-        }
-        var subStyle = packinfo.style;
-        if (subStyle == null) {
-            return "3dmodels";
-        }
-        else if (subStyle == SubPackageConst_1.default.PATH_STYLE_CDN) {
-            return "3dcdns";
-        }
-        else if (subStyle == SubPackageConst_1.default.PATH_STYLE_NATIVE) {
-            return "3dnatives";
-        }
-        else {
-            return "3dmodels";
-        }
+        return "3dmodels";
     }
     //获取文本资源
     static getResTxt(path, bounlde = "textab") {
         return "";
     }
     //获取文件buffer
-    static getResBuffer(path, boundle = "byteab") {
+    static getResBuffer(path, boundle) {
         return new ArrayBuffer(10);
+    }
+    //获取uiprefab
+    static loadUIPrefab(name, boundlename) {
+        var path = this.uiPrefabPath + name + ".prefab";
+        var obj = csharp_1.Resource.ResourceManager.Instance.luaLoadAsset(path, path, boundlename);
+        return csharp_1.UnityEngine.Object.Instantiate(obj);
+    }
+    static loadSpinePrefab(name, boundlename) {
+        var path = this.spinePrefabPath + name + ".prefab";
+        var obj = csharp_1.Resource.ResourceManager.Instance.luaLoadAsset(path, path, boundlename);
+        if (!obj) {
+            window["LogsManager"].errorTag("spineError", "没有找到对应的spine:" + name + "_用临时spine替代effect_jidi_attack_hit");
+            name = "effect_jidi_attack_hit";
+            path = this.spinePrefabPath + name + ".prefab";
+            obj = csharp_1.Resource.ResourceManager.Instance.luaLoadAsset(path, path, boundlename);
+        }
+        return csharp_1.UnityEngine.Object.Instantiate(obj);
+    }
+    //获取对应的Sprite对象
+    static loadSprite(imageurl, boundlename) {
+        if (!imageurl) {
+            window["LogsManager"].errorTag("nullImageUrl", "ResourceManager.loadSprite");
+            return null;
+        }
+        var path = imageurl + "png";
+        var sp = csharp_1.Resource.ResourceManager.Instance.luaLoadAsset(path, path, boundlename);
+        if (!sp) {
+            window["LogsManager"].errorTag("spriteError", path + "加载失败");
+        }
+        return csharp_1.UnityEngine.Object.Instantiate(sp);
     }
 }
 exports.default = ResourceManager;
+ResourceManager.uiPrefabPath = "Assets/UI/Prefabs/";
+ResourceManager.spinePrefabPath = "Assets/Animation/Prefabs/";
 ResourceManager.PATHHEAD = "LayaScene_"; //laya 场景
 ResourceManager.resplatform = "Conventional"; //资源平台
 ResourceManager.SPINEPATH = "spine"; //2d骨骼动画路径
 ResourceManager._checkRenderModeMap = {};
 //缓存spine加载完成, 缓存对应的spine缓冲模版
 ResourceManager._spineModelMap = {};
-//# sourceMappingURL=ResourceManager.js.map

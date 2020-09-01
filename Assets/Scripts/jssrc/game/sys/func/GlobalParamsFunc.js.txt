@@ -83,4 +83,3 @@ exports.default = GlobalParamsFunc;
 GlobalParamsFunc.coin = 2; //金币
 GlobalParamsFunc.gold = 3; //钻石
 GlobalParamsFunc.power = 4; //体力
-//# sourceMappingURL=GlobalParamsFunc.js.map

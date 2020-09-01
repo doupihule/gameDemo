@@ -13,4 +13,3 @@ class ButtonExpand extends BaseViewExpand_1.default {
     }
 }
 exports.default = ButtonExpand;
-//# sourceMappingURL=ButtonExpand.js.map

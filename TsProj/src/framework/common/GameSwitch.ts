@@ -1,13 +1,7 @@
-import LogsManager from "../manager/LogsManager";
+
 import Global from "../../utils/Global";
-import DeviceTools from "../utils/DeviceTools";
-import GameUtils from "../../utils/GameUtils";
 import TableUtils from "../utils/TableUtils";
 import GameSwitchConst from "../../game/sys/consts/GameSwitchConst";
-import BannerAdManager from "../manager/BannerAdManager";
-import ChannelConst from "../../game/sys/consts/ChannelConst";
-import UserInfo from "./UserInfo";
-import GameConsts from "../../game/sys/consts/GameConsts";
 
 
 /**
@@ -193,7 +187,7 @@ export default class GameSwitch {
 	 */
 		//可以在这里初始化定义一些调试开关.后面可以走服务器控制
 		// 比如是否显示日志, 所有的开关默认是关闭的
-	private static _switchMap: any = {
+	public static _switchMap: any = {
 		[GameSwitch.SWITCH_GM_DEBUG]: 0,
 		[GameSwitch.SWITCH_CD_DEBUG]: 0,
 		[GameSwitch.SWITCH_DISABLE_ADV]: 0,
@@ -321,66 +315,6 @@ export default class GameSwitch {
 
 	}
 
-	//覆盖服务器回来的开关
-	static coverServerSwitchMap(map: any) {
-
-		for (var i in map) {
-			this._switchMap[i] = map[i];
-		}
-		LogsManager.setLogGroupVisible(this.checkOnOff(GameSwitch.SWITCH_LOG_PANEL));
-		DeviceTools.checkBySwitch();
-
-		var channelData = ChannelConst.getChannelConst(UserInfo.platformId);
-		//这里做定向覆盖包数据.
-		if (map[this.VIDEO_ID]) {
-			channelData.adVideoId = map[this.VIDEO_ID]
-		}
-		if (map[this.BANNER_ID]) {
-			channelData.adBannerId = map[this.BANNER_ID]
-		}
-		if (map.TTADSDK_ID) {
-			channelData.appSid = map.TTADSDK_ID
-		}
-
-		//全屏视频id
-		if (map.FULLVIDEO_ID) {
-			channelData.adFullVideoId = map.FULLVIDEO_ID
-		}
-
-		//GM开关
-		LogsManager.checkGM();
-		GameUtils.canShare = !this.checkOnOff(GameSwitch.SWITCH_DISABLE_SHARE_NEW);
-		GameUtils.canVideo = !this.checkOnOff(GameSwitch.SWITCH_DISABLE_ADV);
-		GameUtils.isReview = this.checkOnOff(GameSwitch.SWITCH_DISABLE_REVIEW);
-		for (i in map) {
-			LogsManager.echo("服务器返回的开关覆盖结果   ", i, " : ", map[i]);
-		}
-		var frameRate = this.getSwitchState(GameSwitch.SWITCH_GAME_FRAME_RATE)
-		//var frameRate = "60"
-		if (frameRate && frameRate != "0") {
-			var targetRate = Number(frameRate);
-			if (GameConsts.gameFrameRate != targetRate) {
-				GameConsts.gameFrameRate = targetRate
-				LogsManager.echo("设置游戏帧率:", frameRate);
-				UserInfo.platform.setGameFrame();
-			}
-
-		}
-
-	}
-
-	//覆盖开关条件
-	//覆盖服务器回来的开关
-	static coverServerSwitchConditionMap(map: any) {
-		if (!map) {
-			return;
-		}
-		for (var i in map) {
-			this._switchCondition[i] = map[i];
-		}
-
-
-	}
 
 	//改变开关状态 1 表示开启,0 表示关闭
 	static setOnOff(key: string, value: number) {
@@ -445,9 +379,4 @@ export default class GameSwitch {
 		return 0;
 	}
 
-	/**设置需要白名单的开关值 */
-	static setWhiteListSwitch() {
-		BannerAdManager.setBannerSwitch();
-		// ChargeUtils.setChargeSwitch()
-	}
 }

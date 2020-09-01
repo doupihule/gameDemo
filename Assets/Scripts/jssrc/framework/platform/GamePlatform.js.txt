@@ -39,6 +39,7 @@ const NativeBridge_1 = require("../native/NativeBridge");
 const JSToNativeEvent_1 = require("../event/JSToNativeEvent");
 const GameHttpControler_1 = require("../common/GameHttpControler");
 const BattleFunc_1 = require("../../game/sys/func/BattleFunc");
+const DeviceTools_1 = require("../utils/DeviceTools");
 class GamePlatform {
     constructor() {
         //应用平台ID
@@ -198,7 +199,7 @@ class GamePlatform {
         }
         if (result.GameStatic) {
             //version里面的开关覆盖
-            GameSwitch_1.default.coverServerSwitchMap(result.GameStatic);
+            this.coverServerSwitchMap(result.GameStatic);
         }
         Global_1.default.resource_url = result.resource_url_root + "/" + UserInfo_1.default.platformId + "/";
         ;
@@ -395,7 +396,7 @@ class GamePlatform {
     doSingleGlobalBack(data, isError = false) {
         //如果是审核服版本 那么重新发送一次globalsever
         if (data.switch) {
-            GameSwitch_1.default.coverServerSwitchMap(data.switch);
+            this.coverServerSwitchMap(data.switch);
             if (data.switch.CLOUD_URL && (UserInfo_1.default.platform.global_url_review == "" || UserInfo_1.default.platform.global_url_review != data.switch.CLOUD_URL)) {
                 // Global.global_url_review 用于记录审核服主域名【用于区别负载域名】
                 UserInfo_1.default.platform.global_url_review = Global_1.default.global_url = data.switch.CLOUD_URL;
@@ -552,7 +553,7 @@ class GamePlatform {
         //     SingleCommonServer.upDateAllData(tmpTable, SingleCommonServer.setUpdateDataFlag, SingleCommonServer);
         // }
         if (resultData.switch && !Global_1.default.checkIsSingleMode()) {
-            GameSwitch_1.default.coverServerSwitchMap(resultData.switch);
+            this.coverServerSwitchMap(resultData.switch);
         }
     }
     checkHasUpdateData(userData) {
@@ -1201,6 +1202,45 @@ class GamePlatform {
     }
     inAppPurchase(productId, amount, orderId, callbackUrl) {
     }
+    coverServerSwitchMap(map) {
+        for (var i in map) {
+            GameSwitch_1.default._switchMap[i] = map[i];
+        }
+        LogsManager_1.default.setLogGroupVisible(GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_LOG_PANEL));
+        DeviceTools_1.default.checkBySwitch();
+        var channelData = ChannelConst_1.default.getChannelConst(UserInfo_1.default.platformId);
+        //这里做定向覆盖包数据.
+        if (map[GameSwitch_1.default.VIDEO_ID]) {
+            channelData.adVideoId = map[GameSwitch_1.default.VIDEO_ID];
+        }
+        if (map[GameSwitch_1.default.BANNER_ID]) {
+            channelData.adBannerId = map[GameSwitch_1.default.BANNER_ID];
+        }
+        if (map.TTADSDK_ID) {
+            channelData.appSid = map.TTADSDK_ID;
+        }
+        //全屏视频id
+        if (map.FULLVIDEO_ID) {
+            channelData.adFullVideoId = map.FULLVIDEO_ID;
+        }
+        //GM开关
+        LogsManager_1.default.checkGM();
+        GameUtils_1.default.canShare = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_SHARE_NEW);
+        GameUtils_1.default.canVideo = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_ADV);
+        GameUtils_1.default.isReview = GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_REVIEW);
+        for (i in map) {
+            LogsManager_1.default.echo("服务器返回的开关覆盖结果   ", i, " : ", map[i]);
+        }
+        var frameRate = GameSwitch_1.default.getSwitchState(GameSwitch_1.default.SWITCH_GAME_FRAME_RATE);
+        //var frameRate = "60"
+        if (frameRate && frameRate != "0") {
+            var targetRate = Number(frameRate);
+            if (GameConsts_1.default.gameFrameRate != targetRate) {
+                GameConsts_1.default.gameFrameRate = targetRate;
+                LogsManager_1.default.echo("设置游戏帧率:", frameRate);
+                UserInfo_1.default.platform.setGameFrame();
+            }
+        }
+    }
 }
 exports.default = GamePlatform;
-//# sourceMappingURL=GamePlatform.js.map

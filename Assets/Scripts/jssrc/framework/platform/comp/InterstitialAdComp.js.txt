@@ -403,4 +403,3 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
 exports.InterstitialAdComp = InterstitialAdComp;
 //头条插屏注册的回调缓存 
 InterstitialAdComp._interstitialCallBackCache = [];
-//# sourceMappingURL=InterstitialAdComp.js.map

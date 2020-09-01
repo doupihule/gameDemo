@@ -1,9 +1,5 @@
-import TimerManager from "../manager/TimerManager";
-import LogsManager from "../manager/LogsManager";
-import BaseContainer from "../components/BaseContainer";
-import ViewTools from "../components/ViewTools";
-import ImageExpand from "../components/ImageExpand";
 
+import BaseContainer from "../components/BaseContainer";
 //序列帧动画扩展
 export default class SpriteFrameExpand extends BaseContainer {
 
@@ -281,3 +277,9 @@ export default class SpriteFrameExpand extends BaseContainer {
 
 
 }
+
+import TimerManager from "../manager/TimerManager";
+import LogsManager from "../manager/LogsManager";
+
+import ViewTools from "../components/ViewTools";
+import ImageExpand from "../components/ImageExpand";

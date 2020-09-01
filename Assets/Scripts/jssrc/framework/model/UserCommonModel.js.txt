@@ -31,4 +31,3 @@ class UserCommonModel extends BaseModel_1.default {
     }
 }
 exports.default = UserCommonModel;
-//# sourceMappingURL=UserCommonModel.js.map

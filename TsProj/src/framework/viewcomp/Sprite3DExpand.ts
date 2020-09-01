@@ -1,5 +1,4 @@
 import ResourceManager from "../manager/ResourceManager";
-import LogsManager from "../manager/LogsManager";
 import BaseViewExpand from "../components/BaseViewExpand";
 
 //动态的3dsprite扩展.  对于一些不需要操作子对象的3d模型来说.这个方法很适合. 非阻塞的创建3d模型

@@ -18,4 +18,3 @@ class GuideUI extends UIBaseView_1.default {
     }
 }
 exports.default = GuideUI;
-//# sourceMappingURL=GuideUI.js.map

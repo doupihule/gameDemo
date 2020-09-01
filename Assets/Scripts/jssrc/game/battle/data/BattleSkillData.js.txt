@@ -138,4 +138,3 @@ class BattleSkillData {
     }
 }
 exports.default = BattleSkillData;
-//# sourceMappingURL=BattleSkillData.js.map

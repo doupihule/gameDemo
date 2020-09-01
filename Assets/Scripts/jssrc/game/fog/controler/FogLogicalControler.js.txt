@@ -287,4 +287,3 @@ class FogLogicalControler extends FogControler_1.default {
     }
 }
 exports.default = FogLogicalControler;
-//# sourceMappingURL=FogLogicalControler.js.map

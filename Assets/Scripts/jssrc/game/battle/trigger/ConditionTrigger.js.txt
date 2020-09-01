@@ -520,4 +520,3 @@ ConditionTrigger.opportunity_beUsedBuff = 16; //当被buff作用时 buff效果�
 ConditionTrigger.opportunity_usedbuffRmoved = 17; //当被作用着buff移除时 被作用者触发
 //条件数据缓存
 ConditionTrigger._conditionDataCache = {};
-//# sourceMappingURL=ConditionTrigger.js.map

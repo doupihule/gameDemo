@@ -53,4 +53,3 @@ class ChapInstanceBox extends FogInstanceBasic_1.default {
     }
 }
 exports.default = ChapInstanceBox;
-//# sourceMappingURL=ChapInstanceBox.js.map

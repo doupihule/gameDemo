@@ -447,4 +447,3 @@ RolesFunc.STATE_OWN = 3;
 RolesFunc.nowForce = 0;
 RolesFunc.ROLE_UPGRADE_SPINE = "effect_role_levelup01";
 RolesFunc.maxLevel = 10;
-//# sourceMappingURL=RolesFunc.js.map

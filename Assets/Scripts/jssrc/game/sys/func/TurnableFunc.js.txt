@@ -44,4 +44,3 @@ class TurnableFunc extends BaseFunc_1.default {
     }
 }
 exports.default = TurnableFunc;
-//# sourceMappingURL=TurnableFunc.js.map

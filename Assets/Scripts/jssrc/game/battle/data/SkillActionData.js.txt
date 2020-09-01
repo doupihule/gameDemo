@@ -82,4 +82,3 @@ class SkillActionData {
     }
 }
 exports.default = SkillActionData;
-//# sourceMappingURL=SkillActionData.js.map

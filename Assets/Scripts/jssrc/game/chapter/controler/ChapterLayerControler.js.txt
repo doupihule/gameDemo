@@ -65,4 +65,3 @@ class ChapterLayerControler {
     }
 }
 exports.ChapterLayerControler = ChapterLayerControler;
-//# sourceMappingURL=ChapterLayerControler.js.map

@@ -19,4 +19,3 @@ class TaskChatFunc extends BaseFunc_1.default {
     }
 }
 exports.default = TaskChatFunc;
-//# sourceMappingURL=TaskChatFunc.js.map

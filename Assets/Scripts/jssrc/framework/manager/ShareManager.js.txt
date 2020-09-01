@@ -41,4 +41,3 @@ class ShareManager {
     }
 }
 exports.default = ShareManager;
-//# sourceMappingURL=ShareManager.js.map

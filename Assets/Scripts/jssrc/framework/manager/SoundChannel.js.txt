@@ -51,4 +51,3 @@ class SoundChannel {
 exports.default = SoundChannel;
 SoundChannel._emptyFunc = function () {
 };
-//# sourceMappingURL=SoundChannel.js.map

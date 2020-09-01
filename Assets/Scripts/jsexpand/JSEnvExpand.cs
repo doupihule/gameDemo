@@ -8,9 +8,14 @@ namespace GameUtils
     public class JSEnvExpand
     {
         public static JsEnv globalEnv;
-        public static void InitEnv(string debugRoot)
+        public static void InitEnv(string debugRoot,int port)
         {
-            globalEnv = new JsEnv(new JsAssetsLoader(debugRoot));
+            globalEnv = new JsEnv(new JsAssetsLoader(debugRoot), port);
+            globalEnv.Eval(@"
+                console.log('aaaaaaaaaaaaaaaaaa');
+                require('Main')
+            ");
+
         }
     }
 
@@ -29,20 +34,24 @@ namespace GameUtils
 
         public bool FileExists(string filepath)
         {
-            return UnityEngine.Resources.Load(filepath) != null;
+            return true;
         }
 
         public string ReadFile(string filepath, out string debugpath)
         {
 
             string datas = null;
+            if (filepath.EndsWith(".js"))
+            {
+                filepath = filepath.Substring(0, filepath.Length - 3);
+            }
             filepath = filepath.Replace(".", "/");
             debugpath = System.IO.Path.Combine(root, filepath);
 #if UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
             debugpath = debugpath.Replace("/", "\\");
 #endif
             
-            string luaPath = string.Concat("Assets/Scripts/jssrc/", filepath, ".lua.txt");
+            string luaPath = string.Concat("Assets/Scripts/jssrc/", filepath, ".js.txt");
 #if UNITY_EDITOR
             if (Constants.GameConstants.LoadAssetByEditor)
             {
@@ -54,16 +63,12 @@ namespace GameUtils
 #endif
             {
                 TextAsset luaAsset = ResourceManager.Instance.LoadAsset<TextAsset>(luaPath, luaPath, "scriptab");
-                if (luaPath.Contains("Main"))
-                {
-                    DebugUtils.Log(DebugUtils.Type.Lua, "myLuaLoader" + luaAsset.bytes.ToString());
-                }
                 datas = luaAsset.text;
                 //string decryptStr = File.ReadAllText( string.Format( ResourceManager.bytesLuaTxtPath, path ), System.Text.Encoding.UTF8 );
                 //string byteStr = AESUtil.AESDecrypt( decryptStr ); //解密
                 //datas = System.Text.Encoding.UTF8.GetBytes( byteStr );
             }
-            DebugUtils.Assert(datas != null, "The js file cannot be found! path is " + filepath);
+            DebugUtils.Assert(datas != null, "The js file cannot be found! path is " + luaPath);
 
             return datas;
 

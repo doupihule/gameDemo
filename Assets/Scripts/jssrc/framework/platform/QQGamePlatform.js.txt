@@ -62,4 +62,3 @@ class QQGamePlatform extends WXGamePlatform_1.default {
     }
 }
 exports.default = QQGamePlatform;
-//# sourceMappingURL=QQGamePlatform.js.map

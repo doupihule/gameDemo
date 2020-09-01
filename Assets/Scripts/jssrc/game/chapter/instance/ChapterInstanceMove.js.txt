@@ -68,4 +68,3 @@ class ChapterInstanceMove extends FogInstanceMove_1.default {
     }
 }
 exports.default = ChapterInstanceMove;
-//# sourceMappingURL=ChapterInstanceMove.js.map

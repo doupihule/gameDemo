@@ -54,4 +54,3 @@ class TalentSkillsModel extends BaseModel_1.default {
     }
 }
 exports.default = TalentSkillsModel;
-//# sourceMappingURL=TalentSkillsModel.js.map

@@ -1,15 +1,33 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseContainer_1 = require("./BaseContainer");
+const UICompConst_1 = require("../consts/UICompConst");
+const ResourceManager_1 = require("../manager/ResourceManager");
+const GameConsts_1 = require("../../game/sys/consts/GameConsts");
+const ResourceConst_1 = require("../../game/sys/consts/ResourceConst");
 class ImageExpand extends BaseContainer_1.default {
+    constructor(obj) {
+        super(obj);
+        this.uitype = UICompConst_1.default.comp_img;
+    }
     setColor(r, g, b, a) {
     }
-    //设置皮肤
-    setSkin(url, boundname = "imagead") {
+    //设置皮肤 最好手动指定boundlename
+    setSkin(url, boundlename = ResourceConst_1.default.boundle_uiimage, adjustSize = false) {
+        if (!url || url == "") {
+            this.__imageComp.sprite = null;
+        }
+        else {
+            var sp = ResourceManager_1.default.loadSprite(url, boundlename);
+            this.__imageComp.sprite = sp;
+            if (adjustSize) {
+                var size = sp.bounds.size;
+                this.setSize(size.x * GameConsts_1.default.uiMitoPixelRatio, size.y * GameConsts_1.default.uiMitoPixelRatio);
+            }
+        }
     }
     //设置九宫格信息
     setSizeGrid(a, b, c, d) {
     }
 }
 exports.default = ImageExpand;
-//# sourceMappingURL=ImageExpand.js.map

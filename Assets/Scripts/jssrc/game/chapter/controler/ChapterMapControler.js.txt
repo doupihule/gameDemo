@@ -70,4 +70,3 @@ class ChapterMapControler {
     }
 }
 exports.default = ChapterMapControler;
-//# sourceMappingURL=ChapterMapControler.js.map
