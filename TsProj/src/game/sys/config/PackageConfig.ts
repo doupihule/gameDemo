@@ -1,4 +1,4 @@
-import Global from "../../../utils/Global";
+import GlobalData from "../../../framework/utils/GlobalData";
 import UserInfo from "../../../framework/common/UserInfo";
 
 export default class PackageConfig {
@@ -12,7 +12,7 @@ export default class PackageConfig {
 
 	static initCfgs() {
 		if (this.client_template_version != "{client_template_version}") {
-			Global.client_version = this.client_template_version;
+			GlobalData.client_version = this.client_template_version;
 		}
 		if (this.client_template_platformId != "{client_template_platformId}") {
 			UserInfo.platformId = this.client_template_platformId;

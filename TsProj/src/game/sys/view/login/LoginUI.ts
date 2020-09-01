@@ -4,7 +4,7 @@ import Method from "../../common/kakura/Method";
 import WindowManager from "../../../../framework/manager/WindowManager";
 import {WindowCfgs} from "../../consts/WindowCfgs";
 import CacheManager from "../../../../framework/manager/CacheManager";
-import Global from "../../../../utils/Global";
+import GlobalData from "../../../../framework/utils/GlobalData";
 import MainModule from "../../../../framework/manager/MainModule";
 import {ButtonUtils} from "../../../../framework/utils/ButtonUtils";
 import StorageCode from "../../consts/StorageCode";
@@ -62,7 +62,7 @@ export default class LoginUI extends UIBaseView {
 			"params": {
 				"passport": account,
 				"password": this.label_password.text,
-				"device": Global.deviceModel,
+				"device": GlobalData.deviceModel,
 				"comeFrom": UserInfo.LoginSceneInfo
 			}
 		};

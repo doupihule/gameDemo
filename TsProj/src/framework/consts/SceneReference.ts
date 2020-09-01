@@ -1,4 +1,4 @@
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import LogsManager from "../manager/LogsManager";
 import WhiteListFunc from "../func/WhiteListFunc";
 import UserInfo from "../common/UserInfo";
@@ -154,8 +154,8 @@ export default class SceneReference {
 			return true;
 		}
 		// 注册白名单
-		if (!SceneReference.checkWhiteSceneId(Global.sceneId, WhiteListFunc.TYPE_REGISTER)) {
-			LogsManager.echo("hlx scene 账号不在注册白名单,Global.sceneId：", Global.sceneId);
+		if (!SceneReference.checkWhiteSceneId(GlobalData.sceneId, WhiteListFunc.TYPE_REGISTER)) {
+			LogsManager.echo("hlx scene 账号不在注册白名单,GlobalData.sceneId：", GlobalData.sceneId);
 			return false;
 		}
 		// 注册黑名单

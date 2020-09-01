@@ -1,5 +1,5 @@
 import Client from "../common/kakura/Client";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import UserModel from "../../game/sys/model/UserModel";
 import TableUtils from "../utils/TableUtils";
 import CacheManager from "../manager/CacheManager";
@@ -35,7 +35,7 @@ export default class SingleCommonServer {
 	 * @param autoUpdate  ,是否自动同步数据.根据项目需要 判断是否有必要自动同步数据
 	 * 调用入口在UserModel.initData函数里面 .
 	 * 如果对于有金币同步频次较高的游戏.建议开启.同时同步频率建议调到30秒以上
-	 * 可通过修改 Global.updateUserDataDelay或者SWITCH_UPDATE_USERDATA_CD开关值调整同步频率
+	 * 可通过修改 GlobalData.updateUserDataDelay或者SWITCH_UPDATE_USERDATA_CD开关值调整同步频率
 	 */
 	static initData(autoUpdate: boolean = false) {
 		//获取服务器同步用户数据cd
@@ -43,7 +43,7 @@ export default class SingleCommonServer {
 		if (delayValue) {
 			delayValue = Number(delayValue);
 			if (delayValue > 0) {
-				Global.updateUserDataDelay = delayValue;
+				GlobalData.updateUserDataDelay = delayValue;
 			}
 			LogsManager.echo("使用服务器配置的同步cd", delayValue)
 
@@ -60,11 +60,11 @@ export default class SingleCommonServer {
 		}
 		// this.testConn();
 		//如果是单人模式才会去定时同步客户端数据
-		if (Global.checkIsSingleMode()) {
+		if (GlobalData.checkIsSingleMode()) {
 			//暂定10秒同步一次 如果有频繁数据修改需求. 这个值需要调
 			// 定时同步功能关闭。云存储不在有延迟同步需求 fix by 黄璐骁
 			if (autoUpdate) {
-				TimerManager.instance.add(this.startSaveClientData, this, Global.updateUserDataDelay, 9999999);
+				TimerManager.instance.add(this.startSaveClientData, this, GlobalData.updateUserDataDelay, 9999999);
 			}
 		}
 
@@ -120,7 +120,7 @@ export default class SingleCommonServer {
 			WindowManager.ShowTip("xd 数据已经删除,请重启游戏");
 			return;
 		}
-		if (!Global.checkIsSingleMode()) {
+		if (!GlobalData.checkIsSingleMode()) {
 			//非单机项目的数据同步
 			if (Object.keys(Client.temDirtList).length > 0) {
 				var data = Client.temDirtList;
@@ -227,7 +227,7 @@ export default class SingleCommonServer {
 
 	//发送非单机项目的数据同步
 	static sendNoAliCloudData(params) {
-		if (Global.checkIsSingleMode()) return;
+		if (GlobalData.checkIsSingleMode()) return;
 		LogsManager.echo("开始非单机项目同步数据");
 		KakuraClient.instance.clearOneMethod(this.user_updateData_349);
 		Client.instance.send(this.user_updateData_349, params, (result) => {
@@ -279,7 +279,7 @@ export default class SingleCommonServer {
 
 	//云存储清除账号数据
 	static disposeAccount() {
-		if (Global.checkUserCloudStorage()) {
+		if (GlobalData.checkUserCloudStorage()) {
 			this.disposeCloudStorageAccount();
 		} else {
 			WindowManager.ShowTip("非云存储不可使用");

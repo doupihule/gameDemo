@@ -5,7 +5,7 @@ import TimerManager from "../manager/TimerManager";
 import TranslateFunc from "../func/TranslateFunc";
 import WindowManager from "../manager/WindowManager";
 import ErrorCode from "../../game/sys/common/kakura/ErrorCode";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import UserInfo from "./UserInfo";
 import LogsErrorCode from "../consts/LogsErrorCode";
 import Client from "./kakura/Client";
@@ -205,7 +205,7 @@ export default class HttpMessage {
 				if ((!platforms[i].result) || platforms[i].error) {
 					var errs = (platforms[i].error) || {code: ErrorCode.webOffline}
 					//如果是云存储的 那么直接做失败回调
-					if (Global.checkUserCloudStorage()) {
+					if (GlobalData.checkUserCloudStorage()) {
 						this.onHttpError({error: errs});
 						return;
 					}

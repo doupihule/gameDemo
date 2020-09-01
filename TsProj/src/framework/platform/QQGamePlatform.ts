@@ -1,5 +1,5 @@
 import WXGamePlatform from "./WXGamePlatform";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import LogsManager from "../manager/LogsManager";
 import StatisticsManager from "../../game/sys/manager/StatisticsManager";
 import StatisticsCommonConst from "../consts/StatisticsCommonConst";
@@ -60,7 +60,7 @@ export default class QQGamePlatform extends WXGamePlatform {
 	 * 是否从小程序收藏进入
 	 */
 	isFromFavourite() {
-		if (Global.currentSceneId != "3003") {
+		if (GlobalData.currentSceneId != "3003") {
 			return false;
 		}
 		return true;

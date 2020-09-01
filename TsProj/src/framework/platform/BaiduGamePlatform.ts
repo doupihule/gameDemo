@@ -1,7 +1,7 @@
 import TTGamePlatform from "./TTGamePlatform";
 import LogsManager from "../manager/LogsManager";
 import UserInfo from "../common/UserInfo";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import StatisticsManager from "../../game/sys/manager/StatisticsManager";
 import StatisticsCommonConst from "../consts/StatisticsCommonConst";
 import WindowManager from "../manager/WindowManager";
@@ -102,9 +102,9 @@ export class BaiduGamePlatform extends TTGamePlatform {
 								"params": {
 									"code": res.code,
 									"anonymous_code": myThis._swanid,
-									"device": Global.deviceModel,
+									"device": GlobalData.deviceModel,
 									"comeFrom": UserInfo.LoginSceneInfo,
-									"sceneId": String(Global.sceneId),
+									"sceneId": String(GlobalData.sceneId),
 									"swanid_signature": myThis._swanid_signature
 								}
 							};
@@ -123,9 +123,9 @@ export class BaiduGamePlatform extends TTGamePlatform {
 					"params": {
 						"code": "",
 						"anonymous_code": this._swanid,
-						"device": Global.deviceModel,
+						"device": GlobalData.deviceModel,
 						"comeFrom": UserInfo.LoginSceneInfo,
-						"sceneId": String(Global.sceneId),
+						"sceneId": String(GlobalData.sceneId),
 						"swanid_signature": this._swanid_signature
 
 					}
@@ -280,7 +280,7 @@ export class BaiduGamePlatform extends TTGamePlatform {
 	 * 是否从小程序收藏进入
 	 */
 	isFromFavourite() {
-		if (Global.currentSceneId != "1201001000000000") {
+		if (GlobalData.currentSceneId != "1201001000000000") {
 			return false;
 		}
 		return true;

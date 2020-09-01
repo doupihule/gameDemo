@@ -1,4 +1,4 @@
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import Method from "../../game/sys/common/kakura/Method";
 import StatisticsManager from "../../game/sys/manager/StatisticsManager";
 import GamePlatform from "./GamePlatform";
@@ -188,9 +188,9 @@ export default class WXGamePlatform extends GamePlatform {
 							"method": MethodCommon.global_Account_loginWx,
 							"params": {
 								"js_code": res.code,
-								"device": Global.deviceModel,
+								"device": GlobalData.deviceModel,
 								"comeFrom": UserInfo.LoginSceneInfo,
-								"sceneId": String(Global.sceneId)
+								"sceneId": String(GlobalData.sceneId)
 							}
 						};
 					} else if (UserInfo.isQQGame()) {
@@ -198,7 +198,7 @@ export default class WXGamePlatform extends GamePlatform {
 							"method": MethodCommon.global_Account_loginQQ,
 							"params": {
 								"js_code": res.code,
-								"device": Global.deviceModel,
+								"device": GlobalData.deviceModel,
 								"comeFrom": UserInfo.LoginSceneInfo
 							}
 						};
@@ -208,7 +208,7 @@ export default class WXGamePlatform extends GamePlatform {
 							"params": {
 								"code": res.code,
 								"anonymous_code": res.anonymousCode,
-								"device": Global.deviceModel,
+								"device": GlobalData.deviceModel,
 								"comeFrom": UserInfo.LoginSceneInfo
 							}
 						};
@@ -217,7 +217,7 @@ export default class WXGamePlatform extends GamePlatform {
 							"method": MethodCommon.global_Account_loginOppo,
 							"params": {
 								"token": res.data.token,
-								"device": Global.deviceModel,
+								"device": GlobalData.deviceModel,
 								"comeFrom": UserInfo.LoginSceneInfo
 							}
 						};
@@ -226,7 +226,7 @@ export default class WXGamePlatform extends GamePlatform {
 							"method": MethodCommon.global_Account_loginVivo,
 							"params": {
 								"token": res.token,
-								"device": Global.deviceModel,
+								"device": GlobalData.deviceModel,
 								"comeFrom": UserInfo.LoginSceneInfo
 							}
 						};
@@ -235,7 +235,7 @@ export default class WXGamePlatform extends GamePlatform {
 							"method": MethodCommon.global_Account_loginUC,
 							"params": {
 								"code": res.code,
-								"device": Global.deviceModel,
+								"device": GlobalData.deviceModel,
 								"comeFrom": UserInfo.LoginSceneInfo
 							}
 						};
@@ -283,8 +283,8 @@ export default class WXGamePlatform extends GamePlatform {
 			return;
 		}
 		LogsManager.echo("yrc getLaunchOptions", JSON.stringify(launchRes));
-		if (!Global.sceneId) Global.sceneId = launchRes.scene;
-		Global.currentSceneId = launchRes.scene;
+		if (!GlobalData.sceneId) GlobalData.sceneId = launchRes.scene;
+		GlobalData.currentSceneId = launchRes.scene;
 		var queryData = launchRes.query;
 
 		if (queryData) {
@@ -1211,7 +1211,7 @@ export default class WXGamePlatform extends GamePlatform {
 				WindowManager.ShowTip(TranslateFunc.instance.getTranslate("#versionUpdateReady"));
 				TimerManager.instance.setTimeout(() => {
 					// 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
-					Global.isGameDestory = true;
+					GlobalData.isGameDestory = true;
 					updateManager.applyUpdate();
 				}, null, 300);
 
@@ -1376,10 +1376,10 @@ export default class WXGamePlatform extends GamePlatform {
 						appId = "_appId:" + launchRes["referrerInfo"]["appId"];
 					}
 					//首次启动数据缓存起来
-					Global.firstRunSystemInfo = {appId: appId, sceneId: launchRes.scene};
+					GlobalData.firstRunSystemInfo = {appId: appId, sceneId: launchRes.scene};
 					LogsManager.echo("sanmen getLaunchOptionsSync", JSON.stringify(launchRes), "sendStr:", UserInfo.LoginSceneInfo);
 					//存本地
-					CacheManager.instance.setGlobalCache(StorageCode.storage_firstrun_data, JSON.stringify(Global.firstRunSystemInfo));
+					CacheManager.instance.setGlobalCache(StorageCode.storage_firstrun_data, JSON.stringify(GlobalData.firstRunSystemInfo));
 				}
 			} catch (err) {
 				LogsManager.echo("sanmen getLaunchOptionsSync err");
@@ -1387,13 +1387,13 @@ export default class WXGamePlatform extends GamePlatform {
 		} else {
 			//如果有 就取本地的来源数据
 			try {
-				Global.firstRunSystemInfo = JSON.parse(cacheData);
+				GlobalData.firstRunSystemInfo = JSON.parse(cacheData);
 			} catch (e) {
-				Global.firstRunSystemInfo = {};
+				GlobalData.firstRunSystemInfo = {};
 			}
 			LogsManager.echo("sanmen setUserComeFrom", UserInfo.LoginSceneInfo);
 		}
-		Global.sceneId = Global.firstRunSystemInfo.sceneId;
+		GlobalData.sceneId = GlobalData.firstRunSystemInfo.sceneId;
 	}
 
 
@@ -1676,7 +1676,7 @@ export default class WXGamePlatform extends GamePlatform {
 	 * 是否从小程序收藏进入
 	 */
 	isFromFavourite() {
-		if (Global.currentSceneId != "1001") {
+		if (GlobalData.currentSceneId != "1001") {
 			return false;
 		}
 		return true;
@@ -1705,10 +1705,10 @@ export default class WXGamePlatform extends GamePlatform {
 			return;
 		}
 		if (!this._gameClubBtn) {
-			var left = posX / ScreenAdapterTools.width * Global.windowWidth;
-			var top = posY / ScreenAdapterTools.height * Global.windowHeight;
-			var width = btnW / ScreenAdapterTools.width * Global.windowWidth;
-			var height = btnH / ScreenAdapterTools.height * Global.windowHeight;
+			var left = posX / ScreenAdapterTools.width * GlobalData.windowWidth;
+			var top = posY / ScreenAdapterTools.height * GlobalData.windowHeight;
+			var width = btnW / ScreenAdapterTools.width * GlobalData.windowWidth;
+			var height = btnH / ScreenAdapterTools.height * GlobalData.windowHeight;
 			var btn = this.getWX().createGameClubButton({
 				type: "image",
 				style: {

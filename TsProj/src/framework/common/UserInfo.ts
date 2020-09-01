@@ -4,7 +4,7 @@ import EgretPlatform from "../platform/EgretPlatform";
 import QQGamePlatform from "../platform/QQGamePlatform";
 import TTGamePlatform from "../platform/TTGamePlatform";
 import OppoGamePlatform from "../platform/OppoGamePlatform";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import SceneReference from "../consts/SceneReference";
 import {BaiduGamePlatform} from "../platform/BaiduGamePlatform";
 import VivoGamePlatform from "../platform/VivoGamePlatform";

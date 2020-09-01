@@ -1,6 +1,6 @@
 import PackageConfig from "../../game/sys/config/PackageConfig";
 import TestPlatform from "../../game/sys/common/TestPlatform";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import UserInfo from "../common/UserInfo";
 import LogsManager from "./LogsManager";
 import CloudPlatformData from "../../game/sys/common/CloudPlatformData";
@@ -25,11 +25,11 @@ export default class PackConfigManager {
 	static initCfgs() {
 		var config: any = PackageConfig.configData;
 		if (!config) {
-			Global.resource_url = "https://cdn-test-hz.fantasyfancy.com/" + GameConsts.gameCode + "/test/" + UserInfo.platformId + "/";
+			GlobalData.resource_url = "https://cdn-test-hz.fantasyfancy.com/" + GameConsts.gameCode + "/test/" + UserInfo.platformId + "/";
 			return;
 		}
 		if (config.CLIENT_VERSION) {
-			Global.client_version = config.CLIENT_VERSION
+			GlobalData.client_version = config.CLIENT_VERSION
 		}
 		if (config.CHANNEL) {
 			UserInfo.platformId = config.CHANNEL;
@@ -39,7 +39,7 @@ export default class PackConfigManager {
 			LogsManager.echo("gameCode:", GameConsts.gameCode)
 		}
 		if (config.CDN_URL) {
-			Global.resource_url = config.CDN_URL + "/" + UserInfo.platformId + "/";
+			GlobalData.resource_url = config.CDN_URL + "/" + UserInfo.platformId + "/";
 		}
 		if (config.SYSTEM) {
 			UserInfo.systemId = config.SYSTEM
@@ -57,12 +57,12 @@ export default class PackConfigManager {
 		var config: any = PackageConfig.configData;
 		var platform: any = TestPlatform.platform;
 		if (UserInfo.isWeb()) {
-			Global.isCDN = false;
+			GlobalData.isCDN = false;
 		} else {
-			Global.isCDN = true;
+			GlobalData.isCDN = true;
 		}
 
-		if (Global.checkUserCloudStorage()) {
+		if (GlobalData.checkUserCloudStorage()) {
 			platform = CloudPlatformData.platform;
 		}
 		if (config != null) {

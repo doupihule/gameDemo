@@ -2,7 +2,7 @@ import Message from "../common/Message";
 import {LoadingUI} from "../../game/sys/view/loading/LoadingUI";
 import ScreenAdapterTools from "../utils/ScreenAdapterTools";
 import LogsManager from "./LogsManager";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import {LoadManager} from "./LoadManager";
 import {WindowCfgs} from "../../game/sys/consts/WindowCfgs";
 import WindowEvent from "../event/WindowEvent";
@@ -213,7 +213,7 @@ export default class WindowManager {
 	 * @param titleName 默认为“提示”
 	 */
 	public static setPopupTip(type: number, content: string, callBack?: any, thisObj?: any, titleName: string = null, closeBack: any = null): void {
-		if (Global.isGameDestory) {
+		if (GlobalData.isGameDestory) {
 			return;
 		}
 

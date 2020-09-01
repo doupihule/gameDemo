@@ -1,7 +1,7 @@
 import UserInfo, {PlatformIdType} from "../common/UserInfo";
 import JumpConst from "../../game/sys/consts/JumpConst";
 import GlobalParamsFunc from "../../game/sys/func/GlobalParamsFunc";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import LogsManager from "./LogsManager";
 import GameSwitch from "../common/GameSwitch";
 import GameConsts from "../../game/sys/consts/GameConsts";
@@ -94,9 +94,9 @@ export default class JumpManager {
 				var info = cfgs[i];
 				//先判断平台是否相等
 				if (info.blackListPlatform == platCode) {
-					if (String(info.electBlackListNub) == String(Global.currentSceneId)) {
+					if (String(info.electBlackListNub) == String(GlobalData.currentSceneId)) {
 						this.blackSceneState = JumpConst.JUMP_SCENE_STATE_BLACK;
-						LogsManager.echo("jump", "这是一个黑名单的场景值", Global.currentSceneId);
+						LogsManager.echo("jump", "这是一个黑名单的场景值", GlobalData.currentSceneId);
 						break;
 					}
 				}

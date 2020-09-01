@@ -1,7 +1,7 @@
 declare var Md5;
 import GameSwitch from "../common/GameSwitch";
 import TimerManager from "./TimerManager";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import WindowManager from "./WindowManager";
 import UserModel from "../../game/sys/model/UserModel";
 import PackConfigManager from "./PackConfigManager";
@@ -64,7 +64,7 @@ export default class LogsManager {
 	 */
 	static echo(message?: any, ...optionalParams: any[]) {
 		var resultArr = this.turnStr("echo", message, optionalParams);
-		// if (!Global.isRelease)
+		// if (!GlobalData.isRelease)
 		if (!UserInfo.isSystemMini()) {
 			console.log(resultArr.join(" "));
 		} else {
@@ -219,18 +219,18 @@ export default class LogsManager {
 			game: GameConsts.gameCode,
 			platform: PackConfigManager.ins.platform.platform,
 			time: Client.instance.serverTime,
-			os: Global.getOs(),
-			device: Global.deviceModel,
-			cver: Global.client_version,
-			ver: Global.version,
+			os: GlobalData.getOs(),
+			device: GlobalData.deviceModel,
+			cver: GlobalData.client_version,
+			ver: GlobalData.version,
 			rid: UserModel.instance.getUserRid(),
 			error_message: message,
 			error_stack: errorStack,
 			error_type: tag,
 			context: "",
-			deviceId: Global.deviceId,
+			deviceId: GlobalData.deviceId,
 		}
-		var sdkInfo = Global.getSDKInfo();
+		var sdkInfo = GlobalData.getSDKInfo();
 		if (sdkInfo) {
 			params["context"] = sdkInfo + params["context"];
 		}
@@ -268,11 +268,11 @@ export default class LogsManager {
 		var params: any = {
 			game: GameConsts.gameCode,
 			platform: PackConfigManager.ins.platform.platform,
-			cver: Global.client_version,
-			deviceId: Global.deviceId,
+			cver: GlobalData.client_version,
+			deviceId: GlobalData.deviceId,
 			eventId: eventId,
 			rid: UserModel.instance.getUserRid(),
-			device: Global.deviceModel,
+			device: GlobalData.deviceModel,
 			circleId: this.getCircleId(),
 			t: Client.instance.miniserverTime
 		}
@@ -334,8 +334,8 @@ export default class LogsManager {
 		var params = {
 			game: GameConsts.gameCode,
 			platform: PackConfigManager.ins.platform.platform,
-			deviceId: Global.deviceId,
-			device: Global.deviceModel,
+			deviceId: GlobalData.deviceId,
+			device: GlobalData.deviceModel,
 			isNew: isNew,
 		}
 
@@ -363,9 +363,9 @@ export default class LogsManager {
 		var params = {
 			game: GameConsts.gameCode,
 			platform: PackConfigManager.ins.platform.platform,
-			deviceId: Global.deviceId,
-			device: Global.deviceModel,
-			isNew: Global.isNew() ? 1 : 0,
+			deviceId: GlobalData.deviceId,
+			device: GlobalData.deviceModel,
+			isNew: GlobalData.isNew() ? 1 : 0,
 			network: DeviceTools.network,
 			time: time
 		}
@@ -511,7 +511,7 @@ export default class LogsManager {
 
 	public static getCircleId() {
 		if (!this._circleId) {
-			this._circleId = Global.deviceId + "_" + Client.instance.miniserverTime + Math.floor(Math.random() * 100000);
+			this._circleId = GlobalData.deviceId + "_" + Client.instance.miniserverTime + Math.floor(Math.random() * 100000);
 		}
 		return this._circleId;
 	}

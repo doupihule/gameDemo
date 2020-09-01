@@ -9,7 +9,7 @@ import WindowManager from '../manager/WindowManager';
 import TranslateFunc from '../func/TranslateFunc';
 import UserInfo from './UserInfo';
 import PackConfigManager from '../manager/PackConfigManager';
-import Global from '../../utils/Global';
+import GlobalData from '../utils/GlobalData';
 import TableUtils from '../utils/TableUtils';
 // import LogsManager from '../manager/LogsManager';
 
@@ -49,8 +49,8 @@ export default class GameHttpControler {
 
 	//获取serverurl
 	private getServerUrl() {
-		var version = Global.version;
-		if (Global.version == "1" && PackConfigManager.ins.platform.platform == "test") {
+		var version = GlobalData.version;
+		if (GlobalData.version == "1" && PackConfigManager.ins.platform.platform == "test") {
 			version = "100000000";
 		}
 		return this.httpServerUrl + "&ver=" + version + "&upgrade_path=" + PackConfigManager.ins.platform.upgrade_path

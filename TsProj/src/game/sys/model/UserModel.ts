@@ -8,7 +8,7 @@ import CacheManager from "../../../framework/manager/CacheManager";
 import StorageCode from "../consts/StorageCode";
 import SingleCommonServer from "../../../framework/server/SingleCommonServer";
 import GameMainEvent from "../event/GameMainEvent";
-import Global from "../../../utils/Global";
+import GlobalData from "../../../framework/utils/GlobalData";
 import RolesFunc from "../func/RolesFunc";
 import UserGlobalModel from "../../../framework/model/UserGlobalModel";
 import BigNumUtils from "../../../framework/utils/BigNumUtils";
@@ -347,7 +347,7 @@ export default class UserModel extends BaseModel {
 		// }
 		//因为没有引导 所以登入后就判定为老用户
 		// CacheManager.instance.setFileStorageCache(StorageCode.storage_wxGuide, true);
-		if (Global.isNew()) {
+		if (GlobalData.isNew()) {
 			CacheManager.instance.setFileStorageCache(StorageCode.storage_isOldPlayer, true);
 		}
 
@@ -406,7 +406,7 @@ export default class UserModel extends BaseModel {
 			}
 		}
 		// 如果没有设置过黑名单，并且
-		if (!this._data.sceneBlack && !SceneReference.checkWhiteSceneId(Global.currentSceneId, WhiteListFunc.TYPE_LOGIN)) {
+		if (!this._data.sceneBlack && !SceneReference.checkWhiteSceneId(GlobalData.currentSceneId, WhiteListFunc.TYPE_LOGIN)) {
 			upData["sceneBlack"] = 1;
 		}
 		upData["userExt"] = upUserExtData;

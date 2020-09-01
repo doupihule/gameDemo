@@ -1,5 +1,5 @@
 import ScreenAdapterTools from "../../../../framework/utils/ScreenAdapterTools";
-import Global from "../../../../utils/Global";
+import GlobalData from "../../../../framework/utils/GlobalData";
 import WindowManager from "../../../../framework/manager/WindowManager";
 import {WindowCfgs} from "../../consts/WindowCfgs";
 import TableUtils from "../../../../framework/utils/TableUtils";
@@ -168,7 +168,7 @@ export default class AlertUILocal extends UIBaseView {
 		for (var i = 0; i < copyArr.length; i++) {
 			var data = copyArr[i];
 			if (data) {
-				if (Global.isGameDestory) {
+				if (GlobalData.isGameDestory) {
 					return;
 				}
 				var callBack = data.callBack;

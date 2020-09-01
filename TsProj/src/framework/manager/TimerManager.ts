@@ -98,7 +98,7 @@ export default class TimerManager {
 	/**
 	 * 检测时钟
 	 */
-	private tickHandler(time: number) {
+	public tickHandler(time: number) {
 		this.onceUpdateFrame();
 		var timeEntity: TimeEntity;
 		var curTime: number = Client.instance.miniserverTime;

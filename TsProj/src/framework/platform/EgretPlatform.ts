@@ -1,5 +1,5 @@
 import Client from "../common/kakura/Client";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import UserInfo from "../common/UserInfo";
 import GamePlatform from "./GamePlatform";
 import LoginUI from "../../game/sys/view/login/LoginUI";
@@ -20,7 +20,7 @@ export default class EgretPlatform extends GamePlatform {
 
 	public getLoginResult() {
 		//如果是 云储存
-		if (Global.checkUserCloudStorage()) {
+		if (GlobalData.checkUserCloudStorage()) {
 			return;
 		}
 		Client.instance.sendInit(this.loginToken, null, LoginUI.instance.loginResult, LoginUI.instance, this.inviteBy, this.shareInfo);
@@ -47,7 +47,7 @@ export default class EgretPlatform extends GamePlatform {
 				"params": {
 					"passport": CacheManager.instance.getGlobalCache(StorageCode.storage_acount),
 					"password": '',
-					"device": Global.deviceModel
+					"device": GlobalData.deviceModel
 				}
 			};
 			UserInfo.platform.reqGlobal(params);

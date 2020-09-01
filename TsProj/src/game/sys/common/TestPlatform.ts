@@ -1,4 +1,4 @@
-import Global from "../../../utils/Global";
+import GlobalData from "../../../framework/utils/GlobalData";
 import UserInfo from "../../../framework/common/UserInfo";
 
 export default class TestPlatform {
@@ -77,7 +77,7 @@ export default class TestPlatform {
 	// }
 
 	static get platform() {
-		Global.isCDN = true;
+		GlobalData.isCDN = true;
 		if (UserInfo.isQQGame()) {
 			return this.testBricks;
 		}
@@ -87,7 +87,7 @@ export default class TestPlatform {
 		if (UserInfo.isWX()) {
 			return this.testWX;
 		}
-		Global.isCDN = false;
+		GlobalData.isCDN = false;
 		return this.dev;
 	}
 

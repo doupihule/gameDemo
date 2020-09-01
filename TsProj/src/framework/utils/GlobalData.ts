@@ -1,10 +1,10 @@
-import ScreenAdapterTools from "../framework/utils/ScreenAdapterTools";
-import LogsManager from "../framework/manager/LogsManager";
-import CacheManager from "../framework/manager/CacheManager";
-import StorageCode from "../game/sys/consts/StorageCode";
+import ScreenAdapterTools from "./ScreenAdapterTools";
+import LogsManager from "../manager/LogsManager";
+import CacheManager from "../manager/CacheManager";
+import StorageCode from "../../game/sys/consts/StorageCode";
 
 
-export default class Global {
+export default class GlobalData {
 	//客户端版本号
 	static client_version: string = "1.0.0.1";
 	static isCDN: boolean = true;
@@ -27,7 +27,7 @@ export default class Global {
 	//暂定10秒同步一次后台数据
 	public static updateUserDataDelay: number = 10000
 	//游戏模式  single是单机模式, network是联网模式
-	public static gameMode: string = Global.gameMode_single;
+	public static gameMode: string = GlobalData.gameMode_single;
 	private static PHONE_BANGS: any = {
 		"iPhone X": 45,
 		"PACM00": 36,
@@ -61,7 +61,7 @@ export default class Global {
 
 	public static setPhoneSys(sysInfo: any): void {
 		var phoneModel = sysInfo.model;
-		Global.deviceModel = phoneModel;
+		GlobalData.deviceModel = phoneModel;
 
 		if (phoneModel.indexOf("iPhone") > -1 || phoneModel.indexOf("iPad") > -1) {
 			this.phoneSys = "iphone";
@@ -99,10 +99,10 @@ export default class Global {
 			this.SDKVersion = sysInfo.SDKVersion;
 		}
 		if (sysInfo && sysInfo.platform && sysInfo.platform == "devtools") {
-			Global.isDevTools = true;
+			GlobalData.isDevTools = true;
 		}
 
-		// ScreenAdapterTools.toolBarWidth = Global.IPXOffset;
+		// ScreenAdapterTools.toolBarWidth = GlobalData.IPXOffset;
 		LogsManager.echo(">>>>>system>>>>>>", sysInfo);
 
 	}

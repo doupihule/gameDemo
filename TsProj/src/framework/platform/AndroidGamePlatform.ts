@@ -1,7 +1,7 @@
 import {MusicConst} from './../../game/sys/consts/MusicConst';
 import {WindowCfgs} from './../../game/sys/consts/WindowCfgs';
 import GamePlatform from "./GamePlatform";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import UserInfo from "../common/UserInfo";
 import MainModule from "../manager/MainModule";
 import NativeBridge from "../native/NativeBridge";
@@ -95,7 +95,7 @@ export default class AndroidGamePlatform extends GamePlatform {
 		//初始化头条sdk
 		this.initTTADSdk();
 		//如果是 云储存
-		if (Global.checkUserCloudStorage()) {
+		if (GlobalData.checkUserCloudStorage()) {
 			return;
 		}
 		this.changeLeftTask(-1, "getLoginResult");
@@ -164,14 +164,14 @@ export default class AndroidGamePlatform extends GamePlatform {
 
 	//请求global
 	private _startReqGlobal() {
-		var deviceId = Global.deviceId
+		var deviceId = GlobalData.deviceId
 		//登入放到获取到native信息之后处理
 		var params: any = {
 			"method": this.getGlobalMethod(),
 			"params": {
 				"passport": deviceId,
 				"password": '',
-				"device": Global.deviceModel,
+				"device": GlobalData.deviceModel,
 				"childChannelId": this.getChildChannelKey()
 			}
 		};
@@ -241,7 +241,7 @@ export default class AndroidGamePlatform extends GamePlatform {
 
 		var appCache = window["appcache"];
 		//设置缓存的版本号.下次更新直接拉取最新的版本
-		var targetVersion = Global.version
+		var targetVersion = GlobalData.version
 		LogsManager.echo("version setVMSVersion:" + targetVersion, "hotfixSwitch:", GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_HOTFIX));
 		this.changeLeftTask(-1, "addUpdateListener");
 
@@ -336,7 +336,7 @@ export default class AndroidGamePlatform extends GamePlatform {
 		// serverVersion =String( (Number( this.getAPPCacheVersion() ) || 1) +1  ) ;
 		LogsManager.echo("serverVersion:" + serverVersion);
 		//如果是测试渠道 而且版本号是1
-		if (UserInfo.isTest() && Global.version == "1") {
+		if (UserInfo.isTest() && GlobalData.version == "1") {
 			return;
 		}
 
@@ -344,7 +344,7 @@ export default class AndroidGamePlatform extends GamePlatform {
 		var minVersion = __projectConfig && __projectConfig.APP_BUILD_NUM || 1;
 		minVersion = Number(minVersion);
 
-		var localNum = Number(Global.version);
+		var localNum = Number(GlobalData.version);
 		var targetVersion = this.getAPPCacheVersion();
 		var serverNum = 0;
 		if (!serverVersion) {
@@ -358,8 +358,8 @@ export default class AndroidGamePlatform extends GamePlatform {
 		}
 		//直接取服务器的版本和客户端打包的版本最对比.  默认直接用服务器的版. 但如果客户端打包版本号比服务器版本号高. 那么表示采用打包版本号
 		var resultVersion = Math.max(minVersion, serverNum);
-		Global.version = String(resultVersion);
-		LogsManager.echo("GlobalVersion:" + Global.version, "server:", serverVersion, "buildVersion:", minVersion);
+		GlobalData.version = String(resultVersion);
+		LogsManager.echo("GlobalVersion:" + GlobalData.version, "server:", serverVersion, "buildVersion:", minVersion);
 	}
 
 
@@ -397,11 +397,11 @@ export default class AndroidGamePlatform extends GamePlatform {
 	//android平台的versionjson 一定要和 appcache的version同步. 否则会出现版本错乱
 	public getVersionName() {
 		var appCache = window["appcache"];
-		var targetVersion = Global.version
+		var targetVersion = GlobalData.version
 		if (appCache) {
 			targetVersion = appCache.getResourceID(this.getCacheKey());
 			if (!targetVersion) {
-				targetVersion = Global.version;
+				targetVersion = GlobalData.version;
 			}
 		}
 		LogsManager.echo("getVersionName:" + targetVersion);

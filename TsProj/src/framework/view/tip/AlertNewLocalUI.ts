@@ -6,7 +6,7 @@ import ViewTools from "../../components/ViewTools";
 import WindowManager from "../../manager/WindowManager";
 import {WindowCfgs} from "../../../game/sys/consts/WindowCfgs";
 import TableUtils from "../../utils/TableUtils";
-import Global from "../../../utils/Global";
+import GlobalData from "../../utils/GlobalData";
 
 
 export default class AlertNewLocalUI extends UIBaseView {
@@ -155,7 +155,7 @@ export default class AlertNewLocalUI extends UIBaseView {
 		for (var i = 0; i < copyArr.length; i++) {
 			var data = copyArr[i];
 			if (data) {
-				if (Global.isGameDestory) {
+				if (GlobalData.isGameDestory) {
 					return;
 				}
 				var callBack = data.callBack;

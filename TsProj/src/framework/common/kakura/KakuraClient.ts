@@ -7,7 +7,7 @@ import TimerManager from "../../manager/TimerManager";
 import ErrCodeManager from "../../manager/ErrCodeManager";
 import ErrorCode from "../../../game/sys/common/kakura/ErrorCode";
 import WindowManager from "../../manager/WindowManager";
-import Global from "../../../utils/Global";
+import GlobalData from "../../utils/GlobalData";
 import TranslateFunc from "../../func/TranslateFunc";
 import MethodCommon from "./MethodCommon";
 
@@ -101,7 +101,7 @@ export default class KakuraClient {
 		this.clearInitRequest();
 		this.destorySocket();
 		//如果没有获取过用户信息或者 不是单机模式才会显示转菊花. 单机模式第一次获取过用户数据后不需要出菊花了
-		if (!this.hasGetUserInfo || !Global.checkIsSingleMode()) {
+		if (!this.hasGetUserInfo || !GlobalData.checkIsSingleMode()) {
 			WaitManager.instance.add(MsgCMD.ROLL_ANI);
 		}
 
@@ -401,7 +401,7 @@ export default class KakuraClient {
 		} else {
 			//如果 需要等待的 那么关闭loading
 			//只有是联网的游戏才会弹网络弹窗
-			if (Global.gameMode == Global.gameMode_network || !this.hasGetUserInfo) {
+			if (GlobalData.gameMode == GlobalData.gameMode_network || !this.hasGetUserInfo) {
 				WaitManager.instance.remove(MsgCMD.ROLL_ANI);
 				ErrCodeManager.ins.setErr(ErrorCode.webOffline);
 			} else {
@@ -419,7 +419,7 @@ export default class KakuraClient {
 		if (this._hasRegistHeartBeat) {
 			return;
 		}
-		if (Global.checkIsSingleMode()) {
+		if (GlobalData.checkIsSingleMode()) {
 			return;
 		}
 		this._hasRegistHeartBeat = true;

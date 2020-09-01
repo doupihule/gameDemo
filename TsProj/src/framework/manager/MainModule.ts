@@ -1,6 +1,6 @@
 import SoundManager from "./SoundManager";
 import LogsManager from "./LogsManager";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import WindowManager from "./WindowManager";
 import {WindowCfgs} from "../../game/sys/consts/WindowCfgs";
 import ScreenAdapterTools from "../utils/ScreenAdapterTools";
@@ -95,7 +95,7 @@ export default class MainModule implements IMessage {
 	public onLoginResult(result: any) {
 		LogsManager.echo("yrc onLoginResult", result);
 		var serverData = result;
-		if (!Global.checkUserCloudStorage()) {
+		if (!GlobalData.checkUserCloudStorage()) {
 			Client.instance.globalLoginBackData = result;
 			serverData = result.data
 		} else {

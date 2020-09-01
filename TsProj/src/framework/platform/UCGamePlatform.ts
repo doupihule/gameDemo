@@ -1,7 +1,7 @@
 import WXGamePlatform from "./WXGamePlatform";
 import LogsManager from "../manager/LogsManager";
 import UserInfo from "../common/UserInfo";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import GameSwitch from "../common/GameSwitch";
 import MethodCommon from "../common/kakura/MethodCommon";
 
@@ -88,9 +88,9 @@ export default class UCGamePlatform extends WXGamePlatform {
 			"params": {
 				"code": this.code,
 				"guestid": this.guestid,
-				"device": Global.deviceModel,
+				"device": GlobalData.deviceModel,
 				"comeFrom": UserInfo.LoginSceneInfo,
-				"sceneId": String(Global.sceneId),
+				"sceneId": String(GlobalData.sceneId),
 			}
 		};
 		this.reqGlobal(gParams);

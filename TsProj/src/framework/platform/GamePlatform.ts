@@ -1,4 +1,4 @@
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import HttpMessage from "../common/HttpMessage";
 import PackConfigManager from "../manager/PackConfigManager";
 import TimerManager from "../manager/TimerManager";
@@ -204,7 +204,7 @@ export default class GamePlatform implements IMessage {
 
 	reqServerList(callBack: Function, thisObject: any) {
 		var params: any = {"method": 251, "params": {"loginToken": this.loginToken}};
-		var url = Global.global_url + '&ver=' + Global.version;
+		var url = GlobalData.global_url + '&ver=' + GlobalData.version;
 		HttpMessage.instance.send(url, JSON.stringify(params), (data) => {
 			var secList: any[] = data[0].result.data.secList;
 			var len: number = secList.length;
@@ -232,9 +232,9 @@ export default class GamePlatform implements IMessage {
 	 * @param thisObject
 	 */
 	reqVMS(): void {
-		Global.version = PackConfigManager.ins.platform.vms_version
-		if (Global.checkUserCloudStorage()) {
-			Global.global_url = PackConfigManager.ins.platform.cloud_url
+		GlobalData.version = PackConfigManager.ins.platform.vms_version
+		if (GlobalData.checkUserCloudStorage()) {
+			GlobalData.global_url = PackConfigManager.ins.platform.cloud_url
 			//如果是单机模式 直接走global登入
 			this.getWxInfo();
 			return;
@@ -252,7 +252,7 @@ export default class GamePlatform implements IMessage {
 	private checkVMSBack(result) {
 		var version = result.online_version;
 		LogsManager.echo("online_version:", version, "local vms_version", PackConfigManager.ins.platform.vms_version)
-		LogsManager.echo("client_version:", Global.client_version);
+		LogsManager.echo("client_version:", GlobalData.client_version);
 		version = Math.max(version, PackConfigManager.ins.platform.vms_version)
 		PackConfigManager.ins.platform.vms_version = version;
 		this.checkVersion();
@@ -277,28 +277,28 @@ export default class GamePlatform implements IMessage {
 		}
 
 		if (result.global_server_url.indexOf("http://") > -1 || result.global_server_url.indexOf("https://") > -1) {
-			Global.global_url = result.global_server_url;
+			GlobalData.global_url = result.global_server_url;
 		} else {
-			Global.global_url = "http://" + result.global_server_url;
+			GlobalData.global_url = "http://" + result.global_server_url;
 		}
 		if (result.GameStatic) {
 			//version里面的开关覆盖
 			this.coverServerSwitchMap(result.GameStatic)
 		}
-		Global.resource_url = result.resource_url_root + "/" + UserInfo.platformId + "/";
+		GlobalData.resource_url = result.resource_url_root + "/" + UserInfo.platformId + "/";
 		;
-		Global.nocdn_resource_url = result.nocdn_resource_url_root + "/";
+		GlobalData.nocdn_resource_url = result.nocdn_resource_url_root + "/";
 
 		// 记录版本状态 (代码更新是否重启、是否下载version.json时用)
 		VersionManager.versionStatus = result.s;
 		VersionManager.vmsVersion = result.v.version;
 		if (result.s == VersionManager.VERSION_STATUS_FORCE_UPDATE) {
 			// 强更使用vms版本
-			// Global.version = result.v.version;
+			// GlobalData.version = result.v.version;
 			this.doCoverVersion(result.v.version);
 		}
 
-		LogsManager.echo("Global.version:", Global.version, "localVersion:", PackConfigManager.ins.platform.vms_version, "updateSatus:", result.s);
+		LogsManager.echo("GlobalData.version:", GlobalData.version, "localVersion:", PackConfigManager.ins.platform.vms_version, "updateSatus:", result.s);
 
 		this.addUpdateListener();
 
@@ -316,7 +316,7 @@ export default class GamePlatform implements IMessage {
 
 	reqGlobal(params: any, isInit: boolean = false) {
 		this._reloginCount++;
-		var url = Global.global_url + '&ver=' + Global.version;
+		var url = GlobalData.global_url + '&ver=' + GlobalData.version;
 		//@测试代码 强制服务器错误返回
 		// if(this._reloginCount <= 1){
 		//     params.method = "208"
@@ -328,7 +328,7 @@ export default class GamePlatform implements IMessage {
 
 
 		var onHttpErrorBack = (data) => {
-			if (Global.checkUserCloudStorage()) {
+			if (GlobalData.checkUserCloudStorage()) {
 				//如果是使用httpServer的重连.那么必须要强制登入成功
 				if (this._reLoginBackParams) {
 					WindowManager.setPopupTip(1, TranslateFunc.instance.getTranslate("tid_net_error"), this.getWxInfo, this)
@@ -366,7 +366,7 @@ export default class GamePlatform implements IMessage {
 				// this.getWX().aldSendOpenid(data.channelUserId);
 			}
 			if (data.sceneId) {
-				Global.sceneId = data.sceneId;
+				GlobalData.sceneId = data.sceneId;
 			}
 
 			if (!currPlatform.result) {
@@ -392,7 +392,7 @@ export default class GamePlatform implements IMessage {
 
 			this.loginToken = data.loginToken;
 
-			if (Global.checkUserCloudStorage()) {
+			if (GlobalData.checkUserCloudStorage()) {
 				GameHttpControler.instance.loginToken = data.loginToken;
 				this.doSingleGlobalBack(currPlatform.result.data);
 				return;
@@ -433,20 +433,20 @@ export default class GamePlatform implements IMessage {
 
 
 		var webParams: any = {}
-		if (Global.checkUserCloudStorage()) {
-			url = Global.global_url
+		if (GlobalData.checkUserCloudStorage()) {
+			url = GlobalData.global_url
 			params.params.game = GameConsts.gameCode;
 			params.params.platform = PackConfigManager.ins.platform.platform
-			params.params.version = Global.version;
+			params.params.version = GlobalData.version;
 			webParams.errorCall = onHttpErrorBack;
 		} else {
 			params.params.game = GameConsts.gameCode;
 			params.params.platform = PackConfigManager.ins.platform.platform
-			params.params.version = Global.version;
+			params.params.version = GlobalData.version;
 		}
 
 
-		params["params"]["deviceId"] = Global.deviceId;
+		params["params"]["deviceId"] = GlobalData.deviceId;
 		HttpMessage.instance.send(url, params, httpBackFunc, this, "post", webParams);
 
 	}
@@ -472,7 +472,7 @@ export default class GamePlatform implements IMessage {
 
 	public sendKakuraInit() {
 		//单机模式不走这里
-		if (Global.checkUserCloudStorage()) {
+		if (GlobalData.checkUserCloudStorage()) {
 			if (this.platformUserInfo) {
 				var userData = UserModel.instance.getData();
 				//如果授权成功了
@@ -528,8 +528,8 @@ export default class GamePlatform implements IMessage {
 			this.coverServerSwitchMap(data.switch);
 			if (data.switch.CLOUD_URL && (UserInfo.platform.global_url_review == "" || UserInfo.platform.global_url_review != data.switch.CLOUD_URL)) {
 
-				// Global.global_url_review 用于记录审核服主域名【用于区别负载域名】
-				UserInfo.platform.global_url_review = Global.global_url = data.switch.CLOUD_URL
+				// GlobalData.global_url_review 用于记录审核服主域名【用于区别负载域名】
+				UserInfo.platform.global_url_review = GlobalData.global_url = data.switch.CLOUD_URL
 				//重新走一次登入
 				this.reqGlobal(this._globalParams);
 				return;
@@ -541,7 +541,7 @@ export default class GamePlatform implements IMessage {
 
 		// 登陆返回重置global域名
 		if (data.lvsUrl && data.lvsUrl != "") {
-			Global.global_url = data.lvsUrl;
+			GlobalData.global_url = data.lvsUrl;
 		}
 		//做版本更新检查
 		this.doCoverVersion(data.onlineVersion);
@@ -603,7 +603,7 @@ export default class GamePlatform implements IMessage {
 
 	//比对数据
 	public compareData(data) {
-		if (!Global.checkUserCloudStorage()) {
+		if (!GlobalData.checkUserCloudStorage()) {
 			return;
 		}
 
@@ -681,9 +681,9 @@ export default class GamePlatform implements IMessage {
 		var resultData = data;
 		resultData.user = userData
 		if (!userData.firstRunSystemInfo) {
-			userData.firstRunSystemInfo = Global.firstRunSystemInfo;
+			userData.firstRunSystemInfo = GlobalData.firstRunSystemInfo;
 		} else {
-			Global.firstRunSystemInfo = userData.firstRunSystemInfo;
+			GlobalData.firstRunSystemInfo = userData.firstRunSystemInfo;
 		}
 
 		// kakura.Client.instance.hasLoginComplete = !isError;
@@ -696,7 +696,7 @@ export default class GamePlatform implements IMessage {
 		//     SingleCommonServer.upDateAllData(tmpTable, SingleCommonServer.setUpdateDataFlag, SingleCommonServer);
 		// }
 
-		if (resultData.switch && !Global.checkIsSingleMode()) {
+		if (resultData.switch && !GlobalData.checkIsSingleMode()) {
 			this.coverServerSwitchMap(resultData.switch);
 		}
 
@@ -718,7 +718,7 @@ export default class GamePlatform implements IMessage {
 		if (!serverVersion) {
 			return;
 		}
-		Global.version = String(serverVersion);
+		GlobalData.version = String(serverVersion);
 	}
 
 
@@ -811,7 +811,7 @@ export default class GamePlatform implements IMessage {
 	 * 退出游戏
 	 */
 	loginOut(): void {
-		Global.isGameDestory = true
+		GlobalData.isGameDestory = true
 	}
 
 	/**

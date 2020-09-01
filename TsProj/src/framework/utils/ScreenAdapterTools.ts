@@ -1,5 +1,5 @@
 import LogsManager from "../manager/LogsManager";
-import Global from "../../utils/Global";
+import GlobalData from "./GlobalData";
 import ViewTools from "../components/ViewTools";
 import GlobalEnv from "../engine/GlobalEnv";
 
@@ -147,7 +147,7 @@ export default class ScreenAdapterTools {
 		this.windowHeight = sysInfo.windowHeight;
 		if (this.phoneSys != "") return
 		var phoneModel = sysInfo.model;
-		Global.deviceModel = phoneModel;
+		GlobalData.deviceModel = phoneModel;
 		if (phoneModel.indexOf("iPhone") > -1 || phoneModel.indexOf("iPad") > -1) {
 			this.phoneSys = "iphone";
 		} else if (phoneModel.indexOf("Android")) {
@@ -175,7 +175,7 @@ export default class ScreenAdapterTools {
 			var key: string = keys[i];
 			if (phoneModel.indexOf(key) > -1) {
 				ScreenAdapterTools.toolBarWidth = 60;
-				Global.isPhoneBangs = true;
+				GlobalData.isPhoneBangs = true;
 				LogsManager.echo("hlx 刘海屏高度修改:根据白名单", phoneModel, key);
 			}
 		}
@@ -198,7 +198,7 @@ export default class ScreenAdapterTools {
 			if (ScreenAdapterTools.toolBarWidth > 60) {
 				ScreenAdapterTools.toolBarWidth = 60;
 			}
-			Global.isPhoneBangs = true;
+			GlobalData.isPhoneBangs = true;
 			LogsManager.echo("hlx 刘海屏高度修改:根据安全区域 top:", top, "    this.height:", this.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools.toolBarWidth)
 		}
 	}
@@ -215,7 +215,7 @@ export default class ScreenAdapterTools {
 		if (ScreenAdapterTools.toolBarWidth == 0 && barH > 44) {
 			LogsManager.echo("hlx 刘海屏高度修改:根据状态拦高度 statusBarHeight:", barH);
 			ScreenAdapterTools.toolBarWidth = 60;
-			Global.isPhoneBangs = true;
+			GlobalData.isPhoneBangs = true;
 		}
 	}
 
@@ -238,7 +238,7 @@ export default class ScreenAdapterTools {
 			if (ScreenAdapterTools.toolBarWidth > 60) {
 				ScreenAdapterTools.toolBarWidth = 60;
 			}
-			Global.isPhoneBangs = true;
+			GlobalData.isPhoneBangs = true;
 			LogsManager.echo("hlx 刘海屏高度修改:根据胶囊位置 reCheckBar top:", top, "    this.height:", this.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools.toolBarWidth)
 		}
 	}
@@ -289,7 +289,7 @@ export default class ScreenAdapterTools {
 	 * @param alignType 对齐方式
 	 */
 	static alignNotch(view: any, alignType: number = ScreenAdapterTools.Align_LeftTop) {
-		if (!Global.isPhoneBangs) {
+		if (!GlobalData.isPhoneBangs) {
 			return;
 		}
 		if (this.isLandSpace) {
@@ -312,12 +312,12 @@ export default class ScreenAdapterTools {
 	 *     toolBarHeight:刘海高度
 	 */
 	static checkNativeSystemInfo(info: any) {
-		Global.deviceModel = info.model;
+		GlobalData.deviceModel = info.model;
 		if (info.toolBarHeight > 0) {
 			this.toolBarWidth = 60;
-			Global.isPhoneBangs = true;
+			GlobalData.isPhoneBangs = true;
 		} else {
-			Global.isPhoneBangs = false;
+			GlobalData.isPhoneBangs = false;
 		}
 	}
 

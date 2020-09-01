@@ -1,5 +1,5 @@
 
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import TableUtils from "../utils/TableUtils";
 import GameSwitchConst from "../../game/sys/consts/GameSwitchConst";
 
@@ -342,7 +342,7 @@ export default class GameSwitch {
 				var condition1: number = Number(tempArr[0]);
 				//需要把版本号转成数字
 				var conditionVersionNums: number = this.countVersionToNumber(tempArr[1]);
-				var clientVersionNums: number = this.countVersionToNumber(Global.client_version);
+				var clientVersionNums: number = this.countVersionToNumber(GlobalData.client_version);
 				var tempRt: boolean;
 				if (condition1 == 1) {
 					tempRt = conditionVersionNums > clientVersionNums;

@@ -6,7 +6,7 @@ import GameConsts from "../../game/sys/consts/GameConsts";
 import JumpManager from "./JumpManager";
 import JumpConst from "../../game/sys/consts/JumpConst";
 import TimerManager from "./TimerManager";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import MainModule from "./MainModule";
 import TableUtils from "../utils/TableUtils";
 import Client from "../common/kakura/Client";
@@ -124,7 +124,7 @@ export default class KariqiShareManager {
 			{
 				"eventId": KariquShareConst.KARIQU_GETLAUNCHSCENE,
 				"detail": JSON.stringify({
-					scene: String(Global.sceneId)
+					scene: String(GlobalData.sceneId)
 				}),
 				"extraNum": 0
 			}

@@ -7,7 +7,7 @@ import UserInfo from "../common/UserInfo";
 import Client from "../common/kakura/Client";
 import WindowManager from "./WindowManager";
 import KakuraClient from "../common/kakura/KakuraClient";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 
 
 export default class ErrCodeManager {
@@ -93,7 +93,7 @@ export default class ErrCodeManager {
 				hasSendError = true
 			}
 			if (flag) {	//弹出tip意味是意料外情况，可能需要上传日志
-				if (Global.checkIsSingleMode()) {//单机模式不显示tip
+				if (GlobalData.checkIsSingleMode()) {//单机模式不显示tip
 					WindowManager.ShowTip(errerMessage);
 				}
 			}

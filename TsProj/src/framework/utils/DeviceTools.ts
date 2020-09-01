@@ -1,4 +1,4 @@
-import Global from "../../utils/Global";
+import GlobalData from "./GlobalData";
 import LogsManager from "../manager/LogsManager";
 import GameSwitch from "../common/GameSwitch";
 
@@ -20,7 +20,7 @@ export default class DeviceTools {
 		}
 		//标记已经检查过了不用重复检查
 		this._hasCheckDevice = true;
-		var deviceModel = Global.deviceModel;
+		var deviceModel = GlobalData.deviceModel;
 		//测试设备
 		// deviceModel = "iPhone 6("
 		if (this.lowDeviceGroup.indexOf(deviceModel) != -1) {

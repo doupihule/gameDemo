@@ -3,7 +3,7 @@ import Client from "../common/kakura/Client";
 import UserModel from "../../game/sys/model/UserModel";
 import GlobalParamsFunc from "../../game/sys/func/GlobalParamsFunc";
 import LogsManager from "../manager/LogsManager";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import SingleCommonServer from "../server/SingleCommonServer";
 
 
@@ -51,7 +51,7 @@ export default class UserGlobalModel extends BaseModel {
 	 */
 	public flushGlobalData(callback: Function = null, thisObj = null, params: any = null) {
 		if (UserModel.instance.getUserRid() != 'nologin') {
-			if (Global.checkIsSingleMode()) {
+			if (GlobalData.checkIsSingleMode()) {
 				Client.instance.getCloudGlobalData({
 					query: UserGlobalModel.dataField,
 					id: UserModel.instance.getUserRid(),
@@ -119,7 +119,7 @@ export default class UserGlobalModel extends BaseModel {
 		if (UserModel.instance.getUserRid() == 'nologin') {
 			return;
 		}
-		if (Global.checkIsSingleMode()) {
+		if (GlobalData.checkIsSingleMode()) {
 			Client.instance.setCloudGlobalData({
 				clientDirty: {
 					'u': {

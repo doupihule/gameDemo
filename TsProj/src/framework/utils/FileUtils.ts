@@ -73,9 +73,9 @@ export default class FileUtils {
 		return null;
 
 		// if (UserInfo.isWX()()) {
-		// 	return Global.resource_url + "/wxgame/"
+		// 	return GlobalData.resource_url + "/wxgame/"
 		// } else if (UserInfo.isTT()()) {
-		// 	return Global.resource_url + "/tt/"
+		// 	return GlobalData.resource_url + "/tt/"
 		// } else if (UserInfo.isQQGame()()) {
 		// 	return "GameRes://"
 		// }

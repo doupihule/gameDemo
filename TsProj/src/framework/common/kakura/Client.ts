@@ -1,7 +1,7 @@
 import KakuraClient from "./KakuraClient";
 import HashMap from "../../utils/HashMap";
 import PackConfigManager from "../../manager/PackConfigManager";
-import Global from "../../../utils/Global";
+import GlobalData from "../../utils/GlobalData";
 import ErrCodeManager from "../../manager/ErrCodeManager";
 import UserModel from "../../../game/sys/model/UserModel";
 import NotifyManager from "../../manager/NotifyManager";
@@ -15,6 +15,8 @@ import ErrorCode from "../../../game/sys/common/kakura/ErrorCode";
 import UserInfo from "../UserInfo";
 import MethodCommon from "./MethodCommon";
 import GameHttpControler from "../GameHttpControler";
+
+import {GameUtils} from 'csharp'
 
 export default class Client {
 
@@ -89,7 +91,7 @@ export default class Client {
 		this._callback = callback;
 		this._thisObj = thisObj;
 		this._url = PackConfigManager.ins.platform.kakura_url;
-		this._version = Global.version;
+		this._version = GlobalData.version;
 		this._upgrade = PackConfigManager.ins.platform.upgrade_path;
 		this._sec = PackConfigManager.ins.platform.sec;
 		this._kakuraInitParams = this.getKakuraInitMsg(userInfo, invitedBy, shareInfo);
@@ -136,7 +138,7 @@ export default class Client {
 
 
 		//如果是云存储
-		if (Global.checkUserCloudStorage()) {
+		if (GlobalData.checkUserCloudStorage()) {
 			this.saveDataToCloud(param, callback, thisObj, addParam, expandParams);
 
 		} else {
@@ -152,7 +154,7 @@ export default class Client {
 			}
 
 			if (opcode == this.OPCODE_BACKEND_REQUEST) {
-				if (Global.checkIsSingleMode()) {
+				if (GlobalData.checkIsSingleMode()) {
 					if (!param.clientDirty) {
 						param.clientDirty = SingleCommonServer.getClientDirtyList();
 					}
@@ -308,7 +310,7 @@ export default class Client {
 			var param: any = {token: this._token};
 			param.ver = this._version;
 			param.upgrade = this._upgrade;
-			param.deviceId = Global.deviceId
+			param.deviceId = GlobalData.deviceId
 			KakuraClient.instance.sendRequest(this.OPCODE_KAKURA_REAUTH, MethodCommon.User_kakuraReauth, param, this.relogin, this, true, true);
 		}
 
@@ -399,7 +401,7 @@ export default class Client {
 			"gs_token": this._gs_token,
 			"sec": this._sec,
 			"account_id": "1",
-			"deviceId": Global.deviceId
+			"deviceId": GlobalData.deviceId
 		}
 		if (invitedBy != "" && shareInfo != "") {
 			params["invitedBy"] = invitedBy;
@@ -511,7 +513,7 @@ export default class Client {
 		}
 		expandParams = expandParams || this._defaultExpandParams;
 
-		var url = Global.global_url;
+		var url = GlobalData.global_url;
 		params.sendTime = this.serverTime;
 
 		var thisValue = this;
@@ -571,7 +573,7 @@ export default class Client {
 		//如果走强制连接的请求 需要走GameHttpControler
 		if (UserInfo.isUseHttpServer && expandParams.forceConnect) {
 			webParams.url = url
-			expandParams.url = Global.global_url
+			expandParams.url = GlobalData.global_url
 			GameHttpControler.instance.sendRequest(method, params, callback, thisObj, true, false, addParam, expandParams)
 		} else {
 			HttpMessage.instance.send(url, sendData, onHttpBack, this, "post", webParams);
@@ -630,7 +632,7 @@ export default class Client {
 
 
 	public  getNativeTime(){
-		return 0
+		return GameUtils.CommonUtil.GetTimeMiniStamp() as any;
 	}
 
 

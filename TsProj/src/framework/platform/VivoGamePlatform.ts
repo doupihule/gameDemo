@@ -8,7 +8,7 @@ import TranslateFunc from "../func/TranslateFunc";
 import WindowManager from "../manager/WindowManager";
 import TimerManager from "../manager/TimerManager";
 import MainModule from "../manager/MainModule";
-import Global from "../../utils/Global";
+import GlobalData from "../utils/GlobalData";
 import ScreenAdapterTools from "../utils/ScreenAdapterTools";
 import GameSwitch from "../common/GameSwitch";
 
@@ -190,7 +190,7 @@ export default class VivoGamePlatform extends WXGamePlatform {
 				WindowManager.ShowTip(TranslateFunc.instance.getTranslate("#versionForceUpdate"))
 				//300毫秒以后强制删除游戏
 				TimerManager.instance.setTimeout(() => {
-					Global.isGameDestory = true;
+					GlobalData.isGameDestory = true;
 					thisObj.getWX().applyUpdate();
 				}, this, 300);
 			} else {
