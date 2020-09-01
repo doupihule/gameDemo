@@ -6,7 +6,7 @@ const ViewTools_1 = require("../../components/ViewTools");
 const WindowManager_1 = require("../../manager/WindowManager");
 const WindowCfgs_1 = require("../../../game/sys/consts/WindowCfgs");
 const TableUtils_1 = require("../../utils/TableUtils");
-const Global_1 = require("../../../utils/Global");
+const GlobalData_1 = require("../../utils/GlobalData");
 class AlertNewLocalUI extends UIBaseView_1.default {
     constructor() {
         super();
@@ -137,7 +137,7 @@ class AlertNewLocalUI extends UIBaseView_1.default {
         for (var i = 0; i < copyArr.length; i++) {
             var data = copyArr[i];
             if (data) {
-                if (Global_1.default.isGameDestory) {
+                if (GlobalData_1.default.isGameDestory) {
                     return;
                 }
                 var callBack = data.callBack;

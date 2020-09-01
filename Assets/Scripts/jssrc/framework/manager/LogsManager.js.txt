@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const GameSwitch_1 = require("../common/GameSwitch");
 const TimerManager_1 = require("./TimerManager");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const WindowManager_1 = require("./WindowManager");
 const UserModel_1 = require("../../game/sys/model/UserModel");
 const PackConfigManager_1 = require("./PackConfigManager");
@@ -27,7 +27,7 @@ class LogsManager {
      */
     static echo(message, ...optionalParams) {
         var resultArr = this.turnStr("echo", message, optionalParams);
-        // if (!Global.isRelease)
+        // if (!GlobalData.isRelease)
         if (!UserInfo_1.default.isSystemMini()) {
             console.log(resultArr.join(" "));
         }
@@ -174,18 +174,18 @@ class LogsManager {
             game: GameConsts_1.default.gameCode,
             platform: PackConfigManager_1.default.ins.platform.platform,
             time: Client_1.default.instance.serverTime,
-            os: Global_1.default.getOs(),
-            device: Global_1.default.deviceModel,
-            cver: Global_1.default.client_version,
-            ver: Global_1.default.version,
+            os: GlobalData_1.default.getOs(),
+            device: GlobalData_1.default.deviceModel,
+            cver: GlobalData_1.default.client_version,
+            ver: GlobalData_1.default.version,
             rid: UserModel_1.default.instance.getUserRid(),
             error_message: message,
             error_stack: errorStack,
             error_type: tag,
             context: "",
-            deviceId: Global_1.default.deviceId,
+            deviceId: GlobalData_1.default.deviceId,
         };
-        var sdkInfo = Global_1.default.getSDKInfo();
+        var sdkInfo = GlobalData_1.default.getSDKInfo();
         if (sdkInfo) {
             params["context"] = sdkInfo + params["context"];
         }
@@ -216,11 +216,11 @@ class LogsManager {
         var params = {
             game: GameConsts_1.default.gameCode,
             platform: PackConfigManager_1.default.ins.platform.platform,
-            cver: Global_1.default.client_version,
-            deviceId: Global_1.default.deviceId,
+            cver: GlobalData_1.default.client_version,
+            deviceId: GlobalData_1.default.deviceId,
             eventId: eventId,
             rid: UserModel_1.default.instance.getUserRid(),
-            device: Global_1.default.deviceModel,
+            device: GlobalData_1.default.deviceModel,
             circleId: this.getCircleId(),
             t: Client_1.default.instance.miniserverTime
         };
@@ -276,8 +276,8 @@ class LogsManager {
         var params = {
             game: GameConsts_1.default.gameCode,
             platform: PackConfigManager_1.default.ins.platform.platform,
-            deviceId: Global_1.default.deviceId,
-            device: Global_1.default.deviceModel,
+            deviceId: GlobalData_1.default.deviceId,
+            device: GlobalData_1.default.deviceModel,
             isNew: isNew,
         };
         var urlParams = HttpMessage_1.default.instance.objectToUrlParam(params);
@@ -300,9 +300,9 @@ class LogsManager {
         var params = {
             game: GameConsts_1.default.gameCode,
             platform: PackConfigManager_1.default.ins.platform.platform,
-            deviceId: Global_1.default.deviceId,
-            device: Global_1.default.deviceModel,
-            isNew: Global_1.default.isNew() ? 1 : 0,
+            deviceId: GlobalData_1.default.deviceId,
+            device: GlobalData_1.default.deviceModel,
+            isNew: GlobalData_1.default.isNew() ? 1 : 0,
             network: DeviceTools_1.default.network,
             time: time
         };
@@ -423,7 +423,7 @@ class LogsManager {
     }
     static getCircleId() {
         if (!this._circleId) {
-            this._circleId = Global_1.default.deviceId + "_" + Client_1.default.instance.miniserverTime + Math.floor(Math.random() * 100000);
+            this._circleId = GlobalData_1.default.deviceId + "_" + Client_1.default.instance.miniserverTime + Math.floor(Math.random() * 100000);
         }
         return this._circleId;
     }

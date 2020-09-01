@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const FogFunc_1 = require("../../sys/func/FogFunc");
 const GlobalParamsFunc_1 = require("../../sys/func/GlobalParamsFunc");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 const FogModel_1 = require("../../sys/model/FogModel");
 const FogServer_1 = require("../../sys/server/FogServer");
 const FogEventTrigger_1 = require("../trigger/FogEventTrigger");
@@ -122,10 +122,10 @@ class FogCellMapControler {
             //             yArr.splice(i, 1);
             //         }
             //     }
-            //     endy = GameUtils.getRandomInArr(yArr).result;
+            //     endy = GameTools.getRandomInArr(yArr).result;
             // } else {
             //     //在中间列，y只能是第一行或者是最后一行
-            endy = GameUtils_1.default.getRandomInArr([1, FogFunc_1.default.row]).result;
+            endy = GameTools_1.default.getRandomInArr([1, FogFunc_1.default.row]).result;
             // }
         }
         else if (y == 1 || y == FogFunc_1.default.row) {
@@ -138,13 +138,13 @@ class FogCellMapControler {
                     yArr.splice(i, 1);
                 }
             }
-            endy = GameUtils_1.default.getRandomInArr(yArr).result;
+            endy = GameTools_1.default.getRandomInArr(yArr).result;
             //如果出口的y在第一行或者最后一行，固定在第三列
             if (endy == 1 || endy == FogFunc_1.default.row) {
                 endx = 3;
             }
             else {
-                endx = GameUtils_1.default.getRandomInArr([1, FogFunc_1.default.line]).result;
+                endx = GameTools_1.default.getRandomInArr([1, FogFunc_1.default.line]).result;
             }
         }
         var end = endx + "_" + endy;

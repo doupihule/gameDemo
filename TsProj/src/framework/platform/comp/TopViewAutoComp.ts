@@ -3,7 +3,7 @@ import Message from "../../common/Message";
 import LogsManager from "../../manager/LogsManager";
 import WindowEvent from "../../event/WindowEvent";
 import WindowManager from "../../manager/WindowManager";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 
 /**
  * 置顶View自动显示组件基类
@@ -96,7 +96,7 @@ export class TopViewAutoComp implements IMessage {
 	 */
 	protected _checkUIState(force = false) {
 		if (this._parentName) {
-			LogsManager.echo("hlx TopViewAutoComp _parentName:", GameUtils.decryptStr(this._parentName), " CurrentWindowName:", GameUtils.decryptStr(WindowManager.getCurrentWindowName()));
+			LogsManager.echo("hlx TopViewAutoComp _parentName:", GameTools.decryptStr(this._parentName), " CurrentWindowName:", GameTools.decryptStr(WindowManager.getCurrentWindowName()));
 			if (this._parentName == WindowManager.getCurrentWindowName()) {
 				this.show(force);
 			} else {

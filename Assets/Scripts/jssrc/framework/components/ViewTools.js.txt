@@ -12,16 +12,17 @@ const SpineGraphicExpand_1 = require("./SpineGraphicExpand");
 const ResourceConst_1 = require("../../game/sys/consts/ResourceConst");
 class ViewTools {
     //自动绑定cobj
-    static autoBindingCObj(cobj) {
+    static autoBindingCObj(cobj, forceBinding = false) {
         var baseView = ViewTools.cobjMap.get(cobj);
         if (!baseView) {
-            baseView = this.getBaseViewByCobj(cobj);
+            baseView = this.getBaseViewByCobj(cobj, forceBinding);
             if (baseView) {
                 ViewTools.cobjMap.set(cobj, baseView);
             }
         }
         return baseView;
     }
+    static init() { }
     //绑定c对象和 baseview
     static bindCobjToBaseView(cobj, baseView) {
         ViewTools.cobjMap.set(cobj, baseView);
@@ -38,7 +39,9 @@ class ViewTools {
         if (!viewClassName) {
             if (forceBinding) {
                 LogsManager_1.default.echo("这个对象没有指定合法命名", name);
-                return new BaseViewExpand_1.default();
+                var baseView = new BaseViewExpand_1.default();
+                baseView.setCObject(cobj);
+                return baseView;
             }
             return null;
         }

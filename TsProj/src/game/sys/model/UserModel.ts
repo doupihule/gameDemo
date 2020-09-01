@@ -3,7 +3,7 @@ import Message from "../../../framework/common/Message";
 import UserInfo from "../../../framework/common/UserInfo";
 import Client from "../../../framework/common/kakura/Client";
 import GlobalParamsFunc from "../func/GlobalParamsFunc";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import CacheManager from "../../../framework/manager/CacheManager";
 import StorageCode from "../consts/StorageCode";
 import SingleCommonServer from "../../../framework/server/SingleCommonServer";
@@ -87,7 +87,7 @@ export default class UserModel extends BaseModel {
 
 	getHeadImage() {
 		// console.log("my headImg is :", this._data.headImage);
-		var newPath = GameUtils.getHeadImg(this._data.userInfo.headImage);
+		var newPath = GameTools.getHeadImg(this._data.userInfo.headImage);
 		if (newPath) {
 			return newPath;
 		} else {
@@ -493,7 +493,7 @@ export default class UserModel extends BaseModel {
 		}
 
 		//判断是否过期
-		var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameUtils.getNextRefreshTByTime(4);
+		var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameTools.getNextRefreshTByTime(4);
 		if (expireTime < Client.instance.serverTime) {
 			return goodLsit;
 		}
@@ -509,10 +509,10 @@ export default class UserModel extends BaseModel {
 	getFogShopExpireTime() {
 		var data = this.getData();
 		if (!data || !data.fogOuterShop || !Object.keys(data.fogOuterShop.goods).length) {
-			return GameUtils.getNextRefreshTByTime(4);
+			return GameTools.getNextRefreshTByTime(4);
 		}
 
-		var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameUtils.getNextRefreshTByTime(4);
+		var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameTools.getNextRefreshTByTime(4);
 		return expireTime;
 	}
 
@@ -523,7 +523,7 @@ export default class UserModel extends BaseModel {
 			return 0;
 		}
 
-		var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameUtils.getNextRefreshTByTime(4);
+		var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameTools.getNextRefreshTByTime(4);
 		if (expireTime < Client.instance.serverTime) {
 			LogsManager.echo("whn outshop 已经过期");
 			return false;

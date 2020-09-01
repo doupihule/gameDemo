@@ -9,7 +9,7 @@ const FogEventTrigger_1 = require("../trigger/FogEventTrigger");
 const FogModel_1 = require("../../sys/model/FogModel");
 const RolesFunc_1 = require("../../sys/func/RolesFunc");
 const FogConst_1 = require("../../sys/consts/FogConst");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 const FogServer_1 = require("../../sys/server/FogServer");
 const TranslateFunc_1 = require("../../../framework/func/TranslateFunc");
 const FogPropTrigger_1 = require("../trigger/FogPropTrigger");
@@ -174,7 +174,7 @@ class FogEventData {
             }
             //敌人事件还没有ai 的 随机确定一个ai
             if (!this.eventData.ai) {
-                var ai = GameUtils_1.default.getWeightItem(this.enemyData.aiList)[0];
+                var ai = GameTools_1.default.getWeightItem(this.enemyData.aiList)[0];
                 this.eventData["ai"] = ai;
                 //敌人类型为npc的确定一个名字
                 if (this.enemyType == FogConst_1.default.FOG_EVENT_ENEMY_TYPE_NPC && !this.eventData.name) {
@@ -297,7 +297,7 @@ class FogEventData {
                 for (var i = 0; i < params.length; i++) {
                     dropId = params[i][0];
                     dropArr = FogFunc_1.default.instance.getDropGroupReward(dropId);
-                    itemArr.push(GameUtils_1.default.getWeightItem(dropArr));
+                    itemArr.push(GameTools_1.default.getWeightItem(dropArr));
                 }
                 this.rewardArr = itemArr;
                 //保存事件随机出的奖励

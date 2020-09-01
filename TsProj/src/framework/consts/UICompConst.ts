@@ -8,6 +8,7 @@ export default class UICompConst {
 	static comp_scroll = "scroll";    //滚动容器
 	static comp_list = "list";        //滚动列表
 	static comp_spine = "spine";       //spine动画
+	static comp_ui = "ui";			//ui也是一个类型 代表是子ui
 
 
 //组件对应的类

@@ -10,8 +10,6 @@ class ImageExpand extends BaseContainer_1.default {
         super(obj);
         this.uitype = UICompConst_1.default.comp_img;
     }
-    setColor(r, g, b, a) {
-    }
     //设置皮肤 最好手动指定boundlename
     setSkin(url, boundlename = ResourceConst_1.default.boundle_uiimage, adjustSize = false) {
         if (!url || url == "") {

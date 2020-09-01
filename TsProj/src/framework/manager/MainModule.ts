@@ -28,11 +28,7 @@ import FrameWorkEvent from "../event/FrameWorkEvent";
 import ModelToServerMapCommon from "../consts/ModelToServerMapCommon";
 import KariqiShareManager from './KariqiShareManager';
 import KariquShareConst from '../consts/KariquShareConst';
-import ResourceManager from "./ResourceManager";
 import ViewTools from "../components/ViewTools";
-import GlobalEnv from "../engine/GlobalEnv";
-
-;
 
 export default class MainModule implements IMessage {
 	//实例
@@ -53,14 +49,15 @@ export default class MainModule implements IMessage {
 		MainModule.instance = this;
 
 
-
-		SoundManager.init();
 		this.initLayer();
-		this.onLoadingUIComplete();
+		// SoundManager.init();
+
+		// this.onLoadingUIComplete();
 
 		Message.instance.add(MsgCMD.GAME_ONSHOW, this);
 		Message.instance.add(MsgCMD.VIDEO_STOP, this);
 		Message.instance.add(MsgCMD.VIDEO_PLAY, this);
+		WindowManager.OpenUI(WindowCfgs.GameMainUI);
 	}
 
 	//Loading页面显示后开始加载资源
@@ -192,7 +189,7 @@ export default class MainModule implements IMessage {
 		WindowManager.rootLayer = ViewTools.createContainer();
 		WindowManager.rootLayer.x += ScreenAdapterTools.sceneOffsetX;
 		WindowManager.rootLayer.y += ScreenAdapterTools.sceneOffsetY;
-		GlobalEnv.uiRoot.addChild(WindowManager.rootLayer);
+		GlobalData.uiRoot.addChild(WindowManager.rootLayer);
 		WindowManager.commonUILayer = ViewTools.createContainer();
 		WindowManager.commonUILayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
 		WindowManager.rootLayer.addChild(WindowManager.commonUILayer);
@@ -235,22 +232,20 @@ export default class MainModule implements IMessage {
 		LogsManager.initLogPanel();
 
 		if (UserInfo.isWeb()) {
-			var urlParam = window.location.href.indexOf('test=1') > 0;
-			LogsManager.echo(">>>>urlParam>>>>>>", urlParam);
 			GameSwitch.switchMap.SWITCH_GM_DEBUG = 1;
 			GameSwitch.switchMap.SWITCH_CD_DEBUG = 1;
 		}
 
 		//延迟一帧显示loading
-		var delayShowLoading = () => {
-			WindowManager.ShowLoadingUI(null);
-		}
-		//web版因为有loginui. 所以不能延迟一帧显示loading.否则loading会盖住login
-		if (UserInfo.isWeb()) {
-			WindowManager.ShowLoadingUI(null);
-		} else {
-			TimerManager.instance.add(delayShowLoading, null, 10, 1);
-		}
+		// var delayShowLoading = () => {
+		// 	WindowManager.ShowLoadingUI(null);
+		// }
+		// //web版因为有loginui. 所以不能延迟一帧显示loading.否则loading会盖住login
+		// if (UserInfo.isWeb()) {
+		// 	WindowManager.ShowLoadingUI(null);
+		// } else {
+		// 	TimerManager.instance.add(delayShowLoading, null, 10, 1);
+		// }
 		//只有native才填充黑边
 		if (UserInfo.isSystemNative()) {
 			//判断是否填充黑边

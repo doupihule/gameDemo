@@ -23,7 +23,7 @@ import {InterstitialAdComp} from "./comp/InterstitialAdComp";
 import {BannerComp} from "./comp/BannerComp";
 import {JumpFunc} from "../func/JumpFunc";
 import KariqiShareManager from "../manager/KariqiShareManager";
-import GameUtils from "../../utils/GameUtils";
+import GameTools from "../../utils/GameTools";
 import Message from "../common/Message";
 import CommonEvent from "../event/CommonEvent";
 import TranslateFunc from "../func/TranslateFunc";
@@ -38,7 +38,6 @@ import NativeBridge from "../native/NativeBridge";
 import JSToNativeEvent from "../event/JSToNativeEvent";
 import GameHttpControler from "../common/GameHttpControler";
 import BattleFunc from "../../game/sys/func/BattleFunc";
-import GlobalEnv from "../engine/GlobalEnv";
 import DeviceTools from "../utils/DeviceTools";
 
 
@@ -1205,7 +1204,7 @@ export default class GamePlatform implements IMessage {
 	 * 判断是否可以显示视频
 	 */
 	public canAdv() {
-		if (!GameUtils.canVideo) {
+		if (!GameTools.canVideo) {
 			return false;
 		}
 		if (UserInfo.isWeb()) return true;
@@ -1407,8 +1406,8 @@ export default class GamePlatform implements IMessage {
 	protected registFocusEvent() {
 		this.hideT = Client.instance.miniserverTime
 		this.showT = this.hideT;
-		// GlobalEnv.uiRoot.on(Laya.Event.FOCUS, this, this.onGetFocus);
-		// GlobalEnv.uiRoot.on(Laya.Event.BLUR, this, this.onLoseFocus);
+		// GlobalData.uiRoot.on(Laya.Event.FOCUS, this, this.onGetFocus);
+		// GlobalData.uiRoot.on(Laya.Event.BLUR, this, this.onLoseFocus);
 	}
 
 	//获取游戏焦点
@@ -1430,7 +1429,7 @@ export default class GamePlatform implements IMessage {
 		// 发送阿里云打点日志
 		StatisticsManager.ins.onEvent(StatisticsCommonConst.ON_HIDE, {
 			'onlineTime': this.hideT - this.showT,
-			'hideView': GameUtils.decryptStr(WindowManager.getCurrentWindowName())
+			'hideView': GameTools.decryptStr(WindowManager.getCurrentWindowName())
 		});
 	}
 
@@ -1505,9 +1504,9 @@ export default class GamePlatform implements IMessage {
 
 		//GM开关
 		LogsManager.checkGM();
-		GameUtils.canShare = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_SHARE_NEW);
-		GameUtils.canVideo = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ADV);
-		GameUtils.isReview = GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_REVIEW);
+		GameTools.canShare = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_SHARE_NEW);
+		GameTools.canVideo = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_ADV);
+		GameTools.isReview = GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_REVIEW);
 		for (i in map) {
 			LogsManager.echo("服务器返回的开关覆盖结果   ", i, " : ", map[i]);
 		}

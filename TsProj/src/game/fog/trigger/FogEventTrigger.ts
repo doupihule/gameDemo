@@ -5,7 +5,7 @@ import FogModel from "../../sys/model/FogModel";
 import WindowManager from "../../../framework/manager/WindowManager";
 import LogsManager from "../../../framework/manager/LogsManager";
 import {WindowCfgs} from "../../sys/consts/WindowCfgs";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import FogConst from "../../sys/consts/FogConst";
 import FogPropTrigger from "./FogPropTrigger";
 import FogServer from "../../sys/server/FogServer";
@@ -265,7 +265,7 @@ export default class FogEventTrigger {
 
 		//检测后置
 		if (back) {
-			var isShow = GameUtils.getRandomInt(0, 10000) < back[2];
+			var isShow = GameTools.getRandomInt(0, 10000) < back[2];
 			if (isShow) {
 				this.curBehindEvent = back[1];
 				cell.addEventData(back[0]);

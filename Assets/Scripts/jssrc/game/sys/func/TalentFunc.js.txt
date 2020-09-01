@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseFunc_1 = require("../../../framework/func/BaseFunc");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 const UserExtModel_1 = require("../model/UserExtModel");
 const TalentSkillsModel_1 = require("../model/TalentSkillsModel");
 const GlobalParamsFunc_1 = require("./GlobalParamsFunc");
@@ -79,7 +79,7 @@ class TalentFunc extends BaseFunc_1.default {
             var skillInfo = this.getTalentInfoByLevel(talentInfo[i], skilllevel + 1);
             weightArr.push(talentInfo[i] + "," + skillInfo.skillUpdateWeight);
         }
-        var randResult = GameUtils_1.default.getWeightItem(weightArr);
+        var randResult = GameTools_1.default.getWeightItem(weightArr);
         return randResult[0];
     }
 }

@@ -43,6 +43,7 @@ public class ExamplesCfg
                 typeof(Image),
                 typeof(Sprite),
                 typeof(Text),
+                typeof(Button),
                 typeof(Outline),
                 typeof(Shadow),
 
@@ -54,6 +55,7 @@ public class ExamplesCfg
                 
 
                 typeof(ResourceManager),
+                typeof(CommonUtil),
 
                 typeof(ViewExtensionMethods),
             };

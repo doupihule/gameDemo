@@ -7,7 +7,7 @@ import GameSwitch from "../../common/GameSwitch";
 import Message from "../../common/Message";
 import WindowEvent from "../../event/WindowEvent";
 import StatisticsCommonConst from "../../consts/StatisticsCommonConst";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 
 
 export class RecommendationBannerComp extends TopViewAutoComp {
@@ -71,7 +71,7 @@ export class RecommendationBannerComp extends TopViewAutoComp {
 	 * 创建Banner推广组件：微信
 	 */
 	static create(parent, onErrorCallback = null, callbackObj = null, hideType = TopViewAutoComp.HIDE_TYPE_DESTROY) {
-		LogsManager.echo("recommendBannerComp create start:", (parent && parent.windowName) ? GameUtils.decryptStr(parent.windowName) : null);
+		LogsManager.echo("recommendBannerComp create start:", (parent && parent.windowName) ? GameTools.decryptStr(parent.windowName) : null);
 
 		// 不支持的组件直接返回
 		if (!RecommendationBannerComp.canUse()) {
@@ -222,7 +222,7 @@ export class RecommendationBannerComp extends TopViewAutoComp {
 	 * 组件销毁
 	 */
 	public destroy() {
-		LogsManager.echo("hlx recommend banner destroy:", GameUtils.decryptStr(this._parentName));
+		LogsManager.echo("hlx recommend banner destroy:", GameTools.decryptStr(this._parentName));
 		super.destroy();
 		this._onErrorCallback = null;
 		this._callbackObj = null;

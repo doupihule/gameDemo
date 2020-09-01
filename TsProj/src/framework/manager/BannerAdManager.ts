@@ -1,4 +1,4 @@
-import GameUtils from "../../utils/GameUtils";
+import GameTools from "../../utils/GameTools";
 import LogsManager from "./LogsManager";
 import GlobalParamsFunc from "../../game/sys/func/GlobalParamsFunc";
 import SceneReference from "../consts/SceneReference";
@@ -55,8 +55,8 @@ export default class BannerAdManager {
 	recvMsg(cmd: string, data: any): void {
 		if (cmd == CommonEvent.WHITE_LIST_CHANGE) {
 			// 原来不是黑名单，返回收到IP在黑名单之内。设置黑名单字段。并通知黑名单更新
-			GameUtils.canGift = false;
-			GameUtils.canLeadBanner = false;
+			GameTools.canGift = false;
+			GameTools.canLeadBanner = false;
 		}
 	}
 
@@ -65,27 +65,27 @@ export default class BannerAdManager {
 		if (UserInfo.isWX()) {
 			Message.instance.add(CommonEvent.WHITE_LIST_CHANGE, BannerAdManager.instance);
 		}
-		GameUtils.canQuickBanner = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_QUICKBANNER);
+		GameTools.canQuickBanner = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_QUICKBANNER);
 		if (!SceneReference.isInBannerScene()) {
-			GameUtils.canGift = false;
-			GameUtils.canLeadBanner = false;
-			LogsManager.echo(" GameUtils.banner false");
+			GameTools.canGift = false;
+			GameTools.canLeadBanner = false;
+			LogsManager.echo(" GameTools.banner false");
 			return;
 		} else {
-			GameUtils.canLeadBanner = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_LEADBANNER);
-			GameUtils.canGift = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_MYSTERIOUSGIFT);
+			GameTools.canLeadBanner = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_LEADBANNER);
+			GameTools.canGift = !GameSwitch.checkOnOff(GameSwitch.SWITCH_DISABLE_MYSTERIOUSGIFT);
 		}
 
 		if (!BannerAdManager.isPlatformSupport()) {
 			LogsManager.echo("平台不支持banner banner开关关闭");
-			GameUtils.canQuickBanner = false;
-			GameUtils.canGift = false;
-			GameUtils.canLeadBanner = false;
+			GameTools.canQuickBanner = false;
+			GameTools.canGift = false;
+			GameTools.canLeadBanner = false;
 		}
 
-		LogsManager.echo(" GameUtils.canQuickBanner:", GameUtils.canQuickBanner);
-		LogsManager.echo(" GameUtils.canLeadBanner:", GameUtils.canLeadBanner);
-		LogsManager.echo(" GameUtils.canGift:", GameUtils.canGift);
+		LogsManager.echo(" GameTools.canQuickBanner:", GameTools.canQuickBanner);
+		LogsManager.echo(" GameTools.canLeadBanner:", GameTools.canLeadBanner);
+		LogsManager.echo(" GameTools.canGift:", GameTools.canGift);
 	}
 
 	static isPlatformSupport() {
@@ -126,7 +126,7 @@ export default class BannerAdManager {
 			return;
 		}
 		LogsManager.echo("zm.addBannerParent-----------", parent.windowName)
-		if (GameUtils.canQuickBanner) {
+		if (GameTools.canQuickBanner) {
 			// 没有传失败回调，默认banner失败加载推荐组件
 			if (UserInfo.isWX()) {
 				var thisObj = this;
@@ -186,7 +186,7 @@ export default class BannerAdManager {
 
 	/**隐藏直接添加的banner */
 	static hideQuickBanner() {
-		if (GameUtils.canQuickBanner) {
+		if (GameTools.canQuickBanner) {
 			// AdVideoManager.instance.hideBanner();
 		}
 	}
@@ -227,7 +227,7 @@ export default class BannerAdManager {
 
 	/**隐藏神秘礼包banner */
 	static hideGiftBanner() {
-		if (GameUtils.canGift) {
+		if (GameTools.canGift) {
 			// AdVideoManager.instance.hideBanner();
 		}
 	}

@@ -12,7 +12,6 @@ namespace GameUtils
         {
             globalEnv = new JsEnv(new JsAssetsLoader(debugRoot), port);
             globalEnv.Eval(@"
-                console.log('aaaaaaaaaaaaaaaaaa');
                 require('Main')
             ");
 

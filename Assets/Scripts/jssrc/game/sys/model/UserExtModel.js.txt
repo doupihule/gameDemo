@@ -7,7 +7,7 @@ const Message_1 = require("../../../framework/common/Message");
 const UserEvent_1 = require("../event/UserEvent");
 const MsgCMD_1 = require("../common/MsgCMD");
 const UserExtServer_1 = require("../server/UserExtServer");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 const GameMainEvent_1 = require("../event/GameMainEvent");
 const ShareOrTvManager_1 = require("../../../framework/manager/ShareOrTvManager");
 const ShareTvOrderFunc_1 = require("../func/ShareTvOrderFunc");
@@ -81,7 +81,7 @@ class UserExtModel extends BaseModel_1.default {
     }
     /**获取本次游戏是否出现宝箱 */
     getIsShowGiftInGame() {
-        if (!GameUtils_1.default.canGift)
+        if (!GameTools_1.default.canGift)
             return false;
         var level = this.getMaxLevel();
         if (level < GlobalParamsFunc_1.default.instance.getDataNum("secretBagStartPVP"))

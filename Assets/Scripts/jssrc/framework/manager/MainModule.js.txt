@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const SoundManager_1 = require("./SoundManager");
 const LogsManager_1 = require("./LogsManager");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const WindowManager_1 = require("./WindowManager");
 const WindowCfgs_1 = require("../../game/sys/consts/WindowCfgs");
 const ScreenAdapterTools_1 = require("../utils/ScreenAdapterTools");
@@ -13,7 +13,6 @@ const GameSwitch_1 = require("../common/GameSwitch");
 const KakuraClient_1 = require("../common/kakura/KakuraClient");
 const Message_1 = require("../common/Message");
 const UserModel_1 = require("../../game/sys/model/UserModel");
-const TimerManager_1 = require("./TimerManager");
 const MusicConst_1 = require("../../game/sys/consts/MusicConst");
 const MsgCMD_1 = require("../../game/sys/common/MsgCMD");
 const UserGlobalModel_1 = require("../model/UserGlobalModel");
@@ -23,20 +22,19 @@ const ModelToServerMapCommon_1 = require("../consts/ModelToServerMapCommon");
 const KariqiShareManager_1 = require("./KariqiShareManager");
 const KariquShareConst_1 = require("../consts/KariquShareConst");
 const ViewTools_1 = require("../components/ViewTools");
-const GlobalEnv_1 = require("../engine/GlobalEnv");
-;
 class MainModule {
     constructor() {
         this.timeLock = 0;
         //完成任务列表
         this._taskCompMap = {};
         MainModule.instance = this;
-        SoundManager_1.default.init();
         this.initLayer();
-        this.onLoadingUIComplete();
+        // SoundManager.init();
+        // this.onLoadingUIComplete();
         Message_1.default.instance.add(MsgCMD_1.default.GAME_ONSHOW, this);
         Message_1.default.instance.add(MsgCMD_1.default.VIDEO_STOP, this);
         Message_1.default.instance.add(MsgCMD_1.default.VIDEO_PLAY, this);
+        WindowManager_1.default.OpenUI(WindowCfgs_1.WindowCfgs.GameMainUI);
     }
     //Loading页面显示后开始加载资源
     onLoadingUIComplete() {
@@ -58,7 +56,7 @@ class MainModule {
     onLoginResult(result) {
         LogsManager_1.default.echo("yrc onLoginResult", result);
         var serverData = result;
-        if (!Global_1.default.checkUserCloudStorage()) {
+        if (!GlobalData_1.default.checkUserCloudStorage()) {
             Client_1.default.instance.globalLoginBackData = result;
             serverData = result.data;
         }
@@ -140,7 +138,7 @@ class MainModule {
         WindowManager_1.default.rootLayer = ViewTools_1.default.createContainer();
         WindowManager_1.default.rootLayer.x += ScreenAdapterTools_1.default.sceneOffsetX;
         WindowManager_1.default.rootLayer.y += ScreenAdapterTools_1.default.sceneOffsetY;
-        GlobalEnv_1.default.uiRoot.addChild(WindowManager_1.default.rootLayer);
+        GlobalData_1.default.uiRoot.addChild(WindowManager_1.default.rootLayer);
         WindowManager_1.default.commonUILayer = ViewTools_1.default.createContainer();
         WindowManager_1.default.commonUILayer.setSize(ScreenAdapterTools_1.default.width, ScreenAdapterTools_1.default.height);
         WindowManager_1.default.rootLayer.addChild(WindowManager_1.default.commonUILayer);
@@ -173,22 +171,19 @@ class MainModule {
         WindowManager_1.default.rootLayer.addChild(WindowManager_1.default.debugLayer);
         LogsManager_1.default.initLogPanel();
         if (UserInfo_1.default.isWeb()) {
-            var urlParam = window.location.href.indexOf('test=1') > 0;
-            LogsManager_1.default.echo(">>>>urlParam>>>>>>", urlParam);
             GameSwitch_1.default.switchMap.SWITCH_GM_DEBUG = 1;
             GameSwitch_1.default.switchMap.SWITCH_CD_DEBUG = 1;
         }
         //延迟一帧显示loading
-        var delayShowLoading = () => {
-            WindowManager_1.default.ShowLoadingUI(null);
-        };
-        //web版因为有loginui. 所以不能延迟一帧显示loading.否则loading会盖住login
-        if (UserInfo_1.default.isWeb()) {
-            WindowManager_1.default.ShowLoadingUI(null);
-        }
-        else {
-            TimerManager_1.default.instance.add(delayShowLoading, null, 10, 1);
-        }
+        // var delayShowLoading = () => {
+        // 	WindowManager.ShowLoadingUI(null);
+        // }
+        // //web版因为有loginui. 所以不能延迟一帧显示loading.否则loading会盖住login
+        // if (UserInfo.isWeb()) {
+        // 	WindowManager.ShowLoadingUI(null);
+        // } else {
+        // 	TimerManager.instance.add(delayShowLoading, null, 10, 1);
+        // }
         //只有native才填充黑边
         if (UserInfo_1.default.isSystemNative()) {
             //判断是否填充黑边

@@ -8,7 +8,7 @@ const GameConsts_1 = require("../../game/sys/consts/GameConsts");
 const JumpManager_1 = require("./JumpManager");
 const JumpConst_1 = require("../../game/sys/consts/JumpConst");
 const TimerManager_1 = require("./TimerManager");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const MainModule_1 = require("./MainModule");
 const TableUtils_1 = require("../utils/TableUtils");
 const Client_1 = require("../common/kakura/Client");
@@ -85,7 +85,7 @@ class KariqiShareManager {
             {
                 "eventId": KariquShareConst_1.default.KARIQU_GETLAUNCHSCENE,
                 "detail": JSON.stringify({
-                    scene: String(Global_1.default.sceneId)
+                    scene: String(GlobalData_1.default.sceneId)
                 }),
                 "extraNum": 0
             }

@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const PackageConfig_1 = require("../../game/sys/config/PackageConfig");
 const TestPlatform_1 = require("../../game/sys/common/TestPlatform");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const UserInfo_1 = require("../common/UserInfo");
 const LogsManager_1 = require("./LogsManager");
 const CloudPlatformData_1 = require("../../game/sys/common/CloudPlatformData");
@@ -19,11 +19,11 @@ class PackConfigManager {
     static initCfgs() {
         var config = PackageConfig_1.default.configData;
         if (!config) {
-            Global_1.default.resource_url = "https://cdn-test-hz.fantasyfancy.com/" + GameConsts_1.default.gameCode + "/test/" + UserInfo_1.default.platformId + "/";
+            GlobalData_1.default.resource_url = "https://cdn-test-hz.fantasyfancy.com/" + GameConsts_1.default.gameCode + "/test/" + UserInfo_1.default.platformId + "/";
             return;
         }
         if (config.CLIENT_VERSION) {
-            Global_1.default.client_version = config.CLIENT_VERSION;
+            GlobalData_1.default.client_version = config.CLIENT_VERSION;
         }
         if (config.CHANNEL) {
             UserInfo_1.default.platformId = config.CHANNEL;
@@ -33,7 +33,7 @@ class PackConfigManager {
             LogsManager_1.default.echo("gameCode:", GameConsts_1.default.gameCode);
         }
         if (config.CDN_URL) {
-            Global_1.default.resource_url = config.CDN_URL + "/" + UserInfo_1.default.platformId + "/";
+            GlobalData_1.default.resource_url = config.CDN_URL + "/" + UserInfo_1.default.platformId + "/";
         }
         if (config.SYSTEM) {
             UserInfo_1.default.systemId = config.SYSTEM;
@@ -48,12 +48,12 @@ class PackConfigManager {
         var config = PackageConfig_1.default.configData;
         var platform = TestPlatform_1.default.platform;
         if (UserInfo_1.default.isWeb()) {
-            Global_1.default.isCDN = false;
+            GlobalData_1.default.isCDN = false;
         }
         else {
-            Global_1.default.isCDN = true;
+            GlobalData_1.default.isCDN = true;
         }
-        if (Global_1.default.checkUserCloudStorage()) {
+        if (GlobalData_1.default.checkUserCloudStorage()) {
             platform = CloudPlatformData_1.default.platform;
         }
         if (config != null) {

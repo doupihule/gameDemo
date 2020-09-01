@@ -3,7 +3,7 @@ import FogInstanceCell from "../instance/FogInstanceCell";
 import LogsManager from "../../../framework/manager/LogsManager";
 import FogFunc from "../../sys/func/FogFunc";
 import GlobalParamsFunc from "../../sys/func/GlobalParamsFunc";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import FogModel from "../../sys/model/FogModel";
 import FogServer from "../../sys/server/FogServer";
 import FogEventTrigger from "../trigger/FogEventTrigger";
@@ -133,10 +133,10 @@ export default class FogCellMapControler {
 			//             yArr.splice(i, 1);
 			//         }
 			//     }
-			//     endy = GameUtils.getRandomInArr(yArr).result;
+			//     endy = GameTools.getRandomInArr(yArr).result;
 			// } else {
 			//     //在中间列，y只能是第一行或者是最后一行
-			endy = GameUtils.getRandomInArr([1, FogFunc.row]).result;
+			endy = GameTools.getRandomInArr([1, FogFunc.row]).result;
 			// }
 		} else if (y == 1 || y == FogFunc.row) {
 			//不能和起点同行 起点处于上下
@@ -148,12 +148,12 @@ export default class FogCellMapControler {
 					yArr.splice(i, 1);
 				}
 			}
-			endy = GameUtils.getRandomInArr(yArr).result;
+			endy = GameTools.getRandomInArr(yArr).result;
 			//如果出口的y在第一行或者最后一行，固定在第三列
 			if (endy == 1 || endy == FogFunc.row) {
 				endx = 3;
 			} else {
-				endx = GameUtils.getRandomInArr([1, FogFunc.line]).result;
+				endx = GameTools.getRandomInArr([1, FogFunc.line]).result;
 			}
 		}
 		var end = endx + "_" + endy;

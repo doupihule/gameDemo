@@ -1,7 +1,6 @@
 import LogsManager from "../manager/LogsManager";
 import GlobalData from "./GlobalData";
 import ViewTools from "../components/ViewTools";
-import GlobalEnv from "../engine/GlobalEnv";
 
 export default class ScreenAdapterTools {
 
@@ -131,13 +130,13 @@ export default class ScreenAdapterTools {
 		var image = ViewTools.createImage("static/global_image_heibian.png");
 		image.setAnchor(1,0.5)
 		image.set2dPos(this.sceneOffsetX,this.height / 2 + this.UIOffsetY);
-		GlobalEnv.uiRoot.addChild(image);
+		GlobalData.uiRoot.addChild(image);
 		image.setZorder(1000000) ;
 
 		image = ViewTools.createImage("static/global_image_heibian.png");
 		image.setAnchor(0,0.5)
 		image.set2dPos(this.sceneOffsetX + this.width,this.height / 2 + this.UIOffsetY);
-		GlobalEnv.uiRoot.addChild(image);
+		GlobalData.uiRoot.addChild(image);
 		image.setZorder(10000000);
 
 	}

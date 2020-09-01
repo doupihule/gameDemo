@@ -10,7 +10,7 @@ const TranslateFunc_1 = require("../func/TranslateFunc");
 const WindowManager_1 = require("../manager/WindowManager");
 const TimerManager_1 = require("../manager/TimerManager");
 const MainModule_1 = require("../manager/MainModule");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const ScreenAdapterTools_1 = require("../utils/ScreenAdapterTools");
 const GameSwitch_1 = require("../common/GameSwitch");
 class VivoGamePlatform extends WXGamePlatform_1.default {
@@ -177,7 +177,7 @@ class VivoGamePlatform extends WXGamePlatform_1.default {
                 WindowManager_1.default.ShowTip(TranslateFunc_1.default.instance.getTranslate("#versionForceUpdate"));
                 //300毫秒以后强制删除游戏
                 TimerManager_1.default.instance.setTimeout(() => {
-                    Global_1.default.isGameDestory = true;
+                    GlobalData_1.default.isGameDestory = true;
                     thisObj.getWX().applyUpdate();
                 }, this, 300);
             }

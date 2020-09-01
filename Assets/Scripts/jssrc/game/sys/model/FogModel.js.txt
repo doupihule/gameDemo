@@ -11,7 +11,7 @@ const WindowCfgs_1 = require("../consts/WindowCfgs");
 const Message_1 = require("../../../framework/common/Message");
 const FogEvent_1 = require("../event/FogEvent");
 const RolesModel_1 = require("./RolesModel");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 const FogPropTrigger_1 = require("../../fog/trigger/FogPropTrigger");
 const TableUtils_1 = require("../../../framework/utils/TableUtils");
 const BattleFunc_1 = require("../func/BattleFunc");
@@ -389,7 +389,7 @@ class FogModel extends BaseModel_1.default {
                 allRoleList.splice(index1, 1);
             }
         }
-        var roleList = GameUtils_1.default.getRandomArrayElements(allRoleList, count);
+        var roleList = GameTools_1.default.getRandomArrayElements(allRoleList, count);
         for (var i = 0; i < roleList.length; i++) {
             if (allRole.hasOwnProperty(roleList[i])) {
                 roleIdList.push(roleList[i]);
@@ -418,7 +418,7 @@ class FogModel extends BaseModel_1.default {
             }
             randomArr.push(String(arr[i]));
         }
-        var randomNum = GameUtils_1.default.getRandomInt(0, randomArr.length - 1);
+        var randomNum = GameTools_1.default.getRandomInt(0, randomArr.length - 1);
         return randomArr[randomNum];
     }
     checkFogRandomRole() {

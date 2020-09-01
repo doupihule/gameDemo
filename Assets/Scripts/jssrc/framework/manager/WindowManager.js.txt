@@ -4,7 +4,7 @@ const Message_1 = require("../common/Message");
 const LoadingUI_1 = require("../../game/sys/view/loading/LoadingUI");
 const ScreenAdapterTools_1 = require("../utils/ScreenAdapterTools");
 const LogsManager_1 = require("./LogsManager");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const WindowCfgs_1 = require("../../game/sys/consts/WindowCfgs");
 const WindowEvent_1 = require("../event/WindowEvent");
 const LogsErrorCode_1 = require("../consts/LogsErrorCode");
@@ -15,110 +15,61 @@ const PoolTools_1 = require("../utils/PoolTools");
 const JumpManager_1 = require("./JumpManager");
 const ViewTools_1 = require("../components/ViewTools");
 const TimerManager_1 = require("./TimerManager");
+const ResourceManager_1 = require("./ResourceManager");
+const ResourceConst_1 = require("../../game/sys/consts/ResourceConst");
 class WindowManager {
     static OpenUI(UIName, params = null) {
         WindowManager.SwitchUIAPI(UIName, null, null, params);
     }
-    static SwitchUI(openUINames, closeUINames, ...args) {
-        WindowManager.SwitchUIAPI(openUINames, null, closeUINames, ...args);
+    static SwitchUI(openUIName, closeUIName, args) {
+        WindowManager.SwitchUIAPI(openUIName, null, closeUIName, args);
     }
-    static SwitchUIAPI(openUINames, rootNodes, closeUINames, ...args) {
+    static SwitchUIAPI(openUIName, rootNode, closeUIName, args = null) {
         this.SwitchMaskUI(true);
-        if (openUINames) {
-            if (typeof (openUINames) == "string") {
-                openUINames = [openUINames];
-            }
-        }
-        else
-            openUINames = [];
-        if (rootNodes) {
-            if (typeof (rootNodes) == "object" && rootNodes.length == null) {
-                rootNodes = [rootNodes];
-            }
-        }
-        else
-            rootNodes = [];
-        if (closeUINames) {
-            if (typeof (closeUINames) == "string") {
-                closeUINames = [closeUINames];
-            }
-        }
-        else
-            closeUINames = [];
-        var resAll = [];
-        var packArr = [];
-        var res3DAll = [];
-        for (var openUIName of openUINames) {
-            // LogsManager.echo("WindowManager Switch OpenUI:", openUIName);
-            var uiCfgs = this.getWindowCfgs(openUIName);
-            var res = uiCfgs.group || [];
-            for (var url of res) {
-                resAll.push(url);
-            }
-            var subPackage = this.getUIPackage(openUIName);
-            if (subPackage) {
-                for (var url of subPackage) {
-                    packArr.push(url);
-                }
-            }
-            var res3D = uiCfgs.group3d || [];
-            for (var url of res3D) {
-                res3DAll.push(url);
-            }
-        }
-        for (var closeUIName of closeUINames) {
-            var uiView = WindowManager.UIInstance[closeUIName];
-            if (uiView)
-                uiView.mouseEnabled = false;
-        }
-        WindowManager.SwitchUIComplete(openUINames, rootNodes, closeUINames, args);
+        WindowManager.SwitchUIComplete(openUIName, rootNode, closeUIName, args);
     }
-    static SwitchUIComplete(openUINames, rootNodes, closeUINames, args) {
+    static SwitchUIComplete(openUIName, rootNode, closeUIName, args) {
         this.SwitchMaskUI(false);
         Message_1.default.instance.send(WindowEvent_1.default.WINDOW_EVENT_SWITCHUISTART, {
-            openUINames: openUINames,
-            closeUINames: closeUINames
+            openUIName: openUIName,
+            closeUIName: closeUIName
         });
-        for (var index in openUINames) {
-            var uiname = openUINames[index];
-            var targetUI = WindowManager.UIInstance[uiname];
-            var uiCfgs = this.getWindowCfgs(uiname);
+        //如果有打开某个界面
+        if (openUIName) {
+            var targetUI = WindowManager.UIInstance[openUIName];
+            var uiCfgs = this.getWindowCfgs(openUIName);
             if (targetUI == null) {
                 var classIntance = uiCfgs.path;
                 targetUI = new classIntance();
-                if (!rootNodes || rootNodes.length == 0) {
-                    targetUI.width = ScreenAdapterTools_1.default.width;
-                    targetUI.height = ScreenAdapterTools_1.default.height;
+                var uiCobj = ResourceManager_1.default.loadUIPrefab(uiCfgs.prefabPath + "/" + openUIName, ResourceConst_1.default.boundle_ui);
+                targetUI.setCObject(uiCobj);
+                if (!rootNode) {
+                    targetUI.setSize(ScreenAdapterTools_1.default.width, ScreenAdapterTools_1.default.height);
                 }
-                WindowManager.UIInstance[uiname] = targetUI;
+                WindowManager.UIInstance[openUIName] = targetUI;
             }
-            if (rootNodes[index]) {
-                rootNodes[index].addChild(targetUI);
+            if (rootNode) {
+                rootNode.addChild(targetUI);
             }
             else {
-                var ctn = this.getWindowCtn(openUINames[index]);
+                var ctn = this.getWindowCtn(openUIName);
                 ctn.mouseEnabled = true;
                 ctn.addChild(targetUI);
             }
             //给ui赋值属性windowName
-            targetUI.windowName = uiname;
+            targetUI.windowName = openUIName;
             //如果是开启模态的 而且是非全屏ui
             if (uiCfgs.modal == 1 && !uiCfgs.full) {
                 if (!targetUI.__modalView) {
                     targetUI.__modalView = this.createModalView(targetUI, uiCfgs.modalAlpha);
                 }
             }
-            this._currentWindow = targetUI;
-            this._currentWindowName = uiname;
             this._insertWindow(targetUI);
-            LogsManager_1.default.echo("WindowManager  OpenUI Complete:", uiname, "currentWindow:", this.getCurrentWindowName());
+            LogsManager_1.default.echo("WindowManager  OpenUI Complete:", openUIName, "currentWindow:", this.getCurrentWindowName());
             targetUI.mouseEnabled = true;
-            targetUI.setData(args[index]);
-            targetUI.name = openUINames[index];
-            // WindowManager.commonUILayer.addChild(WindowManager.UIInstance[openUIName]);
+            targetUI.setData(args);
         }
-        for (var closeUIName of closeUINames) {
-            // LogsManager.echo("WindowManager Switch CloseUI:", closeUIName);
+        if (closeUIName) {
             if (closeUIName == WindowCfgs_1.WindowCfgs.LoadingUI) {
                 WindowManager.CloseLoadingUI();
             }
@@ -130,8 +81,8 @@ class WindowManager {
         }
         this.updateUiVisible();
         Message_1.default.instance.send(WindowEvent_1.default.WINDOW_EVENT_SWITCHUIFIN, {
-            openUINames: openUINames,
-            closeUINames: closeUINames
+            openUINames: openUIName,
+            closeUINames: closeUIName
         });
     }
     //创建模态
@@ -140,9 +91,6 @@ class WindowManager {
             alpha = 0.3;
         }
         var modalView = ViewTools_1.default.createContainer();
-        // modalView.graphics.drawRect(0, 0, ScreenAdapterTools.width, ScreenAdapterTools.height, "#000000", null, 0);
-        // modalView.width = ScreenAdapterTools.width;
-        // modalView.height = ScreenAdapterTools.height;
         modalView.mouseEnabled = true;
         modalView.mouseThrough = false;
         modalView.alpha = alpha;
@@ -162,7 +110,7 @@ class WindowManager {
      * @param titleName 默认为“提示”
      */
     static setPopupTip(type, content, callBack, thisObj, titleName = null, closeBack = null) {
-        if (Global_1.default.isGameDestory) {
+        if (GlobalData_1.default.isGameDestory) {
             return;
         }
         var data = {
@@ -181,8 +129,6 @@ class WindowManager {
         }
         WindowManager.highLayer.addChild(ui);
         ui.setData(data);
-        // WindowManager.OpenUI(WindowCfgs.AlertUILocal, data);
-        // Message.instance.send(MsgCMD.MODULE_SHOW, { windowName: WindowCfgs.SUREPOPUP, data: data });
     }
     static ShowExpandTip(data, timeout = 1500) {
         // var subPackage = this.getUIPackage(WindowCfgs.TipsUI);
@@ -370,52 +316,8 @@ class WindowManager {
         }, this, 100, 1);
     }
     static SwitchMaskUI(isOpen, alpha = 0) {
-        var UIName = "maskUI";
-        if (isOpen) {
-            // LogsManager.echo("krma. openMask");
-            this.maskCount++;
-            WindowManager.maskLayer.visible = true;
-            if (WindowManager.UIInstance[UIName] == null) {
-                WindowManager.UIInstance[UIName] = this.initMaskUI();
-                WindowManager.UIInstance[UIName].width = ScreenAdapterTools_1.default.width;
-                WindowManager.UIInstance[UIName].height = ScreenAdapterTools_1.default.height;
-            }
-            WindowManager.UIInstance[UIName].mouseEnabled = true;
-            if (alpha > this.maskAlpha)
-                this.maskAlpha = alpha;
-            WindowManager.UIInstance[UIName].alpha = this.maskAlpha;
-            WindowManager.maskLayer.mouseEnabled = true;
-            WindowManager.maskLayer.mouseThrough = false;
-            WindowManager.maskLayer.addChild(WindowManager.UIInstance[UIName]);
-        }
-        else {
-            this.maskCount--;
-            if (this.maskCount <= 0) {
-                this.maskCount = 0;
-                if (WindowManager.UIInstance[UIName] != null) {
-                    WindowManager.UIInstance[UIName].onClose && WindowManager.UIInstance[UIName].onClose();
-                    WindowManager.maskLayer.removeChild(WindowManager.UIInstance[UIName]);
-                }
-                if (!WindowManager.maskLayer.numChildren)
-                    WindowManager.maskLayer.visible = false;
-                this.maskAlpha = 0;
-            }
-        }
-        TimerManager_1.default.instance.removeByCallBack(this, this.CloseMaskUI);
-        if (this.maskCount > 0) {
-            TimerManager_1.default.instance.add(this.CloseMaskUI, this, 5000, 1);
-        }
     }
     static CloseMaskUI() {
-        var UIName = "maskUI";
-        this.maskCount = 0;
-        if (WindowManager.UIInstance[UIName] != null) {
-            WindowManager.UIInstance[UIName].onClose && WindowManager.UIInstance[UIName].onClose();
-            WindowManager.maskLayer.removeChild(WindowManager.UIInstance[UIName]);
-        }
-        if (!WindowManager.maskLayer.numChildren)
-            WindowManager.maskLayer.visible = false;
-        this.maskAlpha = 0;
     }
     static initMaskUI() {
         var mask = ViewTools_1.default.createContainer();
@@ -614,7 +516,6 @@ WindowManager.updateTipsCount = 0;
 WindowManager.maskCount = 0;
 WindowManager.maskAlpha = 0;
 WindowManager.isShowUpdateTip = false;
-WindowManager._currentWindowName = "";
 WindowManager._allWindowMap = [];
 WindowManager.UIInstance = {};
 WindowManager.uiMaker = LoadingUI_1.LoadingUI;

@@ -14,6 +14,7 @@ public class Main : MonoBehaviour
 
     protected Action luaUpdate = null;
     protected Action luaUpdateLate = null;
+    public delegate void initStage(GameObject stage,GameObject uiroot);
     void Awake()
     {
         
@@ -21,14 +22,21 @@ public class Main : MonoBehaviour
         ResourceManager.Instance.Init(this.gameObject);
         //JSEnvExpand.InitEnv("C:/work/unity/gameDemo/TsProj/output/",-1);
         JSEnvExpand.InitEnv("", -1);
+        var initStage = JSEnvExpand.globalEnv.Eval<initStage>("global.initGame");
+        GameObject uiRoot = GameObject.Find("uiRoot");
+        initStage(this.gameObject, uiRoot);
+        Transform ss;
+
 
     }
     void Update()
     {
         //luaUpdate(timerManager);
+        JSEnvExpand.globalEnv.Eval("window.TimeManager.instance.tickHandler()");
     }
     void LateUpdate()
     {
         //luaUpdateLate(timerManager);
+        JSEnvExpand.globalEnv.Eval("window.TimeManager.instance.tickHandlerLater()");
     }
 }

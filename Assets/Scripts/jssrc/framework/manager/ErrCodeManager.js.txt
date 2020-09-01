@@ -9,7 +9,7 @@ const UserInfo_1 = require("../common/UserInfo");
 const Client_1 = require("../common/kakura/Client");
 const WindowManager_1 = require("./WindowManager");
 const KakuraClient_1 = require("../common/kakura/KakuraClient");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 class ErrCodeManager {
     constructor() {
         //没有处理的errorcode状态
@@ -90,7 +90,7 @@ class ErrCodeManager {
                 hasSendError = true;
             }
             if (flag) { //弹出tip意味是意料外情况，可能需要上传日志
-                if (Global_1.default.checkIsSingleMode()) { //单机模式不显示tip
+                if (GlobalData_1.default.checkIsSingleMode()) { //单机模式不显示tip
                     WindowManager_1.default.ShowTip(errerMessage);
                 }
             }

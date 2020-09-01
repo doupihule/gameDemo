@@ -15,7 +15,7 @@ import WindowManager from "../manager/WindowManager";
 import Message from "../common/Message";
 import WXGamePlatform from "./WXGamePlatform";
 import TableUtils from "../utils/TableUtils";
-import GameUtils from "../../utils/GameUtils";
+import GameTools from "../../utils/GameTools";
 import MethodCommon from "../common/kakura/MethodCommon";
 import SoundManager from "../manager/SoundManager";
 import ScreenAdapterTools from '../utils/ScreenAdapterTools';
@@ -380,7 +380,7 @@ export default class AndroidGamePlatform extends GamePlatform {
 
 
 	public canAdv() {
-		if (!GameUtils.canVideo) {
+		if (!GameTools.canVideo) {
 			return false;
 		}
 		//如果是套壳包 不能看广告

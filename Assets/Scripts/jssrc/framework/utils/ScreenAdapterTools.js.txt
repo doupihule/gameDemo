@@ -1,9 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const LogsManager_1 = require("../manager/LogsManager");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("./GlobalData");
 const ViewTools_1 = require("../components/ViewTools");
-const GlobalEnv_1 = require("../engine/GlobalEnv");
 class ScreenAdapterTools {
     //是否是刘海设备
     static isNotchDevice() {
@@ -84,12 +83,12 @@ class ScreenAdapterTools {
         var image = ViewTools_1.default.createImage("static/global_image_heibian.png");
         image.setAnchor(1, 0.5);
         image.set2dPos(this.sceneOffsetX, this.height / 2 + this.UIOffsetY);
-        GlobalEnv_1.default.uiRoot.addChild(image);
+        GlobalData_1.default.uiRoot.addChild(image);
         image.setZorder(1000000);
         image = ViewTools_1.default.createImage("static/global_image_heibian.png");
         image.setAnchor(0, 0.5);
         image.set2dPos(this.sceneOffsetX + this.width, this.height / 2 + this.UIOffsetY);
-        GlobalEnv_1.default.uiRoot.addChild(image);
+        GlobalData_1.default.uiRoot.addChild(image);
         image.setZorder(10000000);
     }
     static setPhoneSys(sysInfo) {
@@ -98,7 +97,7 @@ class ScreenAdapterTools {
         if (this.phoneSys != "")
             return;
         var phoneModel = sysInfo.model;
-        Global_1.default.deviceModel = phoneModel;
+        GlobalData_1.default.deviceModel = phoneModel;
         if (phoneModel.indexOf("iPhone") > -1 || phoneModel.indexOf("iPad") > -1) {
             this.phoneSys = "iphone";
         }
@@ -126,7 +125,7 @@ class ScreenAdapterTools {
             var key = keys[i];
             if (phoneModel.indexOf(key) > -1) {
                 ScreenAdapterTools.toolBarWidth = 60;
-                Global_1.default.isPhoneBangs = true;
+                GlobalData_1.default.isPhoneBangs = true;
                 LogsManager_1.default.echo("hlx 刘海屏高度修改:根据白名单", phoneModel, key);
             }
         }
@@ -148,7 +147,7 @@ class ScreenAdapterTools {
             if (ScreenAdapterTools.toolBarWidth > 60) {
                 ScreenAdapterTools.toolBarWidth = 60;
             }
-            Global_1.default.isPhoneBangs = true;
+            GlobalData_1.default.isPhoneBangs = true;
             LogsManager_1.default.echo("hlx 刘海屏高度修改:根据安全区域 top:", top, "    this.height:", this.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools.toolBarWidth);
         }
     }
@@ -164,7 +163,7 @@ class ScreenAdapterTools {
         if (ScreenAdapterTools.toolBarWidth == 0 && barH > 44) {
             LogsManager_1.default.echo("hlx 刘海屏高度修改:根据状态拦高度 statusBarHeight:", barH);
             ScreenAdapterTools.toolBarWidth = 60;
-            Global_1.default.isPhoneBangs = true;
+            GlobalData_1.default.isPhoneBangs = true;
         }
     }
     /**
@@ -186,7 +185,7 @@ class ScreenAdapterTools {
             if (ScreenAdapterTools.toolBarWidth > 60) {
                 ScreenAdapterTools.toolBarWidth = 60;
             }
-            Global_1.default.isPhoneBangs = true;
+            GlobalData_1.default.isPhoneBangs = true;
             LogsManager_1.default.echo("hlx 刘海屏高度修改:根据胶囊位置 reCheckBar top:", top, "    this.height:", this.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools.toolBarWidth);
         }
     }
@@ -238,7 +237,7 @@ class ScreenAdapterTools {
      * @param alignType 对齐方式
      */
     static alignNotch(view, alignType = ScreenAdapterTools.Align_LeftTop) {
-        if (!Global_1.default.isPhoneBangs) {
+        if (!GlobalData_1.default.isPhoneBangs) {
             return;
         }
         if (this.isLandSpace) {
@@ -262,13 +261,13 @@ class ScreenAdapterTools {
      *     toolBarHeight:刘海高度
      */
     static checkNativeSystemInfo(info) {
-        Global_1.default.deviceModel = info.model;
+        GlobalData_1.default.deviceModel = info.model;
         if (info.toolBarHeight > 0) {
             this.toolBarWidth = 60;
-            Global_1.default.isPhoneBangs = true;
+            GlobalData_1.default.isPhoneBangs = true;
         }
         else {
-            Global_1.default.isPhoneBangs = false;
+            GlobalData_1.default.isPhoneBangs = false;
         }
     }
     /**

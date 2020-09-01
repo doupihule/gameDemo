@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const LogsManager_1 = require("../manager/LogsManager");
 const WhiteListFunc_1 = require("../func/WhiteListFunc");
 const UserInfo_1 = require("../common/UserInfo");
@@ -76,8 +76,8 @@ class SceneReference {
             return true;
         }
         // 注册白名单
-        if (!SceneReference.checkWhiteSceneId(Global_1.default.sceneId, WhiteListFunc_1.default.TYPE_REGISTER)) {
-            LogsManager_1.default.echo("hlx scene 账号不在注册白名单,Global.sceneId：", Global_1.default.sceneId);
+        if (!SceneReference.checkWhiteSceneId(GlobalData_1.default.sceneId, WhiteListFunc_1.default.TYPE_REGISTER)) {
+            LogsManager_1.default.echo("hlx scene 账号不在注册白名单,GlobalData.sceneId：", GlobalData_1.default.sceneId);
             return false;
         }
         // 注册黑名单

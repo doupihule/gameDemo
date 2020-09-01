@@ -12,6 +12,7 @@ UICompConst.comp_input = "input"; //输入文本
 UICompConst.comp_scroll = "scroll"; //滚动容器
 UICompConst.comp_list = "list"; //滚动列表
 UICompConst.comp_spine = "spine"; //spine动画
+UICompConst.comp_ui = "ui"; //ui也是一个类型 代表是子ui
 //组件对应的类
 UICompConst.classMap = {
     base: "BaseView",

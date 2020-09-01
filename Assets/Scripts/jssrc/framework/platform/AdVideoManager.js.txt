@@ -9,7 +9,7 @@ const InterstitialAdComp_1 = require("./comp/InterstitialAdComp");
 const RecommendationInterstitialComp_1 = require("./comp/RecommendationInterstitialComp");
 const BannerAdManager_1 = require("../manager/BannerAdManager");
 const ScreenAdapterTools_1 = require("../utils/ScreenAdapterTools");
-const GameUtils_1 = require("../../utils/GameUtils");
+const GameTools_1 = require("../../utils/GameTools");
 const SceneReference_1 = require("../consts/SceneReference");
 const OriginalIconAdComp_1 = require("./comp/OriginalIconAdComp");
 const TimerManager_1 = require("../manager/TimerManager");
@@ -258,7 +258,7 @@ class AdVideoManager {
      * 能否移位误触
      */
     canBtnMove() {
-        if (!GameUtils_1.default.canQuickBanner) {
+        if (!GameTools_1.default.canQuickBanner) {
             LogsManager_1.default.echo("ycn MoveButtonOnClick 无banner");
             return false;
         }
@@ -288,7 +288,7 @@ class AdVideoManager {
     bindBtnMove(btnObj, btnCallBack, viewObj, moveX = 0, moveY = 170) {
         if (!btnObj['clickMoveInit']) {
             btnObj['clickMoveInit'] = true;
-            btnObj['targetClickNum'] = GameUtils_1.default.getRandomInt(2, 3);
+            btnObj['targetClickNum'] = GameTools_1.default.getRandomInt(2, 3);
             btnObj['currentClickNum'] = 0;
             ScreenAdapterTools_1.default.offsetView(btnObj, moveX, moveY);
             return new ButtonUtils_1.ButtonUtils(btnObj, () => {

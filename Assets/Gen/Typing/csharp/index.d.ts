@@ -83,6 +83,9 @@ declare module 'csharp' {
             
         }
         type Action$3<T1,T2,T3> = (arg1: T1, arg2: T2, arg3: T3) => void;
+        class Byte extends System.ValueType {
+            
+        }
         type Action = () => void;
         var Action: {new (func: () => void): Action;}
         
@@ -719,6 +722,15 @@ declare module 'csharp' {
         class UIBehaviour extends UnityEngine.MonoBehaviour {
             
         }
+        class AbstractEventData extends System.Object {
+            
+        }
+        class BaseEventData extends UnityEngine.EventSystems.AbstractEventData {
+            
+        }
+        class PointerEventData extends UnityEngine.EventSystems.BaseEventData {
+            
+        }
         
     }
     namespace UnityEngine.UI {
@@ -794,6 +806,15 @@ declare module 'csharp' {
             public OnRebuildRequested():void;
             
         }
+        class Selectable extends UnityEngine.EventSystems.UIBehaviour {
+            
+        }
+        class Button extends UnityEngine.UI.Selectable {
+            public onClick: UnityEngine.UI.Button.ButtonClickedEvent;
+            public OnPointerClick(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnSubmit(eventData: UnityEngine.EventSystems.BaseEventData):void;
+            
+        }
         class BaseMeshEffect extends UnityEngine.EventSystems.UIBehaviour {
             
         }
@@ -817,6 +838,21 @@ declare module 'csharp' {
     namespace UnityEngine.UI.Image {
         enum Type { Simple = 0, Sliced = 1, Tiled = 2, Filled = 3 }
         enum FillMethod { Horizontal = 0, Vertical = 1, Radial90 = 2, Radial180 = 3, Radial360 = 4 }
+        
+    }
+    namespace UnityEngine.Events {
+        class UnityEventBase extends System.Object {
+            
+        }
+        class UnityEvent extends UnityEngine.Events.UnityEventBase {
+            
+        }
+        
+    }
+    namespace UnityEngine.UI.Button {
+        class ButtonClickedEvent extends UnityEngine.Events.UnityEvent {
+            
+        }
         
     }
     namespace Spine {
@@ -1035,19 +1071,34 @@ declare module 'csharp' {
         
     }
     namespace GameUtils {
+        class CommonUtil extends System.Object {
+            public static IsIphoneX: boolean;
+            public static LoadAssetsWay: boolean;
+            public constructor();
+            public static GetPlatformString():string;
+            public static EncodingToMd5(data: string):string;
+            public static ReverseBytes(inArray: number[]):number[];
+            public static GetTimeStamp():string;
+            public static GetTimeMiniStamp():bigint;
+            public static DebugLogByteArrayContent(data: number[], length: number, name: string):void;
+            
+        }
         class ViewExtensionMethods extends System.Object {
             public static MouseButtonDown():boolean;
             public static CameraToRaycastHitObjectClick(c: UnityEngine.Camera, go: UnityEngine.GameObject, onClickHandle: System.Action):boolean;
             public static SetChildrenLayer(obj: UnityEngine.GameObject, Layer: string):void;
             public static PlaySounds(obj: UnityEngine.GameObject, isPreloading: boolean, assetName: string, path: string, bundleName: string, delay: number):void;
             public static ClearSounds(obj: UnityEngine.GameObject):void;
-            public static setObj2dPos(trans: UnityEngine.RectTransform, x: number, y: number):void;
+            public static SetObj2dPos(trans: UnityEngine.RectTransform, x: number, y: number):void;
             public static SetObj3dPos(trans: UnityEngine.Transform, x: number, y: number, z: number):void;
             public static SetObjRotation(trans: UnityEngine.Transform, x: number, y: number, z: number):void;
             public static SetObjScale(trans: UnityEngine.Transform, x: number, y: number, z: number):void;
             public static SetLocalScaleSize(trans: UnityEngine.Transform, scale: number):void;
             public static SetImageColor(img: UnityEngine.UI.Image, r: number, g: number, b: number, a: number):void;
             public static SetLabelColor(txt: UnityEngine.UI.Text, r: number, g: number, b: number, a: number):void;
+            public static initVec3(x: number, y: number, z: number):UnityEngine.Vector3;
+            public static initVec2(x: number, y: number):UnityEngine.Vector2;
+            public static initColor(r: number, g: number, b: number, a: number):UnityEngine.Color;
             
         }
         

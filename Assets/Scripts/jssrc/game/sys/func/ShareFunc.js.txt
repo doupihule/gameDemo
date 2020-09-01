@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseFunc_1 = require("../../../framework/func/BaseFunc");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 const TranslateFunc_1 = require("../../../framework/func/TranslateFunc");
 const UserInfo_1 = require("../../../framework/common/UserInfo");
 const UserModel_1 = require("../model/UserModel");
@@ -97,7 +97,7 @@ class ShareFunc extends BaseFunc_1.default {
         for (var i = 0; i < datas.length; i++) {
             weightSum += Number(datas[i]["weight"]);
         }
-        var randomNum = GameUtils_1.default.getRandomInt(0, weightSum - 1);
+        var randomNum = GameTools_1.default.getRandomInt(0, weightSum - 1);
         var curWeight = 0;
         for (var i = 0; i < datas.length; i++) {
             curWeight += Number(datas[i]["weight"]);

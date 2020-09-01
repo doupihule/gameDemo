@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Client_1 = require("../common/kakura/Client");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const UserModel_1 = require("../../game/sys/model/UserModel");
 const TableUtils_1 = require("../utils/TableUtils");
 const CacheManager_1 = require("../manager/CacheManager");
@@ -20,7 +20,7 @@ class SingleCommonServer {
      * @param autoUpdate  ,是否自动同步数据.根据项目需要 判断是否有必要自动同步数据
      * 调用入口在UserModel.initData函数里面 .
      * 如果对于有金币同步频次较高的游戏.建议开启.同时同步频率建议调到30秒以上
-     * 可通过修改 Global.updateUserDataDelay或者SWITCH_UPDATE_USERDATA_CD开关值调整同步频率
+     * 可通过修改 GlobalData.updateUserDataDelay或者SWITCH_UPDATE_USERDATA_CD开关值调整同步频率
      */
     static initData(autoUpdate = false) {
         //获取服务器同步用户数据cd
@@ -28,7 +28,7 @@ class SingleCommonServer {
         if (delayValue) {
             delayValue = Number(delayValue);
             if (delayValue > 0) {
-                Global_1.default.updateUserDataDelay = delayValue;
+                GlobalData_1.default.updateUserDataDelay = delayValue;
             }
             LogsManager_1.default.echo("使用服务器配置的同步cd", delayValue);
         }
@@ -45,11 +45,11 @@ class SingleCommonServer {
         }
         // this.testConn();
         //如果是单人模式才会去定时同步客户端数据
-        if (Global_1.default.checkIsSingleMode()) {
+        if (GlobalData_1.default.checkIsSingleMode()) {
             //暂定10秒同步一次 如果有频繁数据修改需求. 这个值需要调
             // 定时同步功能关闭。云存储不在有延迟同步需求 fix by 黄璐骁
             if (autoUpdate) {
-                TimerManager_1.default.instance.add(this.startSaveClientData, this, Global_1.default.updateUserDataDelay, 9999999);
+                TimerManager_1.default.instance.add(this.startSaveClientData, this, GlobalData_1.default.updateUserDataDelay, 9999999);
             }
         }
     }
@@ -91,7 +91,7 @@ class SingleCommonServer {
             WindowManager_1.default.ShowTip("xd 数据已经删除,请重启游戏");
             return;
         }
-        if (!Global_1.default.checkIsSingleMode()) {
+        if (!GlobalData_1.default.checkIsSingleMode()) {
             //非单机项目的数据同步
             if (Object.keys(Client_1.default.temDirtList).length > 0) {
                 var data = Client_1.default.temDirtList;
@@ -192,7 +192,7 @@ class SingleCommonServer {
     }
     //发送非单机项目的数据同步
     static sendNoAliCloudData(params) {
-        if (Global_1.default.checkIsSingleMode())
+        if (GlobalData_1.default.checkIsSingleMode())
             return;
         LogsManager_1.default.echo("开始非单机项目同步数据");
         KakuraClient_1.default.instance.clearOneMethod(this.user_updateData_349);
@@ -238,7 +238,7 @@ class SingleCommonServer {
     }
     //云存储清除账号数据
     static disposeAccount() {
-        if (Global_1.default.checkUserCloudStorage()) {
+        if (GlobalData_1.default.checkUserCloudStorage()) {
             this.disposeCloudStorageAccount();
         }
         else {

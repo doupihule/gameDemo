@@ -98,7 +98,7 @@ export default class TimerManager {
 	/**
 	 * 检测时钟
 	 */
-	public tickHandler(time: number) {
+	public tickHandler() {
 		this.onceUpdateFrame();
 		var timeEntity: TimeEntity;
 		var curTime: number = Client.instance.miniserverTime;
@@ -125,6 +125,11 @@ export default class TimerManager {
 			}
 		}
 		return true;
+	}
+
+	//循环结束后的检测时钟
+	public  tickHandlerLater(){
+		LogsManager.echo("-------------test");
 	}
 
 

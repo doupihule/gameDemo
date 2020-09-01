@@ -1,5 +1,5 @@
 import BaseFunc from "../../../framework/func/BaseFunc";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import UserExtModel from "../model/UserExtModel";
 import TalentSkillsModel from "../model/TalentSkillsModel";
 import GlobalParamsFunc from "./GlobalParamsFunc";
@@ -90,7 +90,7 @@ export default class TalentFunc extends BaseFunc {
 			var skillInfo = this.getTalentInfoByLevel(talentInfo[i], skilllevel + 1);
 			weightArr.push(talentInfo[i] + "," + skillInfo.skillUpdateWeight);
 		}
-		var randResult = GameUtils.getWeightItem(weightArr);
+		var randResult = GameTools.getWeightItem(weightArr);
 		return randResult[0];
 	}
 }

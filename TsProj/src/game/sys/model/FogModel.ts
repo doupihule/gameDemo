@@ -9,7 +9,7 @@ import {WindowCfgs} from "../consts/WindowCfgs";
 import Message from "../../../framework/common/Message";
 import FogEvent from "../event/FogEvent";
 import RolesModel from "./RolesModel";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import FogPropTrigger from "../../fog/trigger/FogPropTrigger";
 import TableUtils from "../../../framework/utils/TableUtils";
 import BattleFunc from "../func/BattleFunc";
@@ -440,7 +440,7 @@ export default class FogModel extends BaseModel {
 			}
 		}
 
-		var roleList = GameUtils.getRandomArrayElements(allRoleList, count);
+		var roleList = GameTools.getRandomArrayElements(allRoleList, count);
 		for (var i = 0; i < roleList.length; i++) {
 			if (allRole.hasOwnProperty(roleList[i])) {
 				roleIdList.push(roleList[i]);
@@ -474,7 +474,7 @@ export default class FogModel extends BaseModel {
 			randomArr.push(String(arr[i]));
 		}
 
-		var randomNum = GameUtils.getRandomInt(0, randomArr.length - 1);
+		var randomNum = GameTools.getRandomInt(0, randomArr.length - 1);
 		return randomArr[randomNum];
 	}
 

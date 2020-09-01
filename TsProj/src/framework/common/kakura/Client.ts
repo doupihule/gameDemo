@@ -632,7 +632,7 @@ export default class Client {
 
 
 	public  getNativeTime(){
-		return GameUtils.CommonUtil.GetTimeMiniStamp() as any;
+		return Number( GameUtils.CommonUtil.GetTimeMiniStamp());
 	}
 
 

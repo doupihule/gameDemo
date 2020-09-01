@@ -1,5 +1,5 @@
 import BaseFunc from "../../../framework/func/BaseFunc";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 
 /**技能相关 */
 export default class SkillFunc extends BaseFunc {
@@ -45,7 +45,7 @@ export default class SkillFunc extends BaseFunc {
 			case 7:
 				value = param[1];
 				if (Number(param[1]) > 10000) {
-					value = GameUtils.getShowNum(Number(param[1]));
+					value = GameTools.getShowNum(Number(param[1]));
 				}
 				break;
 			case 8:

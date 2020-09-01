@@ -1,6 +1,63 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseViewExpand_1 = require("./BaseViewExpand");
+const UICompConst_1 = require("../consts/UICompConst");
+const ViewTools_1 = require("./ViewTools");
+const LogsManager_1 = require("../manager/LogsManager");
+const Message_1 = require("../common/Message");
 class UIBaseView extends BaseViewExpand_1.default {
+    constructor() {
+        super();
+        this.uitype = UICompConst_1.default.comp_ui;
+    }
+    setCObject(cui) {
+        super.setCObject(cui);
+        this.bindChild(cui);
+    }
+    //bing子对象
+    bindChild(cuiobj, parentViewInstance = null, path = "") {
+        var transform = cuiobj.transform;
+        var childCount = transform.childCount;
+        if (childCount == 0) {
+            return;
+        }
+        for (var i = childCount - 1; i >= 0; i--) {
+            var childTrans = transform.GetChild(i);
+            var name = childTrans.name;
+            var uiType = name.split("_")[0];
+            var className = UICompConst_1.default.classMap[uiType];
+            if (className) {
+                var childGameObj = childTrans.gameObject;
+                var childViewInstance = ViewTools_1.default.autoBindingCObj(childGameObj, true);
+                if (this[name] != null) {
+                    //子对象名字重复 只打警告
+                    LogsManager_1.default.warn("有子对象名字重复了" + path + "." + name);
+                }
+                else {
+                    this[name] = childViewInstance;
+                }
+                //给父对象也绑定这个属性. 这样可以形成链式访问 .比如 a.b.c
+                if (parentViewInstance) {
+                    parentViewInstance[name] = childViewInstance;
+                }
+                if (uiType != UICompConst_1.default.comp_scroll && uiType != UICompConst_1.default.comp_list) {
+                    this.bindChild(childGameObj, childViewInstance, path + name);
+                }
+            }
+        }
+    }
+    //设置窗口名字
+    setWindowName(name) {
+        this.windowName = name;
+        this.name = name;
+    }
+    setData(data) {
+    }
+    close() {
+    }
+    dispose() {
+        super.dispose();
+        Message_1.default.instance.removeObjEvents(this);
+    }
 }
 exports.default = UIBaseView;

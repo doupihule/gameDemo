@@ -11,7 +11,7 @@ import WindowManager from "./WindowManager";
 import Message from "../common/Message";
 import JumpEvent from "../event/JumpEvent";
 import {AdResponse} from "../platform/AdResponse";
-import GameUtils from "../../utils/GameUtils";
+import GameTools from "../../utils/GameTools";
 import {JumpFunc} from "../func/JumpFunc";
 import KariqiShareManager from "./KariqiShareManager";
 import WindowCommonCfgs from "../consts/WindowCommonCfgs";
@@ -577,8 +577,8 @@ export default class JumpManager {
 		this.data.sort(function (a, b) {
 			return a.Position - b.Position
 		})
-		var randNum1 = GameUtils.getRandomInt(2, this.data.length - 1);
-		var randNum2 = GameUtils.getRandomInt(2, this.data.length - 1);
+		var randNum1 = GameTools.getRandomInt(2, this.data.length - 1);
+		var randNum2 = GameTools.getRandomInt(2, this.data.length - 1);
 		if (randNum2 == randNum1) {
 			randNum2 = (randNum1 > 2) ? (randNum1 - 1) : (randNum1 + 1);
 		}
@@ -678,7 +678,7 @@ export default class JumpManager {
 	/**获取随机到的icon下标 */
 	static getGroupRandomIndex(arr = []) {
 		if (arr.length == 0) return 1;
-		var index = GameUtils.getRandomInt(0, arr.length - 1);
+		var index = GameTools.getRandomInt(0, arr.length - 1);
 		var result = arr[index];
 		for (var i = arr.length - 1; i >= 0; i--) {
 			if (i == index) {
@@ -753,7 +753,7 @@ export default class JumpManager {
 	/**获取指色文本背景色 */
 	static getZhiseLabelBg(index = null) {
 		if (!index) {
-			index = GameUtils.getRandomInt(1, 9);
+			index = GameTools.getRandomInt(1, 9);
 		}
 		return "uisource/jump/jump/" + index + ".png"
 	}
@@ -761,7 +761,7 @@ export default class JumpManager {
 	/**获取两个随机的标index */
 	static getTwoRandom(min, max, data) {
 		if (data.length == 2) return;
-		var item = GameUtils.getRandomInt(min, max);
+		var item = GameTools.getRandomInt(min, max);
 		if (data.indexOf(item) == -1) {
 			data.push(item);
 		}

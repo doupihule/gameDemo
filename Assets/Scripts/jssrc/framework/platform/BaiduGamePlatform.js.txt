@@ -4,7 +4,7 @@ exports.BaiduGamePlatform = void 0;
 const TTGamePlatform_1 = require("./TTGamePlatform");
 const LogsManager_1 = require("../manager/LogsManager");
 const UserInfo_1 = require("../common/UserInfo");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const StatisticsManager_1 = require("../../game/sys/manager/StatisticsManager");
 const StatisticsCommonConst_1 = require("../consts/StatisticsCommonConst");
 const WindowManager_1 = require("../manager/WindowManager");
@@ -98,9 +98,9 @@ class BaiduGamePlatform extends TTGamePlatform_1.default {
                                 "params": {
                                     "code": res.code,
                                     "anonymous_code": myThis._swanid,
-                                    "device": Global_1.default.deviceModel,
+                                    "device": GlobalData_1.default.deviceModel,
                                     "comeFrom": UserInfo_1.default.LoginSceneInfo,
-                                    "sceneId": String(Global_1.default.sceneId),
+                                    "sceneId": String(GlobalData_1.default.sceneId),
                                     "swanid_signature": myThis._swanid_signature
                                 }
                             };
@@ -120,9 +120,9 @@ class BaiduGamePlatform extends TTGamePlatform_1.default {
                     "params": {
                         "code": "",
                         "anonymous_code": this._swanid,
-                        "device": Global_1.default.deviceModel,
+                        "device": GlobalData_1.default.deviceModel,
                         "comeFrom": UserInfo_1.default.LoginSceneInfo,
-                        "sceneId": String(Global_1.default.sceneId),
+                        "sceneId": String(GlobalData_1.default.sceneId),
                         "swanid_signature": this._swanid_signature
                     }
                 };
@@ -267,7 +267,7 @@ class BaiduGamePlatform extends TTGamePlatform_1.default {
      * 是否从小程序收藏进入
      */
     isFromFavourite() {
-        if (Global_1.default.currentSceneId != "1201001000000000") {
+        if (GlobalData_1.default.currentSceneId != "1201001000000000") {
             return false;
         }
         return true;

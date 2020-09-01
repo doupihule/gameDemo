@@ -114,7 +114,7 @@ namespace GameUtils
 
         //---------------------------transform---------------------------------
         
-        public static void setObj2dPos(RectTransform trans, float x, float y)
+        public static void SetObj2dPos(RectTransform trans, float x, float y)
         {
             _tempVec2.x = x;
             _tempVec2.y = y;
@@ -172,7 +172,30 @@ namespace GameUtils
         }
 
 
+        public static Vector3 initVec3(float x, float y, float z)
+        {
+            _tempVec3.x = x;
+            _tempVec3.y = y;
+            _tempVec3.z = z;
+            return _tempVec3;
+        }
 
+        public static Vector2 initVec2(float x, float y)
+        {
+            _tempVec2.x = x;
+            _tempVec2.y = y;
+            return _tempVec2;
+        }
+
+        //初始化颜色
+        public static Color initColor(int r, int g, int b, int a)
+        {
+            _tempColor.r = r;
+            _tempColor.g = g;
+            _tempColor.b = b;
+            _tempColor.a = a;
+            return _tempColor;
+        }
     }
 }
 

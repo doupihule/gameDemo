@@ -7,7 +7,7 @@ const TimerManager_1 = require("../manager/TimerManager");
 const TranslateFunc_1 = require("../func/TranslateFunc");
 const WindowManager_1 = require("../manager/WindowManager");
 const ErrorCode_1 = require("../../game/sys/common/kakura/ErrorCode");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const Client_1 = require("./kakura/Client");
 const PackConfigManager_1 = require("../manager/PackConfigManager");
 class HttpMessage {
@@ -149,7 +149,7 @@ class HttpMessage {
                 if ((!platforms[i].result) || platforms[i].error) {
                     var errs = (platforms[i].error) || { code: ErrorCode_1.default.webOffline };
                     //如果是云存储的 那么直接做失败回调
-                    if (Global_1.default.checkUserCloudStorage()) {
+                    if (GlobalData_1.default.checkUserCloudStorage()) {
                         this.onHttpError({ error: errs });
                         return;
                     }

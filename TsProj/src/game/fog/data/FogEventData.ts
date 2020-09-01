@@ -7,7 +7,7 @@ import FogEventTrigger from "../trigger/FogEventTrigger";
 import FogModel from "../../sys/model/FogModel";
 import RolesFunc from "../../sys/func/RolesFunc";
 import FogConst from "../../sys/consts/FogConst";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import FogServer from "../../sys/server/FogServer";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
 import FogInstanceCell from "../instance/FogInstanceCell";
@@ -206,7 +206,7 @@ export default class FogEventData {
 			}
 			//敌人事件还没有ai 的 随机确定一个ai
 			if (!this.eventData.ai) {
-				var ai = GameUtils.getWeightItem(this.enemyData.aiList)[0];
+				var ai = GameTools.getWeightItem(this.enemyData.aiList)[0];
 				this.eventData["ai"] = ai
 				//敌人类型为npc的确定一个名字
 				if (this.enemyType == FogConst.FOG_EVENT_ENEMY_TYPE_NPC && !this.eventData.name) {
@@ -332,7 +332,7 @@ export default class FogEventData {
 				for (var i = 0; i < params.length; i++) {
 					dropId = params[i][0];
 					dropArr = FogFunc.instance.getDropGroupReward(dropId);
-					itemArr.push(GameUtils.getWeightItem(dropArr));
+					itemArr.push(GameTools.getWeightItem(dropArr));
 				}
 				this.rewardArr = itemArr;
 				//保存事件随机出的奖励

@@ -16,7 +16,7 @@ class BaseFunc {
         }
         BaseFunc.globalCfgsHasLoad = true;
         var congfigName = this._globalConfigsName;
-        if (GameUtils_1.default.isReview) {
+        if (GameTools_1.default.isReview) {
             congfigName = this._globalConfigsReviewName;
         }
         this._globalConfigMap = ResourceManager_1.default.getResTxt(congfigName);
@@ -401,4 +401,4 @@ const MsgCMD_1 = require("../../game/sys/common/MsgCMD");
 const LogsErrorCode_1 = require("../consts/LogsErrorCode");
 const GameSwitch_1 = require("../common/GameSwitch");
 const TableUtils_1 = require("../utils/TableUtils");
-const GameUtils_1 = require("../../utils/GameUtils");
+const GameTools_1 = require("../../utils/GameTools");

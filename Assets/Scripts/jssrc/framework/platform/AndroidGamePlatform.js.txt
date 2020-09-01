@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const MusicConst_1 = require("./../../game/sys/consts/MusicConst");
 const WindowCfgs_1 = require("./../../game/sys/consts/WindowCfgs");
 const GamePlatform_1 = require("./GamePlatform");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const UserInfo_1 = require("../common/UserInfo");
 const MainModule_1 = require("../manager/MainModule");
 const NativeBridge_1 = require("../native/NativeBridge");
@@ -17,7 +17,7 @@ const WindowManager_1 = require("../manager/WindowManager");
 const Message_1 = require("../common/Message");
 const WXGamePlatform_1 = require("./WXGamePlatform");
 const TableUtils_1 = require("../utils/TableUtils");
-const GameUtils_1 = require("../../utils/GameUtils");
+const GameTools_1 = require("../../utils/GameTools");
 const MethodCommon_1 = require("../common/kakura/MethodCommon");
 const SoundManager_1 = require("../manager/SoundManager");
 const ScreenAdapterTools_1 = require("../utils/ScreenAdapterTools");
@@ -79,7 +79,7 @@ class AndroidGamePlatform extends GamePlatform_1.default {
         //初始化头条sdk
         this.initTTADSdk();
         //如果是 云储存
-        if (Global_1.default.checkUserCloudStorage()) {
+        if (GlobalData_1.default.checkUserCloudStorage()) {
             return;
         }
         this.changeLeftTask(-1, "getLoginResult");
@@ -133,14 +133,14 @@ class AndroidGamePlatform extends GamePlatform_1.default {
     }
     //请求global
     _startReqGlobal() {
-        var deviceId = Global_1.default.deviceId;
+        var deviceId = GlobalData_1.default.deviceId;
         //登入放到获取到native信息之后处理
         var params = {
             "method": this.getGlobalMethod(),
             "params": {
                 "passport": deviceId,
                 "password": '',
-                "device": Global_1.default.deviceModel,
+                "device": GlobalData_1.default.deviceModel,
                 "childChannelId": this.getChildChannelKey()
             }
         };
@@ -197,7 +197,7 @@ class AndroidGamePlatform extends GamePlatform_1.default {
     addUpdateListener() {
         var appCache = window["appcache"];
         //设置缓存的版本号.下次更新直接拉取最新的版本
-        var targetVersion = Global_1.default.version;
+        var targetVersion = GlobalData_1.default.version;
         LogsManager_1.default.echo("version setVMSVersion:" + targetVersion, "hotfixSwitch:", GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_HOTFIX));
         this.changeLeftTask(-1, "addUpdateListener");
         //必须是 开启热更状态才会去覆盖本地版本
@@ -276,13 +276,13 @@ class AndroidGamePlatform extends GamePlatform_1.default {
         // serverVersion =String( (Number( this.getAPPCacheVersion() ) || 1) +1  ) ;
         LogsManager_1.default.echo("serverVersion:" + serverVersion);
         //如果是测试渠道 而且版本号是1
-        if (UserInfo_1.default.isTest() && Global_1.default.version == "1") {
+        if (UserInfo_1.default.isTest() && GlobalData_1.default.version == "1") {
             return;
         }
         var __projectConfig = window["__projectConfig"];
         var minVersion = __projectConfig && __projectConfig.APP_BUILD_NUM || 1;
         minVersion = Number(minVersion);
-        var localNum = Number(Global_1.default.version);
+        var localNum = Number(GlobalData_1.default.version);
         var targetVersion = this.getAPPCacheVersion();
         var serverNum = 0;
         if (!serverVersion) {
@@ -295,8 +295,8 @@ class AndroidGamePlatform extends GamePlatform_1.default {
         }
         //直接取服务器的版本和客户端打包的版本最对比.  默认直接用服务器的版. 但如果客户端打包版本号比服务器版本号高. 那么表示采用打包版本号
         var resultVersion = Math.max(minVersion, serverNum);
-        Global_1.default.version = String(resultVersion);
-        LogsManager_1.default.echo("GlobalVersion:" + Global_1.default.version, "server:", serverVersion, "buildVersion:", minVersion);
+        GlobalData_1.default.version = String(resultVersion);
+        LogsManager_1.default.echo("GlobalVersion:" + GlobalData_1.default.version, "server:", serverVersion, "buildVersion:", minVersion);
     }
     //获取app缓存的版本号
     getAPPCacheVersion() {
@@ -312,7 +312,7 @@ class AndroidGamePlatform extends GamePlatform_1.default {
         return "vmsVersion" + PackConfigManager_1.default.ins.platform.platform;
     }
     canAdv() {
-        if (!GameUtils_1.default.canVideo) {
+        if (!GameTools_1.default.canVideo) {
             return false;
         }
         //如果是套壳包 不能看广告
@@ -327,11 +327,11 @@ class AndroidGamePlatform extends GamePlatform_1.default {
     //android平台的versionjson 一定要和 appcache的version同步. 否则会出现版本错乱
     getVersionName() {
         var appCache = window["appcache"];
-        var targetVersion = Global_1.default.version;
+        var targetVersion = GlobalData_1.default.version;
         if (appCache) {
             targetVersion = appCache.getResourceID(this.getCacheKey());
             if (!targetVersion) {
-                targetVersion = Global_1.default.version;
+                targetVersion = GlobalData_1.default.version;
             }
         }
         LogsManager_1.default.echo("getVersionName:" + targetVersion);

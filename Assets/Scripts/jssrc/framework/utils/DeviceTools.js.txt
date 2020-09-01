@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("./GlobalData");
 const LogsManager_1 = require("../manager/LogsManager");
 const GameSwitch_1 = require("../common/GameSwitch");
 class DeviceTools {
@@ -13,7 +13,7 @@ class DeviceTools {
         }
         //标记已经检查过了不用重复检查
         this._hasCheckDevice = true;
-        var deviceModel = Global_1.default.deviceModel;
+        var deviceModel = GlobalData_1.default.deviceModel;
         //测试设备
         // deviceModel = "iPhone 6("
         if (this.lowDeviceGroup.indexOf(deviceModel) != -1) {

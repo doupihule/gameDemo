@@ -1,89 +1,63 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const ViewTools_1 = require("./framework/components/ViewTools");
+const GlobalData_1 = require("./framework/utils/GlobalData");
 const LogsManager_1 = require("./framework/manager/LogsManager");
 const MainModule_1 = require("./framework/manager/MainModule");
-const StatisticsManager_1 = require("./game/sys/manager/StatisticsManager");
-const CacheManager_1 = require("./framework/manager/CacheManager");
-const StorageCode_1 = require("./game/sys/consts/StorageCode");
+const PackConfigManager_1 = require("./framework/manager/PackConfigManager");
+const FileUtils_1 = require("./framework/utils/FileUtils");
+const EngineExpand_1 = require("./framework/engine/EngineExpand");
+const FrameWorkHandle_1 = require("./game/sys/manager/FrameWorkHandle");
+const BaseFunc_1 = require("./framework/func/BaseFunc");
 const UserInfo_1 = require("./framework/common/UserInfo");
+const TimerManager_1 = require("./framework/manager/TimerManager");
+const ScreenAdapterTools_1 = require("./framework/utils/ScreenAdapterTools");
 class Main {
     constructor() {
-        console.log("globa;Evn:", global);
-        // BaseFunc.setCfgExportType(BaseFunc.exportType_New);
-        //
-        // //初始化全就
-        // this.initWindowEnv();
-        // FrameWorkHandle.init();
-        //
-        // PackConfigManager.initCfgs();
-        // UserInfo.init();
-        // if (UserInfo.isSystemIos()) {
-        // 	UserInfo.adMediaType = PlatformIdType.adMedia_gdt;
-        // }
-        //
-        // FileUtils.initRootCachePath();
-        // //初始化引擎扩展
-        // EngineExpand.initEngineExpand();
-        //
-        //
-        // this.checkIsNew();
-        // UserInfo.platform.setSystemInfo();
-        // if (Global.isNew()) {
-        // 	StatisticsManager.ins.onEvent(StatisticsCommonConst.NEW_LOADING_1);
-        // } else {
-        // 	StatisticsManager.ins.onEvent(StatisticsCommonConst.LOADING_1);
-        // }
-        //
-        //
-        // this.showMainModule();
-        // if (UserInfo.isWX() || UserInfo.isTT()) {
-        // 	JumpManager.setJumpChannel(JumpConst.JUMP_CHANNEL_KARIQU);
-        // 	KariquShareConst.initKariquUrl(GameConsts.kariquUrlMap);
-        // 	JumpManager.setKariquList({
-        // 		1: {
-        // 			url: GameConsts.JUMP_KARIQU_REDIRECT_LIST_URL,
-        // 			type: JumpConst.JUMP_KARIQU_LEFTSIDE,
-        // 		},
-        // 		2: {
-        // 			url: GameConsts.JUMP_KARIQU_REDIRECT_LIST_URL,
-        // 			type: JumpConst.JUMP_KARIQU_BATTLEICON,
-        // 		},
-        // 		3: {
-        // 			url: GameConsts.JUMP_KARIQU_REDIRECT_LIST_URL,
-        // 			type: JumpConst.JUMP_KARIQU_BANNER,
-        // 		},
-        //
-        // 	});
-        // } else {
-        // 	JumpManager.setJumpChannel(JumpConst.JUMP_CHANNEL_FANTASY);
-        // }
-        //
-        // DisplayUtils.adjustLabelPos();
+        if (!global.window) {
+            //赋值global.window 为global. 兼容web标准 .
+            global.window = global;
+        }
+        var thisObj = this;
+        global.initGame = function (stageRoot, uiRoot) {
+            GlobalData_1.default.initStage(stageRoot, uiRoot);
+            ViewTools_1.default.init();
+            BaseFunc_1.default.setCfgExportType(BaseFunc_1.default.exportType_New);
+            var size = GlobalData_1.default.uiRoot.getViewRect();
+            ScreenAdapterTools_1.default.checkScreenFixMode(size.x, size.y);
+            // //初始化全局变量
+            thisObj.initWindowEnv();
+            FrameWorkHandle_1.default.init();
+            //
+            PackConfigManager_1.default.initCfgs();
+            UserInfo_1.default.init();
+            if (UserInfo_1.default.isSystemIos()) {
+                UserInfo_1.default.adMediaType = UserInfo_1.PlatformIdType.adMedia_gdt;
+            }
+            FileUtils_1.default.initRootCachePath();
+            //初始化引擎扩展
+            EngineExpand_1.default.initEngineExpand();
+            UserInfo_1.default.platform.setSystemInfo();
+            new MainModule_1.default();
+        };
+        this.showMainModule();
     }
     showMainModule() {
-        new MainModule_1.default();
     }
     /**打点-激活数据上传到阿里云 */
     checkIsNew() {
-        var isNewStr = StorageCode_1.default.storage_isNewPlayer;
-        var isNewSta = CacheManager_1.default.instance.getFileStorageCache(isNewStr);
-        var isNew = isNewSta == "0" || !isNewSta;
-        StatisticsManager_1.default.isNewPlayer = isNew;
-        if (!UserInfo_1.default.isWeb()) {
-            LogsManager_1.default.sendActiveToAiCloud(isNew ? 1 : 0);
-        }
-        CacheManager_1.default.instance.setFileStorageCache(isNewStr, true);
     }
     //初始化全局变量
     initWindowEnv() {
         if (!window["LogsManager"]) {
             window["LogsManager"] = LogsManager_1.default;
         }
-        //全局封装一个LogsTools变量, 如果修改了底层源码的地方 全部改用LogsTools,防止因为LogsManager因为被加密导致访问不到
-        window["LogsTools"] = LogsManager_1.default;
         if (!window["UserInfo"]) {
             window["UserInfo"] = UserInfo_1.default;
         }
+        //赋值timemanager
+        window["TimeManager"] = TimerManager_1.default;
+        window["GlobalData"] = GlobalData_1.default;
     }
 }
 //激活启动类

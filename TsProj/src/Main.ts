@@ -1,7 +1,5 @@
 
-import ImageExpand from "./framework/components/ImageExpand";
-import ButtonExpand from "./framework/components/ButtonExpand";
-
+import ViewTools from "./framework/components/ViewTools";
 
 import GlobalData from "./framework/utils/GlobalData";
 import LogsManager from "./framework/manager/LogsManager";
@@ -22,6 +20,8 @@ import UserInfo, {PlatformIdType} from "./framework/common/UserInfo";
 import KariquShareConst from "./framework/consts/KariquShareConst";
 import GameConsts from "./game/sys/consts/GameConsts";
 import TimerManager from "./framework/manager/TimerManager";
+import ResourceManager from "./framework/manager/ResourceManager";
+import ScreenAdapterTools from "./framework/utils/ScreenAdapterTools";
 
 declare  var global;
 class Main {
@@ -30,24 +30,35 @@ class Main {
 			//赋值global.window 为global. 兼容web标准 .
 			global.window = global
 		}
-		BaseFunc.setCfgExportType(BaseFunc.exportType_New);
 
-		// //初始化全局变量
-		this.initWindowEnv();
-		FrameWorkHandle.init();
-		//
-		PackConfigManager.initCfgs();
-		UserInfo.init();
-		if (UserInfo.isSystemIos()) {
-			UserInfo.adMediaType = PlatformIdType.adMedia_gdt;
+		var thisObj = this;
+		global.initGame = function(stageRoot,uiRoot){
+			GlobalData.initStage(stageRoot,uiRoot);
+			ViewTools.init()
+			BaseFunc.setCfgExportType(BaseFunc.exportType_New);
+			var  size = GlobalData.uiRoot.getViewRect();
+			ScreenAdapterTools.checkScreenFixMode(size.x, size.y)
+			// //初始化全局变量
+			thisObj.initWindowEnv();
+			FrameWorkHandle.init();
+			//
+			PackConfigManager.initCfgs();
+			UserInfo.init();
+			if (UserInfo.isSystemIos()) {
+				UserInfo.adMediaType = PlatformIdType.adMedia_gdt;
+			}
+
+			FileUtils.initRootCachePath();
+			//初始化引擎扩展
+			EngineExpand.initEngineExpand();
+
+			UserInfo.platform.setSystemInfo();
+
+			new MainModule();
 		}
 
-		FileUtils.initRootCachePath();
-		//初始化引擎扩展
-		EngineExpand.initEngineExpand();
 
-		this.checkIsNew();
-		UserInfo.platform.setSystemInfo();
+
 
 
 		this.showMainModule();
@@ -57,19 +68,11 @@ class Main {
 
 
 	showMainModule() {
-		new MainModule();
+
 	}
 
 	/**打点-激活数据上传到阿里云 */
 	checkIsNew() {
-		var isNewStr = StorageCode.storage_isNewPlayer;
-		var isNewSta = CacheManager.instance.getFileStorageCache(isNewStr);
-		var isNew = isNewSta == "0" || !isNewSta;
-		StatisticsManager.isNewPlayer = isNew;
-		if (!UserInfo.isWeb()) {
-			LogsManager.sendActiveToAiCloud(isNew ? 1 : 0);
-		}
-		CacheManager.instance.setFileStorageCache(isNewStr, true);
 	}
 
 	//初始化全局变量
@@ -84,6 +87,7 @@ class Main {
 		}
 		//赋值timemanager
 		window["TimeManager"] = TimerManager;
+		window["GlobalData"] = GlobalData;
 	}
 }
 

@@ -201,7 +201,6 @@ export class WindowCfgs {
 					path: ResultJumpUI,
 					modalAlpha: 0.01,
 					group: ["gameui/jump/ResultJump.scene",],
-					subPackage: ["uisource", "atlas_source"]
 				},
 
 				[WindowCfgs.JumpListUI]: {
@@ -209,18 +208,14 @@ export class WindowCfgs {
 					path: JumpListUI,
 					modalAlpha: 0.01,
 					group: ["gameui/jump/JumpList.scene",],
-					subPackage: ["uisource", "atlas_source"]
 				},
 				[WindowCfgs.GameMainUI]: {
 					path: GameMainUI,
-					group: ["native/GameMain.scene"],
-					subPackage: ["uisource", "atlas_source"],
+					prefabPath : "main",
 					full: true
 				},
 				[WindowCfgs.BattleUI]: {
 					path: BattleUI,
-					group: ["gameui/battle/Battle.scene"],
-					subPackage: ["uisource", "atlas_source", "scene_battle01"],
 					full: true
 				},
 

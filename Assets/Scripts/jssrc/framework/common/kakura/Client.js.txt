@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const KakuraClient_1 = require("./KakuraClient");
 const HashMap_1 = require("../../utils/HashMap");
 const PackConfigManager_1 = require("../../manager/PackConfigManager");
-const Global_1 = require("../../../utils/Global");
+const GlobalData_1 = require("../../utils/GlobalData");
 const ErrCodeManager_1 = require("../../manager/ErrCodeManager");
 const UserModel_1 = require("../../../game/sys/model/UserModel");
 const NotifyManager_1 = require("../../manager/NotifyManager");
@@ -16,6 +16,7 @@ const ErrorCode_1 = require("../../../game/sys/common/kakura/ErrorCode");
 const UserInfo_1 = require("../UserInfo");
 const MethodCommon_1 = require("./MethodCommon");
 const GameHttpControler_1 = require("../GameHttpControler");
+const csharp_1 = require("csharp");
 class Client {
     constructor() {
         this._requestId = 0;
@@ -60,7 +61,7 @@ class Client {
         this._callback = callback;
         this._thisObj = thisObj;
         this._url = PackConfigManager_1.default.ins.platform.kakura_url;
-        this._version = Global_1.default.version;
+        this._version = GlobalData_1.default.version;
         this._upgrade = PackConfigManager_1.default.ins.platform.upgrade_path;
         this._sec = PackConfigManager_1.default.ins.platform.sec;
         this._kakuraInitParams = this.getKakuraInitMsg(userInfo, invitedBy, shareInfo);
@@ -102,7 +103,7 @@ class Client {
      */
     send(method, param, callback, thisObj, opcode = this.OPCODE_BACKEND_REQUEST, isWait = true, addParam = null, expandParams = null) {
         //如果是云存储
-        if (Global_1.default.checkUserCloudStorage()) {
+        if (GlobalData_1.default.checkUserCloudStorage()) {
             this.saveDataToCloud(param, callback, thisObj, addParam, expandParams);
         }
         else {
@@ -118,7 +119,7 @@ class Client {
                 }
             }
             if (opcode == this.OPCODE_BACKEND_REQUEST) {
-                if (Global_1.default.checkIsSingleMode()) {
+                if (GlobalData_1.default.checkIsSingleMode()) {
                     if (!param.clientDirty) {
                         param.clientDirty = SingleCommonServer_1.default.getClientDirtyList();
                     }
@@ -253,7 +254,7 @@ class Client {
             var param = { token: this._token };
             param.ver = this._version;
             param.upgrade = this._upgrade;
-            param.deviceId = Global_1.default.deviceId;
+            param.deviceId = GlobalData_1.default.deviceId;
             KakuraClient_1.default.instance.sendRequest(this.OPCODE_KAKURA_REAUTH, MethodCommon_1.default.User_kakuraReauth, param, this.relogin, this, true, true);
         }
     }
@@ -330,7 +331,7 @@ class Client {
             "gs_token": this._gs_token,
             "sec": this._sec,
             "account_id": "1",
-            "deviceId": Global_1.default.deviceId
+            "deviceId": GlobalData_1.default.deviceId
         };
         if (invitedBy != "" && shareInfo != "") {
             params["invitedBy"] = invitedBy;
@@ -426,7 +427,7 @@ class Client {
             return;
         }
         expandParams = expandParams || this._defaultExpandParams;
-        var url = Global_1.default.global_url;
+        var url = GlobalData_1.default.global_url;
         params.sendTime = this.serverTime;
         var thisValue = this;
         var onErrorBack = (errorInfo) => {
@@ -479,7 +480,7 @@ class Client {
         //如果走强制连接的请求 需要走GameHttpControler
         if (UserInfo_1.default.isUseHttpServer && expandParams.forceConnect) {
             webParams.url = url;
-            expandParams.url = Global_1.default.global_url;
+            expandParams.url = GlobalData_1.default.global_url;
             GameHttpControler_1.default.instance.sendRequest(method, params, callback, thisObj, true, false, addParam, expandParams);
         }
         else {
@@ -525,7 +526,7 @@ class Client {
         return state;
     }
     getNativeTime() {
-        return 0;
+        return Number(csharp_1.GameUtils.CommonUtil.GetTimeMiniStamp());
     }
 }
 exports.default = Client;

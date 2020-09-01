@@ -5,7 +5,7 @@ const Message_1 = require("../../common/Message");
 const LogsManager_1 = require("../../manager/LogsManager");
 const WindowEvent_1 = require("../../event/WindowEvent");
 const WindowManager_1 = require("../../manager/WindowManager");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 /**
  * 置顶View自动显示组件基类
  *
@@ -75,7 +75,7 @@ class TopViewAutoComp {
      */
     _checkUIState(force = false) {
         if (this._parentName) {
-            LogsManager_1.default.echo("hlx TopViewAutoComp _parentName:", GameUtils_1.default.decryptStr(this._parentName), " CurrentWindowName:", GameUtils_1.default.decryptStr(WindowManager_1.default.getCurrentWindowName()));
+            LogsManager_1.default.echo("hlx TopViewAutoComp _parentName:", GameTools_1.default.decryptStr(this._parentName), " CurrentWindowName:", GameTools_1.default.decryptStr(WindowManager_1.default.getCurrentWindowName()));
             if (this._parentName == WindowManager_1.default.getCurrentWindowName()) {
                 this.show(force);
             }

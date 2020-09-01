@@ -1,5 +1,5 @@
 import BaseContainer from "./BaseContainer";
-import { UnityEngine,GameUtils } from "csharp";
+import { UnityEngine } from "csharp";
 import UICompConst from "../consts/UICompConst";
 import ResourceManager from "../manager/ResourceManager";
 import GameConsts from "../../game/sys/consts/GameConsts";
@@ -12,9 +12,7 @@ export default class ImageExpand extends BaseContainer{
 		this.uitype = UICompConst.comp_img;
 	}
 
-	public  setColor(r, g, b, a) {
 
-	}
 
 	//设置皮肤 最好手动指定boundlename
 	public  setSkin(url,boundlename:string = ResourceConst.boundle_uiimage,adjustSize:boolean =false){

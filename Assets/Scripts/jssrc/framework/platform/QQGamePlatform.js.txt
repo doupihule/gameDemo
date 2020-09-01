@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const WXGamePlatform_1 = require("./WXGamePlatform");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const LogsManager_1 = require("../manager/LogsManager");
 const StatisticsManager_1 = require("../../game/sys/manager/StatisticsManager");
 const StatisticsCommonConst_1 = require("../consts/StatisticsCommonConst");
@@ -55,7 +55,7 @@ class QQGamePlatform extends WXGamePlatform_1.default {
      * 是否从小程序收藏进入
      */
     isFromFavourite() {
-        if (Global_1.default.currentSceneId != "3003") {
+        if (GlobalData_1.default.currentSceneId != "3003") {
             return false;
         }
         return true;

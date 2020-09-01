@@ -6,7 +6,7 @@ import UserEvent from "../event/UserEvent";
 import IMessage from "../interfaces/IMessage";
 import MsgCMD from "../common/MsgCMD";
 import UserExtServer from "../server/UserExtServer";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import GameMainEvent from "../event/GameMainEvent";
 import ShareOrTvManager from "../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "../func/ShareTvOrderFunc";
@@ -101,7 +101,7 @@ export default class UserExtModel extends BaseModel implements IMessage {
 
 	/**获取本次游戏是否出现宝箱 */
 	getIsShowGiftInGame() {
-		if (!GameUtils.canGift) return false;
+		if (!GameTools.canGift) return false;
 		var level = this.getMaxLevel();
 		if (level < GlobalParamsFunc.instance.getDataNum("secretBagStartPVP")) return false;
 		var rate = GlobalParamsFunc.instance.getDataByTwoId("secretBagTouchRound", "arr");

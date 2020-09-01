@@ -11,7 +11,7 @@ const WindowManager_1 = require("../manager/WindowManager");
 const TranslateFunc_1 = require("../func/TranslateFunc");
 const UserInfo_1 = require("./UserInfo");
 const PackConfigManager_1 = require("../manager/PackConfigManager");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const TableUtils_1 = require("../utils/TableUtils");
 // import LogsManager from '../manager/LogsManager';
 class GameHttpControler {
@@ -54,8 +54,8 @@ class GameHttpControler {
     }
     //获取serverurl
     getServerUrl() {
-        var version = Global_1.default.version;
-        if (Global_1.default.version == "1" && PackConfigManager_1.default.ins.platform.platform == "test") {
+        var version = GlobalData_1.default.version;
+        if (GlobalData_1.default.version == "1" && PackConfigManager_1.default.ins.platform.platform == "test") {
             version = "100000000";
         }
         return this.httpServerUrl + "&ver=" + version + "&upgrade_path=" + PackConfigManager_1.default.ins.platform.upgrade_path;

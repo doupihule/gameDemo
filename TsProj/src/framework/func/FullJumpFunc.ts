@@ -1,5 +1,5 @@
 import BaseFunc from "./BaseFunc";
-import GameUtils from "../../utils/GameUtils";
+import GameTools from "../../utils/GameTools";
 import LogsManager from "../manager/LogsManager";
 
 export default class FullJumpFunc extends BaseFunc {
@@ -50,7 +50,7 @@ export default class FullJumpFunc extends BaseFunc {
 		var jumpData = this.getCfgDatas("FullJump_json", id, true);
 		if (!jumpData) return false;
 		var jumpProb = jumpData.probab;
-		var randNum = GameUtils.getRandomInt(1, 10000);
+		var randNum = GameTools.getRandomInt(1, 10000);
 		LogsManager.echo("ycn full jump jumpProb:", jumpProb, ",randNum:", randNum);
 		if (randNum <= jumpProb) {
 			return true;

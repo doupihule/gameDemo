@@ -42,7 +42,7 @@ class Global {
         if (sysInfo && sysInfo.platform && sysInfo.platform == "devtools") {
             Global.isDevTools = true;
         }
-        // ScreenAdapterTools.toolBarWidth = Global.IPXOffset;
+        // ScreenAdapterTools.toolBarWidth = GlobalData.IPXOffset;
         LogsManager_1.default.echo(">>>>>system>>>>>>", sysInfo);
     }
     /**获取当前操作系统 */

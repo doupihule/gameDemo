@@ -10,7 +10,7 @@ const GameSwitch_1 = require("../../common/GameSwitch");
 const Message_1 = require("../../common/Message");
 const AdVideoManager_1 = require("../AdVideoManager");
 const StatisticsCommonConst_1 = require("../../consts/StatisticsCommonConst");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 const WindowManager_1 = require("../../manager/WindowManager");
 const TimerManager_1 = require("../../manager/TimerManager");
 const Client_1 = require("../../common/kakura/Client");
@@ -109,7 +109,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
      */
     static create(parent, onErrorCallback = null, callbackObj = null, hideType = TopViewAutoComp_1.TopViewAutoComp.HIDE_TYPE_DESTROY, style = null) {
         var windowName = parent.windowName;
-        LogsManager_1.default.echo("hlx bannerComp create start:", GameUtils_1.default.decryptStr(windowName));
+        LogsManager_1.default.echo("hlx bannerComp create start:", GameTools_1.default.decryptStr(windowName));
         if (!windowName) {
             LogsManager_1.default.errorTag("banner_noparent", "没有传递parent");
             onErrorCallback && onErrorCallback.call(this);
@@ -541,7 +541,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
      * 组件销毁
      */
     destroy(forceDestroy = false) {
-        LogsManager_1.default.echo("hlx banner destroy:", GameUtils_1.default.decryptStr(this._parentName));
+        LogsManager_1.default.echo("hlx banner destroy:", GameTools_1.default.decryptStr(this._parentName));
         this._status = TopViewAutoComp_1.TopViewAutoComp.STATUS_HIDE;
         this._parentName = null;
         this._onErrorCallback = null;

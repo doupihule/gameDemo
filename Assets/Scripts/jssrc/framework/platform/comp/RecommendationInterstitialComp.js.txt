@@ -8,7 +8,7 @@ const UserInfo_1 = require("../../common/UserInfo");
 const GameSwitch_1 = require("../../common/GameSwitch");
 const Message_1 = require("../../common/Message");
 const WindowEvent_1 = require("../../event/WindowEvent");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 class RecommendationInterstitialComp extends TopViewAutoComp_1.TopViewAutoComp {
     /**
      * 初始化组件
@@ -56,7 +56,7 @@ class RecommendationInterstitialComp extends TopViewAutoComp_1.TopViewAutoComp {
      * 创建Banner推广组件：微信
      */
     static create(parent, onErrorCallback = null, onCloseCallback = null, callbackObj = null) {
-        LogsManager_1.default.echo("hlx 推荐插屏 RecommendationInterstitialComp create start:", (parent && parent.windowName) ? GameUtils_1.default.decryptStr(parent.windowName) : null);
+        LogsManager_1.default.echo("hlx 推荐插屏 RecommendationInterstitialComp create start:", (parent && parent.windowName) ? GameTools_1.default.decryptStr(parent.windowName) : null);
         // 不支持的组件直接返回
         if (!RecommendationInterstitialComp.canUse()) {
             onErrorCallback && onErrorCallback.call(this);
@@ -165,7 +165,7 @@ class RecommendationInterstitialComp extends TopViewAutoComp_1.TopViewAutoComp {
      * 组件销毁
      */
     destroy() {
-        LogsManager_1.default.echo("hlx 推荐插屏 InterstitialAd destroy:", GameUtils_1.default.decryptStr(this._parentName));
+        LogsManager_1.default.echo("hlx 推荐插屏 InterstitialAd destroy:", GameTools_1.default.decryptStr(this._parentName));
         super.destroy();
         this._onErrorCallback = null;
         this._onCloseCallback = null;

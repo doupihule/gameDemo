@@ -2,18 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseContainer_1 = require("../../../../framework/components/BaseContainer");
 const ViewTools_1 = require("../../../../framework/components/ViewTools");
-const GlobalEnv_1 = require("../../../../framework/engine/GlobalEnv");
 const TweenTools_1 = require("../../../../framework/components/TweenTools");
 const TimerManager_1 = require("../../../../framework/manager/TimerManager");
-;
+const GlobalData_1 = require("../../../../framework/utils/GlobalData");
 class ReqLoadingUI extends BaseContainer_1.default {
     constructor() {
         super();
-        this.rollAsset = ViewTools_1.default.createLabel("loading...");
-        this.rollAsset.color = "#ffffff";
-        this.rollAsset.fontSize = 24;
-        this.rollAsset.x = GlobalEnv_1.default.uiRoot.width - 150;
-        this.rollAsset.y = GlobalEnv_1.default.uiRoot.height - 50;
+        this.rollAsset = ViewTools_1.default.createLabel("loading...", 100, 30, 24);
+        this.rollAsset.setColor(0xff, 0xff, 0xff);
+        this.rollAsset.x = GlobalData_1.default.uiRoot.width - 150;
+        this.rollAsset.y = GlobalData_1.default.uiRoot.height - 50;
         this.addChild(this.rollAsset);
         this.mouseEnabled = true;
         this.mouseThrough = false;

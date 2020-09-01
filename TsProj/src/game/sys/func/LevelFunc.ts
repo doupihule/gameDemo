@@ -1,5 +1,5 @@
 import BaseFunc from "../../../framework/func/BaseFunc";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import ShareOrTvManager from "../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "./ShareTvOrderFunc";
 import GlobalParamsFunc from "./GlobalParamsFunc";
@@ -147,7 +147,7 @@ export default class LevelFunc extends BaseFunc {
 			var battleAddtionInfo = this.getBattleAddtionById(battleAddtions[i]);
 			weightArr.push(battleAddtions[i] + "," + battleAddtionInfo.weight);
 		}
-		var randResult = GameUtils.getWeightItem(weightArr);
+		var randResult = GameTools.getWeightItem(weightArr);
 
 		return randResult[0];
 	}

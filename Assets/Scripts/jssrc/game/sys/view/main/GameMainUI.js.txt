@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const BaseViewExpand_1 = require("../../../../framework/components/BaseViewExpand");
-class GameMainUI extends BaseViewExpand_1.default {
+const UIBaseView_1 = require("../../../../framework/components/UIBaseView");
+class GameMainUI extends UIBaseView_1.default {
     constructor() {
         super();
     }

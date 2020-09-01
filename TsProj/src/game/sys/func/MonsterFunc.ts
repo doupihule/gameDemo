@@ -1,5 +1,5 @@
 import BaseFunc from "../../../framework/func/BaseFunc";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 
 /**怪物相关 */
 export default class MonsterFunc extends BaseFunc {
@@ -46,14 +46,14 @@ export default class MonsterFunc extends BaseFunc {
 		for (var index in allList) {
 			length++;
 		}
-		var id1 = GameUtils.getRandomInt(1, length);
-		var id2 = GameUtils.getRandomInt(1, length);
+		var id1 = GameTools.getRandomInt(1, length);
+		var id2 = GameTools.getRandomInt(1, length);
 		while (id2 == id1) {
-			id2 = GameUtils.getRandomInt(1, length);
+			id2 = GameTools.getRandomInt(1, length);
 		}
-		var id3 = GameUtils.getRandomInt(1, length);
+		var id3 = GameTools.getRandomInt(1, length);
 		while (id3 == id1 || id3 == id2) {
-			id3 = GameUtils.getRandomInt(1, length);
+			id3 = GameTools.getRandomInt(1, length);
 		}
 		return [allList[id1].name, allList[id2].name, allList[id3].name];
 	}

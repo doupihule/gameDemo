@@ -5,7 +5,7 @@ const FogModel_1 = require("../../sys/model/FogModel");
 const WindowManager_1 = require("../../../framework/manager/WindowManager");
 const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const WindowCfgs_1 = require("../../sys/consts/WindowCfgs");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 const FogConst_1 = require("../../sys/consts/FogConst");
 const FogPropTrigger_1 = require("./FogPropTrigger");
 const FogServer_1 = require("../../sys/server/FogServer");
@@ -212,7 +212,7 @@ class FogEventTrigger {
         var isMove = false;
         //检测后置
         if (back) {
-            var isShow = GameUtils_1.default.getRandomInt(0, 10000) < back[2];
+            var isShow = GameTools_1.default.getRandomInt(0, 10000) < back[2];
             if (isShow) {
                 this.curBehindEvent = back[1];
                 cell.addEventData(back[0]);

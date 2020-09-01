@@ -7,7 +7,7 @@ import {InterstitialAdComp} from "./comp/InterstitialAdComp";
 import {RecommendationInterstitialComp} from "./comp/RecommendationInterstitialComp";
 import BannerAdManager from "../manager/BannerAdManager";
 import ScreenAdapterTools from "../utils/ScreenAdapterTools";
-import GameUtils from "../../utils/GameUtils";
+import GameTools from "../../utils/GameTools";
 import SceneReference from '../consts/SceneReference';
 import OriginalIconAdComp from './comp/OriginalIconAdComp';
 import TimerManager from '../manager/TimerManager';
@@ -291,7 +291,7 @@ export default class AdVideoManager {
 	 * 能否移位误触
 	 */
 	public canBtnMove() {
-		if (!GameUtils.canQuickBanner) {
+		if (!GameTools.canQuickBanner) {
 			LogsManager.echo("ycn MoveButtonOnClick 无banner");
 			return false;
 		}
@@ -327,7 +327,7 @@ export default class AdVideoManager {
 	public bindBtnMove(btnObj, btnCallBack, viewObj, moveX = 0, moveY = 170) {
 		if (!btnObj['clickMoveInit']) {
 			btnObj['clickMoveInit'] = true;
-			btnObj['targetClickNum'] = GameUtils.getRandomInt(2, 3);
+			btnObj['targetClickNum'] = GameTools.getRandomInt(2, 3);
 			btnObj['currentClickNum'] = 0;
 			ScreenAdapterTools.offsetView(btnObj, moveX, moveY);
 

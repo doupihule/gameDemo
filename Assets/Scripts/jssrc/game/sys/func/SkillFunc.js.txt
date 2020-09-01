@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseFunc_1 = require("../../../framework/func/BaseFunc");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 /**技能相关 */
 class SkillFunc extends BaseFunc_1.default {
     //处理用户配表相关接口.用静态方法
@@ -40,7 +40,7 @@ class SkillFunc extends BaseFunc_1.default {
             case 7:
                 value = param[1];
                 if (Number(param[1]) > 10000) {
-                    value = GameUtils_1.default.getShowNum(Number(param[1]));
+                    value = GameTools_1.default.getShowNum(Number(param[1]));
                 }
                 break;
             case 8:

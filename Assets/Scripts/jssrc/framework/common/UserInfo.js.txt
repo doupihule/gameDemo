@@ -169,10 +169,10 @@ UserInfo.paramStr = "";
 UserInfo.urlParams = null;
 //应用平台ID
 // 如果设置为 "tt"，则为头条
-// static platformId = "web";
+UserInfo.platformId = "web";
 // static platformId = "wxgame";
 // static platformId = "qqgame";
-UserInfo.platformId = "tt";
+// static platformId = "tt";
 // static platformId = "oppogame";
 // static platformId = "baidugame";
 // static platformId = "android_master";

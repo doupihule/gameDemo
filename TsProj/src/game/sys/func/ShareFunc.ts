@@ -1,5 +1,5 @@
 import BaseFunc from "../../../framework/func/BaseFunc";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
 import UserInfo from "../../../framework/common/UserInfo";
 import UserModel from "../model/UserModel";
@@ -94,7 +94,7 @@ export default class ShareFunc extends BaseFunc {
 		for (var i = 0; i < datas.length; i++) {
 			weightSum += Number(datas[i]["weight"]);
 		}
-		var randomNum = GameUtils.getRandomInt(0, weightSum - 1);
+		var randomNum = GameTools.getRandomInt(0, weightSum - 1);
 		var curWeight: number = 0;
 		for (var i = 0; i < datas.length; i++) {
 			curWeight += Number(datas[i]["weight"]);

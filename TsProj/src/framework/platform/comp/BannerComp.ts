@@ -7,7 +7,7 @@ import GameSwitch from "../../common/GameSwitch";
 import Message from "../../common/Message";
 import AdVideoManager from "../AdVideoManager";
 import StatisticsCommonConst from "../../consts/StatisticsCommonConst";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import WindowManager from "../../manager/WindowManager";
 import TimerManager from "../../manager/TimerManager";
 import Client from "../../common/kakura/Client";
@@ -168,7 +168,7 @@ export class BannerComp extends TopViewAutoComp {
 	 */
 	static create(parent, onErrorCallback = null, callbackObj = null, hideType = TopViewAutoComp.HIDE_TYPE_DESTROY, style = null) {
 		var windowName = parent.windowName;
-		LogsManager.echo("hlx bannerComp create start:", GameUtils.decryptStr(windowName));
+		LogsManager.echo("hlx bannerComp create start:", GameTools.decryptStr(windowName));
 		if (!windowName) {
 			LogsManager.errorTag("banner_noparent", "没有传递parent");
 			onErrorCallback && onErrorCallback.call(this);
@@ -619,7 +619,7 @@ export class BannerComp extends TopViewAutoComp {
 	 * 组件销毁
 	 */
 	public destroy(forceDestroy: boolean = false) {
-		LogsManager.echo("hlx banner destroy:", GameUtils.decryptStr(this._parentName));
+		LogsManager.echo("hlx banner destroy:", GameTools.decryptStr(this._parentName));
 		this._status = TopViewAutoComp.STATUS_HIDE;
 		this._parentName = null;
 		this._onErrorCallback = null;

@@ -5,12 +5,12 @@ const Message_1 = require("../../../framework/common/Message");
 const UserInfo_1 = require("../../../framework/common/UserInfo");
 const Client_1 = require("../../../framework/common/kakura/Client");
 const GlobalParamsFunc_1 = require("../func/GlobalParamsFunc");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 const CacheManager_1 = require("../../../framework/manager/CacheManager");
 const StorageCode_1 = require("../consts/StorageCode");
 const SingleCommonServer_1 = require("../../../framework/server/SingleCommonServer");
 const GameMainEvent_1 = require("../event/GameMainEvent");
-const Global_1 = require("../../../utils/Global");
+const GlobalData_1 = require("../../../framework/utils/GlobalData");
 const RolesFunc_1 = require("../func/RolesFunc");
 const UserGlobalModel_1 = require("../../../framework/model/UserGlobalModel");
 const BigNumUtils_1 = require("../../../framework/utils/BigNumUtils");
@@ -82,7 +82,7 @@ class UserModel extends BaseModel_1.default {
     }
     getHeadImage() {
         // console.log("my headImg is :", this._data.headImage);
-        var newPath = GameUtils_1.default.getHeadImg(this._data.userInfo.headImage);
+        var newPath = GameTools_1.default.getHeadImg(this._data.userInfo.headImage);
         if (newPath) {
             return newPath;
         }
@@ -305,7 +305,7 @@ class UserModel extends BaseModel_1.default {
         // }
         //因为没有引导 所以登入后就判定为老用户
         // CacheManager.instance.setFileStorageCache(StorageCode.storage_wxGuide, true);
-        if (Global_1.default.isNew()) {
+        if (GlobalData_1.default.isNew()) {
             CacheManager_1.default.instance.setFileStorageCache(StorageCode_1.default.storage_isOldPlayer, true);
         }
     }
@@ -355,7 +355,7 @@ class UserModel extends BaseModel_1.default {
             }
         }
         // 如果没有设置过黑名单，并且
-        if (!this._data.sceneBlack && !SceneReference_1.default.checkWhiteSceneId(Global_1.default.currentSceneId, WhiteListFunc_1.default.TYPE_LOGIN)) {
+        if (!this._data.sceneBlack && !SceneReference_1.default.checkWhiteSceneId(GlobalData_1.default.currentSceneId, WhiteListFunc_1.default.TYPE_LOGIN)) {
             upData["sceneBlack"] = 1;
         }
         upData["userExt"] = upUserExtData;
@@ -429,7 +429,7 @@ class UserModel extends BaseModel_1.default {
             return goodLsit;
         }
         //判断是否过期
-        var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameUtils_1.default.getNextRefreshTByTime(4);
+        var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameTools_1.default.getNextRefreshTByTime(4);
         if (expireTime < Client_1.default.instance.serverTime) {
             return goodLsit;
         }
@@ -443,9 +443,9 @@ class UserModel extends BaseModel_1.default {
     getFogShopExpireTime() {
         var data = this.getData();
         if (!data || !data.fogOuterShop || !Object.keys(data.fogOuterShop.goods).length) {
-            return GameUtils_1.default.getNextRefreshTByTime(4);
+            return GameTools_1.default.getNextRefreshTByTime(4);
         }
-        var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameUtils_1.default.getNextRefreshTByTime(4);
+        var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameTools_1.default.getNextRefreshTByTime(4);
         return expireTime;
     }
     //获取迷雾商店种商品得状态
@@ -454,7 +454,7 @@ class UserModel extends BaseModel_1.default {
         if (!data || !data.fogOuterShop || !data.fogOuterShop.goods || !data.fogOuterShop.goods[index] || !data.fogOuterShop.goods[index].status) {
             return 0;
         }
-        var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameUtils_1.default.getNextRefreshTByTime(4);
+        var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameTools_1.default.getNextRefreshTByTime(4);
         if (expireTime < Client_1.default.instance.serverTime) {
             LogsManager_1.default.echo("whn outshop 已经过期");
             return false;

@@ -1,4 +1,4 @@
-import {UnityEngine, System} from 'csharp'
+import {UnityEngine, System,GameUtils} from 'csharp'
 import {$ref, $unref, $generic, $promise, $typeof} from 'puerts'
 const CS = require('csharp');
 
@@ -60,7 +60,8 @@ export default class BaseViewExpand {
 	public  set2dPos(x:number,y:number){
 		this.positionTrans.x = x;
 		this.positionTrans.y = y;
-		this.__ctransform.anchoredPosition = this.positionTrans;
+		// this.__ctransform.anchoredPosition = this.positionTrans;
+		GameUtils.ViewExtensionMethods.SetObj2dPos(this.__ctransform, x,y);
 	}
 
 	//设置3d坐标
@@ -68,14 +69,15 @@ export default class BaseViewExpand {
 		this.positionTrans.x = x;
 		this.positionTrans.y = y;
 		this.positionTrans.z = z;
-		this.__ctransform.localPosition = this.positionTrans;
+		GameUtils.ViewExtensionMethods.SetObj3dPos(this.__ctransform, x,y,z);
 	}
 
 
 	//设置2d旋转
 	public  set2dRotation(value:number){
 		this.rotationTrans.z = value;
-		this.__ctransform.eulerAngles = this.rotationTrans;
+
+		this.__ctransform.eulerAngles = GameUtils.ViewExtensionMethods.initVec3(0,0,this.rotationTrans.z);
 	}
 
 	//设置缩放
@@ -84,7 +86,7 @@ export default class BaseViewExpand {
 		trans.x = sx;
 		trans.y = sy;
 		trans.z = sz;
-		this.__ctransform.localScale = trans;
+		GameUtils.ViewExtensionMethods.SetObjScale(this.__ctransform,sx,sy,sz);
 	}
 
 	public  get scale(){
@@ -97,9 +99,7 @@ export default class BaseViewExpand {
 
 	//设置锚点
 	public  setAnchor(x,y){
-		BaseViewExpand._tempVew2.x = x;
-		BaseViewExpand._tempVew2.y = y;
-		this.__ctransform.pivot = BaseViewExpand._tempVew2 as UnityEngine.Vector2;
+		this.__ctransform.pivot = GameUtils.ViewExtensionMethods.initVec2(x,y);
 	}
 
 	//获取透明度
@@ -138,7 +138,7 @@ export default class BaseViewExpand {
 
 	//添加子对象
 	public  addChild(childView:BaseViewExpand,index:number = -1){
-		childView.__ctransform.parent =childView.__ctransform.parent;
+		childView.__ctransform.SetParent(this.__ctransform,false);
 		if (index >=0){
 			childView.__ctransform.SetSiblingIndex(index);
 		}
@@ -146,11 +146,11 @@ export default class BaseViewExpand {
 
 	//移除子对象
 	public  removeChild(childView:BaseViewExpand){
-		childView.__ctransform.parent = null;
+		childView.__ctransform.SetParent(null);
 	}
 	//移除自己
 	public  removeSelf(){
-		this.__ctransform.parent =null;
+		this.__ctransform.SetParent(null);
 	}
 
 	public  get numChildren(){
@@ -174,10 +174,7 @@ export default class BaseViewExpand {
 		//绑定lua和c对象
 		if (childTrans){
 			//如果是需要bangding对象的
-			if (withBinding){
-				return ViewTools.autoBindingCObj(childTrans.gameObject);
-			}
-			return childTrans;
+			return ViewTools.autoBindingCObj(childTrans.gameObject,true);
 		}
 		return  null;
 	}
@@ -197,12 +194,17 @@ export default class BaseViewExpand {
 		return this.__ctransform.sizeDelta.y;
 	}
 
+	public  getViewRect(){
+		return this.__ctransform.sizeDelta
+	}
+
 	private  static  _tempVew2 = {x:0,y:0};
 
 	public  setSize(w,h){
 		BaseViewExpand._tempVew2.x = w;
 		BaseViewExpand._tempVew2.y = h;
-		this.__ctransform.sizeDelta =BaseViewExpand._tempVew2 as UnityEngine.Vector2;
+		//设置尺寸
+		 this.__ctransform.sizeDelta =GameUtils.ViewExtensionMethods.initVec2(w,h);
 	}
 
 	//设置是否可见

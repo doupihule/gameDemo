@@ -4,7 +4,7 @@ const BaseFunc_1 = require("../../../framework/func/BaseFunc");
 const GlobalParamsFunc_1 = require("./GlobalParamsFunc");
 const UserExtModel_1 = require("../model/UserExtModel");
 const FogModel_1 = require("../model/FogModel");
-const GameUtils_1 = require("../../../utils/GameUtils");
+const GameTools_1 = require("../../../utils/GameTools");
 const RolesFunc_1 = require("./RolesFunc");
 const TranslateFunc_1 = require("../../../framework/func/TranslateFunc");
 const ResourceConst_1 = require("../consts/ResourceConst");
@@ -132,7 +132,7 @@ class FogFunc extends BaseFunc_1.default {
         for (var i = 0; i < shopInfo.length; i++) {
             var shopCellId = shopInfo[i];
             shopCells = FogFunc.instance.getShopCells(shopCellId);
-            goodsId = GameUtils_1.default.getWeightItem(shopCells)[0];
+            goodsId = GameTools_1.default.getWeightItem(shopCells)[0];
             //排重
             if (goods.indexOf(goodsId) == -1) {
                 goods.push(goodsId);
@@ -204,7 +204,7 @@ class FogFunc extends BaseFunc_1.default {
     //获取随机名字
     getRandomName() {
         var randomNames = this.getAllCfgData("RandomName_json");
-        var rand = GameUtils_1.default.getRandomInt(1, Object.keys(randomNames).length);
+        var rand = GameTools_1.default.getRandomInt(1, Object.keys(randomNames).length);
         return TranslateFunc_1.default.instance.getTranslate(this.getRandomNameById(rand), "TranslateRandomName");
     }
     getEnemyCfg(id) {
@@ -541,7 +541,7 @@ class FogFunc extends BaseFunc_1.default {
             }
         }
         if (roleArr.length != 0) {
-            var firstIndex = GameUtils_1.default.getRandomInt(0, roleArr.length - 1);
+            var firstIndex = GameTools_1.default.getRandomInt(0, roleArr.length - 1);
             roleId = roleArr[firstIndex];
         }
         return roleId;

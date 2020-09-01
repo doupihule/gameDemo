@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const TableUtils_1 = require("../utils/TableUtils");
 const GameSwitchConst_1 = require("../../game/sys/consts/GameSwitchConst");
 /**
@@ -69,7 +69,7 @@ class GameSwitch {
                 var condition1 = Number(tempArr[0]);
                 //需要把版本号转成数字
                 var conditionVersionNums = this.countVersionToNumber(tempArr[1]);
-                var clientVersionNums = this.countVersionToNumber(Global_1.default.client_version);
+                var clientVersionNums = this.countVersionToNumber(GlobalData_1.default.client_version);
                 var tempRt;
                 if (condition1 == 1) {
                     tempRt = conditionVersionNums > clientVersionNums;

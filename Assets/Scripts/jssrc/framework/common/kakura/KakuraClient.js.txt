@@ -10,7 +10,7 @@ const TimerManager_1 = require("../../manager/TimerManager");
 const ErrCodeManager_1 = require("../../manager/ErrCodeManager");
 const ErrorCode_1 = require("../../../game/sys/common/kakura/ErrorCode");
 const WindowManager_1 = require("../../manager/WindowManager");
-const Global_1 = require("../../../utils/Global");
+const GlobalData_1 = require("../../utils/GlobalData");
 const TranslateFunc_1 = require("../../func/TranslateFunc");
 const MethodCommon_1 = require("./MethodCommon");
 class KakuraClient {
@@ -70,7 +70,7 @@ class KakuraClient {
         this.clearInitRequest();
         this.destorySocket();
         //如果没有获取过用户信息或者 不是单机模式才会显示转菊花. 单机模式第一次获取过用户数据后不需要出菊花了
-        if (!this.hasGetUserInfo || !Global_1.default.checkIsSingleMode()) {
+        if (!this.hasGetUserInfo || !GlobalData_1.default.checkIsSingleMode()) {
             WaitManager_1.default.instance.add(MsgCMD_1.default.ROLL_ANI);
         }
     }
@@ -332,7 +332,7 @@ class KakuraClient {
         else {
             //如果 需要等待的 那么关闭loading
             //只有是联网的游戏才会弹网络弹窗
-            if (Global_1.default.gameMode == Global_1.default.gameMode_network || !this.hasGetUserInfo) {
+            if (GlobalData_1.default.gameMode == GlobalData_1.default.gameMode_network || !this.hasGetUserInfo) {
                 WaitManager_1.default.instance.remove(MsgCMD_1.default.ROLL_ANI);
                 ErrCodeManager_1.default.ins.setErr(ErrorCode_1.default.webOffline);
             }
@@ -348,7 +348,7 @@ class KakuraClient {
         if (this._hasRegistHeartBeat) {
             return;
         }
-        if (Global_1.default.checkIsSingleMode()) {
+        if (GlobalData_1.default.checkIsSingleMode()) {
             return;
         }
         this._hasRegistHeartBeat = true;

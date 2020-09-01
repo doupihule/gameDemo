@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const HttpMessage_1 = require("../common/HttpMessage");
 const PackConfigManager_1 = require("../manager/PackConfigManager");
 const TimerManager_1 = require("../manager/TimerManager");
@@ -25,7 +25,7 @@ const InterstitialAdComp_1 = require("./comp/InterstitialAdComp");
 const BannerComp_1 = require("./comp/BannerComp");
 const JumpFunc_1 = require("../func/JumpFunc");
 const KariqiShareManager_1 = require("../manager/KariqiShareManager");
-const GameUtils_1 = require("../../utils/GameUtils");
+const GameTools_1 = require("../../utils/GameTools");
 const Message_1 = require("../common/Message");
 const CommonEvent_1 = require("../event/CommonEvent");
 const TranslateFunc_1 = require("../func/TranslateFunc");
@@ -124,7 +124,7 @@ class GamePlatform {
     }
     reqServerList(callBack, thisObject) {
         var params = { "method": 251, "params": { "loginToken": this.loginToken } };
-        var url = Global_1.default.global_url + '&ver=' + Global_1.default.version;
+        var url = GlobalData_1.default.global_url + '&ver=' + GlobalData_1.default.version;
         HttpMessage_1.default.instance.send(url, JSON.stringify(params), (data) => {
             var secList = data[0].result.data.secList;
             var len = secList.length;
@@ -151,9 +151,9 @@ class GamePlatform {
      * @param thisObject
      */
     reqVMS() {
-        Global_1.default.version = PackConfigManager_1.default.ins.platform.vms_version;
-        if (Global_1.default.checkUserCloudStorage()) {
-            Global_1.default.global_url = PackConfigManager_1.default.ins.platform.cloud_url;
+        GlobalData_1.default.version = PackConfigManager_1.default.ins.platform.vms_version;
+        if (GlobalData_1.default.checkUserCloudStorage()) {
+            GlobalData_1.default.global_url = PackConfigManager_1.default.ins.platform.cloud_url;
             //如果是单机模式 直接走global登入
             this.getWxInfo();
             return;
@@ -171,7 +171,7 @@ class GamePlatform {
     checkVMSBack(result) {
         var version = result.online_version;
         LogsManager_1.default.echo("online_version:", version, "local vms_version", PackConfigManager_1.default.ins.platform.vms_version);
-        LogsManager_1.default.echo("client_version:", Global_1.default.client_version);
+        LogsManager_1.default.echo("client_version:", GlobalData_1.default.client_version);
         version = Math.max(version, PackConfigManager_1.default.ins.platform.vms_version);
         PackConfigManager_1.default.ins.platform.vms_version = version;
         this.checkVersion();
@@ -192,27 +192,27 @@ class GamePlatform {
             return;
         }
         if (result.global_server_url.indexOf("http://") > -1 || result.global_server_url.indexOf("https://") > -1) {
-            Global_1.default.global_url = result.global_server_url;
+            GlobalData_1.default.global_url = result.global_server_url;
         }
         else {
-            Global_1.default.global_url = "http://" + result.global_server_url;
+            GlobalData_1.default.global_url = "http://" + result.global_server_url;
         }
         if (result.GameStatic) {
             //version里面的开关覆盖
             this.coverServerSwitchMap(result.GameStatic);
         }
-        Global_1.default.resource_url = result.resource_url_root + "/" + UserInfo_1.default.platformId + "/";
+        GlobalData_1.default.resource_url = result.resource_url_root + "/" + UserInfo_1.default.platformId + "/";
         ;
-        Global_1.default.nocdn_resource_url = result.nocdn_resource_url_root + "/";
+        GlobalData_1.default.nocdn_resource_url = result.nocdn_resource_url_root + "/";
         // 记录版本状态 (代码更新是否重启、是否下载version.json时用)
         VersionManager_1.default.versionStatus = result.s;
         VersionManager_1.default.vmsVersion = result.v.version;
         if (result.s == VersionManager_1.default.VERSION_STATUS_FORCE_UPDATE) {
             // 强更使用vms版本
-            // Global.version = result.v.version;
+            // GlobalData.version = result.v.version;
             this.doCoverVersion(result.v.version);
         }
-        LogsManager_1.default.echo("Global.version:", Global_1.default.version, "localVersion:", PackConfigManager_1.default.ins.platform.vms_version, "updateSatus:", result.s);
+        LogsManager_1.default.echo("GlobalData.version:", GlobalData_1.default.version, "localVersion:", PackConfigManager_1.default.ins.platform.vms_version, "updateSatus:", result.s);
         this.addUpdateListener();
         //联网模式也需要执行卡日曲登录
         KariqiShareManager_1.default.kariquLogin();
@@ -225,7 +225,7 @@ class GamePlatform {
     }
     reqGlobal(params, isInit = false) {
         this._reloginCount++;
-        var url = Global_1.default.global_url + '&ver=' + Global_1.default.version;
+        var url = GlobalData_1.default.global_url + '&ver=' + GlobalData_1.default.version;
         //@测试代码 强制服务器错误返回
         // if(this._reloginCount <= 1){
         //     params.method = "208"
@@ -235,7 +235,7 @@ class GamePlatform {
             params["params"] = {};
         }
         var onHttpErrorBack = (data) => {
-            if (Global_1.default.checkUserCloudStorage()) {
+            if (GlobalData_1.default.checkUserCloudStorage()) {
                 //如果是使用httpServer的重连.那么必须要强制登入成功
                 if (this._reLoginBackParams) {
                     WindowManager_1.default.setPopupTip(1, TranslateFunc_1.default.instance.getTranslate("tid_net_error"), this.getWxInfo, this);
@@ -269,7 +269,7 @@ class GamePlatform {
                 // this.getWX().aldSendOpenid(data.channelUserId);
             }
             if (data.sceneId) {
-                Global_1.default.sceneId = data.sceneId;
+                GlobalData_1.default.sceneId = data.sceneId;
             }
             if (!currPlatform.result) {
                 onHttpErrorBack(data);
@@ -291,7 +291,7 @@ class GamePlatform {
                 }
             }
             this.loginToken = data.loginToken;
-            if (Global_1.default.checkUserCloudStorage()) {
+            if (GlobalData_1.default.checkUserCloudStorage()) {
                 GameHttpControler_1.default.instance.loginToken = data.loginToken;
                 this.doSingleGlobalBack(currPlatform.result.data);
                 return;
@@ -323,19 +323,19 @@ class GamePlatform {
             this.getLoginResult();
         };
         var webParams = {};
-        if (Global_1.default.checkUserCloudStorage()) {
-            url = Global_1.default.global_url;
+        if (GlobalData_1.default.checkUserCloudStorage()) {
+            url = GlobalData_1.default.global_url;
             params.params.game = GameConsts_1.default.gameCode;
             params.params.platform = PackConfigManager_1.default.ins.platform.platform;
-            params.params.version = Global_1.default.version;
+            params.params.version = GlobalData_1.default.version;
             webParams.errorCall = onHttpErrorBack;
         }
         else {
             params.params.game = GameConsts_1.default.gameCode;
             params.params.platform = PackConfigManager_1.default.ins.platform.platform;
-            params.params.version = Global_1.default.version;
+            params.params.version = GlobalData_1.default.version;
         }
-        params["params"]["deviceId"] = Global_1.default.deviceId;
+        params["params"]["deviceId"] = GlobalData_1.default.deviceId;
         HttpMessage_1.default.instance.send(url, params, httpBackFunc, this, "post", webParams);
     }
     //重登回来
@@ -355,7 +355,7 @@ class GamePlatform {
     }
     sendKakuraInit() {
         //单机模式不走这里
-        if (Global_1.default.checkUserCloudStorage()) {
+        if (GlobalData_1.default.checkUserCloudStorage()) {
             if (this.platformUserInfo) {
                 var userData = UserModel_1.default.instance.getData();
                 //如果授权成功了
@@ -398,8 +398,8 @@ class GamePlatform {
         if (data.switch) {
             this.coverServerSwitchMap(data.switch);
             if (data.switch.CLOUD_URL && (UserInfo_1.default.platform.global_url_review == "" || UserInfo_1.default.platform.global_url_review != data.switch.CLOUD_URL)) {
-                // Global.global_url_review 用于记录审核服主域名【用于区别负载域名】
-                UserInfo_1.default.platform.global_url_review = Global_1.default.global_url = data.switch.CLOUD_URL;
+                // GlobalData.global_url_review 用于记录审核服主域名【用于区别负载域名】
+                UserInfo_1.default.platform.global_url_review = GlobalData_1.default.global_url = data.switch.CLOUD_URL;
                 //重新走一次登入
                 this.reqGlobal(this._globalParams);
                 return;
@@ -410,7 +410,7 @@ class GamePlatform {
         }
         // 登陆返回重置global域名
         if (data.lvsUrl && data.lvsUrl != "") {
-            Global_1.default.global_url = data.lvsUrl;
+            GlobalData_1.default.global_url = data.lvsUrl;
         }
         //做版本更新检查
         this.doCoverVersion(data.onlineVersion);
@@ -464,7 +464,7 @@ class GamePlatform {
     }
     //比对数据
     compareData(data) {
-        if (!Global_1.default.checkUserCloudStorage()) {
+        if (!GlobalData_1.default.checkUserCloudStorage()) {
             return;
         }
         var localData = CacheManager_1.default.instance.getGlobalCache(StorageCode_1.default.storage_userinfo);
@@ -539,10 +539,10 @@ class GamePlatform {
         var resultData = data;
         resultData.user = userData;
         if (!userData.firstRunSystemInfo) {
-            userData.firstRunSystemInfo = Global_1.default.firstRunSystemInfo;
+            userData.firstRunSystemInfo = GlobalData_1.default.firstRunSystemInfo;
         }
         else {
-            Global_1.default.firstRunSystemInfo = userData.firstRunSystemInfo;
+            GlobalData_1.default.firstRunSystemInfo = userData.firstRunSystemInfo;
         }
         // kakura.Client.instance.hasLoginComplete = !isError;
         // kakura.Client.instance.globalLoginBackData = resultData;
@@ -552,7 +552,7 @@ class GamePlatform {
         //     tmpTable["hasUpdateData"] = true;
         //     SingleCommonServer.upDateAllData(tmpTable, SingleCommonServer.setUpdateDataFlag, SingleCommonServer);
         // }
-        if (resultData.switch && !Global_1.default.checkIsSingleMode()) {
+        if (resultData.switch && !GlobalData_1.default.checkIsSingleMode()) {
             this.coverServerSwitchMap(resultData.switch);
         }
     }
@@ -571,7 +571,7 @@ class GamePlatform {
         if (!serverVersion) {
             return;
         }
-        Global_1.default.version = String(serverVersion);
+        GlobalData_1.default.version = String(serverVersion);
     }
     //获取version name
     getVersionName() {
@@ -638,7 +638,7 @@ class GamePlatform {
      * 退出游戏
      */
     loginOut() {
-        Global_1.default.isGameDestory = true;
+        GlobalData_1.default.isGameDestory = true;
     }
     /**
      * 分享
@@ -964,7 +964,7 @@ class GamePlatform {
      * 判断是否可以显示视频
      */
     canAdv() {
-        if (!GameUtils_1.default.canVideo) {
+        if (!GameTools_1.default.canVideo) {
             return false;
         }
         if (UserInfo_1.default.isWeb())
@@ -1144,8 +1144,8 @@ class GamePlatform {
     registFocusEvent() {
         this.hideT = Client_1.default.instance.miniserverTime;
         this.showT = this.hideT;
-        // GlobalEnv.uiRoot.on(Laya.Event.FOCUS, this, this.onGetFocus);
-        // GlobalEnv.uiRoot.on(Laya.Event.BLUR, this, this.onLoseFocus);
+        // GlobalData.uiRoot.on(Laya.Event.FOCUS, this, this.onGetFocus);
+        // GlobalData.uiRoot.on(Laya.Event.BLUR, this, this.onLoseFocus);
     }
     //获取游戏焦点
     onGetFocus() {
@@ -1165,7 +1165,7 @@ class GamePlatform {
         // 发送阿里云打点日志
         StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.ON_HIDE, {
             'onlineTime': this.hideT - this.showT,
-            'hideView': GameUtils_1.default.decryptStr(WindowManager_1.default.getCurrentWindowName())
+            'hideView': GameTools_1.default.decryptStr(WindowManager_1.default.getCurrentWindowName())
         });
     }
     //是否是套壳包
@@ -1225,9 +1225,9 @@ class GamePlatform {
         }
         //GM开关
         LogsManager_1.default.checkGM();
-        GameUtils_1.default.canShare = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_SHARE_NEW);
-        GameUtils_1.default.canVideo = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_ADV);
-        GameUtils_1.default.isReview = GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_REVIEW);
+        GameTools_1.default.canShare = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_SHARE_NEW);
+        GameTools_1.default.canVideo = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_ADV);
+        GameTools_1.default.isReview = GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_REVIEW);
         for (i in map) {
             LogsManager_1.default.echo("服务器返回的开关覆盖结果   ", i, " : ", map[i]);
         }

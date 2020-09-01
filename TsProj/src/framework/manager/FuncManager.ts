@@ -7,7 +7,7 @@ import FileUtils from "../utils/FileUtils";
 import VersionManager from "./VersionManager";
 import SubPackageManager from "./SubPackageManager";
 import SubPackageConst from "../../game/sys/consts/SubPackageConst";
-import GameUtils from "../../utils/GameUtils";
+import GameTools from "../../utils/GameTools";
 import Client from "../common/kakura/Client";
 
 export default class FuncManager {

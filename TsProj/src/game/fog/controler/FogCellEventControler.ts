@@ -1,6 +1,6 @@
 import FogLogicalControler from "./FogLogicalControler";
 import FogFunc from "../../sys/func/FogFunc";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import FogModel from "../../sys/model/FogModel";
 import FogServer from "../../sys/server/FogServer";
 import TableUtils from "../../../framework/utils/TableUtils";
@@ -40,20 +40,20 @@ export default class FogCellEventControler {
 			var item = cfg[id];
 			var event = item.eventList;
 			tempArr = [];
-			tempArr = GameUtils.createArrBetweenTwo(item.layerRange[0], item.layerRange[1]);
+			tempArr = GameTools.createArrBetweenTwo(item.layerRange[0], item.layerRange[1]);
 			for (var i = 0; i < event.length; i++) {
 				var eventItem = event[i];
 				//判断这个事件是否出 不出 直接下一个
-				if (GameUtils.getRandomInt(1, 10000) > Number(eventItem[1])) continue;
+				if (GameTools.getRandomInt(1, 10000) > Number(eventItem[1])) continue;
 				var layer;
 				if (tempArr.length > 0) {
 					//优先没有全局事件的层
-					var info = GameUtils.getRandomInArr(tempArr);
+					var info = GameTools.getRandomInArr(tempArr);
 					tempArr.splice(info.index, 1);
 					layer = info.result;
 				} else {
 					//这些层全有全局事件了，直接随机
-					layer = GameUtils.getRandomInt(item.layerRange[0], item.layerRange[1]);
+					layer = GameTools.getRandomInt(item.layerRange[0], item.layerRange[1]);
 				}
 				var eventInfo = globalEvent[layer];
 				if (!eventInfo) {
@@ -85,11 +85,11 @@ export default class FogCellEventControler {
 	/**初始化起点和终点周围的事件组 */
 	initStartAndEndEvent() {
 		var cfg = this.fogControler.layerCfg;
-		var enterId = GameUtils.getWeightItem(cfg.enterEvent)[0];
+		var enterId = GameTools.getWeightItem(cfg.enterEvent)[0];
 		var start = FogModel.instance.getCellIdByType(FogConst.cellType_Start);
 		this.setEventGroup(enterId, this.fogControler.getCellData(start), FogConst.cellType_StartAround);
 		var end = FogModel.instance.getCellIdByType(FogConst.cellType_End);
-		var exitId = GameUtils.getWeightItem(cfg.exitEvent)[0];
+		var exitId = GameTools.getWeightItem(cfg.exitEvent)[0];
 		this.setEventGroup(exitId, this.fogControler.getCellData(end), FogConst.cellType_EndAround);
 		//把开始我正前方的格子强制设置成3001
 		if (UserModel.instance.getMainGuide() == 9 && this.fogControler._allCellId.indexOf("3_2") != -1) {
@@ -114,19 +114,19 @@ export default class FogCellEventControler {
 	/**设置本层必出事件 */
 	setLayerSureEvent() {
 		var cfg = this.fogControler.layerCfg;
-		var id = GameUtils.getWeightItem(cfg.sureEvents)[0];
+		var id = GameTools.getWeightItem(cfg.sureEvents)[0];
 		this.setEventGroup(id);
 	}
 
 	/**设置本层随机事件 */
 	setLayerRandomEvent() {
 		var cfg = this.fogControler.layerCfg;
-		var num = Number(GameUtils.getWeightItem(cfg.randomEventsNum)[0]);
+		var num = Number(GameTools.getWeightItem(cfg.randomEventsNum)[0]);
 		var random = [];
 		var eventTab = {};
 		TableUtils.copyOneArr(cfg.randomEvents, random);
 		for (var i = 0; i < num; i++) {
-			var info = GameUtils.getWeightItem(random);
+			var info = GameTools.getWeightItem(random);
 			var id = info[0]
 			//随出一个事件组
 			this.setEventGroup(id);
@@ -158,10 +158,10 @@ export default class FogCellEventControler {
 		var eventType = event.type;
 		if (eventType == FogCellEventControler.Event_ShowType_RandomEvent) {
 			//如果是随机事件类型
-			eventList = [GameUtils.getWeightItem(eventList)]
+			eventList = [GameTools.getWeightItem(eventList)]
 		} else if (eventType == FogCellEventControler.Event_ShowType_RandomEventGroup) {
 			//如果是随机事件组类型，随出一个事件组id，然后再取这个事件组的事件信息
-			var randomGroup = GameUtils.getWeightItem(eventList)[0];
+			var randomGroup = GameTools.getWeightItem(eventList)[0];
 			this.setEventGroup(randomGroup, referCell, type);
 			return;
 		}
@@ -174,7 +174,7 @@ export default class FogCellEventControler {
 				//获取偏移的格子id
 				id = referCell.getOffestCellId(Number(itemEvent[1]), Number(itemEvent[2]));
 			} else {
-				id = GameUtils.getRandomInArr(this.fogControler._allCellId).result;
+				id = GameTools.getRandomInArr(this.fogControler._allCellId).result;
 			}
 			if (id) {
 				if (id == "3_2" && referCell && UserModel.instance.getMainGuide() == 9) {

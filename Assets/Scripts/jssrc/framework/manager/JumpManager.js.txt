@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const UserInfo_1 = require("../common/UserInfo");
 const JumpConst_1 = require("../../game/sys/consts/JumpConst");
 const GlobalParamsFunc_1 = require("../../game/sys/func/GlobalParamsFunc");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const LogsManager_1 = require("./LogsManager");
 const GameSwitch_1 = require("../common/GameSwitch");
 const GameConsts_1 = require("../../game/sys/consts/GameConsts");
@@ -13,7 +13,7 @@ const WindowManager_1 = require("./WindowManager");
 const Message_1 = require("../common/Message");
 const JumpEvent_1 = require("../event/JumpEvent");
 const AdResponse_1 = require("../platform/AdResponse");
-const GameUtils_1 = require("../../utils/GameUtils");
+const GameTools_1 = require("../../utils/GameTools");
 const JumpFunc_1 = require("../func/JumpFunc");
 const KariqiShareManager_1 = require("./KariqiShareManager");
 const WindowCommonCfgs_1 = require("../consts/WindowCommonCfgs");
@@ -46,9 +46,9 @@ class JumpManager {
                 var info = cfgs[i];
                 //先判断平台是否相等
                 if (info.blackListPlatform == platCode) {
-                    if (String(info.electBlackListNub) == String(Global_1.default.currentSceneId)) {
+                    if (String(info.electBlackListNub) == String(GlobalData_1.default.currentSceneId)) {
                         this.blackSceneState = JumpConst_1.default.JUMP_SCENE_STATE_BLACK;
-                        LogsManager_1.default.echo("jump", "这是一个黑名单的场景值", Global_1.default.currentSceneId);
+                        LogsManager_1.default.echo("jump", "这是一个黑名单的场景值", GlobalData_1.default.currentSceneId);
                         break;
                     }
                 }
@@ -509,8 +509,8 @@ class JumpManager {
         this.data.sort(function (a, b) {
             return a.Position - b.Position;
         });
-        var randNum1 = GameUtils_1.default.getRandomInt(2, this.data.length - 1);
-        var randNum2 = GameUtils_1.default.getRandomInt(2, this.data.length - 1);
+        var randNum1 = GameTools_1.default.getRandomInt(2, this.data.length - 1);
+        var randNum2 = GameTools_1.default.getRandomInt(2, this.data.length - 1);
         if (randNum2 == randNum1) {
             randNum2 = (randNum1 > 2) ? (randNum1 - 1) : (randNum1 + 1);
         }
@@ -601,7 +601,7 @@ class JumpManager {
     static getGroupRandomIndex(arr = []) {
         if (arr.length == 0)
             return 1;
-        var index = GameUtils_1.default.getRandomInt(0, arr.length - 1);
+        var index = GameTools_1.default.getRandomInt(0, arr.length - 1);
         var result = arr[index];
         for (var i = arr.length - 1; i >= 0; i--) {
             if (i == index) {
@@ -665,7 +665,7 @@ class JumpManager {
     /**获取指色文本背景色 */
     static getZhiseLabelBg(index = null) {
         if (!index) {
-            index = GameUtils_1.default.getRandomInt(1, 9);
+            index = GameTools_1.default.getRandomInt(1, 9);
         }
         return "uisource/jump/jump/" + index + ".png";
     }
@@ -673,7 +673,7 @@ class JumpManager {
     static getTwoRandom(min, max, data) {
         if (data.length == 2)
             return;
-        var item = GameUtils_1.default.getRandomInt(min, max);
+        var item = GameTools_1.default.getRandomInt(min, max);
         if (data.indexOf(item) == -1) {
             data.push(item);
         }

@@ -1,4 +1,4 @@
-import GameUtils from "../../utils/GameUtils";
+import GameTools from "../../utils/GameTools";
 import Client from "../common/kakura/Client";
 import SingleCommonServer from "./SingleCommonServer";
 
@@ -10,7 +10,7 @@ export default class CountsCommonServer {
 	 */
 	static updateDayCounts(type, value, isSend = true, callBack = null, thisObj = null) {
 		var countData = {};
-		countData["expireTime"] = GameUtils.getNextRefreshTByTime(4)
+		countData["expireTime"] = GameTools.getNextRefreshTByTime(4)
 		countData["id"] = type;
 		countData["count"] = value;
 		if (!this.upData["countsCommon"]) {

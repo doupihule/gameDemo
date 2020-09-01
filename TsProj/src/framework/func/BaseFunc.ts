@@ -37,7 +37,7 @@ export default class BaseFunc implements IMessage {
 		BaseFunc.globalCfgsHasLoad = true;
 
 		var congfigName = this._globalConfigsName;
-		if (GameUtils.isReview) {
+		if (GameTools.isReview) {
 			congfigName = this._globalConfigsReviewName;
 		}
 		this._globalConfigMap =ResourceManager.getResTxt(congfigName);
@@ -436,4 +436,4 @@ import MsgCMD from "../../game/sys/common/MsgCMD";
 import LogsErrorCode from "../consts/LogsErrorCode";
 import GameSwitch from "../common/GameSwitch";
 import TableUtils from "../utils/TableUtils";
-import GameUtils from "../../utils/GameUtils";
+import GameTools from "../../utils/GameTools";

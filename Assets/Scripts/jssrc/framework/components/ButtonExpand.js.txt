@@ -11,5 +11,18 @@ class ButtonExpand extends BaseViewExpand_1.default {
             this.setCObject(cobj);
         }
     }
+    //设置点击事件
+    setClickFunc(func, thisObj, params) {
+        this.clickFunc = func;
+        this.clickObj = thisObj;
+        this.backParams = params;
+        var thisSelf = this;
+        if (!this.__btnComp) {
+            this.__btnComp = this.__cobject.GetComponent("Button");
+            this.__btnComp.onClick.AddListener(function () {
+                thisSelf.clickFunc.call(thisSelf.clickObj, thisSelf.backParams);
+            });
+        }
+    }
 }
 exports.default = ButtonExpand;

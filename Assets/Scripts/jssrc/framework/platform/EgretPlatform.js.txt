@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const Client_1 = require("../common/kakura/Client");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const UserInfo_1 = require("../common/UserInfo");
 const GamePlatform_1 = require("./GamePlatform");
 const LoginUI_1 = require("../../game/sys/view/login/LoginUI");
@@ -18,7 +18,7 @@ class EgretPlatform extends GamePlatform_1.default {
     }
     getLoginResult() {
         //如果是 云储存
-        if (Global_1.default.checkUserCloudStorage()) {
+        if (GlobalData_1.default.checkUserCloudStorage()) {
             return;
         }
         Client_1.default.instance.sendInit(this.loginToken, null, LoginUI_1.default.instance.loginResult, LoginUI_1.default.instance, this.inviteBy, this.shareInfo);
@@ -41,7 +41,7 @@ class EgretPlatform extends GamePlatform_1.default {
                 "params": {
                     "passport": CacheManager_1.default.instance.getGlobalCache(StorageCode_1.default.storage_acount),
                     "password": '',
-                    "device": Global_1.default.deviceModel
+                    "device": GlobalData_1.default.deviceModel
                 }
             };
             UserInfo_1.default.platform.reqGlobal(params);

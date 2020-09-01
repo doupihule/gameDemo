@@ -1,5 +1,5 @@
 import Client from "../../../framework/common/kakura/Client";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import GlobalParamsFunc from "../func/GlobalParamsFunc";
 import UserModel from "../model/UserModel";
 import UserExtModel from "../model/UserExtModel";

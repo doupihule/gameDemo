@@ -13,16 +13,18 @@ import ResourceConst from "../../game/sys/consts/ResourceConst";
 export default class ViewTools {
 	static  cobjMap:Map<UnityEngine.GameObject,BaseViewExpand> = new Map<UnityEngine.GameObject, BaseViewExpand>();
 	//自动绑定cobj
-	static autoBindingCObj(cobj:UnityEngine.GameObject){
+	static autoBindingCObj(cobj:UnityEngine.GameObject,forceBinding:boolean =false){
 		var baseView:BaseViewExpand = ViewTools.cobjMap.get(cobj) as BaseViewExpand;
 		if (!baseView){
-			 baseView = this.getBaseViewByCobj(cobj);
+			 baseView = this.getBaseViewByCobj(cobj,forceBinding);
 			 if (baseView){
 				 ViewTools.cobjMap.set(cobj,baseView);
 			 }
 		}
 		return baseView;
 	}
+	static  init(){}
+
 
 	//绑定c对象和 baseview
 	static  bindCobjToBaseView(cobj,baseView:BaseViewExpand){
@@ -42,7 +44,9 @@ export default class ViewTools {
 		if (!viewClassName){
 			if (forceBinding){
 				LogsManager.echo("这个对象没有指定合法命名",name);
-				return new BaseViewExpand();
+				var baseView = new BaseViewExpand();
+				baseView.setCObject(cobj);
+				return baseView
 			}
 			return null;
 		} else{

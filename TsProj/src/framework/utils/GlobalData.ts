@@ -2,6 +2,8 @@ import ScreenAdapterTools from "./ScreenAdapterTools";
 import LogsManager from "../manager/LogsManager";
 import CacheManager from "../manager/CacheManager";
 import StorageCode from "../../game/sys/consts/StorageCode";
+import BaseViewExpand from "../components/BaseViewExpand";
+import ViewTools from "../components/ViewTools";
 
 
 export default class GlobalData {
@@ -20,6 +22,25 @@ export default class GlobalData {
 	static isGameDestory: boolean = false;
 
 	public static phoneSys: string = "";
+
+
+	private  static  _cstage:any;
+	private  static  _cuiroot:any;
+
+	//游戏舞台
+	public  static stage:BaseViewExpand;
+	//ui的跟容器
+	public  static  uiRoot:BaseViewExpand;
+
+	//初始化舞台
+	static  initStage(cstage:any,cuiroot){
+		this._cstage = cstage;
+		this._cuiroot = cuiroot;
+		this.stage = ViewTools.autoBindingCObj(cstage,true)
+		this.uiRoot = ViewTools.autoBindingCObj(cuiroot,true);
+	}
+
+
 
 	public static isPhoneBangs: boolean = false;
 	public static gameMode_single: string = "single";

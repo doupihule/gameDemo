@@ -8,7 +8,7 @@ import JumpConst from "../../consts/JumpConst";
 import WindowManager from "../../../../framework/manager/WindowManager";
 import {WindowCfgs} from "../../consts/WindowCfgs";
 import TableUtils from "../../../../framework/utils/TableUtils";
-import GameUtils from "../../../../utils/GameUtils";
+import GameTools from "../../../../utils/GameTools";
 import UIBaseView from "../../../../framework/components/UIBaseView";
 
 export default class MainJumpKariquUI extends UIBaseView implements IMessage {

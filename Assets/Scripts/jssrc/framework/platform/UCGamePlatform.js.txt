@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const WXGamePlatform_1 = require("./WXGamePlatform");
 const LogsManager_1 = require("../manager/LogsManager");
 const UserInfo_1 = require("../common/UserInfo");
-const Global_1 = require("../../utils/Global");
+const GlobalData_1 = require("../utils/GlobalData");
 const GameSwitch_1 = require("../common/GameSwitch");
 const MethodCommon_1 = require("../common/kakura/MethodCommon");
 class UCGamePlatform extends WXGamePlatform_1.default {
@@ -79,9 +79,9 @@ class UCGamePlatform extends WXGamePlatform_1.default {
             "params": {
                 "code": this.code,
                 "guestid": this.guestid,
-                "device": Global_1.default.deviceModel,
+                "device": GlobalData_1.default.deviceModel,
                 "comeFrom": UserInfo_1.default.LoginSceneInfo,
-                "sceneId": String(Global_1.default.sceneId),
+                "sceneId": String(GlobalData_1.default.sceneId),
             }
         };
         this.reqGlobal(gParams);

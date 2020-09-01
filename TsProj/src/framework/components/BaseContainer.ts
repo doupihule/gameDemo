@@ -23,7 +23,6 @@ export default class BaseContainer extends BaseViewExpand{
 	}
 
 	public  setColor(r, g, b, a =255) {
-		// this.__imageComp.color = BaseContainer._tempColor as any;
 		GameUtils.ViewExtensionMethods.SetImageColor(this.__imageComp,r,g,b,a);
 	}
 	public  dispose() {

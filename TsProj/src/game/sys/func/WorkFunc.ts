@@ -1,6 +1,6 @@
 import BaseFunc from "../../../framework/func/BaseFunc";
 import GlobalParamsFunc from "./GlobalParamsFunc";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import Client from "../../../framework/common/kakura/Client";
 
 /*
@@ -38,7 +38,7 @@ export default class WorkFunc extends BaseFunc {
 				this.expireArr.push(Number(info[i]) + todayZero);
 			}
 			//把明天的第一个加上
-			var tomorrow = GameUtils.getNextRefreshTByTime(0);
+			var tomorrow = GameTools.getNextRefreshTByTime(0);
 			this.expireArr.push(Number(info[0]) + tomorrow);
 
 		}
@@ -60,7 +60,7 @@ export default class WorkFunc extends BaseFunc {
 	}
 
 	isShowGift(giftReward) {
-		var random = GameUtils.getWeightItem(giftReward);
+		var random = GameTools.getWeightItem(giftReward);
 		if (Number(random[0] == -1)) {
 			return false;
 		} else {

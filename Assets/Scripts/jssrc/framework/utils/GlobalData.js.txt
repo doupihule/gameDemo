@@ -1,0 +1,171 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const ScreenAdapterTools_1 = require("./ScreenAdapterTools");
+const LogsManager_1 = require("../manager/LogsManager");
+const CacheManager_1 = require("../manager/CacheManager");
+const StorageCode_1 = require("../../game/sys/consts/StorageCode");
+const ViewTools_1 = require("../components/ViewTools");
+class GlobalData {
+    //初始化舞台
+    static initStage(cstage, cuiroot) {
+        this._cstage = cstage;
+        this._cuiroot = cuiroot;
+        this.stage = ViewTools_1.default.autoBindingCObj(cstage, true);
+        this.uiRoot = ViewTools_1.default.autoBindingCObj(cuiroot, true);
+    }
+    static setPhoneSys(sysInfo) {
+        var phoneModel = sysInfo.model;
+        GlobalData.deviceModel = phoneModel;
+        if (phoneModel.indexOf("iPhone") > -1 || phoneModel.indexOf("iPad") > -1) {
+            this.phoneSys = "iphone";
+        }
+        else if (phoneModel.indexOf("Android"))
+            this.phoneSys = "android";
+        var keys = Object.keys(this.PHONE_BANGS);
+        var len = keys.length;
+        for (var i = 0; i < len; i++) {
+            var key = keys[i];
+            if (phoneModel.indexOf(key) > -1) {
+                this.isPhoneBangs = true;
+                ScreenAdapterTools_1.default.toolBarWidth = 60;
+            }
+        }
+        //如果长宽比小于2 那么一定不是刘海设备
+        if (ScreenAdapterTools_1.default.height / ScreenAdapterTools_1.default.width > 2) {
+            var barH = sysInfo.statusBarHeight;
+            if (barH > 44) {
+                LogsManager_1.default.echo("yrc 根据微信/头条返回的判断为刘海屏,statusBarHeight", barH);
+                this.isPhoneBangs = true;
+                ScreenAdapterTools_1.default.toolBarWidth = 60;
+            }
+        }
+        this.windowWidth = sysInfo.windowWidth || this.windowWidth;
+        this.windowHeight = sysInfo.windowHeight || this.windowHeight;
+        if (sysInfo.version) {
+            this.wxVersion = sysInfo.version;
+        }
+        if (sysInfo.SDKVersion) {
+            this.SDKVersion = sysInfo.SDKVersion;
+        }
+        if (sysInfo && sysInfo.platform && sysInfo.platform == "devtools") {
+            GlobalData.isDevTools = true;
+        }
+        // ScreenAdapterTools.toolBarWidth = GlobalData.IPXOffset;
+        LogsManager_1.default.echo(">>>>>system>>>>>>", sysInfo);
+    }
+    /**获取当前操作系统 */
+    static getOs() {
+        return "unknown";
+    }
+    /**是否已授权用户信息 */
+    static isAuthorized() {
+        return this._isAuthorized;
+    }
+    /**判断是否未经过第一次引导 */
+    static isNotGuide() {
+        var guideSta = CacheManager_1.default.instance.getFileStorageCache(StorageCode_1.default.storage_wxGuide);
+        var notGuide = guideSta == "0";
+        return notGuide;
+    }
+    /**判断是否未经过老玩家转换 */
+    static isNew() {
+        var guideSta = CacheManager_1.default.instance.getFileStorageCache(StorageCode_1.default.storage_isOldPlayer);
+        var notGuide = guideSta == "0";
+        return notGuide;
+    }
+    static get deviceId() {
+        if (!this._deviceId) {
+            var deviceStr = StorageCode_1.default.storage_deviceStr;
+            var deId = CacheManager_1.default.instance.getFileStorageCache(deviceStr);
+            if (!deId || deId == "0") {
+                deId = "" + "_" + Math.round(Math.random() * 100000);
+                CacheManager_1.default.instance.setFileStorageCache(deviceStr, deId);
+            }
+            this._deviceId = deId;
+        }
+        return this._deviceId;
+    }
+    /**获取wx等客户端版本号及基础库SDK版本号 */
+    static getSDKInfo() {
+        var info = "";
+        if (this.wxVersion) {
+            info += "  version:" + this.wxVersion;
+        }
+        if (this.SDKVersion) {
+            info += "  SDKVersion:" + this.SDKVersion;
+        }
+        if (info != "") {
+            info += "\n";
+        }
+        return info;
+    }
+    /**根据获取到的胶囊位置再次判断是否为刘海屏设备 */
+    static reCheckBar(menuInfo) {
+        if (this.isPhoneBangs) {
+            //如果已经判断是刘海设备，则不需要
+            return;
+        }
+        if (!menuInfo) {
+            return;
+        }
+        var top = menuInfo.top || 0;
+        if (top > 16) {
+            var offset = top * ScreenAdapterTools_1.default.height / this.windowHeight;
+            if (offset > 60) {
+                offset = 60;
+            }
+            ScreenAdapterTools_1.default.toolBarWidth = offset;
+            LogsManager_1.default.echo("yrc111 reCheckBar top:", top, "    this.height:", ScreenAdapterTools_1.default.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools_1.default.toolBarWidth);
+        }
+    }
+    //判断是否是单机
+    static checkIsSingleMode() {
+        return this.gameMode == this.gameMode_single;
+    }
+    //判断是否使用云存储
+    static checkUserCloudStorage() {
+        return this.gameMode == this.gameMode_single;
+        // return false;
+    }
+}
+exports.default = GlobalData;
+//客户端版本号
+GlobalData.client_version = "1.0.0.1";
+GlobalData.isCDN = true;
+//版本号
+GlobalData.version = "";
+//设备型号
+GlobalData.deviceModel = "blank";
+//游戏是否销毁中
+GlobalData.isGameDestory = false;
+GlobalData.phoneSys = "";
+GlobalData.isPhoneBangs = false;
+GlobalData.gameMode_single = "single";
+GlobalData.gameMode_network = "network";
+//暂定10秒同步一次后台数据
+GlobalData.updateUserDataDelay = 10000;
+//游戏模式  single是单机模式, network是联网模式
+GlobalData.gameMode = GlobalData.gameMode_single;
+GlobalData.PHONE_BANGS = {
+    "iPhone X": 45,
+    "PACM00": 36,
+    "ANE-AL00": 52,
+    "COL-AL10": 52,
+    "JSN-AL00a": 52,
+    "V1813BA": 52,
+    "PBEM00": 52,
+    "vivo Z3x": 52,
+    "MI 9": 50,
+    "LYA-AL00": 52,
+    "TL00": 52,
+    "GM1910": 52
+};
+GlobalData.windowWidth = 640;
+GlobalData.windowHeight = 1136;
+GlobalData.firstRunSystemInfo = {}; //首次启动数据
+//wx、tt、qq对应的客户端版本号、基础库版本号
+GlobalData.wxVersion = "";
+GlobalData.SDKVersion = "";
+/**判断是否为开发者工具 */
+GlobalData.isDevTools = false;
+GlobalData._isAuthorized = false;

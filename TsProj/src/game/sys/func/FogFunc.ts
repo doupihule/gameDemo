@@ -4,7 +4,7 @@ import UserExtModel from "../model/UserExtModel";
 import FogModel from "../model/FogModel";
 import ShareOrTvManager from "../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "./ShareTvOrderFunc";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 import RolesFunc from "./RolesFunc";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
 import ResourceConst from "../consts/ResourceConst";
@@ -224,7 +224,7 @@ export default class FogFunc extends BaseFunc {
 		for (var i = 0; i < shopInfo.length; i++) {
 			var shopCellId = shopInfo[i];
 			shopCells = FogFunc.instance.getShopCells(shopCellId);
-			goodsId = GameUtils.getWeightItem(shopCells)[0];
+			goodsId = GameTools.getWeightItem(shopCells)[0];
 			//排重
 			if (goods.indexOf(goodsId) == -1) {
 				goods.push(goodsId);
@@ -317,7 +317,7 @@ export default class FogFunc extends BaseFunc {
 	//获取随机名字
 	getRandomName() {
 		var randomNames = this.getAllCfgData("RandomName_json");
-		var rand = GameUtils.getRandomInt(1, Object.keys(randomNames).length);
+		var rand = GameTools.getRandomInt(1, Object.keys(randomNames).length);
 		return TranslateFunc.instance.getTranslate(this.getRandomNameById(rand), "TranslateRandomName");
 	}
 
@@ -705,7 +705,7 @@ export default class FogFunc extends BaseFunc {
 			}
 		}
 		if (roleArr.length != 0) {
-			var firstIndex = GameUtils.getRandomInt(0, roleArr.length - 1);
+			var firstIndex = GameTools.getRandomInt(0, roleArr.length - 1);
 			roleId = roleArr[firstIndex];
 		}
 		return roleId;

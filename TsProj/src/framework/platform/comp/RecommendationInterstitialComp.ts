@@ -5,7 +5,7 @@ import UserInfo from "../../common/UserInfo";
 import GameSwitch from "../../common/GameSwitch";
 import Message from "../../common/Message";
 import WindowEvent from "../../event/WindowEvent";
-import GameUtils from "../../../utils/GameUtils";
+import GameTools from "../../../utils/GameTools";
 
 export class RecommendationInterstitialComp extends TopViewAutoComp {
 	/** 广告Id */
@@ -71,7 +71,7 @@ export class RecommendationInterstitialComp extends TopViewAutoComp {
 	 * 创建Banner推广组件：微信
 	 */
 	static create(parent, onErrorCallback = null, onCloseCallback = null, callbackObj = null) {
-		LogsManager.echo("hlx 推荐插屏 RecommendationInterstitialComp create start:", (parent && parent.windowName) ? GameUtils.decryptStr(parent.windowName) : null);
+		LogsManager.echo("hlx 推荐插屏 RecommendationInterstitialComp create start:", (parent && parent.windowName) ? GameTools.decryptStr(parent.windowName) : null);
 		// 不支持的组件直接返回
 		if (!RecommendationInterstitialComp.canUse()) {
 			onErrorCallback && onErrorCallback.call(this);
@@ -202,7 +202,7 @@ export class RecommendationInterstitialComp extends TopViewAutoComp {
 	 * 组件销毁
 	 */
 	public destroy() {
-		LogsManager.echo("hlx 推荐插屏 InterstitialAd destroy:", GameUtils.decryptStr(this._parentName));
+		LogsManager.echo("hlx 推荐插屏 InterstitialAd destroy:", GameTools.decryptStr(this._parentName));
 		super.destroy();
 		this._onErrorCallback = null;
 		this._onCloseCallback = null;

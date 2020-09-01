@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const GameUtils_1 = require("../../utils/GameUtils");
+const GameTools_1 = require("../../utils/GameTools");
 const Client_1 = require("../common/kakura/Client");
 const SingleCommonServer_1 = require("./SingleCommonServer");
 class CountsCommonServer {
@@ -9,7 +9,7 @@ class CountsCommonServer {
      */
     static updateDayCounts(type, value, isSend = true, callBack = null, thisObj = null) {
         var countData = {};
-        countData["expireTime"] = GameUtils_1.default.getNextRefreshTByTime(4);
+        countData["expireTime"] = GameTools_1.default.getNextRefreshTByTime(4);
         countData["id"] = type;
         countData["count"] = value;
         if (!this.upData["countsCommon"]) {

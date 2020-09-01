@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const GameUtils_1 = require("../../utils/GameUtils");
+const GameTools_1 = require("../../utils/GameTools");
 const LogsManager_1 = require("./LogsManager");
 const SceneReference_1 = require("../consts/SceneReference");
 const GameSwitch_1 = require("../common/GameSwitch");
@@ -23,8 +23,8 @@ class BannerAdManager {
     recvMsg(cmd, data) {
         if (cmd == CommonEvent_1.default.WHITE_LIST_CHANGE) {
             // 原来不是黑名单，返回收到IP在黑名单之内。设置黑名单字段。并通知黑名单更新
-            GameUtils_1.default.canGift = false;
-            GameUtils_1.default.canLeadBanner = false;
+            GameTools_1.default.canGift = false;
+            GameTools_1.default.canLeadBanner = false;
         }
     }
     /**设置开关值 */
@@ -32,26 +32,26 @@ class BannerAdManager {
         if (UserInfo_1.default.isWX()) {
             Message_1.default.instance.add(CommonEvent_1.default.WHITE_LIST_CHANGE, BannerAdManager.instance);
         }
-        GameUtils_1.default.canQuickBanner = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_QUICKBANNER);
+        GameTools_1.default.canQuickBanner = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_QUICKBANNER);
         if (!SceneReference_1.default.isInBannerScene()) {
-            GameUtils_1.default.canGift = false;
-            GameUtils_1.default.canLeadBanner = false;
-            LogsManager_1.default.echo(" GameUtils.banner false");
+            GameTools_1.default.canGift = false;
+            GameTools_1.default.canLeadBanner = false;
+            LogsManager_1.default.echo(" GameTools.banner false");
             return;
         }
         else {
-            GameUtils_1.default.canLeadBanner = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_LEADBANNER);
-            GameUtils_1.default.canGift = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_MYSTERIOUSGIFT);
+            GameTools_1.default.canLeadBanner = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_LEADBANNER);
+            GameTools_1.default.canGift = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_MYSTERIOUSGIFT);
         }
         if (!BannerAdManager.isPlatformSupport()) {
             LogsManager_1.default.echo("平台不支持banner banner开关关闭");
-            GameUtils_1.default.canQuickBanner = false;
-            GameUtils_1.default.canGift = false;
-            GameUtils_1.default.canLeadBanner = false;
+            GameTools_1.default.canQuickBanner = false;
+            GameTools_1.default.canGift = false;
+            GameTools_1.default.canLeadBanner = false;
         }
-        LogsManager_1.default.echo(" GameUtils.canQuickBanner:", GameUtils_1.default.canQuickBanner);
-        LogsManager_1.default.echo(" GameUtils.canLeadBanner:", GameUtils_1.default.canLeadBanner);
-        LogsManager_1.default.echo(" GameUtils.canGift:", GameUtils_1.default.canGift);
+        LogsManager_1.default.echo(" GameTools.canQuickBanner:", GameTools_1.default.canQuickBanner);
+        LogsManager_1.default.echo(" GameTools.canLeadBanner:", GameTools_1.default.canLeadBanner);
+        LogsManager_1.default.echo(" GameTools.canGift:", GameTools_1.default.canGift);
     }
     static isPlatformSupport() {
         if (UserInfo_1.default.isTT()) {
@@ -88,7 +88,7 @@ class BannerAdManager {
             return;
         }
         LogsManager_1.default.echo("zm.addBannerParent-----------", parent.windowName);
-        if (GameUtils_1.default.canQuickBanner) {
+        if (GameTools_1.default.canQuickBanner) {
             // 没有传失败回调，默认banner失败加载推荐组件
             if (UserInfo_1.default.isWX()) {
                 var thisObj = this;
@@ -145,7 +145,7 @@ class BannerAdManager {
     }
     /**隐藏直接添加的banner */
     static hideQuickBanner() {
-        if (GameUtils_1.default.canQuickBanner) {
+        if (GameTools_1.default.canQuickBanner) {
             // AdVideoManager.instance.hideBanner();
         }
     }
@@ -177,7 +177,7 @@ class BannerAdManager {
     }
     /**隐藏神秘礼包banner */
     static hideGiftBanner() {
-        if (GameUtils_1.default.canGift) {
+        if (GameTools_1.default.canGift) {
             // AdVideoManager.instance.hideBanner();
         }
     }

@@ -24,10 +24,10 @@ export default class UserInfo {
 	private static urlParams: any = null;
 	//应用平台ID
 	// 如果设置为 "tt"，则为头条
-	// static platformId = "web";
+	static platformId = "web";
 	// static platformId = "wxgame";
 	// static platformId = "qqgame";
-	static platformId = "tt";
+	// static platformId = "tt";
 	// static platformId = "oppogame";
 	// static platformId = "baidugame";
 	// static platformId = "android_master";

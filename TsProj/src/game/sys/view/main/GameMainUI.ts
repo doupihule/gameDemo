@@ -1,7 +1,7 @@
-import BaseViewExpand from "../../../../framework/components/BaseViewExpand";
+import UIBaseView from "../../../../framework/components/UIBaseView";
 
 
-export default class GameMainUI extends BaseViewExpand  {
+export default class GameMainUI extends UIBaseView  {
 
 
 

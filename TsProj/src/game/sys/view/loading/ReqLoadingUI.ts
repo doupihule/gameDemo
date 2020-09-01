@@ -1,22 +1,21 @@
 import BaseContainer from "../../../../framework/components/BaseContainer";
 import ViewTools from "../../../../framework/components/ViewTools";
-import GlobalEnv from "../../../../framework/engine/GlobalEnv";
 import TweenTools from "../../../../framework/components/TweenTools";
 import TimerManager from "../../../../framework/manager/TimerManager";
+import GlobalData from "../../../../framework/utils/GlobalData";
+import LabelExpand from "../../../../framework/components/LabelExpand";
 
-;
 
 export default class ReqLoadingUI extends BaseContainer {
 	public static res = null;
-	private rollAsset;
+	private rollAsset:LabelExpand;
 
 	constructor() {
 		super();
-		this.rollAsset = ViewTools.createLabel("loading...");
-		this.rollAsset.color = "#ffffff";
-		this.rollAsset.fontSize = 24;
-		this.rollAsset.x = GlobalEnv.uiRoot.width - 150;
-		this.rollAsset.y = GlobalEnv.uiRoot.height - 50;
+		this.rollAsset = ViewTools.createLabel("loading...",100,30,24);
+		this.rollAsset.setColor(0xff,0xff,0xff);
+		this.rollAsset.x = GlobalData.uiRoot.width - 150;
+		this.rollAsset.y = GlobalData.uiRoot.height - 50;
 		this.addChild(this.rollAsset);
 
 		this.mouseEnabled = true;

@@ -50,19 +50,20 @@ class BaseViewExpand {
     set2dPos(x, y) {
         this.positionTrans.x = x;
         this.positionTrans.y = y;
-        this.__ctransform.anchoredPosition = this.positionTrans;
+        // this.__ctransform.anchoredPosition = this.positionTrans;
+        csharp_1.GameUtils.ViewExtensionMethods.SetObj2dPos(this.__ctransform, x, y);
     }
     //设置3d坐标
     set3dPos(x, y, z) {
         this.positionTrans.x = x;
         this.positionTrans.y = y;
         this.positionTrans.z = z;
-        this.__ctransform.localPosition = this.positionTrans;
+        csharp_1.GameUtils.ViewExtensionMethods.SetObj3dPos(this.__ctransform, x, y, z);
     }
     //设置2d旋转
     set2dRotation(value) {
         this.rotationTrans.z = value;
-        this.__ctransform.eulerAngles = this.rotationTrans;
+        this.__ctransform.eulerAngles = csharp_1.GameUtils.ViewExtensionMethods.initVec3(0, 0, this.rotationTrans.z);
     }
     //设置缩放
     setScale(sx, sy, sz = 1) {
@@ -70,7 +71,7 @@ class BaseViewExpand {
         trans.x = sx;
         trans.y = sy;
         trans.z = sz;
-        this.__ctransform.localScale = trans;
+        csharp_1.GameUtils.ViewExtensionMethods.SetObjScale(this.__ctransform, sx, sy, sz);
     }
     get scale() {
         return this.scaleTrans.x;
@@ -80,9 +81,7 @@ class BaseViewExpand {
     }
     //设置锚点
     setAnchor(x, y) {
-        BaseViewExpand._tempVew2.x = x;
-        BaseViewExpand._tempVew2.y = y;
-        this.__ctransform.pivot = BaseViewExpand._tempVew2;
+        this.__ctransform.pivot = csharp_1.GameUtils.ViewExtensionMethods.initVec2(x, y);
     }
     //获取透明度
     get alpha() {
@@ -112,18 +111,18 @@ class BaseViewExpand {
     }
     //添加子对象
     addChild(childView, index = -1) {
-        childView.__ctransform.parent = childView.__ctransform.parent;
+        childView.__ctransform.SetParent(this.__ctransform, false);
         if (index >= 0) {
             childView.__ctransform.SetSiblingIndex(index);
         }
     }
     //移除子对象
     removeChild(childView) {
-        childView.__ctransform.parent = null;
+        childView.__ctransform.SetParent(null);
     }
     //移除自己
     removeSelf() {
-        this.__ctransform.parent = null;
+        this.__ctransform.SetParent(null);
     }
     get numChildren() {
         return this.__ctransform.childCount;
@@ -143,10 +142,7 @@ class BaseViewExpand {
         //绑定lua和c对象
         if (childTrans) {
             //如果是需要bangding对象的
-            if (withBinding) {
-                return ViewTools_1.default.autoBindingCObj(childTrans.gameObject);
-            }
-            return childTrans;
+            return ViewTools_1.default.autoBindingCObj(childTrans.gameObject, true);
         }
         return null;
     }
@@ -160,10 +156,14 @@ class BaseViewExpand {
     get height() {
         return this.__ctransform.sizeDelta.y;
     }
+    getViewRect() {
+        return this.__ctransform.sizeDelta;
+    }
     setSize(w, h) {
         BaseViewExpand._tempVew2.x = w;
         BaseViewExpand._tempVew2.y = h;
-        this.__ctransform.sizeDelta = BaseViewExpand._tempVew2;
+        //设置尺寸
+        this.__ctransform.sizeDelta = csharp_1.GameUtils.ViewExtensionMethods.initVec2(w, h);
     }
     //设置是否可见
     setActive(value) {
