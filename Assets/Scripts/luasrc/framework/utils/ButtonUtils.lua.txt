@@ -1,5 +1,0 @@
-ButtonUtils = class('ButtonUtils')
-
-function ButtonUtils:ctor(button, callBack, thisObj, defUrl, tapUrl, args)
-
-end

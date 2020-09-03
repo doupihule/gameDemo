@@ -1,4 +1,0 @@
-NotifyEvent = class('NotifyEvent')
-function NotifyEvent:ctor()
-end
-NotifyEvent.methodToEventMap = { [10000] = "CLIENT_SEND_LOG" };

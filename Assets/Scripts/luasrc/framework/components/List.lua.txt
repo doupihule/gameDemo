@@ -1,3 +1,0 @@
-local List = class("Label", LuaBaseView)
-luaui.List = List;
-return List
