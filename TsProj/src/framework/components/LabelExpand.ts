@@ -23,6 +23,7 @@ export default class LabelExpand extends BaseViewExpand{
 	public  setCObject(cobj: UnityEngine.GameObject) {
 		super.setCObject(cobj);
 		this.__textComp =cobj.GetComponent($typeof(UnityEngine.UI.Text)) as any;
+		return this;
 	}
 
 	public  get text(){

@@ -29,6 +29,7 @@ import KariqiShareManager from './KariqiShareManager';
 import KariquShareConst from '../consts/KariquShareConst';
 import ViewTools from "../components/ViewTools";
 import Base3dViewExpand from "../components/Base3dViewExpand";
+import ResourceCommonConst from "../consts/ResourceCommonConst";
 
 export default class MainModule implements IMessage {
 	//实例
@@ -44,7 +45,8 @@ export default class MainModule implements IMessage {
 	static task_mergeFileBack: string = "task_mergeFileBack"         //文件合并回来
 	static task_kariquLogin: string = "task_kariquLogin"         //卡日曲登录结果
 
-
+	private  _childNums:number =0;
+	private  _model:Base3dViewExpand;
 	constructor() {
 		MainModule.instance = this;
 
@@ -58,8 +60,27 @@ export default class MainModule implements IMessage {
 		Message.instance.add(MsgCMD.VIDEO_STOP, this);
 		Message.instance.add(MsgCMD.VIDEO_PLAY, this);
 		WindowManager.OpenUI(WindowCfgs.GameMainUI);
-		var model:Base3dViewExpand = ViewTools.create3DModel("battle_prefab","Main");
-		GlobalData.stage.addChild(model);
+		this._model = ViewTools.create3DModel("battle_prefab","Main",ResourceCommonConst.boundle_model3d,true);
+		var child:Base3dViewExpand = this._model.getChildByName("element_group");
+		child.setActive(false);
+		GlobalData.stage.addChild(this._model);
+		// TimerManager.instance.registObjUpdate(this.updateFrame,this);
+
+		TimerManager.instance.add(this.updateFrame,this,1000,9999);
+	}
+	public  updateFrame(){
+		this._childNums ++;
+		if (this._childNums > 50){
+			return;
+		}
+		var child:Base3dViewExpand = this._model.getChildByName("element_group");
+		child.setActive(false);
+		var childCount = child.numChildren;
+		var inddex = this._childNums % childCount;
+		var targetView = child.getChildAt(inddex);
+		var cloneObj:Base3dViewExpand = ViewTools.cloneOneView(targetView);
+		cloneObj.set3dPos(targetView.x,targetView.y +10,targetView.z);
+		this._model.addChild(cloneObj);
 	}
 
 	//Loading页面显示后开始加载资源

@@ -16,6 +16,7 @@ export default class UIBaseView extends BaseViewExpand {
         super.setCObject(cui);
         this.bindChild(cui);
         this.doAfterInit();
+        return this
     }
 
     //bing子对象

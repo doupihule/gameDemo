@@ -18,14 +18,16 @@ export default class UICompConst {
 
 //组件对应的类
 	static classMap = {
-		base: "BaseView",
-		btn: "Button",
-		img: "Image",
-		ctn: "Container",
-		label: "Label",
-		input: "Input",
-		list: "List",
-		spine: "Spine",
+		base: "BaseViewExpand",
+		btn: "ButtonExpand",
+		img: "ImageExpand",
+		ctn: "BaseContainer",
+		label: "LabelExpand",
+		input: "InputExpand",
+		list: "ListExpand",
+		spine: "SpineGraphicExpand",
+		ui:"UI",
+		base3d:"Base3dViewExpand",
 
 	}
 }

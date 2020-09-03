@@ -56,12 +56,17 @@ export default class ResourceManager {
 	}
 
 	//获取一个3demol的sprite3D对象.根据业务逻辑自己去clone withClone 是否克隆.原则上都需要克隆 默认false;
-	static get3dmodelRes(modelName,shortPath:string,  boundlename:string) {
+	static get3dmodelRes(modelName,shortPath:string,  boundlename:string,outclone:boolean =false) {
 		var targetPath = "Assets/Model3d/"+shortPath+"/Prefabs/"+modelName +".prefab";
 		LogsManager.echo("targetPath",targetPath);
 		var obj =Resource.ResourceManager.Instance.luaLoadAsset(targetPath, targetPath, boundlename);
+		if (!outclone){
+			return obj;
+		}
 		return UnityEngine.Object.Instantiate(obj);
 	}
+
+
 
 
 

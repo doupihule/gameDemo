@@ -17,9 +17,10 @@ export default class BaseContainer extends BaseViewExpand{
 		}
 		this.setCObject(cobj);
 	}
-	public  setCObject(cobj: UnityEngine.GameObject) {
+		public  setCObject(cobj: UnityEngine.GameObject) {
 		super.setCObject(cobj);
 		this.__imageComp = cobj.GetComponent($typeof(UnityEngine.UI.Image)) as any ;
+		return this
 	}
 
 	public  setColor(r, g, b, a =255) {

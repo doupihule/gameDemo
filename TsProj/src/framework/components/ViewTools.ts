@@ -77,10 +77,12 @@ export default class ViewTools {
 			} else if(uiType == UICompConst.comp_base3d){
 				return  new Base3dViewExpand();
 			} else if(uiType == UICompConst.comp_ui){
-				return  new UIBaseView();
+				return  new UIBaseView().setCObject(cobj);
+			} else if(uiType == UICompConst.comp_base){
+				return new BaseViewExpand().setCObject(cobj);
 			}
 		}
-
+		LogsManager.warn("没有找到对应的类型--",name,uiType);
 		return null
 
 	}
@@ -113,11 +115,21 @@ export default class ViewTools {
 
 
 	//创建3d模型 role1, role目录
-	static create3DModel(modelName,shortPath:string , boundlename:string=ResourceCommonConst.boundle_model3d, compType:string = UICompConst.comp_base3d){
-		var cobj:any = ResourceManager.get3dmodelRes(modelName,shortPath,boundlename);
-		if (compType == UICompConst.comp_base3d){
-			return this.autoBindingCObj(cobj,true,compType);
+	static create3DModel(modelName,shortPath:string , boundlename:string=ResourceCommonConst.boundle_model3d, outclone:boolean =false, compType:string = UICompConst.comp_base3d):any{
+		var cobj:any = ResourceManager.get3dmodelRes(modelName,shortPath,boundlename,outclone);
+		return this.autoBindingCObj(cobj,true,compType) as any;
+	}
+
+	//clone一个对象
+	static  cloneOneView(obj:any,compType:string = UICompConst.comp_base ){
+		var cloneCobj ;
+		//如果是baseview
+		if (obj.__cobject){
+			cloneCobj = UnityEngine.GameObject.Instantiate(obj.__cobject);
+		} else{
+			cloneCobj = UnityEngine.GameObject.Instantiate(obj) as any;
 		}
+		return this.autoBindingCObj(cloneCobj,true, compType);
 	}
 
 }

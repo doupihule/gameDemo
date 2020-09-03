@@ -38,8 +38,8 @@ export default class GlobalData {
 	static  initStage(cstage:any,cuiroot){
 		this._cstage = cstage;
 		this._cuiroot = cuiroot;
-		this.stage = ViewTools.autoBindingCObj(cstage,true,UICompConst.comp_base3d);
-		this.uiRoot = ViewTools.autoBindingCObj(cuiroot,true);
+		this.stage = ViewTools.autoBindingCObj( cstage ,true, UICompConst.comp_base3d);
+		this.uiRoot = ViewTools.autoBindingCObj(cuiroot,true,UICompConst.comp_base);
 	}
 
 

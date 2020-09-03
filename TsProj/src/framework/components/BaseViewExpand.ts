@@ -34,6 +34,7 @@ export default class BaseViewExpand {
 		this.__cobject = cobj;
 		this.__ctransform = cobj.transform as UnityEngine.RectTransform;
 		ViewTools.bindCobjToBaseView(cobj,this);
+		return this;
 	}
 
 
@@ -170,6 +171,9 @@ export default class BaseViewExpand {
 	//获取子对象 targetCompType是否指定绑定类型
 	public  getChildAt(index:number,targetCompType:string = null){
 		var childTrans:UnityEngine.Transform = this.__ctransform.GetChild(index);
+		if (targetCompType == null){
+			targetCompType = this.getDefaultCompType()
+		}
 		//绑定lua和c对象
 		if (childTrans){
 			//如果是需要bangding对象的
@@ -178,15 +182,24 @@ export default class BaseViewExpand {
 		return  null;
 	}
 
+	private  getDefaultCompType(){
+		if (this.posStyle == UICompConst.posStyle_3d){
+			return  UICompConst.comp_base3d;
+		} else{
+			return UICompConst.comp_base;
+		}
+	}
+
+
 	//获取子对象 根据名字
-	public  getChildByName(name:string,outbinding:boolean =false){
+	public  getChildByName(name:string,targetCompType:string = null){
 		var childObj = GameUtils.ViewExtensionMethods.GetChildByName(this.__ctransform,name);
-		if (outbinding){
-			return;
+		if (targetCompType == null){
+			targetCompType = this.getDefaultCompType()
 		}
 		if (childObj){
 			//如果是需要bangding对象的
-			return ViewTools.autoBindingCObj(childObj,true);
+			return ViewTools.autoBindingCObj(childObj,true,targetCompType);
 		}
 
 	}
