@@ -4,7 +4,6 @@ const BattleConditionData_1 = require("../data/BattleConditionData");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const RandomUtis_1 = require("../../../framework/utils/RandomUtis");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const PassiveSkillTrigger_1 = require("./PassiveSkillTrigger");
 const BattleLogsManager_1 = require("../../sys/manager/BattleLogsManager");
 /**
@@ -40,7 +39,7 @@ class ConditionTrigger {
                         }
                         passive.triggerNums += 1;
                         if (passive.triggerNums >= 10) {
-                            LogsManager_1.default.errorTag("passiveError", "被动技能死循环了,id:", passive._skillId, "opportunity:", opportunity);
+                            LogsManager.errorTag("passiveError", "被动技能死循环了,id:", passive._skillId, "opportunity:", opportunity);
                             continue;
                         }
                         var rt = PassiveSkillTrigger_1.default.runOnePassiveSkill(selfInstance, passive, p1, p2, p3, p4);
@@ -92,7 +91,7 @@ class ConditionTrigger {
         //根据条件类型动态拿方法
         var func = this["checkCondition_" + type];
         if (!func) {
-            LogsManager_1.default.errorTag("battleCfgError", "错误的条件类型,id:", condition._id, "type:", condition.type);
+            LogsManager.errorTag("battleCfgError", "错误的条件类型,id:", condition._id, "type:", condition.type);
             return false;
         }
         else {
@@ -169,7 +168,7 @@ class ConditionTrigger {
         var tempInstance = selfInstance;
         var tempResultInfo = tempInstance.tempBeUsedValue;
         if (!tempResultInfo) {
-            LogsManager_1.default.errorTag("checkCondition_6", "检查是否配置条件错误.还没有判定结果,condition:", condition._id, "skill:", skill && skill._skillId || "none");
+            LogsManager.errorTag("checkCondition_6", "检查是否配置条件错误.还没有判定结果,condition:", condition._id, "skill:", skill && skill._skillId || "none");
             return false;
         }
         if (tempResultInfo[0] == BattleConst_1.default.damage_miss) {
@@ -358,7 +357,7 @@ class ConditionTrigger {
     static checkCondition_18(selfInstance, condition, skill, useArr, skillAction) {
         var arr1 = condition.conditionLogicalParams;
         if (!skillAction.skill) {
-            LogsManager_1.default.errorTag("paramserror", "参数错误");
+            LogsManager.errorTag("paramserror", "参数错误");
         }
         for (var i = 0; i < arr1.length; i++) {
             var tempArr = arr1[i];
@@ -407,7 +406,7 @@ class ConditionTrigger {
             var propId = String(params[1]);
             var compareType = params[0];
             if (!propId) {
-                LogsManager_1.default.errorTag("conditionError", "condtion配置错误,id:", condition._id), "没有属性id";
+                LogsManager.errorTag("conditionError", "condtion配置错误,id:", condition._id), "没有属性id";
                 return false;
             }
             if (!useArr || useArr.length == 0) {
@@ -520,3 +519,4 @@ ConditionTrigger.opportunity_beUsedBuff = 16; //当被buff作用时 buff效果�
 ConditionTrigger.opportunity_usedbuffRmoved = 17; //当被作用着buff移除时 被作用者触发
 //条件数据缓存
 ConditionTrigger._conditionDataCache = {};
+//# sourceMappingURL=ConditionTrigger.js.map

@@ -4,14 +4,14 @@ const BaseViewExpand_1 = require("./BaseViewExpand");
 const csharp_1 = require("csharp");
 const UICompConst_1 = require("../consts/UICompConst");
 const ResourceManager_1 = require("../manager/ResourceManager");
-const ResourceConst_1 = require("../../game/sys/consts/ResourceConst");
 const puerts_1 = require("puerts");
+const ResourceCommonConst_1 = require("../consts/ResourceCommonConst");
 class LabelExpand extends BaseViewExpand_1.default {
     constructor(cobj) {
         super();
         this.uitype = UICompConst_1.default.comp_label;
         if (!cobj) {
-            cobj = ResourceManager_1.default.loadUIPrefab(ResourceConst_1.default.baseLabelPrefeb, ResourceConst_1.default.boundle_ui);
+            cobj = ResourceManager_1.default.loadUIPrefab(ResourceCommonConst_1.default.baseLabelPrefeb, ResourceCommonConst_1.default.boundle_ui);
         }
         this.setCObject(cobj);
     }
@@ -52,3 +52,4 @@ class LabelExpand extends BaseViewExpand_1.default {
     }
 }
 exports.default = LabelExpand;
+//# sourceMappingURL=LabelExpand.js.map

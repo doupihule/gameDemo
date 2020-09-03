@@ -4,6 +4,7 @@ import UICompConst from "../consts/UICompConst";
 import ResourceManager from "../manager/ResourceManager";
 import GameConsts from "../../game/sys/consts/GameConsts";
 import ResourceConst from "../../game/sys/consts/ResourceConst";
+import ResourceCommonConst from "../consts/ResourceCommonConst";
 
 export default class ImageExpand extends BaseContainer{
 
@@ -15,7 +16,7 @@ export default class ImageExpand extends BaseContainer{
 
 
 	//设置皮肤 最好手动指定boundlename
-	public  setSkin(url,boundlename:string = ResourceConst.boundle_uiimage,adjustSize:boolean =false){
+	public  setSkin(url,boundlename:string = ResourceCommonConst.boundle_uiimage,adjustSize:boolean =false){
 		if (!url || url =="" ){
 			this.__imageComp.sprite = null
 		} else{

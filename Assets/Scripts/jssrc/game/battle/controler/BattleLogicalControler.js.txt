@@ -26,7 +26,6 @@ const BattleLogsManager_1 = require("../../sys/manager/BattleLogsManager");
 const InstancePlayer_1 = require("../instance/InstancePlayer");
 const BattleSkillData_1 = require("../data/BattleSkillData");
 const ChooseTrigger_1 = require("../trigger/ChooseTrigger");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const ResourceConst_1 = require("../../sys/consts/ResourceConst");
 const PassiveSkillData_1 = require("../data/PassiveSkillData");
 const PassiveSkillTrigger_1 = require("../trigger/PassiveSkillTrigger");
@@ -127,7 +126,7 @@ class BattleLogicalControler extends BattleControler_1.default {
             mapId = FogFunc_1.default.instance.getCfgDatasByKey("Enemy", event.params[0], "sceneId");
         }
         else {
-            LogsManager_1.default.errorTag("", "没有当前的敌人事件格子");
+            LogsManager.errorTag("", "没有当前的敌人事件格子");
         }
         this.mapControler.setData(mapId || "1");
     }
@@ -761,7 +760,7 @@ class BattleLogicalControler extends BattleControler_1.default {
         }
         ;
         if (isNaN(targetY)) {
-            LogsManager_1.default.errorTag("无效的z坐标", "无效的z坐标");
+            LogsManager.errorTag("无效的z坐标", "无效的z坐标");
         }
         outpos.x = targetX;
         outpos.z = targetY;
@@ -965,3 +964,4 @@ class BattleLogicalControler extends BattleControler_1.default {
     }
 }
 exports.default = BattleLogicalControler;
+//# sourceMappingURL=BattleLogicalControler.js.map

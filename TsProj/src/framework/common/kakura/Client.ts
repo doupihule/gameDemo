@@ -8,7 +8,6 @@ import NotifyManager from "../../manager/NotifyManager";
 import ModelToServerMap from "../../../game/sys/consts/ModelToServerMap";
 
 import GameSwitch from "../GameSwitch";
-import LogsManager from "../../manager/LogsManager";
 import SingleCommonServer from "../../server/SingleCommonServer";
 import HttpMessage from "../HttpMessage";
 import ErrorCode from "../../../game/sys/common/kakura/ErrorCode";

@@ -1,7 +1,7 @@
 import {OriginalInterstitialAdComp} from './comp/OriginalInterstitialAdComp';
 import {ButtonUtils} from './../utils/ButtonUtils';
 import UserInfo from "../common/UserInfo";
-import LogsManager from "../manager/LogsManager";
+
 import GameSwitch from "../common/GameSwitch";
 import {InterstitialAdComp} from "./comp/InterstitialAdComp";
 import {RecommendationInterstitialComp} from "./comp/RecommendationInterstitialComp";

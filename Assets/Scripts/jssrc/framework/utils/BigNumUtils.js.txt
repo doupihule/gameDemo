@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../manager/LogsManager");
 class BigNumUtils {
     //大数加法：供外部接口调用
     static sum(a, b) {
@@ -11,11 +10,11 @@ class BigNumUtils {
         var indexa = a.indexOf(".");
         var indexb = b.indexOf(".");
         if (indexa != -1) {
-            LogsManager_1.default.errorTag("BigNumUtils", "大数运算加法a出现小数", a);
+            LogsManager.errorTag("BigNumUtils", "大数运算加法a出现小数", a);
             a = a.substr(0, indexa);
         }
         if (indexb != -1) {
-            LogsManager_1.default.errorTag("BigNumUtils", "大数运算加法b出现小数", b);
+            LogsManager.errorTag("BigNumUtils", "大数运算加法b出现小数", b);
             b = b.substr(0, indexb);
         }
         //结果
@@ -77,11 +76,11 @@ class BigNumUtils {
         var indexa = a.indexOf(".");
         var indexb = b.indexOf(".");
         if (indexa != -1) {
-            LogsManager_1.default.errorTag("BigNumUtils", "大数运算减法a出现小数", a);
+            LogsManager.errorTag("BigNumUtils", "大数运算减法a出现小数", a);
             a = a.substr(0, indexa);
         }
         if (indexb != -1) {
-            LogsManager_1.default.errorTag("BigNumUtils", "大数运算减法b出现小数", b);
+            LogsManager.errorTag("BigNumUtils", "大数运算减法b出现小数", b);
             b = b.substr(0, indexb);
         }
         //结果
@@ -159,11 +158,11 @@ class BigNumUtils {
         var indexa = a.indexOf(".");
         var indexb = b.indexOf(".");
         if (indexa != -1) {
-            LogsManager_1.default.errorTag("BigNumUtils", "大数运算乘法a出现小数", a);
+            LogsManager.errorTag("BigNumUtils", "大数运算乘法a出现小数", a);
             a = a.substr(0, indexa);
         }
         if (indexb != -1) {
-            LogsManager_1.default.errorTag("BigNumUtils", "大数运算乘法b出现小数", b);
+            LogsManager.errorTag("BigNumUtils", "大数运算乘法b出现小数", b);
             b = b.substr(0, indexb);
         }
         //判断符号
@@ -262,18 +261,18 @@ class BigNumUtils {
         b = b + "";
         //判零
         if (b == "0") {
-            LogsManager_1.default.errorTag("BigNumUtils", "大数运算除法除数为0", b);
+            LogsManager.errorTag("BigNumUtils", "大数运算除法除数为0", b);
             return 0;
         }
         //出现小数的处理：打error，并强制取整
         var indexa = a.indexOf(".");
         var indexb = b.indexOf(".");
         if (indexa != -1) {
-            LogsManager_1.default.errorTag("BigNumUtils", "大数运算除法a出现小数", a);
+            LogsManager.errorTag("BigNumUtils", "大数运算除法a出现小数", a);
             a = a.substr(0, indexa);
         }
         if (indexb != -1) {
-            LogsManager_1.default.errorTag("BigNumUtils", "大数运算除法b出现小数", b);
+            LogsManager.errorTag("BigNumUtils", "大数运算除法b出现小数", b);
             b = b.substr(0, indexb);
             if (b == "0") {
                 return 0;
@@ -519,3 +518,4 @@ class BigNumUtils {
     }
 }
 exports.default = BigNumUtils;
+//# sourceMappingURL=BigNumUtils.js.map

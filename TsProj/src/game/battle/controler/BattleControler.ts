@@ -5,7 +5,7 @@ import RefreshControler from "./RefreshControler";
 import BattleConst from "../../sys/consts/BattleConst";
 import GameConsts from "../../sys/consts/GameConsts";
 import BattleTweenControler from "./BattleTweenControler";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import InstanceLogical from "../instance/InstanceLogical";
 import PerformanceControler from "./PerformanceControler";
 import BattleLogsManager from "../../sys/manager/BattleLogsManager";

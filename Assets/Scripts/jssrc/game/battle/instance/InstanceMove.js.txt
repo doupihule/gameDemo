@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const InstanceMoveEntity_1 = require("./InstanceMoveEntity");
 const InstanceMoveMultyEntity_1 = require("./InstanceMoveMultyEntity");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
 const InstanceBasic_1 = require("./InstanceBasic");
 const PoolCode_1 = require("../../sys/consts/PoolCode");
@@ -198,7 +197,7 @@ class InstanceMove extends InstanceBasic_1.default {
         this._multyparams.expandParams = expandParams;
         var param = this._multyparams.getNextpos();
         if (!param) {
-            LogsManager_1.default.errorTag(null, "没有找到当前运动的点");
+            LogsManager.errorTag(null, "没有找到当前运动的点");
             return;
         }
         this.moveToOnePointByEntity(param, InstanceMove.moveType_multyPoint, false);
@@ -315,7 +314,7 @@ class InstanceMove extends InstanceBasic_1.default {
             return;
         }
         if (!this.controler) {
-            LogsManager_1.default.warn("已经放入缓存了不应该走到这里来");
+            LogsManager.warn("已经放入缓存了不应该走到这里来");
             return;
         }
         for (var i = 0; i < effectParamsArr.length; i++) {
@@ -349,7 +348,7 @@ class InstanceMove extends InstanceBasic_1.default {
         var aniSpeed = params.aniSpeed || 1;
         if (offsetType == 2) {
             if (!this.cfgData) {
-                LogsManager_1.default.errorTag("cgfserror", "没有配置size,rid:", this.dataId, "类型:", this["lifeType"]);
+                LogsManager.errorTag("cgfserror", "没有配置size,rid:", this.dataId, "类型:", this["lifeType"]);
             }
             var viewSize = this.cfgData.size;
             if (!viewSize) {
@@ -433,3 +432,4 @@ InstanceMove.moveType_tween = 3;
 InstanceMove.state_stand = "stand";
 InstanceMove.state_move = "move";
 InstanceMove._defaultViewSize = [0, 0];
+//# sourceMappingURL=InstanceMove.js.map

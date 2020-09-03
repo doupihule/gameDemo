@@ -1,5 +1,5 @@
 import BattleFunc from "../../sys/func/BattleFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import BattleConst from "../../sys/consts/BattleConst";
 import FogInstanceBasic from "./FogInstanceBasic";
 import InstanceMoveEntity from "../../battle/instance/InstanceMoveEntity";

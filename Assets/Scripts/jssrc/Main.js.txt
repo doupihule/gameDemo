@@ -20,13 +20,13 @@ class Main {
         }
         var thisObj = this;
         global.initGame = function (stageRoot, uiRoot) {
+            thisObj.initWindowEnv();
             GlobalData_1.default.initStage(stageRoot, uiRoot);
             ViewTools_1.default.init();
             BaseFunc_1.default.setCfgExportType(BaseFunc_1.default.exportType_New);
             var size = GlobalData_1.default.uiRoot.getViewRect();
             ScreenAdapterTools_1.default.checkScreenFixMode(size.x, size.y);
             // //初始化全局变量
-            thisObj.initWindowEnv();
             FrameWorkHandle_1.default.init();
             //
             PackConfigManager_1.default.initCfgs();
@@ -62,3 +62,4 @@ class Main {
 }
 //激活启动类
 new Main();
+//# sourceMappingURL=Main.js.map

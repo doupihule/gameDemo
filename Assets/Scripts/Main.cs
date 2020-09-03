@@ -20,8 +20,8 @@ public class Main : MonoBehaviour
         
         instance = this;
         ResourceManager.Instance.Init(this.gameObject);
-        //JSEnvExpand.InitEnv("C:/work/unity/gameDemo/TsProj/output/",-1);
-        JSEnvExpand.InitEnv("", -1);
+        JSEnvExpand.InitEnv("C:/work/unity/gameDemo/TsProj/output/",8080);
+        //JSEnvExpand.InitEnv("", -1);
         var initStage = JSEnvExpand.globalEnv.Eval<initStage>("global.initGame");
         GameObject uiRoot = GameObject.Find("uiRoot");
         initStage(this.gameObject, uiRoot);
@@ -31,6 +31,7 @@ public class Main : MonoBehaviour
     }
     void Update()
     {
+        JSEnvExpand.globalEnv.Tick();
         //luaUpdate(timerManager);
         JSEnvExpand.globalEnv.Eval("window.TimeManager.instance.tickHandler()");
     }

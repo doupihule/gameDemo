@@ -2,7 +2,6 @@ import {UnityEngine} from 'csharp'
 import BaseViewExpand from "./BaseViewExpand";
 import UICompConst from "../consts/UICompConst";
 import ViewTools from "./ViewTools";
-import LogsManager from "../manager/LogsManager";
 import Message from "../common/Message";
 
 export default class UIBaseView extends BaseViewExpand {
@@ -36,7 +35,7 @@ export default class UIBaseView extends BaseViewExpand {
                 var childViewInstance:BaseViewExpand = ViewTools.autoBindingCObj(childGameObj,true);
                 if (this[name] != null){
                     //子对象名字重复 只打警告
-                    LogsManager.warn("有子对象名字重复了"+path+"."+ name);
+                    window["LogsManager"].warn("有子对象名字重复了"+path+"."+ name);
                 } else{
                     this[name] = childViewInstance;
                 }

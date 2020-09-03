@@ -36,3 +36,4 @@ class DataResourceFunc extends BaseFunc_1.default {
     }
 }
 exports.default = DataResourceFunc;
+//# sourceMappingURL=DataResourceFunc.js.map

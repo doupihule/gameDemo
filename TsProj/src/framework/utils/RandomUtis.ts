@@ -1,4 +1,4 @@
-import LogsManager from "../manager/LogsManager";
+
 import TableUtils from "./TableUtils";
 
 export default class RandomUtis {

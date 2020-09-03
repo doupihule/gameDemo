@@ -1,5 +1,4 @@
 import UserInfo from "../common/UserInfo";
-import LogsManager from "./LogsManager";
 import CacheManager from "./CacheManager";
 import StorageCode from "../../game/sys/consts/StorageCode";
 import FileUtils from "../utils/FileUtils";

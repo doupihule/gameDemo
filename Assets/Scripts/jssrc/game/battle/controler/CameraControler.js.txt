@@ -151,3 +151,4 @@ class CameraControler {
     }
 }
 exports.default = CameraControler;
+//# sourceMappingURL=CameraControler.js.map

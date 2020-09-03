@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const GlobalData_1 = require("../utils/GlobalData");
-const LogsManager_1 = require("../manager/LogsManager");
 const WhiteListFunc_1 = require("../func/WhiteListFunc");
 const UserInfo_1 = require("../common/UserInfo");
 const UserModel_1 = require("../../game/sys/model/UserModel");
@@ -62,35 +61,35 @@ class SceneReference {
         // 第一次查场景值添加监听事件。IP城市信息请求返回刷新黑名单状态
         Message_1.default.instance.add(CommonEvent_1.default.GET_IPINFO_SUCCESS, SceneReference.instance);
         Message_1.default.instance.add(CommonEvent_1.default.GET_IPINFO_FAIL, SceneReference.instance);
-        LogsManager_1.default.echo("hlx scene 开始检查是否是白名单-----start");
+        LogsManager.echo("hlx scene 开始检查是否是白名单-----start");
         if (UserInfo_1.default.isWeb()) {
-            LogsManager_1.default.echo("zm web版永远是白名单");
+            LogsManager.echo("zm web版永远是白名单");
             return true;
         }
         if (GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_ALL_IN_WHITE_LIST)) {
-            LogsManager_1.default.echo("hlx scene 全服白名单开关开启");
+            LogsManager.echo("hlx scene 全服白名单开关开启");
             return true;
         }
         if (UserExtCommonModel_1.default.instance.getTestSceneMark()) {
-            LogsManager_1.default.echo("hlx scene 测试用户永远是白名单");
+            LogsManager.echo("hlx scene 测试用户永远是白名单");
             return true;
         }
         // 注册白名单
         if (!SceneReference.checkWhiteSceneId(GlobalData_1.default.sceneId, WhiteListFunc_1.default.TYPE_REGISTER)) {
-            LogsManager_1.default.echo("hlx scene 账号不在注册白名单,GlobalData.sceneId：", GlobalData_1.default.sceneId);
+            LogsManager.echo("hlx scene 账号不在注册白名单,GlobalData.sceneId：", GlobalData_1.default.sceneId);
             return false;
         }
         // 注册黑名单
         if (UserInfo_1.default.isNewAccount && this.checkQueryBlack()) {
-            LogsManager_1.default.echo("hlx scene 账号在Query黑名单中");
+            LogsManager.echo("hlx scene 账号在Query黑名单中");
             return false;
         }
         // 登陆黑名单
         if (UserModel_1.default.instance.isSceneBlack()) {
-            LogsManager_1.default.echo("hlx scene 账号不在登陆白名单,userModel.sceneBlack：", UserModel_1.default.instance.isSceneBlack());
+            LogsManager.echo("hlx scene 账号不在登陆白名单,userModel.sceneBlack：", UserModel_1.default.instance.isSceneBlack());
             return false;
         }
-        LogsManager_1.default.echo("hlx scene 检查白名单结束-----白名单用户");
+        LogsManager.echo("hlx scene 检查白名单结束-----白名单用户");
         return true;
     }
     /**
@@ -98,7 +97,7 @@ class SceneReference {
      */
     static checkIpBlack() {
         if (UserModel_1.default.instance.isSceneBlack()) {
-            LogsManager_1.default.echo("ycn 检查Ip黑名单： 账号已被染黑");
+            LogsManager.echo("ycn 检查Ip黑名单： 账号已被染黑");
             return true;
         }
         if (UserInfo_1.default.platform.cityName) {
@@ -107,7 +106,7 @@ class SceneReference {
                 for (var blackCityName of cityNames) {
                     if (blackCityName != "") {
                         if (UserInfo_1.default.platform.cityName.search(blackCityName) != -1) {
-                            LogsManager_1.default.echo("hlx 检查Ip黑名单：染黑", UserInfo_1.default.platform.cityName, " ", blackCityName);
+                            LogsManager.echo("hlx 检查Ip黑名单：染黑", UserInfo_1.default.platform.cityName, " ", blackCityName);
                             return true;
                         }
                     }
@@ -121,7 +120,7 @@ class SceneReference {
      */
     static checkQueryBlack() {
         if (UserModel_1.default.instance.isSceneBlack()) {
-            LogsManager_1.default.echo("ycn 检查query白名单： 账号已被染黑");
+            LogsManager.echo("ycn 检查query白名单： 账号已被染黑");
             return true;
         }
         // 非微信平台不检查Query白名单
@@ -130,18 +129,18 @@ class SceneReference {
         }
         var blackenStr = GlobalParamsFunc_1.default.instance.getCfgDatas("GlobalParams_json", 'whiteListString', true);
         if (!blackenStr.string) {
-            LogsManager_1.default.echo('hlx 检查Query白名单，通过：whiteListString未配置');
+            LogsManager.echo('hlx 检查Query白名单，通过：whiteListString未配置');
             return false;
         }
         var launchOptions = UserInfo_1.default.platform.getLaunchOptions();
         if (!launchOptions.query) {
-            LogsManager_1.default.warn('hlx 检查Query白名单，通过：launchOptions.query 未获取到');
+            LogsManager.warn('hlx 检查Query白名单，通过：launchOptions.query 未获取到');
             return false;
         }
-        LogsManager_1.default.echo("ycn scene query:", JSON.stringify(launchOptions.query), ' whiteListString：', blackenStr.string);
+        LogsManager.echo("ycn scene query:", JSON.stringify(launchOptions.query), ' whiteListString：', blackenStr.string);
         for (var keyword in launchOptions.query) {
             if (keyword.search(blackenStr.string) != -1) {
-                LogsManager_1.default.echo("hlx 检查Query白名单，通过, query:", keyword);
+                LogsManager.echo("hlx 检查Query白名单，通过, query:", keyword);
                 return false;
             }
         }
@@ -165,18 +164,18 @@ class SceneReference {
         var sceneWhiteList = WhiteListFunc_1.default.instance.getWhiteList(type);
         // 没有配置白名单。所有banner放行
         if (sceneWhiteList.length == 0 && !UserInfo_1.default.isWeb()) {
-            LogsManager_1.default.echo("zm noWhiteList sceneId:", sceneId);
+            LogsManager.echo("zm noWhiteList sceneId:", sceneId);
             return true;
         }
         else {
-            LogsManager_1.default.echo("krma. bannerScene:", sceneWhiteList.length);
+            LogsManager.echo("krma. bannerScene:", sceneWhiteList.length);
             if (sceneId) {
                 if (sceneWhiteList.indexOf(String(Number(sceneId))) != -1) {
-                    LogsManager_1.default.echo("zm find sceneId:", sceneId);
+                    LogsManager.echo("zm find sceneId:", sceneId);
                     return true;
                 }
             }
-            LogsManager_1.default.echo("zm noFind sceneId:", sceneId);
+            LogsManager.echo("zm noFind sceneId:", sceneId);
             return false;
         }
     }
@@ -252,3 +251,4 @@ SceneReference["1102"] = "公众号 profile 页服务预览";
 SceneReference["1103"] = "发现栏小程序主入口，「我的小程序」列表"; //（基础库2.2.4版本起废弃）
 SceneReference["1104"] = "微信聊天主界面下拉，「我的小程序」栏"; //（基础库2.2.4版本起废弃）
 SceneReference["1129"] = "微信爬虫访问";
+//# sourceMappingURL=SceneReference.js.map

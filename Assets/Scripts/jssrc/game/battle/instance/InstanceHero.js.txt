@@ -135,3 +135,4 @@ class InstanceHero extends InstanceLogical_1.default {
     }
 }
 exports.default = InstanceHero;
+//# sourceMappingURL=InstanceHero.js.map

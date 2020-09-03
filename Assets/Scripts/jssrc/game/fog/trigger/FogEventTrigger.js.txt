@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const FogFunc_1 = require("../../sys/func/FogFunc");
 const FogModel_1 = require("../../sys/model/FogModel");
 const WindowManager_1 = require("../../../framework/manager/WindowManager");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const WindowCfgs_1 = require("../../sys/consts/WindowCfgs");
 const GameTools_1 = require("../../../utils/GameTools");
 const FogConst_1 = require("../../sys/consts/FogConst");
@@ -55,7 +54,7 @@ class FogEventTrigger {
             //检测当前事件
             var func = this["runEvent_" + logicType];
             if (!func) {
-                LogsManager_1.default.errorTag("fogEventError", "没有对应的FogEvent类型:", logicType);
+                LogsManager.errorTag("fogEventError", "没有对应的FogEvent类型:", logicType);
             }
             else {
                 func.call(this, eventData, cell);
@@ -218,7 +217,7 @@ class FogEventTrigger {
                 cell.addEventData(back[0]);
                 //是否立刻检测是否弹后置事件
                 if (isQuickShow) {
-                    LogsManager_1.default.echo("开始检测------------", cell.mySign);
+                    LogsManager.echo("开始检测------------", cell.mySign);
                     this.showBehindEvent({ cell: cell });
                 }
             }
@@ -252,7 +251,7 @@ class FogEventTrigger {
     //显示后置事件
     static showBehindEvent(data) {
         var cell = data.cell;
-        LogsManager_1.default.echo("检测后置------------", cell.mySign);
+        LogsManager.echo("检测后置------------", cell.mySign);
         if (this.curBehindEvent == FogEventTrigger.Behind_event_Quick) {
             //直接触发
             FogEventTrigger.checkOneEvent(cell.eventData, cell);
@@ -293,3 +292,4 @@ FogEventTrigger.Event_logical_Brokenroad = 12;
 FogEventTrigger.Behind_event_Quick = 1;
 /**后置事件类型：非直接触发 */
 FogEventTrigger.Behind_event_Noquick = 2;
+//# sourceMappingURL=FogEventTrigger.js.map

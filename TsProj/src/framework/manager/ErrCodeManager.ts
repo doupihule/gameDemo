@@ -1,5 +1,4 @@
 import TranslateFunc from "../func/TranslateFunc";
-import LogsManager from "./LogsManager";
 import ErrorCode from "../../game/sys/common/kakura/ErrorCode";
 import Message from "../common/Message";
 import MsgCMD from "../../game/sys/common/MsgCMD";

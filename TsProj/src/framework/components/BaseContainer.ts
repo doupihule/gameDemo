@@ -1,8 +1,8 @@
 import BaseViewExpand from "./BaseViewExpand";
 import ResourceManager from "../manager/ResourceManager";
-import ResourceConst from "../../game/sys/consts/ResourceConst";
 import { UnityEngine,GameUtils } from "csharp";
 import { $typeof } from "puerts";
+import ResourceCommonConst from "../consts/ResourceCommonConst";
 
 
 export default class BaseContainer extends BaseViewExpand{
@@ -13,7 +13,7 @@ export default class BaseContainer extends BaseViewExpand{
 	constructor(cobj=null) {
 		super();
 		if (!cobj){
-			cobj = ResourceManager.loadUIPrefab(ResourceConst.baseContainerPrefeb,ResourceConst.boundle_ui);
+			cobj = ResourceManager.loadUIPrefab(ResourceCommonConst.baseContainerPrefeb, ResourceCommonConst.boundle_ui);
 		}
 		this.setCObject(cobj);
 	}

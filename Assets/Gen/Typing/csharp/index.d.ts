@@ -1106,6 +1106,8 @@ declare module 'csharp' {
             public static initVec3(x: number, y: number, z: number):UnityEngine.Vector3;
             public static initVec2(x: number, y: number):UnityEngine.Vector2;
             public static initColor(r: number, g: number, b: number, a: number):UnityEngine.Color;
+            public static RemoveAllChild(tran: UnityEngine.Transform):void;
+            public static GetChildByName(tran: UnityEngine.Transform, name: string):UnityEngine.GameObject;
             
         }
         

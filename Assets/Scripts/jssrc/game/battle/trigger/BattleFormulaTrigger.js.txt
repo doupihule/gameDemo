@@ -4,7 +4,6 @@ const BattleConst_1 = require("../../sys/consts/BattleConst");
 const ConditionTrigger_1 = require("./ConditionTrigger");
 const RandomUtis_1 = require("../../../framework/utils/RandomUtis");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const GameSwitch_1 = require("../../../framework/common/GameSwitch");
 const GameSwitchConst_1 = require("../../sys/consts/GameSwitchConst");
 const BattleLogsManager_1 = require("../../sys/manager/BattleLogsManager");
@@ -112,7 +111,7 @@ class BattleFormulaTrigger {
             dmg = 0;
         }
         if (isNaN(dmg)) {
-            LogsManager_1.default.errorTag("battleError", "___遇到错误的伤害");
+            LogsManager.errorTag("battleError", "___遇到错误的伤害");
             dmg = 1;
         }
         this.doDmgResult(attacker, defer, dmg, dmgType, skillAction, buff);
@@ -255,3 +254,4 @@ class BattleFormulaTrigger {
 }
 exports.default = BattleFormulaTrigger;
 BattleFormulaTrigger._cacheLogsMap = {};
+//# sourceMappingURL=BattleFormulaTrigger.js.map

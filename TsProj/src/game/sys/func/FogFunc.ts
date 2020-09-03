@@ -10,7 +10,7 @@ import TranslateFunc from "../../../framework/func/TranslateFunc";
 import ResourceConst from "../consts/ResourceConst";
 import UserModel from "../model/UserModel";
 import BigNumUtils from "../../../framework/utils/BigNumUtils";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import FogConst from "../consts/FogConst";
 import RolesModel from "../model/RolesModel";
 import BattleFunc from "./BattleFunc";

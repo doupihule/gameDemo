@@ -1,6 +1,6 @@
 import FogLogicalControler from "./FogLogicalControler";
 import FogInstanceCell from "../instance/FogInstanceCell";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import FogFunc from "../../sys/func/FogFunc";
 import GlobalParamsFunc from "../../sys/func/GlobalParamsFunc";
 import GameTools from "../../../utils/GameTools";

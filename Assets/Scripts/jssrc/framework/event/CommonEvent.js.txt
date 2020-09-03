@@ -20,3 +20,4 @@ CommonEvent.GET_IPINFO_SUCCESS = "GET_IPINFO_SUCCESS";
 CommonEvent.GET_IPINFO_FAIL = "GET_IPINFO_FAIL";
 /** 白名单状态变化 */
 CommonEvent.WHITE_LIST_CHANGE = "WHITE_LIST_CHANGE";
+//# sourceMappingURL=CommonEvent.js.map

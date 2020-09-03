@@ -38,3 +38,4 @@ class ReqLoadingUI extends BaseContainer_1.default {
 }
 exports.default = ReqLoadingUI;
 ReqLoadingUI.res = null;
+//# sourceMappingURL=ReqLoadingUI.js.map

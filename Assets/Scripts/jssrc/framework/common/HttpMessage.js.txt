@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const WaitManager_1 = require("../manager/WaitManager");
 const ErrCodeManager_1 = require("../manager/ErrCodeManager");
-const LogsManager_1 = require("../manager/LogsManager");
 const TimerManager_1 = require("../manager/TimerManager");
 const TranslateFunc_1 = require("../func/TranslateFunc");
 const WindowManager_1 = require("../manager/WindowManager");
@@ -93,7 +92,7 @@ class HttpMessage {
     //日志转化
     turnShortLogs(targetStr) {
         //如果是打开了日志调试的 不做转化
-        if (LogsManager_1.default.isOpenLogsDebug) {
+        if (LogsManager.isOpenLogsDebug) {
             return targetStr;
         }
         if (PackConfigManager_1.default.ins.platform.platform == "dev" || PackConfigManager_1.default.ins.platform.platform == "test") {
@@ -111,7 +110,7 @@ class HttpMessage {
         var url = this._currentConn.url;
         WaitManager_1.default.instance.remove(url);
         if (data && (typeof data == "string") && data.indexOf("!DOCTYPE HTML") != -1) {
-            LogsManager_1.default.echo("url is off," + url);
+            LogsManager.echo("url is off," + url);
             HttpMessage.instance.onHttpError({ error: { code: ErrorCode_1.default.webOffline } });
             return;
         }
@@ -122,7 +121,7 @@ class HttpMessage {
         //LogsManager.echo(this._currentConn.webParams.isCache, "this._currentConn.webParams.isCache")
         //如果是正常返回的 而且是要缓存数据到本地的
         if (!data) {
-            LogsManager_1.default.echo("没有返回数据");
+            LogsManager.echo("没有返回数据");
             HttpMessage.instance.onHttpError({ error: { code: ErrorCode_1.default.webOffline } });
             return;
         }
@@ -139,7 +138,7 @@ class HttpMessage {
                 data = JSON.parse(data);
             }
             catch (e) {
-                LogsManager_1.default.errorTag(null, "httpError,url:", url, "backData:");
+                LogsManager.errorTag(null, "httpError,url:", url, "backData:");
                 HttpMessage.instance.onHttpError({ error: { code: ErrorCode_1.default.webOffline } });
                 return;
             }
@@ -162,7 +161,7 @@ class HttpMessage {
         this._reconnectCount = 0;
         var shortLogs = this.turnShortLogs(originData);
         //test或者dev 打印完整的数据日志
-        LogsManager_1.default.echo("http callback,url:" + url.slice(0, Math.min(200, url.length)) + " cosTime:" + (Client_1.default.instance.miniserverTime - this.reqTime), "len:", originData.length, "backData:", shortLogs);
+        LogsManager.echo("http callback,url:" + url.slice(0, Math.min(200, url.length)) + " cosTime:" + (Client_1.default.instance.miniserverTime - this.reqTime), "len:", originData.length, "backData:", shortLogs);
         if (callBack) {
             callBack.call(thisObj, data);
         }
@@ -176,7 +175,7 @@ class HttpMessage {
         }
         var url = this._currentConn.url;
         WaitManager_1.default.instance.remove(url);
-        LogsManager_1.default.warn("error>>>>>", url, err.type, err);
+        LogsManager.warn("error>>>>>", url, err.type, err);
         this._reconnectCount++;
         if (this._reconnectCount <= this.autoConnectCount) {
             TimerManager_1.default.instance.setTimeout(this.reSendRequest, this, 1000);
@@ -232,3 +231,4 @@ HttpMessage.URLLoaderDataFormat = {
     TEXTURE: "texture",
     BINARY: "binary"
 };
+//# sourceMappingURL=HttpMessage.js.map

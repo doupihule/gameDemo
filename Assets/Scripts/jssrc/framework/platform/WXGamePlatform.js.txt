@@ -5,7 +5,6 @@ const Method_1 = require("../../game/sys/common/kakura/Method");
 const StatisticsManager_1 = require("../../game/sys/manager/StatisticsManager");
 const GamePlatform_1 = require("./GamePlatform");
 const Message_1 = require("../common/Message");
-const LogsManager_1 = require("../manager/LogsManager");
 const ShareFunc_1 = require("../../game/sys/func/ShareFunc");
 const TranslateFunc_1 = require("../func/TranslateFunc");
 const WindowManager_1 = require("../manager/WindowManager");
@@ -51,7 +50,6 @@ class WXGamePlatform extends GamePlatform_1.default {
         //定义微信平台为分包模式
         this._isSubPackage = true;
         this.listenTime = Client_1.default.instance.miniserverTime;
-        LogsManager_1.default.echo('构造platform');
     }
     /**
      * 初始化平台信息
@@ -86,12 +84,12 @@ class WXGamePlatform extends GamePlatform_1.default {
         if ("function" === typeof this.getWX().getSystemInfo) {
             this.getWX().getSystemInfo({
                 success(systemInfo) {
-                    LogsManager_1.default.echo('>>getSystemInfo成功回调', JSON.stringify(systemInfo));
+                    LogsManager.echo('>>getSystemInfo成功回调', JSON.stringify(systemInfo));
                     myThis.initSystemInfoData(systemInfo);
                 }, fail(err) {
-                    LogsManager_1.default.echo('>>getSystemInfo失败回调', JSON.stringify(err));
+                    LogsManager.echo('>>getSystemInfo失败回调', JSON.stringify(err));
                     var data = myThis.getWX().getSystemInfoSync();
-                    LogsManager_1.default.echo('>>getSystemInfo失败回调 重新同步拉取', JSON.stringify(data));
+                    LogsManager.echo('>>getSystemInfo失败回调 重新同步拉取', JSON.stringify(data));
                     if (data) {
                         myThis.initSystemInfoData(data);
                     }
@@ -124,7 +122,7 @@ class WXGamePlatform extends GamePlatform_1.default {
     //延迟检测system 获取最新的宽高. 防止因为宽高异常 导致获取到的banner位置有问题
     _delayCheckSystemInfo() {
         var systemInfo = this.getWX().getSystemInfoSync();
-        LogsManager_1.default.echo("xd _delayCheckSystemInfo:", this.systemInfo.windowHeight, systemInfo.windowHeight);
+        LogsManager.echo("xd _delayCheckSystemInfo:", this.systemInfo.windowHeight, systemInfo.windowHeight);
         if (systemInfo.windowHeight && systemInfo.windowHeight > this.systemInfo.windowHeight) {
             this.initSystemInfoData(systemInfo, true);
         }
@@ -146,7 +144,7 @@ class WXGamePlatform extends GamePlatform_1.default {
         this.reCheckBar();
         var data = {
             success: (res) => {
-                LogsManager_1.default.echo('>>login成功回调>>', res);
+                LogsManager.echo('>>login成功回调>>', res);
                 myThis.setLaunchOptions();
                 if (res != undefined) {
                     var gParams = {};
@@ -231,7 +229,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                 }
             },
             fail(err) {
-                LogsManager_1.default.echo('>>login失败回调>>', JSON.stringify(err));
+                LogsManager.echo('>>login失败回调>>', JSON.stringify(err));
                 myThis.retryGetWxInfo();
             }, complete() {
             }
@@ -244,7 +242,7 @@ class WXGamePlatform extends GamePlatform_1.default {
     retryGetWxInfo() {
         this.curReqGlobalCount++;
         if (this.curReqGlobalCount >= this.maxReqGlobalCount) {
-            LogsManager_1.default.warn(".login未获取到code超过五次", LogsManager_1.default.errorTag_gameError);
+            LogsManager.warn(".login未获取到code超过五次", LogsManager.errorTag_gameError);
             WindowManager_1.default.setPopupTip(1, "登陆失败，请重试！", () => {
                 this.getWxInfo();
             }, this);
@@ -259,7 +257,7 @@ class WXGamePlatform extends GamePlatform_1.default {
         if (this.isDoWxThings)
             return;
         if (UserInfo_1.default.isOppo() || UserInfo_1.default.isVivo() || UserInfo_1.default.isUC()) {
-            LogsManager_1.default.echo('Oppo Vivo 无 getLaunchOptions接口');
+            LogsManager.echo('Oppo Vivo 无 getLaunchOptions接口');
             return;
         }
         this.isDoWxThings = true;
@@ -268,7 +266,7 @@ class WXGamePlatform extends GamePlatform_1.default {
         if (!launchRes) {
             return;
         }
-        LogsManager_1.default.echo("yrc getLaunchOptions", JSON.stringify(launchRes));
+        LogsManager.echo("yrc getLaunchOptions", JSON.stringify(launchRes));
         if (!GlobalData_1.default.sceneId)
             GlobalData_1.default.sceneId = launchRes.scene;
         GlobalData_1.default.currentSceneId = launchRes.scene;
@@ -293,28 +291,28 @@ class WXGamePlatform extends GamePlatform_1.default {
         if (typeof this.getWX().getMenuButtonBoundingClientRect == 'function') {
             try {
                 var menuInfo = this.getWX().getMenuButtonBoundingClientRect();
-                LogsManager_1.default.echo('hlx menuInfo:', JSON.stringify(menuInfo));
+                LogsManager.echo('hlx menuInfo:', JSON.stringify(menuInfo));
                 ScreenAdapterTools_1.default.reCheckBar(menuInfo);
             }
             catch (e) {
-                LogsManager_1.default.echo('getMenuButtonBoundingClientRect 方法报错:', JSON.stringify(e));
+                LogsManager.echo('getMenuButtonBoundingClientRect 方法报错:', JSON.stringify(e));
             }
         }
         else {
-            LogsManager_1.default.echo('无 getMenuButtonBoundingClientRect 方法');
+            LogsManager.echo('无 getMenuButtonBoundingClientRect 方法');
         }
     }
     //添加监听事件
     addListener() {
         var thisObj = this;
         if (UserInfo_1.default.isUC()) {
-            LogsManager_1.default.echo("UC平台无全局事件注册");
+            LogsManager.echo("UC平台无全局事件注册");
             return;
         }
         //获取报错信息
         if (this.getWX().onError) {
             this.getWX().onError((res) => {
-                LogsManager_1.default.systemError("onError!!!!!!!!!!!!", JSON.stringify(res));
+                LogsManager.systemError("onError!!!!!!!!!!!!", JSON.stringify(res));
             });
         }
         if (this.getWX().onMemoryWarning) {
@@ -328,7 +326,7 @@ class WXGamePlatform extends GamePlatform_1.default {
             });
         }
         else {
-            LogsManager_1.default.warn("没有找到onMemoryWarning这个接口");
+            LogsManager.warn("没有找到onMemoryWarning这个接口");
         }
         // 添加onshow回调移动到构造函数保证最开始运行
         this.addOnShowListener();
@@ -343,16 +341,16 @@ class WXGamePlatform extends GamePlatform_1.default {
         myThis.platformUserInfo = {};
         this.getWX().getSetting({
             success: (res) => {
-                LogsManager_1.default.echo("yrc wx getSetting success", JSON.stringify(res));
+                LogsManager.echo("yrc wx getSetting success", JSON.stringify(res));
                 if (res.authSetting['scope.userInfo']) {
-                    LogsManager_1.default.echo("yrc wx start getUserInfo");
+                    LogsManager.echo("yrc wx start getUserInfo");
                     myThis.getWX().getUserInfo({
                         withCredentials: true,
                         lang: "",
                         success(res) {
-                            LogsManager_1.default.echo("yrc wx getUserInfo success", JSON.stringify(res));
+                            LogsManager.echo("yrc wx getUserInfo success", JSON.stringify(res));
                             if (UserInfo_1.default.isBaidu()) {
-                                LogsManager_1.default.echo("xd 百度不处理授权数据");
+                                LogsManager.echo("xd 百度不处理授权数据");
                                 return;
                             }
                             myThis.userInfoData = res;
@@ -364,9 +362,9 @@ class WXGamePlatform extends GamePlatform_1.default {
                             }
                         },
                         fail(err) {
-                            LogsManager_1.default.echo("yrc getUserInfo fail", JSON.stringify(err));
+                            LogsManager.echo("yrc getUserInfo fail", JSON.stringify(err));
                         }, complete(res) {
-                            LogsManager_1.default.echo("yrc getUserInfo complete", JSON.stringify(res));
+                            LogsManager.echo("yrc getUserInfo complete", JSON.stringify(res));
                             if (!UserInfo_1.default.isQQGame()) {
                                 myThis.sendKakuraInit();
                             }
@@ -378,11 +376,11 @@ class WXGamePlatform extends GamePlatform_1.default {
                 }
             },
             fail: () => {
-                LogsManager_1.default.echo("yrc getSetting ==fail===");
+                LogsManager.echo("yrc getSetting ==fail===");
                 myThis.sendKakuraInit();
             },
             complete: () => {
-                LogsManager_1.default.echo("yrc getSetting ==complete===");
+                LogsManager.echo("yrc getSetting ==complete===");
             }
         });
     }
@@ -406,14 +404,14 @@ class WXGamePlatform extends GamePlatform_1.default {
         });
         button.onTap((res) => {
             if (res.errMsg == "getUserInfo:ok") {
-                LogsManager_1.default.echo('>>createLoginButton成功回调>>', JSON.stringify(res));
-                LogsManager_1.default.echo("yrc wx authorize success", JSON.stringify(res));
+                LogsManager.echo('>>createLoginButton成功回调>>', JSON.stringify(res));
+                LogsManager.echo("yrc wx authorize success", JSON.stringify(res));
                 callBack && callBack.call(thisObject);
                 button.hide();
                 button.destroy();
             }
             else {
-                LogsManager_1.default.echo("拒绝授权 wx GetUserInfo 数据：" + JSON.stringify(res));
+                LogsManager.echo("拒绝授权 wx GetUserInfo 数据：" + JSON.stringify(res));
                 button.hide();
                 button.destroy();
                 callBack && callBack.call(thisObject);
@@ -439,13 +437,13 @@ class WXGamePlatform extends GamePlatform_1.default {
             }
         });
         button.onTap((res) => {
-            LogsManager_1.default.echo(">>>>>>onTap>>>>>>>>", res.errMsg == "getUserInfo:ok", res);
+            LogsManager.echo(">>>>>>onTap>>>>>>>>", res.errMsg == "getUserInfo:ok", res);
             if (res.errMsg == "getUserInfo:ok") {
-                LogsManager_1.default.echo('>>loginbutton onTap 成功回调>>', JSON.stringify(res));
+                LogsManager.echo('>>loginbutton onTap 成功回调>>', JSON.stringify(res));
                 callBack && callBack.call(thisObject, res);
             }
             else {
-                LogsManager_1.default.echo("拒绝授权 wx GetUserInfo 数据：" + JSON.stringify(res));
+                LogsManager.echo("拒绝授权 wx GetUserInfo 数据：" + JSON.stringify(res));
                 callBack && callBack.call(thisObject, -1);
             }
         });
@@ -464,7 +462,7 @@ class WXGamePlatform extends GamePlatform_1.default {
      *
      */
     share(id, extraData, callback, thisObj) {
-        LogsManager_1.default.echo("yrc wx share", id, extraData);
+        LogsManager.echo("yrc wx share", id, extraData);
         if (this._isShare)
             return;
         StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.NORMAL_SHARE);
@@ -473,7 +471,7 @@ class WXGamePlatform extends GamePlatform_1.default {
             this._isShare = false;
         }, this, 1300);
         if (GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_SHARE_NEW)) {
-            LogsManager_1.default.echo("yrc share 开关关了");
+            LogsManager.echo("yrc share 开关关了");
             callback && callback.call(thisObj, true);
             return;
         }
@@ -558,11 +556,11 @@ class WXGamePlatform extends GamePlatform_1.default {
                 query: shareQuery || "inviterRid=" + rid,
                 target: "wechat",
                 success: res => {
-                    LogsManager_1.default.echo("hlx 分享成功回调", JSON.stringify(res));
+                    LogsManager.echo("hlx 分享成功回调", JSON.stringify(res));
                     callback && callback.call(thisObj, true);
                 },
                 fail: err => {
-                    LogsManager_1.default.echo("hlx 分享失败回调", JSON.stringify(err));
+                    LogsManager.echo("hlx 分享失败回调", JSON.stringify(err));
                     callback && callback.call(thisObj, false);
                 }
             };
@@ -576,15 +574,15 @@ class WXGamePlatform extends GamePlatform_1.default {
             };
         }
         this._lastShareImg = shareData.imgId;
-        LogsManager_1.default.echo("yrc wxshare", data);
+        LogsManager.echo("yrc wxshare", data);
         var shareCallBack = (res) => {
-            LogsManager_1.default.echo('分享成功回调', res);
+            LogsManager.echo('分享成功回调', res);
             if (res != null) {
                 this._doShareCallBack(res == 1);
                 return;
             }
             else {
-                LogsManager_1.default.warn('分享失败回调');
+                LogsManager.warn('分享失败回调');
             }
         };
         if (id == "2" && extraData.shareInfo) {
@@ -602,7 +600,7 @@ class WXGamePlatform extends GamePlatform_1.default {
     }
     //分享非动态消息
     shareNormalAppMessage(data, shareCallBack) {
-        LogsManager_1.default.echo("yrc shareNormalAppMessage");
+        LogsManager.echo("yrc shareNormalAppMessage");
         if (this.getWX().updateShareMenu) {
             // 百度无updateShareMenu接口
             this.getWX().updateShareMenu({
@@ -614,7 +612,7 @@ class WXGamePlatform extends GamePlatform_1.default {
     }
     //分享动态消息
     shareDynamicAppMessage(data, shareCallBack, activityId) {
-        LogsManager_1.default.echo("yrc shareDynamicAppMessage");
+        LogsManager.echo("yrc shareDynamicAppMessage");
         if (this.getWX().updateShareMenu) {
             // 百度无updateShareMenu接口
             this.getWX().updateShareMenu({
@@ -654,12 +652,12 @@ class WXGamePlatform extends GamePlatform_1.default {
     /**判断是否分享超过3秒 */
     checkShareSucc() {
         var newTime = Client_1.default.instance.miniserverTime;
-        LogsManager_1.default.echo("yrc checkShareSucc newTime", newTime);
+        LogsManager.echo("yrc checkShareSucc newTime", newTime);
         if (this._shareTime && this._shareTime > 0) {
             var distime = newTime - this._shareTime;
             this._shareTime = 0;
             var kariquRt = KariqiShareManager_1.default.checkShareResult(distime);
-            LogsManager_1.default.echo("kariquRt", kariquRt);
+            LogsManager.echo("kariquRt", kariquRt);
             if (kariquRt == -1) {
                 FrameWorkHandle_1.default.instance.onCheckShareSucess(distime, this._shareExtraData);
             }
@@ -687,9 +685,9 @@ class WXGamePlatform extends GamePlatform_1.default {
     }
     // test
     sharePage() {
-        LogsManager_1.default.echo("hlx 初始默认分享配置");
+        LogsManager.echo("hlx 初始默认分享配置");
         if (UserInfo_1.default.isUC()) {
-            LogsManager_1.default.echo("hlx UC平台无三个点分享配置");
+            LogsManager.echo("hlx UC平台无三个点分享配置");
             return;
         }
         this.getWX().showShareMenu({
@@ -723,7 +721,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                     query += "&inviterRid=" + UserModel_1.default.instance.getUserRid();
                 }
             }
-            LogsManager_1.default.echo("wx share:", query, imgUrl);
+            LogsManager.echo("wx share:", query, imgUrl);
             myThis._lastShareImg = shareData.imgId;
             return {
                 imageUrl: imgUrl,
@@ -752,7 +750,7 @@ class WXGamePlatform extends GamePlatform_1.default {
         // 初始化视频广告
     }
     loadVideoAd() {
-        LogsManager_1.default.echo('hlx reload VideoAd');
+        LogsManager.echo('hlx reload VideoAd');
         var thisObj = this;
         if (!this._videoAd) {
             this.registerAd();
@@ -762,13 +760,13 @@ class WXGamePlatform extends GamePlatform_1.default {
             if (typeof promise === 'object' && promise.then) {
                 promise
                     .then(() => {
-                    LogsManager_1.default.echo('videoAd 注册广告加载成功');
+                    LogsManager.echo('videoAd 注册广告加载成功');
                     thisObj.loadAdvFailed = false;
                     thisObj.advHasShow = false;
                 })
                     .catch(err => {
                     thisObj.loadAdvFailed = true;
-                    LogsManager_1.default.echo('videoAd 广告手动加载失败', err);
+                    LogsManager.echo('videoAd 广告手动加载失败', err);
                     KariqiShareManager_1.default.addAdvPoint({
                         eventId: KariquShareConst_1.default.KARIQU_SHOWADV_FAIL,
                         name: ShareOrTvManager_1.default.curOrderName
@@ -782,11 +780,11 @@ class WXGamePlatform extends GamePlatform_1.default {
             return false;
         }
         if (UserInfo_1.default.isUC() && "function" != typeof this.getWX().createRewardVideoAd) {
-            LogsManager_1.default.warn("hlx adv 这个设备没有视频广告组件");
+            LogsManager.warn("hlx adv 这个设备没有视频广告组件");
             return false;
         }
         else if ("function" != typeof this.getWX().createRewardedVideoAd) {
-            LogsManager_1.default.warn("hlx adv这个设备没有视频广告组件");
+            LogsManager.warn("hlx adv这个设备没有视频广告组件");
             return false;
         }
         return true;
@@ -794,7 +792,7 @@ class WXGamePlatform extends GamePlatform_1.default {
     /**注册广告事件 */
     registerAd() {
         this.loadAdvFailed = false;
-        LogsManager_1.default.echo("yrc registerAd", this._videoId);
+        LogsManager.echo("yrc registerAd", this._videoId);
         if (this._videoAd)
             return;
         if (!this.canAdv()) {
@@ -828,7 +826,7 @@ class WXGamePlatform extends GamePlatform_1.default {
             }
             this._videoAd = this.getWX().createRewardedVideoAd(obj);
         }
-        LogsManager_1.default.echo("yrc registerAd this._videoAd", typeof this._videoAd);
+        LogsManager.echo("yrc registerAd this._videoAd", typeof this._videoAd);
         if (this._videoAd) {
             var videoAd = this._videoAd;
             videoAd.onError((err) => {
@@ -838,7 +836,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                     name: ShareOrTvManager_1.default.curOrderName
                 }, true);
                 WindowManager_1.default.SwitchMaskUI(false, 0.5);
-                LogsManager_1.default.echo("videoAd.onError:", JSON.stringify(err));
+                LogsManager.echo("videoAd.onError:", JSON.stringify(err));
                 thisObj.videoState = 0;
                 if (thisObj._videoLoaded) {
                     WindowManager_1.default.ShowTip(TranslateFunc_1.default.instance.getTranslate("#tid_ad_error"));
@@ -847,7 +845,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                 }
             });
             videoAd.onLoad(() => {
-                LogsManager_1.default.echo("videoAd.onLoad:");
+                LogsManager.echo("videoAd.onLoad:");
                 thisObj.loadAdvFailed = false;
                 // 加载成功新广告，advHasShow = false
                 thisObj.advHasShow = false;
@@ -861,7 +859,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                 if (res && res.isEnded) {
                     // 给予奖励
                     StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.NORMAL_VIDEO_SUCCESS);
-                    LogsManager_1.default.echo("yrc show WX video suc");
+                    LogsManager.echo("yrc show WX video suc");
                     thisObj._extraData && thisObj._extraData.callback && thisObj._extraData.callback.call(thisObj._extraData.thisObj, true);
                     thisObj.onVideoComplete(true);
                 }
@@ -880,7 +878,7 @@ class WXGamePlatform extends GamePlatform_1.default {
         }
     }
     onVideoComplete(videoResult) {
-        LogsManager_1.default.echo("onVideoComplete time:", Client_1.default.instance.miniserverTime);
+        LogsManager.echo("onVideoComplete time:", Client_1.default.instance.miniserverTime);
         // 由于回调有延迟。为防止拉取下一条视频后OnError回调。提前置空回调
         // 定时器到了再回调
         this.videoState = 0;
@@ -904,7 +902,7 @@ class WXGamePlatform extends GamePlatform_1.default {
         var thisObj = this;
         var failHandleType = GlobalParamsFunc_1.default.instance.videoHandleType;
         if (failHandleType == 1) {
-            LogsManager_1.default.echo("看视频中途退出");
+            LogsManager.echo("看视频中途退出");
             thisObj.onVideoComplete(false);
         }
         else if (failHandleType == 2) {
@@ -913,12 +911,12 @@ class WXGamePlatform extends GamePlatform_1.default {
                 confirmText: TranslateFunc_1.default.videoLabTranslate,
                 success: (res) => {
                     if (res.confirm) {
-                        LogsManager_1.default.echo('用户点击确定,再次拉起视频');
+                        LogsManager.echo('用户点击确定,再次拉起视频');
                         //再次拉起视频
                         thisObj.showVideoAd(thisObj._videoSucCallback, thisObj._videoFailCallback, thisObj._videoThisObj, thisObj._extraData);
                     }
                     else if (res.cancel) {
-                        LogsManager_1.default.echo("用户取消了再次看视频");
+                        LogsManager.echo("用户取消了再次看视频");
                         thisObj.onVideoComplete(false);
                     }
                 }
@@ -941,7 +939,7 @@ class WXGamePlatform extends GamePlatform_1.default {
         }
         if (!this._videoAd) {
             WindowManager_1.default.SwitchMaskUI(false, 0.5);
-            LogsManager_1.default.echo("yrc 没有广告实例，直接执行失败回调");
+            LogsManager.echo("yrc 没有广告实例，直接执行失败回调");
             this._doVedioCallBack(false);
             return;
         }
@@ -952,30 +950,30 @@ class WXGamePlatform extends GamePlatform_1.default {
         WindowManager_1.default.ShowTip("视频加载中");
         videoAd.show()
             .then(() => {
-            LogsManager_1.default.echo('广告显示成功');
+            LogsManager.echo('广告显示成功');
             myThis.isPlayVideo = true;
             Message_1.default.instance.send(MsgCMD_1.default.VIDEO_STOP);
         })
             .catch(err => {
-            LogsManager_1.default.echo('广告组件出现问题', err);
+            LogsManager.echo('广告组件出现问题', err);
             // 可以手动加载一次
             videoAd.load()
                 .then(() => {
-                LogsManager_1.default.echo('手动加载成功');
+                LogsManager.echo('手动加载成功');
                 //如果当前不是广告播放状态 没必要在显示了
                 if (myThis.videoState == 0) {
-                    LogsManager_1.default.echo("当前没有播放广告的回调.可能是在注册的时候初始化失败了-已经做了失败回调了");
+                    LogsManager.echo("当前没有播放广告的回调.可能是在注册的时候初始化失败了-已经做了失败回调了");
                     return;
                 }
                 //如果没有回调要执行的回调 就不show了
                 videoAd.show()
                     .then(() => {
-                    LogsManager_1.default.echo('广告显示成功');
+                    LogsManager.echo('广告显示成功');
                     myThis.isPlayVideo = true;
                     Message_1.default.instance.send(MsgCMD_1.default.VIDEO_STOP);
                 })
                     .catch(err => {
-                    LogsManager_1.default.echo('hlx video.广告组件第二次show失败，执行失败回调', err);
+                    LogsManager.echo('hlx video.广告组件第二次show失败，执行失败回调', err);
                     myThis.loadAdvFailed = true;
                     KariqiShareManager_1.default.addAdvPoint({
                         eventId: KariquShareConst_1.default.KARIQU_SHOWADV_FAIL,
@@ -986,7 +984,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                 });
             })
                 .catch(err => {
-                LogsManager_1.default.echo('广告手动加载失败', err);
+                LogsManager.echo('广告手动加载失败', err);
                 myThis.loadAdvFailed = true;
                 KariqiShareManager_1.default.addAdvPoint({
                     eventId: KariquShareConst_1.default.KARIQU_SHOWADV_FAIL,
@@ -1001,7 +999,7 @@ class WXGamePlatform extends GamePlatform_1.default {
      * 视频回调
      */
     _doVedioCallBack(result) {
-        LogsManager_1.default.echo("_doVedioCallBack and 重置视频参数 _videoCallback _videoThisObj");
+        LogsManager.echo("_doVedioCallBack and 重置视频参数 _videoCallback _videoThisObj");
         this.videoState = 0;
         var tempFunc = result ? this._videoSucCallback : this._videoFailCallback;
         var tempObj = this._videoThisObj;
@@ -1017,7 +1015,7 @@ class WXGamePlatform extends GamePlatform_1.default {
      * 分享回调
      */
     _doShareCallBack(result) {
-        LogsManager_1.default.echo("_doShareCallBack and 重置分享参数 _shareCallback _shareThisObj _shareId _shareExtra");
+        LogsManager.echo("_doShareCallBack and 重置分享参数 _shareCallback _shareThisObj _shareId _shareExtra");
         var tempFunc = this._shareCallback;
         var tempObj = this._shareThisObj;
         this._shareCallback = null;
@@ -1085,7 +1083,7 @@ class WXGamePlatform extends GamePlatform_1.default {
         var timeCode = TimerManager_1.default.instance.setTimeout(() => {
             thisObj.isOutTime = true;
             if (thisObj._hasCheckUpdateListener) {
-                LogsManager_1.default.echo("wxgme xd 已经处理过更新检查了--000000000");
+                LogsManager.echo("wxgme xd 已经处理过更新检查了--000000000");
                 return;
             }
             thisObj._hasCheckUpdateListener = true;
@@ -1098,10 +1096,10 @@ class WXGamePlatform extends GamePlatform_1.default {
         if (typeof this.getWX().getUpdateManager === 'function') { // 请在使用前先判断是否支持
             const updateManager = this.getWX().getUpdateManager();
             if (!VersionManager_1.default.checkIsForceUpdate()) {
-                LogsManager_1.default.echo("krma. no ForceUpdate");
+                LogsManager.echo("krma. no ForceUpdate");
                 timeCode && TimerManager_1.default.instance.remove(timeCode);
                 if (thisObj._hasCheckUpdateListener) {
-                    LogsManager_1.default.echo("wxgme xd 已经处理过更新检查了--000000000");
+                    LogsManager.echo("wxgme xd 已经处理过更新检查了--000000000");
                     return;
                 }
                 thisObj._hasCheckUpdateListener = true;
@@ -1110,7 +1108,7 @@ class WXGamePlatform extends GamePlatform_1.default {
             var timer = Client_1.default.instance.miniserverTime;
             updateManager.onCheckForUpdate(function (res) {
                 // 请求完新版本信息的回调
-                LogsManager_1.default.echo("请求完新版本信息的回调", res.hasUpdate, "costTime :", Client_1.default.instance.miniserverTime - timer);
+                LogsManager.echo("请求完新版本信息的回调", res.hasUpdate, "costTime :", Client_1.default.instance.miniserverTime - timer);
                 thisObj.setVersionCheckResult(res.hasUpdate ? 2 : 1);
                 if (thisObj.isOutTime)
                     return;
@@ -1118,7 +1116,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                     TimerManager_1.default.instance.remove(timeCode);
                 }
                 if (thisObj._hasCheckUpdateListener) {
-                    LogsManager_1.default.echo("wxgme xd 已经处理过更新检查了--000000000");
+                    LogsManager.echo("wxgme xd 已经处理过更新检查了--000000000");
                     return;
                 }
                 thisObj._hasCheckUpdateListener = true;
@@ -1133,14 +1131,14 @@ class WXGamePlatform extends GamePlatform_1.default {
             });
             updateManager.onUpdateReady(function () {
                 // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
-                LogsManager_1.default.echo("新版本下载完毕", "costTime :", Client_1.default.instance.miniserverTime - timer);
+                LogsManager.echo("新版本下载完毕", "costTime :", Client_1.default.instance.miniserverTime - timer);
                 //如果不是强更状态 return
                 if (!VersionManager_1.default.checkIsForceUpdate()) {
-                    LogsManager_1.default.warn("本次是非强更，无需重启客户端,localversion:", PackConfigManager_1.default.ins.platform.vms_version, "vmsversion:", VersionManager_1.default.vmsVersion);
+                    LogsManager.warn("本次是非强更，无需重启客户端,localversion:", PackConfigManager_1.default.ins.platform.vms_version, "vmsversion:", VersionManager_1.default.vmsVersion);
                     return;
                 }
                 // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
-                LogsManager_1.default.echo("新版本下载完毕");
+                LogsManager.echo("新版本下载完毕");
                 WindowManager_1.default.ShowTip(TranslateFunc_1.default.instance.getTranslate("#versionUpdateReady"));
                 TimerManager_1.default.instance.setTimeout(() => {
                     // 新的版本已经下载好，调用 applyUpdate 应用新版本并重启
@@ -1150,21 +1148,21 @@ class WXGamePlatform extends GamePlatform_1.default {
             });
             updateManager.onUpdateFailed(function () {
                 if (thisObj._hasCheckUpdateListener) {
-                    LogsManager_1.default.echo("wxgme xd 已经处理过更新检查了--000000000");
+                    LogsManager.echo("wxgme xd 已经处理过更新检查了--000000000");
                     return;
                 }
                 thisObj._hasCheckUpdateListener = true;
                 // 新的版本下载失败
-                LogsManager_1.default.echo("新版本下载失败", "costTime :", Client_1.default.instance.miniserverTime - timer);
+                LogsManager.echo("新版本下载失败", "costTime :", Client_1.default.instance.miniserverTime - timer);
                 MainModule_1.default.instance.changeShowMainTask(-1, MainModule_1.default.task_updateListerner, "task_updateListerner back");
             });
         }
         else {
-            LogsManager_1.default.echo('this.getWX().getUpdateManager不支持');
+            LogsManager.echo('this.getWX().getUpdateManager不支持');
             timeCode && TimerManager_1.default.instance.remove(timeCode);
             this.setVersionCheckResult(1);
             if (thisObj._hasCheckUpdateListener) {
-                LogsManager_1.default.echo("wxgme xd 已经处理过更新检查了--000000000");
+                LogsManager.echo("wxgme xd 已经处理过更新检查了--000000000");
                 return;
             }
             thisObj._hasCheckUpdateListener = true;
@@ -1179,7 +1177,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                 // this.getWX().setPreferredFramesPerSecond(30);
             }
             else {
-                LogsManager_1.default.echo("hlx 该平台不支持设置帧率函数");
+                LogsManager.echo("hlx 该平台不支持设置帧率函数");
             }
         }
     }
@@ -1202,18 +1200,18 @@ class WXGamePlatform extends GamePlatform_1.default {
         var myThis = this;
         // 首次注册初始化showT
         this.showT = Client_1.default.instance.miniserverTime;
-        LogsManager_1.default.echo('wx_listener 初始化onShow showT：', this.showT);
+        LogsManager.echo('wx_listener 初始化onShow showT：', this.showT);
         if (!(UserInfo_1.default.isOppo() || UserInfo_1.default.isVivo())) {
             this.getWX().onShow((res) => {
                 var nowTime = Client_1.default.instance.miniserverTime;
-                LogsManager_1.default.echo('>>OnShow成功回调', nowTime, JSON.stringify(res));
+                LogsManager.echo('>>OnShow成功回调', nowTime, JSON.stringify(res));
                 if (!this.isHide || !myThis.hideT) {
                     if (this.listenTime) {
                         this.mainToListen = this.listenTime - StatisticsManager_1.default.mainStartT;
-                        LogsManager_1.default.echo("krma. noHide show start " + StatisticsManager_1.default.mainStartT + " listen " + this.listenTime + " mainToListen " + this.mainToListen + " now " + nowTime + " mainToNow " + (nowTime - StatisticsManager_1.default.mainStartT));
+                        LogsManager.echo("krma. noHide show start " + StatisticsManager_1.default.mainStartT + " listen " + this.listenTime + " mainToListen " + this.mainToListen + " now " + nowTime + " mainToNow " + (nowTime - StatisticsManager_1.default.mainStartT));
                     }
                     else {
-                        LogsManager_1.default.echo("krma. noHide show start " + StatisticsManager_1.default.mainStartT + " no listen " + " now " + nowTime + " mainToNow " + (nowTime - StatisticsManager_1.default.mainStartT));
+                        LogsManager.echo("krma. noHide show start " + StatisticsManager_1.default.mainStartT + " no listen " + " now " + nowTime + " mainToNow " + (nowTime - StatisticsManager_1.default.mainStartT));
                     }
                     StatisticsManager_1.default.mainStartT = nowTime;
                 }
@@ -1246,7 +1244,7 @@ class WXGamePlatform extends GamePlatform_1.default {
             if (window["__physics3D"]) {
                 window["Laya3D"]["_physics3D"] = window["__physics3D"];
             }
-            LogsManager_1.default.echo("__已经拥有3D库了表示不会走到这里;");
+            LogsManager.echo("__已经拥有3D库了表示不会走到这里;");
             MainModule_1.default.instance.changeShowMainTask(-1, MainModule_1.default.task_subpackage, "xd wx-loadSubpackage,quick");
             return;
         }
@@ -1255,7 +1253,7 @@ class WXGamePlatform extends GamePlatform_1.default {
             this.initPhysics3D("xd wx-loadSubpackage,no subpackage");
             return;
         }
-        LogsManager_1.default.echo("xd- startDownloadSubPackage");
+        LogsManager.echo("xd- startDownloadSubPackage");
         var t1 = Client_1.default.instance.miniserverTime;
         var thisObj = this;
         this.getWX().loadSubpackage({
@@ -1266,11 +1264,11 @@ class WXGamePlatform extends GamePlatform_1.default {
             },
             fail: function (res) {
                 //失败弹出异常提示框 重连
-                LogsManager_1.default.echo("___分包下载异常--重新下载");
+                LogsManager.echo("___分包下载异常--重新下载");
                 WindowManager_1.default.setPopupTip(1, TranslateFunc_1.default.instance.getTranslate("#subPackageError"), thisObj.startDownloadSubPackage, thisObj);
             },
             complete: function (res) {
-                LogsManager_1.default.echo("___分包下载complete", res);
+                LogsManager.echo("___分包下载complete", res);
             }
         });
     }
@@ -1291,13 +1289,13 @@ class WXGamePlatform extends GamePlatform_1.default {
                     }
                     //首次启动数据缓存起来
                     GlobalData_1.default.firstRunSystemInfo = { appId: appId, sceneId: launchRes.scene };
-                    LogsManager_1.default.echo("sanmen getLaunchOptionsSync", JSON.stringify(launchRes), "sendStr:", UserInfo_1.default.LoginSceneInfo);
+                    LogsManager.echo("sanmen getLaunchOptionsSync", JSON.stringify(launchRes), "sendStr:", UserInfo_1.default.LoginSceneInfo);
                     //存本地
                     CacheManager_1.default.instance.setGlobalCache(StorageCode_1.default.storage_firstrun_data, JSON.stringify(GlobalData_1.default.firstRunSystemInfo));
                 }
             }
             catch (err) {
-                LogsManager_1.default.echo("sanmen getLaunchOptionsSync err");
+                LogsManager.echo("sanmen getLaunchOptionsSync err");
             }
         }
         else {
@@ -1308,7 +1306,7 @@ class WXGamePlatform extends GamePlatform_1.default {
             catch (e) {
                 GlobalData_1.default.firstRunSystemInfo = {};
             }
-            LogsManager_1.default.echo("sanmen setUserComeFrom", UserInfo_1.default.LoginSceneInfo);
+            LogsManager.echo("sanmen setUserComeFrom", UserInfo_1.default.LoginSceneInfo);
         }
         GlobalData_1.default.sceneId = GlobalData_1.default.firstRunSystemInfo.sceneId;
     }
@@ -1325,7 +1323,7 @@ class WXGamePlatform extends GamePlatform_1.default {
     }
     /**显示模态对话框，即弹窗 */
     showPopTip(title, content, extraData = null) {
-        LogsManager_1.default.echo("yrc showPopTip:", title, content, extraData);
+        LogsManager.echo("yrc showPopTip:", title, content, extraData);
         if (this.getWX().showModal) {
             var data = TableUtils_1.default.copyOneTable(extraData) || {};
             data.title = title;
@@ -1339,7 +1337,7 @@ class WXGamePlatform extends GamePlatform_1.default {
      * @param icon 图标类型，none为没有图标
      */
     showFlyTip(title, icon = "none") {
-        LogsManager_1.default.echo("yrc showFlyTip:", title);
+        LogsManager.echo("yrc showFlyTip:", title);
         if (this.getWX().showToast) {
             this.getWX().showToast({
                 title: title,
@@ -1351,7 +1349,7 @@ class WXGamePlatform extends GamePlatform_1.default {
     loadSubPackage(packageName, callback, thisObj, isShowPop = false) {
         var t1 = Client_1.default.instance.miniserverTime;
         if (!this.getWX().loadSubpackage) {
-            LogsManager_1.default.errorTag(LogsErrorCode_1.default.WX_SDK_ERROR, "yrc loadSubPackage 无分包加载接口");
+            LogsManager.errorTag(LogsErrorCode_1.default.WX_SDK_ERROR, "yrc loadSubPackage 无分包加载接口");
             callback && callback.call(thisObj, false);
             return;
         }
@@ -1362,11 +1360,11 @@ class WXGamePlatform extends GamePlatform_1.default {
             if (!callback) {
                 return;
             }
-            LogsManager_1.default.echo("yrc loadSubpackage fail packageName:", packageName, "_subPackErrorCount ", myThis._subPackErrorCount, " errRes:", TableUtils_1.default.safelyJsonStringfy(res));
+            LogsManager.echo("yrc loadSubpackage fail packageName:", packageName, "_subPackErrorCount ", myThis._subPackErrorCount, " errRes:", TableUtils_1.default.safelyJsonStringfy(res));
             myThis._subPackErrorCount++;
             //如果第一次下载失败
             if (myThis._subPackErrorCount == 1) {
-                LogsManager_1.default.echo("xd _重试---下载分包", packageName);
+                LogsManager.echo("xd _重试---下载分包", packageName);
                 TimerManager_1.default.instance.add(myThis.loadSubPackage, myThis, 100, 1, false, [packageName, callback, thisObj, isShowPop]);
                 callback = null;
             }
@@ -1392,7 +1390,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                         var tempCallBack = callback;
                         callback = null;
                         WindowManager_1.default.setPopupTip(1, TranslateFunc_1.default.instance.getTranslate("#error110"), () => {
-                            LogsManager_1.default.echo("yrc111 loadSubpackage fail 弹窗重新加载点击确认");
+                            LogsManager.echo("yrc111 loadSubpackage fail 弹窗重新加载点击确认");
                             myThis.loadSubPackage(packageName, tempCallBack, thisObj, true);
                         }, myThis);
                     }
@@ -1408,7 +1406,7 @@ class WXGamePlatform extends GamePlatform_1.default {
             name: packageName,
             success: (res) => {
                 myThis._subPackErrorCount = 0;
-                LogsManager_1.default.echo("yrc loadSubpackage success packageName:", packageName, "   sucRes:", res, "cosTime:", Client_1.default.instance.miniserverTime - t1);
+                LogsManager.echo("yrc loadSubpackage success packageName:", packageName, "   sucRes:", res, "cosTime:", Client_1.default.instance.miniserverTime - t1);
                 SubPackageManager_1.default.setLoadStatus(packageName);
                 //这里延迟一帧做回调
                 if (callback) {
@@ -1422,7 +1420,7 @@ class WXGamePlatform extends GamePlatform_1.default {
             fail: failFunc,
             complete: (res) => {
                 TimerManager_1.default.instance.remove(timeCode);
-                LogsManager_1.default.echo("yrc loadSubpackage complete packageName:", packageName);
+                LogsManager.echo("yrc loadSubpackage complete packageName:", packageName);
             }
         });
     }
@@ -1434,14 +1432,14 @@ class WXGamePlatform extends GamePlatform_1.default {
                 sendMessageTitle: "我要领钻石",
                 sendMessageImg: "common/main_btn_lingzuan.png",
                 success: (res) => {
-                    LogsManager_1.default.echo("yrc111 openCustomerServiceConversation success", res);
+                    LogsManager.echo("yrc111 openCustomerServiceConversation success", res);
                     Message_1.default.instance.send(MsgCMD_1.default.CUSTOMER_BACK);
                 },
                 fail: (res) => {
-                    LogsManager_1.default.echo("yrc111 openCustomerServiceConversation fail", res);
+                    LogsManager.echo("yrc111 openCustomerServiceConversation fail", res);
                 },
                 complete: (res) => {
-                    LogsManager_1.default.echo("yrc111 openCustomerServiceConversation complete", res);
+                    LogsManager.echo("yrc111 openCustomerServiceConversation complete", res);
                 },
             });
         }
@@ -1457,7 +1455,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                     path: data.path,
                     extraData: data.extraData && data.extraData.ext,
                     success: (res) => {
-                        LogsManager_1.default.echo("yrc navigateToMiniProgram success", res);
+                        LogsManager.echo("yrc navigateToMiniProgram success", res);
                         JumpManager_1.default.sendKariquJumpClickData(data.jumpData);
                         //额外数据处理
                         if (data.extraData) {
@@ -1483,13 +1481,13 @@ class WXGamePlatform extends GamePlatform_1.default {
                         });
                     },
                     fail: (res) => {
-                        LogsManager_1.default.echo("yrc navigateToMiniProgram fail", res);
+                        LogsManager.echo("yrc navigateToMiniProgram fail", res);
                         if (data.extraData.callBack) {
                             data.extraData.callBack.call();
                         }
                     },
                     complete: (res) => {
-                        LogsManager_1.default.echo("yrc navigateToMiniProgram complete", res);
+                        LogsManager.echo("yrc navigateToMiniProgram complete", res);
                     },
                 });
             }
@@ -1508,7 +1506,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                     path: data.path,
                     extraData: data.extraData && data.extraData.ext,
                     success: (res) => {
-                        LogsManager_1.default.echo("yrc navigateToMiniProgram success", res);
+                        LogsManager.echo("yrc navigateToMiniProgram success", res);
                         //额外数据处理
                         if (data.extraData) {
                             data.extraData.callBack && data.extraData.callBack.call(data.extraData.thisObj, data.appId);
@@ -1534,7 +1532,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                         JumpManager_1.default.removeJumpedApp(toAppId);
                     },
                     fail: (res) => {
-                        LogsManager_1.default.echo("yrc navigateToMiniProgram fail", res);
+                        LogsManager.echo("yrc navigateToMiniProgram fail", res);
                         // Message.instance.send(WxEvent.WX_EVENT_JUMPFAIL);
                         JumpManager_1.default.showDrawerView(data.extraData && data.extraData.from);
                         if (data.extraData && data.extraData.failCall) {
@@ -1542,7 +1540,7 @@ class WXGamePlatform extends GamePlatform_1.default {
                         }
                     },
                     complete: (res) => {
-                        LogsManager_1.default.echo("yrc navigateToMiniProgram complete", res);
+                        LogsManager.echo("yrc navigateToMiniProgram complete", res);
                         // Message.instance.send(WxEvent.WX_EVENT_JUMPCOMPLETE);
                     },
                 });
@@ -1555,14 +1553,14 @@ class WXGamePlatform extends GamePlatform_1.default {
             this.getWX().setUserCloudStorage({
                 KVDataList: data,
                 success(res) {
-                    LogsManager_1.default.echo('setUserCloudStorage>>成功回调', JSON.stringify(res));
+                    LogsManager.echo('setUserCloudStorage>>成功回调', JSON.stringify(res));
                 }, fail(err) {
-                    LogsManager_1.default.echo('setUserCloudStorage>>失败回调', JSON.stringify(err));
+                    LogsManager.echo('setUserCloudStorage>>失败回调', JSON.stringify(err));
                 }
             });
         }
         else {
-            LogsManager_1.default.errorTag(null, "没有找到setUserCloudStorage这个接口");
+            LogsManager.errorTag(null, "没有找到setUserCloudStorage这个接口");
         }
     }
     /**
@@ -1667,3 +1665,4 @@ class WXGamePlatform extends GamePlatform_1.default {
     }
 }
 exports.default = WXGamePlatform;
+//# sourceMappingURL=WXGamePlatform.js.map

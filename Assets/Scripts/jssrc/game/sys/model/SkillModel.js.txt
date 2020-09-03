@@ -32,3 +32,4 @@ class SkillModel extends BaseModel_1.default {
     }
 }
 exports.default = SkillModel;
+//# sourceMappingURL=SkillModel.js.map

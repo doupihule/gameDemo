@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RecommendationBaiduComp = void 0;
-const LogsManager_1 = require("../../manager/LogsManager");
 const TopViewAutoComp_1 = require("./TopViewAutoComp");
 const UserInfo_1 = require("../../common/UserInfo");
 const Message_1 = require("../../common/Message");
@@ -52,7 +51,7 @@ class RecommendationBaiduComp extends TopViewAutoComp_1.TopViewAutoComp {
                 thisObj._retryTimes++;
                 thisObj._recommendationButton.load();
             }
-            LogsManager_1.default.warn("Recommendation error:", JSON.stringify(e));
+            LogsManager.warn("Recommendation error:", JSON.stringify(e));
         });
         // 监听按钮资源加载完成
         this._recommendationButton.onLoad(() => {
@@ -83,11 +82,11 @@ class RecommendationBaiduComp extends TopViewAutoComp_1.TopViewAutoComp {
     }
     static canUseRecommendBaidu() {
         if (GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISIBLE_RECOMMEND_BAIDU)) {
-            LogsManager_1.default.echo('hlx Recommendation 禁用：推荐开关关闭');
+            LogsManager.echo('hlx Recommendation 禁用：推荐开关关闭');
             return false;
         }
         if (!UserInfo_1.default.platform.getWX().createRecommendationButton) {
-            LogsManager_1.default.echo("hlx Recommendation createRecommendationButton not found");
+            LogsManager.echo("hlx Recommendation createRecommendationButton not found");
             return false;
         }
         return true;
@@ -121,3 +120,4 @@ exports.RecommendationBaiduComp = RecommendationBaiduComp;
 RecommendationBaiduComp.TYPE_LIST = 'list';
 /** 推荐列表类型：轮播 */
 RecommendationBaiduComp.TYPE_CAROUSEL = 'carousel';
+//# sourceMappingURL=RecommendationBaiduComp.js.map

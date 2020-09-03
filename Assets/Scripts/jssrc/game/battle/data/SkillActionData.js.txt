@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 //技能效果数据
 class SkillActionData {
     //技能效果id
@@ -32,7 +31,7 @@ class SkillActionData {
     //刷新数据
     updateData(owner, skill, relyonSkill = null) {
         if (!skill) {
-            LogsManager_1.default.echo("noSkill------------------");
+            LogsManager.echo("noSkill------------------");
         }
         //存储当前的技能对象
         this.skill = skill;
@@ -82,3 +81,4 @@ class SkillActionData {
     }
 }
 exports.default = SkillActionData;
+//# sourceMappingURL=SkillActionData.js.map

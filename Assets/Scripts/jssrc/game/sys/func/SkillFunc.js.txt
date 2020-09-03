@@ -55,3 +55,4 @@ class SkillFunc extends BaseFunc_1.default {
     }
 }
 exports.default = SkillFunc;
+//# sourceMappingURL=SkillFunc.js.map

@@ -4,7 +4,6 @@ const UserInfo_1 = require("../common/UserInfo");
 const JumpConst_1 = require("../../game/sys/consts/JumpConst");
 const GlobalParamsFunc_1 = require("../../game/sys/func/GlobalParamsFunc");
 const GlobalData_1 = require("../utils/GlobalData");
-const LogsManager_1 = require("./LogsManager");
 const GameSwitch_1 = require("../common/GameSwitch");
 const GameConsts_1 = require("../../game/sys/consts/GameConsts");
 const HttpMessage_1 = require("../common/HttpMessage");
@@ -48,7 +47,7 @@ class JumpManager {
                 if (info.blackListPlatform == platCode) {
                     if (String(info.electBlackListNub) == String(GlobalData_1.default.currentSceneId)) {
                         this.blackSceneState = JumpConst_1.default.JUMP_SCENE_STATE_BLACK;
-                        LogsManager_1.default.echo("jump", "这是一个黑名单的场景值", GlobalData_1.default.currentSceneId);
+                        LogsManager.echo("jump", "这是一个黑名单的场景值", GlobalData_1.default.currentSceneId);
                         break;
                     }
                 }
@@ -168,8 +167,8 @@ class JumpManager {
     }
     static sendKariquReq(callBack, thisObject, callParams = null, mutualType = null) {
         if (!JumpManager.kariquList) {
-            LogsManager_1.default.errorTag("noJumpList", "kariquNoJumpList");
-            LogsManager_1.default.echo("this.data-----------------", this.data);
+            LogsManager.errorTag("noJumpList", "kariquNoJumpList");
+            LogsManager.echo("this.data-----------------", this.data);
             this.callBack && this.callBack.call(this.thisObject, this.callParams);
             return;
         }
@@ -191,8 +190,8 @@ class JumpManager {
             }
         }
         if (kariquList.length == 0) {
-            LogsManager_1.default.errorTag("noJumpList", "kariquNoJumpList");
-            LogsManager_1.default.echo("this.data-----------------", this.data);
+            LogsManager.errorTag("noJumpList", "kariquNoJumpList");
+            LogsManager.echo("this.data-----------------", this.data);
             this.callBack && this.callBack.call(this.thisObject, this.callParams);
             return;
         }
@@ -208,7 +207,7 @@ class JumpManager {
         });
     }
     static onKariquSuccess(data, kariquParams) {
-        LogsManager_1.default.echo("hlx 卡日曲互推列表返回：", data);
+        LogsManager.echo("hlx 卡日曲互推列表返回：", data);
         if (data) {
             data = JSON.parse(data);
         }
@@ -229,7 +228,7 @@ class JumpManager {
             });
         }
         else {
-            LogsManager_1.default.echo("this.data-----------------", this.data);
+            LogsManager.echo("this.data-----------------", this.data);
             this.callBack && this.callBack.call(this.thisObject, this.callParams);
         }
     }
@@ -237,7 +236,7 @@ class JumpManager {
      * 指色：获取互推数据
      */
     static sendZhiseReq(callBack, thisObject, callParams = null) {
-        LogsManager_1.default.echo("拉取指色互推");
+        LogsManager.echo("拉取指色互推");
         this.callBack = callBack;
         this.thisObject = thisObject;
         this.callParams = callParams;
@@ -251,7 +250,7 @@ class JumpManager {
                 for (var i = 0; i < thisObj.data.length; i++) {
                     thisObj.data[i].GameIndex = i;
                 }
-                LogsManager_1.default.echo("拉取指色互推Success", thisObj.data);
+                LogsManager.echo("拉取指色互推Success", thisObj.data);
                 thisObj.callBack && thisObj.callBack.call(thisObj.thisObject, thisObj.callParams);
             }
         });
@@ -293,7 +292,7 @@ class JumpManager {
                     this.data.push(data[i]);
                 }
             }
-            LogsManager_1.default.echo("ycn fantasyJumpData:", this.data, this.interData, "len:", this.data.length);
+            LogsManager.echo("ycn fantasyJumpData:", this.data, this.interData, "len:", this.data.length);
             this.callBack && this.callBack.call(this.thisObject, this.callParams);
             return true;
         }
@@ -303,17 +302,17 @@ class JumpManager {
      * 奇幻梦想：获取互推数据回调
      */
     static onFantasySuccess(data) {
-        LogsManager_1.default.echo("拉取互推列表 onFantasySuccess", data);
+        LogsManager.echo("拉取互推列表 onFantasySuccess", data);
         if (data) {
             try {
                 data = JSON.parse(data);
             }
             catch (e) {
-                LogsManager_1.default.warn("Fantasyjump", "httpError,onFantasySuccess backData:", data);
+                LogsManager.warn("Fantasyjump", "httpError,onFantasySuccess backData:", data);
                 return;
             }
             if (!data[0].result) {
-                LogsManager_1.default.warn("Fantasyjump", "httpError,onFantasySuccess backData:", data);
+                LogsManager.warn("Fantasyjump", "httpError,onFantasySuccess backData:", data);
                 return;
             }
             this.data = data[0].result.data;
@@ -358,13 +357,13 @@ class JumpManager {
      * 拉取互推信息列表回调
      */
     static onMokaSuccess(data) {
-        LogsManager_1.default.echo("拉取互推列表 onMokaSuccess", data);
+        LogsManager.echo("拉取互推列表 onMokaSuccess", data);
         if (data) {
             try {
                 data = JSON.parse(data);
             }
             catch (e) {
-                LogsManager_1.default.warn("mokajump", "httpError,onMokaSuccess backData:", data);
+                LogsManager.warn("mokajump", "httpError,onMokaSuccess backData:", data);
                 return;
             }
             if (data.code && data.code == "200") {
@@ -391,7 +390,7 @@ class JumpManager {
         }
     }
     static onMokaError(data) {
-        LogsManager_1.default.echo("拉取互推列表 失败 onMokaError", data);
+        LogsManager.echo("拉取互推列表 失败 onMokaError", data);
     }
     /**获取互推小游戏列表数据 */
     static getMokaData(min = 1, max = 10, sort = 1) {
@@ -461,7 +460,7 @@ class JumpManager {
             return;
         }
         this.setFrom = from;
-        LogsManager_1.default.echo("returnGame1----------------", from);
+        LogsManager.echo("returnGame1----------------", from);
         if (!this.checkShow())
             return;
         if (this.isInDrawer)
@@ -485,7 +484,7 @@ class JumpManager {
     /**显示指色主界面互推弹框 */
     static showMainJumpZhise(from) {
         this.setFrom = from;
-        LogsManager_1.default.echo("returnGame1----------------", from);
+        LogsManager.echo("returnGame1----------------", from);
         if (!this.checkShow())
             return;
         if (this.data) {
@@ -495,7 +494,7 @@ class JumpManager {
     /**显示主界面互推弹框 */
     static showMainJumpKariqu(from) {
         this.setFrom = from;
-        LogsManager_1.default.echo("returnGame1----------------", from);
+        LogsManager.echo("returnGame1----------------", from);
         if (!this.checkShow())
             return;
         if (this.data) {
@@ -714,11 +713,11 @@ class JumpManager {
      *  打开插屏互推界面
      */
     static showInterJump() {
-        LogsManager_1.default.echo("ycn show inter jump:", this.interData);
+        LogsManager.echo("ycn show inter jump:", this.interData);
         if (this.interData.length > 0) {
             var interJumpArgv = GlobalParamsFunc_1.default.instance.getDataArray("advertJumpChance")[0].split(',');
             var jumpData = JumpManager.getRandomInterJumpByPosition(21, 21, 25);
-            LogsManager_1.default.echo("ycn interJumpRandResult:", jumpData);
+            LogsManager.echo("ycn interJumpRandResult:", jumpData);
             if ((this.interJumpNum == -1 || this.interJumpNum >= interJumpArgv[0]) && jumpData) {
                 WindowManager_1.default.OpenUI(WindowCommonCfgs_1.default.INTERJUMPVIEW, jumpData);
                 this.interJumpNum = 0;
@@ -747,7 +746,7 @@ class JumpManager {
     }
     static onSendClickSuccess(data) {
         if (data) {
-            LogsManager_1.default.echo("zm.上报点击成功");
+            LogsManager.echo("zm.上报点击成功");
         }
         var url = GameConsts_1.default['JUMP_KARIQU_CONFIRM_URL'];
         var params = {
@@ -756,7 +755,7 @@ class JumpManager {
         };
         HttpMessage_1.default.instance.sendOtherHttpRequest(url, params, () => {
             if (data) {
-                LogsManager_1.default.echo("hlx.卡日曲导出确认成功", data);
+                LogsManager.echo("hlx.卡日曲导出确认成功", data);
             }
         }, this, "post");
     }
@@ -771,7 +770,7 @@ class JumpManager {
         var curChannel = KariqiShareManager_1.default.getChannelValue();
         if (!curChannel) {
             this.kariquJumpResult = false;
-            LogsManager_1.default.echo("zm.noCurChannel--------------------", curChannel, this.kariquJumpResult);
+            LogsManager.echo("zm.noCurChannel--------------------", curChannel, this.kariquJumpResult);
             return this.kariquJumpResult;
         }
         if (KariqiShareManager_1.default.kariquConfigValue && KariqiShareManager_1.default.kariquConfigValue.indexOf(curChannel) != -1) {
@@ -780,7 +779,7 @@ class JumpManager {
         else {
             this.kariquJumpResult = false;
         }
-        LogsManager_1.default.echo("zm.kariquBlack--------------------", curChannel, this.kariquJumpResult);
+        LogsManager.echo("zm.kariquBlack--------------------", curChannel, this.kariquJumpResult);
         return this.kariquJumpResult;
     }
     /**
@@ -916,3 +915,4 @@ link_id:'',//icon获取的path参数中截取mt_link_id的值 });
  timestamp 	Y	当前时间戳
  appkey 	Y	对接sdk统计平台时由梦嘉工作人员提供的appkey，于打点上报时获取，唯一
  */
+//# sourceMappingURL=JumpManager.js.map

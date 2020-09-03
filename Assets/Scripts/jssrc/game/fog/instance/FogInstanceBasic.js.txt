@@ -76,3 +76,4 @@ class FogInstanceBasic extends ImageExpand_1.default {
     }
 }
 exports.default = FogInstanceBasic;
+//# sourceMappingURL=FogInstanceBasic.js.map

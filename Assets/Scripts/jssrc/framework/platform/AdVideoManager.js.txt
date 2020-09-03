@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const OriginalInterstitialAdComp_1 = require("./comp/OriginalInterstitialAdComp");
 const ButtonUtils_1 = require("./../utils/ButtonUtils");
 const UserInfo_1 = require("../common/UserInfo");
-const LogsManager_1 = require("../manager/LogsManager");
 const GameSwitch_1 = require("../common/GameSwitch");
 const InterstitialAdComp_1 = require("./comp/InterstitialAdComp");
 const RecommendationInterstitialComp_1 = require("./comp/RecommendationInterstitialComp");
@@ -105,7 +104,7 @@ class AdVideoManager {
             return;
         var adInfo = PlaqueFunc_1.default.instance.getPlaqueInfoById(id);
         var possibility = 10000 * Math.random();
-        LogsManager_1.default.echo("----possibility: " + possibility);
+        LogsManager.echo("----possibility: " + possibility);
         if (possibility <= adInfo.plaqueProbab) {
             this.interstitialAdTimeId = TimerManager_1.default.instance.setTimeout(() => {
                 this.showInterstitialAd(parent, onErrorCallback, onCloseCallback, thisObj);
@@ -136,7 +135,7 @@ class AdVideoManager {
                 var lastShowTime = Number(CountsCommonModel_1.default.instance.getCountById(CountsCommonModel_1.default.TYPE_INTERVALAD_LASTSHOWTIME));
                 var durT = Client_1.default.instance.miniserverTime - lastShowTime;
                 if (durT <= intervalTime) {
-                    LogsManager_1.default.echo("hlx InterstitialAd 插屏广告不显示：间隔小于", intervalTime, "间隔：", durT);
+                    LogsManager.echo("hlx InterstitialAd 插屏广告不显示：间隔小于", intervalTime, "间隔：", durT);
                     return true;
                 }
             }
@@ -155,7 +154,7 @@ class AdVideoManager {
                 // 最大次数
                 var interstitialCount = Number(CountsCommonModel_1.default.instance.getCountById(CountsCommonModel_1.default.TYPE_INTERVALAD_COUNT));
                 if (interstitialCount >= maxTime) {
-                    LogsManager_1.default.echo("hlx InterstitialAd 插屏广告不显示：当日次数用完", maxTime, "interstitialCount:", interstitialCount);
+                    LogsManager.echo("hlx InterstitialAd 插屏广告不显示：当日次数用完", maxTime, "interstitialCount:", interstitialCount);
                     return true;
                 }
             }
@@ -166,9 +165,9 @@ class AdVideoManager {
             // 最后展示时间
             var lastShowTime = this.ttInterstitialAdLastShowTime;
             var durT = Client_1.default.instance.miniserverTime - lastShowTime;
-            LogsManager_1.default.echo("whn------tt插屏显示时间--------", lastShowTime, durT);
+            LogsManager.echo("whn------tt插屏显示时间--------", lastShowTime, durT);
             if (durT <= intervalTime) {
-                LogsManager_1.default.echo("whn InterstitialAd 插屏广告不显示：间隔小于", intervalTime, "间隔：", durT);
+                LogsManager.echo("whn InterstitialAd 插屏广告不显示：间隔小于", intervalTime, "间隔：", durT);
                 return true;
             }
             return false;
@@ -234,7 +233,7 @@ class AdVideoManager {
                 OriginalIconAdComp_1.default.instance.reportClickOriginal(id);
                 break;
             default:
-                LogsManager_1.default.errorTag('reportClickOriginal_type_error', type);
+                LogsManager.errorTag('reportClickOriginal_type_error', type);
                 break;
         }
     }
@@ -250,7 +249,7 @@ class AdVideoManager {
                 OriginalIconAdComp_1.default.instance.reportShowOriginal(id);
                 break;
             default:
-                LogsManager_1.default.errorTag('reportShowOriginal_type_error', type);
+                LogsManager.errorTag('reportShowOriginal_type_error', type);
                 break;
         }
     }
@@ -259,19 +258,19 @@ class AdVideoManager {
      */
     canBtnMove() {
         if (!GameTools_1.default.canQuickBanner) {
-            LogsManager_1.default.echo("ycn MoveButtonOnClick 无banner");
+            LogsManager.echo("ycn MoveButtonOnClick 无banner");
             return false;
         }
         if (!UserInfo_1.default.isWX()) {
-            LogsManager_1.default.echo("ycn MoveButtonOnClick 非微信渠道");
+            LogsManager.echo("ycn MoveButtonOnClick 非微信渠道");
             return false;
         }
         if (!GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_BTN_MOVE)) {
-            LogsManager_1.default.echo("ycn MoveButtonOnClick 开关未开启");
+            LogsManager.echo("ycn MoveButtonOnClick 开关未开启");
             return false;
         }
         if (!SceneReference_1.default.isInBannerScene()) {
-            LogsManager_1.default.echo("ycn MoveButtonOnClick sceneBlack");
+            LogsManager.echo("ycn MoveButtonOnClick sceneBlack");
             return false;
         }
         return true;
@@ -328,3 +327,4 @@ AdVideoManager.TYPE_ORIGINAL_INTERSTITIAL = 'INTERSTITIAL';
  * 原生广告类型：icon
  */
 AdVideoManager.TYPE_ORIGINAL_ICON = 'ICON';
+//# sourceMappingURL=AdVideoManager.js.map

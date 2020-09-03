@@ -2,7 +2,6 @@ import PackageConfig from "../../game/sys/config/PackageConfig";
 import TestPlatform from "../../game/sys/common/TestPlatform";
 import GlobalData from "../utils/GlobalData";
 import UserInfo from "../common/UserInfo";
-import LogsManager from "./LogsManager";
 import CloudPlatformData from "../../game/sys/common/CloudPlatformData";
 import GameConsts from "../../game/sys/consts/GameConsts";
 

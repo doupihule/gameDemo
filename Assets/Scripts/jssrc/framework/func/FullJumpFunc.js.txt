@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseFunc_1 = require("./BaseFunc");
 const GameTools_1 = require("../../utils/GameTools");
-const LogsManager_1 = require("../manager/LogsManager");
 class FullJumpFunc extends BaseFunc_1.default {
     //处理用户配表相关接口.用静态方法
     //初始化 加载配表
@@ -28,7 +27,7 @@ class FullJumpFunc extends BaseFunc_1.default {
             return false;
         var jumpProb = jumpData.probab;
         var randNum = GameTools_1.default.getRandomInt(1, 10000);
-        LogsManager_1.default.echo("ycn full jump jumpProb:", jumpProb, ",randNum:", randNum);
+        LogsManager.echo("ycn full jump jumpProb:", jumpProb, ",randNum:", randNum);
         if (randNum <= jumpProb) {
             return true;
         }
@@ -58,3 +57,4 @@ FullJumpFunc.ID_EXIT_SHARE = "8";
 FullJumpFunc.ID_EXIT_UPDATE = "9";
 // 关闭上阵面板时
 FullJumpFunc.ID_EXIT_FORMATE = "10";
+//# sourceMappingURL=FullJumpFunc.js.map

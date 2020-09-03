@@ -24,3 +24,4 @@ GameConfig.stat = false;
 GameConfig.physicsDebug = false;
 GameConfig.exportSceneToJson = true;
 GameConfig.init();
+//# sourceMappingURL=GameConfig.js.map

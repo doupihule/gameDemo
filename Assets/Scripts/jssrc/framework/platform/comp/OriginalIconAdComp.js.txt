@@ -29,3 +29,4 @@ class OriginalIconAdComp extends OriginalAdBaseComp_1.default {
     }
 }
 exports.default = OriginalIconAdComp;
+//# sourceMappingURL=OriginalIconAdComp.js.map

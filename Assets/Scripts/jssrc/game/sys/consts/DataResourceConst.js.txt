@@ -13,3 +13,4 @@ DataResourceConst.FOGITEM = 8; //迷雾道具
 DataResourceConst.FOGCOIN = 9; //迷雾币
 DataResourceConst.TASKPOINT = 10; //活跃度
 DataResourceConst.REPUTE = 11; //声望
+//# sourceMappingURL=DataResourceConst.js.map

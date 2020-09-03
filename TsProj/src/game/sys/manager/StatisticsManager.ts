@@ -1,5 +1,5 @@
 import UserInfo from "../../../framework/common/UserInfo";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import FileUtils from "../../../framework/utils/FileUtils";
 import StatisticsExtendManager from "../../../framework/manager/StatisticsExtendManager";
 import Client from "../../../framework/common/kakura/Client";

@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../../manager/LogsManager");
 const TimerManager_1 = require("../../manager/TimerManager");
 const UIBaseView_1 = require("../../components/UIBaseView");
 class BannerStyleJumpUI extends UIBaseView_1.default {
@@ -51,7 +50,7 @@ class BannerStyleJumpUI extends UIBaseView_1.default {
             if (this._leftMoveFrame == 0) {
                 this._leftMoveFrame = BannerStyleJumpUI.perMoveFrame;
                 this._leftWaitFrame = BannerStyleJumpUI.perWaitFrame;
-                LogsManager_1.default.echo("_oneframemvoe");
+                LogsManager.echo("_oneframemvoe");
             }
         }
     }
@@ -78,3 +77,4 @@ exports.default = BannerStyleJumpUI;
 //每移动一格等待时间
 BannerStyleJumpUI.perWaitFrame = 120;
 BannerStyleJumpUI.perMoveFrame = 30; //每次移动的时间是0.5秒
+//# sourceMappingURL=BannerStyleJumpUI.js.map

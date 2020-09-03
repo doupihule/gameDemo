@@ -8,3 +8,4 @@ class BattlePropControler {
     }
 }
 exports.default = BattlePropControler;
+//# sourceMappingURL=BattlePropControler.js.map

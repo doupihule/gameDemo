@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../manager/LogsManager");
 const GlobalData_1 = require("./GlobalData");
 const ViewTools_1 = require("../components/ViewTools");
 class ScreenAdapterTools {
@@ -70,8 +69,8 @@ class ScreenAdapterTools {
         }
         this.UIOffsetX = (this.width - this.designWidth) / 2;
         this.UIOffsetY = (this.height - this.designHeight) / 2;
-        LogsManager_1.default.echo("适配结果:this.isLandSpace", scaleMode, this.isLandSpace, this.sceneOffsetX, this.sceneOffsetY);
-        LogsManager_1.default.echo("stageW:", browWidth, "stageH:", browHeight, "wd:", this.width, "hei:", this.height, "ofx:", this.UIOffsetX, "ofy:", this.UIOffsetY);
+        LogsManager.echo("适配结果:this.isLandSpace", scaleMode, this.isLandSpace, this.sceneOffsetX, this.sceneOffsetY);
+        LogsManager.echo("stageW:", browWidth, "stageH:", browHeight, "wd:", this.width, "hei:", this.height, "ofx:", this.UIOffsetX, "ofy:", this.UIOffsetY);
         return scaleMode;
     }
     //判断是否填充黑边
@@ -126,7 +125,7 @@ class ScreenAdapterTools {
             if (phoneModel.indexOf(key) > -1) {
                 ScreenAdapterTools.toolBarWidth = 60;
                 GlobalData_1.default.isPhoneBangs = true;
-                LogsManager_1.default.echo("hlx 刘海屏高度修改:根据白名单", phoneModel, key);
+                LogsManager.echo("hlx 刘海屏高度修改:根据白名单", phoneModel, key);
             }
         }
     }
@@ -148,7 +147,7 @@ class ScreenAdapterTools {
                 ScreenAdapterTools.toolBarWidth = 60;
             }
             GlobalData_1.default.isPhoneBangs = true;
-            LogsManager_1.default.echo("hlx 刘海屏高度修改:根据安全区域 top:", top, "    this.height:", this.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools.toolBarWidth);
+            LogsManager.echo("hlx 刘海屏高度修改:根据安全区域 top:", top, "    this.height:", this.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools.toolBarWidth);
         }
     }
     /**
@@ -161,7 +160,7 @@ class ScreenAdapterTools {
         }
         var barH = sysInfo.statusBarHeight;
         if (ScreenAdapterTools.toolBarWidth == 0 && barH > 44) {
-            LogsManager_1.default.echo("hlx 刘海屏高度修改:根据状态拦高度 statusBarHeight:", barH);
+            LogsManager.echo("hlx 刘海屏高度修改:根据状态拦高度 statusBarHeight:", barH);
             ScreenAdapterTools.toolBarWidth = 60;
             GlobalData_1.default.isPhoneBangs = true;
         }
@@ -179,14 +178,14 @@ class ScreenAdapterTools {
             return;
         }
         var top = menuInfo.top || 0;
-        LogsManager_1.default.echo("ycn reCheckBar top: ", top);
+        LogsManager.echo("ycn reCheckBar top: ", top);
         if (top > 20) {
             ScreenAdapterTools.toolBarWidth = top * this.getStageScaleY();
             if (ScreenAdapterTools.toolBarWidth > 60) {
                 ScreenAdapterTools.toolBarWidth = 60;
             }
             GlobalData_1.default.isPhoneBangs = true;
-            LogsManager_1.default.echo("hlx 刘海屏高度修改:根据胶囊位置 reCheckBar top:", top, "    this.height:", this.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools.toolBarWidth);
+            LogsManager.echo("hlx 刘海屏高度修改:根据胶囊位置 reCheckBar top:", top, "    this.height:", this.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools.toolBarWidth);
         }
     }
     // 设置view对其
@@ -351,3 +350,4 @@ ScreenAdapterTools.windowWidth = 640;
 ScreenAdapterTools.windowHeight = 1136;
 //刘海的位置 -1 对应左边或者 竖屏上面, 竖屏游戏一定是上边
 ScreenAdapterTools.toolBarWay = -1;
+//# sourceMappingURL=ScreenAdapterTools.js.map

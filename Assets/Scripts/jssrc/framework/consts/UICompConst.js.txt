@@ -13,6 +13,9 @@ UICompConst.comp_scroll = "scroll"; //滚动容器
 UICompConst.comp_list = "list"; //滚动列表
 UICompConst.comp_spine = "spine"; //spine动画
 UICompConst.comp_ui = "ui"; //ui也是一个类型 代表是子ui
+UICompConst.comp_base3d = "base3d"; //基础3d模型
+UICompConst.posStyle_2d = 1;
+UICompConst.posStyle_3d = 2;
 //组件对应的类
 UICompConst.classMap = {
     base: "BaseView",
@@ -24,3 +27,4 @@ UICompConst.classMap = {
     list: "List",
     spine: "Spine",
 };
+//# sourceMappingURL=UICompConst.js.map

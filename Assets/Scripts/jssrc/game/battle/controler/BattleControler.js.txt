@@ -4,7 +4,6 @@ const CameraControler_1 = require("./CameraControler");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
 const GameConsts_1 = require("../../sys/consts/GameConsts");
 const BattleTweenControler_1 = require("./BattleTweenControler");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const PerformanceControler_1 = require("./PerformanceControler");
 const BattleLogsManager_1 = require("../../sys/manager/BattleLogsManager");
 const BattleDebugTool_1 = require("./BattleDebugTool");
@@ -114,7 +113,7 @@ class BattleControler {
             for (var j = i + 1; j < this._allInstanceArr.length; j++) {
                 var instance2 = this._allInstanceArr[j];
                 if (instance1 == instance2) {
-                    LogsManager_1.default.errorTag("instanceError", "对象重复了--", instance1);
+                    LogsManager.errorTag("instanceError", "对象重复了--", instance1);
                 }
             }
         }
@@ -280,7 +279,7 @@ class BattleControler {
      */
     setCallBack(frame, callBack, thisObj, params = null, doApplyOrCall = false) {
         if (frame == null || isNaN(frame)) {
-            LogsManager_1.default.errorTag("battleerror", "没有传入frame,直接做回调");
+            LogsManager.errorTag("battleerror", "没有传入frame,直接做回调");
         }
         var obj = this.getOneCacheTimeObj();
         if (!frame) {
@@ -313,7 +312,7 @@ class BattleControler {
      */
     setLastCallBack(delay, interval, times, callBack, thisObj, params = null, endCallBack = null, endParams = null, doApplyOrCall = false) {
         if (delay == null || isNaN(delay)) {
-            LogsManager_1.default.errorTag("battleerror", "没有传入frame");
+            LogsManager.errorTag("battleerror", "没有传入frame");
             return;
         }
         var obj = this.getOneCacheTimeObj();
@@ -399,3 +398,4 @@ class BattleControler {
     }
 }
 exports.default = BattleControler;
+//# sourceMappingURL=BattleControler.js.map

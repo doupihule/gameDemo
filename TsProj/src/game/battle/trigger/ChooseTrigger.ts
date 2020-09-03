@@ -1,5 +1,5 @@
 import InstanceLogical from "../instance/InstanceLogical";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import BattleSkillData from "../data/BattleSkillData";
 import InstanceBasic from "../instance/InstanceBasic";
 import RandomUtis from "../../../framework/utils/RandomUtis";

@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConnectObj = void 0;
 const KakuraMessage_1 = require("./KakuraMessage");
 const Client_1 = require("./Client");
-const LogsManager_1 = require("../../manager/LogsManager");
 const WaitManager_1 = require("../../manager/WaitManager");
 const MsgCMD_1 = require("../../../game/sys/common/MsgCMD");
 const TimerManager_1 = require("../../manager/TimerManager");
@@ -46,7 +45,7 @@ class KakuraClient {
     //重新连接
     aginConnect() {
         this._hasOnClose = false;
-        LogsManager_1.default.echo("kakura _again connect");
+        LogsManager.echo("kakura _again connect");
         WaitManager_1.default.instance.remove(MsgCMD_1.default.ROLL_ANI);
         this.registConnectEvent();
     }
@@ -66,7 +65,7 @@ class KakuraClient {
     //注册连接事件侦听
     registConnectEvent() {
         this._aesKey = this._defaultAesKey;
-        LogsManager_1.default.echo(">>>>>>>>connectByUrl>>>>>>>>>>", this._url);
+        LogsManager.echo(">>>>>>>>connectByUrl>>>>>>>>>>", this._url);
         this.clearInitRequest();
         this.destorySocket();
         //如果没有获取过用户信息或者 不是单机模式才会显示转菊花. 单机模式第一次获取过用户数据后不需要出菊花了
@@ -86,7 +85,7 @@ class KakuraClient {
     sendRequest(opcode, method, params = null, callback = null, thisObj = null, isWait = true, isInsert = false, addParams = null) {
         if (!this.checkIsInitMethod(method)) {
             if (!this._webSocketConnet) {
-                LogsManager_1.default.echo("发送请求的时候还没连上", method);
+                LogsManager.echo("发送请求的时候还没连上", method);
             }
         }
         //如果已经被挤掉线了 那么 后面发的任何请求都干掉
@@ -106,7 +105,7 @@ class KakuraClient {
             this._connectCacheArr.push(coninfo);
         }
         if (this._currentConn) {
-            LogsManager_1.default.echo(this._currentConn.method + "请求正在处理中...缓存:." + coninfo.method);
+            LogsManager.echo(this._currentConn.method + "请求正在处理中...缓存:." + coninfo.method);
             return;
         }
         //如果这个时候是没有连上的
@@ -154,14 +153,14 @@ class KakuraClient {
     timerHandler() {
         TimerManager_1.default.instance.remove(this._timeCode);
         if (this._currentConn) {
-            LogsManager_1.default.echo("kakura _>>>>>>>>>>>>request again>>>>>>>>>>>>", this._currentConn.method);
+            LogsManager.echo("kakura _>>>>>>>>>>>>request again>>>>>>>>>>>>", this._currentConn.method);
         }
         else {
-            LogsManager_1.default.echo(">>>>>>>>>>>>request again>>>>>>>>>>>>", this._timeCount);
+            LogsManager.echo(">>>>>>>>>>>>request again>>>>>>>>>>>>", this._timeCount);
         }
         //如果当前是初始化请求失败了 那么手动close.
         if (this._currentConn && this.checkIsInitMethod(this._currentConn.method)) {
-            LogsManager_1.default.echo("_初始化请求失败", this._currentConn.method);
+            LogsManager.echo("_初始化请求失败", this._currentConn.method);
             this.destorySocket();
             //移除转菊花功能 弹窗重连弹窗
             WaitManager_1.default.instance.remove(MsgCMD_1.default.ROLL_ANI);
@@ -242,7 +241,7 @@ class KakuraClient {
                 }
                 else {
                     //只有method匹配上了才会做这个处理 否则代表的是 超时第二次重发回来时的回调。 这个时候 不能通过这个匹配 
-                    LogsManager_1.default.echo("返回的消息可能是超时重发的-", this._currentConn.method, "_serverback method:", jsonData.method);
+                    LogsManager.echo("返回的消息可能是超时重发的-", this._currentConn.method, "_serverback method:", jsonData.method);
                 }
             }
         }
@@ -262,7 +261,7 @@ class KakuraClient {
         if (this._currentConn) {
             //如果是心跳请求 return
             if (jsonData == "success") {
-                LogsManager_1.default.echo("_心跳请求返回的时候 正好有请求发送 导致解析失败");
+                LogsManager.echo("_心跳请求返回的时候 正好有请求发送 导致解析失败");
                 return;
             }
             //只有匹配到 需要loading请求的时候 才移除 loading动画,否则心跳包的请求可能会提前中断loading
@@ -295,9 +294,9 @@ class KakuraClient {
     }
     onSocketClose(e, isFromError = false) {
         TimerManager_1.default.instance.remove(this._timeCode);
-        LogsManager_1.default.echo("socket close!!! is from error:", isFromError);
+        LogsManager.echo("socket close!!! is from error:", isFromError);
         if (this._hasOnClose) {
-            LogsManager_1.default.echo("刚刚收到close消息,避免和error冲突");
+            LogsManager.echo("刚刚收到close消息,避免和error冲突");
             this._hasOnClose = false;
             return;
         }
@@ -321,7 +320,7 @@ class KakuraClient {
         // this.clearOneMethod(kakura.KakuraClient.method_heartBeat);
         this._reconnectCount++;
         if (this._reconnectCount <= this.autoConnectCount) {
-            LogsManager_1.default.echo("掉线自动重连:当前次数:", this._reconnectCount);
+            LogsManager.echo("掉线自动重连:当前次数:", this._reconnectCount);
             // this._websocket.connectByUrl(this._url);
             //自动重连不需要关闭loading
             // 100ms后做重连 防止因为切后台回来立马出现 请求超时情况
@@ -369,7 +368,7 @@ class KakuraClient {
         // } else {
         // 	ErrCodeManager.ins.setErr("110");
         // }
-        LogsManager_1.default.echo("socket connet error!!!");
+        LogsManager.echo("socket connet error!!!");
         this.onSocketClose(null, true);
     }
     get webSocketConnet() {
@@ -509,3 +508,4 @@ class ConnectObj {
     }
 }
 exports.ConnectObj = ConnectObj;
+//# sourceMappingURL=KakuraClient.js.map

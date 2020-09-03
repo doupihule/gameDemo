@@ -105,3 +105,4 @@ class ChapInstanceEnemy extends FogInstanceBasic_1.default {
     }
 }
 exports.default = ChapInstanceEnemy;
+//# sourceMappingURL=ChapInstanceEnemy.js.map

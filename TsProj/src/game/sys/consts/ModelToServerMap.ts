@@ -2,7 +2,7 @@ import UserModel from "../model/UserModel";
 import SwitchModel from "../model/SwitchModel";
 import UserExtModel from "../model/UserExtModel";
 import RolesModel from "../model/RolesModel";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import Client from "../../../framework/common/kakura/Client";
 import GlobalParamsFunc from "../func/GlobalParamsFunc";
 import TalentSkillsModel from "../model/TalentSkillsModel";

@@ -1,7 +1,7 @@
 import IMessage from "../interfaces/IMessage";
 import WindowManager from "../../../framework/manager/WindowManager";
 import StatisticsManager from "./StatisticsManager";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import UserModel from "../model/UserModel";
 import GuideFunc from "../func/GuideFunc";
 import {WindowCfgs} from "../consts/WindowCfgs";

@@ -1,6 +1,6 @@
 import InstanceLogical from "../instance/InstanceLogical";
 import BattleSkillData from "../data/BattleSkillData";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import BattleFunc from "../../sys/func/BattleFunc";
 import BattleLogsManager from "../../sys/manager/BattleLogsManager";
 import BattleRoleView from "../view/BattleRoleView";

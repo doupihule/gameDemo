@@ -14,7 +14,6 @@ const GlobalData_1 = require("../../../framework/utils/GlobalData");
 const RolesFunc_1 = require("../func/RolesFunc");
 const UserGlobalModel_1 = require("../../../framework/model/UserGlobalModel");
 const BigNumUtils_1 = require("../../../framework/utils/BigNumUtils");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const LevelFunc_1 = require("../func/LevelFunc");
 const SceneReference_1 = require("../../../framework/consts/SceneReference");
 const WhiteListFunc_1 = require("../../../framework/func/WhiteListFunc");
@@ -347,10 +346,10 @@ class UserModel extends BaseModel_1.default {
         //登陆修改下宝箱累计时间
         if (this.getGoodsAccumuStartTime()) {
             if (this._data && this._data.sendTime && (Number(this._data.sendTime) * 1000 > this.getGoodsAccumuStartTime())) {
-                LogsManager_1.default.echo("登陆修改宝箱累计时间，原累计时间：" + this.getGoodsAccumuStartTime());
-                LogsManager_1.default.echo("最后一次同步数据时间：" + this._data.sendTime);
+                LogsManager.echo("登陆修改宝箱累计时间，原累计时间：" + this.getGoodsAccumuStartTime());
+                LogsManager.echo("最后一次同步数据时间：" + this._data.sendTime);
                 var newGoodsAccumuStartTime = Client_1.default.instance.serverTimeMicro - (Number(this._data.sendTime) * 1000 - this.getGoodsAccumuStartTime());
-                LogsManager_1.default.echo("新宝箱累计时间：" + newGoodsAccumuStartTime);
+                LogsManager.echo("新宝箱累计时间：" + newGoodsAccumuStartTime);
                 upUserExtData["goodsAccumuStartTime"] = newGoodsAccumuStartTime;
             }
         }
@@ -456,7 +455,7 @@ class UserModel extends BaseModel_1.default {
         }
         var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameTools_1.default.getNextRefreshTByTime(4);
         if (expireTime < Client_1.default.instance.serverTime) {
-            LogsManager_1.default.echo("whn outshop 已经过期");
+            LogsManager.echo("whn outshop 已经过期");
             return false;
         }
         return data.fogOuterShop.goods[index].status;
@@ -477,3 +476,4 @@ class UserModel extends BaseModel_1.default {
     }
 }
 exports.default = UserModel;
+//# sourceMappingURL=UserModel.js.map

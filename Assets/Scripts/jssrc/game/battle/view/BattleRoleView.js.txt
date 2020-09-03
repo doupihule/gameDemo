@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const DisplayUtils_1 = require("../../../framework/utils/DisplayUtils");
 const ResourceManager_1 = require("../../../framework/manager/ResourceManager");
 const ResourceConst_1 = require("../../sys/consts/ResourceConst");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const TimerManager_1 = require("../../../framework/manager/TimerManager");
 const UserInfo_1 = require("../../../framework/common/UserInfo");
 const BaseContainer_1 = require("../../../framework/components/BaseContainer");
@@ -36,7 +35,7 @@ class BattleRoleView extends BaseContainer_1.default {
         this._viewScale = scale;
         this.currentAni = this.cloneOneChildAni();
         if (!tag) {
-            LogsManager_1.default.errorTag("没有传入tag");
+            LogsManager.errorTag("没有传入tag");
         }
         this.tagStr = tag;
         //只有web版开启动画调试
@@ -182,10 +181,10 @@ class BattleRoleView extends BaseContainer_1.default {
                     runAniNums++;
                 }
                 // 还在激活中的ani 表示这个动画状态是play.还没有调用stop.  displayedInStage是否在舞台: 如果displayedInStage输出为true. 表示这个动画还在进行计算.
-                LogsManager_1.default.echo("还在激活中的ani", this._cacheAllAniArr[i]._viewName, this._cacheAllAniArr[i].tagStr);
+                LogsManager.echo("还在激活中的ani", this._cacheAllAniArr[i]._viewName, this._cacheAllAniArr[i].tagStr);
             }
         }
-        LogsManager_1.default.echo("当前激活中的动画数量", resultArr.length, "在舞台并计算的动画数量:", runAniNums);
+        LogsManager.echo("当前激活中的动画数量", resultArr.length, "在舞台并计算的动画数量:", runAniNums);
         return resultArr;
     }
 }
@@ -222,3 +221,4 @@ BattleRoleView._childSortFormation = [
     ],
 ];
 BattleRoleView._cacheAllAniArr = [];
+//# sourceMappingURL=BattleRoleView.js.map

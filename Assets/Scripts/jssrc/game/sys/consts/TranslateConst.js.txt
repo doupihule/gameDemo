@@ -93,3 +93,4 @@ TranslateConst.localTranslate = {
     "#tid_alarm_sub": { "zh_CN": "体力提醒" },
     "#tid_alarm_body": { "zh_CN": "体力已满" },
 };
+//# sourceMappingURL=TranslateConst.js.map

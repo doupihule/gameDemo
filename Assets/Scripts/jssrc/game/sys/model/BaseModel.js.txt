@@ -25,3 +25,4 @@ class BaseModel {
 }
 exports.default = BaseModel;
 const TableUtils_1 = require("../../../framework/utils/TableUtils");
+//# sourceMappingURL=BaseModel.js.map

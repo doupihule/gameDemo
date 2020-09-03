@@ -40,6 +40,7 @@ export default class ResourceManager {
 
 	//加载一个3dmodel
 	static load3dmodel(modelName, isScene: boolean, callBack, thisObj, params = null) {
+
 	}
 
 	//获取一个3dmodel的分包名
@@ -55,16 +56,13 @@ export default class ResourceManager {
 	}
 
 	//获取一个3demol的sprite3D对象.根据业务逻辑自己去clone withClone 是否克隆.原则上都需要克隆 默认false;
-	static get3dmodelRes(modelName, isScene: boolean = false, withClone: boolean = false) {
-		return null
+	static get3dmodelRes(modelName,shortPath:string,  boundlename:string) {
+		var targetPath = "Assets/Model3d/"+shortPath+"/Prefabs/"+modelName +".prefab";
+		LogsManager.echo("targetPath",targetPath);
+		var obj =Resource.ResourceManager.Instance.luaLoadAsset(targetPath, targetPath, boundlename);
+		return UnityEngine.Object.Instantiate(obj);
 	}
 
-	private static _checkRenderModeMap: any = {}
-
-
-
-	//缓存spine加载完成, 缓存对应的spine缓冲模版
-	private static _spineModelMap: any = {};
 
 
 	//加载一个spine动画  根据spine动画名字作为动态分包 ,回调参数顺序:  callback(ani,params); 会把 动画对象放到回调里面

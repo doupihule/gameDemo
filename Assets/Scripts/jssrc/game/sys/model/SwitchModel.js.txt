@@ -65,3 +65,4 @@ exports.default = SwitchModel;
 SwitchModel.music_switch = "3"; //背景音乐音量
 SwitchModel.sound_switch = "4"; //音效音量
 SwitchModel.shake_switch = "5"; //震动开关  默认是0  有震动
+//# sourceMappingURL=SwitchModel.js.map

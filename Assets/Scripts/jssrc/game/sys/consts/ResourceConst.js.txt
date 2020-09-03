@@ -13,14 +13,6 @@ ResourceConst.JUMP_ICON_HOT = "native/main/main/index_image_remen.png";
 ResourceConst.JUMP_ICON_NEW = "native/main/main/index_image_baokuan.png";
 /**指色互推背景 */
 ResourceConst.JUMP_ZHISE_ICONBG = "uisource/jump/bg-box.png";
-ResourceConst.boundle_ui = "uiab";
-ResourceConst.boundle_map = "map";
-ResourceConst.boundle_base = "baseab";
-ResourceConst.boundle_animation = "animation";
-ResourceConst.boundle_uiimage = "uiimageab";
-ResourceConst.UIResPath = "Assets/UI/UIRes/";
-ResourceConst.baseLabelPrefeb = "base/BaseLabel";
-ResourceConst.baseContainerPrefeb = "base/BaseContainer";
 ResourceConst.BATTLE_SHADE = "Assets/UI/UIRes/battle/battle_image_yinying";
 ResourceConst.BATTLE_HEALTH_BACK = "Assets/UI/UIRes/battle/battle_image_xutiaodi";
 ResourceConst.BATTLE_HEALTH_PROGRESS = "Assets/UI/UIRes/battle/battle_image_xutiao1";
@@ -124,3 +116,4 @@ ResourceConst.CHAPTER_REWARD_BOXCLOSE = "fog/fog/fogstreet_box_locked.png";
 ResourceConst.CHAPTER_REWARD_BOXOPEN = "uisource/common/common/level_image_baoxiang.png";
 /**互推退出按钮 */
 ResourceConst.JUMP_RETURNBTN = "native/main/main/index_bt_shou.png";
+//# sourceMappingURL=ResourceConst.js.map

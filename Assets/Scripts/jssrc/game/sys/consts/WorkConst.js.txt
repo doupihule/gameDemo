@@ -13,3 +13,4 @@ WorkConst.WorkRole_none = 3;
 WorkConst.CompanyUnlock_level = 1;
 /**公司解锁条件：迷雾最大层数 */
 WorkConst.CompanyUnlock_fogLevel = 2;
+//# sourceMappingURL=WorkConst.js.map

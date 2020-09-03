@@ -99,3 +99,4 @@ class Bezier {
 exports.default = Bezier;
 Bezier.tempVec1 = { x: 0, y: 0 };
 Bezier.tempVec2 = { x: 0, y: 0 };
+//# sourceMappingURL=Bezier.js.map

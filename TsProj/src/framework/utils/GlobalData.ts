@@ -1,9 +1,11 @@
 import ScreenAdapterTools from "./ScreenAdapterTools";
-import LogsManager from "../manager/LogsManager";
+
 import CacheManager from "../manager/CacheManager";
 import StorageCode from "../../game/sys/consts/StorageCode";
 import BaseViewExpand from "../components/BaseViewExpand";
 import ViewTools from "../components/ViewTools";
+import Base3dViewExpand from "../components/Base3dViewExpand";
+import UICompConst from "../consts/UICompConst";
 
 
 export default class GlobalData {
@@ -28,7 +30,7 @@ export default class GlobalData {
 	private  static  _cuiroot:any;
 
 	//游戏舞台
-	public  static stage:BaseViewExpand;
+	public  static stage:Base3dViewExpand;
 	//ui的跟容器
 	public  static  uiRoot:BaseViewExpand;
 
@@ -36,7 +38,7 @@ export default class GlobalData {
 	static  initStage(cstage:any,cuiroot){
 		this._cstage = cstage;
 		this._cuiroot = cuiroot;
-		this.stage = ViewTools.autoBindingCObj(cstage,true)
+		this.stage = ViewTools.autoBindingCObj(cstage,true,UICompConst.comp_base3d);
 		this.uiRoot = ViewTools.autoBindingCObj(cuiroot,true);
 	}
 

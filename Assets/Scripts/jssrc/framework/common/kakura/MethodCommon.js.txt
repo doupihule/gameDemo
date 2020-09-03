@@ -41,3 +41,4 @@ MethodCommon.Charge_getOrderId = "2001"; //获取订单号
 MethodCommon.Charge_checkOrderState = "2003"; //客户端检查订单状态
 MethodCommon.Charge_confirm = "2005"; //客户端确认成功或失败
 MethodCommon.saveSubscribeMsg = "2101"; //存储订阅消息
+//# sourceMappingURL=MethodCommon.js.map

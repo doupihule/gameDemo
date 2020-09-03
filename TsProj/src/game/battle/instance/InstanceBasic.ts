@@ -1,6 +1,6 @@
 import BattleLogicalControler from "../controler/BattleLogicalControler";
 import BattleFunc from "../../sys/func/BattleFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import BattleConst from "../../sys/consts/BattleConst";
 import BaseContainer from "../../../framework/components/BaseContainer";
 import VectorTools from "../../../framework/utils/VectorTools";

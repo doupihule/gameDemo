@@ -1,6 +1,5 @@
 import WaitManager from "../manager/WaitManager";
 import ErrCodeManager from "../manager/ErrCodeManager";
-import LogsManager from "../manager/LogsManager";
 import TimerManager from "../manager/TimerManager";
 import TranslateFunc from "../func/TranslateFunc";
 import WindowManager from "../manager/WindowManager";
@@ -123,6 +122,7 @@ export default class HttpMessage {
 	private turnShortLogs(targetStr: string) {
 		//如果是打开了日志调试的 不做转化
 		if (LogsManager.isOpenLogsDebug) {
+
 			return targetStr;
 		}
 		if (PackConfigManager.ins.platform.platform == "dev" || PackConfigManager.ins.platform.platform == "test") {

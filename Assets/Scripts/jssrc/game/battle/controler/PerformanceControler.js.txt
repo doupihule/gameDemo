@@ -242,3 +242,4 @@ PerformanceControler._resourcePointCache = {
     [DataResourceConst_1.default.SP]: { x: 35, y: 35 }
 };
 PerformanceControler._tempPos = { x: 0, y: 0 };
+//# sourceMappingURL=PerformanceControler.js.map

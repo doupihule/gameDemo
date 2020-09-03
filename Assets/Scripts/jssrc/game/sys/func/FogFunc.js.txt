@@ -627,3 +627,4 @@ FogFunc.fogOuterRewardType = [
     DataResourceConst_1.default.FOGITEM,
     DataResourceConst_1.default.PIECE,
 ];
+//# sourceMappingURL=FogFunc.js.map

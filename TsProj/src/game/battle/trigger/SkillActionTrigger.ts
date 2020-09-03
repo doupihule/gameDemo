@@ -1,7 +1,7 @@
 import InstanceLogical from "../instance/InstanceLogical";
 import SkillActionData from "../data/SkillActionData";
 import BattleSkillData from "../data/BattleSkillData";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import BattleFunc from "../../sys/func/BattleFunc";
 import BattleFormulaTrigger from "./BattleFormulaTrigger";
 import BattleBuffData from '../data/BattleBuffData';

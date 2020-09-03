@@ -21,3 +21,4 @@ class TimeEntity {
 exports.default = TimeEntity;
 TimeEntity.TimeCode = 0;
 TimeEntity.emptyArr = [];
+//# sourceMappingURL=TimeEntity.js.map

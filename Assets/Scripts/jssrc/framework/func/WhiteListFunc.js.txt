@@ -64,3 +64,4 @@ exports.default = WhiteListFunc;
  */
 WhiteListFunc.TYPE_REGISTER = 1;
 WhiteListFunc.TYPE_LOGIN = 2;
+//# sourceMappingURL=WhiteListFunc.js.map

@@ -1,4 +1,4 @@
-import LogsManager from "../manager/LogsManager";
+
 import GlobalData from "./GlobalData";
 import ViewTools from "../components/ViewTools";
 

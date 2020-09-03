@@ -3,7 +3,7 @@ import {ButtonUtils} from "../../../../framework/utils/ButtonUtils";
 import JumpManager from "../../../../framework/manager/JumpManager";
 
 import ResourceConst from "../../consts/ResourceConst";
-import LogsManager from "../../../../framework/manager/LogsManager";
+
 import JumpConst from "../../consts/JumpConst";
 import WindowManager from "../../../../framework/manager/WindowManager";
 import {WindowCfgs} from "../../consts/WindowCfgs";

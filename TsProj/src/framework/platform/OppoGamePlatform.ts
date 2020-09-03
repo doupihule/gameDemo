@@ -1,6 +1,6 @@
 import WXGamePlatform from "./WXGamePlatform";
 import AdVideoManager from "./AdVideoManager";
-import LogsManager from "../manager/LogsManager";
+
 import GameSwitch from "../common/GameSwitch";
 import WindowManager from "../manager/WindowManager";
 import Message from "../common/Message";

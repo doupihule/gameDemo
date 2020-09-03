@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const BattleLogicalControler_1 = require("../../battle/controler/BattleLogicalControler");
 const TimerManager_1 = require("../../../framework/manager/TimerManager");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const ShareOrTvManager_1 = require("../../../framework/manager/ShareOrTvManager");
 const UserInfo_1 = require("../../../framework/common/UserInfo");
 class BattleSceneManager {
@@ -42,7 +41,7 @@ class BattleSceneManager {
         // 重玩开始录屏时还没有结束录屏的回调，延迟加开始录屏
         if (ShareOrTvManager_1.default.instance.canShareVideo()) {
             TimerManager_1.default.instance.setTimeout(() => {
-                LogsManager_1.default.echo("whn replay recordStart----------");
+                LogsManager.echo("whn replay recordStart----------");
                 UserInfo_1.default.platform.recordStart();
             }, this, 200);
         }
@@ -87,3 +86,4 @@ class BattleSceneManager {
     }
 }
 exports.default = BattleSceneManager;
+//# sourceMappingURL=BattleSceneManager.js.map

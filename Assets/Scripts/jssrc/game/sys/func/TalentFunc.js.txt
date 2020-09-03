@@ -84,3 +84,4 @@ class TalentFunc extends BaseFunc_1.default {
     }
 }
 exports.default = TalentFunc;
+//# sourceMappingURL=TalentFunc.js.map

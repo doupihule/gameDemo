@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InterstitialAdComp = void 0;
-const LogsManager_1 = require("../../manager/LogsManager");
 const TopViewAutoComp_1 = require("./TopViewAutoComp");
 const ChannelConst_1 = require("../../../game/sys/consts/ChannelConst");
 const UserInfo_1 = require("../../common/UserInfo");
@@ -41,7 +40,7 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
      * InterstitialAd预加载
      */
     static register() {
-        LogsManager_1.default.echo("hlx InterstitialAd 预加载");
+        LogsManager.echo("hlx InterstitialAd 预加载");
         // 不支持的组件直接返回
         if (!InterstitialAdComp.canUse()) {
             return;
@@ -57,7 +56,7 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
      * 创建Banner推广组件：微信
      */
     static create(parent, onErrorCallback = null, onCloseCallback = null, callbackObj = null) {
-        LogsManager_1.default.echo("hlx InterstitialAdComp create start:", (parent && parent.windowName) ? GameTools_1.default.decryptStr(parent.windowName) : null);
+        LogsManager.echo("hlx InterstitialAdComp create start:", (parent && parent.windowName) ? GameTools_1.default.decryptStr(parent.windowName) : null);
         // 不支持的组件直接返回
         if (!InterstitialAdComp.canUse()) {
             onErrorCallback && onErrorCallback.call(this);
@@ -87,7 +86,7 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
     }
     /**注册InterstitialAd */
     registerInterstitialAd() {
-        LogsManager_1.default.echo('hlx InterstitialAd registerInterstitialAd');
+        LogsManager.echo('hlx InterstitialAd registerInterstitialAd');
         this._loadSuccess = false;
         this._hasError = false;
         var thisObj = this;
@@ -111,24 +110,24 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
             });
         }
         var onErrorBack = (err) => {
-            LogsManager_1.default.echo('hlx InterstitialAd: onError', JSON.stringify(err));
+            LogsManager.echo('hlx InterstitialAd: onError', JSON.stringify(err));
             thisObj._loadSuccess = false;
             thisObj._hasError = true;
             thisObj._checkUIState(true);
         };
         var onLoadBack = (err) => {
-            LogsManager_1.default.echo('whn InterstitialAd: onLoad success');
+            LogsManager.echo('whn InterstitialAd: onLoad success');
             thisObj._loadSuccess = true;
             thisObj._hasError = false;
             thisObj._checkUIState(true);
         };
         var onCloseBack = (err) => {
-            LogsManager_1.default.echo("whn InterstitialAd 插屏广告 onClose");
+            LogsManager.echo("whn InterstitialAd 插屏广告 onClose");
             // 关闭插屏广告后自动destroy
             thisObj._onCloseCallback && thisObj._onCloseCallback.call(thisObj._callbackObj);
             thisObj.destroy();
         };
-        LogsManager_1.default.echo("hlx InterstitialAd instance:", this._interstitialAd);
+        LogsManager.echo("hlx InterstitialAd instance:", this._interstitialAd);
         if (this._interstitialAd) {
             var interstitialAd = this._interstitialAd;
             this._interstitialAd.__isDestoryed = false;
@@ -147,25 +146,25 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
             }
             else {
                 interstitialAd.onError(err => {
-                    LogsManager_1.default.echo('hlx InterstitialAd: onError', JSON.stringify(err));
+                    LogsManager.echo('hlx InterstitialAd: onError', JSON.stringify(err));
                     thisObj._loadSuccess = false;
                     thisObj._hasError = true;
                     thisObj._checkUIState(true);
                 });
                 interstitialAd.onLoad(() => {
-                    LogsManager_1.default.echo('hlx InterstitialAd: onLoad success');
+                    LogsManager.echo('hlx InterstitialAd: onLoad success');
                     thisObj._loadSuccess = true;
                     thisObj._hasError = false;
                     thisObj._checkUIState(true);
                 });
                 if (UserInfo_1.default.isOppo()) {
                     interstitialAd.onShow(() => {
-                        LogsManager_1.default.echo("hlx InterstitialAd 插屏广告展示成功");
+                        LogsManager.echo("hlx InterstitialAd 插屏广告展示成功");
                     });
                 }
                 else {
                     interstitialAd.onClose(() => {
-                        LogsManager_1.default.echo("hlx InterstitialAd 插屏广告 onClose");
+                        LogsManager.echo("hlx InterstitialAd 插屏广告 onClose");
                         // 关闭插屏广告后自动destroy
                         thisObj._onCloseCallback && thisObj._onCloseCallback.call(thisObj._callbackObj);
                         thisObj.destroy();
@@ -178,7 +177,7 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
         }
     }
     _doCallBack() {
-        LogsManager_1.default.echo('hlx InterstitialAd: _doErrorCallBack');
+        LogsManager.echo('hlx InterstitialAd: _doErrorCallBack');
         var tempFunc = this._onErrorCallback;
         var tempObj = this._callbackObj;
         this._onErrorCallback = null;
@@ -192,28 +191,28 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
      */
     static canUse() {
         if (!(UserInfo_1.default.isWX() || UserInfo_1.default.isOppo() || UserInfo_1.default.isVivo() || UserInfo_1.default.isTT() || UserInfo_1.default.isQQGame())) {
-            LogsManager_1.default.warn("hlx InterstitialAd canNotUse:该平台不支持插屏广告");
+            LogsManager.warn("hlx InterstitialAd canNotUse:该平台不支持插屏广告");
             return false;
         }
         if (GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_INTERSTITIALAD)) {
-            LogsManager_1.default.warn("hlx InterstitialAd canNotUse:开关关闭 SWITCH_DISABLE_INTERSTITIALAD");
+            LogsManager.warn("hlx InterstitialAd canNotUse:开关关闭 SWITCH_DISABLE_INTERSTITIALAD");
             return false;
         }
         if (!AdVideoManager_1.default.instance._isInitAdv) {
-            LogsManager_1.default.warn("hlx InterstitialAd canNotUse:广告组件未加载完毕");
+            LogsManager.warn("hlx InterstitialAd canNotUse:广告组件未加载完毕");
             return false;
         }
         if (!InterstitialAdComp.interstitialId) {
-            LogsManager_1.default.warn("hlx InterstitialAd canNotUse:不初始化InterstitialAd");
+            LogsManager.warn("hlx InterstitialAd canNotUse:不初始化InterstitialAd");
             return false;
         }
         if (UserInfo_1.default.isOppo()) {
             if (GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_OPPO_REVIEW)) {
-                LogsManager_1.default.echo('hlx InterstitialAd canNotUse:review模式不显示插屏');
+                LogsManager.echo('hlx InterstitialAd canNotUse:review模式不显示插屏');
                 return false;
             }
             if (!UserInfo_1.default.platform.getWX().createInsertAd) {
-                LogsManager_1.default.echo('hlx InterstitialAd canNotUse:该设备不支持 createInsertAd 函数');
+                LogsManager.echo('hlx InterstitialAd canNotUse:该设备不支持 createInsertAd 函数');
                 return false;
             }
         }
@@ -221,16 +220,16 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
             if (UserInfo_1.default.isTT()) {
                 // 插屏广告仅今日头条安卓客户端支持
                 if (UserInfo_1.default.platform.getSystemInfo().appName != "Toutiao") {
-                    LogsManager_1.default.echo('whn InterstitialAd canNotUse: 插屏广告仅今日头条支持');
+                    LogsManager.echo('whn InterstitialAd canNotUse: 插屏广告仅今日头条支持');
                     return false;
                 }
                 if (UserInfo_1.default.platform.getSystemInfo().platform == "ios") {
-                    LogsManager_1.default.echo('whn InterstitialAd canNotUse: IOS不支持头条插屏广告');
+                    LogsManager.echo('whn InterstitialAd canNotUse: IOS不支持头条插屏广告');
                     return false;
                 }
             }
             if (!UserInfo_1.default.platform.getWX().createInterstitialAd) {
-                LogsManager_1.default.echo('hlx InterstitialAd canNotUse:该设备不支持 createInterstitialAd 函数');
+                LogsManager.echo('hlx InterstitialAd canNotUse:该设备不支持 createInterstitialAd 函数');
                 return false;
             }
         }
@@ -240,7 +239,7 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
      * 组件销毁
      */
     destroy() {
-        LogsManager_1.default.echo("hlx InterstitialAd destroy:", GameTools_1.default.decryptStr(this._parentName));
+        LogsManager.echo("hlx InterstitialAd destroy:", GameTools_1.default.decryptStr(this._parentName));
         super.destroy();
         this._onErrorCallback = null;
         this._onCloseCallback = null;
@@ -255,7 +254,7 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
     reloadInter() {
         if (UserInfo_1.default.isVivo() || UserInfo_1.default.isTT() || UserInfo_1.default.isQQGame()) {
             // Vivo或者tt实例不能复用。必须每次重新创建
-            LogsManager_1.default.echo('hlx InterstitialAd reloadInter:vivo/tt/qq 只销毁实例，不重新拉取');
+            LogsManager.echo('hlx InterstitialAd reloadInter:vivo/tt/qq 只销毁实例，不重新拉取');
             if (this._interstitialAd) {
                 if (UserInfo_1.default.isVivo() || UserInfo_1.default.isQQGame()) {
                     if (typeof this._interstitialAd.destroy == "function") {
@@ -263,7 +262,7 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
                     }
                 }
                 else {
-                    LogsManager_1.default.echo('whn InterstitialAd reloadInter tt: 删除');
+                    LogsManager.echo('whn InterstitialAd reloadInter tt: 删除');
                     this._ttDestroyInterstitialAd(this._interstitialAd);
                 }
                 this._interstitialAd = null;
@@ -294,11 +293,11 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
     * 头条destory插屏
     */
     _ttDestroyInterstitialAd(instance) {
-        LogsManager_1.default.echo("whn 销毁一个插屏------------", instance);
+        LogsManager.echo("whn 销毁一个插屏------------", instance);
         //删除插屏的回调
         this._offTTInterstitialAdCallBack(instance);
         if (instance.__isDestoryed) {
-            LogsManager_1.default.warn("这个插屏已经执行过销毁了 为什么会重复执行--");
+            LogsManager.warn("这个插屏已经执行过销毁了 为什么会重复执行--");
             return;
         }
         if (typeof instance.destroy == "function") {
@@ -331,7 +330,7 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
      * 子类重写show方法。不管force都继续changeStatus
      */
     show(force = false) {
-        LogsManager_1.default.echo("hlx InterstitialAd show _lastParentName:", this._lastParentName, " _parentName:", this._parentName, " force:", force);
+        LogsManager.echo("hlx InterstitialAd show _lastParentName:", this._lastParentName, " _parentName:", this._parentName, " force:", force);
         if (this._lastParentName != this._parentName) {
             // 页面不同：并且之前已经是show状态【相邻的InterstitialAd界面】。需要重新加载新的InterstitialAd
             if (this._status == TopViewAutoComp_1.TopViewAutoComp.STATUS_SHOW) {
@@ -351,9 +350,9 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
     }
     /** 子类重写组件显示方法 */
     _compShow() {
-        LogsManager_1.default.echo("hlx InterstitialAd _compShow");
+        LogsManager.echo("hlx InterstitialAd _compShow");
         if (AdVideoManager_1.default.instance.isInterstitialLimit()) {
-            LogsManager_1.default.echo("hlx InterstitialAd _compShow：插屏广告isInterstitialLimit");
+            LogsManager.echo("hlx InterstitialAd _compShow：插屏广告isInterstitialLimit");
             this._doCallBack();
             return;
         }
@@ -363,22 +362,22 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
             this.registerInterstitialAd();
         }
         if (this._hasError) {
-            LogsManager_1.default.echo("hlx InterstitialAd _compShow：InterstitialAd加载存在error直接执行失败回调");
+            LogsManager.echo("hlx InterstitialAd _compShow：InterstitialAd加载存在error直接执行失败回调");
             this._doCallBack();
             return;
         }
         if (this._interstitialAd && this._loadSuccess) {
             this._hasShow = true;
-            LogsManager_1.default.echo("hlx InterstitialAd show");
+            LogsManager.echo("hlx InterstitialAd show");
             if (typeof this._interstitialAd.show == "function") {
                 try {
                     var promise = this._interstitialAd.show();
                     if (UserInfo_1.default.isWX() || UserInfo_1.default.isTT()) {
                         promise && promise.then(() => {
-                            LogsManager_1.default.echo("hlx InterstitialAd广告组件show success");
+                            LogsManager.echo("hlx InterstitialAd广告组件show success");
                         })
                             .catch(err => {
-                            LogsManager_1.default.echo("hlx InterstitialAd广告组件show error", JSON.stringify(err));
+                            LogsManager.echo("hlx InterstitialAd广告组件show error", JSON.stringify(err));
                             this._doCallBack();
                         });
                     }
@@ -387,15 +386,15 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
                 }
                 catch (e) {
                     if (e) {
-                        LogsManager_1.default.errorTag('InterstitialAd_show_error', e.toString());
+                        LogsManager.errorTag('InterstitialAd_show_error', e.toString());
                     }
                     else {
-                        LogsManager_1.default.errorTag('InterstitialAd_show_error', "InterstitialAd_show_error");
+                        LogsManager.errorTag('InterstitialAd_show_error', "InterstitialAd_show_error");
                     }
                 }
             }
             else {
-                LogsManager_1.default.errorTag("hlx _interstitialAd.show 方法不存在");
+                LogsManager.errorTag("hlx _interstitialAd.show 方法不存在");
             }
         }
     }
@@ -403,3 +402,4 @@ class InterstitialAdComp extends TopViewAutoComp_1.TopViewAutoComp {
 exports.InterstitialAdComp = InterstitialAdComp;
 //头条插屏注册的回调缓存 
 InterstitialAdComp._interstitialCallBackCache = [];
+//# sourceMappingURL=InterstitialAdComp.js.map

@@ -4,7 +4,6 @@ const InstanceMove_1 = require("./InstanceMove");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
 const SkillActionData_1 = require("../data/SkillActionData");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const ChooseTrigger_1 = require("../trigger/ChooseTrigger");
 const SkillActionTrigger_1 = require("../trigger/SkillActionTrigger");
 const RandomUtis_1 = require("../../../framework/utils/RandomUtis");
@@ -92,7 +91,7 @@ class InstanceBullet extends InstanceMove_1.default {
         var targetType = this.cfgData.targetType;
         if (targetType == 1) {
             if (!targetRole) {
-                LogsManager_1.default.errorTag("bulletError", "没有传入目标角色");
+                LogsManager.errorTag("bulletError", "没有传入目标角色");
                 this._chooseTargetArr = [];
             }
             else {
@@ -446,3 +445,4 @@ class InstanceBullet extends InstanceMove_1.default {
     }
 }
 exports.default = InstanceBullet;
+//# sourceMappingURL=InstanceBullet.js.map

@@ -1,6 +1,5 @@
 import UserInfo from "../common/UserInfo";
 import UserGlobalModel from "../model/UserGlobalModel";
-import LogsManager from "./LogsManager";
 import WindowManager from "./WindowManager";
 import ResourceCommonConst from "../../game/sys/consts/ResourceCommonConst";
 import ShareTvOrderFunc from "../../game/sys/func/ShareTvOrderFunc";

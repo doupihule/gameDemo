@@ -34,3 +34,4 @@ WindowCommonCfgs.ResultJumpDoubleView = "ResultJumpDoubleUI";
 WindowCommonCfgs.ResultJumpView = "ResultJumpUI";
 //修改用户数据
 WindowCommonCfgs.ChangeDataView = "ChangeDataUI";
+//# sourceMappingURL=WindowCommonCfgs.js.map

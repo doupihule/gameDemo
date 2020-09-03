@@ -1,6 +1,6 @@
 
 import IMessage from "../../interfaces/IMessage";
-import LogsManager from "../../../../framework/manager/LogsManager";
+
 import TimerManager from "../../../../framework/manager/TimerManager";
 import Message from "../../../../framework/common/Message";
 import MsgCMD from "../../common/MsgCMD";

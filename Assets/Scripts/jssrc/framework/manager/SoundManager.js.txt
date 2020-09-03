@@ -306,3 +306,4 @@ SoundManager._volumes = {}; //设置了部分音乐的音量
 SoundManager._volume = 1; //总音量
 SoundManager._bgvolume = 1; //背景音乐总音量
 SoundManager._channelNum = 0; //创建对象数量
+//# sourceMappingURL=SoundManager.js.map

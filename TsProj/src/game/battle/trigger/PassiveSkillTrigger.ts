@@ -1,6 +1,6 @@
 import InstanceLogical from "../instance/InstanceLogical";
 import PassiveSkillData from "../data/PassiveSkillData";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import BattleFunc from "../../sys/func/BattleFunc";
 import SkillActionData from "../data/SkillActionData";
 import BattleConst from "../../sys/consts/BattleConst";

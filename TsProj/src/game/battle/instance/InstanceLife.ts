@@ -1,7 +1,7 @@
 import BattleConst from "../../sys/consts/BattleConst";
 import BattleSkillData from "../data/BattleSkillData";
 import BattleFunc from "../../sys/func/BattleFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import PoolCode from "../../sys/consts/PoolCode";
 import PoolTools from "../../../framework/utils/PoolTools";
 import PassiveSkillData from "../data/PassiveSkillData";

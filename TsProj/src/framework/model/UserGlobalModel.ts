@@ -2,7 +2,6 @@ import BaseModel from "../../game/sys/model/BaseModel";
 import Client from "../common/kakura/Client";
 import UserModel from "../../game/sys/model/UserModel";
 import GlobalParamsFunc from "../../game/sys/func/GlobalParamsFunc";
-import LogsManager from "../manager/LogsManager";
 import GlobalData from "../utils/GlobalData";
 import SingleCommonServer from "../server/SingleCommonServer";
 

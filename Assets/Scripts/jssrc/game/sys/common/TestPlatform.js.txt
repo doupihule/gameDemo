@@ -87,3 +87,4 @@ TestPlatform.testBaidu = {
     "vms_url": "https://cloud-test.fantasyfancy.com:8608/",
     "vms_version": 1,
 };
+//# sourceMappingURL=TestPlatform.js.map

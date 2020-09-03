@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../manager/LogsManager");
 const UserInfo_1 = require("../common/UserInfo");
 const GameSwitch_1 = require("../common/GameSwitch");
 class FileUtils {
@@ -150,7 +149,7 @@ class FileUtils {
     /**获取一个文件所在的路径 */
     static getFilePathByUrl(fileUrl, isJoin = true) {
         if (fileUrl.slice(fileUrl.length - 1, fileUrl.length) == "/") {
-            LogsManager_1.default.echo("_传入的已经是文件夹了", fileUrl);
+            LogsManager.echo("_传入的已经是文件夹了", fileUrl);
             if (isJoin) {
                 return fileUrl;
             }
@@ -200,3 +199,4 @@ FileUtils.isUseZipFiles = true;
 //记录已经存在的文件路径 防止重复判断
 FileUtils.fs_cache = {};
 FileUtils.hasInitCacheRoot = false;
+//# sourceMappingURL=FileUtils.js.map

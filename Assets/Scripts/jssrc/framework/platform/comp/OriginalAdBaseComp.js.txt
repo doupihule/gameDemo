@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const GameSwitch_1 = require("../../common/GameSwitch");
 const UserInfo_1 = require("../../common/UserInfo");
-const LogsManager_1 = require("../../manager/LogsManager");
 const AdVideoManager_1 = require("../AdVideoManager");
 const Client_1 = require("../../common/kakura/Client");
 const TimerManager_1 = require("../../manager/TimerManager");
@@ -34,25 +33,25 @@ class OriginalAdBaseComp {
     }
     canOriginalAdv() {
         if (!(UserInfo_1.default.isOppo() || UserInfo_1.default.isVivo())) {
-            LogsManager_1.default.echo("hlx " + this.logName + "关闭：平台不支持原生广告");
+            LogsManager.echo("hlx " + this.logName + "关闭：平台不支持原生广告");
             return false;
         }
         if (GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_ORIGIN)) {
-            LogsManager_1.default.echo("hlx " + this.logName + "关闭：开关关闭");
+            LogsManager.echo("hlx " + this.logName + "关闭：开关关闭");
             return false;
         }
         if (!AdVideoManager_1.default.instance._isInitAdv) {
-            LogsManager_1.default.echo("hlx " + this.logName + "关闭：_isInitAdv 广告组件未初始化完毕");
-            LogsManager_1.default.errorTag('originAd_id_not_init', 'originAd_id_not_init');
+            LogsManager.echo("hlx " + this.logName + "关闭：_isInitAdv 广告组件未初始化完毕");
+            LogsManager.errorTag('originAd_id_not_init', 'originAd_id_not_init');
             return false;
         }
         if (!UserInfo_1.default.platform.getWX().createNativeAd) {
-            LogsManager_1.default.echo("hlx " + this.logName + "关闭：createNativeAd函数不存在");
-            LogsManager_1.default.errorTag("noOriginalAd", "这个设备没有原生广告组件");
+            LogsManager.echo("hlx " + this.logName + "关闭：createNativeAd函数不存在");
+            LogsManager.errorTag("noOriginalAd", "这个设备没有原生广告组件");
             return false;
         }
         if (!this.adOriginalIds || !(this.adOriginalIds.length >= 1)) {
-            LogsManager_1.default.echo('hlx ' + this.logName + '关闭：adOriginalIds未配置');
+            LogsManager.echo('hlx ' + this.logName + '关闭：adOriginalIds未配置');
             return false;
         }
         return true;
@@ -62,7 +61,7 @@ class OriginalAdBaseComp {
      */
     registerOrigionAdv(callBack = null, thisObj = null, params = {}) {
         this._isLoadOriginalSucc = false;
-        LogsManager_1.default.echo("hlx " + this.logName + "原生广告初始化开始--------------------");
+        LogsManager.echo("hlx " + this.logName + "原生广告初始化开始--------------------");
         if (!this.canOriginalAdv()) {
             return;
         }
@@ -88,22 +87,22 @@ class OriginalAdBaseComp {
      * 创建原生广告实例
      */
     createOriginalSysc(idArr, callBack = null, thisObj = null, params = {}) {
-        LogsManager_1.default.echo("hlx " + this.logName + " 原生广告初始化开始2--------------------" + this._curIdsKey);
+        LogsManager.echo("hlx " + this.logName + " 原生广告初始化开始2--------------------" + this._curIdsKey);
         // 上锁中
         if (this._startLoadTime != null) {
             // 上锁小于5秒，给失败返回
             if (Client_1.default.instance.serverTime - this._startLoadTime < 5) {
-                LogsManager_1.default.warn("hlx " + this.logName + " 广告实例未初始化完成，不重复初始化: 建议查询代码不要频繁加载原生广告！", Client_1.default.instance.serverTime - this._startLoadTime);
+                LogsManager.warn("hlx " + this.logName + " 广告实例未初始化完成，不重复初始化: 建议查询代码不要频繁加载原生广告！", Client_1.default.instance.serverTime - this._startLoadTime);
                 callBack && callBack.call(thisObj, false, params);
                 return;
             }
             else {
                 // 上锁大于5秒，说明初始化load没有成功或失败回调。发送报错平台定位问题
-                LogsManager_1.default.errorTag('original_lock_expire', "startTime:" + this._startLoadTime + " nowTime:" + Client_1.default.instance.serverTime);
+                LogsManager.errorTag('original_lock_expire', "startTime:" + this._startLoadTime + " nowTime:" + Client_1.default.instance.serverTime);
             }
         }
         if (this._isLoadOriginalSucc) {
-            LogsManager_1.default.errorTag('origin_LoadOriginalSucc_error', '成功不应该走到此处');
+            LogsManager.errorTag('origin_LoadOriginalSucc_error', '成功不应该走到此处');
             return;
         }
         if (this._tryCount > this.adOriginalIds.length) {
@@ -112,7 +111,7 @@ class OriginalAdBaseComp {
         }
         if (this._originalAd) {
             if (this._isOriginalObjReady) {
-                LogsManager_1.default.echo("hlx " + this.logName + " 原生广告已缓存，直接显示--------------------" + this._curIdsKey);
+                LogsManager.echo("hlx " + this.logName + " 原生广告已缓存，直接显示--------------------" + this._curIdsKey);
                 // 预加载过就直接返回
                 callBack && callBack.call(thisObj, true, params, this.adList);
                 return;
@@ -125,7 +124,7 @@ class OriginalAdBaseComp {
                 }
             }
         }
-        LogsManager_1.default.echo("hlx " + this.logName + " 创建原生广告对象");
+        LogsManager.echo("hlx " + this.logName + " 创建原生广告对象");
         var id = this.adOriginalIds[this._curIdsKey];
         var wx = UserInfo_1.default.platform.getWX();
         // 创建实例后锁住无法重复创建实例
@@ -136,7 +135,7 @@ class OriginalAdBaseComp {
         if (this._originalAd) {
             var _originalAd = this._originalAd;
             _originalAd.onError(err => {
-                LogsManager_1.default.echo("hlx " + this.logName + " onError--------------------" + this._curIdsKey, JSON.stringify(err));
+                LogsManager.echo("hlx " + this.logName + " onError--------------------" + this._curIdsKey, JSON.stringify(err));
                 // 加载解锁
                 this._startLoadTime = null;
                 this._isLoadOriginalSucc = false;
@@ -156,14 +155,14 @@ class OriginalAdBaseComp {
                 TimerManager_1.default.instance.setTimeout(this.createOriginalSysc, this, 300, idArr, callBack, thisObj, params);
             });
             _originalAd.onLoad((res) => {
-                LogsManager_1.default.echo("hlx " + this.logName + " onLoad--------------------" + this._curIdsKey, JSON.stringify(res));
+                LogsManager.echo("hlx " + this.logName + " onLoad--------------------" + this._curIdsKey, JSON.stringify(res));
                 // 加载解锁
                 this._startLoadTime = null;
                 this._isLoadOriginalSucc = true;
                 this.adList = res.adList[0];
                 if (res.adList[0]) {
                     this._isOriginalObjReady = true;
-                    LogsManager_1.default.echo("原生广告初始化开始6--------------------");
+                    LogsManager.echo("原生广告初始化开始6--------------------");
                     callBack && callBack.call(thisObj, true, params, this.adList);
                 }
             });
@@ -174,7 +173,7 @@ class OriginalAdBaseComp {
      * 汇报点击
      */
     reportClickOriginal(adId) {
-        LogsManager_1.default.echo("hlx " + this.logName + " 汇报点击");
+        LogsManager.echo("hlx " + this.logName + " 汇报点击");
         StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.ORIGINAL_CLICK, { type: this.logName });
         this._originalAd.reportAdClick({
             adId: adId
@@ -184,7 +183,7 @@ class OriginalAdBaseComp {
      * 汇报展示
      */
     reportShowOriginal(adId) {
-        LogsManager_1.default.echo("hlx " + this.logName + " 汇报展示");
+        LogsManager.echo("hlx " + this.logName + " 汇报展示");
         StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.ORIGINAL_SHOW, { type: this.logName });
         this._isOriginalObjReady = false;
         this._originalAd.reportAdShow({
@@ -193,3 +192,4 @@ class OriginalAdBaseComp {
     }
 }
 exports.default = OriginalAdBaseComp;
+//# sourceMappingURL=OriginalAdBaseComp.js.map

@@ -9,3 +9,4 @@ exports.default = BannerEvent;
 BannerEvent.BANNER_EVENT_SHOWLEADBANNER = "BANNER_EVENT_SHOWLEADBANNER";
 /**刷新间接banner */
 BannerEvent.BANNER_EVENT_SHOWQUICKBANNER = "BANNER_EVENT_SHOWQUICKBANNER"; /**刷新直接banner */
+//# sourceMappingURL=BannerEvent.js.map

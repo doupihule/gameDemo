@@ -1,5 +1,5 @@
 import WXGamePlatform from "./WXGamePlatform";
-import LogsManager from "../manager/LogsManager";
+
 import UserInfo from "../common/UserInfo";
 import GlobalData from "../utils/GlobalData";
 import GameSwitch from "../common/GameSwitch";

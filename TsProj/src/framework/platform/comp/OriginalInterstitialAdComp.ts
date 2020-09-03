@@ -2,7 +2,7 @@ import OriginalAdBaseComp from "./OriginalAdBaseComp";
 import ChannelConst from "../../../game/sys/consts/ChannelConst";
 import UserInfo from "../../common/UserInfo";
 import GameSwitch from "../../common/GameSwitch";
-import LogsManager from "../../manager/LogsManager";
+
 import WindowCommonCfgs from "../../consts/WindowCommonCfgs";
 import WindowManager from "../../manager/WindowManager";
 import AdVideoManager from "../AdVideoManager";

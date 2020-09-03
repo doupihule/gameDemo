@@ -25,14 +25,6 @@ class Sprite3DExpand extends BaseViewExpand_1.default {
     }
     //加载成功回调
     onLoadComplete() {
-        this.currentView = ResourceManager_1.default.get3dmodelRes(this.modelName, false, true);
-        this.addChild(this.currentView);
-        this.showChildView();
-        this.doExpandOnShow();
-        if (this._onCompleteBack) {
-            this._onCompleteBack();
-            this._onCompleteBack = null;
-        }
     }
     //子类重写 .比如需要播放特效的
     doExpandOnShow() {
@@ -89,3 +81,4 @@ class Sprite3DExpand extends BaseViewExpand_1.default {
     }
 }
 exports.default = Sprite3DExpand;
+//# sourceMappingURL=Sprite3DExpand.js.map

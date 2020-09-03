@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../manager/LogsManager");
 class NativeTools {
     static downLoadFile(url, callBack, thisObj, isBin = false, progressFunc = null) {
         var conFileCl = window["conch_File"];
@@ -12,7 +11,7 @@ class NativeTools {
             callBack.call(thisObj, fr.result);
         };
         fr.onerror = (e) => {
-            LogsManager_1.default.warn('downLoadERROR ', e);
+            LogsManager.warn('downLoadERROR ', e);
             //if (reject)
             //    reject(e); 
             // resolve(null);
@@ -26,3 +25,4 @@ class NativeTools {
     }
 }
 exports.default = NativeTools;
+//# sourceMappingURL=NativeTools.js.map

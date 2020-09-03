@@ -1,5 +1,5 @@
 import BaseFunc from "../../../framework/func/BaseFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import GameConsts from "../consts/GameConsts";
 import BattleConst from "../consts/BattleConst";
 import GlobalParamsFunc from "./GlobalParamsFunc";

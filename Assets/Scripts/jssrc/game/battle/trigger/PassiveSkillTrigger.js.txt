@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const SkillActionData_1 = require("../data/SkillActionData");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
@@ -65,7 +64,7 @@ class PassiveSkillTrigger {
             skill.leftSkillCd = BattleFunc_1.default.instance.turnMinisecondToframe(Number(skill.cfgData.cdTime));
         }
         if (!func) {
-            LogsManager_1.default.errorTag("PassiveSkillCfgError", "错误的被动技能效果类型,id:", skill._skillId, "effecttype:", type);
+            LogsManager.errorTag("PassiveSkillCfgError", "错误的被动技能效果类型,id:", skill._skillId, "effecttype:", type);
             return 0;
         }
         else {
@@ -163,7 +162,7 @@ class PassiveSkillTrigger {
     static runPassiveSkill_11(attacker, skill, useArr, skillAction, outArr) {
         var paramsArr = skill.skillLogicalParams;
         if (!outArr) {
-            LogsManager_1.default.errorTag("passiveerror_11", "被动技能效果参数错误,skillId:", skill._skillId);
+            LogsManager.errorTag("passiveerror_11", "被动技能效果参数错误,skillId:", skill._skillId);
             return;
         }
         outArr.length = 0;
@@ -243,3 +242,4 @@ class PassiveSkillTrigger {
     }
 }
 exports.default = PassiveSkillTrigger;
+//# sourceMappingURL=PassiveSkillTrigger.js.map

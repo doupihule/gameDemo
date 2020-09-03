@@ -9,3 +9,4 @@ exports.default = SevenDayEvent;
 SevenDayEvent.SEVENTDAYEVENT_FRESH_SEVENDAY = "SEVENTDAYEVENT_FRESH_SEVENDAY";
 /**刷新七日登录红点 */
 SevenDayEvent.SEVENDAY_EVENT_REDPOINT = "SEVENDAY_EVENT_REDPOINT";
+//# sourceMappingURL=SevenDayEvent.js.map

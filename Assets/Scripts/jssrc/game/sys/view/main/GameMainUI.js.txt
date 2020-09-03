@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const UIBaseView_1 = require("../../../../framework/components/UIBaseView");
-const LogsManager_1 = require("../../../../framework/manager/LogsManager");
 class GameMainUI extends UIBaseView_1.default {
     constructor() {
         super();
@@ -12,7 +11,8 @@ class GameMainUI extends UIBaseView_1.default {
         this.btn_test.set2dPos(100, 100);
     }
     onClickTest(params) {
-        LogsManager_1.default.echo("__clickTest", params);
+        LogsManager.echo("__clickTest", params);
     }
 }
 exports.default = GameMainUI;
+//# sourceMappingURL=GameMainUI.js.map

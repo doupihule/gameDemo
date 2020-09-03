@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const BattleFormulaTrigger_1 = require("./BattleFormulaTrigger");
 const BattleBuffData_1 = require("../data/BattleBuffData");
@@ -124,7 +123,7 @@ class SkillActionTrigger {
         }
         var func = this["runSkillAction_" + logicType];
         if (!func) {
-            LogsManager_1.default.errorTag("skillactionError", "没有对应的效果类型:", logicType);
+            LogsManager.errorTag("skillactionError", "没有对应的效果类型:", logicType);
             return 0;
         }
         else {
@@ -338,7 +337,7 @@ class SkillActionTrigger {
             for (var s = 0; s < useArr.length; s++) {
                 attacker.controler.createBullet(bulletId, attacker, skillAction, x + attacker.pos.x, attacker.pos.y + y, rotation, useArr[s], offz);
                 if (useArr.length > 1 && paramsArr.length > 1) {
-                    LogsManager_1.default.errorTag("skillactionError", "技能效果id:", skillAction.skillEffectId, "_选择了多个目标.同时配置了多个子弹.不符合逻辑");
+                    LogsManager.errorTag("skillactionError", "技能效果id:", skillAction.skillEffectId, "_选择了多个目标.同时配置了多个子弹.不符合逻辑");
                     break;
                 }
             }
@@ -392,3 +391,4 @@ SkillActionTrigger.action_fanshang = 10; //反伤
 SkillActionTrigger.action_zhaohuan = 11; //召唤
 SkillActionTrigger.action_aoe = 12; //触发aoe
 SkillActionTrigger.action_bullet = 13; //发射子弹
+//# sourceMappingURL=SkillActionTrigger.js.map

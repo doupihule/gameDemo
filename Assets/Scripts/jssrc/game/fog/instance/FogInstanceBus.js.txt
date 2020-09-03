@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const FogModel_1 = require("../../sys/model/FogModel");
 const FogFunc_1 = require("../../sys/func/FogFunc");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const FogConst_1 = require("../../sys/consts/FogConst");
 const FogInstanceMove_1 = require("./FogInstanceMove");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
@@ -74,7 +73,7 @@ class FogInstanceBus extends FogInstanceMove_1.default {
             WindowManager_1.default.ShowTip(TranslateFunc_1.default.instance.getTranslate("#tid_fog_click_deep_cell"));
             return;
         }
-        LogsManager_1.default.echo("path-----------", arr.length);
+        LogsManager.echo("path-----------", arr.length);
         this.pathIndex = 0;
         //不是移动状态就直接开始移动
         if (this._myState != BattleConst_1.default.state_move) {
@@ -89,7 +88,7 @@ class FogInstanceBus extends FogInstanceMove_1.default {
     moveToOnePos() {
         this.isNewPath = false;
         if (this.pathArr.length == 0) {
-            LogsManager_1.default.echo("item-----------------");
+            LogsManager.echo("item-----------------");
         }
         if (this.pathArr.length == 0)
             return;
@@ -103,7 +102,7 @@ class FogInstanceBus extends FogInstanceMove_1.default {
         var item = this.pathArr[this.pathIndex];
         // if (!item) return;
         if (type == "side") {
-            LogsManager_1.default.echo("到达边缘--------------------");
+            LogsManager.echo("到达边缘--------------------");
             //到达下个格子边缘 先完全照亮格子
             if (this.fogControler.cellMapControler.openTargetCell(item.mySign)) {
                 //本次是新解锁的格子
@@ -128,7 +127,7 @@ class FogInstanceBus extends FogInstanceMove_1.default {
                 return;
             if (this.pathIndex >= this.pathArr.length - 1) {
                 //到终点了
-                LogsManager_1.default.echo("到终点了");
+                LogsManager.echo("到终点了");
                 this.onArriveEnd();
             }
             //如果触发了进入当前格子的事件 停止运动
@@ -138,7 +137,7 @@ class FogInstanceBus extends FogInstanceMove_1.default {
             }
             //当移动到一个点后有了新的路径，直接开始新的
             if (this.isNewPath) {
-                LogsManager_1.default.echo("newpath2-----------", this.tempPathArr);
+                LogsManager.echo("newpath2-----------", this.tempPathArr);
                 TableUtils_1.default.copyOneArr(this.tempPathArr, this.pathArr);
                 this.moveToOnePos();
                 return;
@@ -146,7 +145,7 @@ class FogInstanceBus extends FogInstanceMove_1.default {
             if (this.pathIndex < this.pathArr.length - 1) {
                 //移动到下一个点
                 this.pathIndex += 1;
-                LogsManager_1.default.echo("去下一个点");
+                LogsManager.echo("去下一个点");
                 this.moveToOnePos();
             }
         }
@@ -216,3 +215,4 @@ class FogInstanceBus extends FogInstanceMove_1.default {
     }
 }
 exports.default = FogInstanceBus;
+//# sourceMappingURL=FogInstanceBus.js.map

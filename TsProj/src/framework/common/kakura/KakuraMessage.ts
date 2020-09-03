@@ -1,7 +1,4 @@
 import KakuraPackage from "./KakuraPackage";
-import LogsManager from "../../manager/LogsManager";
-import ErrorCode from "../../../game/sys/common/kakura/ErrorCode";
-import Client from "./Client";
 
 export default class KakuraMessage {
 

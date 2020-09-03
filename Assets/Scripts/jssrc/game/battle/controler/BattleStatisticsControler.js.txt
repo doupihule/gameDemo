@@ -36,3 +36,4 @@ class BattleStatisticsControler {
     }
 }
 exports.default = BattleStatisticsControler;
+//# sourceMappingURL=BattleStatisticsControler.js.map

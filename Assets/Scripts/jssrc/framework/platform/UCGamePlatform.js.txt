@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const WXGamePlatform_1 = require("./WXGamePlatform");
-const LogsManager_1 = require("../manager/LogsManager");
 const UserInfo_1 = require("../common/UserInfo");
 const GlobalData_1 = require("../utils/GlobalData");
 const GameSwitch_1 = require("../common/GameSwitch");
@@ -25,7 +24,7 @@ class UCGamePlatform extends WXGamePlatform_1.default {
     }
     //初始化平台数据
     initPlatformData() {
-        LogsManager_1.default.echo("hlx 初始化平台数据");
+        LogsManager.echo("hlx 初始化平台数据");
         this.registerAd();
     }
     /**调取对应平台的分享 */
@@ -63,7 +62,7 @@ class UCGamePlatform extends WXGamePlatform_1.default {
                     }
                 },
                 fail: function (data) {
-                    LogsManager_1.default.warn("hlx isLogin fail");
+                    LogsManager.warn("hlx isLogin fail");
                     mythis.retryGetWxInfo();
                     return;
                 },
@@ -91,14 +90,14 @@ class UCGamePlatform extends WXGamePlatform_1.default {
      */
     _guestLogin(callback = null, thisObj = null) {
         if (this.guestid) {
-            LogsManager_1.default.echo("hlx _guestLogin 已经进行过游客登录，直接成功回调");
+            LogsManager.echo("hlx _guestLogin 已经进行过游客登录，直接成功回调");
             callback && callback.call(thisObj, true);
             return;
         }
         var myThis = this;
         this.getWX().getGuestInfo({
             success: function (res) {
-                LogsManager_1.default.echo("getGuestInfo 加载成功", JSON.stringify(res));
+                LogsManager.echo("getGuestInfo 加载成功", JSON.stringify(res));
                 if (res.guestid) {
                     myThis.guestid = res.guestid;
                     // 废弃userInfoData 使用 platformUserInfo
@@ -106,16 +105,16 @@ class UCGamePlatform extends WXGamePlatform_1.default {
                     callback && callback.call(thisObj, true);
                 }
                 else {
-                    LogsManager_1.default.errorTag("getGuestInfo_error", "getGuestInfo 加载成功,返回值异常");
+                    LogsManager.errorTag("getGuestInfo_error", "getGuestInfo 加载成功,返回值异常");
                     callback && callback.call(thisObj, false);
                 }
             },
             fail: function (res) {
                 try {
-                    LogsManager_1.default.errorTag("getGuestInfo_error", "getGuestInfo 加载失败", JSON.stringify(res));
+                    LogsManager.errorTag("getGuestInfo_error", "getGuestInfo 加载失败", JSON.stringify(res));
                 }
                 catch (e) {
-                    LogsManager_1.default.errorTag("getGuestInfo_error", "getGuestInfo 加载失败,无法序列化error");
+                    LogsManager.errorTag("getGuestInfo_error", "getGuestInfo 加载失败,无法序列化error");
                 }
                 callback && callback.call(thisObj, false);
             }
@@ -129,25 +128,25 @@ class UCGamePlatform extends WXGamePlatform_1.default {
         try {
             this.getWX().login({
                 success: function (res) {
-                    LogsManager_1.default.echo('>>login成功回调>>', JSON.stringify(res));
+                    LogsManager.echo('>>login成功回调>>', JSON.stringify(res));
                     myThis.setLaunchOptions();
                     if (res && res.code) {
                         myThis.code = res.code;
                         callback && callback.call(thisObj, true);
                     }
                     else {
-                        LogsManager_1.default.errorTag("login_error", "login 加载成功,返回值异常");
+                        LogsManager.errorTag("login_error", "login 加载成功,返回值异常");
                         callback && callback.call(thisObj, false);
                     }
                 },
                 fail: function (err) {
-                    LogsManager_1.default.warn('>>login失败回调>>', err);
+                    LogsManager.warn('>>login失败回调>>', err);
                     callback && callback.call(thisObj, false);
                 }
             });
         }
         catch (e) {
-            LogsManager_1.default.echo('login_error:', e);
+            LogsManager.echo('login_error:', e);
         }
     }
     /**
@@ -158,18 +157,18 @@ class UCGamePlatform extends WXGamePlatform_1.default {
         myThis.platformUserInfo = {};
         this.getWX().getSetting({
             success: (res) => {
-                LogsManager_1.default.echo("hlx UC getSetting success", JSON.stringify(res));
+                LogsManager.echo("hlx UC getSetting success", JSON.stringify(res));
                 if (res.userInfo) {
-                    LogsManager_1.default.echo("hlx UC start getUserInfo");
+                    LogsManager.echo("hlx UC start getUserInfo");
                     myThis.getWX().getUserInfo({
                         success(res) {
-                            LogsManager_1.default.echo("hlx UC getUserInfo success", JSON.stringify(res));
+                            LogsManager.echo("hlx UC getUserInfo success", JSON.stringify(res));
                             // 废弃userInfoData
                             // myThis.userInfoData = {userInfo:res};
                             myThis.platformUserInfo = { "name": res.nickName, "headImage": res.avatarUrl };
                             myThis.sendKakuraInit();
                         }, fail(err) {
-                            LogsManager_1.default.echo("hlx UC getUserInfo fail", JSON.stringify(err));
+                            LogsManager.echo("hlx UC getUserInfo fail", JSON.stringify(err));
                             myThis.sendKakuraInit();
                         }
                     });
@@ -179,17 +178,18 @@ class UCGamePlatform extends WXGamePlatform_1.default {
                 }
             },
             fail: () => {
-                LogsManager_1.default.echo("hlx UC getSetting ==fail===");
+                LogsManager.echo("hlx UC getSetting ==fail===");
                 myThis.sendKakuraInit();
             },
         });
     }
     //添加监听事件
     addListener() {
-        LogsManager_1.default.echo("hlx addListener ", typeof window['onerror']);
+        LogsManager.echo("hlx addListener ", typeof window['onerror']);
         window['onerror'] = function (errorMessage, scriptURI, lineNumber, columnNumber, errorObj) {
-            LogsManager_1.default.systemError("onError!!!!!!!!!!!!", JSON.stringify(errorMessage));
+            LogsManager.systemError("onError!!!!!!!!!!!!", JSON.stringify(errorMessage));
         };
     }
 }
 exports.default = UCGamePlatform;
+//# sourceMappingURL=UCGamePlatform.js.map

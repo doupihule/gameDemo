@@ -1,6 +1,6 @@
 import IMessage from "../../../game/sys/interfaces/IMessage";
 import Message from "../../common/Message";
-import LogsManager from "../../manager/LogsManager";
+
 import WindowEvent from "../../event/WindowEvent";
 import WindowManager from "../../manager/WindowManager";
 import GameTools from "../../../utils/GameTools";

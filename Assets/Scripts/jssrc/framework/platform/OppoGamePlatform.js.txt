@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const WXGamePlatform_1 = require("./WXGamePlatform");
 const AdVideoManager_1 = require("./AdVideoManager");
-const LogsManager_1 = require("../manager/LogsManager");
 const GameSwitch_1 = require("../common/GameSwitch");
 const WindowManager_1 = require("../manager/WindowManager");
 const Message_1 = require("../common/Message");
@@ -38,10 +37,10 @@ class OppoGamePlatform extends WXGamePlatform_1.default {
     }
     //初始化平台数据
     initPlatformData() {
-        LogsManager_1.default.echo("初始化Oppo平台--------------------");
+        LogsManager.echo("初始化Oppo平台--------------------");
         var wx = this.getWX();
         if (!wx.initAdService) {
-            LogsManager_1.default.warn("noAdService:", "无法初始化视频组件");
+            LogsManager.warn("noAdService:", "无法初始化视频组件");
             return;
         }
         var thisObj = this;
@@ -87,7 +86,7 @@ class OppoGamePlatform extends WXGamePlatform_1.default {
         //判断是否有广告,如果没有广告
         if (!this.getWX().createRewardedVideoAd) {
             this.loadAdvFailed = true;
-            LogsManager_1.default.echo(null, "这个设备没有广告组件");
+            LogsManager.echo(null, "这个设备没有广告组件");
             return;
         }
         if (!this._videoId)
@@ -95,11 +94,11 @@ class OppoGamePlatform extends WXGamePlatform_1.default {
         this._videoAd = this.getWX().createRewardedVideoAd({ posId: this._videoId });
         if (this._videoAd) {
             var videoAd = this._videoAd;
-            LogsManager_1.default.echo("zm registerAd this._videoAd", this._videoAd);
+            LogsManager.echo("zm registerAd this._videoAd", this._videoAd);
             videoAd.onError((err) => {
                 thisObj.loadAdvFailed = true;
                 WindowManager_1.default.closeAdvMask();
-                LogsManager_1.default.echo("videoAd.onError:", err.toString());
+                LogsManager.echo("videoAd.onError:", err.toString());
                 if (thisObj._videoLoaded) {
                     StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.NORMAL_VIDEO_AD_FAIL);
                     thisObj._doVedioCallBack(false);
@@ -107,7 +106,7 @@ class OppoGamePlatform extends WXGamePlatform_1.default {
             });
             videoAd.onLoad((res) => {
                 thisObj.loadAdvFailed = false;
-                LogsManager_1.default.echo("videoAd.onLoad:", JSON.stringify(res));
+                LogsManager.echo("videoAd.onLoad:", JSON.stringify(res));
                 // if (!res) {
                 //     this.videoFailed = true;
                 // }
@@ -117,11 +116,11 @@ class OppoGamePlatform extends WXGamePlatform_1.default {
                 WindowManager_1.default.closeAdvMask();
                 if (res && res.isEnded) {
                     // 给予奖励
-                    LogsManager_1.default.echo("hlx show wx video suc");
+                    LogsManager.echo("hlx show wx video suc");
                     thisObj.onVideoComplete(true);
                 }
                 else {
-                    LogsManager_1.default.echo("hlx show wx video fail");
+                    LogsManager.echo("hlx show wx video fail");
                     // VO不弹模态
                     thisObj.onVideoComplete(false);
                 }
@@ -161,7 +160,7 @@ class OppoGamePlatform extends WXGamePlatform_1.default {
         }
         if (!this._videoAd) {
             WindowManager_1.default.closeAdvMask();
-            LogsManager_1.default.echo("yrc 没有广告实例，直接执行成功回调");
+            LogsManager.echo("yrc 没有广告实例，直接执行成功回调");
             this._doVedioCallBack(false);
             return;
         }
@@ -170,3 +169,4 @@ class OppoGamePlatform extends WXGamePlatform_1.default {
     }
 }
 exports.default = OppoGamePlatform;
+//# sourceMappingURL=OppoGamePlatform.js.map

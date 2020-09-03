@@ -1,4 +1,4 @@
-import LogsManager from "../../manager/LogsManager";
+
 import {TopViewAutoComp} from "./TopViewAutoComp";
 import ChannelConst from "../../../game/sys/consts/ChannelConst";
 import UserInfo from "../../common/UserInfo";

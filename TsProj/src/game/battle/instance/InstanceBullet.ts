@@ -3,7 +3,7 @@ import InstanceLogical from "./InstanceLogical";
 import BattleFunc from "../../sys/func/BattleFunc";
 import BattleConst from "../../sys/consts/BattleConst";
 import SkillActionData from "../data/SkillActionData";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import ChooseTrigger from "../trigger/ChooseTrigger";
 import SkillActionTrigger from "../trigger/SkillActionTrigger";
 import RandomUtis from "../../../framework/utils/RandomUtis";

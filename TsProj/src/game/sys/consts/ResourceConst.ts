@@ -10,16 +10,6 @@ export default class ResourceConst {
 	/**指色互推背景 */
 	static JUMP_ZHISE_ICONBG = "uisource/jump/bg-box.png";
 
-	static boundle_ui = "uiab"
-	static boundle_map = "map"
-	static boundle_base = "baseab"
-	static boundle_animation = "animation"
-	static boundle_uiimage = "uiimageab"
-
-	static UIResPath = "Assets/UI/UIRes/"
-
-	static baseLabelPrefeb = "base/BaseLabel";
-	static baseContainerPrefeb = "base/BaseContainer";
 
 	static BATTLE_SHADE = "Assets/UI/UIRes/battle/battle_image_yinying"
 

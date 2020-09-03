@@ -41,3 +41,4 @@ class RecycleFunc extends BaseFunc_1.default {
     }
 }
 exports.default = RecycleFunc;
+//# sourceMappingURL=RecycleFunc.js.map

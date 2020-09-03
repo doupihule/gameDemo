@@ -72,3 +72,4 @@ class WorkFunc extends BaseFunc_1.default {
     }
 }
 exports.default = WorkFunc;
+//# sourceMappingURL=WorkFunc.js.map

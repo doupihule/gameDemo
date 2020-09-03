@@ -6,7 +6,6 @@ const UserModel_1 = require("../../game/sys/model/UserModel");
 const TableUtils_1 = require("../utils/TableUtils");
 const CacheManager_1 = require("../manager/CacheManager");
 const StorageCode_1 = require("../../game/sys/consts/StorageCode");
-const LogsManager_1 = require("../manager/LogsManager");
 const KakuraClient_1 = require("../common/kakura/KakuraClient");
 const WindowManager_1 = require("../manager/WindowManager");
 const TimerManager_1 = require("../manager/TimerManager");
@@ -30,7 +29,7 @@ class SingleCommonServer {
             if (delayValue > 0) {
                 GlobalData_1.default.updateUserDataDelay = delayValue;
             }
-            LogsManager_1.default.echo("使用服务器配置的同步cd", delayValue);
+            LogsManager.echo("使用服务器配置的同步cd", delayValue);
         }
         var minUpdateTime = GameSwitch_1.default.getSwitchState("SWITCH_MINUPDATETIME");
         if (minUpdateTime) {
@@ -64,7 +63,7 @@ class SingleCommonServer {
     static startSaveClientData(isDelaySave = false, callBack = null, thisObj = null, dummyBackData = null) {
         if (this._saveLock) {
             this._hasDataChange = true;
-            LogsManager_1.default.echo("server 当前保存数据cd没到");
+            LogsManager.echo("server 当前保存数据cd没到");
             callBack && callBack.call(thisObj, dummyBackData);
             return;
         }
@@ -78,7 +77,7 @@ class SingleCommonServer {
     }
     static delayCheck() {
         this._saveLock = false;
-        LogsManager_1.default.echo("server 保存数据cd到了,是否有数据变化:", this._hasDataChange);
+        LogsManager.echo("server 保存数据cd到了,是否有数据变化:", this._hasDataChange);
         //如果期间又有数据变化. 那么重新保存一次数据.
         if (this._hasDataChange) {
             this._hasDataChange = false;
@@ -117,7 +116,7 @@ class SingleCommonServer {
             TableUtils_1.default.deepCopy(tempUserData, tempData);
             params = { clientDirty: { u: tempData } };
             CacheManager_1.default.instance.setGlobalCache(StorageCode_1.default.storage_userinfo, JSON.stringify(tempUserData));
-            LogsManager_1.default.echo("_还没有完整的同步过数据,需要先整体同步");
+            LogsManager.echo("_还没有完整的同步过数据,需要先整体同步");
             // this.upDateAllData(lastBackData, this.onUserDataSaveComplete, this);
         }
         else {
@@ -150,7 +149,7 @@ class SingleCommonServer {
         TableUtils_1.default.deepCopy(tempUserData, lastBackData);
         //请求服务器同步数据 同步成功之后 才会把本地的back数据更新. 防止某一步数据同步失败后本地数据遗漏
         //这里暂时写死,因为分系统还没有定义这个协议后面游戏自行修改这个参数
-        LogsManager_1.default.echo("开始同步数据,length:" + userDataStr.length);
+        LogsManager.echo("开始同步数据,length:" + userDataStr.length);
         KakuraClient_1.default.instance.clearOneMethod(this.user_updateData_349);
         var tempParams = {
             callBack: callBack,
@@ -183,7 +182,7 @@ class SingleCommonServer {
             return;
         }
         this.hasUpdateAllData = true;
-        LogsManager_1.default.echo("__客户端同步数据成功");
+        LogsManager.echo("__客户端同步数据成功");
         //更新成功就重新覆盖上一次本地缓存的数据
         this._lastBackUpData = addParams.backData;
         if (addParams.callBack) {
@@ -194,14 +193,14 @@ class SingleCommonServer {
     static sendNoAliCloudData(params) {
         if (GlobalData_1.default.checkIsSingleMode())
             return;
-        LogsManager_1.default.echo("开始非单机项目同步数据");
+        LogsManager.echo("开始非单机项目同步数据");
         KakuraClient_1.default.instance.clearOneMethod(this.user_updateData_349);
         Client_1.default.instance.send(this.user_updateData_349, params, (result) => {
             Client_1.default.temDirtList = {};
             if (result.error) {
                 return;
             }
-            LogsManager_1.default.echo("__非单机客户端同步数据成功");
+            LogsManager.echo("__非单机客户端同步数据成功");
         }, this, null, false);
     }
     static getClientDirtyList() {
@@ -233,7 +232,7 @@ class SingleCommonServer {
      * 确认同步
      */
     static setUpdateDataFlag(thisObj, data) {
-        LogsManager_1.default.echo("krma. 确认同步，存入本地");
+        LogsManager.echo("krma. 确认同步，存入本地");
         CacheManager_1.default.instance.setGlobalCache(StorageCode_1.default.storage_userinfo, JSON.stringify(data));
     }
     //云存储清除账号数据
@@ -278,3 +277,4 @@ SingleCommonServer._saveLock = false;
 SingleCommonServer._hasDataChange = false;
 SingleCommonServer._forceExpandParams = { forceConnect: true };
 SingleCommonServer._isDestoryData = false;
+//# sourceMappingURL=SingleCommonServer.js.map

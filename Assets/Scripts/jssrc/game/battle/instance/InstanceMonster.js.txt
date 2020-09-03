@@ -23,3 +23,4 @@ class InstanceMonster extends InstanceLogical_1.default {
     }
 }
 exports.default = InstanceMonster;
+//# sourceMappingURL=InstanceMonster.js.map

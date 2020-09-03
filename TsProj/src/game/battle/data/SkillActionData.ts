@@ -1,5 +1,5 @@
 import BattleFunc from "../../sys/func/BattleFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 
 
 //技能效果数据

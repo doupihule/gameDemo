@@ -1,7 +1,6 @@
 import Message from "../common/Message";
 import {LoadingUI} from "../../game/sys/view/loading/LoadingUI";
 import ScreenAdapterTools from "../utils/ScreenAdapterTools";
-import LogsManager from "./LogsManager";
 import GlobalData from "../utils/GlobalData";
 import {LoadManager} from "./LoadManager";
 import {WindowCfgs} from "../../game/sys/consts/WindowCfgs";
@@ -18,6 +17,7 @@ import TimerManager from "./TimerManager";
 import ResourceManager from "./ResourceManager";
 import ResourceConst from "../../game/sys/consts/ResourceConst";
 import UIBaseView from "../components/UIBaseView";
+import ResourceCommonConst from "../consts/ResourceCommonConst";
 
 export default class WindowManager {
 
@@ -79,7 +79,7 @@ export default class WindowManager {
 			if (targetUI == null) {
 				var classIntance = uiCfgs.path;
 				targetUI = new classIntance() as UIBaseView;
-				var uiCobj =ResourceManager.loadUIPrefab(uiCfgs.prefabPath+"/"+ openUIName,ResourceConst.boundle_ui);
+				var uiCobj =ResourceManager.loadUIPrefab(uiCfgs.prefabPath+"/"+ openUIName,ResourceCommonConst.boundle_ui);
 				targetUI.setCObject(uiCobj);
 				if (!rootNode) {
 					// targetUI.setSize(ScreenAdapterTools.width,ScreenAdapterTools.height);

@@ -1,15 +1,4 @@
-import LogsManager from "./LogsManager";
-import TimerManager from "./TimerManager";
-import Message from "../common/Message";
-import MsgCMD from "../../game/sys/common/MsgCMD";
-import {WindowCfgs} from "../../game/sys/consts/WindowCfgs";
-import TranslateFunc from "../func/TranslateFunc";
-import WindowManager from "./WindowManager";
-import TableUtils from "../utils/TableUtils";
-import VersionManager from "./VersionManager";
-import {LoadZipManager} from "./LoadZipManager";
-import SubPackageManager from "./SubPackageManager";
-import UserInfo from "../common/UserInfo";
+
 
 export class LoadManager {
 	private static _instance: LoadManager;

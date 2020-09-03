@@ -2,7 +2,6 @@ import UserInfo, {PlatformIdType} from "../common/UserInfo";
 import JumpConst from "../../game/sys/consts/JumpConst";
 import GlobalParamsFunc from "../../game/sys/func/GlobalParamsFunc";
 import GlobalData from "../utils/GlobalData";
-import LogsManager from "./LogsManager";
 import GameSwitch from "../common/GameSwitch";
 import GameConsts from "../../game/sys/consts/GameConsts";
 import HttpMessage from "../common/HttpMessage";

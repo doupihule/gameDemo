@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
 const VectorTools_1 = require("../../../framework/utils/VectorTools");
 /**
@@ -245,7 +244,7 @@ class InstanceBasic {
             this.controler.performanceControler.setCacheEffect(eff, eff.cacheId);
         }
         if (!this.controler.layerControler) {
-            LogsManager_1.default.errorTag("battleEffectError", "战斗销毁了还在创建特效-");
+            LogsManager.errorTag("battleEffectError", "战斗销毁了还在创建特效-");
             return null;
         }
         var ctnIndex = layerIndex;
@@ -372,3 +371,4 @@ class InstanceBasic {
 }
 exports.default = InstanceBasic;
 InstanceBasic._instanceCount = 0;
+//# sourceMappingURL=InstanceBasic.js.map

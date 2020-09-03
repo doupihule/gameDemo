@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ButtonUtils = void 0;
-const LogsManager_1 = require("../manager/LogsManager");
 const ButtonConst_1 = require("../consts/ButtonConst");
 const TimerManager_1 = require("../manager/TimerManager");
 class ButtonUtils {
@@ -51,7 +50,7 @@ class ButtonUtils {
         this.setCallBackInfo(callBack, thisObj, args);
         //如果按钮已经注册过按钮事件了 这里需要移除
         if (button.__lastButtonUtils) {
-            LogsManager_1.default.echo("这个按钮重复注册事件,先销毁上一次注册的事件");
+            LogsManager.echo("这个按钮重复注册事件,先销毁上一次注册的事件");
             button.__lastButtonUtils.destoryButtonUtil();
         }
         button.__lastButtonUtils = this;
@@ -184,3 +183,4 @@ class ButtonUtils {
     }
 }
 exports.ButtonUtils = ButtonUtils;
+//# sourceMappingURL=ButtonUtils.js.map

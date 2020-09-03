@@ -1,7 +1,6 @@
 import KariquShareConst from "../consts/KariquShareConst";
 import HttpMessage from "../common/HttpMessage";
 import UserInfo from "../common/UserInfo";
-import LogsManager from "./LogsManager";
 import GameConsts from "../../game/sys/consts/GameConsts";
 import JumpManager from "./JumpManager";
 import JumpConst from "../../game/sys/consts/JumpConst";

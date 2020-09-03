@@ -4,7 +4,7 @@ import UserModel from "../../game/sys/model/UserModel";
 import TableUtils from "../utils/TableUtils";
 import CacheManager from "../manager/CacheManager";
 import StorageCode from "../../game/sys/consts/StorageCode";
-import LogsManager from "../manager/LogsManager";
+
 import KakuraClient from "../common/kakura/KakuraClient";
 import WindowManager from "../manager/WindowManager";
 import TimerManager from "../manager/TimerManager";

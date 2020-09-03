@@ -112,12 +112,12 @@ class SpriteFrameExpand extends BaseContainer_1.default {
                 return;
             }
         }
-        LogsManager_1.default.errorTag("labelError", "没有这个动作标签数据,label:", label, "_path:", this._fullPath);
+        LogsManager.errorTag("labelError", "没有这个动作标签数据,label:", label, "_path:", this._fullPath);
     }
     /*按照动作序号播放 从序号0开始*/
     playByIndex(index, isLoop, startFrame = 0, endFrame = 0) {
         if (index > this._labelsData.length) {
-            LogsManager_1.default.errorTag("labelIndexError", "动作序号超出了index:", index, "_path:", this._fullPath);
+            LogsManager.errorTag("labelIndexError", "动作序号超出了index:", index, "_path:", this._fullPath);
             return;
         }
         this._playState = 1;
@@ -226,5 +226,5 @@ exports.default = SpriteFrameExpand;
  */
 SpriteFrameExpand._cacheFrameData = {};
 const TimerManager_1 = require("../manager/TimerManager");
-const LogsManager_1 = require("../manager/LogsManager");
 const ViewTools_1 = require("../components/ViewTools");
+//# sourceMappingURL=SpriteFrameExpand.js.map

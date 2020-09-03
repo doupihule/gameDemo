@@ -1,4 +1,4 @@
-import LogsManager from "../manager/LogsManager";
+
 import UserInfo from "../common/UserInfo";
 import GameSwitch from "../common/GameSwitch";
 import LogsErrorCode from "../consts/LogsErrorCode";

@@ -1,8 +1,4 @@
-import UserInfo from "../common/UserInfo";
-import FileUtils from "../utils/FileUtils";
-import GameConsts from "../../game/sys/consts/GameConsts";
-import TableUtils from "../utils/TableUtils";
-import LogsManager from "./LogsManager";
+
 
 export enum StorageKey {
 	HIGHEST_SCORE = "HIGHEST_SCORE",

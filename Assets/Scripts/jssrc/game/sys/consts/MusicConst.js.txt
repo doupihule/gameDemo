@@ -21,3 +21,4 @@ MusicConst.SOUND_MAIN_BG = "main_bg";
 MusicConst.SOUND_BUTTON_CLICK = "click";
 //音效参数定义.暂时定义时长. 后面会定义 是否循环.时间等
 MusicConst.soundCfgs = {};
+//# sourceMappingURL=MusicConst.js.map

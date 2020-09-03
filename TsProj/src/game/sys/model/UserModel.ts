@@ -12,7 +12,7 @@ import GlobalData from "../../../framework/utils/GlobalData";
 import RolesFunc from "../func/RolesFunc";
 import UserGlobalModel from "../../../framework/model/UserGlobalModel";
 import BigNumUtils from "../../../framework/utils/BigNumUtils";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import LevelFunc from "../func/LevelFunc";
 import SceneReference from "../../../framework/consts/SceneReference";
 import WhiteListFunc from "../../../framework/func/WhiteListFunc";

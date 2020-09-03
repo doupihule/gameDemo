@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const FogFunc_1 = require("../../sys/func/FogFunc");
 const FogModel_1 = require("../../sys/model/FogModel");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const FogConst_1 = require("../../sys/consts/FogConst");
 const FogServer_1 = require("../../sys/server/FogServer");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
@@ -25,7 +24,7 @@ class FogPropTrigger {
             if (itemInfo.logicType == logicType) {
                 var func = this["runProp_" + logicType];
                 if (!func) {
-                    LogsManager_1.default.errorTag("fogPropError", "没有对应的item类型:", logicType);
+                    LogsManager.errorTag("fogPropError", "没有对应的item类型:", logicType);
                 }
                 else {
                     var itemData = FogFunc_1.default.instance.getCfgDatasByKey("ItemUpGrade", id, propData[id]);
@@ -193,3 +192,4 @@ FogPropTrigger.ITEM_TYPE_CANNOTUP = 2;
 FogPropTrigger.ReduceAct_Type_AllEvent = 1;
 FogPropTrigger.ReduceAct_Type_SameLogical = 2;
 FogPropTrigger.ReduceAct_Type_SameEventId = 3;
+//# sourceMappingURL=FogPropTrigger.js.map

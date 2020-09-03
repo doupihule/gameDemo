@@ -2,7 +2,7 @@
 import DisplayUtils from "../../../framework/utils/DisplayUtils";
 import ResourceManager from "../../../framework/manager/ResourceManager";
 import ResourceConst from "../../sys/consts/ResourceConst";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import TimerManager from "../../../framework/manager/TimerManager";
 import UserInfo from "../../../framework/common/UserInfo";
 import BaseContainer from "../../../framework/components/BaseContainer";

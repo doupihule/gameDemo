@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const SkillActionData_1 = require("../data/SkillActionData");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const ConditionTrigger_1 = require("./ConditionTrigger");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
@@ -90,7 +89,7 @@ class BuffTrigger {
         BattleFunc_1.default.cacheOneTempArr(tempArr);
         //这些是被buff作用的人
         if (!func) {
-            LogsManager_1.default.errorTag("buffError", "没有对应的buff效果类型:", logicType);
+            LogsManager.errorTag("buffError", "没有对应的buff效果类型:", logicType);
         }
         else {
             func.call(this, attacker, defer, skillAction, buff);
@@ -118,7 +117,7 @@ class BuffTrigger {
     }
     //额外提升 合并到2改成属性提升
     static runBuff_3(attacker, defer, skillAction, buff) {
-        LogsManager_1.default.warn("暂时废弃的buff生效类型3,buffid:", buff._id);
+        LogsManager.warn("暂时废弃的buff生效类型3,buffid:", buff._id);
     }
     //眩晕 不需要再处理
     static runBuff_4(attacker, defer, skillAction, buff) {
@@ -424,3 +423,4 @@ BuffTrigger.buffTypeToBit = {
     [19]: 512, [20]: 1024
 };
 BuffTrigger._hasInit = false;
+//# sourceMappingURL=BuffTrigger.js.map

@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BaseViewExpand_1 = require("./BaseViewExpand");
+const UICompConst_1 = require("../consts/UICompConst");
+class Base3dViewExpand extends BaseViewExpand_1.default {
+    constructor() {
+        super();
+        console.log("初始化3d");
+        //坐标样式是 1 3d坐标
+        this.posStyle = UICompConst_1.default.posStyle_3d;
+        this.uitype = UICompConst_1.default.comp_base3d;
+    }
+}
+exports.default = Base3dViewExpand;
+//# sourceMappingURL=Base3dViewExpand.js.map

@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const TimeEntity_1 = require("../entity/TimeEntity");
 const GameConsts_1 = require("../../game/sys/consts/GameConsts");
 const Client_1 = require("../common/kakura/Client");
-const LogsManager_1 = require("./LogsManager");
 class TimerManager {
     constructor() {
         this.timeCount = 0;
@@ -97,7 +96,7 @@ class TimerManager {
     }
     //移除所有时钟
     removeAll() {
-        LogsManager_1.default.errorTag("timeError", "移除了所有计时器--禁止调用");
+        LogsManager.errorTag("timeError", "移除了所有计时器--禁止调用");
         this._timeMap = {};
     }
     /**
@@ -218,3 +217,4 @@ class TimerManager {
 exports.default = TimerManager;
 //时区偏移
 TimerManager.timeOurOffset = 8;
+//# sourceMappingURL=TimerManager.js.map

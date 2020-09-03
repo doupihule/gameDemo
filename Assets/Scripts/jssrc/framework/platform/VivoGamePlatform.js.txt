@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const WXGamePlatform_1 = require("./WXGamePlatform");
-const LogsManager_1 = require("../manager/LogsManager");
 const Client_1 = require("../common/kakura/Client");
 const SoundManager_1 = require("../manager/SoundManager");
 const StatisticsManager_1 = require("../../game/sys/manager/StatisticsManager");
@@ -30,7 +29,7 @@ class VivoGamePlatform extends WXGamePlatform_1.default {
         // BannerAdManager.registerBanner();
         // AdVideoManager.instance.registerOrigionAdv();
         this.registerAd();
-        LogsManager_1.default.echo("平台登录就添加桌面 --------------------");
+        LogsManager.echo("平台登录就添加桌面 --------------------");
         if (!GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_VIVO_ADDTODESK)) {
             this.addToDesktop();
         }
@@ -42,7 +41,7 @@ class VivoGamePlatform extends WXGamePlatform_1.default {
      * @returns 返回装状态res，0没看完，1看完，-1没广告
      */
     showVideoAd(successCallBack = null, closeCallBack = null, thisObj = null, extraData = {}) {
-        LogsManager_1.default.echo("hlx videoad.showVideoAd 视频开始展示！！！", Client_1.default.instance.serverTime);
+        LogsManager.echo("hlx videoad.showVideoAd 视频开始展示！！！", Client_1.default.instance.serverTime);
         WindowManager_1.default.SwitchMaskUI(true, 0.5);
         SoundManager_1.default.stopMusic();
         StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.NORMAL_VIDEO_AD);
@@ -57,7 +56,7 @@ class VivoGamePlatform extends WXGamePlatform_1.default {
         }
         if (!this._videoAd) {
             WindowManager_1.default.SwitchMaskUI(false, 0.5);
-            LogsManager_1.default.echo("yrc 没有广告实例，直接执行失败回调");
+            LogsManager.echo("yrc 没有广告实例，直接执行失败回调");
             this._doVedioCallBack(false);
             return;
         }
@@ -73,18 +72,18 @@ class VivoGamePlatform extends WXGamePlatform_1.default {
             //     this._doVedioCallBack(false);
             //     return;
             // }
-            LogsManager_1.default.echo("hlx videoAd.load.begin");
+            LogsManager.echo("hlx videoAd.load.begin");
             this._lastShowVideoTime = Client_1.default.instance.serverTime;
             // 在onload中做showVideo
             var loadResult = videoAd.load();
-            LogsManager_1.default.echo("hlx videoAd.load.end");
+            LogsManager.echo("hlx videoAd.load.end");
             // 调用then和catch之前需要对load的结果做下判空处理，防止出错（如果没有判空，在平台版本为1052以及以下的手机上将会出现错误）
             if (loadResult) {
-                LogsManager_1.default.echo("hlx videoAd.load Promise begin");
+                LogsManager.echo("hlx videoAd.load Promise begin");
                 loadResult.then(() => {
-                    LogsManager_1.default.echo('hlx video.load.then', Client_1.default.instance.serverTime);
+                    LogsManager.echo('hlx video.load.then', Client_1.default.instance.serverTime);
                 }).catch((err) => {
-                    LogsManager_1.default.echo("hlx videoAd.load.err 激励视频广告加载失败", JSON.stringify(err));
+                    LogsManager.echo("hlx videoAd.load.err 激励视频广告加载失败", JSON.stringify(err));
                     if (platformObj._videoLoaded) {
                         WindowManager_1.default.ShowTip(TranslateFunc_1.default.instance.getTranslate("#tid_ad_error"));
                         StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.NORMAL_VIDEO_AD_FAIL);
@@ -92,12 +91,12 @@ class VivoGamePlatform extends WXGamePlatform_1.default {
                         platformObj._doVedioCallBack(false);
                     }
                 }).finally(() => {
-                    LogsManager_1.default.echo("hlx videoAd.load.finally");
+                    LogsManager.echo("hlx videoAd.load.finally");
                 });
-                LogsManager_1.default.echo("hlx videoAd.load Promise end");
+                LogsManager.echo("hlx videoAd.load Promise end");
             }
             else {
-                LogsManager_1.default.warn('hlx videoAd.load 没有result，直接执行show');
+                LogsManager.warn('hlx videoAd.load 没有result，直接执行show');
                 // this._showVideo();
             }
         }
@@ -115,7 +114,7 @@ class VivoGamePlatform extends WXGamePlatform_1.default {
         }
     }
     _showVideo() {
-        LogsManager_1.default.echo('hlx video._showVideo 开始显示视频广告', Client_1.default.instance.serverTime);
+        LogsManager.echo('hlx video._showVideo 开始显示视频广告', Client_1.default.instance.serverTime);
         this.videoState = 1;
         this._videoAd.show();
         WindowManager_1.default.SwitchMaskUI(false, 0.5);
@@ -131,12 +130,12 @@ class VivoGamePlatform extends WXGamePlatform_1.default {
         }
         this.getWX().installShortcut({
             success(res) {
-                LogsManager_1.default.echo("hlx 添加到桌面成功", JSON.stringify(res));
+                LogsManager.echo("hlx 添加到桌面成功", JSON.stringify(res));
                 StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.ADD_DESKTOP_SUCCESS);
                 successCall && successCall.call(thisObj);
             },
             fail(res) {
-                LogsManager_1.default.echo("hlx 添加到桌面失败", JSON.stringify(res));
+                LogsManager.echo("hlx 添加到桌面失败", JSON.stringify(res));
                 StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.ADD_DESKTOP_FAIL);
                 failCall && failCall.call(thisObj);
             }
@@ -165,7 +164,7 @@ class VivoGamePlatform extends WXGamePlatform_1.default {
         var timer = Client_1.default.instance.serverTime;
         this.getWX().onUpdateReady(function (res) {
             // 请求完新版本信息的回调
-            LogsManager_1.default.echo("请求完新版本信息的回调", JSON.stringify(res), "costTime :", Client_1.default.instance.serverTime - timer);
+            LogsManager.echo("请求完新版本信息的回调", JSON.stringify(res), "costTime :", Client_1.default.instance.serverTime - timer);
             thisObj.setVersionCheckResult(res == 1 ? 2 : 1);
             // 如果检查更新未超时，则移除计时器
             if (!thisObj.isOutTime) {
@@ -205,20 +204,21 @@ class VivoGamePlatform extends WXGamePlatform_1.default {
                     success: function (data) {
                         // 异形屏高度
                         ScreenAdapterTools_1.default.toolBarWidth = data.height;
-                        LogsManager_1.default.echo(`hlx getNotchHeight success: ${data.height}`);
+                        LogsManager.echo(`hlx getNotchHeight success: ${data.height}`);
                     },
                     fail: function (data, code) {
-                        LogsManager_1.default.echo(`hlx getNotchHeight fail, code = ${code}`);
+                        LogsManager.echo(`hlx getNotchHeight fail, code = ${code}`);
                     }
                 });
             }
             catch (e) {
-                LogsManager_1.default.echo('hlx getNotchHeight 方法报错:', JSON.stringify(e));
+                LogsManager.echo('hlx getNotchHeight 方法报错:', JSON.stringify(e));
             }
         }
         else {
-            LogsManager_1.default.echo('hlx 无 getNotchHeight 方法');
+            LogsManager.echo('hlx 无 getNotchHeight 方法');
         }
     }
 }
 exports.default = VivoGamePlatform;
+//# sourceMappingURL=VivoGamePlatform.js.map

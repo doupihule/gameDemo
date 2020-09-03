@@ -97,3 +97,4 @@ class RoleBuffBar extends BaseContainer_1.default {
     }
 }
 exports.default = RoleBuffBar;
+//# sourceMappingURL=RoleBuffBar.js.map

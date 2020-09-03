@@ -1,6 +1,6 @@
 import BattleLogicalControler from "../../battle/controler/BattleLogicalControler";
 import TimerManager from "../../../framework/manager/TimerManager";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import ShareOrTvManager from "../../../framework/manager/ShareOrTvManager";
 import UserInfo from "../../../framework/common/UserInfo";
 import BaseContainer from "../../../framework/components/BaseContainer";

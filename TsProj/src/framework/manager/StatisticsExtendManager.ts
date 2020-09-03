@@ -1,4 +1,3 @@
-import LogsManager from "./LogsManager";
 import UserInfo from "../common/UserInfo";
 import GameSwitch from "../common/GameSwitch";
 

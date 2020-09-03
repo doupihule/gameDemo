@@ -1,6 +1,6 @@
 import UIBaseView from "../../../../framework/components/UIBaseView";
 import ButtonExpand from "../../../../framework/components/ButtonExpand";
-import LogsManager from "../../../../framework/manager/LogsManager";
+
 
 
 export default class GameMainUI extends UIBaseView  {

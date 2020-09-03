@@ -1,6 +1,5 @@
 import AndroidGamePlatform from "../platform/AndroidGamePlatform";
 import MethodCommon from "../common/kakura/MethodCommon";
-import LogsManager from "./LogsManager";
 import UserInfo from "../common/UserInfo";
 import NativeBridge from "../native/NativeBridge";
 import JSToNativeEvent from "../event/JSToNativeEvent";

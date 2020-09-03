@@ -4,7 +4,6 @@ const UserModel_1 = require("../model/UserModel");
 const SwitchModel_1 = require("../model/SwitchModel");
 const UserExtModel_1 = require("../model/UserExtModel");
 const RolesModel_1 = require("../model/RolesModel");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const Client_1 = require("../../../framework/common/kakura/Client");
 const GlobalParamsFunc_1 = require("../func/GlobalParamsFunc");
 const TalentSkillsModel_1 = require("../model/TalentSkillsModel");
@@ -33,7 +32,7 @@ class ModelToServerMap {
         // return { sendTime: 0 }
         //初始体力
         var bornSp = GlobalParamsFunc_1.default.instance.getDataNum('bornSp');
-        LogsManager_1.default.echo("krma. 构造初始数据");
+        LogsManager.echo("krma. 构造初始数据");
         var homeId = GlobalParamsFunc_1.default.instance.getDataNum("bornHomeId");
         var baseRoleId = GlobalParamsFunc_1.default.instance.getDataNum("bornRoleId");
         var baseRole = {
@@ -78,3 +77,4 @@ class ModelToServerMap {
 }
 exports.default = ModelToServerMap;
 ModelToServerMap.modelToServerMap = [];
+//# sourceMappingURL=ModelToServerMap.js.map

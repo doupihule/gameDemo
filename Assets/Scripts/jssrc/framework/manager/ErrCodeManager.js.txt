@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const TranslateFunc_1 = require("../func/TranslateFunc");
-const LogsManager_1 = require("./LogsManager");
 const ErrorCode_1 = require("../../game/sys/common/kakura/ErrorCode");
 const Message_1 = require("../common/Message");
 const MsgCMD_1 = require("../../game/sys/common/MsgCMD");
@@ -38,7 +37,7 @@ class ErrCodeManager {
         var warningList = [];
         var resendList = [];
         var hasSendError = false;
-        LogsManager_1.default.warn(">>>>>>>>>>>>errCode>>>>>>>>>>>>", errCode);
+        LogsManager.warn(">>>>>>>>>>>>errCode>>>>>>>>>>>>", errCode);
         var errerMessage = TranslateFunc_1.default.instance.getTranslate("#error" + errCode);
         if (errCode == ErrorCode_1.default.duplicate_login) { //重复登陆
             // {"error":{"code":999722,"message":"duplicate login"}}
@@ -76,7 +75,7 @@ class ErrCodeManager {
                     if (warning.sendMethod) {
                         if (KakuraClient_1.default.instance._currentConn && Number(KakuraClient_1.default.instance._currentConn.method) == warning.sendMethod) {
                             flag = false;
-                            LogsManager_1.default.echo("krma. _currentConn.method " + Number(KakuraClient_1.default.instance._currentConn.method) + " " + warning.sendMethod);
+                            LogsManager.echo("krma. _currentConn.method " + Number(KakuraClient_1.default.instance._currentConn.method) + " " + warning.sendMethod);
                         }
                     }
                     else {
@@ -86,7 +85,7 @@ class ErrCodeManager {
                 }
             }
             if (errCode == ErrorCode_1.default.server_error_test_210101 && flag) {
-                LogsManager_1.default.sendErrorToPlatform("210101_sign_login_step_error", LogsManager_1.default.errorTage_serverError);
+                LogsManager.sendErrorToPlatform("210101_sign_login_step_error", LogsManager.errorTage_serverError);
                 hasSendError = true;
             }
             if (flag) { //弹出tip意味是意料外情况，可能需要上传日志
@@ -104,10 +103,10 @@ class ErrCodeManager {
         }
         if (!hasSendError) {
             var needError = this.checkNeedSendError(errCode);
-            LogsManager_1.default.echo("_错误码:", errCode, "是否需要发送错误:", needError);
+            LogsManager.echo("_错误码:", errCode, "是否需要发送错误:", needError);
             if (needError) {
                 //发送错误日志平台 拉取最近200行的日志
-                LogsManager_1.default.sendErrorToPlatform("code:" + errCode + "," + errerMessage, LogsManager_1.default.errorTage_serverError, 200);
+                LogsManager.sendErrorToPlatform("code:" + errCode + "," + errerMessage, LogsManager.errorTage_serverError, 200);
             }
         }
         this._currCode = errCode;
@@ -130,7 +129,7 @@ class ErrCodeManager {
             }
             if (content != "") {
                 content = "<" + config[i].hid + "> " + content;
-                LogsManager_1.default.warn("ErrorCode Id :", content);
+                LogsManager.warn("ErrorCode Id :", content);
             }
         }
     }
@@ -162,3 +161,4 @@ class ErrCodeManager {
     }
 }
 exports.default = ErrCodeManager;
+//# sourceMappingURL=ErrCodeManager.js.map

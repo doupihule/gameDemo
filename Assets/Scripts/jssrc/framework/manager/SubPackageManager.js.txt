@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserInfo_1 = require("../common/UserInfo");
-const LogsManager_1 = require("./LogsManager");
 const SubPackageConst_1 = require("../../game/sys/consts/SubPackageConst");
 const FileUtils_1 = require("../utils/FileUtils");
 /**
@@ -40,7 +39,7 @@ class SubPackageManager {
             return;
         }
         else {
-            LogsManager_1.default.echo("xd _开始下载分包", packageName, "_____");
+            LogsManager.echo("xd _开始下载分包", packageName, "_____");
             UserInfo_1.default.platform.loadSubPackage(packageName, callback, thisObj, isShowPop);
         }
     }
@@ -93,7 +92,7 @@ class SubPackageManager {
     static load(names, callback = null, thisObj = null, isInsert = false) {
         this._initGroupSubpack();
         if (!this.canSubpack) {
-            LogsManager_1.default.echo("xd load 分包加载开关已关闭");
+            LogsManager.echo("xd load 分包加载开关已关闭");
             callback && callback.call(thisObj, false);
             return;
         }
@@ -106,7 +105,7 @@ class SubPackageManager {
             names = [names];
         }
         if (!names.length || names.length < 1) {
-            LogsManager_1.default.echo("SubPackageManager load names error:", names);
+            LogsManager.echo("SubPackageManager load names error:", names);
             callback && callback.call(thisObj, false);
             return;
         }
@@ -191,7 +190,7 @@ class SubPackageManager {
         var curIndex = this.curLoadInfo.curIndex;
         //现在是这个loadName的加载完成回调
         var loadName = this.curLoadInfo.names[curIndex];
-        LogsManager_1.default.echo("yrc loadNext loadName:", loadName, ">>isSuc:", isSuc);
+        LogsManager.echo("yrc loadNext loadName:", loadName, ">>isSuc:", isSuc);
         var allNum = this.curLoadInfo.allNum;
         if (curIndex >= allNum - 1) {
             //全部走完了
@@ -286,3 +285,4 @@ SubPackageManager._groupInfoCache = {
 如果是子包.   先走微信加载子包逻辑. 加载完成 后 在走egret的load.
 加载子包失败弹出网络提示. 并重新加载.
  */ 
+//# sourceMappingURL=SubPackageManager.js.map

@@ -40,3 +40,4 @@ class InstanceHome extends InstanceLogical_1.default {
     }
 }
 exports.default = InstanceHome;
+//# sourceMappingURL=InstanceHome.js.map

@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 /**
  * 渠道参数类
  *
@@ -9,7 +8,7 @@ const LogsManager_1 = require("../../../framework/manager/LogsManager");
 class ChannelConst {
     static getChannelConst(platformId) {
         if (!this[platformId]) {
-            LogsManager_1.default.errorTag('errorChannelId', 'errorChannelId:' + platformId);
+            LogsManager.errorTag('errorChannelId', 'errorChannelId:' + platformId);
             return {};
         }
         return this[platformId];
@@ -69,3 +68,4 @@ ChannelConst.ios_master = {
     actionId: "1110605017",
     actionSecret: "5af02f596deff76e6859354f5ad792c2",
 };
+//# sourceMappingURL=ChannelConst.js.map

@@ -12,3 +12,4 @@ ChapterConst.Chapter_boxState_receive = 3;
 ChapterConst.model_enemy = "model_enemy";
 ChapterConst.model_box = "model_box";
 ChapterConst.model_player = "model_player";
+//# sourceMappingURL=ChapterConst.js.map

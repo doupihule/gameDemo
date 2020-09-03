@@ -38,3 +38,4 @@ class ChapInstancePlayer extends ChapterInstanceMove_1.default {
     }
 }
 exports.default = ChapInstancePlayer;
+//# sourceMappingURL=ChapInstancePlayer.js.map

@@ -19,3 +19,4 @@ TranslateCommonConst.localTranslate = {
     "#tid_noKariquJumpDesc": { "zh_CN": "卡日曲互推第#1项无描述" },
     "#tid_purchaseFail": { "zh_CN": "购买验证失败" }
 };
+//# sourceMappingURL=TranslateCommonConst.js.map

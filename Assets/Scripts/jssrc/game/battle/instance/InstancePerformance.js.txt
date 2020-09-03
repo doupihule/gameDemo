@@ -5,7 +5,6 @@ const DisplayUtils_1 = require("../../../framework/utils/DisplayUtils");
 const GameConsts_1 = require("../../sys/consts/GameConsts");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const PoolTools_1 = require("../../../framework/utils/PoolTools");
 const PoolCode_1 = require("../../sys/consts/PoolCode");
 const BattleLogsManager_1 = require("../../sys/manager/BattleLogsManager");
@@ -521,7 +520,7 @@ class InstancePerformance extends InstanceMove_1.default {
             tempValue = 10000;
         }
         if (tempValue < 0) {
-            LogsManager_1.default.errorTag("技能速率不能为0,设置最低速率为30%");
+            LogsManager.errorTag("技能速率不能为0,设置最低速率为30%");
             tempValue = 3000;
         }
         return tempValue / 10000;
@@ -534,7 +533,7 @@ class InstancePerformance extends InstanceMove_1.default {
         if (this._shade) {
             this._shade.removeSelf();
             for (var i = this.totalViewNums - 1; i >= 0; i--) {
-                var childShade = this._shade.getChildAt(i, true);
+                var childShade = this._shade.getChildAt(i);
                 PoolTools_1.default.cacheItem(PoolCode_1.default.POOL_SHADE, childShade);
                 childShade.removeSelf();
             }
@@ -549,3 +548,4 @@ class InstancePerformance extends InstanceMove_1.default {
     }
 }
 exports.default = InstancePerformance;
+//# sourceMappingURL=InstancePerformance.js.map

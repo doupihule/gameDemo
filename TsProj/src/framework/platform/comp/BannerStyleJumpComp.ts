@@ -5,8 +5,6 @@ import Message from "../../common/Message";
 import WindowEvent from "../../event/WindowEvent";
 import JumpManager from "../../manager/JumpManager";
 import WindowManager from "../../manager/WindowManager";
-import BannerStyleJumpUI from "../../view/jump/BannerStyleJumpUI";
-import ScreenAdapterTools from "../../utils/ScreenAdapterTools";
 import KariquShareConst from "../../consts/KariquShareConst";
 
 export default class BannerStyleJumpComp implements IMessage {
@@ -47,16 +45,6 @@ export default class BannerStyleJumpComp implements IMessage {
 	public constructor() {
 		Message.instance.add(WindowEvent.WINDOW_EVENT_SWITCHUIFIN, this);
 		var uiinfo: any = this._uiJumpMap[0];
-		if (!uiinfo.ui) {
-			uiinfo.ui = new BannerStyleJumpUI();
-			uiinfo.ui.y = ScreenAdapterTools.height - BannerStyleJumpComp.jumpHeight;
-		}
-		uiinfo = this._uiJumpMap[1];
-		if (!uiinfo.ui) {
-			uiinfo.ui = new BannerStyleJumpUI();
-			uiinfo.ui.y = 80;
-		}
-
 	}
 
 	public init() {
@@ -88,7 +76,7 @@ export default class BannerStyleJumpComp implements IMessage {
 			var uiInfo = this._uiJumpMap[i];
 			var uiCfg = uiInfo.uiCfg;
 			var currentInfo = uiCfg[currentUIName];
-			var jumpui: BannerStyleJumpUI = uiInfo.ui
+			var jumpui: any = uiInfo.ui
 
 			//如果当前界面不展示互推
 			if (!currentInfo) {

@@ -4,14 +4,14 @@ const BaseContainer_1 = require("./BaseContainer");
 const UICompConst_1 = require("../consts/UICompConst");
 const ResourceManager_1 = require("../manager/ResourceManager");
 const GameConsts_1 = require("../../game/sys/consts/GameConsts");
-const ResourceConst_1 = require("../../game/sys/consts/ResourceConst");
+const ResourceCommonConst_1 = require("../consts/ResourceCommonConst");
 class ImageExpand extends BaseContainer_1.default {
     constructor(obj) {
         super(obj);
         this.uitype = UICompConst_1.default.comp_img;
     }
     //设置皮肤 最好手动指定boundlename
-    setSkin(url, boundlename = ResourceConst_1.default.boundle_uiimage, adjustSize = false) {
+    setSkin(url, boundlename = ResourceCommonConst_1.default.boundle_uiimage, adjustSize = false) {
         if (!url || url == "") {
             this.__imageComp.sprite = null;
         }
@@ -29,3 +29,4 @@ class ImageExpand extends BaseContainer_1.default {
     }
 }
 exports.default = ImageExpand;
+//# sourceMappingURL=ImageExpand.js.map

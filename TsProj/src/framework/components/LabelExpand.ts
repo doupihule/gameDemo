@@ -5,6 +5,7 @@ import UICompConst from "../consts/UICompConst";
 import ResourceManager from "../manager/ResourceManager";
 import ResourceConst from "../../game/sys/consts/ResourceConst";
 import { $typeof } from "puerts";
+import ResourceCommonConst from "../consts/ResourceCommonConst";
 
 export default class LabelExpand extends BaseViewExpand{
 	private  _text:string;
@@ -14,7 +15,7 @@ export default class LabelExpand extends BaseViewExpand{
 		super();
 		this.uitype = UICompConst.comp_label;
 		if (!cobj){
-			cobj =ResourceManager.loadUIPrefab(ResourceConst.baseLabelPrefeb,ResourceConst.boundle_ui);
+			cobj =ResourceManager.loadUIPrefab(ResourceCommonConst.baseLabelPrefeb,ResourceCommonConst.boundle_ui);
 		}
 		this.setCObject(cobj);
 	}

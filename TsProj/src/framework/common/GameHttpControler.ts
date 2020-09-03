@@ -1,5 +1,4 @@
 import {ConnectObj} from './kakura/KakuraClient';
-import LogsManager from '../manager/LogsManager';
 import Client from './kakura/Client';
 import UserModel from '../../game/sys/model/UserModel';
 import WaitManager from '../manager/WaitManager';
@@ -11,7 +10,7 @@ import UserInfo from './UserInfo';
 import PackConfigManager from '../manager/PackConfigManager';
 import GlobalData from '../utils/GlobalData';
 import TableUtils from '../utils/TableUtils';
-// import LogsManager from '../manager/LogsManager';
+//
 
 export default class GameHttpControler {
 	private static _instance: GameHttpControler;

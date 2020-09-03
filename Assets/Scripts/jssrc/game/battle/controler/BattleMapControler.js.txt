@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ScreenAdapterTools_1 = require("../../../framework/utils/ScreenAdapterTools");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const UserInfo_1 = require("../../../framework/common/UserInfo");
 const ViewTools_1 = require("../../../framework/components/ViewTools");
@@ -34,7 +33,7 @@ class BattleMapControler {
     }
     //初始化设置数据 场景id
     setData(sceneId) {
-        LogsManager_1.default.echo("初始化战斗地图-------------------------");
+        LogsManager.echo("初始化战斗地图-------------------------");
         var sceneInfo = BattleFunc_1.default.instance.getCfgDatas("Scene", sceneId);
         var backInfo = sceneInfo.background;
         var mapName = backInfo[0];
@@ -148,7 +147,7 @@ class BattleMapControler {
         image.setSkin(imageUrl1);
         var viewInfo = { view: image };
         mpInfo.infoArr.push(viewInfo);
-        LogsManager_1.default.echo("id:", mapId, "pos:", xpos);
+        LogsManager.echo("id:", mapId, "pos:", xpos);
     }
     // 当地图发生运动
     onMapMove(targety, pos = 0) {
@@ -170,3 +169,4 @@ class BattleMapControler {
     }
 }
 exports.default = BattleMapControler;
+//# sourceMappingURL=BattleMapControler.js.map

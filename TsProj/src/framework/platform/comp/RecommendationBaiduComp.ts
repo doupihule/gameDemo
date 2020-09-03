@@ -1,4 +1,4 @@
-import LogsManager from "../../manager/LogsManager";
+
 import {TopViewAutoComp} from "./TopViewAutoComp";
 import UserInfo from "../../common/UserInfo";
 import Message from "../../common/Message";

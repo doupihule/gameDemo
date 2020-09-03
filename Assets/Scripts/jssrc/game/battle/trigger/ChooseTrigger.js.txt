@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const RandomUtis_1 = require("../../../framework/utils/RandomUtis");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
@@ -318,7 +317,7 @@ class ChooseTrigger {
                 for (var i = 0; i < chooseCondArr.length; i++) {
                     var func = this["chooseRoleBy_" + chooseCondArr[i]];
                     if (!func) {
-                        LogsManager_1.default.errorTag("cfgerror", "battle 没有对应的选择类型,targetId:", targetData.id, "targetChoose:", i);
+                        LogsManager.errorTag("cfgerror", "battle 没有对应的选择类型,targetId:", targetData.id, "targetChoose:", i);
                     }
                     else {
                         //如果有第三个参数 那么把选择的数量也传进去
@@ -765,3 +764,4 @@ ChooseTrigger.choose_summoned = 3;
 ChooseTrigger.choose_campoutself = 4; //己方不包括自己
 ChooseTrigger.choose_hitself = 5; //打自己的人
 ChooseTrigger.choose_campwithdied = 11; //己方包括死亡单位
+//# sourceMappingURL=ChooseTrigger.js.map

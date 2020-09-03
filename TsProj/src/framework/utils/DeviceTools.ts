@@ -1,5 +1,5 @@
 import GlobalData from "./GlobalData";
-import LogsManager from "../manager/LogsManager";
+
 import GameSwitch from "../common/GameSwitch";
 
 export default class DeviceTools {

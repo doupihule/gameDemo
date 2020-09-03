@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const FogInstanceBasic_1 = require("./FogInstanceBasic");
 const FogModel_1 = require("../../sys/model/FogModel");
 const FogFunc_1 = require("../../sys/func/FogFunc");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const FogEventData_1 = require("../data/FogEventData");
 const FogEventTrigger_1 = require("../trigger/FogEventTrigger");
 const FogServer_1 = require("../../sys/server/FogServer");
@@ -94,13 +93,13 @@ class FogInstanceCell extends FogInstanceBasic_1.default {
             }
             else if (Number(this.myData.type) == FogConst_1.default.cellType_StartAround) {
                 if (!FogFunc_1.default.fogStartCell) {
-                    LogsManager_1.default.errorTag("", "起始点还未初始化");
+                    LogsManager.errorTag("", "起始点还未初始化");
                 }
                 this.myRotate = FogFunc_1.default.fogStartCell.myRotate;
             }
             else if (Number(this.myData.type) == FogConst_1.default.cellType_EndAround) {
                 if (!FogFunc_1.default.fogEndCell) {
-                    LogsManager_1.default.errorTag("", "终点还未初始化");
+                    LogsManager.errorTag("", "终点还未初始化");
                 }
                 this.myRotate = FogFunc_1.default.fogEndCell.myRotate;
             }
@@ -253,7 +252,7 @@ class FogInstanceCell extends FogInstanceBasic_1.default {
             yIndex += yOffest;
         }
         if (xIndex < 1 || yIndex < 1) {
-            LogsManager_1.default.errorTag("无效的偏移，不存在此格子", "无效的偏移，不存在此格子,偏移" + xOffest + "_" + yOffest);
+            LogsManager.errorTag("无效的偏移，不存在此格子", "无效的偏移，不存在此格子,偏移" + xOffest + "_" + yOffest);
             return;
         }
         return xIndex + "_" + yIndex;
@@ -276,7 +275,7 @@ class FogInstanceCell extends FogInstanceBasic_1.default {
     onClickItem() {
         if (!this.mySign || !this.fogControler || !this.fogControler.myBus)
             return;
-        LogsManager_1.default.echo("点击格子", this.mySign);
+        LogsManager.echo("点击格子", this.mySign);
         //完成第一次引导点击格子
         if (this.mySign == "3_2" && GuideManager_1.default.ins.nowGuideId == GuideConst_1.default.GUIDE_6_603) {
             //先关闭引导界面，但不认为引导完成，等当前事件完成后再认为引导完成
@@ -309,7 +308,7 @@ class FogInstanceCell extends FogInstanceBasic_1.default {
         if (FogEventTrigger_1.default.checkEventTriggerOnInstance(FogEventTrigger_1.default.FogEvent_trigger_Quick, this.fogControler.getCellData(this.mySign)))
             return;
         this.fogControler.myBus.moveToTargetPos(this);
-        LogsManager_1.default.echo("小汽车准备寻路", this.mySign);
+        LogsManager.echo("小汽车准备寻路", this.mySign);
     }
     /**刪除格子事件 */
     delEventData() {
@@ -350,3 +349,4 @@ class FogInstanceCell extends FogInstanceBasic_1.default {
     }
 }
 exports.default = FogInstanceCell;
+//# sourceMappingURL=FogInstanceCell.js.map

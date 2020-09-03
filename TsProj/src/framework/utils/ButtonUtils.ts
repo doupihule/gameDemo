@@ -1,4 +1,4 @@
-import LogsManager from "../manager/LogsManager";
+
 import SoundManager from "../manager/SoundManager";
 import ButtonConst from "../consts/ButtonConst";
 import TimerManager from "../manager/TimerManager";

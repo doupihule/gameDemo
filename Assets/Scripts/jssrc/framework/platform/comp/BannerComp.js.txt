@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BannerComp = void 0;
-const LogsManager_1 = require("../../manager/LogsManager");
 const StatisticsManager_1 = require("../../../game/sys/manager/StatisticsManager");
 const TopViewAutoComp_1 = require("./TopViewAutoComp");
 const ChannelConst_1 = require("../../../game/sys/consts/ChannelConst");
@@ -92,7 +91,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
      * banner预加载
      */
     static register() {
-        LogsManager_1.default.echo("hlx banner 预加载");
+        LogsManager.echo("hlx banner 预加载");
         // 不支持的组件直接返回
         if (!BannerComp.canUseBanner()) {
             return;
@@ -109,9 +108,9 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
      */
     static create(parent, onErrorCallback = null, callbackObj = null, hideType = TopViewAutoComp_1.TopViewAutoComp.HIDE_TYPE_DESTROY, style = null) {
         var windowName = parent.windowName;
-        LogsManager_1.default.echo("hlx bannerComp create start:", GameTools_1.default.decryptStr(windowName));
+        LogsManager.echo("hlx bannerComp create start:", GameTools_1.default.decryptStr(windowName));
         if (!windowName) {
-            LogsManager_1.default.errorTag("banner_noparent", "没有传递parent");
+            LogsManager.errorTag("banner_noparent", "没有传递parent");
             onErrorCallback && onErrorCallback.call(this);
             return;
         }
@@ -148,7 +147,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
         // Banner组件隐藏式
         this._hideType = hideType;
         this._style = style;
-        LogsManager_1.default.echo("ycn banner style", style);
+        LogsManager.echo("ycn banner style", style);
         if (!parentName) {
             return;
         }
@@ -161,7 +160,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
     updateDataByName(parentName) {
         var cacheInfo = BannerComp._cacheInfo[parentName];
         if (!cacheInfo) {
-            LogsManager_1.default.errorTag("banner_error", "没有找到缓存的uibanner信息", parentName);
+            LogsManager.errorTag("banner_error", "没有找到缓存的uibanner信息", parentName);
             return;
         }
         var params = cacheInfo.params;
@@ -170,7 +169,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
         this._callbackObj = params.callbackObj;
         // Banner组件隐藏式
         this._hideType = params.hideType;
-        LogsManager_1.default.echo("ycn banner style", params.style);
+        LogsManager.echo("ycn banner style", params.style);
         this._style = params.style;
     }
     /**注册banner */
@@ -182,18 +181,18 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             NativeBridge_1.default.instance.callNative(JSToNativeEvent_1.default.TTADSDK_BANNER, { status: 2 });
             return;
         }
-        LogsManager_1.default.echo("hlx register Banner");
+        LogsManager.echo("hlx register Banner");
         var tempThis = this;
         var wx = UserInfo_1.default.platform.getWX();
         if (!wx) {
             return;
         }
         if (this._bannerAd) {
-            LogsManager_1.default.warn("hlx banner 实例已经创建，无需重复注册，请检查代码逻辑是否存在异常");
+            LogsManager.warn("hlx banner 实例已经创建，无需重复注册，请检查代码逻辑是否存在异常");
             return;
         }
         if (!wx.createBannerAd) {
-            LogsManager_1.default.warn("hlx banner noGameBanner", "没有Gamebanner组件");
+            LogsManager.warn("hlx banner noGameBanner", "没有Gamebanner组件");
             this._doBannerCallBack();
             StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.BANNER_PULLFAILED);
             return;
@@ -208,7 +207,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             //那么从缓存里面拿
             var banner = BannerComp.getCacheBanner();
             if (banner) {
-                LogsManager_1.default.echo("xd_banner_这是一个缓存的banner");
+                LogsManager.echo("xd_banner_这是一个缓存的banner");
                 // WindowManager.ShowTip("使用缓存banner")
                 this._loadSuccess = true;
                 this._hasError = false;
@@ -222,9 +221,9 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
         //正常的banner  只能使用一次
         this._leftUseCount = 0;
         if (UserInfo_1.default.isOppo()) {
-            LogsManager_1.default.echo("ycn oppo banner style", tempThis._style);
+            LogsManager.echo("ycn oppo banner style", tempThis._style);
             if (tempThis._style && tempThis._style.offsetY) {
-                LogsManager_1.default.echo("ycn oppo banner with style");
+                LogsManager.echo("ycn oppo banner with style");
                 this._bannerAd = wx.createBannerAd({
                     adUnitId: BannerComp.bannerId,
                     style: {
@@ -243,7 +242,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             if (BannerComp.lastCreateBannerTime != 0) {
                 var leftCD = 11 - Math.ceil((Client_1.default.instance.miniserverTime - BannerComp.lastCreateBannerTime) / 1000);
                 if (leftCD > 0) {
-                    LogsManager_1.default.echo("hlx banner vivo平台Banner创建最小间隔10秒。直接return");
+                    LogsManager.echo("hlx banner vivo平台Banner创建最小间隔10秒。直接return");
                     return;
                 }
             }
@@ -332,16 +331,16 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
         var bannerAd = null;
         var onErrorBack = (err) => {
             if (tempThis._leftUseCount > 0) {
-                LogsManager_1.default.echo("当前是缓存的banner 什么都不要做");
+                LogsManager.echo("当前是缓存的banner 什么都不要做");
                 tempThis._checkUIState(true);
                 return;
             }
             if (bannerAd && bannerAd.__isDestoryed) {
-                LogsManager_1.default.errorTag("bannerError", "这个banner已经被销毁了可能是网络原因导致的.再做一次销毁逻辑");
+                LogsManager.errorTag("bannerError", "这个banner已经被销毁了可能是网络原因导致的.再做一次销毁逻辑");
                 BannerComp.checkCahceOrDestoryBanner(bannerAd, true);
                 return;
             }
-            LogsManager_1.default.echo("hlx bannerAd.onError----------------------count:", tempThis._errorCount, JSON.stringify(err));
+            LogsManager.echo("hlx bannerAd.onError----------------------count:", tempThis._errorCount, JSON.stringify(err));
             StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.BANNER_PULLFAILED);
             // 由于registerBanner为异步预加载。所以不能直接执行失败回调。标记状态。在show时回调
             tempThis._hasError = true;
@@ -376,9 +375,9 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             }
         };
         var onLoadBack = (res) => {
-            LogsManager_1.default.echo('hlx bannerAd.onload:', JSON.stringify(res));
+            LogsManager.echo('hlx bannerAd.onload:', JSON.stringify(res));
             if (bannerAd.__isDestoryed) {
-                LogsManager_1.default.errorTag("bannerError", "这个banner已经被销毁了可能是网络原因导致的.再做一次销毁逻辑");
+                LogsManager.errorTag("bannerError", "这个banner已经被销毁了可能是网络原因导致的.再做一次销毁逻辑");
                 BannerComp.checkCahceOrDestoryBanner(bannerAd, true);
                 return;
             }
@@ -412,7 +411,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             this._checkUIState(true);
         };
         var onResizeBack = (size) => {
-            LogsManager_1.default.echo("hlx bannerAd.onResize:", size.width, size.height);
+            LogsManager.echo("hlx bannerAd.onResize:", size.width, size.height);
             // 如果一开始设置的 banner 宽度超过了系统限制，可以在此处加以调整
             // 头条存在width=0情况，需要做特殊判断
             if (size.width != 0) {
@@ -442,11 +441,11 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
                 //OPPO渠道在show时才判断加载成功与失败
                 this._loadSuccess = true;
                 bannerAd.onShow(function () {
-                    LogsManager_1.default.echo("hlx banner 广告显示");
+                    LogsManager.echo("hlx banner 广告显示");
                 });
                 bannerAd.onHide(function () {
                     BannerComp.bannerCloseCount++;
-                    LogsManager_1.default.echo("hlx banner 广告隐藏");
+                    LogsManager.echo("hlx banner 广告隐藏");
                 });
                 this._checkUIState(true);
             }
@@ -463,7 +462,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             }
         }
         else {
-            LogsManager_1.default.warn('hlx registerBanner error:ad not found');
+            LogsManager.warn('hlx registerBanner error:ad not found');
         }
     }
     /**
@@ -490,7 +489,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
         // TODO Oppo Vivo设置高度方法后续补充
     }
     _doBannerCallBack() {
-        LogsManager_1.default.echo("hlx _doBannerCallBack _onErrorCallback");
+        LogsManager.echo("hlx _doBannerCallBack _onErrorCallback");
         var tempFunc = this._onErrorCallback;
         var tempObj = this._callbackObj;
         // 注意！由于组件复用，此处无需重置回调。新界面调用组件，会覆盖回调
@@ -511,27 +510,27 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             return true;
         }
         if (!BannerComp.bannerId && !UserInfo_1.default.isUC()) {
-            LogsManager_1.default.warn("hlx bannerId 未配置，不初始化banner");
+            LogsManager.warn("hlx bannerId 未配置，不初始化banner");
             return false;
         }
         if (!UserInfo_1.default.platform.getWX().createBannerAd) {
-            LogsManager_1.default.echo("hlx createBannerAd 方法不存在，不初始化banner");
+            LogsManager.echo("hlx createBannerAd 方法不存在，不初始化banner");
             return false;
         }
         if (UserInfo_1.default.isBaidu() && !BannerComp.appSid) {
-            LogsManager_1.default.warn("hlx appSid 未配置，不初始化banner");
+            LogsManager.warn("hlx appSid 未配置，不初始化banner");
             return false;
         }
         if (UserInfo_1.default.isTT()) {
-            LogsManager_1.default.echo("krma. UserInfo.platform.getSystemInfo().appName " + UserInfo_1.default.platform.getSystemInfo().appName);
+            LogsManager.echo("krma. UserInfo.platform.getSystemInfo().appName " + UserInfo_1.default.platform.getSystemInfo().appName);
             if (UserInfo_1.default.platform.getSystemInfo().appName == "Douyin" || UserInfo_1.default.platform.getSystemInfo().appName == "PPX") {
-                LogsManager_1.default.echo("krma. 该渠道不支持banner", UserInfo_1.default.platform.getSystemInfo().appName);
+                LogsManager.echo("krma. 该渠道不支持banner", UserInfo_1.default.platform.getSystemInfo().appName);
                 return false;
             }
         }
         if (UserInfo_1.default.isOppo()) {
             if (GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_OPPO_REVIEW) && BannerComp.bannerCloseCount >= 5) {
-                LogsManager_1.default.echo("hlx banner 超过最大关闭上线 5，不在显示banner");
+                LogsManager.echo("hlx banner 超过最大关闭上线 5，不在显示banner");
                 return false;
             }
         }
@@ -541,7 +540,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
      * 组件销毁
      */
     destroy(forceDestroy = false) {
-        LogsManager_1.default.echo("hlx banner destroy:", GameTools_1.default.decryptStr(this._parentName));
+        LogsManager.echo("hlx banner destroy:", GameTools_1.default.decryptStr(this._parentName));
         this._status = TopViewAutoComp_1.TopViewAutoComp.STATUS_HIDE;
         this._parentName = null;
         this._onErrorCallback = null;
@@ -573,7 +572,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
         }
     }
     reLoadBanner(forceTry = false) {
-        LogsManager_1.default.echo("hlx banner reLoad Banner,_leftUseCount", this._leftUseCount, "_loadSuccess", this._loadSuccess, "_hasError", this._hasError);
+        LogsManager.echo("hlx banner reLoad Banner,_leftUseCount", this._leftUseCount, "_loadSuccess", this._loadSuccess, "_hasError", this._hasError);
         if (UserInfo_1.default.isSystemNative()) {
             //预加载banner
             this.registerBanner(false);
@@ -593,11 +592,11 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
         }
         //如果加载成功了 但是还没有显示过banner return
         if (this._loadSuccess && (!this._isShowBanner)) {
-            LogsManager_1.default.echo(("xd banner 加载成功 但是还没有显示过 on reLoadBanner"));
+            LogsManager.echo(("xd banner 加载成功 但是还没有显示过 on reLoadBanner"));
             return;
         }
         if (this._loadSuccess || this._hasError) {
-            LogsManager_1.default.echo("hlx banner reload, ad destory: _isShowBanner:", this._isShowBanner, " _hasError:", this._hasError);
+            LogsManager.echo("hlx banner reload, ad destory: _isShowBanner:", this._isShowBanner, " _hasError:", this._hasError);
             // 由于需要预加载所以要销毁重新拉取新的banner
             // if (typeof this._bannerAd.destroy == "function") {
             //     this._bannerAd.destroy();
@@ -664,7 +663,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
     }
     /** 子类重写组件显示方法 */
     _compShow() {
-        LogsManager_1.default.echo("hlx banner _compShow");
+        LogsManager.echo("hlx banner _compShow");
         if (!this._bannerAd) {
             // 如果不存在实例或者已经展示过一次
             // 重新加载新的banner
@@ -673,7 +672,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             this.registerBanner(hasError);
         }
         if (this._hasError) {
-            LogsManager_1.default.echo("hlx banner _compShow：banner加载存在error直接执行失败回调");
+            LogsManager.echo("hlx banner _compShow：banner加载存在error直接执行失败回调");
             this._doBannerCallBack();
             return;
         }
@@ -682,7 +681,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             this._isShowBanner = true;
             // 显示前修改位置及大小
             this.channgeStyle();
-            LogsManager_1.default.echo("hlx banner show");
+            LogsManager.echo("hlx banner show");
             var promise = this._bannerAd.show();
             if (typeof promise === 'object' && promise.then) {
                 var tempBanner = this._bannerAd;
@@ -692,29 +691,29 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
                             tempBanner.hide();
                         }
                         catch (e) {
-                            LogsManager_1.default.errorTag("bannererror", "bannerHideError", e);
+                            LogsManager.errorTag("bannererror", "bannerHideError", e);
                         }
                     }
                 };
                 promise.then(() => {
-                    LogsManager_1.default.echo("hlx banner广告组件show success");
+                    LogsManager.echo("hlx banner广告组件show success");
                     if (UserInfo_1.default.isQQGame() && thisObj._status == TopViewAutoComp_1.TopViewAutoComp.STATUS_HIDE) {
                         // thisObj.hide(true)
                         sureHide();
                         //为了安全起见.这里延迟一帧以后再重复隐藏1次 刚复现sureHide也无法隐藏的情况
                         TimerManager_1.default.instance.setTimeout(sureHide, thisObj, 10);
-                        LogsManager_1.default.errorTag("bannererror", "在banner显示的过程中又关掉banner了,这里需要再强制hide");
+                        LogsManager.errorTag("bannererror", "在banner显示的过程中又关掉banner了,这里需要再强制hide");
                     }
                 })
                     .catch(err => {
-                    LogsManager_1.default.echo("hlx banner广告组件show error", err);
+                    LogsManager.echo("hlx banner广告组件show error", err);
                     this._doBannerCallBack();
                 });
             }
             StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.BANNER_EXPOSURENUM);
         }
         else {
-            LogsManager_1.default.echo("hlx banner comp show 没有达到条件：loadSuccess ", this._loadSuccess);
+            LogsManager.echo("hlx banner comp show 没有达到条件：loadSuccess ", this._loadSuccess);
         }
     }
     /**
@@ -724,7 +723,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
         if (this._style) {
             // QQ 微信自定义尺寸
             if (UserInfo_1.default.isWX() || UserInfo_1.default.isQQGame()) {
-                LogsManager_1.default.echo('hlx banner comp changeStyle:', JSON.stringify(this._style));
+                LogsManager.echo('hlx banner comp changeStyle:', JSON.stringify(this._style));
                 // 缩放和定宽互斥
                 if (this._style.retio) {
                     this._bannerAd.style.width = UserInfo_1.default.platform.getSystemInfo().windowWidth * this._style.retio;
@@ -824,7 +823,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.BANNER_EXPOSURENUM);
         }
         else if (status == 11) {
-            LogsManager_1.default.echo("banner xd handleNativeBannerBack 点击banner");
+            LogsManager.echo("banner xd handleNativeBannerBack 点击banner");
         }
     }
     //接受信息
@@ -841,7 +840,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
         }
         if (!hasError && this._cacheBannerArr.length < this.cacheBannerNums && !bannerInstance.__isDestoryed) {
             this._cacheBannerArr.push(bannerInstance);
-            LogsManager_1.default.echo("xd banner _缓存一个banner");
+            LogsManager.echo("xd banner _缓存一个banner");
             bannerInstance.hide();
         }
         else {
@@ -850,10 +849,10 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
     }
     //销毁banner实例
     static _destroyBannerInstance(bannerInstance) {
-        LogsManager_1.default.echo("销毁一个banner---");
+        LogsManager.echo("销毁一个banner---");
         this._offBannerCallBack(bannerInstance);
         if (bannerInstance.__isDestoryed) {
-            LogsManager_1.default.warn("这个banner已经执行过销毁了 为什么会重复执行--");
+            LogsManager.warn("这个banner已经执行过销毁了 为什么会重复执行--");
             return;
         }
         if (typeof bannerInstance.destroy == "function") {
@@ -885,7 +884,7 @@ class BannerComp extends TopViewAutoComp_1.TopViewAutoComp {
                     bannerInstance.offError(info.onError);
                 }
                 //移除这个数组
-                LogsManager_1.default.echo("xd banner _销毁banner注册的回调");
+                LogsManager.echo("xd banner _销毁banner注册的回调");
                 this._bannerCallBackCache.splice(i, 1);
             }
         }
@@ -940,3 +939,4 @@ BannerComp.lastCreateBannerTime = 0;
 BannerComp.bannerCloseCount = 0;
 //banner注册的回调缓存  [{instane:banner,onLoad,onError } ]
 BannerComp._bannerCallBackCache = [];
+//# sourceMappingURL=BannerComp.js.map

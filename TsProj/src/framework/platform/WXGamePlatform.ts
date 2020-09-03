@@ -3,7 +3,7 @@ import Method from "../../game/sys/common/kakura/Method";
 import StatisticsManager from "../../game/sys/manager/StatisticsManager";
 import GamePlatform from "./GamePlatform";
 import Message from "../common/Message";
-import LogsManager from "../manager/LogsManager";
+
 import ShareFunc from "../../game/sys/func/ShareFunc";
 import TranslateFunc from "../func/TranslateFunc";
 import WindowManager from "../manager/WindowManager";
@@ -52,7 +52,7 @@ export default class WXGamePlatform extends GamePlatform {
 		this._isSubPackage = true;
 
 		this.listenTime = Client.instance.miniserverTime
-		LogsManager.echo('构造platform');
+
 
 	}
 

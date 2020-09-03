@@ -1,5 +1,4 @@
 import UserInfo from "../common/UserInfo";
-import LogsManager from "./LogsManager";
 import SubPackageConst from "../../game/sys/consts/SubPackageConst";
 import FileUtils from "../utils/FileUtils";
 

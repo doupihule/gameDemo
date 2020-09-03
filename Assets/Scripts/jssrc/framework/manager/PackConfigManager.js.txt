@@ -4,7 +4,6 @@ const PackageConfig_1 = require("../../game/sys/config/PackageConfig");
 const TestPlatform_1 = require("../../game/sys/common/TestPlatform");
 const GlobalData_1 = require("../utils/GlobalData");
 const UserInfo_1 = require("../common/UserInfo");
-const LogsManager_1 = require("./LogsManager");
 const CloudPlatformData_1 = require("../../game/sys/common/CloudPlatformData");
 const GameConsts_1 = require("../../game/sys/consts/GameConsts");
 class PackConfigManager {
@@ -30,7 +29,7 @@ class PackConfigManager {
         }
         if (config.GAME_CODE) {
             GameConsts_1.default.gameCode = config.GAME_CODE;
-            LogsManager_1.default.echo("gameCode:", GameConsts_1.default.gameCode);
+            LogsManager.echo("gameCode:", GameConsts_1.default.gameCode);
         }
         if (config.CDN_URL) {
             GlobalData_1.default.resource_url = config.CDN_URL + "/" + UserInfo_1.default.platformId + "/";
@@ -38,7 +37,7 @@ class PackConfigManager {
         if (config.SYSTEM) {
             UserInfo_1.default.systemId = config.SYSTEM;
         }
-        LogsManager_1.default.echo("UserInfo.systemId", UserInfo_1.default.systemId, UserInfo_1.default.platformId, UserInfo_1.default.isSystemAndroid());
+        LogsManager.echo("UserInfo.systemId", UserInfo_1.default.systemId, UserInfo_1.default.platformId, UserInfo_1.default.isSystemAndroid());
     }
     get platform() {
         if (this._platform != null) {
@@ -70,10 +69,10 @@ class PackConfigManager {
             //是否有下载链接
             if (config.DOWNLOAD_URL) {
                 this._platform.DOWNLOAD_URL = config.DOWNLOAD_URL;
-                LogsManager_1.default.echo("DOWNLOAD_URL" + config.DOWNLOAD_URL);
+                LogsManager.echo("DOWNLOAD_URL" + config.DOWNLOAD_URL);
             }
             else {
-                LogsManager_1.default.warn("没有配置DOWNLOAD_URL");
+                LogsManager.warn("没有配置DOWNLOAD_URL");
             }
         }
         else {
@@ -89,3 +88,4 @@ class PackConfigManager {
     }
 }
 exports.default = PackConfigManager;
+//# sourceMappingURL=PackConfigManager.js.map

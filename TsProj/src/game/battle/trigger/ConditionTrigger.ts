@@ -6,7 +6,7 @@ import BattleBuffData from "../data/BattleBuffData";
 import BattleFunc from "../../sys/func/BattleFunc";
 import RandomUtis from "../../../framework/utils/RandomUtis";
 import BattleConst from "../../sys/consts/BattleConst";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import PassiveSkillData from "../data/PassiveSkillData";
 import PassiveSkillTrigger from "./PassiveSkillTrigger";
 import InstanceLife from "../instance/InstanceLife";

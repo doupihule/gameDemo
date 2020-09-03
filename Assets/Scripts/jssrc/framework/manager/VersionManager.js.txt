@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserInfo_1 = require("../common/UserInfo");
-const LogsManager_1 = require("./LogsManager");
 const CacheManager_1 = require("./CacheManager");
 const StorageCode_1 = require("../../game/sys/consts/StorageCode");
 const FileUtils_1 = require("../utils/FileUtils");
@@ -144,7 +143,7 @@ class VersionManager {
             CacheManager_1.default.instance.setGlobalCache(StorageCode_1.default.storage_zip_file, str);
         }
         else {
-            LogsManager_1.default.echo("_zip文件没有发生变化不需要清理");
+            LogsManager.echo("_zip文件没有发生变化不需要清理");
         }
     }
     //尝试删除目标文件
@@ -192,23 +191,23 @@ class VersionManager {
             var switchState = GameSwitch_1.default.getSwitchState(GameSwitch_1.default.SWITCH_FORCE_UPDATE);
             if (!switchState || switchState == "0") {
                 if (UserInfo_1.default.isOnIosDevice()) {
-                    LogsManager_1.default.echo("ForceUpdate 0 wxios设备关闭了强更");
+                    LogsManager.echo("ForceUpdate 0 wxios设备关闭了强更");
                     return false;
                 }
                 //如果ios和android设备都关闭强更
             }
             else if (switchState == "2") {
-                LogsManager_1.default.echo("ForceUpdate 2 wxios和android设备关闭了强更");
+                LogsManager.echo("ForceUpdate 2 wxios和android设备关闭了强更");
                 return false;
             }
             else if (switchState == "1") {
                 if (UserInfo_1.default.isOnAndroidDevice()) {
-                    LogsManager_1.default.echo("ForceUpdate 1 wxandroid设备关闭了强更");
+                    LogsManager.echo("ForceUpdate 1 wxandroid设备关闭了强更");
                     return false;
                 }
             }
         }
-        LogsManager_1.default.echo("ForceUpdate 3  走正常更新流程");
+        LogsManager.echo("ForceUpdate 3  走正常更新流程");
         return VersionManager.versionStatus == VersionManager.VERSION_STATUS_FORCE_UPDATE;
     }
     /**
@@ -274,3 +273,4 @@ VersionManager.ZIP_MODEL_KEY_VERSION = "version";
 VersionManager.ZIP_MODEL_KEY_CONFIG = "json";
 VersionManager.ZIP_MODEL_KEY_UICFGS = "uiCfgs";
 VersionManager.ZIP_MODEL_KEY_MERGEFILES = "mergefiles";
+//# sourceMappingURL=VersionManager.js.map

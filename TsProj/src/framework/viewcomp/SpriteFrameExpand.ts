@@ -279,7 +279,7 @@ export default class SpriteFrameExpand extends BaseContainer {
 }
 
 import TimerManager from "../manager/TimerManager";
-import LogsManager from "../manager/LogsManager";
+
 
 import ViewTools from "../components/ViewTools";
 import ImageExpand from "../components/ImageExpand";

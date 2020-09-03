@@ -2,7 +2,7 @@
  * 一些json对象工具
  */
 
-//import LogsManager from "../manager/LogsManager";
+//
 
 export default class TableUtils {
 	public constructor() {

@@ -16,3 +16,4 @@ JSToNativeEvent.NATIVE_ACCEL_PAUSE = "NATIVE_ACCEL_PAUSE"; //设备加速计暂�
 JSToNativeEvent.NATIVE_PUSH = "NATIVE_PUSH"; //注册推送
 JSToNativeEvent.NATIVE_PUSH_CLEAR = "NATIVE_PUSH_CLEAR"; //注销推送
 JSToNativeEvent.NATIVE_INAPP_PURCHASE = "NATIVE_INAPP_PURCHASE"; //内购
+//# sourceMappingURL=JSToNativeEvent.js.map

@@ -3,7 +3,7 @@
  * 一些json对象工具
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-//import LogsManager from "../manager/LogsManager";
+//
 class TableUtils {
     constructor() {
     }
@@ -358,3 +358,4 @@ class TableUtils {
     }
 }
 exports.default = TableUtils;
+//# sourceMappingURL=TableUtils.js.map

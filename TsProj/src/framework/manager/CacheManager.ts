@@ -1,6 +1,5 @@
 import LocalStorageManager from "./LocalStorageManager";
 import FileUtils from "../utils/FileUtils";
-import LogsManager from "./LogsManager";
 
 import UserInfo from "../common/UserInfo";
 

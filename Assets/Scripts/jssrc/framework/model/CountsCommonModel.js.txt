@@ -62,3 +62,4 @@ CountsCommonModel.TYPE_INTERVALAD_LASTSHOWTIME = "2";
  * 每日原生插屏广告自动点击次数
  */
 CountsCommonModel.TYPE_INTERVAL_ORIGINAL_CLICK_COUNT = "3";
+//# sourceMappingURL=CountsCommonModel.js.map

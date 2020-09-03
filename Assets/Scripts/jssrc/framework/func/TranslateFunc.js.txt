@@ -209,3 +209,4 @@ TranslateFunc.shareLabTranslate = "去分享";
 TranslateFunc.videoTranslateArr = ["观看完视频即可领取奖励"];
 //wx看视频中途退出弹wx框时的确认按钮文本
 TranslateFunc.videoLabTranslate = "好的";
+//# sourceMappingURL=TranslateFunc.js.map

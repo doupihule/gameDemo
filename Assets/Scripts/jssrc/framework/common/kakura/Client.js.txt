@@ -9,7 +9,6 @@ const UserModel_1 = require("../../../game/sys/model/UserModel");
 const NotifyManager_1 = require("../../manager/NotifyManager");
 const ModelToServerMap_1 = require("../../../game/sys/consts/ModelToServerMap");
 const GameSwitch_1 = require("../GameSwitch");
-const LogsManager_1 = require("../../manager/LogsManager");
 const SingleCommonServer_1 = require("../../server/SingleCommonServer");
 const HttpMessage_1 = require("../HttpMessage");
 const ErrorCode_1 = require("../../../game/sys/common/kakura/ErrorCode");
@@ -363,7 +362,7 @@ class Client {
         if (!params.token) {
             params.token = token;
         }
-        LogsManager_1.default.echo("krma. cloud authenticate token=" + token + "body=" + JSON.stringify(params.clientDirty) + "sendTime=" + params.sendTime);
+        LogsManager.echo("krma. cloud authenticate token=" + token + "body=" + JSON.stringify(params.clientDirty) + "sendTime=" + params.sendTime);
         this.startRequestCloud(MethodCommon_1.default.cloudStorage_setByUser, params, callback, thisObj, addParam, expandParams);
     }
     /**
@@ -444,7 +443,7 @@ class Client {
                     thisValue.startRelogin();
                 }
             }
-            LogsManager_1.default.echo("_errorBack;", error && error.code);
+            LogsManager.echo("_errorBack;", error && error.code);
             if (callback) {
                 callback.call(thisObj, error, addParam);
             }
@@ -500,7 +499,7 @@ class Client {
         if (this._loginState != 0) {
             return;
         }
-        LogsManager_1.default.echo("xd_ 开始重登-");
+        LogsManager.echo("xd_ 开始重登-");
         this._loginState = 1;
         this.hasLoginComplete = false;
         UserInfo_1.default.platform.getWxInfo();
@@ -508,7 +507,7 @@ class Client {
     //重登回来
     onReloginBack(data, isError = false) {
         this._loginState = 0;
-        LogsManager_1.default.echo("xd_重登回来,重置状态");
+        LogsManager.echo("xd_重登回来,重置状态");
     }
     //判断是否需要重新登入
     checkCanRelogin() {
@@ -532,3 +531,4 @@ class Client {
 exports.default = Client;
 //需要更新的数据dirtlist
 Client.temDirtList = {};
+//# sourceMappingURL=Client.js.map

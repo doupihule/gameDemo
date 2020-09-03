@@ -1,6 +1,6 @@
 import BattleLogicalControler from "./BattleLogicalControler";
 import ScreenAdapterTools from "../../../framework/utils/ScreenAdapterTools";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import SubPackageManager from "../../../framework/manager/SubPackageManager";
 import SubPackageConst from "../../sys/consts/SubPackageConst";
 import BattleFunc from "../../sys/func/BattleFunc";

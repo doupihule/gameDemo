@@ -27,3 +27,4 @@ class FlatFunc extends BaseFunc_1.default {
     }
 }
 exports.default = FlatFunc;
+//# sourceMappingURL=FlatFunc.js.map

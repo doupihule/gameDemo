@@ -77,3 +77,4 @@ ChapterFunc.chapterListScale = 0.75;
 ChapterFunc.chapterMapScale = 1.5;
 ChapterFunc.ChapterBoxDouble = 2;
 ChapterFunc.playerSpeed = 180;
+//# sourceMappingURL=ChapterFunc.js.map

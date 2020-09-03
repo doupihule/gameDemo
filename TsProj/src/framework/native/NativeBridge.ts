@@ -1,5 +1,5 @@
 import UserInfo from "../common/UserInfo";
-import LogsManager from "../manager/LogsManager";
+
 import Message from "../common/Message";
 import TableUtils from "../utils/TableUtils";
 import NativeToJSEvent from "../event/NativeToJSEvent";

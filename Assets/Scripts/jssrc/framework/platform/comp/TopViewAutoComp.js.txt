@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TopViewAutoComp = void 0;
 const Message_1 = require("../../common/Message");
-const LogsManager_1 = require("../../manager/LogsManager");
 const WindowEvent_1 = require("../../event/WindowEvent");
 const WindowManager_1 = require("../../manager/WindowManager");
 const GameTools_1 = require("../../../utils/GameTools");
@@ -75,7 +74,7 @@ class TopViewAutoComp {
      */
     _checkUIState(force = false) {
         if (this._parentName) {
-            LogsManager_1.default.echo("hlx TopViewAutoComp _parentName:", GameTools_1.default.decryptStr(this._parentName), " CurrentWindowName:", GameTools_1.default.decryptStr(WindowManager_1.default.getCurrentWindowName()));
+            LogsManager.echo("hlx TopViewAutoComp _parentName:", GameTools_1.default.decryptStr(this._parentName), " CurrentWindowName:", GameTools_1.default.decryptStr(WindowManager_1.default.getCurrentWindowName()));
             if (this._parentName == WindowManager_1.default.getCurrentWindowName()) {
                 this.show(force);
             }
@@ -89,7 +88,7 @@ class TopViewAutoComp {
             }
         }
         else {
-            LogsManager_1.default.echo("hlx TopViewAutoComp 组件未绑定任何页面，无需设置显示状态。此日志不是异常。");
+            LogsManager.echo("hlx TopViewAutoComp 组件未绑定任何页面，无需设置显示状态。此日志不是异常。");
         }
     }
     /**
@@ -110,3 +109,4 @@ TopViewAutoComp.STATUS_HIDE = 0;
 TopViewAutoComp.HIDE_TYPE_DESTROY = 1;
 /** 组件隐藏状态：隐藏 */
 TopViewAutoComp.HIDE_TYPE_HIDE = 0;
+//# sourceMappingURL=TopViewAutoComp.js.map

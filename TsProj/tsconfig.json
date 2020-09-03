@@ -3,11 +3,12 @@
     "target": "esnext",
     "module": "commonjs",
     "jsx": "react",
-    "sourceMap": false,
+    "sourceMap": true,
     "typeRoots": [
       "../Assets/Puerts/Typing",
       "../Assets/Gen/Typing",
       "./node_modules/@types",
+      "./libs"
     ],
     "outDir": "output",
   }

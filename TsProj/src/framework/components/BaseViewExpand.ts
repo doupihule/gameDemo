@@ -4,10 +4,12 @@ const CS = require('csharp');
 
 
 import ViewTools from "./ViewTools";
+import UICompConst from "../consts/UICompConst";
 export default class BaseViewExpand {
 	//对应的c对象
 	public __cobject:UnityEngine.GameObject;
 	public  __ctransform:UnityEngine.RectTransform;
+	public  __c3dtransform:UnityEngine.RectTransform;
 	public  positionTrans:any = {x:0,y:0,z:0};
 	//旋转
 	public rotationTrans:any = {x:0,y:0,z:0};
@@ -19,6 +21,9 @@ export default class BaseViewExpand {
 
 	//对应的ui类型
 	public  uitype:string;
+
+	//坐标样式 1是2d, 2是3d
+	public  posStyle:number = 1;
 
 	constructor() {
 		this.uitype ="base";
@@ -159,24 +164,31 @@ export default class BaseViewExpand {
 
 	//移除所有子对象
 	public  removeChildren(){
-		var trans = this.__ctransform;
-		var childNums = trans.childCount;
-		for (var s=childNums-1;s>=0;s--){
-			var childTrans:UnityEngine.Transform = trans.GetChild(s);
-			childTrans.SetParent(null);
-
-		}
+		GameUtils.ViewExtensionMethods.RemoveAllChild(this.__ctransform);
 	}
 
-	//获取子对象
-	public  getChildAt(index:number,withBinding:boolean =false){
+	//获取子对象 targetCompType是否指定绑定类型
+	public  getChildAt(index:number,targetCompType:string = null){
 		var childTrans:UnityEngine.Transform = this.__ctransform.GetChild(index);
 		//绑定lua和c对象
 		if (childTrans){
 			//如果是需要bangding对象的
-			return ViewTools.autoBindingCObj(childTrans.gameObject,true);
+			return ViewTools.autoBindingCObj(childTrans.gameObject,true,targetCompType);
 		}
 		return  null;
+	}
+
+	//获取子对象 根据名字
+	public  getChildByName(name:string,outbinding:boolean =false){
+		var childObj = GameUtils.ViewExtensionMethods.GetChildByName(this.__ctransform,name);
+		if (outbinding){
+			return;
+		}
+		if (childObj){
+			//如果是需要bangding对象的
+			return ViewTools.autoBindingCObj(childObj,true);
+		}
+
 	}
 
 
@@ -201,16 +213,21 @@ export default class BaseViewExpand {
 	private  static  _tempVew2 = {x:0,y:0};
 
 	public  setSize(w,h){
-		BaseViewExpand._tempVew2.x = w;
-		BaseViewExpand._tempVew2.y = h;
+		if (this.posStyle == UICompConst.posStyle_3d){
+			window["LogsManager"].errorTag("setSizewrong","3d对象禁止设置2dsize");
+			return;
+		}
 		//设置尺寸
-		 this.__ctransform.sizeDelta =GameUtils.ViewExtensionMethods.initVec2(w,h);
+		 this.__ctransform.sizeDelta = GameUtils.ViewExtensionMethods.initVec2(w,h);
 	}
 
 	//设置是否可见
 	public  setActive(value:boolean){
 		this.__cobject.SetActive(value);
 	}
+
+
+
 	//设置深度
 	public  setZorder(value){
 
@@ -244,6 +261,10 @@ export default class BaseViewExpand {
 		return this._mouseThrough;
 	}
 
+	//获取组件
+	public  getComponent(comp:string){
+		return this.__cobject.GetComponent(comp);
+	}
 
 	//销毁函数
 	public  dispose(){

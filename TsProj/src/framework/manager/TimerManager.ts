@@ -1,7 +1,6 @@
 import TimeEntity from "../entity/TimeEntity";
 import GameConsts from "../../game/sys/consts/GameConsts";
 import Client from "../common/kakura/Client";
-import LogsManager from "./LogsManager";
 
 
 export default class TimerManager {

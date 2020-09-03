@@ -65,3 +65,4 @@ class TaskFunc extends BaseFunc_1.default {
 exports.default = TaskFunc;
 TaskFunc.taskBoxDouble = 2;
 TaskFunc.roleSizeInTask = 1.5;
+//# sourceMappingURL=TaskFunc.js.map

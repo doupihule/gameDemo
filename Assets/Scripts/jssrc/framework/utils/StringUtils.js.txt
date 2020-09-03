@@ -179,3 +179,4 @@ class StringUtils {
 exports.default = StringUtils;
 StringUtils._signKey = "0123456789:abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 StringUtils._signOffset = 13;
+//# sourceMappingURL=StringUtils.js.map

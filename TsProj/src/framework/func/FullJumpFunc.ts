@@ -1,6 +1,5 @@
 import BaseFunc from "./BaseFunc";
 import GameTools from "../../utils/GameTools";
-import LogsManager from "../manager/LogsManager";
 
 export default class FullJumpFunc extends BaseFunc {
 	//处理用户配表相关接口.用静态方法

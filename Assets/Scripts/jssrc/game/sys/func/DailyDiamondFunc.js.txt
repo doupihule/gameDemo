@@ -45,3 +45,4 @@ class DailyDiamondFunc extends BaseFunc_1.default {
     }
 }
 exports.default = DailyDiamondFunc;
+//# sourceMappingURL=DailyDiamondFunc.js.map

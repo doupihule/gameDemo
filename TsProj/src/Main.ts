@@ -2,26 +2,19 @@
 import ViewTools from "./framework/components/ViewTools";
 
 import GlobalData from "./framework/utils/GlobalData";
+
 import LogsManager from "./framework/manager/LogsManager";
+
 import MainModule from "./framework/manager/MainModule";
 import PackConfigManager from "./framework/manager/PackConfigManager";
-import StatisticsManager from "./game/sys/manager/StatisticsManager";
-import DisplayUtils from "./framework/utils/DisplayUtils";
-import CacheManager from "./framework/manager/CacheManager";
-import StorageCode from "./game/sys/consts/StorageCode";
 import FileUtils from "./framework/utils/FileUtils";
 import EngineExpand from "./framework/engine/EngineExpand";
-import JumpManager from "./framework/manager/JumpManager";
-import JumpConst from "./game/sys/consts/JumpConst";
 import FrameWorkHandle from "./game/sys/manager/FrameWorkHandle";
-import StatisticsCommonConst from "./framework/consts/StatisticsCommonConst";
 import BaseFunc from "./framework/func/BaseFunc";
 import UserInfo, {PlatformIdType} from "./framework/common/UserInfo";
-import KariquShareConst from "./framework/consts/KariquShareConst";
-import GameConsts from "./game/sys/consts/GameConsts";
 import TimerManager from "./framework/manager/TimerManager";
-import ResourceManager from "./framework/manager/ResourceManager";
 import ScreenAdapterTools from "./framework/utils/ScreenAdapterTools";
+
 
 declare  var global;
 class Main {
@@ -33,13 +26,14 @@ class Main {
 
 		var thisObj = this;
 		global.initGame = function(stageRoot,uiRoot){
+			thisObj.initWindowEnv();
 			GlobalData.initStage(stageRoot,uiRoot);
 			ViewTools.init()
 			BaseFunc.setCfgExportType(BaseFunc.exportType_New);
 			var  size = GlobalData.uiRoot.getViewRect();
 			ScreenAdapterTools.checkScreenFixMode(size.x, size.y)
 			// //初始化全局变量
-			thisObj.initWindowEnv();
+
 			FrameWorkHandle.init();
 			//
 			PackConfigManager.initCfgs();
@@ -88,6 +82,7 @@ class Main {
 		//赋值timemanager
 		window["TimeManager"] = TimerManager;
 		window["GlobalData"] = GlobalData;
+
 	}
 }
 

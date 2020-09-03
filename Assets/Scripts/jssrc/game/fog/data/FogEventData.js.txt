@@ -315,3 +315,4 @@ class FogEventData {
     }
 }
 exports.default = FogEventData;
+//# sourceMappingURL=FogEventData.js.map

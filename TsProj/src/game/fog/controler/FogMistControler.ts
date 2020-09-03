@@ -3,7 +3,7 @@ import FogFunc from "../../sys/func/FogFunc";
 import FogModel from "../../sys/model/FogModel";
 import FogConst from "../../sys/consts/FogConst";
 import RandomUtis from "../../../framework/utils/RandomUtis";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 
 /**总控制器 */
 export default class FogMistControler {

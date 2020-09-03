@@ -9,3 +9,4 @@ exports.default = VideoAdvEvent;
 VideoAdvEvent.VIDEOADV_EVENT_VICTORYBOX = "VIDEOADV_EVENT_VICTORYBOX"; //刷新胜利宝箱
 //成功看视频
 VideoAdvEvent.VIDEOADV_EVENT_ADV_SUCCESS = "VIDEOADV_EVENT_ADV_SUCCESS";
+//# sourceMappingURL=VideoAdvEvent.js.map

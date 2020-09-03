@@ -2,21 +2,24 @@
 import {UnityEngine, System} from 'csharp'
 import BaseViewExpand from "./BaseViewExpand";
 import UICompConst from "../consts/UICompConst";
-import LogsManager from "../manager/LogsManager";
 import ButtonExpand from "./ButtonExpand";
 import ImageExpand from "./ImageExpand";
 import ListExpand from "./ListExpand";
 import BaseContainer from "./BaseContainer";
 import LabelExpand from "./LabelExpand";
 import SpineGraphicExpand from "./SpineGraphicExpand";
-import ResourceConst from "../../game/sys/consts/ResourceConst";
+import ResourceCommonConst from "../consts/ResourceCommonConst";
+import ResourceManager from "../manager/ResourceManager";
+import Base3dViewExpand from "./Base3dViewExpand";
+import UIBaseView from "./UIBaseView";
+
 export default class ViewTools {
 	static  cobjMap:Map<UnityEngine.GameObject,BaseViewExpand> = new Map<UnityEngine.GameObject, BaseViewExpand>();
 	//自动绑定cobj
-	static autoBindingCObj(cobj:UnityEngine.GameObject,forceBinding:boolean =false){
+	static autoBindingCObj(cobj:UnityEngine.GameObject,forceBinding:boolean =false,targetCompType:string =null){
 		var baseView:BaseViewExpand = ViewTools.cobjMap.get(cobj) as BaseViewExpand;
 		if (!baseView){
-			 baseView = this.getBaseViewByCobj(cobj,forceBinding);
+			 baseView = this.getBaseViewByCobj(cobj,forceBinding,targetCompType);
 			 if (baseView){
 				 ViewTools.cobjMap.set(cobj,baseView);
 			 }
@@ -37,9 +40,15 @@ export default class ViewTools {
 
 
 	//forceBinding 是否强制绑定.主要是针对没有定义名字的对象. 比如有时也需要通过getChildAt获取
-	static  getBaseViewByCobj(cobj:UnityEngine.GameObject,forceBinding:boolean =false){
+	static  getBaseViewByCobj(cobj:UnityEngine.GameObject,forceBinding:boolean =false,targetCompType:string = null){
 		var name:string = cobj.name
-		var uiType:string = name.split("_")[0];
+		var uiType:string ;
+		//如果手动指定组件类型
+		if (targetCompType){
+			uiType = targetCompType
+		} else{
+			uiType = name.split("_")[0];
+		}
 		var viewClassName = UICompConst.classMap[uiType];
 		if (!viewClassName){
 			if (forceBinding){
@@ -63,8 +72,12 @@ export default class ViewTools {
 				return  new ListExpand(cobj);
 			} else if(uiType == UICompConst.comp_input){
 				return  new LabelExpand(cobj);
-			}else if(uiType == UICompConst.comp_spine){
+			} else if(uiType == UICompConst.comp_spine){
 				return  new SpineGraphicExpand(null,null,cobj);
+			} else if(uiType == UICompConst.comp_base3d){
+				return  new Base3dViewExpand();
+			} else if(uiType == UICompConst.comp_ui){
+				return  new UIBaseView();
 			}
 		}
 
@@ -79,7 +92,7 @@ export default class ViewTools {
 	}
 
 	//第一次创建图片的时候 必定 调整尺寸
-	static  createImage(url:string ="",boundleName:string = ResourceConst.boundle_uiimage){
+	static  createImage(url:string ="",boundleName:string = ResourceCommonConst.boundle_uiimage){
 		var img =  new ImageExpand(null);
 		if (url ){
 			img.setSkin(url,boundleName,true)
@@ -96,6 +109,15 @@ export default class ViewTools {
 
 	static  createLabel(str:string, wid:number =100, hei:number =50, fontSize = 24, align=4, supportRichText=false, fontStyle=0, lineSpace =1){
 		return new LabelExpand(null);
+	}
+
+
+	//创建3d模型 role1, role目录
+	static create3DModel(modelName,shortPath:string , boundlename:string=ResourceCommonConst.boundle_model3d, compType:string = UICompConst.comp_base3d){
+		var cobj:any = ResourceManager.get3dmodelRes(modelName,shortPath,boundlename);
+		if (compType == UICompConst.comp_base3d){
+			return this.autoBindingCObj(cobj,true,compType);
+		}
 	}
 
 }

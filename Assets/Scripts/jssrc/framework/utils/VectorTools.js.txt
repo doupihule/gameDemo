@@ -69,3 +69,4 @@ exports.default = VectorTools;
 VectorTools.originPoint = VectorTools.createVec3();
 //单位向量
 VectorTools.unitPoint = VectorTools.createVec3(1, 1, 1);
+//# sourceMappingURL=VectorTools.js.map

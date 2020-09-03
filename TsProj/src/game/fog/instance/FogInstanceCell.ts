@@ -1,7 +1,7 @@
 import FogInstanceBasic from "./FogInstanceBasic";
 import FogModel from "../../sys/model/FogModel";
 import FogFunc from "../../sys/func/FogFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import FogEventData from "../data/FogEventData";
 import FogEventTrigger from "../trigger/FogEventTrigger";
 import FogServer from "../../sys/server/FogServer";

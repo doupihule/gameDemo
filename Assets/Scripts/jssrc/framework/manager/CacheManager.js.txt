@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const LocalStorageManager_1 = require("./LocalStorageManager");
 const FileUtils_1 = require("../utils/FileUtils");
-const LogsManager_1 = require("./LogsManager");
 const UserInfo_1 = require("../common/UserInfo");
 class CacheManager {
     constructor() {
@@ -130,22 +129,23 @@ class CacheManager {
         }
         var fileInfo = FileUtils_1.default.getLocalFileData(this._fileCachePath + this._fileCacheName);
         if (this._fileStorage) {
-            LogsManager_1.default.warn("出现了文件存在但是读取失败的现象,防止_fileStorage 被覆盖");
+            LogsManager.warn("出现了文件存在但是读取失败的现象,防止_fileStorage 被覆盖");
             return;
         }
         if (!fileInfo) {
             this._fileStorage = {};
         }
         else {
-            LogsManager_1.default.echo("fileCachestr:", fileInfo);
+            LogsManager.echo("fileCachestr:", fileInfo);
             try {
                 this._fileStorage = JSON.parse(fileInfo);
             }
             catch (e) {
                 this._fileStorage = {};
-                LogsManager_1.default.warn("FileStorageCahceError", "cacheStr:" + fileInfo);
+                LogsManager.warn("FileStorageCahceError", "cacheStr:" + fileInfo);
             }
         }
     }
 }
 exports.default = CacheManager;
+//# sourceMappingURL=CacheManager.js.map

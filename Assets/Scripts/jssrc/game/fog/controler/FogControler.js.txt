@@ -39,3 +39,4 @@ class FogControler extends BattleControler_1.default {
     }
 }
 exports.default = FogControler;
+//# sourceMappingURL=FogControler.js.map

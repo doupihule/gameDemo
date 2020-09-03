@@ -2,7 +2,7 @@ import FogInstanceCell from "../instance/FogInstanceCell";
 import FogEventData from "../data/FogEventData";
 import FogFunc from "../../sys/func/FogFunc";
 import FogModel from "../../sys/model/FogModel";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import FogConst from "../../sys/consts/FogConst";
 import FogServer from "../../sys/server/FogServer";
 import BattleLogicalControler from "../../battle/controler/BattleLogicalControler";

@@ -22,3 +22,4 @@ RedPointConst.POINT_MAIN_DAILYRED = "POINT_MAIN_DAILYRED";
 RedPointConst.POINT_MAIN_CHATRED = "POINT_MAIN_CHATRED";
 /**任务刷新 */
 RedPointConst.POINT_MAIN_TASKRED = "POINT_MAIN_TASKRED";
+//# sourceMappingURL=RedPointConst.js.map

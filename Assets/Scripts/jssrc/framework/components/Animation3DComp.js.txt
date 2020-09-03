@@ -1,0 +1,6 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Animation3DComp {
+}
+exports.default = Animation3DComp;
+//# sourceMappingURL=Animation3DComp.js.map

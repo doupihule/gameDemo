@@ -7,3 +7,4 @@ class WaitEntity {
     }
 }
 exports.default = WaitEntity;
+//# sourceMappingURL=WaitEntity.js.map

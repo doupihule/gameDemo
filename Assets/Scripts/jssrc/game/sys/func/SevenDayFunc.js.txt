@@ -22,3 +22,4 @@ class SevenDayFunc extends BaseFunc_1.default {
     }
 }
 exports.default = SevenDayFunc;
+//# sourceMappingURL=SevenDayFunc.js.map

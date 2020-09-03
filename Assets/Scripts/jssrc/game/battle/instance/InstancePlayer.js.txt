@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const BattleConst_1 = require("../../sys/consts/BattleConst");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const ChooseTrigger_1 = require("../trigger/ChooseTrigger");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const InstanceHero_1 = require("./InstanceHero");
 const ButtonUtils_1 = require("../../../framework/utils/ButtonUtils");
 const GameConsts_1 = require("../../sys/consts/GameConsts");
@@ -165,7 +164,7 @@ class InstancePlayer extends InstanceHero_1.default {
         var skillData = this.normalSkills[index];
         ChooseTrigger_1.default.getIsCanUseSkill(this.targetRole, skillData, tempArr);
         if (tempArr[0] != -1) {
-            LogsManager_1.default.echo("使用了技能------------------");
+            LogsManager.echo("使用了技能------------------");
             this.giveOutSkill(tempArr[1]);
             if (this.noCd && UserModel_1.default.instance.getMaxBattleLevel() > 0) {
                 this.useSkillGroup[skillData._skillId] = 1;
@@ -179,3 +178,4 @@ class InstancePlayer extends InstanceHero_1.default {
     }
 }
 exports.default = InstancePlayer;
+//# sourceMappingURL=InstancePlayer.js.map

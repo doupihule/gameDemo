@@ -46,3 +46,4 @@ class PassiveSkillData extends BattleSkillData_1.default {
     }
 }
 exports.default = PassiveSkillData;
+//# sourceMappingURL=PassiveSkillData.js.map

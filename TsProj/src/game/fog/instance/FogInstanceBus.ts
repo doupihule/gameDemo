@@ -1,6 +1,6 @@
 import FogModel from "../../sys/model/FogModel";
 import FogFunc from "../../sys/func/FogFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import FogConst from "../../sys/consts/FogConst";
 import FogInstanceMove from "./FogInstanceMove";
 import BattleConst from "../../sys/consts/BattleConst";

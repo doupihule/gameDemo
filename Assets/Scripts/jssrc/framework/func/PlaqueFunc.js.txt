@@ -28,3 +28,4 @@ class PlaqueFunc extends BaseFunc_1.default {
     }
 }
 exports.default = PlaqueFunc;
+//# sourceMappingURL=PlaqueFunc.js.map

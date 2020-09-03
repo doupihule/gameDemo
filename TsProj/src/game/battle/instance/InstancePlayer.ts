@@ -2,7 +2,7 @@ import BattleLogicalControler from "../controler/BattleLogicalControler";
 import BattleConst from "../../sys/consts/BattleConst";
 import BattleFunc from "../../sys/func/BattleFunc";
 import ChooseTrigger from "../trigger/ChooseTrigger";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import InstanceHero from "./InstanceHero";
 import {ButtonUtils} from "../../../framework/utils/ButtonUtils";
 import GameConsts from "../../sys/consts/GameConsts";

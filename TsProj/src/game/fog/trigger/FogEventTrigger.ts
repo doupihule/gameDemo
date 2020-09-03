@@ -3,7 +3,7 @@ import FogEventData from "../data/FogEventData";
 import FogFunc from "../../sys/func/FogFunc";
 import FogModel from "../../sys/model/FogModel";
 import WindowManager from "../../../framework/manager/WindowManager";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import {WindowCfgs} from "../../sys/consts/WindowCfgs";
 import GameTools from "../../../utils/GameTools";
 import FogConst from "../../sys/consts/FogConst";

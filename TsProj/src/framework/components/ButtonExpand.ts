@@ -1,6 +1,5 @@
 import BaseViewComponent from "./BaseViewExpand";
 import UICompConst from "../consts/UICompConst";
-import LogsManager from "../manager/LogsManager";
 import { UnityEngine } from "csharp";
 import { $typeof } from "puerts";
 //按钮

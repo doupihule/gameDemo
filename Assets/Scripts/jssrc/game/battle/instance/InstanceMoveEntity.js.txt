@@ -64,3 +64,4 @@ class InstanceMoveEntity {
     }
 }
 exports.default = InstanceMoveEntity;
+//# sourceMappingURL=InstanceMoveEntity.js.map

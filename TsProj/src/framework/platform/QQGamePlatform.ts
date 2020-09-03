@@ -1,6 +1,6 @@
 import WXGamePlatform from "./WXGamePlatform";
 import GlobalData from "../utils/GlobalData";
-import LogsManager from "../manager/LogsManager";
+
 import StatisticsManager from "../../game/sys/manager/StatisticsManager";
 import StatisticsCommonConst from "../consts/StatisticsCommonConst";
 

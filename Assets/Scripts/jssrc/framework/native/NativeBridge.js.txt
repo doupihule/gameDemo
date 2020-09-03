@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserInfo_1 = require("../common/UserInfo");
-const LogsManager_1 = require("../manager/LogsManager");
 const Message_1 = require("../common/Message");
 const TableUtils_1 = require("../utils/TableUtils");
 const NativeToJSEvent_1 = require("../event/NativeToJSEvent");
@@ -91,7 +90,7 @@ class NativeBridge {
         this._cacheObj.params = params;
         var strValue = TableUtils_1.default.safelyJsonStringfy(this._cacheObj);
         if (!NativeBridge.instance._ignoreEventMap[eventName]) {
-            LogsManager_1.default.echo("callNative", bridge && "has bridge" || "null brigdge", strValue);
+            LogsManager.echo("callNative", bridge && "has bridge" || "null brigdge", strValue);
         }
         if (!bridge) {
             return;
@@ -116,19 +115,19 @@ class NativeBridge {
         var params = jsonData.params;
         if (eventName == NativeToJSEvent_1.default.CALL_JSLOGS) {
             if (params.type == "echo") {
-                LogsManager_1.default.echo("nativeLogs,", params.message);
+                LogsManager.echo("nativeLogs,", params.message);
             }
             else if (params.type == "warn") {
-                LogsManager_1.default.warn("nativeLogs,", params.message);
+                LogsManager.warn("nativeLogs,", params.message);
             }
             else {
-                LogsManager_1.default.errorTag(params.tag, params.message);
+                LogsManager.errorTag(params.tag, params.message);
             }
         }
         else {
             //在这里做所有的native回调.然后由系统负责侦听事件
             if (!NativeBridge.instance._ignoreEventMap[eventName]) {
-                LogsManager_1.default.echo("onNativeCallBack:", "backData:", backData);
+                LogsManager.echo("onNativeCallBack:", "backData:", backData);
             }
             //发送事件出去给分系统处理
             Message_1.default.instance.send(eventName, params);
@@ -136,3 +135,4 @@ class NativeBridge {
     }
 }
 exports.default = NativeBridge;
+//# sourceMappingURL=NativeBridge.js.map

@@ -45,3 +45,4 @@ class JumpFunc extends BaseFunc_1.default {
     }
 }
 exports.JumpFunc = JumpFunc;
+//# sourceMappingURL=JumpFunc.js.map

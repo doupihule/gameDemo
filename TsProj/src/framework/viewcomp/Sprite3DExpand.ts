@@ -43,15 +43,6 @@ export default class Sprite3DExpand extends BaseViewExpand {
 
 	//加载成功回调
 	public onLoadComplete() {
-		this.currentView = ResourceManager.get3dmodelRes(this.modelName, false, true);
-		this.addChild(this.currentView);
-
-		this.showChildView();
-		this.doExpandOnShow();
-		if (this._onCompleteBack) {
-			this._onCompleteBack();
-			this._onCompleteBack = null;
-		}
 	}
 
 	//子类重写 .比如需要播放特效的

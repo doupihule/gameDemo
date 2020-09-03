@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const GameSwitch_1 = require("../common/GameSwitch");
-const LogsManager_1 = require("./LogsManager");
 const TimerManager_1 = require("./TimerManager");
 const AdVideoManager_1 = require("../platform/AdVideoManager");
 class OppoAdvManager {
@@ -18,7 +17,7 @@ class OppoAdvManager {
         var originalDelay = Number(GameSwitch_1.default.getSwitchState(GameSwitch_1.default.ORIGIN_AD_DELAY)) * 1000;
         var tipType;
         tipType = Number(GameSwitch_1.default.getSwitchState(receiveType));
-        LogsManager_1.default.echo("tipType------------------", tipType);
+        LogsManager.echo("tipType------------------", tipType);
         if (tipType == 4) {
             type = this.rewardAdv;
         }
@@ -54,3 +53,4 @@ OppoAdvManager.intervalAdv = 3; //插屏广告
 OppoAdvManager.rewardAdv = 4; //激励广告
 OppoAdvManager.origionAndReward = 5; //先原生后激励
 OppoAdvManager.intervalAndReward = 6; //先插屏后激励
+//# sourceMappingURL=OppoAdvManager.js.map

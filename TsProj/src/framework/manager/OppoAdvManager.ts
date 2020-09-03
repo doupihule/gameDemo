@@ -1,5 +1,4 @@
 import GameSwitch from "../common/GameSwitch";
-import LogsManager from "./LogsManager";
 import TimerManager from "./TimerManager";
 import AdVideoManager from "../platform/AdVideoManager";
 

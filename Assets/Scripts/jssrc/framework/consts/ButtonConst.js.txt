@@ -17,3 +17,4 @@ ButtonConst.BUTTON_TYPE_5 = "BUTTON_TYPE_5";
 ButtonConst.BUTTON_TYPE_6 = "BUTTON_TYPE_6";
 /** 按钮类型7：立体Y偏移按钮 typeParams{diffY:10} */
 ButtonConst.BUTTON_TYPE_7 = "BUTTON_TYPE_7";
+//# sourceMappingURL=ButtonConst.js.map

@@ -1,4 +1,4 @@
-import LogsManager from "../../../framework/manager/LogsManager";
+
 
 /**
  * 渠道参数类

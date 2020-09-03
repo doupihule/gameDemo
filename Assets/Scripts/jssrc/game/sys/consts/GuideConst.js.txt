@@ -71,3 +71,4 @@ GuideConst.GUIDE_TYPE_M_RF = 4;
 GuideConst.GUIDE_TYPE_NONE = 5;
 /**引导类型：有遮罩 有右边手指 */
 GuideConst.GUIDE_TYPE_M_RIGHTF = 6;
+//# sourceMappingURL=GuideConst.js.map

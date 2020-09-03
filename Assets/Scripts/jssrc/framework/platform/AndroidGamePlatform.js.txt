@@ -21,7 +21,6 @@ const GameTools_1 = require("../../utils/GameTools");
 const MethodCommon_1 = require("../common/kakura/MethodCommon");
 const SoundManager_1 = require("../manager/SoundManager");
 const ScreenAdapterTools_1 = require("../utils/ScreenAdapterTools");
-const LogsManager_1 = require("../manager/LogsManager");
 const TranslateFunc_1 = require("../func/TranslateFunc");
 const UserModel_1 = require("../../game/sys/model/UserModel");
 const TimerManager_1 = require("../manager/TimerManager");
@@ -36,7 +35,7 @@ class AndroidGamePlatform extends GamePlatform_1.default {
         this._reloginCount = 0;
         //注册错误回调事件
         window.onerror = function (errorMessage, scriptURI, lineNumber, columnNumber, errorObj) {
-            LogsManager_1.default.systemError(errorMessage, errorObj && errorObj.stack, "uri:", scriptURI);
+            LogsManager.systemError(errorMessage, errorObj && errorObj.stack, "uri:", scriptURI);
         };
         //添加 获取android设备信息接口
         MainModule_1.default.showMainTask += 1;
@@ -92,7 +91,7 @@ class AndroidGamePlatform extends GamePlatform_1.default {
         var sign = "PhmdlmidmeQmfhmefmfgmOhmejmROmNhmfjmOhmPNmejmfcmjhmihmePmNg|kQmOPmSOmkgmljmcimcgmjemedmejmORmNjmNkmefmecmjimkdmQgmifmei";
         var singArr;
         if (!sign) {
-            LogsManager_1.default.errorTag("sha1Error", "Game Const.ts没有配置ENCODE_SHA1");
+            LogsManager.errorTag("sha1Error", "Game Const.ts没有配置ENCODE_SHA1");
             return;
         }
         var decodeSign = StringUtils_1.default.decodeSign(sign);
@@ -105,7 +104,7 @@ class AndroidGamePlatform extends GamePlatform_1.default {
             return;
         }
         if (!this._nativeSha1Arr || this._nativeSha1Arr.length == 0) {
-            LogsManager_1.default.warn("native串还没初始化--");
+            LogsManager.warn("native串还没初始化--");
             return;
         }
         for (var i = 0; i < this._nativeSha1Arr.length; i++) {
@@ -113,11 +112,11 @@ class AndroidGamePlatform extends GamePlatform_1.default {
             if (decodeSign.indexOf(nativeSign) == -1) {
                 //这个表名是套壳包
                 this.childChannelId = nativeSign;
-                LogsManager_1.default.errorTag("wrongSha1", "这是套壳包.sha1:" + nativeSign);
+                LogsManager.errorTag("wrongSha1", "这是套壳包.sha1:" + nativeSign);
                 return;
             }
         }
-        LogsManager_1.default.echo("这个包是合法的");
+        LogsManager.echo("这个包是合法的");
     }
     createLoginButton(callBack, thisObject) {
         callBack && callBack.call(thisObject);
@@ -198,7 +197,7 @@ class AndroidGamePlatform extends GamePlatform_1.default {
         var appCache = window["appcache"];
         //设置缓存的版本号.下次更新直接拉取最新的版本
         var targetVersion = GlobalData_1.default.version;
-        LogsManager_1.default.echo("version setVMSVersion:" + targetVersion, "hotfixSwitch:", GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_HOTFIX));
+        LogsManager.echo("version setVMSVersion:" + targetVersion, "hotfixSwitch:", GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_HOTFIX));
         this.changeLeftTask(-1, "addUpdateListener");
         //必须是 开启热更状态才会去覆盖本地版本
         if (!GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_HOTFIX)) {
@@ -222,7 +221,7 @@ class AndroidGamePlatform extends GamePlatform_1.default {
                 else {
                     if (oldVersion != targetVersion) {
                         appCache.setResourceID(this.getCacheKey(), targetVersion);
-                        LogsManager_1.default.echo("versionUpdate:", "有新版本,vold:" + oldVersion + ",vnew:" + targetVersion);
+                        LogsManager.echo("versionUpdate:", "有新版本,vold:" + oldVersion + ",vnew:" + targetVersion);
                         //测试环境
                         // if(Number(targetVersion)% 2 ==0){
                         //     WindowManager.setPopupTip(1, TranslateFunc.instance.getTranslate("#tid_newVersion"), this.reloadGame, this);
@@ -274,7 +273,7 @@ class AndroidGamePlatform extends GamePlatform_1.default {
     //执行版本覆盖
     doCoverVersion(serverVersion) {
         // serverVersion =String( (Number( this.getAPPCacheVersion() ) || 1) +1  ) ;
-        LogsManager_1.default.echo("serverVersion:" + serverVersion);
+        LogsManager.echo("serverVersion:" + serverVersion);
         //如果是测试渠道 而且版本号是1
         if (UserInfo_1.default.isTest() && GlobalData_1.default.version == "1") {
             return;
@@ -296,7 +295,7 @@ class AndroidGamePlatform extends GamePlatform_1.default {
         //直接取服务器的版本和客户端打包的版本最对比.  默认直接用服务器的版. 但如果客户端打包版本号比服务器版本号高. 那么表示采用打包版本号
         var resultVersion = Math.max(minVersion, serverNum);
         GlobalData_1.default.version = String(resultVersion);
-        LogsManager_1.default.echo("GlobalVersion:" + GlobalData_1.default.version, "server:", serverVersion, "buildVersion:", minVersion);
+        LogsManager.echo("GlobalVersion:" + GlobalData_1.default.version, "server:", serverVersion, "buildVersion:", minVersion);
     }
     //获取app缓存的版本号
     getAPPCacheVersion() {
@@ -334,7 +333,7 @@ class AndroidGamePlatform extends GamePlatform_1.default {
                 targetVersion = GlobalData_1.default.version;
             }
         }
-        LogsManager_1.default.echo("getVersionName:" + targetVersion);
+        LogsManager.echo("getVersionName:" + targetVersion);
         return "version_" + targetVersion + ".json";
     }
     //重写是否是套壳包
@@ -448,11 +447,11 @@ class AndroidGamePlatform extends GamePlatform_1.default {
      */
     pushMessage(delay, id, title, subTitle, body, repeats = false) {
         if (delay < 1) {
-            LogsManager_1.default.warn("推送延迟小于1秒，注册不执行");
+            LogsManager.warn("推送延迟小于1秒，注册不执行");
             return;
         }
         if (repeats && delay <= 60) {
-            LogsManager_1.default.warn("推送需要重发且延迟不大于60秒，注册不执行");
+            LogsManager.warn("推送需要重发且延迟不大于60秒，注册不执行");
             return;
         }
         if (this.tempPushDic["title"]) {
@@ -480,3 +479,4 @@ class AndroidGamePlatform extends GamePlatform_1.default {
     }
 }
 exports.default = AndroidGamePlatform;
+//# sourceMappingURL=AndroidGamePlatform.js.map

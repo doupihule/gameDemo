@@ -1,5 +1,4 @@
 import GlobalData from "../utils/GlobalData";
-import LogsManager from "../manager/LogsManager";
 import WhiteListFunc from "../func/WhiteListFunc";
 import UserInfo from "../common/UserInfo";
 import UserModel from "../../game/sys/model/UserModel";

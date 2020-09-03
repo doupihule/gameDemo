@@ -1,6 +1,6 @@
 import FogLogicalControler from "./FogLogicalControler";
 import FogInstanceCell from "../instance/FogInstanceCell";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 
 /**寻路控制器 */
 export class FogFindWayControler {

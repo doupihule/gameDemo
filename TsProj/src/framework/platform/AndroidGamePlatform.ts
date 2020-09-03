@@ -19,7 +19,7 @@ import GameTools from "../../utils/GameTools";
 import MethodCommon from "../common/kakura/MethodCommon";
 import SoundManager from "../manager/SoundManager";
 import ScreenAdapterTools from '../utils/ScreenAdapterTools';
-import LogsManager from '../manager/LogsManager';
+
 import TranslateFunc from '../func/TranslateFunc';
 import UserModel from '../../game/sys/model/UserModel';
 import TimerManager from '../manager/TimerManager';

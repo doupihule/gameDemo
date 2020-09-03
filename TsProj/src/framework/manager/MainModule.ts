@@ -1,5 +1,4 @@
 import SoundManager from "./SoundManager";
-import LogsManager from "./LogsManager";
 import GlobalData from "../utils/GlobalData";
 import WindowManager from "./WindowManager";
 import {WindowCfgs} from "../../game/sys/consts/WindowCfgs";
@@ -29,6 +28,7 @@ import ModelToServerMapCommon from "../consts/ModelToServerMapCommon";
 import KariqiShareManager from './KariqiShareManager';
 import KariquShareConst from '../consts/KariquShareConst';
 import ViewTools from "../components/ViewTools";
+import Base3dViewExpand from "../components/Base3dViewExpand";
 
 export default class MainModule implements IMessage {
 	//实例
@@ -58,6 +58,8 @@ export default class MainModule implements IMessage {
 		Message.instance.add(MsgCMD.VIDEO_STOP, this);
 		Message.instance.add(MsgCMD.VIDEO_PLAY, this);
 		WindowManager.OpenUI(WindowCfgs.GameMainUI);
+		var model:Base3dViewExpand = ViewTools.create3DModel("battle_prefab","Main");
+		GlobalData.stage.addChild(model);
 	}
 
 	//Loading页面显示后开始加载资源

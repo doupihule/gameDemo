@@ -53,3 +53,4 @@ exports.default = MathUtils;
 MathUtils.tempVector3_1 = { x: 0, y: 0, z: 0 };
 MathUtils.tempVector3_2 = { x: 0, y: 0, z: 0 };
 MathUtils.tempVector3_3 = { x: 0, y: 0, z: 0 };
+//# sourceMappingURL=MathUtils.js.map

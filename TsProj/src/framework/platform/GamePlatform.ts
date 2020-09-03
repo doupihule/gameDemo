@@ -3,7 +3,7 @@ import HttpMessage from "../common/HttpMessage";
 import PackConfigManager from "../manager/PackConfigManager";
 import TimerManager from "../manager/TimerManager";
 import UserInfo from "../common/UserInfo";
-import LogsManager from "../manager/LogsManager";
+
 import CacheManager from "../manager/CacheManager";
 import ErrCodeManager from "../manager/ErrCodeManager";
 import ErrorCode from "../../game/sys/common/kakura/ErrorCode";

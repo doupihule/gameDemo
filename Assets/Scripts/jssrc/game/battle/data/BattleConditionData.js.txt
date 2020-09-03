@@ -30,3 +30,4 @@ class BattleConditionData {
     }
 }
 exports.default = BattleConditionData;
+//# sourceMappingURL=BattleConditionData.js.map

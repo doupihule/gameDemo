@@ -4,6 +4,7 @@ const csharp_1 = require("csharp");
 const puerts_1 = require("puerts");
 const CS = require('csharp');
 const ViewTools_1 = require("./ViewTools");
+const UICompConst_1 = require("../consts/UICompConst");
 class BaseViewExpand {
     constructor() {
         this.positionTrans = { x: 0, y: 0, z: 0 };
@@ -12,6 +13,8 @@ class BaseViewExpand {
         // 缩放
         this.scaleTrans = { x: 0, y: 0, z: 0 };
         this._alpha = 1;
+        //坐标样式 1是2d, 2是3d
+        this.posStyle = 1;
         this._visible = true;
         //--触摸事件相关
         this._mouseEnabled = false;
@@ -129,22 +132,28 @@ class BaseViewExpand {
     }
     //移除所有子对象
     removeChildren() {
-        var trans = this.__ctransform;
-        var childNums = trans.childCount;
-        for (var s = childNums - 1; s >= 0; s--) {
-            var childTrans = trans.GetChild(s);
-            childTrans.SetParent(null);
-        }
+        csharp_1.GameUtils.ViewExtensionMethods.RemoveAllChild(this.__ctransform);
     }
-    //获取子对象
-    getChildAt(index, withBinding = false) {
+    //获取子对象 targetCompType是否指定绑定类型
+    getChildAt(index, targetCompType = null) {
         var childTrans = this.__ctransform.GetChild(index);
         //绑定lua和c对象
         if (childTrans) {
             //如果是需要bangding对象的
-            return ViewTools_1.default.autoBindingCObj(childTrans.gameObject, true);
+            return ViewTools_1.default.autoBindingCObj(childTrans.gameObject, true, targetCompType);
         }
         return null;
+    }
+    //获取子对象 根据名字
+    getChildByName(name, outbinding = false) {
+        var childObj = csharp_1.GameUtils.ViewExtensionMethods.GetChildByName(this.__ctransform, name);
+        if (outbinding) {
+            return;
+        }
+        if (childObj) {
+            //如果是需要bangding对象的
+            return ViewTools_1.default.autoBindingCObj(childObj, true);
+        }
     }
     //设置颜色 子类重写
     setColor(r, g, b, a) {
@@ -160,8 +169,10 @@ class BaseViewExpand {
         return this.__ctransform.sizeDelta;
     }
     setSize(w, h) {
-        BaseViewExpand._tempVew2.x = w;
-        BaseViewExpand._tempVew2.y = h;
+        if (this.posStyle == UICompConst_1.default.posStyle_3d) {
+            window["LogsManager"].errorTag("setSizewrong", "3d对象禁止设置2dsize");
+            return;
+        }
         //设置尺寸
         this.__ctransform.sizeDelta = csharp_1.GameUtils.ViewExtensionMethods.initVec2(w, h);
     }
@@ -190,6 +201,10 @@ class BaseViewExpand {
     get mouseThrough() {
         return this._mouseThrough;
     }
+    //获取组件
+    getComponent(comp) {
+        return this.__cobject.GetComponent(comp);
+    }
     //销毁函数
     dispose() {
         this.__ctransform = null;
@@ -199,3 +214,4 @@ class BaseViewExpand {
 }
 exports.default = BaseViewExpand;
 BaseViewExpand._tempVew2 = { x: 0, y: 0 };
+//# sourceMappingURL=BaseViewExpand.js.map

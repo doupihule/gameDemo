@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const UserInfo_1 = require("../common/UserInfo");
 const UserGlobalModel_1 = require("../model/UserGlobalModel");
-const LogsManager_1 = require("./LogsManager");
 const WindowManager_1 = require("./WindowManager");
 const ResourceCommonConst_1 = require("../../game/sys/consts/ResourceCommonConst");
 const ShareTvOrderFunc_1 = require("../../game/sys/func/ShareTvOrderFunc");
@@ -48,7 +47,7 @@ class ShareOrTvManager {
             var info = KariqiShareManager_1.default.getShareOrTvType(id, index);
             //如果是走卡日曲的
             if (info) {
-                LogsManager_1.default.echo("kariqu shareTvinfo", TableUtils_1.default.safelyJsonStringfy(info));
+                LogsManager.echo("kariqu shareTvinfo", TableUtils_1.default.safelyJsonStringfy(info));
                 successType = info.type;
             }
             else {
@@ -174,7 +173,7 @@ class ShareOrTvManager {
         if (times <= 0) {
             return false;
         }
-        LogsManager_1.default.echo("shareOrTv 还有分享次数，走了分享");
+        LogsManager.echo("shareOrTv 还有分享次数，走了分享");
         return true;
     }
     /**
@@ -224,7 +223,7 @@ class ShareOrTvManager {
             ShareOrTvManager.leadTypeId = id;
         }
         var type = this.getShareOrTvType(id, failType, firstType);
-        LogsManager_1.default.echo("krma. shareOrTv type " + type);
+        LogsManager.echo("krma. shareOrTv type " + type);
         shareData = shareData || {};
         var doFaillVedioCall = () => {
             closeCall && closeCall.call(thisObj, type);
@@ -401,3 +400,4 @@ ShareOrTvManager.ORDER_ID_SHARE = 1;
 /** 配表序列意义：分享录屏 */
 ShareOrTvManager.ORDER_ID_SHAREVIDEO = 2;
 ShareOrTvManager.leadTypeId = null; //当前诱导分享的序列id
+//# sourceMappingURL=ShareOrTvManager.js.map

@@ -60,3 +60,4 @@ ModelToServerMapCommon.modelToServerMapCommon = [
     { key: "userExtCommon", model: UserExtCommonModel_1.default },
     { key: "countsCommon", model: CountsCommonModel_1.default },
 ];
+//# sourceMappingURL=ModelToServerMapCommon.js.map

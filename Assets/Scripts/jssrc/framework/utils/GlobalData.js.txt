@@ -1,16 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ScreenAdapterTools_1 = require("./ScreenAdapterTools");
-const LogsManager_1 = require("../manager/LogsManager");
 const CacheManager_1 = require("../manager/CacheManager");
 const StorageCode_1 = require("../../game/sys/consts/StorageCode");
 const ViewTools_1 = require("../components/ViewTools");
+const UICompConst_1 = require("../consts/UICompConst");
 class GlobalData {
     //初始化舞台
     static initStage(cstage, cuiroot) {
         this._cstage = cstage;
         this._cuiroot = cuiroot;
-        this.stage = ViewTools_1.default.autoBindingCObj(cstage, true);
+        this.stage = ViewTools_1.default.autoBindingCObj(cstage, true, UICompConst_1.default.comp_base3d);
         this.uiRoot = ViewTools_1.default.autoBindingCObj(cuiroot, true);
     }
     static setPhoneSys(sysInfo) {
@@ -34,7 +34,7 @@ class GlobalData {
         if (ScreenAdapterTools_1.default.height / ScreenAdapterTools_1.default.width > 2) {
             var barH = sysInfo.statusBarHeight;
             if (barH > 44) {
-                LogsManager_1.default.echo("yrc 根据微信/头条返回的判断为刘海屏,statusBarHeight", barH);
+                LogsManager.echo("yrc 根据微信/头条返回的判断为刘海屏,statusBarHeight", barH);
                 this.isPhoneBangs = true;
                 ScreenAdapterTools_1.default.toolBarWidth = 60;
             }
@@ -51,7 +51,7 @@ class GlobalData {
             GlobalData.isDevTools = true;
         }
         // ScreenAdapterTools.toolBarWidth = GlobalData.IPXOffset;
-        LogsManager_1.default.echo(">>>>>system>>>>>>", sysInfo);
+        LogsManager.echo(">>>>>system>>>>>>", sysInfo);
     }
     /**获取当前操作系统 */
     static getOs() {
@@ -115,7 +115,7 @@ class GlobalData {
                 offset = 60;
             }
             ScreenAdapterTools_1.default.toolBarWidth = offset;
-            LogsManager_1.default.echo("yrc111 reCheckBar top:", top, "    this.height:", ScreenAdapterTools_1.default.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools_1.default.toolBarWidth);
+            LogsManager.echo("yrc111 reCheckBar top:", top, "    this.height:", ScreenAdapterTools_1.default.height, "    this.windowHeight:", this.windowHeight, "    toolBarWidth:", ScreenAdapterTools_1.default.toolBarWidth);
         }
     }
     //判断是否是单机
@@ -169,3 +169,4 @@ GlobalData.SDKVersion = "";
 /**判断是否为开发者工具 */
 GlobalData.isDevTools = false;
 GlobalData._isAuthorized = false;
+//# sourceMappingURL=GlobalData.js.map

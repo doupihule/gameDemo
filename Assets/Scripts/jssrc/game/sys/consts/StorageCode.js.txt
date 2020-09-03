@@ -37,3 +37,4 @@ StorageCode.storage_offlineCoinCount = "offlineCoinCount";
 StorageCode.storage_battleResultCount = "battleResultCount";
 //迷雾战斗结算奖励
 StorageCode.storage_fogBattleResultCount = "fogBattleResultCount";
+//# sourceMappingURL=StorageCode.js.map

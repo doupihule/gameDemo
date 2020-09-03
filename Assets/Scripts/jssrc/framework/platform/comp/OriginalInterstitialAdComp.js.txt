@@ -5,7 +5,6 @@ const OriginalAdBaseComp_1 = require("./OriginalAdBaseComp");
 const ChannelConst_1 = require("../../../game/sys/consts/ChannelConst");
 const UserInfo_1 = require("../../common/UserInfo");
 const GameSwitch_1 = require("../../common/GameSwitch");
-const LogsManager_1 = require("../../manager/LogsManager");
 const WindowCommonCfgs_1 = require("../../consts/WindowCommonCfgs");
 const WindowManager_1 = require("../../manager/WindowManager");
 const AdVideoManager_1 = require("../AdVideoManager");
@@ -37,7 +36,7 @@ class OriginalInterstitialAdComp extends OriginalAdBaseComp_1.default {
      */
     openOriginalView(params, adList) {
         if (adList) {
-            LogsManager_1.default.echo("hlx 显示原生广告插屏广告1-----------", adList.adId);
+            LogsManager.echo("hlx 显示原生广告插屏广告1-----------", adList.adId);
             // 汇报点击
             this.reportShowOriginal(adList.adId);
             WindowManager_1.default.OpenUI(WindowCommonCfgs_1.default.ORIGINALVIEW, { info: adList, pos: params.pos });
@@ -46,7 +45,7 @@ class OriginalInterstitialAdComp extends OriginalAdBaseComp_1.default {
             AdVideoManager_1.default.instance.updateInterstitialLimit();
         }
         else {
-            LogsManager_1.default.echo('hlx 原生广告插屏未加载到数据，不显示');
+            LogsManager.echo('hlx 原生广告插屏未加载到数据，不显示');
         }
     }
     /**
@@ -59,10 +58,11 @@ class OriginalInterstitialAdComp extends OriginalAdBaseComp_1.default {
             }
             else {
                 // 失败走回调
-                LogsManager_1.default.echo('hlx 原生广告插屏未加载到数据，不显示, 执行失败回调');
+                LogsManager.echo('hlx 原生广告插屏未加载到数据，不显示, 执行失败回调');
                 onErrorCallback && onErrorCallback.call(callbackObj);
             }
         }, this, params);
     }
 }
 exports.OriginalInterstitialAdComp = OriginalInterstitialAdComp;
+//# sourceMappingURL=OriginalInterstitialAdComp.js.map

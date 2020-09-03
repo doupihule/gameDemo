@@ -87,3 +87,4 @@ GameConsts.GAME_OFFEST = 13;
  * 把debug包的sha1也设置为合法的sha1串 多个sha1串用 | 分割,不能带空格
  */
 GameConsts.ENCODE_SHA1 = "PhmdlmidmeQmfhmefmfgmOhmejmROmNhmfjmOhmPNmejmfcmjhmihmePmNg|kQmOPmSOmkgmljmcimcgmjemedmejmORmNjmNkmefmecmjimkdmQgmifmei";
+//# sourceMappingURL=GameConsts.js.map

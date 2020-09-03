@@ -2,7 +2,7 @@ import BattleControler from "../controler/BattleControler";
 import InstanceMoveEntity from "./InstanceMoveEntity";
 import InstanceMoveMultyEntity from "./InstanceMoveMultyEntity";
 import BattleFunc from "../../sys/func/BattleFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import BattleConst from "../../sys/consts/BattleConst";
 import InstanceBasic from "./InstanceBasic";
 import PoolCode from "../../sys/consts/PoolCode";

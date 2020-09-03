@@ -5,7 +5,7 @@ import JumpManager from "../../../../framework/manager/JumpManager";
 import TimerManager from "../../../../framework/manager/TimerManager";
 import Equation from "../../../../framework/utils/Equation";
 import GlobalParamsFunc from "../../func/GlobalParamsFunc";
-import LogsManager from "../../../../framework/manager/LogsManager";
+
 import JumpConst from "../../consts/JumpConst";
 import UserInfo from "../../../../framework/common/UserInfo";
 import ControlConst from "../../../../framework/consts/ControlConst";

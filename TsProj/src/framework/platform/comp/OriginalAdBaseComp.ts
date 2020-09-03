@@ -1,6 +1,6 @@
 import GameSwitch from "../../common/GameSwitch";
 import UserInfo from "../../common/UserInfo";
-import LogsManager from "../../manager/LogsManager";
+
 import AdVideoManager from "../AdVideoManager";
 import Client from "../../common/kakura/Client";
 import TimerManager from "../../manager/TimerManager";

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseFunc_1 = require("../../../framework/func/BaseFunc");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const GameConsts_1 = require("../consts/GameConsts");
 const BattleConst_1 = require("../consts/BattleConst");
 const GlobalParamsFunc_1 = require("./GlobalParamsFunc");
@@ -132,7 +131,7 @@ class BattleFunc extends BaseFunc_1.default {
         }
         ;
         if (!propArr) {
-            LogsManager_1.default.errorTag("properror", "没有传入属性数据");
+            LogsManager.errorTag("properror", "没有传入属性数据");
             return outTable;
         }
         for (var i = 0; i < propArr.length; i++) {
@@ -198,17 +197,17 @@ class BattleFunc extends BaseFunc_1.default {
         var tempArr = key.split("_");
         var arr1 = skillParams[Number(tempArr[0]) - 1];
         if (!arr1) {
-            LogsManager_1.default.errorTag("SkillCfgsError", "参数配置错误,skillId:", _skillId, "skilllv:", level, "key:", key, tag);
+            LogsManager.errorTag("SkillCfgsError", "参数配置错误,skillId:", _skillId, "skilllv:", level, "key:", key, tag);
             return 0;
         }
         var rt = arr1[Number(tempArr[1]) - 1];
         if (rt == null) {
-            LogsManager_1.default.errorTag("SkillCfgsError", "参数配置错误,skillId:", _skillId, "skilllv:", level, "key:", key, tag);
+            LogsManager.errorTag("SkillCfgsError", "参数配置错误,skillId:", _skillId, "skilllv:", level, "key:", key, tag);
             return 0;
         }
         rt = Number(rt);
         if (isNaN(rt)) {
-            LogsManager_1.default.errorTag("battleError", "错误的技能参数数据,skillId:", _skillId, "skilllv:", level, tag);
+            LogsManager.errorTag("battleError", "错误的技能参数数据,skillId:", _skillId, "skilllv:", level, tag);
         }
         return rt;
     }
@@ -245,7 +244,7 @@ class BattleFunc extends BaseFunc_1.default {
             if (window.location.href.search(re) >= 0) {
                 var rt = re.exec(window.location.href);
                 var str = rt[1];
-                LogsManager_1.default.echo("战斗调试模式:", str);
+                LogsManager.echo("战斗调试模式:", str);
                 GameSwitch_1.default.switchMap.SWITCH_BATTLE_DEBUGLEVEL = str;
             }
         }
@@ -419,3 +418,4 @@ BattleFunc.bossMaxFrame = 60 * 60;
 BattleFunc.CreateRoleIndex = {};
 /**当前战斗类型 */
 BattleFunc.curBattleType = 1;
+//# sourceMappingURL=BattleFunc.js.map

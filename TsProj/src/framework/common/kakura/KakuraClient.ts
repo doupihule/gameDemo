@@ -1,6 +1,5 @@
 import KakuraMessage from "./KakuraMessage";
 import Client from "./Client";
-import LogsManager from "../../manager/LogsManager";
 import WaitManager from "../../manager/WaitManager";
 import MsgCMD from "../../../game/sys/common/MsgCMD";
 import TimerManager from "../../manager/TimerManager";

@@ -31,3 +31,4 @@ class JumpCommonModel extends BaseModel_1.default {
     }
 }
 exports.default = JumpCommonModel;
+//# sourceMappingURL=JumpCommonModel.js.map

@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const WXGamePlatform_1 = require("./WXGamePlatform");
 const GlobalData_1 = require("../utils/GlobalData");
-const LogsManager_1 = require("../manager/LogsManager");
 const StatisticsManager_1 = require("../../game/sys/manager/StatisticsManager");
 const StatisticsCommonConst_1 = require("../consts/StatisticsCommonConst");
 class QQGamePlatform extends WXGamePlatform_1.default {
@@ -40,12 +39,12 @@ class QQGamePlatform extends WXGamePlatform_1.default {
         }
         this.getWX().saveAppToDesktop({
             success: (res) => {
-                LogsManager_1.default.echo("hlx 添加到桌面成功", JSON.stringify(res));
+                LogsManager.echo("hlx 添加到桌面成功", JSON.stringify(res));
                 StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.ADD_DESKTOP_SUCCESS);
                 successCall && successCall.call(thisObj);
             },
             fail: (res) => {
-                LogsManager_1.default.echo("hlx 添加到桌面失败", JSON.stringify(res));
+                LogsManager.echo("hlx 添加到桌面失败", JSON.stringify(res));
                 StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.ADD_DESKTOP_FAIL);
                 failCall && failCall.call(thisObj);
             }
@@ -62,3 +61,4 @@ class QQGamePlatform extends WXGamePlatform_1.default {
     }
 }
 exports.default = QQGamePlatform;
+//# sourceMappingURL=QQGamePlatform.js.map

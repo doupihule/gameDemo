@@ -948,3 +948,4 @@ Equation.MATH2PI = Math.PI * 2;
 Equation.ANGLETORADIAN = 180 / Math.PI;
 //弧度转角度
 Equation.RADIANTOANGLE = Math.PI / 180;
+//# sourceMappingURL=Equation.js.map

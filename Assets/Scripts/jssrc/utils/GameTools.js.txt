@@ -360,3 +360,4 @@ GameTools.canGift = false;
 /**是否是审核模式 */
 GameTools.isReview = false;
 GameTools.firestMap = "ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz0123456789";
+//# sourceMappingURL=GameTools.js.map

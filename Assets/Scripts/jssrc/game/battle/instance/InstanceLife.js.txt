@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const BattleConst_1 = require("../../sys/consts/BattleConst");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const PoolCode_1 = require("../../sys/consts/PoolCode");
 const PoolTools_1 = require("../../../framework/utils/PoolTools");
 const PassiveSkillData_1 = require("../data/PassiveSkillData");
@@ -366,7 +365,7 @@ class InstanceLife extends InstancePerformance_1.default {
             }
         }
         if (this.hp <= 0 && value > 0) {
-            LogsManager_1.default.errorTag("hpError", "死亡的角色还在被治疗");
+            LogsManager.errorTag("hpError", "死亡的角色还在被治疗");
         }
         this.hp += value;
         var changeValue = value;
@@ -382,7 +381,7 @@ class InstanceLife extends InstancePerformance_1.default {
             this.hp = this.maxHp;
         }
         if (!this.hpBar) {
-            LogsManager_1.default.errorTag("instanceError", "血条没了----");
+            LogsManager.errorTag("instanceError", "血条没了----");
         }
         else {
             //通知血条更新
@@ -871,3 +870,4 @@ class InstanceLife extends InstancePerformance_1.default {
     }
 }
 exports.default = InstanceLife;
+//# sourceMappingURL=InstanceLife.js.map

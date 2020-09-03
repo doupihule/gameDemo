@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const LoadingUI_1 = require("../../game/sys/view/loading/LoadingUI");
 const ScreenAdapterTools_1 = require("../utils/ScreenAdapterTools");
-const LogsManager_1 = require("./LogsManager");
 const GlobalData_1 = require("../utils/GlobalData");
 const WindowCfgs_1 = require("../../game/sys/consts/WindowCfgs");
 const LogsErrorCode_1 = require("../consts/LogsErrorCode");
@@ -14,7 +13,7 @@ const JumpManager_1 = require("./JumpManager");
 const ViewTools_1 = require("../components/ViewTools");
 const TimerManager_1 = require("./TimerManager");
 const ResourceManager_1 = require("./ResourceManager");
-const ResourceConst_1 = require("../../game/sys/consts/ResourceConst");
+const ResourceCommonConst_1 = require("../consts/ResourceCommonConst");
 class WindowManager {
     static OpenUI(UIName, params = null) {
         WindowManager.SwitchUIAPI(UIName, null, null, params);
@@ -39,7 +38,7 @@ class WindowManager {
             if (targetUI == null) {
                 var classIntance = uiCfgs.path;
                 targetUI = new classIntance();
-                var uiCobj = ResourceManager_1.default.loadUIPrefab(uiCfgs.prefabPath + "/" + openUIName, ResourceConst_1.default.boundle_ui);
+                var uiCobj = ResourceManager_1.default.loadUIPrefab(uiCfgs.prefabPath + "/" + openUIName, ResourceCommonConst_1.default.boundle_ui);
                 targetUI.setCObject(uiCobj);
                 if (!rootNode) {
                     // targetUI.setSize(ScreenAdapterTools.width,ScreenAdapterTools.height);
@@ -62,7 +61,7 @@ class WindowManager {
                 }
             }
             this._insertWindow(targetUI);
-            LogsManager_1.default.echo("WindowManager  OpenUI Complete:", openUIName, "currentWindow:", this.getCurrentWindowName());
+            LogsManager.echo("WindowManager  OpenUI Complete:", openUIName, "currentWindow:", this.getCurrentWindowName());
             targetUI.mouseEnabled = true;
             targetUI.setData(args);
         }
@@ -74,7 +73,7 @@ class WindowManager {
                 WindowManager.CloseUIAPI(closeUIName);
             }
             this._removeOneWindow(closeUIName);
-            LogsManager_1.default.echo("WindowManager close  Complete:", closeUIName, "currentWindow:", this.getCurrentWindowName());
+            LogsManager.echo("WindowManager close  Complete:", closeUIName, "currentWindow:", this.getCurrentWindowName());
         }
         this.updateUiVisible();
         // Message.instance.send(WindowEvent.WINDOW_EVENT_SWITCHUIFIN, {
@@ -120,7 +119,7 @@ class WindowManager {
         };
         //先从缓存拿
         var ui = PoolTools_1.default.getItem("AlertNewLocalUI", "sys");
-        LogsManager_1.default.echo("-----------setPopupTip---------", ui == null);
+        LogsManager.echo("-----------setPopupTip---------", ui == null);
         if (!ui) {
             ui = new AlertNewLocalUI_1.default();
         }
@@ -191,7 +190,7 @@ class WindowManager {
     }
     static CloseUIAPI(UIName) {
         if (WindowManager.UIInstance[UIName] != null) {
-            LogsManager_1.default.echo("WindowManager CloseUI:", UIName);
+            LogsManager.echo("WindowManager CloseUI:", UIName);
             var uiView = WindowManager.UIInstance[UIName];
             uiView.onClose && uiView.onClose();
             var parent = uiView.parent;
@@ -300,7 +299,7 @@ class WindowManager {
     }
     static CloseLoadingUI() {
         if (WindowManager.loadingUI != null) {
-            LogsManager_1.default.echo("WindowManager CloseLoadingUI");
+            LogsManager.echo("WindowManager CloseLoadingUI");
             WindowManager.loadingUI.hideLoading();
             // WindowManager.commonUILayer.removeChild(WindowManager.loadingUI);
         }
@@ -341,7 +340,7 @@ class WindowManager {
             return WindowManager.debugLayer;
         }
         else {
-            LogsManager_1.default.echo("打开toplayer", winName);
+            LogsManager.echo("打开toplayer", winName);
             return WindowManager.topUILayer;
         }
         // return WindowManager.commonUILayer;
@@ -387,7 +386,7 @@ class WindowManager {
         var cfgs = this.getWindowCfgs(winName);
         var path = cfgs.path;
         if (!path) {
-            LogsManager_1.default.errorTag(LogsErrorCode_1.default.WINDOW_ERROR, "_没有给这个窗口配置类对象:", winName);
+            LogsManager.errorTag(LogsErrorCode_1.default.WINDOW_ERROR, "_没有给这个窗口配置类对象:", winName);
             return null;
         }
         return new path();
@@ -399,7 +398,7 @@ class WindowManager {
     }
     static openAdvMask() {
         var UIName = "advMaskUI";
-        LogsManager_1.default.echo("zm 打开蒙版--------------------------");
+        LogsManager.echo("zm 打开蒙版--------------------------");
         WindowManager.maskLayer.visible = true;
         if (WindowManager.UIInstance[UIName] == null) {
             WindowManager.UIInstance[UIName] = this.initMaskUI();
@@ -413,7 +412,7 @@ class WindowManager {
         WindowManager.maskLayer.addChild(WindowManager.UIInstance[UIName]);
     }
     static closeAdvMask() {
-        LogsManager_1.default.echo("zm 关闭蒙版--------------------------");
+        LogsManager.echo("zm 关闭蒙版--------------------------");
         var UIName = "advMaskUI";
         if (WindowManager.UIInstance[UIName] != null) {
             WindowManager.UIInstance[UIName].onClose && WindowManager.UIInstance[UIName].onClose();
@@ -515,3 +514,4 @@ WindowManager.isShowUpdateTip = false;
 WindowManager._allWindowMap = [];
 WindowManager.UIInstance = {};
 WindowManager.uiMaker = LoadingUI_1.LoadingUI;
+//# sourceMappingURL=WindowManager.js.map

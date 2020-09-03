@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseViewExpand_1 = require("./BaseViewExpand");
 const UICompConst_1 = require("../consts/UICompConst");
-const LogsManager_1 = require("../manager/LogsManager");
 const csharp_1 = require("csharp");
 const puerts_1 = require("puerts");
 //按钮
@@ -23,9 +22,9 @@ class ButtonExpand extends BaseViewExpand_1.default {
         if (!this.__btnComp) {
             this.__btnComp = this.__cobject.GetComponent(puerts_1.$typeof(csharp_1.UnityEngine.UI.Button));
             if (!this.__btnComp) {
-                LogsManager_1.default.errorTag("btnCompError", "这个没有按钮组件:" + this.name);
+                LogsManager.errorTag("btnCompError", "这个没有按钮组件:" + this.name);
             }
-            LogsManager_1.default.echo("__注册点击事件---");
+            LogsManager.echo("__注册点击事件---");
             this.__btnComp.onClick.AddListener(() => {
                 thisSelf.clickFunc.call(thisSelf.clickObj, thisSelf.backParams);
             });
@@ -33,3 +32,4 @@ class ButtonExpand extends BaseViewExpand_1.default {
     }
 }
 exports.default = ButtonExpand;
+//# sourceMappingURL=ButtonExpand.js.map

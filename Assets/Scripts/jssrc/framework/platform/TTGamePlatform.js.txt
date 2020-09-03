@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const WXGamePlatform_1 = require("./WXGamePlatform");
-const LogsManager_1 = require("../manager/LogsManager");
 const UserInfo_1 = require("../common/UserInfo");
 const Message_1 = require("../common/Message");
 const UserModel_1 = require("../../game/sys/model/UserModel");
@@ -44,42 +43,42 @@ class TTGamePlatform extends WXGamePlatform_1.default {
         this.getWX().authorize({
             scope: "scope.userInfo",
             success(res) {
-                LogsManager_1.default.echo("yrc authorize success", JSON.stringify(res));
+                LogsManager.echo("yrc authorize success", JSON.stringify(res));
                 if (res && res.userInfo) {
-                    LogsManager_1.default.echo('>>loginbutton onTap 成功回调>>', JSON.stringify(res));
+                    LogsManager.echo('>>loginbutton onTap 成功回调>>', JSON.stringify(res));
                     callBack && callBack.call(thisObject, res);
                 }
                 else {
                     myThis.getWX().getSetting({
                         success(res) {
-                            LogsManager_1.default.echo("yrc getSetting success", JSON.stringify(res));
+                            LogsManager.echo("yrc getSetting success", JSON.stringify(res));
                             if (res.authSetting['scope.userInfo']) {
-                                LogsManager_1.default.echo("yrc start getUserInfo");
+                                LogsManager.echo("yrc start getUserInfo");
                                 myThis.getWX().getUserInfo({
                                     withCredentials: true, lang: "",
                                     success(res) {
-                                        LogsManager_1.default.echo("yrc getUserInfo success", JSON.stringify(res));
+                                        LogsManager.echo("yrc getUserInfo success", JSON.stringify(res));
                                         callBack && callBack.call(thisObject, res);
                                     }, fail(err) {
-                                        LogsManager_1.default.echo("yrc getUserInfo fail", JSON.stringify(err));
+                                        LogsManager.echo("yrc getUserInfo fail", JSON.stringify(err));
                                         callBack && callBack.call(thisObject, -1);
                                     }, complete(res) {
-                                        LogsManager_1.default.echo("yrc getUserInfo complete", JSON.stringify(res));
+                                        LogsManager.echo("yrc getUserInfo complete", JSON.stringify(res));
                                     }
                                 });
                             }
                         }, fail(err) {
-                            LogsManager_1.default.echo("==fail===", err);
+                            LogsManager.echo("==fail===", err);
                         }, complete() {
-                            LogsManager_1.default.echo("==complete===");
+                            LogsManager.echo("==complete===");
                         }
                     });
                 }
             }, fail(res) {
-                LogsManager_1.default.echo("yrc authorize fail", res);
+                LogsManager.echo("yrc authorize fail", res);
                 callBack && callBack.call(thisObject, -1);
             }, complete(res) {
-                LogsManager_1.default.echo("yrc authorize complete", res);
+                LogsManager.echo("yrc authorize complete", res);
             }
         });
     }
@@ -91,7 +90,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
         else if (UserInfo_1.default.isBaidu()) {
             this.recorder = this.getWX().getVideoRecorderManager();
         }
-        LogsManager_1.default.echo("yrc registerRecord ", this.recorder);
+        LogsManager.echo("yrc registerRecord ", this.recorder);
         this.recorder.onStart(res => {
             this.onStartRecord(res);
         });
@@ -99,13 +98,13 @@ class TTGamePlatform extends WXGamePlatform_1.default {
             this.onStopRecord(res);
         });
         this.recorder.onError(res => {
-            LogsManager_1.default.echo("yrc 录屏 onError", JSON.stringify(res));
+            LogsManager.echo("yrc 录屏 onError", JSON.stringify(res));
         });
     }
     /**对开始录屏注册事件 */
     onStartRecord(res) {
-        LogsManager_1.default.echo("yrc 开始录屏");
-        LogsManager_1.default.echo(res);
+        LogsManager.echo("yrc 开始录屏");
+        LogsManager.echo(res);
         this._startCallback && this._startCallback.call(this._startThisObj);
         this._startCallback = null;
         this._recordStartT = Client_1.default.instance.miniserverTime;
@@ -114,8 +113,8 @@ class TTGamePlatform extends WXGamePlatform_1.default {
     }
     /**对结束录屏注册事件 */
     onStopRecord(res) {
-        LogsManager_1.default.echo("yrc 结束录屏");
-        LogsManager_1.default.echo(res);
+        LogsManager.echo("yrc 结束录屏");
+        LogsManager.echo(res);
         var curT = Client_1.default.instance.miniserverTime;
         if (curT - this._recordStartT < 4000) {
             WindowManager_1.default.ShowTip("录屏时间不足，请重新录屏");
@@ -145,10 +144,10 @@ class TTGamePlatform extends WXGamePlatform_1.default {
         else if (UserInfo_1.default.isBaidu()) {
             durT = Math.min(durT, 120);
         }
-        LogsManager_1.default.echo("yrc tt recordStart", durT, recordType);
+        LogsManager.echo("yrc tt recordStart", durT, recordType);
         //判断是否已经开始录屏
         if (this.checkRecordStart()) {
-            LogsManager_1.default.echo("yrc tt record 已经开始---------------");
+            LogsManager.echo("yrc tt record 已经开始---------------");
             return;
         }
         //录屏类型记录
@@ -168,7 +167,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
                 cutTime = 15;
             }
             this._recordTimeRange = [cutTime, 0];
-            LogsManager_1.default.echo("clipObj_timeRange", cutTime);
+            LogsManager.echo("clipObj_timeRange", cutTime);
         }
         this.recorder.start({
             duration: durT,
@@ -178,16 +177,16 @@ class TTGamePlatform extends WXGamePlatform_1.default {
     recordStop(recordType = this.RECORD_TYPE_AUTO) {
         if (this.recorder) {
             if (!this.checkRecordStart()) {
-                LogsManager_1.default.echo("whn tt record 已经结束----------------");
+                LogsManager.echo("whn tt record 已经结束----------------");
                 return;
             }
-            LogsManager_1.default.echo("whn tt record------------------", this._recordType, recordType);
+            LogsManager.echo("whn tt record------------------", this._recordType, recordType);
             //暂时去掉此限制：避免手动开始的录屏无法结束录屏、视频path没有准备好，分享录屏掉起摄像机
             // // 自动开始的录屏可通过手动去结束，手动开始的录屏不可以自动结束，必须手动去结束
             // if (this._recordType == this.RECORD_TYPE_MANUAL && recordType == this.RECORD_TYPE_AUTO) {
             //     return;
             // }
-            LogsManager_1.default.echo("yrc tt recordStop");
+            LogsManager.echo("yrc tt recordStop");
             this.recorder.stop();
         }
     }
@@ -213,16 +212,16 @@ class TTGamePlatform extends WXGamePlatform_1.default {
         if (!this._videoPath)
             return;
         var videoPath = this._videoPath;
-        LogsManager_1.default.echo("yrc clipVideo path:", videoPath);
+        LogsManager.echo("yrc clipVideo path:", videoPath);
         var thisObj = this;
         var clipObj = {
             path: videoPath,
             success(res) {
-                LogsManager_1.default.echo("yrc clipvideo succ", JSON.stringify(res));
+                LogsManager.echo("yrc clipvideo succ", JSON.stringify(res));
                 thisObj._videoPath = res.videoPath;
                 UserInfo_1.default.platform.isHaveRecord = true;
             }, fail(err) {
-                LogsManager_1.default.echo('yrc clipvideo fail', JSON.stringify(err));
+                LogsManager.echo('yrc clipvideo fail', JSON.stringify(err));
             }
         };
         if (this._recordTimeRange) {
@@ -236,7 +235,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
             videoPath: this._videoPath,
             type: this._recordType
         });
-        LogsManager_1.default.echo(`shareVideo 开始！`, this._videoPath);
+        LogsManager.echo(`shareVideo 开始！`, this._videoPath);
         var myThis = this;
         var title_num = Math.random() > 0.5 ? '1' : '2';
         var title = TranslateFunc_1.default.instance.getTranslate("#tid_shareVideoTitle_" + title_num, 'TranslateGlobal');
@@ -253,19 +252,19 @@ class TTGamePlatform extends WXGamePlatform_1.default {
                         videoPath: myThis._videoPath,
                         type: myThis._recordType
                     });
-                    LogsManager_1.default.echo('shareVideo 分享成功！');
+                    LogsManager.echo('shareVideo 分享成功！');
                     UserInfo_1.default.platform.isHaveRecord = false;
                     myThis._videoPath = null;
                     //分享成功
                     callBack && callBack.call(thisObj, true);
                 },
                 fail(e) {
-                    LogsManager_1.default.echo(`shareVideo 分享失败！`, JSON.stringify(e));
+                    LogsManager.echo(`shareVideo 分享失败！`, JSON.stringify(e));
                     callBack && callBack.call(thisObj, false);
                     // myThis._videoPath = null;
                 },
                 complete(e) {
-                    LogsManager_1.default.echo("shareVideo complete", e);
+                    LogsManager.echo("shareVideo complete", e);
                     // myThis._videoPath = null;
                 }
             });
@@ -296,7 +295,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
                         videoPath: myThis._videoPath,
                         type: myThis._recordType
                     });
-                    LogsManager_1.default.echo('shareVideo 分享成功！');
+                    LogsManager.echo('shareVideo 分享成功！');
                     UserInfo_1.default.platform.isHaveRecord = false;
                     // myThis._videoPath = null;
                     //分享成功
@@ -307,7 +306,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
                     KariqiShareManager_1.default.saveShareRecord();
                 },
                 fail(e) {
-                    LogsManager_1.default.echo('shareVideo 分享失败！', JSON.stringify(e));
+                    LogsManager.echo('shareVideo 分享失败！', JSON.stringify(e));
                     callBack && callBack.call(thisObj, false);
                     // 兼容大刀 发送回调
                     Message_1.default.instance.send(ControlConst_1.default.TT_SHARE_FAIL, this);
@@ -318,7 +317,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
     }
     /**是否有可分享的录屏 */
     isCanShareVideo() {
-        LogsManager_1.default.echo("yrc111 isCanShareVideo _videoPath:", this._videoPath);
+        LogsManager.echo("yrc111 isCanShareVideo _videoPath:", this._videoPath);
         if (this._videoPath) {
             return true;
         }
@@ -327,17 +326,17 @@ class TTGamePlatform extends WXGamePlatform_1.default {
     getPhotoAuthorize(callBack, thisObject) {
         this.getWX().getSetting({
             success(res) {
-                LogsManager_1.default.echo("yrc tt getPhotoAuthorize setting", res);
+                LogsManager.echo("yrc tt getPhotoAuthorize setting", res);
                 TTGamePlatform.instance.getWX().authorize({
                     scope: 'scope.writePhotosAlbum',
                     success(res) {
                         //授权成功
-                        LogsManager_1.default.echo("yrc tt authorize writePhotosAlbum suc", res);
+                        LogsManager.echo("yrc tt authorize writePhotosAlbum suc", res);
                         callBack && callBack.call(thisObject, true);
                     },
                     fail(err) {
                         //拒绝授权
-                        LogsManager_1.default.echo("yrc tt authorize writePhotosAlbum fail", err);
+                        LogsManager.echo("yrc tt authorize writePhotosAlbum fail", err);
                         callBack && callBack.call(thisObject, false);
                     }
                 });
@@ -351,12 +350,12 @@ class TTGamePlatform extends WXGamePlatform_1.default {
                 filePath: filePath,
                 success(res) {
                     //保存成功
-                    LogsManager_1.default.echo("yrc tt saveImgToAlbum suc", res);
+                    LogsManager.echo("yrc tt saveImgToAlbum suc", res);
                     callBack && callBack.call(thisObject, true);
                 },
                 fail(err) {
                     //保存失败
-                    LogsManager_1.default.echo("yrc tt saveImgToAlbum err", err);
+                    LogsManager.echo("yrc tt saveImgToAlbum err", err);
                     callBack && callBack.call(thisObject, false);
                 }
             });
@@ -382,13 +381,13 @@ class TTGamePlatform extends WXGamePlatform_1.default {
         // wx.getUpdateManager().applyUpdate();
         var obj = {
             success: () => {
-                LogsManager_1.default.echo("_loginOut success__");
+                LogsManager.echo("_loginOut success__");
             },
             fail: () => {
-                LogsManager_1.default.echo("_loginOut fail__");
+                LogsManager.echo("_loginOut fail__");
             },
             complete: () => {
-                LogsManager_1.default.echo("_loginOut complete__");
+                LogsManager.echo("_loginOut complete__");
             }
         };
         this.getWX().exitMiniProgram(obj);
@@ -410,7 +409,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
         var tt = this.getWX();
         if (!this._hasInitMoreGame) {
             tt.onMoreGamesModalClose(function (res) {
-                LogsManager_1.default.echo("hlx 头条互推 onMoreGamesModalClose ", res);
+                LogsManager.echo("hlx 头条互推 onMoreGamesModalClose ", res);
             });
             // 监听小游戏跳转
             tt.onNavigateToMiniProgram(function (res) {
@@ -425,7 +424,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
                 else {
                     StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.JUMP_TO_OTHER_GAME_SUCCESS);
                 }
-                LogsManager_1.default.echo("hlx 头条互推 onNavigateToMiniProgram errCode:", res.errCode, "errMsg:", res.errMsg);
+                LogsManager.echo("hlx 头条互推 onNavigateToMiniProgram errCode:", res.errCode, "errMsg:", res.errMsg);
             });
         }
         var appLaunchOptions = [];
@@ -442,16 +441,16 @@ class TTGamePlatform extends WXGamePlatform_1.default {
         tt.showMoreGamesModal({
             appLaunchOptions: appLaunchOptions,
             success(res) {
-                LogsManager_1.default.echo("hlx 头条互推 showMoreGamesModal success", res.errMsg);
+                LogsManager.echo("hlx 头条互推 showMoreGamesModal success", res.errMsg);
             },
             fail(res) {
-                LogsManager_1.default.echo("hlx 头条互推 showMoreGamesModal fail", res.errMsg);
+                LogsManager.echo("hlx 头条互推 showMoreGamesModal fail", res.errMsg);
             }
         });
     }
     /**右上角三点分享相关 */
     sharePage() {
-        LogsManager_1.default.echo("hlx 初始默认分享配置");
+        LogsManager.echo("hlx 初始默认分享配置");
         this.getWX().showShareMenu({
             withShareTicket: true,
             success() {
@@ -505,7 +504,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
                         query: "inviterRid=" + rid + "&imgId=" + shareData.imgId,
                     };
                 }
-                LogsManager_1.default.echo(">>>>>>>>sharePage>>>>>>>", obj);
+                LogsManager.echo(">>>>>>>>sharePage>>>>>>>", obj);
                 myThis._lastShareImg = shareData.imgId;
                 return obj;
             };
@@ -519,7 +518,7 @@ class TTGamePlatform extends WXGamePlatform_1.default {
                     imageUrl: shareData.imgUrl,
                     query: "inviterRid=" + rid + "&imgId=" + shareData.imgId,
                 };
-                LogsManager_1.default.echo(">>>>>>>>sharePage>>>>>>>", obj);
+                LogsManager.echo(">>>>>>>>sharePage>>>>>>>", obj);
                 myThis._lastShareImg = shareData.imgId;
                 return obj;
             };
@@ -528,3 +527,4 @@ class TTGamePlatform extends WXGamePlatform_1.default {
     }
 }
 exports.default = TTGamePlatform;
+//# sourceMappingURL=TTGamePlatform.js.map

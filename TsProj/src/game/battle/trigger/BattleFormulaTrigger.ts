@@ -5,7 +5,7 @@ import BattleConst from "../../sys/consts/BattleConst";
 import ConditionTrigger from "./ConditionTrigger";
 import RandomUtis from "../../../framework/utils/RandomUtis";
 import BattleFunc from "../../sys/func/BattleFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import GameSwitch from "../../../framework/common/GameSwitch";
 import GameSwitchConst from "../../sys/consts/GameSwitchConst";
 import BattleLogsManager from "../../sys/manager/BattleLogsManager";

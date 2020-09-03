@@ -1,4 +1,4 @@
-import LogsManager from "../../../framework/manager/LogsManager";
+
 
 export default class BattleLogsManager {
 

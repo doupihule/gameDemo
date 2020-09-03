@@ -196,6 +196,31 @@ namespace GameUtils
             _tempColor.a = a;
             return _tempColor;
         }
+
+         //移除所有子对象
+         public static void RemoveAllChild(Transform tran)
+        {
+            int nums = tran.childCount;
+            for(int i = nums-1; i >= 0; i--)
+            {
+                tran.GetChild(i).parent = null;
+            }
+        }
+
+        public static GameObject GetChildByName(Transform tran,string name)
+        {
+            int nums = tran.childCount;
+            for (int i = nums - 1; i >= 0; i--)
+            {
+                Transform childTrans = tran.GetChild(i);
+                if (childTrans.name.Equals(name))
+                {
+                    return childTrans.gameObject;
+                }
+            }
+            return null;
+        }
+
     }
 }
 

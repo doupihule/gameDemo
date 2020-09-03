@@ -44,3 +44,4 @@ PoolCode.POOL_FLAT = "POOL_FLAT";
 PoolCode.pool_model_battle = "battle";
 PoolCode.pool_model_sys = "sys";
 PoolCode.pool_model_scene = "scene";
+//# sourceMappingURL=PoolCode.js.map

@@ -29,7 +29,7 @@ import BattleLogsManager from '../../sys/manager/BattleLogsManager';
 import InstancePlayer from '../instance/InstancePlayer';
 import BattleSkillData from '../data/BattleSkillData';
 import ChooseTrigger from '../trigger/ChooseTrigger';
-import LogsManager from '../../../framework/manager/LogsManager';
+
 import ResourceConst from '../../sys/consts/ResourceConst';
 import PassiveSkillData from '../data/PassiveSkillData';
 import PassiveSkillTrigger from '../trigger/PassiveSkillTrigger';

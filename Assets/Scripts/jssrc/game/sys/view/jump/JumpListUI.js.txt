@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const JumpManager_1 = require("../../../../framework/manager/JumpManager");
 const TimerManager_1 = require("../../../../framework/manager/TimerManager");
 const GlobalParamsFunc_1 = require("../../func/GlobalParamsFunc");
-const LogsManager_1 = require("../../../../framework/manager/LogsManager");
 const JumpConst_1 = require("../../consts/JumpConst");
 const UserInfo_1 = require("../../../../framework/common/UserInfo");
 const WindowManager_1 = require("../../../../framework/manager/WindowManager");
@@ -54,7 +53,7 @@ class JumpListUI extends UIBaseView_1.default {
     }
     /**点击图片 */
     clickItem(data) {
-        LogsManager_1.default.echo("yrc clickItem", data);
+        LogsManager.echo("yrc clickItem", data);
         var sendData = {
             appId: data.GameAppId,
             path: data.PromoteLink,
@@ -97,3 +96,4 @@ class JumpListUI extends UIBaseView_1.default {
     }
 }
 exports.default = JumpListUI;
+//# sourceMappingURL=JumpListUI.js.map

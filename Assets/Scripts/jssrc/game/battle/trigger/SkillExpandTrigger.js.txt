@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const BattleFunc_1 = require("../../sys/func/BattleFunc");
 const BattleLogsManager_1 = require("../../sys/manager/BattleLogsManager");
 const UserInfo_1 = require("../../../framework/common/UserInfo");
@@ -20,7 +19,7 @@ class SkillExpandTrigger {
             var type = info[0];
             var func = this["skillExpand_" + type];
             if (!func) {
-                LogsManager_1.default.errorTag("skillExpandError", "错误的技能扩展类型:" + type);
+                LogsManager.errorTag("skillExpandError", "错误的技能扩展类型:" + type);
             }
             else {
                 func.call(this, instance, skill, info, useArr, isFollow);
@@ -102,7 +101,7 @@ class SkillExpandTrigger {
             var delayTime = Number(params[1]);
             var ratio = Number(params[6]);
             if (params.length < 7) {
-                LogsManager_1.default.errorTag("battleCfgsError", "受击抖动配置长度错误,skillId:" + skill._skillId);
+                LogsManager.errorTag("battleCfgsError", "受击抖动配置长度错误,skillId:" + skill._skillId);
             }
             //必须满足概率才硬直或者能够移动
             if (targetInstance.checkCanMove() && (ratio >= 10000 || RandomUtis_1.default.getOneRandomInt(10000, 0, BattleFunc_1.default.battleRandomIndex) < ratio)) {
@@ -128,3 +127,4 @@ exports.default = SkillExpandTrigger;
 //技能扩展触发器. 专门用来扩展一些特殊的技能效果.
 //连线特效
 SkillExpandTrigger.EXPAND_TYLE_LINEEFFECT = "1";
+//# sourceMappingURL=SkillExpandTrigger.js.map

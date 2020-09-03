@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class ResourceCommonConst {
+}
+exports.default = ResourceCommonConst;
+ResourceCommonConst.boundle_ui = "uiab";
+ResourceCommonConst.boundle_map = "map";
+ResourceCommonConst.boundle_base = "baseab";
+ResourceCommonConst.boundle_animation = "animation";
+ResourceCommonConst.boundle_uiimage = "uiimageab";
+//3d模型
+ResourceCommonConst.boundle_model3d = "model3dab";
+ResourceCommonConst.UIResPath = "Assets/UI/UIRes/";
+ResourceCommonConst.baseLabelPrefeb = "base/BaseLabel";
+ResourceCommonConst.baseContainerPrefeb = "base/BaseContainer";
+//# sourceMappingURL=ResourceCommonConst.js.map

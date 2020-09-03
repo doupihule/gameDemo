@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const GameTools_1 = require("../../utils/GameTools");
-const LogsManager_1 = require("./LogsManager");
 const SceneReference_1 = require("../consts/SceneReference");
 const GameSwitch_1 = require("../common/GameSwitch");
 const BannerComp_1 = require("../platform/comp/BannerComp");
@@ -36,7 +35,7 @@ class BannerAdManager {
         if (!SceneReference_1.default.isInBannerScene()) {
             GameTools_1.default.canGift = false;
             GameTools_1.default.canLeadBanner = false;
-            LogsManager_1.default.echo(" GameTools.banner false");
+            LogsManager.echo(" GameTools.banner false");
             return;
         }
         else {
@@ -44,20 +43,20 @@ class BannerAdManager {
             GameTools_1.default.canGift = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_MYSTERIOUSGIFT);
         }
         if (!BannerAdManager.isPlatformSupport()) {
-            LogsManager_1.default.echo("平台不支持banner banner开关关闭");
+            LogsManager.echo("平台不支持banner banner开关关闭");
             GameTools_1.default.canQuickBanner = false;
             GameTools_1.default.canGift = false;
             GameTools_1.default.canLeadBanner = false;
         }
-        LogsManager_1.default.echo(" GameTools.canQuickBanner:", GameTools_1.default.canQuickBanner);
-        LogsManager_1.default.echo(" GameTools.canLeadBanner:", GameTools_1.default.canLeadBanner);
-        LogsManager_1.default.echo(" GameTools.canGift:", GameTools_1.default.canGift);
+        LogsManager.echo(" GameTools.canQuickBanner:", GameTools_1.default.canQuickBanner);
+        LogsManager.echo(" GameTools.canLeadBanner:", GameTools_1.default.canLeadBanner);
+        LogsManager.echo(" GameTools.canGift:", GameTools_1.default.canGift);
     }
     static isPlatformSupport() {
         if (UserInfo_1.default.isTT()) {
-            LogsManager_1.default.echo("krma. UserInfo.platform.getSystemInfo().appName " + UserInfo_1.default.platform.getSystemInfo().appName);
+            LogsManager.echo("krma. UserInfo.platform.getSystemInfo().appName " + UserInfo_1.default.platform.getSystemInfo().appName);
             if (UserInfo_1.default.platform.getSystemInfo().appName == "Douyin" || UserInfo_1.default.platform.getSystemInfo().appName == "PPX") {
-                LogsManager_1.default.echo("krma. 该渠道不支持banner", UserInfo_1.default.platform.getSystemInfo().appName);
+                LogsManager.echo("krma. 该渠道不支持banner", UserInfo_1.default.platform.getSystemInfo().appName);
                 return false;
             }
         }
@@ -78,7 +77,7 @@ class BannerAdManager {
      */
     static addBannerQuick(parent, onErrorCallback = null, callbackObj = null, hideType = TopViewAutoComp_1.TopViewAutoComp.HIDE_TYPE_DESTROY, quickBannerType = null, style = null) {
         if (!parent.windowName) {
-            LogsManager_1.default.errorTag("bannerParamsError", "传入的对象没有windowName");
+            LogsManager.errorTag("bannerParamsError", "传入的对象没有windowName");
             return;
         }
         var jumpBannerState = KariqiShareManager_1.default.getOneUIBannerJumpState(parent.windowName);
@@ -87,7 +86,7 @@ class BannerAdManager {
             BannerStyleJumpComp_1.default.instance.showJump(parent, onErrorCallback, callbackObj);
             return;
         }
-        LogsManager_1.default.echo("zm.addBannerParent-----------", parent.windowName);
+        LogsManager.echo("zm.addBannerParent-----------", parent.windowName);
         if (GameTools_1.default.canQuickBanner) {
             // 没有传失败回调，默认banner失败加载推荐组件
             if (UserInfo_1.default.isWX()) {
@@ -205,3 +204,4 @@ BannerAdManager.BANNER_ORDER_TYPE_RECOMMEND = 2;
 BannerAdManager.BANNER_ORDER_TYPE_ORDER = 3;
 /** BANNER序列类型：只有Banner */
 BannerAdManager.BANNER_ORDER_TYPE_JUST_BANNER = 4;
+//# sourceMappingURL=BannerAdManager.js.map

@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FogFindWayControler = void 0;
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 /**寻路控制器 */
 class FogFindWayControler {
     constructor(fogControler) {
@@ -49,7 +48,7 @@ class FogFindWayControler {
                     tmpNode = tmpNode.tmpCell;
                     //起点是没有上一个格子 说明结束了
                     if (tmpNode.tmpCell == null) {
-                        LogsManager_1.default.echo("找到终点了", times);
+                        LogsManager.echo("找到终点了", times);
                         break;
                     }
                 }
@@ -106,3 +105,4 @@ class FogFindWayControler {
     }
 }
 exports.FogFindWayControler = FogFindWayControler;
+//# sourceMappingURL=FogFindWayControler.js.map

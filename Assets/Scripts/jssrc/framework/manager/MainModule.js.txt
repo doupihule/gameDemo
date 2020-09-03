@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const SoundManager_1 = require("./SoundManager");
-const LogsManager_1 = require("./LogsManager");
 const GlobalData_1 = require("../utils/GlobalData");
 const WindowManager_1 = require("./WindowManager");
 const WindowCfgs_1 = require("../../game/sys/consts/WindowCfgs");
@@ -35,6 +34,8 @@ class MainModule {
         Message_1.default.instance.add(MsgCMD_1.default.VIDEO_STOP, this);
         Message_1.default.instance.add(MsgCMD_1.default.VIDEO_PLAY, this);
         WindowManager_1.default.OpenUI(WindowCfgs_1.WindowCfgs.GameMainUI);
+        var model = ViewTools_1.default.create3DModel("battle_prefab", "Main");
+        GlobalData_1.default.stage.addChild(model);
     }
     //Loading页面显示后开始加载资源
     onLoadingUIComplete() {
@@ -54,7 +55,7 @@ class MainModule {
         Client_1.default.instance.send(Method_1.default.User_login, {}, this.onLoginResult, this);
     }
     onLoginResult(result) {
-        LogsManager_1.default.echo("yrc onLoginResult", result);
+        LogsManager.echo("yrc onLoginResult", result);
         var serverData = result;
         if (!GlobalData_1.default.checkUserCloudStorage()) {
             Client_1.default.instance.globalLoginBackData = result;
@@ -68,12 +69,12 @@ class MainModule {
             //覆盖服务器来回的开关参数
             if (result.data.config.switch) {
                 UserInfo_1.default.platform.coverServerSwitchMap(result.data.config.switch);
-                LogsManager_1.default.echo("yrc gameswitch resultSwitch", result.data.config.switch);
+                LogsManager.echo("yrc gameswitch resultSwitch", result.data.config.switch);
             }
             KakuraClient_1.default.instance.registHeartBeat();
         }
-        LogsManager_1.default.echo("yrc SWITCH_LOG_PANEL:", GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_LOG_PANEL));
-        LogsManager_1.default.setLogGroupVisible(GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_LOG_PANEL));
+        LogsManager.echo("yrc SWITCH_LOG_PANEL:", GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_LOG_PANEL));
+        LogsManager.setLogGroupVisible(GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_LOG_PANEL));
         var userData = serverData.user;
         //初始化所有的模块数据
         ModelToServerMapCommon_1.default.initModelToServerMap();
@@ -113,7 +114,7 @@ class MainModule {
     //value 完成任务数量,key,完成的任务对应的key, tag,任务描述
     changeShowMainTask(value, key, tag = null) {
         MainModule.showMainTask += value;
-        LogsManager_1.default.echo("yrc showMainTask", value, MainModule.showMainTask, "tag:", tag);
+        LogsManager.echo("yrc showMainTask", value, MainModule.showMainTask, "tag:", tag);
         //同时记录对应的任务key标记为true.为了一些特殊情况判断
         this._taskCompMap[key] = true;
         //所有任务都完成就进入主界面
@@ -121,7 +122,7 @@ class MainModule {
             this.showGameMain();
         }
         else if (MainModule.showMainTask < 0) {
-            LogsManager_1.default.errorTag("mainTaskError", "taskError", MainModule.showMainTask, tag);
+            LogsManager.errorTag("mainTaskError", "taskError", MainModule.showMainTask, tag);
         }
     }
     //判断某个任务是否完成
@@ -168,7 +169,7 @@ class MainModule {
         //最顶层2级容器（越高级优先级越高）
         WindowManager_1.default.debugLayer = ViewTools_1.default.createContainer("debugLayer");
         WindowManager_1.default.rootLayer.addChild(WindowManager_1.default.debugLayer);
-        LogsManager_1.default.initLogPanel();
+        LogsManager.initLogPanel();
         if (UserInfo_1.default.isWeb()) {
             GameSwitch_1.default.switchMap.SWITCH_GM_DEBUG = 1;
             GameSwitch_1.default.switchMap.SWITCH_CD_DEBUG = 1;
@@ -190,16 +191,16 @@ class MainModule {
         }
     }
     onTTShow() {
-        LogsManager_1.default.echo("yrc onTTShow");
+        LogsManager.echo("yrc onTTShow");
         if (!UserInfo_1.default.platform.isPlayVideo) {
             //不播放视频广告的时候才播BGM
             if (WindowManager_1.default.isUIOpened(WindowCfgs_1.WindowCfgs.GameMainUI)) {
-                LogsManager_1.default.echo("yrc have GameMainUI");
+                LogsManager.echo("yrc have GameMainUI");
                 SoundManager_1.default.stopMusic();
                 SoundManager_1.default.playBGM(MusicConst_1.MusicConst.MUSIC_BGM);
             }
             else {
-                LogsManager_1.default.echo("yrc have not GameMainUI");
+                LogsManager.echo("yrc have not GameMainUI");
                 SoundManager_1.default.playBGM();
             }
         }
@@ -226,7 +227,7 @@ class MainModule {
                 this.stopBGM();
                 break;
             case MsgCMD_1.default.CLIENT_SEND_LOG:
-                LogsManager_1.default.sendAndShowLog();
+                LogsManager.sendAndShowLog();
                 break;
         }
     }
@@ -240,3 +241,4 @@ MainModule.task_onloginResult = "task_onloginResult"; //登入完成
 MainModule.task_mergeFileBack = "task_mergeFileBack"; //文件合并回来
 MainModule.task_kariquLogin = "task_kariquLogin"; //卡日曲登录结果
 MainModule.showMainTask = 6; // 进主界面6个任务, 1,版本检查结束, 2, 312登入初始化完成, 3,fileconfig.json加载完成 4.分包下载完成 ,5.合并文件完成,6卡日曲登录回调 7获取系统信息完成(只有android和ios有)
+//# sourceMappingURL=MainModule.js.map

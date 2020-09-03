@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const FileUtils_1 = require("../../../framework/utils/FileUtils");
 const StatisticsExtendManager_1 = require("../../../framework/manager/StatisticsExtendManager");
 const Client_1 = require("../../../framework/common/kakura/Client");
@@ -26,10 +25,10 @@ class StatisticsManager {
                 disT -= this.loadingOutT;
             }
             if (disT > 100000) {
-                LogsManager_1.default.echo("krma. start " + this.mainStartT + " end " + Client_1.default.instance.miniserverTime + " time " + disT + " except " + this.loadingOutT);
-                LogsManager_1.default.sendErrorToPlatform("loadingTime_moreThan_100000", LogsManager_1.default.errorTage_serverError, 1000, "loadingTime_moreThan_100000");
+                LogsManager.echo("krma. start " + this.mainStartT + " end " + Client_1.default.instance.miniserverTime + " time " + disT + " except " + this.loadingOutT);
+                LogsManager.sendErrorToPlatform("loadingTime_moreThan_100000", LogsManager.errorTage_serverError, 1000, "loadingTime_moreThan_100000");
             }
-            LogsManager_1.default.sendLoadingToAiCloud(disT);
+            LogsManager.sendLoadingToAiCloud(disT);
         }
     }
     /**loading过程中隐藏到后台的时间长 */
@@ -78,3 +77,4 @@ StatisticsManager.FOG_EVENT_TRIGGER = { groupId: StatisticsManager.GROUP_FOG, so
 StatisticsManager.FOG_EVENT_COMPLETE = { groupId: StatisticsManager.GROUP_FOG, sortId: 7, name: "fog_event_complete" }; //迷雾街区完成事件的人数/次数
 StatisticsManager.FOG_ITEM_GET = { groupId: StatisticsManager.GROUP_FOG, sortId: 9, name: "fog_item_get" }; //迷雾街区大巴车获得局内道具的人数/次数
 StatisticsManager.FOG_BATTLE_START = { groupId: StatisticsManager.GROUP_FOG, sortId: 10, name: "fog_battle_start" }; //进入战斗的人数/次数
+//# sourceMappingURL=StatisticsManager.js.map

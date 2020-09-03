@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RecommendationBannerComp = void 0;
-const LogsManager_1 = require("../../manager/LogsManager");
 const StatisticsManager_1 = require("../../../game/sys/manager/StatisticsManager");
 const TopViewAutoComp_1 = require("./TopViewAutoComp");
 const ChannelConst_1 = require("../../../game/sys/consts/ChannelConst");
@@ -42,7 +41,7 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
      * banner预加载
      */
     static register() {
-        LogsManager_1.default.echo("hlx recommend banner 预加载");
+        LogsManager.echo("hlx recommend banner 预加载");
         // 不支持的组件直接返回
         if (!RecommendationBannerComp.canUse()) {
             return;
@@ -58,7 +57,7 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
      * 创建Banner推广组件：微信
      */
     static create(parent, onErrorCallback = null, callbackObj = null, hideType = TopViewAutoComp_1.TopViewAutoComp.HIDE_TYPE_DESTROY) {
-        LogsManager_1.default.echo("recommendBannerComp create start:", (parent && parent.windowName) ? GameTools_1.default.decryptStr(parent.windowName) : null);
+        LogsManager.echo("recommendBannerComp create start:", (parent && parent.windowName) ? GameTools_1.default.decryptStr(parent.windowName) : null);
         // 不支持的组件直接返回
         if (!RecommendationBannerComp.canUse()) {
             onErrorCallback && onErrorCallback.call(this);
@@ -88,15 +87,15 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
     /**注册banner */
     registerBanner(offest = -0.1) {
         var thisObj = this;
-        LogsManager_1.default.echo("hlx register RecommendBanner");
+        LogsManager.echo("hlx register RecommendBanner");
         StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.RECOMMEND_BANNER_PULLNUM);
         var wx = UserInfo_1.default.platform.getWX();
         if (this._bannerAd) {
-            LogsManager_1.default.warn("hlx banner 实例已经创建，无需重复注册，请检查代码逻辑是否存在异常");
+            LogsManager.warn("hlx banner 实例已经创建，无需重复注册，请检查代码逻辑是否存在异常");
             return;
         }
         if (!wx.createGameBanner) {
-            LogsManager_1.default.warn("noGameBanner", "没有Gamebanner组件");
+            LogsManager.warn("noGameBanner", "没有Gamebanner组件");
             this._doBannerCallBack();
             StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.RECOMMEND_BANNER_PULLFAILED);
             return;
@@ -119,7 +118,7 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             this._loadSuccess = false;
             var bannerAd = this._bannerAd;
             bannerAd.onError((err) => {
-                LogsManager_1.default.echo("hlx recommend bannerAd.onError----------------------", JSON.stringify(err));
+                LogsManager.echo("hlx recommend bannerAd.onError----------------------", JSON.stringify(err));
                 StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.RECOMMEND_BANNER_PULLFAILED);
                 // 由于registerBanner为异步预加载。所以不能直接执行失败回调。标记状态。在show时回调
                 this._hasError = true;
@@ -130,14 +129,14 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
                 this._hasError = false;
                 this._loadSuccess = true;
                 // 拉取不同的banner大小会不一样。要根据大小调整top left
-                LogsManager_1.default.echo("hlx recommend bannerAd.onLoad:");
+                LogsManager.echo("hlx recommend bannerAd.onLoad:");
                 StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.RECOMMEND_BANNER_PULLSUCCESS);
                 bannerAd.style.left = (w - bannerAd.style.width) / 2;
                 bannerAd.style.top = h - bannerAd.style.height + offest;
                 this._checkUIState(true);
             });
             bannerAd.onResize(size => {
-                LogsManager_1.default.echo("hlx recommend bannerAd.onResize:", size.width, size.height);
+                LogsManager.echo("hlx recommend bannerAd.onResize:", size.width, size.height);
                 // 如果一开始设置的 banner 宽度超过了系统限制，可以在此处加以调整
                 // 头条存在width=0情况，需要做特殊判断
                 if (size.width != 0) {
@@ -148,7 +147,7 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
         }
     }
     _doBannerCallBack() {
-        LogsManager_1.default.echo("hlx _doRecommendBannerCallBack _onErrorCallback");
+        LogsManager.echo("hlx _doRecommendBannerCallBack _onErrorCallback");
         var tempFunc = this._onErrorCallback;
         var tempObj = this._callbackObj;
         // 注意！由于组件复用，此处无需重置回调。新界面调用组件，会覆盖回调
@@ -162,11 +161,11 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
     static canUse() {
         if (UserInfo_1.default.isWX()) {
             if (!RecommendationBannerComp.recommendBannerId) {
-                LogsManager_1.default.echo("hlx recommend bannerId 未配置，不初始化banner");
+                LogsManager.echo("hlx recommend bannerId 未配置，不初始化banner");
                 return false;
             }
             if (!UserInfo_1.default.platform.getSystemInfo().SDKVersion) {
-                LogsManager_1.default.echo('hlx recommend not support：取不到SDKVersion');
+                LogsManager.echo('hlx recommend not support：取不到SDKVersion');
                 return false;
             }
             var currentVersion = UserInfo_1.default.platform.getSystemInfo().SDKVersion;
@@ -174,18 +173,18 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
                 return true;
             }
             if (!UserInfo_1.default.platform.getWX().createGameBanner) {
-                LogsManager_1.default.echo('hlx recommend createGameBanner 方法不存在：不初始化banner');
+                LogsManager.echo('hlx recommend createGameBanner 方法不存在：不初始化banner');
                 return false;
             }
         }
-        LogsManager_1.default.echo('hlx recommend not support');
+        LogsManager.echo('hlx recommend not support');
         return false;
     }
     /**
      * 组件销毁
      */
     destroy() {
-        LogsManager_1.default.echo("hlx recommend banner destroy:", GameTools_1.default.decryptStr(this._parentName));
+        LogsManager.echo("hlx recommend banner destroy:", GameTools_1.default.decryptStr(this._parentName));
         super.destroy();
         this._onErrorCallback = null;
         this._callbackObj = null;
@@ -198,7 +197,7 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             this._bannerAd.hide();
         }
         if (this._isShowBanner || this._hasError) {
-            LogsManager_1.default.echo("hlx recommend banner reload, ad destory: _isShowBanner:", this._isShowBanner, " _hasError:", this._hasError);
+            LogsManager.echo("hlx recommend banner reload, ad destory: _isShowBanner:", this._isShowBanner, " _hasError:", this._hasError);
             // 由于需要预加载所以要销毁重新拉取新的banner
             if (typeof this._bannerAd.destroy == "function") {
                 this._bannerAd.destroy();
@@ -236,7 +235,7 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             this.registerBanner();
         }
         if (this._hasError) {
-            LogsManager_1.default.echo("hlx banner _compShow：banner加载存在error直接执行失败回调");
+            LogsManager.echo("hlx banner _compShow：banner加载存在error直接执行失败回调");
             this._doBannerCallBack();
             return;
         }
@@ -244,7 +243,7 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
             this._isShowBanner = true;
         }
         else {
-            LogsManager_1.default.echo("hlx redommend banner comp show 没有达到条件：loadSuccess ", this._loadSuccess);
+            LogsManager.echo("hlx redommend banner comp show 没有达到条件：loadSuccess ", this._loadSuccess);
         }
     }
     /** 子类重写组件隐藏方法 */
@@ -268,3 +267,4 @@ class RecommendationBannerComp extends TopViewAutoComp_1.TopViewAutoComp {
     }
 }
 exports.RecommendationBannerComp = RecommendationBannerComp;
+//# sourceMappingURL=RecommendationBannerComp.js.map

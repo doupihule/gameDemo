@@ -5,8 +5,6 @@ const Message_1 = require("../../common/Message");
 const WindowEvent_1 = require("../../event/WindowEvent");
 const JumpManager_1 = require("../../manager/JumpManager");
 const WindowManager_1 = require("../../manager/WindowManager");
-const BannerStyleJumpUI_1 = require("../../view/jump/BannerStyleJumpUI");
-const ScreenAdapterTools_1 = require("../../utils/ScreenAdapterTools");
 const KariquShareConst_1 = require("../../consts/KariquShareConst");
 class BannerStyleJumpComp {
     constructor() {
@@ -28,15 +26,6 @@ class BannerStyleJumpComp {
         ];
         Message_1.default.instance.add(WindowEvent_1.default.WINDOW_EVENT_SWITCHUIFIN, this);
         var uiinfo = this._uiJumpMap[0];
-        if (!uiinfo.ui) {
-            uiinfo.ui = new BannerStyleJumpUI_1.default();
-            uiinfo.ui.y = ScreenAdapterTools_1.default.height - BannerStyleJumpComp.jumpHeight;
-        }
-        uiinfo = this._uiJumpMap[1];
-        if (!uiinfo.ui) {
-            uiinfo.ui = new BannerStyleJumpUI_1.default();
-            uiinfo.ui.y = 80;
-        }
     }
     static get instance() {
         if (!this._instance) {
@@ -145,3 +134,4 @@ class BannerStyleJumpComp {
 exports.default = BannerStyleJumpComp;
 //互推页的高度
 BannerStyleJumpComp.jumpHeight = 170;
+//# sourceMappingURL=BannerStyleJumpComp.js.map

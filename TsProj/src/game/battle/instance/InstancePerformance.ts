@@ -4,7 +4,7 @@ import GameConsts from "../../sys/consts/GameConsts";
 import BattleConst from "../../sys/consts/BattleConst";
 import BattleFunc from "../../sys/func/BattleFunc";
 import BattleBuffData from "../data/BattleBuffData";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import PoolTools from "../../../framework/utils/PoolTools";
 import PoolCode from "../../sys/consts/PoolCode";
 import BattleLogsManager from "../../sys/manager/BattleLogsManager";
@@ -670,7 +670,7 @@ export default class InstancePerformance extends InstanceMove {
 		if (this._shade) {
 			this._shade.removeSelf();
 			for (var i = this.totalViewNums - 1; i >= 0; i--) {
-				var childShade:any = this._shade.getChildAt(i,true);
+				var childShade:any = this._shade.getChildAt(i);
 				PoolTools.cacheItem(PoolCode.POOL_SHADE, childShade);
 				childShade.removeSelf();
 			}

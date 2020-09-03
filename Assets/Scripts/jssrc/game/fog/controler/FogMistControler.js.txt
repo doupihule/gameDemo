@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const FogFunc_1 = require("../../sys/func/FogFunc");
 const FogModel_1 = require("../../sys/model/FogModel");
 const FogConst_1 = require("../../sys/consts/FogConst");
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 /**总控制器 */
 class FogMistControler {
     constructor(controler) {
@@ -22,7 +21,7 @@ class FogMistControler {
             for (var i = 0; i <= xNums; i++) {
                 var data = FogModel_1.default.instance.getCellInfoById(i + "_" + j);
                 if (i == 2 && j == 6) {
-                    LogsManager_1.default.echo("kasjdkasd", data);
+                    LogsManager.echo("kasjdkasd", data);
                 }
                 if (!data) {
                     this._mistsData[j][i] = false;
@@ -104,3 +103,4 @@ FogMistControler.littledarkMatrix = [
     0, 0, 0.6, 0, 0,
     0, 0, 0, 1, 0,
 ];
+//# sourceMappingURL=FogMistControler.js.map

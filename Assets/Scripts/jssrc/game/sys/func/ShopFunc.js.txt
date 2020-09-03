@@ -29,3 +29,4 @@ class ShopFunc extends BaseFunc_1.default {
     }
 }
 exports.default = ShopFunc;
+//# sourceMappingURL=ShopFunc.js.map

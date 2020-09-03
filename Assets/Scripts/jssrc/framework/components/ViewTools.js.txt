@@ -2,20 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseViewExpand_1 = require("./BaseViewExpand");
 const UICompConst_1 = require("../consts/UICompConst");
-const LogsManager_1 = require("../manager/LogsManager");
 const ButtonExpand_1 = require("./ButtonExpand");
 const ImageExpand_1 = require("./ImageExpand");
 const ListExpand_1 = require("./ListExpand");
 const BaseContainer_1 = require("./BaseContainer");
 const LabelExpand_1 = require("./LabelExpand");
 const SpineGraphicExpand_1 = require("./SpineGraphicExpand");
-const ResourceConst_1 = require("../../game/sys/consts/ResourceConst");
+const ResourceCommonConst_1 = require("../consts/ResourceCommonConst");
+const ResourceManager_1 = require("../manager/ResourceManager");
+const Base3dViewExpand_1 = require("./Base3dViewExpand");
+const UIBaseView_1 = require("./UIBaseView");
 class ViewTools {
     //自动绑定cobj
-    static autoBindingCObj(cobj, forceBinding = false) {
+    static autoBindingCObj(cobj, forceBinding = false, targetCompType = null) {
         var baseView = ViewTools.cobjMap.get(cobj);
         if (!baseView) {
-            baseView = this.getBaseViewByCobj(cobj, forceBinding);
+            baseView = this.getBaseViewByCobj(cobj, forceBinding, targetCompType);
             if (baseView) {
                 ViewTools.cobjMap.set(cobj, baseView);
             }
@@ -32,13 +34,20 @@ class ViewTools {
         ViewTools.cobjMap.delete(cobj);
     }
     //forceBinding 是否强制绑定.主要是针对没有定义名字的对象. 比如有时也需要通过getChildAt获取
-    static getBaseViewByCobj(cobj, forceBinding = false) {
+    static getBaseViewByCobj(cobj, forceBinding = false, targetCompType = null) {
         var name = cobj.name;
-        var uiType = name.split("_")[0];
+        var uiType;
+        //如果手动指定组件类型
+        if (targetCompType) {
+            uiType = targetCompType;
+        }
+        else {
+            uiType = name.split("_")[0];
+        }
         var viewClassName = UICompConst_1.default.classMap[uiType];
         if (!viewClassName) {
             if (forceBinding) {
-                LogsManager_1.default.echo("这个对象没有指定合法命名", name);
+                LogsManager.echo("这个对象没有指定合法命名", name);
                 var baseView = new BaseViewExpand_1.default();
                 baseView.setCObject(cobj);
                 return baseView;
@@ -68,6 +77,12 @@ class ViewTools {
             else if (uiType == UICompConst_1.default.comp_spine) {
                 return new SpineGraphicExpand_1.default(null, null, cobj);
             }
+            else if (uiType == UICompConst_1.default.comp_base3d) {
+                return new Base3dViewExpand_1.default();
+            }
+            else if (uiType == UICompConst_1.default.comp_ui) {
+                return new UIBaseView_1.default();
+            }
         }
         return null;
     }
@@ -77,7 +92,7 @@ class ViewTools {
         return ctn;
     }
     //第一次创建图片的时候 必定 调整尺寸
-    static createImage(url = "", boundleName = ResourceConst_1.default.boundle_uiimage) {
+    static createImage(url = "", boundleName = ResourceCommonConst_1.default.boundle_uiimage) {
         var img = new ImageExpand_1.default(null);
         if (url) {
             img.setSkin(url, boundleName, true);
@@ -93,6 +108,14 @@ class ViewTools {
     static createLabel(str, wid = 100, hei = 50, fontSize = 24, align = 4, supportRichText = false, fontStyle = 0, lineSpace = 1) {
         return new LabelExpand_1.default(null);
     }
+    //创建3d模型 role1, role目录
+    static create3DModel(modelName, shortPath, boundlename = ResourceCommonConst_1.default.boundle_model3d, compType = UICompConst_1.default.comp_base3d) {
+        var cobj = ResourceManager_1.default.get3dmodelRes(modelName, shortPath, boundlename);
+        if (compType == UICompConst_1.default.comp_base3d) {
+            return this.autoBindingCObj(cobj, true, compType);
+        }
+    }
 }
 exports.default = ViewTools;
 ViewTools.cobjMap = new Map();
+//# sourceMappingURL=ViewTools.js.map

@@ -8,3 +8,4 @@ class InstanceBoss extends InstanceMonster_1.default {
     }
 }
 exports.default = InstanceBoss;
+//# sourceMappingURL=InstanceBoss.js.map

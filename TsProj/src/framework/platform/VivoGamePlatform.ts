@@ -1,5 +1,5 @@
 import WXGamePlatform from "./WXGamePlatform";
-import LogsManager from "../manager/LogsManager";
+
 import Client from "../common/kakura/Client";
 import SoundManager from "../manager/SoundManager";
 import StatisticsManager from "../../game/sys/manager/StatisticsManager";

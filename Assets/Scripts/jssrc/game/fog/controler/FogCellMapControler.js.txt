@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("../../../framework/manager/LogsManager");
 const FogFunc_1 = require("../../sys/func/FogFunc");
 const GlobalParamsFunc_1 = require("../../sys/func/GlobalParamsFunc");
 const GameTools_1 = require("../../../utils/GameTools");
@@ -40,7 +39,7 @@ class FogCellMapControler {
         else {
             this.freshAllInfo();
         }
-        LogsManager_1.default.echo("cell,,,,,,,,,,,,", FogModel_1.default.instance.getCellInfo());
+        LogsManager.echo("cell,,,,,,,,,,,,", FogModel_1.default.instance.getCellInfo());
     }
     freshAllInfo() {
         if (!this.fogControler)
@@ -148,8 +147,8 @@ class FogCellMapControler {
             }
         }
         var end = endx + "_" + endy;
-        LogsManager_1.default.echo("start-------------", start);
-        LogsManager_1.default.echo("end-------------", end);
+        LogsManager.echo("start-------------", start);
+        LogsManager.echo("end-------------", end);
         this.fogControler.delCellId(start);
         this.fogControler.delCellId(end);
         FogServer_1.default.initCellInfo({ id: start, type: FogConst_1.default.cellType_Start, ste: 2 }, () => {
@@ -355,3 +354,4 @@ class FogCellMapControler {
     }
 }
 exports.default = FogCellMapControler;
+//# sourceMappingURL=FogCellMapControler.js.map

@@ -1,5 +1,5 @@
 import WXGamePlatform from "./WXGamePlatform";
-import LogsManager from "../manager/LogsManager";
+
 import UserInfo from "../common/UserInfo";
 import Message from "../common/Message";
 import UserModel from "../../game/sys/model/UserModel";

@@ -5,7 +5,6 @@ const HttpMessage_1 = require("../common/HttpMessage");
 const PackConfigManager_1 = require("../manager/PackConfigManager");
 const TimerManager_1 = require("../manager/TimerManager");
 const UserInfo_1 = require("../common/UserInfo");
-const LogsManager_1 = require("../manager/LogsManager");
 const CacheManager_1 = require("../manager/CacheManager");
 const ErrCodeManager_1 = require("../manager/ErrCodeManager");
 const ErrorCode_1 = require("../../game/sys/common/kakura/ErrorCode");
@@ -170,8 +169,8 @@ class GamePlatform {
     //版本检查回来
     checkVMSBack(result) {
         var version = result.online_version;
-        LogsManager_1.default.echo("online_version:", version, "local vms_version", PackConfigManager_1.default.ins.platform.vms_version);
-        LogsManager_1.default.echo("client_version:", GlobalData_1.default.client_version);
+        LogsManager.echo("online_version:", version, "local vms_version", PackConfigManager_1.default.ins.platform.vms_version);
+        LogsManager.echo("client_version:", GlobalData_1.default.client_version);
         version = Math.max(version, PackConfigManager_1.default.ins.platform.vms_version);
         PackConfigManager_1.default.ins.platform.vms_version = version;
         this.checkVersion();
@@ -184,10 +183,10 @@ class GamePlatform {
         HttpMessage_1.default.instance.send(url, null, this.checkVersionCallback, this);
     }
     checkVersionCallback(result) {
-        LogsManager_1.default.echo(null == undefined, "___null undefined");
+        LogsManager.echo(null == undefined, "___null undefined");
         // 如果返回值没有s 状态字段
         if (result.s == null || !result.global_server_url || !result.v.version) {
-            LogsManager_1.default.errorTag(null, JSON.stringify(result));
+            LogsManager.errorTag(null, JSON.stringify(result));
             ErrCodeManager_1.default.ins.setErr(ErrorCode_1.default.sys_error);
             return;
         }
@@ -212,7 +211,7 @@ class GamePlatform {
             // GlobalData.version = result.v.version;
             this.doCoverVersion(result.v.version);
         }
-        LogsManager_1.default.echo("GlobalData.version:", GlobalData_1.default.version, "localVersion:", PackConfigManager_1.default.ins.platform.vms_version, "updateSatus:", result.s);
+        LogsManager.echo("GlobalData.version:", GlobalData_1.default.version, "localVersion:", PackConfigManager_1.default.ins.platform.vms_version, "updateSatus:", result.s);
         this.addUpdateListener();
         //联网模式也需要执行卡日曲登录
         KariqiShareManager_1.default.kariquLogin();
@@ -263,7 +262,7 @@ class GamePlatform {
                 return;
             }
             //阿拉丁上报openid
-            LogsManager_1.default.echo('=====================ald相关');
+            LogsManager.echo('=====================ald相关');
             if (UserInfo_1.default.isWX() && data.channelUserId) {
                 // LogsManager.echo("ald上报OpenId:", data.channelUserId);
                 // this.getWX().aldSendOpenid(data.channelUserId);
@@ -315,7 +314,7 @@ class GamePlatform {
                 }
             }
             if (!pData) {
-                LogsManager_1.default.errorTag("globalServerError", "global请求异常");
+                LogsManager.errorTag("globalServerError", "global请求异常");
                 WindowManager_1.default.setPopupTip(1, TranslateFunc_1.default.instance.getTranslate("#tid_net_error"), this.onGlobalError, this);
                 return;
             }
@@ -341,7 +340,7 @@ class GamePlatform {
     //重登回来
     onReLoginBack(data) {
         GameHttpControler_1.default.instance.loginToken = data && data.loginToken;
-        LogsManager_1.default.echo("data.loginToken", data.loginToken);
+        LogsManager.echo("data.loginToken", data.loginToken);
         var params = this._reLoginBackParams;
         this._reLoginBackParams = null;
         params.callBack.call(params.thisObj, data);
@@ -385,7 +384,7 @@ class GamePlatform {
     doSingleErrorBack() {
         //如果次数为0
         if (this._reloginCount == 1) {
-            LogsManager_1.default.echo("第一次登入失败尝试重新登入");
+            LogsManager.echo("第一次登入失败尝试重新登入");
             this.getWxInfo();
             return;
         }
@@ -427,8 +426,8 @@ class GamePlatform {
         //如果是调试开关的
         if (data && ((data.user && data.user.isTestAccount) || data.isTestAccount)) {
             //显示日志窗口
-            LogsManager_1.default.sendErrorToPlatform("发送客户端错误日志", LogsManager_1.default.errorTage_clientLog, 200, "sendClientError");
-            LogsManager_1.default.setLogGroupVisible(true);
+            LogsManager.sendErrorToPlatform("发送客户端错误日志", LogsManager.errorTage_clientLog, 200, "sendClientError");
+            LogsManager.setLogGroupVisible(true);
         }
         if (data != null && this.checkHasUserData(data.user)) {
             this.checkHasUpdateData(data.user);
@@ -473,7 +472,7 @@ class GamePlatform {
             // if (data.user &&  (data.user.rid || data.user._id) ) {
             if (this.checkHasUserData(data.user)) {
                 localData = data.user;
-                LogsManager_1.default.echo("_线上服务器有数据,本地没数据");
+                LogsManager.echo("_线上服务器有数据,本地没数据");
                 // LogsManager.errorTag("dataSync","_线上服务器有数据,本地没数据", JSON.stringify(data));
             }
             else {
@@ -504,7 +503,7 @@ class GamePlatform {
                     clientDirty: { u: {}, d: deleteData }
                 };
                 Client_1.default.instance.send("349", params, null, null);
-                LogsManager_1.default.errorTag("dataNullValue", "玩家数据有空字段," + TableUtils_1.default.safelyJsonStringfy(deleteData));
+                LogsManager.errorTag("dataNullValue", "玩家数据有空字段," + TableUtils_1.default.safelyJsonStringfy(deleteData));
             }
         }
         else {
@@ -521,11 +520,11 @@ class GamePlatform {
                 var dt = localData.sendTime - userData.sendTime;
                 //如果这个时间 异常 用服务器数据
                 if (dt > 1 * 365 * 24 * 3600) {
-                    LogsManager_1.default.errorTag("userDataError", "用户时间戳错误,", localData.sendTime);
+                    LogsManager.errorTag("userDataError", "用户时间戳错误,", localData.sendTime);
                     isUserLocalData = false;
                 }
             }
-            LogsManager_1.default.warn("userData:", "本地缓存的数据比服务器的数据新,采用本地数据");
+            LogsManager.warn("userData:", "本地缓存的数据比服务器的数据新,采用本地数据");
             if (isUserLocalData) {
                 userData = localData;
             }
@@ -598,7 +597,7 @@ class GamePlatform {
             }
         };
         //非授权界面 直接2秒后授权成功
-        LogsManager_1.default.echo("xd 没有授权系统,直接2秒后授权成功");
+        LogsManager.echo("xd 没有授权系统,直接2秒后授权成功");
         TimerManager_1.default.instance.add(tempFunc, this, 2000, 1);
     }
     setSystemInfo() {
@@ -692,7 +691,7 @@ class GamePlatform {
     //改变剩余的任务数，目前只有一条，
     changeLeftTask(value, tag = null) {
         this._leftWaitTask += value;
-        LogsManager_1.default.echo("yrc changeLeftTask", value, this._leftWaitTask, tag);
+        LogsManager.echo("yrc changeLeftTask", value, this._leftWaitTask, tag);
         if (this._leftWaitTask == 0) {
             this.getUserInfoAndReq();
         }
@@ -703,7 +702,7 @@ class GamePlatform {
     //初始化平台用户id
     initChannelUserId(cuid) {
         if (!cuid) {
-            LogsManager_1.default.errorTag(null, "没有设置uid");
+            LogsManager.errorTag(null, "没有设置uid");
             return;
         }
         this.channelUserId = cuid;
@@ -741,7 +740,7 @@ class GamePlatform {
     }
     setVersionCheckResult(num) {
         this.versionCheckResult = num;
-        LogsManager_1.default.echo("versionCheckResult:", num);
+        LogsManager.echo("versionCheckResult:", num);
     }
     getVersionCheckResult() {
         return this.versionCheckResult;
@@ -842,34 +841,34 @@ class GamePlatform {
      */
     canUseJump() {
         if (GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_SHOWJUMP)) {
-            LogsManager_1.default.echo('hlx 互推禁用：互推开关关闭');
+            LogsManager.echo('hlx 互推禁用：互推开关关闭');
             return false;
         }
         if (UserInfo_1.default.isOppo() && GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_OPPO_REVIEW)) {
-            LogsManager_1.default.echo('hlx 互推禁用：审核模式无互推');
+            LogsManager.echo('hlx 互推禁用：审核模式无互推');
             return false;
         }
         if (!(UserInfo_1.default.isTT() || UserInfo_1.default.isWX() || UserInfo_1.default.isBaidu()) || UserInfo_1.default.isOppo()) {
-            LogsManager_1.default.echo('hlx 互推禁用：该平台不支持互推');
+            LogsManager.echo('hlx 互推禁用：该平台不支持互推');
             return false;
         }
         if (UserInfo_1.default.isTT()) {
             if (!this.getWX().showMoreGamesModal) {
-                LogsManager_1.default.warn("hlx 头条互推禁用 showMoreGamesModal not support");
+                LogsManager.warn("hlx 头条互推禁用 showMoreGamesModal not support");
                 return false;
             }
             if (UserInfo_1.default.platform.getSystemInfo().platform == "ios") {
-                LogsManager_1.default.echo('hlx 头条互推禁用：IOS不支持头条互推');
+                LogsManager.echo('hlx 头条互推禁用：IOS不支持头条互推');
                 return false;
             }
             if (JumpFunc_1.JumpFunc.instance.getJumpList().length == 0) {
-                LogsManager_1.default.warn("hlx 头条互推禁用 互推Jump表未配置，请联系管理员配置");
+                LogsManager.warn("hlx 头条互推禁用 互推Jump表未配置，请联系管理员配置");
                 return false;
             }
         }
         else if (UserInfo_1.default.isBaidu()) {
             if (JumpFunc_1.JumpFunc.instance.getJumpList().length == 0) {
-                LogsManager_1.default.warn("hlx 百度互推禁用 互推Jump表未配置，请联系管理员配置");
+                LogsManager.warn("hlx 百度互推禁用 互推Jump表未配置，请联系管理员配置");
                 return false;
             }
         }
@@ -886,28 +885,28 @@ class GamePlatform {
      */
     canAddToDesktop() {
         if (!(UserInfo_1.default.isQQGame() || UserInfo_1.default.isBaidu() || UserInfo_1.default.isOppo() || UserInfo_1.default.isVivo())) {
-            LogsManager_1.default.echo('hlx 添加到桌面功能禁用：该平台不支持添加到桌面功能');
+            LogsManager.echo('hlx 添加到桌面功能禁用：该平台不支持添加到桌面功能');
             return false;
         }
         if (this.getSystemInfo().platform && (this.getSystemInfo().platform == "ios" || this.getSystemInfo().platform == "devtools")) {
-            LogsManager_1.default.echo('hlx 添加到桌面功能禁用：IOS不支持');
+            LogsManager.echo('hlx 添加到桌面功能禁用：IOS不支持');
             return false;
         }
         if (UserInfo_1.default.isQQGame()) {
             if (!this.getWX().saveAppToDesktop) {
-                LogsManager_1.default.echo('hlx 添加到桌面功能禁用：saveAppToDesktop不支持');
+                LogsManager.echo('hlx 添加到桌面功能禁用：saveAppToDesktop不支持');
                 return false;
             }
         }
         else if (UserInfo_1.default.isBaidu()) {
             if (typeof (this.getWX().showAddToDesktopGuide) != 'function') {
-                LogsManager_1.default.echo('hlx 添加到桌面功能禁用：showAddToDesktopGuide不支持');
+                LogsManager.echo('hlx 添加到桌面功能禁用：showAddToDesktopGuide不支持');
                 return false;
             }
         }
         else if (UserInfo_1.default.isOppo() || UserInfo_1.default.isVivo()) {
             if (!this.getWX().installShortcut) {
-                LogsManager_1.default.echo('hlx 添加到桌面功能禁用：installShortcut不支持');
+                LogsManager.echo('hlx 添加到桌面功能禁用：installShortcut不支持');
                 return false;
             }
         }
@@ -918,11 +917,11 @@ class GamePlatform {
      */
     canAddToFavorite() {
         if (!UserInfo_1.default.isBaidu()) {
-            LogsManager_1.default.echo('hlx 添加到桌面功能禁用：该平台不支持添加到桌面功能');
+            LogsManager.echo('hlx 添加到桌面功能禁用：该平台不支持添加到桌面功能');
             return false;
         }
         if (this.getSystemInfo().platform == "devtools") {
-            LogsManager_1.default.echo('hlx 添加到桌面功能禁用：开发者工具无此功能');
+            LogsManager.echo('hlx 添加到桌面功能禁用：开发者工具无此功能');
             return false;
         }
         if ((typeof (this.getWX().showFavoriteGuide) != 'function')) {
@@ -977,12 +976,12 @@ class GamePlatform {
     canShareVideo() {
         // 分享开关开启
         if (GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_SHAREVIDEO)) {
-            LogsManager_1.default.echo("hlx 录屏功能禁用: 开关关闭");
+            LogsManager.echo("hlx 录屏功能禁用: 开关关闭");
             return false;
         }
         if (this._canShareVideoRt == null) {
             if (!UserInfo_1.default.isTT() && !UserInfo_1.default.isBaidu()) {
-                LogsManager_1.default.echo("hlx 录屏功能禁用: 该平台不支持录屏");
+                LogsManager.echo("hlx 录屏功能禁用: 该平台不支持录屏");
                 this._canShareVideoRt = false;
                 return false;
             }
@@ -990,7 +989,7 @@ class GamePlatform {
                 var systemInfo = UserInfo_1.default.platform.getSystemInfo();
                 if (systemInfo.host && systemInfo.host != 'baiduboxapp') {
                     // 只有手机百度app有分享录屏功能。
-                    LogsManager_1.default.echo("hlx 录屏功能禁用: 百度渠道只有手百支持录屏", systemInfo.host);
+                    LogsManager.echo("hlx 录屏功能禁用: 百度渠道只有手百支持录屏", systemInfo.host);
                     this._canShareVideoRt = false;
                     return false;
                 }
@@ -1004,12 +1003,12 @@ class GamePlatform {
      */
     canShare() {
         if (UserInfo_1.default.isBaidu() || UserInfo_1.default.isTT() || UserInfo_1.default.isOppo() || UserInfo_1.default.isVivo()) {
-            LogsManager_1.default.echo("hlx 分享功能禁用: 该平台不开启分享功能：");
+            LogsManager.echo("hlx 分享功能禁用: 该平台不开启分享功能：");
             return false;
         }
         // 分享开关开启
         if (GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_SHARE_NEW)) {
-            LogsManager_1.default.echo("hlx 分享功能禁用: 分享开关关闭");
+            LogsManager.echo("hlx 分享功能禁用: 分享开关关闭");
             return false;
         }
         return true;
@@ -1033,10 +1032,10 @@ class GamePlatform {
                         msgId: this._launchOptions.query.msgId,
                     });
                 }
-                LogsManager_1.default.echo('_launchOptions', JSON.stringify(this._launchOptions));
+                LogsManager.echo('_launchOptions', JSON.stringify(this._launchOptions));
             }
             else {
-                LogsManager_1.default.echo('该平台不支持 getLaunchOptionsSync');
+                LogsManager.echo('该平台不支持 getLaunchOptionsSync');
             }
         }
         return this._launchOptions;
@@ -1064,7 +1063,7 @@ class GamePlatform {
             return;
         }
         if (this.cityName) {
-            LogsManager_1.default.echo("hlx clientInfo已经初始化完毕，无需重复初始化", JSON.stringify(this.cityName));
+            LogsManager.echo("hlx clientInfo已经初始化完毕，无需重复初始化", JSON.stringify(this.cityName));
         }
         else {
             var url = "https://pv.sohu.com/cityjson?ie=utf-8";
@@ -1092,23 +1091,23 @@ class GamePlatform {
             if (!isSuc) {
                 UserInfo_1.default.platform.clientInfoReqCount++;
                 if (UserInfo_1.default.platform.clientInfoReqCount >= 5) {
-                    LogsManager_1.default.echo("hlx 获取IP所在城市5次重试错误，跳过", data);
+                    LogsManager.echo("hlx 获取IP所在城市5次重试错误，跳过", data);
                 }
                 else {
-                    LogsManager_1.default.echo("hlx 获取IP所在城市格式有误，重试", UserInfo_1.default.platform.clientInfoReqCount, data);
+                    LogsManager.echo("hlx 获取IP所在城市格式有误，重试", UserInfo_1.default.platform.clientInfoReqCount, data);
                     UserInfo_1.default.platform.initCityName();
                 }
             }
         }
         catch (e) {
-            LogsManager_1.default.errorTag("get_cityname_error", e.toString());
+            LogsManager.errorTag("get_cityname_error", e.toString());
         }
     }
     initCityNameErrorCallBack(error) {
         try {
             UserInfo_1.default.platform.clientInfoReqCount++;
             if (UserInfo_1.default.platform.clientInfoReqCount >= 5) {
-                LogsManager_1.default.echo("hlx 获取IP所在城市5次重试错误，跳过", UserInfo_1.default.platform.clientInfoReqCount, error.toString());
+                LogsManager.echo("hlx 获取IP所在城市5次重试错误，跳过", UserInfo_1.default.platform.clientInfoReqCount, error.toString());
                 Message_1.default.instance.send(CommonEvent_1.default.GET_IPINFO_FAIL);
                 return;
             }
@@ -1117,7 +1116,7 @@ class GamePlatform {
             }
         }
         catch (e) {
-            LogsManager_1.default.errorTag("get_cityname_error", e.toString());
+            LogsManager.errorTag("get_cityname_error", e.toString());
         }
         return;
     }
@@ -1149,7 +1148,7 @@ class GamePlatform {
     }
     //获取游戏焦点
     onGetFocus() {
-        LogsManager_1.default.echo("获取焦点");
+        LogsManager.echo("获取焦点");
         this.isHide = false;
         this.showT = Client_1.default.instance.miniserverTime;
         Message_1.default.instance.send(MsgCMD_1.default.GAME_ONSHOW);
@@ -1160,7 +1159,7 @@ class GamePlatform {
     onLoseFocus() {
         this.isHide = true;
         this.hideT = Client_1.default.instance.miniserverTime;
-        LogsManager_1.default.echo('>>OnHide成功回调', this.hideT);
+        LogsManager.echo('>>OnHide成功回调', this.hideT);
         Message_1.default.instance.send(MsgCMD_1.default.GAME_ONHIDE);
         // 发送阿里云打点日志
         StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.ON_HIDE, {
@@ -1206,7 +1205,7 @@ class GamePlatform {
         for (var i in map) {
             GameSwitch_1.default._switchMap[i] = map[i];
         }
-        LogsManager_1.default.setLogGroupVisible(GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_LOG_PANEL));
+        LogsManager.setLogGroupVisible(GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_LOG_PANEL));
         DeviceTools_1.default.checkBySwitch();
         var channelData = ChannelConst_1.default.getChannelConst(UserInfo_1.default.platformId);
         //这里做定向覆盖包数据.
@@ -1224,12 +1223,12 @@ class GamePlatform {
             channelData.adFullVideoId = map.FULLVIDEO_ID;
         }
         //GM开关
-        LogsManager_1.default.checkGM();
+        LogsManager.checkGM();
         GameTools_1.default.canShare = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_SHARE_NEW);
         GameTools_1.default.canVideo = !GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_ADV);
         GameTools_1.default.isReview = GameSwitch_1.default.checkOnOff(GameSwitch_1.default.SWITCH_DISABLE_REVIEW);
         for (i in map) {
-            LogsManager_1.default.echo("服务器返回的开关覆盖结果   ", i, " : ", map[i]);
+            LogsManager.echo("服务器返回的开关覆盖结果   ", i, " : ", map[i]);
         }
         var frameRate = GameSwitch_1.default.getSwitchState(GameSwitch_1.default.SWITCH_GAME_FRAME_RATE);
         //var frameRate = "60"
@@ -1237,10 +1236,11 @@ class GamePlatform {
             var targetRate = Number(frameRate);
             if (GameConsts_1.default.gameFrameRate != targetRate) {
                 GameConsts_1.default.gameFrameRate = targetRate;
-                LogsManager_1.default.echo("设置游戏帧率:", frameRate);
+                LogsManager.echo("设置游戏帧率:", frameRate);
                 UserInfo_1.default.platform.setGameFrame();
             }
         }
     }
 }
 exports.default = GamePlatform;
+//# sourceMappingURL=GamePlatform.js.map

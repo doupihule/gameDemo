@@ -1,5 +1,5 @@
 import TTGamePlatform from "./TTGamePlatform";
-import LogsManager from "../manager/LogsManager";
+
 import UserInfo from "../common/UserInfo";
 import GlobalData from "../utils/GlobalData";
 import StatisticsManager from "../../game/sys/manager/StatisticsManager";

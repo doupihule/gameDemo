@@ -72,3 +72,4 @@ ResultJumpUI.res = [
     "gameui/ResultJump.scene",
 ];
 ResultJumpUI.instance = null;
+//# sourceMappingURL=ResultJumpUI.js.map

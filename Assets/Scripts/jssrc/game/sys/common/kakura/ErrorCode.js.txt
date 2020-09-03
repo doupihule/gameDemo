@@ -32,3 +32,4 @@ ErrorCode.wx_sdk_error2 = "21901"; //global请求sdk error
 ErrorCode.wx_sdk_error3 = "21301"; //global请求sdk error
 ErrorCode.wx_sdk_error4 = "21302"; //global请求sdk error
 ErrorCode.wx_sdk_error5 = "10057"; //global请求sdk error
+//# sourceMappingURL=ErrorCode.js.map

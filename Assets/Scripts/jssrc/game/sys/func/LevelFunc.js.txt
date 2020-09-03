@@ -132,3 +132,4 @@ class LevelFunc extends BaseFunc_1.default {
     }
 }
 exports.default = LevelFunc;
+//# sourceMappingURL=LevelFunc.js.map

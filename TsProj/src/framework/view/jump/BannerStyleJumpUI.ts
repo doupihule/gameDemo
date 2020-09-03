@@ -1,5 +1,5 @@
 import IMessage from "../../../game/sys/interfaces/IMessage";
-import LogsManager from "../../manager/LogsManager";
+
 import ScreenAdapterTools from "../../utils/ScreenAdapterTools";
 import JumpManager from "../../manager/JumpManager";
 import TimerManager from "../../manager/TimerManager";

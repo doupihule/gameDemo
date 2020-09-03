@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const LogsManager_1 = require("./LogsManager");
 const UserInfo_1 = require("../common/UserInfo");
 const GameSwitch_1 = require("../common/GameSwitch");
 class StatisticsExtendManager {
@@ -12,7 +11,7 @@ class StatisticsExtendManager {
             if (eventData) {
                 errStr += "eventData" + JSON.stringify(eventData);
             }
-            LogsManager_1.default.errorTag(null, errStr);
+            LogsManager.errorTag(null, errStr);
             return;
         }
         if (eventData) {
@@ -59,7 +58,7 @@ class StatisticsExtendManager {
         else {
             sendData["sex"] = "未授权";
         }
-        LogsManager_1.default.echo("yrc real send >>>>eventId:", eventId, ">>>>sendData:", event, ">>>>eventData", eventData);
+        LogsManager.echo("yrc real send >>>>eventId:", eventId, ">>>>sendData:", event, ">>>>eventData", eventData);
         if (UserInfo_1.default.isWX() && isAld) {
             UserInfo_1.default.platform.aldSendEvent(eventId, sendData);
         }
@@ -76,9 +75,10 @@ class StatisticsExtendManager {
                 sendAli = false;
             }
             if (sendAli) {
-                LogsManager_1.default.sendStaticToAiCloud(eventId, sendData);
+                LogsManager.sendStaticToAiCloud(eventId, sendData);
             }
         }
     }
 }
 exports.default = StatisticsExtendManager;
+//# sourceMappingURL=StatisticsExtendManager.js.map

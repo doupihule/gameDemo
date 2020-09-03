@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const KariquShareConst_1 = require("../consts/KariquShareConst");
 const HttpMessage_1 = require("../common/HttpMessage");
 const UserInfo_1 = require("../common/UserInfo");
-const LogsManager_1 = require("./LogsManager");
 const GameConsts_1 = require("../../game/sys/consts/GameConsts");
 const JumpManager_1 = require("./JumpManager");
 const JumpConst_1 = require("../../game/sys/consts/JumpConst");
@@ -58,7 +57,7 @@ class KariqiShareManager {
         };
         HttpMessage_1.default.instance.sendOtherHttpRequest(url, params, (data) => {
             if (data) {
-                LogsManager_1.default.echo("kariqu zm.kariquLoginResult------------", data, TableUtils_1.default.safelyJsonStringfy(params));
+                LogsManager.echo("kariqu zm.kariquLoginResult------------", data, TableUtils_1.default.safelyJsonStringfy(params));
                 data = JSON.parse(data);
                 KariqiShareManager.kariqiUserId = data && data.data && data.data.userId;
                 //拉取分享序列相关数据
@@ -126,7 +125,7 @@ class KariqiShareManager {
         }
         HttpMessage_1.default.instance.sendOtherHttpRequest(url, params, (data) => {
             if (data) {
-                LogsManager_1.default.echo("kariqu zm.kariquNewLevelResult------------", data, params);
+                LogsManager.echo("kariqu zm.kariquNewLevelResult------------", data, params);
             }
         }, this, "post");
     }
@@ -147,7 +146,7 @@ class KariqiShareManager {
         var datas = {
             param: []
         };
-        LogsManager_1.default.echo("kariqu zm.kariquserchConfig------------", datas);
+        LogsManager.echo("kariqu zm.kariquserchConfig------------", datas);
         var onErrorCall = () => {
             this.kariquConfigValue = null;
             callback && callback.call(thisObj);
@@ -179,7 +178,7 @@ class KariqiShareManager {
                         }
                     }
                 }
-                LogsManager_1.default.echo("kariqu zm.kariquserchConfigResult------------", data);
+                LogsManager.echo("kariqu zm.kariquserchConfigResult------------", data);
             }
             this.kariquConfigValue = value;
             callback && callback.call(thisObj);
@@ -230,7 +229,7 @@ class KariqiShareManager {
         // LogsManager.echo("zm.addKariquPoint------------", params)
         HttpMessage_1.default.instance.sendOtherHttpRequest(url, params, (data) => {
             if (data) {
-                LogsManager_1.default.echo("kariqu zm.addKariquPointResult------------", data, params);
+                LogsManager.echo("kariqu zm.addKariquPointResult------------", data, params);
                 callback && callback.call(thisObj);
             }
         }, this, "post");
@@ -297,7 +296,7 @@ class KariqiShareManager {
                     };
                     KariqiShareManager.shareOrderData.push(tempObj);
                 }
-                LogsManager_1.default.echo("kariqu xd initShareImageInfo:", data, TableUtils_1.default.safelyJsonStringfy(KariqiShareManager.shareOrderData));
+                LogsManager.echo("kariqu xd initShareImageInfo:", data, TableUtils_1.default.safelyJsonStringfy(KariqiShareManager.shareOrderData));
                 callBack && callBack.call(thisObj, data);
             }
         };
@@ -325,7 +324,7 @@ class KariqiShareManager {
         };
         //设置分享来源渠道为001
         shareData.extraData[KariquShareConst_1.default.KARIQU_CHANNEL_TITLE] = "001";
-        LogsManager_1.default.echo("kariqu getOneRandomShareInfo", TableUtils_1.default.safelyJsonStringfy(shareData));
+        LogsManager.echo("kariqu getOneRandomShareInfo", TableUtils_1.default.safelyJsonStringfy(shareData));
         return shareData;
     }
     //上报分享记录
@@ -334,7 +333,7 @@ class KariqiShareManager {
             return;
         }
         if (!this._currentShareData) {
-            LogsManager_1.default.warn("没有分享数据,可能是网络原因没有获取到");
+            LogsManager.warn("没有分享数据,可能是网络原因没有获取到");
             return;
         }
         var params = {
@@ -344,7 +343,7 @@ class KariqiShareManager {
         };
         var onShareCall = (data) => {
             //上报分享成功什么也不执行
-            LogsManager_1.default.echo("kariqu xd saveShareRecord:", data, "params:", TableUtils_1.default.safelyJsonStringfy(params));
+            LogsManager.echo("kariqu xd saveShareRecord:", data, "params:", TableUtils_1.default.safelyJsonStringfy(params));
         };
         HttpMessage_1.default.instance.sendOtherHttpRequest(KariquShareConst_1.default.KARIQU_SHAREBEGIN_URL, params, onShareCall, this, "post", this.defaultContentParams);
     }
@@ -365,7 +364,7 @@ class KariqiShareManager {
         };
         var onShareCall = (data) => {
             //上报分享成功什么也不执行
-            LogsManager_1.default.echo("kariqu  postShareLink:", data, "params:", TableUtils_1.default.safelyJsonStringfy(params));
+            LogsManager.echo("kariqu  postShareLink:", data, "params:", TableUtils_1.default.safelyJsonStringfy(params));
         };
         HttpMessage_1.default.instance.sendOtherHttpRequest(KariquShareConst_1.default.KARIQU_POSTENTERGAME_URL, params, onShareCall, this, "post", this.defaultContentParams);
     }
@@ -378,7 +377,7 @@ class KariqiShareManager {
             userId: this.kariqiUserId
         };
         var onCallBack = (data) => {
-            LogsManager_1.default.echo("kariqu initShareVedioMethod", data, TableUtils_1.default.safelyJsonStringfy(params));
+            LogsManager.echo("kariqu initShareVedioMethod", data, TableUtils_1.default.safelyJsonStringfy(params));
             data = TableUtils_1.default.safelyJsonParse(data);
             if (data && data.code == 0) {
                 var ruleDatas = data.data;
@@ -397,7 +396,7 @@ class KariqiShareManager {
                     var tempInfo = ruleDatas[i];
                     if (tempInfo.tag == this.defaultShareVedioTag) {
                         this.defaultRuleData = tempInfo;
-                        LogsManager_1.default.echo("kariqu defaultRuleData init");
+                        LogsManager.echo("kariqu defaultRuleData init");
                     }
                     var totalCount = 0;
                     for (var s = 0; s < tempInfo.rule.length; s++) {
@@ -417,7 +416,7 @@ class KariqiShareManager {
             return null;
         }
         if (!this.defaultRuleData) {
-            LogsManager_1.default.echo("kariqu 分享序列_数据还没有初始化完毕");
+            LogsManager.echo("kariqu 分享序列_数据还没有初始化完毕");
             return null;
         }
         tag = String(tag);
@@ -439,7 +438,7 @@ class KariqiShareManager {
         }
         var data = this.getShareVedioMethod(tag);
         if (!data) {
-            LogsManager_1.default.echo("kariqu 没有找到分享视频序列数据,tag", tag);
+            LogsManager.echo("kariqu 没有找到分享视频序列数据,tag", tag);
             return null;
         }
         if (!this._shareTvResultMap[tag]) {
@@ -487,8 +486,8 @@ class KariqiShareManager {
         }
         tempObj.shareRateArr = shareRate;
         tempObj.shareTimeArr = shareTime;
-        LogsManager_1.default.echo("kariqu getShareOrTvType,tag:", tag, "count:", count, "ruleIndex:", ruleIndex, TableUtils_1.default.safelyJsonStringfy(tempObj));
-        LogsManager_1.default.echo("kariqu getShareOrTvType,tagRuleData:", TableUtils_1.default.safelyJsonStringfy(data));
+        LogsManager.echo("kariqu getShareOrTvType,tag:", tag, "count:", count, "ruleIndex:", ruleIndex, TableUtils_1.default.safelyJsonStringfy(tempObj));
+        LogsManager.echo("kariqu getShareOrTvType,tagRuleData:", TableUtils_1.default.safelyJsonStringfy(data));
         this.currentShareVedioMethod = tempObj;
         return tempObj;
     }
@@ -531,7 +530,7 @@ class KariqiShareManager {
                 shareRate = -1;
             }
         }
-        LogsManager_1.default.echo("kariqu checkShareResult", "shareRate", shareRate, "shareTime", shareTime);
+        LogsManager.echo("kariqu checkShareResult", "shareRate", shareRate, "shareTime", shareTime);
         //如果概率为-1 表示走原生的
         if (shareRate == -1 || shareTime == -1) {
             return -1;
@@ -623,3 +622,4 @@ KariqiShareManager._cacheShareVedioMethod = {};
 KariqiShareManager._shareTvResultMap = {};
 //记录当前的分享视频策略  {id:,index:}
 KariqiShareManager.currentShareVedioMethod = null;
+//# sourceMappingURL=KariqiShareManager.js.map

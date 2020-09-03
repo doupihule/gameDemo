@@ -53,3 +53,4 @@ SensorUtils.maxX = 0;
 SensorUtils.maxTime = 0;
 SensorUtils.minX = 0;
 SensorUtils.minTime = 0;
+//# sourceMappingURL=SensorUtils.js.map

@@ -18,3 +18,4 @@ PackageConfig.configData = null;
 PackageConfig.client_template_version = "{client_template_version}";
 //target platform
 PackageConfig.client_template_platformId = "{client_template_platformId}";
+//# sourceMappingURL=PackageConfig.js.map

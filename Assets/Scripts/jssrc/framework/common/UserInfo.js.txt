@@ -247,3 +247,4 @@ PlatformIdType.android_master = "android_master";
 PlatformIdType.android_qs = "android_qs";
 PlatformIdType.adMedia_gdt = 2; //广点通
 PlatformIdType.adMedia_tt = 1; //穿山甲
+//# sourceMappingURL=UserInfo.js.map

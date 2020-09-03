@@ -10,7 +10,7 @@ import {WindowCfgs} from "../consts/WindowCfgs";
 import Message from "../../../framework/common/Message";
 import FrameWorkEvent from "../../../framework/event/FrameWorkEvent";
 import TranslateFunc from "../../../framework/func/TranslateFunc";
-import LogsManager from "../../../framework/manager/LogsManager";
+
 import BattleFunc from "../func/BattleFunc";
 import BattleConst from "../consts/BattleConst";
 import SoundManager from "../../../framework/manager/SoundManager";

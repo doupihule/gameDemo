@@ -19,3 +19,4 @@ class LocalStorageManager {
     }
 }
 exports.default = LocalStorageManager;
+//# sourceMappingURL=LocalStorageManager.js.map
