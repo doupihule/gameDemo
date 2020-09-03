@@ -135,39 +135,38 @@ class MainModule {
     }
     //初始化UI层
     initLayer() {
-        WindowManager_1.default.rootLayer = ViewTools_1.default.createContainer();
-        WindowManager_1.default.rootLayer.x += ScreenAdapterTools_1.default.sceneOffsetX;
-        WindowManager_1.default.rootLayer.y += ScreenAdapterTools_1.default.sceneOffsetY;
+        WindowManager_1.default.rootLayer = ViewTools_1.default.createContainer("rootLayer");
+        WindowManager_1.default.rootLayer.set2dPos(ScreenAdapterTools_1.default.sceneOffsetX, ScreenAdapterTools_1.default.sceneOffsetY);
         GlobalData_1.default.uiRoot.addChild(WindowManager_1.default.rootLayer);
-        WindowManager_1.default.commonUILayer = ViewTools_1.default.createContainer();
-        WindowManager_1.default.commonUILayer.setSize(ScreenAdapterTools_1.default.width, ScreenAdapterTools_1.default.height);
+        WindowManager_1.default.commonUILayer = ViewTools_1.default.createContainer("commonUILayer");
+        // WindowManager.commonUILayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
         WindowManager_1.default.rootLayer.addChild(WindowManager_1.default.commonUILayer);
-        WindowManager_1.default.topUILayer = ViewTools_1.default.createContainer();
-        WindowManager_1.default.topUILayer.setSize(ScreenAdapterTools_1.default.width, ScreenAdapterTools_1.default.height);
+        WindowManager_1.default.topUILayer = ViewTools_1.default.createContainer("topUILayer");
+        // WindowManager.topUILayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
         WindowManager_1.default.topUILayer.mouseEnabled = true;
         WindowManager_1.default.topUILayer.mouseThrough = true;
         WindowManager_1.default.rootLayer.addChild(WindowManager_1.default.topUILayer);
-        WindowManager_1.default.guideLayer = ViewTools_1.default.createContainer();
-        WindowManager_1.default.guideLayer.setSize(ScreenAdapterTools_1.default.width, ScreenAdapterTools_1.default.height);
+        WindowManager_1.default.guideLayer = ViewTools_1.default.createContainer("guideLayer");
+        // WindowManager.guideLayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
         WindowManager_1.default.rootLayer.addChild(WindowManager_1.default.guideLayer);
         WindowManager_1.default.guideLayer.mouseEnabled = true;
         WindowManager_1.default.guideLayer.mouseThrough = true;
         WindowManager_1.default.guideLayer.visible = false;
-        WindowManager_1.default.highLayer = ViewTools_1.default.createContainer();
-        WindowManager_1.default.highLayer.setSize(ScreenAdapterTools_1.default.width, ScreenAdapterTools_1.default.height);
+        WindowManager_1.default.highLayer = ViewTools_1.default.createContainer("highLayer");
+        // WindowManager.highLayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
         WindowManager_1.default.rootLayer.addChild(WindowManager_1.default.highLayer);
-        WindowManager_1.default.toolsLayer = ViewTools_1.default.createContainer();
+        WindowManager_1.default.toolsLayer = ViewTools_1.default.createContainer("toolsLayer");
         WindowManager_1.default.rootLayer.addChild(WindowManager_1.default.toolsLayer);
-        WindowManager_1.default.maskLayer = ViewTools_1.default.createContainer();
-        WindowManager_1.default.maskLayer.setSize(ScreenAdapterTools_1.default.width, ScreenAdapterTools_1.default.height);
+        WindowManager_1.default.maskLayer = ViewTools_1.default.createContainer("maskLayer");
+        // WindowManager.maskLayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
         WindowManager_1.default.rootLayer.addChild(WindowManager_1.default.maskLayer);
-        WindowManager_1.default.tipsLayer = ViewTools_1.default.createContainer();
-        WindowManager_1.default.tipsLayer.setSize(ScreenAdapterTools_1.default.width, ScreenAdapterTools_1.default.height);
+        WindowManager_1.default.tipsLayer = ViewTools_1.default.createContainer("tipsLayer");
+        // WindowManager.tipsLayer.setSize(ScreenAdapterTools.width, ScreenAdapterTools.height);
         WindowManager_1.default.tipsLayer.mouseEnabled = false;
         WindowManager_1.default.tipsLayer.mouseThrough = true;
         WindowManager_1.default.rootLayer.addChild(WindowManager_1.default.tipsLayer);
         //最顶层2级容器（越高级优先级越高）
-        WindowManager_1.default.debugLayer = ViewTools_1.default.createContainer();
+        WindowManager_1.default.debugLayer = ViewTools_1.default.createContainer("debugLayer");
         WindowManager_1.default.rootLayer.addChild(WindowManager_1.default.debugLayer);
         LogsManager_1.default.initLogPanel();
         if (UserInfo_1.default.isWeb()) {

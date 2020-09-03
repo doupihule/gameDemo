@@ -16,6 +16,7 @@ export default class UIBaseView extends BaseViewExpand {
     public setCObject(cui){
         super.setCObject(cui);
         this.bindChild(cui);
+        this.doAfterInit();
     }
 
     //bing子对象
@@ -48,6 +49,11 @@ export default class UIBaseView extends BaseViewExpand {
                 }
             }
         }
+    }
+
+    //初始化完毕之后 可以访问组件了 给子类重写.类似ya的createChildren . 如果某个ui 没有和cobj进行绑定. 也就是手写ui. 那么就需要手动调用这个函数 .
+    public  doAfterInit(){
+
     }
 
     //设置窗口名字

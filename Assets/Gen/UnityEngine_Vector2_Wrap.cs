@@ -30,7 +30,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Vector2 constructor");
             }
             catch (Exception e)
             {
@@ -96,7 +96,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetFloat(false);
                         var result = UnityEngine.Vector2.Lerp(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -132,7 +132,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetFloat(false);
                         var result = UnityEngine.Vector2.LerpUnclamped(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -168,7 +168,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetFloat(false);
                         var result = UnityEngine.Vector2.MoveTowards(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -202,7 +202,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.Get<UnityEngine.Vector2>(false);
                         var result = UnityEngine.Vector2.Scale(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -416,7 +416,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.Get<UnityEngine.Vector2>(false);
                         var result = UnityEngine.Vector2.Reflect(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -448,7 +448,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<UnityEngine.Vector2>(false);
                         var result = UnityEngine.Vector2.Perpendicular(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -618,7 +618,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.GetFloat(false);
                         var result = UnityEngine.Vector2.ClampMagnitude(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -714,7 +714,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.Get<UnityEngine.Vector2>(false);
                         var result = UnityEngine.Vector2.Min(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -748,7 +748,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.Get<UnityEngine.Vector2>(false);
                         var result = UnityEngine.Vector2.Max(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -793,7 +793,7 @@ namespace PuertsStaticWrap
                         var result = UnityEngine.Vector2.SmoothDamp(Arg0,Arg1,ref Arg2,Arg3,Arg4);
                         
                         argHelper2.SetByRefValue(Arg2);
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -820,7 +820,7 @@ namespace PuertsStaticWrap
                         var result = UnityEngine.Vector2.SmoothDamp(Arg0,Arg1,ref Arg2,Arg3);
                         
                         argHelper2.SetByRefValue(Arg2);
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -853,7 +853,7 @@ namespace PuertsStaticWrap
                         var result = UnityEngine.Vector2.SmoothDamp(Arg0,Arg1,ref Arg2,Arg3,Arg4,Arg5);
                         
                         argHelper2.SetByRefValue(Arg2);
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -875,7 +875,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Vector2 obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.normalized;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -926,7 +926,7 @@ namespace PuertsStaticWrap
             {
                 
                 var result = UnityEngine.Vector2.zero;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -943,7 +943,7 @@ namespace PuertsStaticWrap
             {
                 
                 var result = UnityEngine.Vector2.one;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -960,7 +960,7 @@ namespace PuertsStaticWrap
             {
                 
                 var result = UnityEngine.Vector2.up;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -977,7 +977,7 @@ namespace PuertsStaticWrap
             {
                 
                 var result = UnityEngine.Vector2.down;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -994,7 +994,7 @@ namespace PuertsStaticWrap
             {
                 
                 var result = UnityEngine.Vector2.left;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1011,7 +1011,7 @@ namespace PuertsStaticWrap
             {
                 
                 var result = UnityEngine.Vector2.right;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1028,7 +1028,7 @@ namespace PuertsStaticWrap
             {
                 
                 var result = UnityEngine.Vector2.positiveInfinity;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1045,7 +1045,7 @@ namespace PuertsStaticWrap
             {
                 
                 var result = UnityEngine.Vector2.negativeInfinity;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1216,7 +1216,7 @@ namespace PuertsStaticWrap
                         var arg0 = argHelper0.Get<UnityEngine.Vector2>(false);
                         var arg1 = argHelper1.Get<UnityEngine.Vector2>(false);
                         var result = arg0 + arg1;
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -1248,7 +1248,7 @@ namespace PuertsStaticWrap
                         var arg0 = argHelper0.Get<UnityEngine.Vector2>(false);
                         var arg1 = argHelper1.Get<UnityEngine.Vector2>(false);
                         var result = arg0 - arg1;
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -1281,7 +1281,7 @@ namespace PuertsStaticWrap
                         var arg0 = argHelper0.Get<UnityEngine.Vector2>(false);
                         var arg1 = argHelper1.Get<UnityEngine.Vector2>(false);
                         var result = arg0 * arg1;
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector2), false, false)
@@ -1291,7 +1291,7 @@ namespace PuertsStaticWrap
                         var arg0 = argHelper0.Get<UnityEngine.Vector2>(false);
                         var arg1 = argHelper1.GetFloat(false);
                         var result = arg0 * arg1;
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false)
@@ -1301,7 +1301,7 @@ namespace PuertsStaticWrap
                         var arg0 = argHelper0.GetFloat(false);
                         var arg1 = argHelper1.Get<UnityEngine.Vector2>(false);
                         var result = arg0 * arg1;
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -1334,7 +1334,7 @@ namespace PuertsStaticWrap
                         var arg0 = argHelper0.Get<UnityEngine.Vector2>(false);
                         var arg1 = argHelper1.Get<UnityEngine.Vector2>(false);
                         var result = arg0 / arg1;
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector2), false, false)
@@ -1344,7 +1344,7 @@ namespace PuertsStaticWrap
                         var arg0 = argHelper0.Get<UnityEngine.Vector2>(false);
                         var arg1 = argHelper1.GetFloat(false);
                         var result = arg0 / arg1;
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -1374,7 +1374,7 @@ namespace PuertsStaticWrap
                         
                         var arg0 = argHelper0.Get<UnityEngine.Vector2>(false);
                         var result = -arg0;
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -1468,7 +1468,7 @@ namespace PuertsStaticWrap
                         
                         var arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
                         var result = (UnityEngine.Vector2)arg0;
-                        Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector2), false, false))
@@ -1476,7 +1476,7 @@ namespace PuertsStaticWrap
                         
                         var arg0 = argHelper0.Get<UnityEngine.Vector2>(false);
                         var result = (UnityEngine.Vector3)arg0;
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }

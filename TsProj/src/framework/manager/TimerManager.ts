@@ -129,7 +129,6 @@ export default class TimerManager {
 
 	//循环结束后的检测时钟
 	public  tickHandlerLater(){
-		LogsManager.echo("-------------test");
 	}
 
 

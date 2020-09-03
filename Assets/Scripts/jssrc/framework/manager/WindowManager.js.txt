@@ -1,12 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Message_1 = require("../common/Message");
 const LoadingUI_1 = require("../../game/sys/view/loading/LoadingUI");
 const ScreenAdapterTools_1 = require("../utils/ScreenAdapterTools");
 const LogsManager_1 = require("./LogsManager");
 const GlobalData_1 = require("../utils/GlobalData");
 const WindowCfgs_1 = require("../../game/sys/consts/WindowCfgs");
-const WindowEvent_1 = require("../event/WindowEvent");
 const LogsErrorCode_1 = require("../consts/LogsErrorCode");
 const GuideManager_1 = require("../../game/sys/manager/GuideManager");
 const UserInfo_1 = require("../common/UserInfo");
@@ -25,15 +23,15 @@ class WindowManager {
         WindowManager.SwitchUIAPI(openUIName, null, closeUIName, args);
     }
     static SwitchUIAPI(openUIName, rootNode, closeUIName, args = null) {
-        this.SwitchMaskUI(true);
+        // this.SwitchMaskUI(true);
         WindowManager.SwitchUIComplete(openUIName, rootNode, closeUIName, args);
     }
     static SwitchUIComplete(openUIName, rootNode, closeUIName, args) {
-        this.SwitchMaskUI(false);
-        Message_1.default.instance.send(WindowEvent_1.default.WINDOW_EVENT_SWITCHUISTART, {
-            openUIName: openUIName,
-            closeUIName: closeUIName
-        });
+        // this.SwitchMaskUI(false);
+        // Message.instance.send(WindowEvent.WINDOW_EVENT_SWITCHUISTART, {
+        // 	openUIName: openUIName,
+        // 	closeUIName: closeUIName
+        // });
         //如果有打开某个界面
         if (openUIName) {
             var targetUI = WindowManager.UIInstance[openUIName];
@@ -44,7 +42,7 @@ class WindowManager {
                 var uiCobj = ResourceManager_1.default.loadUIPrefab(uiCfgs.prefabPath + "/" + openUIName, ResourceConst_1.default.boundle_ui);
                 targetUI.setCObject(uiCobj);
                 if (!rootNode) {
-                    targetUI.setSize(ScreenAdapterTools_1.default.width, ScreenAdapterTools_1.default.height);
+                    // targetUI.setSize(ScreenAdapterTools.width,ScreenAdapterTools.height);
                 }
                 WindowManager.UIInstance[openUIName] = targetUI;
             }
@@ -53,11 +51,10 @@ class WindowManager {
             }
             else {
                 var ctn = this.getWindowCtn(openUIName);
-                ctn.mouseEnabled = true;
                 ctn.addChild(targetUI);
             }
             //给ui赋值属性windowName
-            targetUI.windowName = openUIName;
+            targetUI.setWindowName(openUIName);
             //如果是开启模态的 而且是非全屏ui
             if (uiCfgs.modal == 1 && !uiCfgs.full) {
                 if (!targetUI.__modalView) {
@@ -80,17 +77,17 @@ class WindowManager {
             LogsManager_1.default.echo("WindowManager close  Complete:", closeUIName, "currentWindow:", this.getCurrentWindowName());
         }
         this.updateUiVisible();
-        Message_1.default.instance.send(WindowEvent_1.default.WINDOW_EVENT_SWITCHUIFIN, {
-            openUINames: openUIName,
-            closeUINames: closeUIName
-        });
+        // Message.instance.send(WindowEvent.WINDOW_EVENT_SWITCHUIFIN, {
+        // 	openUINames: openUIName,
+        // 	closeUINames: closeUIName
+        // });
     }
     //创建模态
     static createModalView(ctn, alpha = 1) {
         if (alpha == null) {
             alpha = 0.3;
         }
-        var modalView = ViewTools_1.default.createContainer();
+        var modalView = ViewTools_1.default.createContainer(ctn.windowName + "_modal");
         modalView.mouseEnabled = true;
         modalView.mouseThrough = false;
         modalView.alpha = alpha;
@@ -320,9 +317,8 @@ class WindowManager {
     static CloseMaskUI() {
     }
     static initMaskUI() {
-        var mask = ViewTools_1.default.createContainer();
-        ;
-        var background = ViewTools_1.default.createContainer();
+        var mask = ViewTools_1.default.createContainer("admask");
+        var background = ViewTools_1.default.createContainer("admaskbg");
         mask.addChild(background);
         //画矩形
         background.alpha = 1;

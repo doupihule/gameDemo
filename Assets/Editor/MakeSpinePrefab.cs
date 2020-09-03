@@ -22,7 +22,7 @@ public static class MakeSpinePrefab
     [MenuItem("Tools/生成spine预制")]
     private static void makeSpineFrefab()
     {
-        string sourcepath = "Assets/Animation/spine";
+        string sourcepath = "Assets/Animation/SpineRes";
         string prefabpath = "Assets/Animation/Prefabs/";
         string baseprefab = "Assets/Animation/Prefabs/baseSpine.prefab";
 

@@ -50,20 +50,20 @@ export class BattleLayerControler {
 		this.controler = controler;
 		this.rootCtn = rootCtn;
 
-		this.a = ViewTools.createContainer()
+		this.a = ViewTools.createContainer("a")
 		this.a.x = ScreenAdapterTools.UIOffsetX
 		this.a.y = ScreenAdapterTools.UIOffsetY;
 
-		this.a1 = ViewTools.createContainer();
-		this.a2 = ViewTools.createContainer();
-		this.a3 = ViewTools.createContainer();
+		this.a1 = ViewTools.createContainer("a1");
+		this.a2 = ViewTools.createContainer("a2");
+		this.a3 = ViewTools.createContainer("a3");
 
 
-		this.a2Offset = ViewTools.createContainer();
+		this.a2Offset = ViewTools.createContainer("a2Offset");
 
-		this.a21 = ViewTools.createContainer();
-		this.a22 = ViewTools.createContainer();
-		this.a23 = ViewTools.createContainer();
+		this.a21 = ViewTools.createContainer("a21");
+		this.a22 = ViewTools.createContainer("a22");
+		this.a23 = ViewTools.createContainer("a23");
 
 
 		rootCtn.addChild(this.a);

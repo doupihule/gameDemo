@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Debug constructor");
             }
             catch (Exception e)
             {
@@ -1026,7 +1026,7 @@ namespace PuertsStaticWrap
             {
                 
                 var result = UnityEngine.Debug.unityLogger;
-                Puerts.StaticTranslate<UnityEngine.ILogger>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1091,7 +1091,7 @@ namespace PuertsStaticWrap
             {
                 
                 var result = UnityEngine.Debug.unityLogger;
-                Puerts.StaticTranslate<UnityEngine.ILogger>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {

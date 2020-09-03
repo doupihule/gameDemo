@@ -25,10 +25,10 @@ export class ChapterLayerControler {
 	public constructor(controler, rootCtn: BaseContainer) {
 		this.controler = controler;
 		this.rootCtn = rootCtn;
-		this.a = ViewTools.createContainer()
-		this.a1 = ViewTools.createContainer();
-		this.a2 = ViewTools.createContainer();
-		this.a21 = ViewTools.createContainer();
+		this.a = ViewTools.createContainer("a")
+		this.a1 = ViewTools.createContainer("a1");
+		this.a2 = ViewTools.createContainer("a2");
+		this.a21 = ViewTools.createContainer("a21");
 
 		rootCtn.addChild(this.a);
 		this.a.addChild(this.a1);

@@ -72,8 +72,10 @@ export default class ViewTools {
 
 	}
 
-	static  createContainer(){
-		return new BaseContainer();
+	static  createContainer(name:string){
+		var ctn = new BaseContainer();
+		ctn.name = name;
+		return ctn;
 	}
 
 	//第一次创建图片的时候 必定 调整尺寸

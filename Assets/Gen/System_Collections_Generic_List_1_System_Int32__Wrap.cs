@@ -142,7 +142,7 @@ namespace PuertsStaticWrap
                         
                         var result = obj.AsReadOnly();
                         
-                        Puerts.StaticTranslate<System.Collections.ObjectModel.ReadOnlyCollection<int>>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -456,7 +456,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<System.Predicate<int>>(false);
                         var result = obj.FindAll(Arg0);
                         
-                        Puerts.StaticTranslate<System.Collections.Generic.List<int>>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -700,7 +700,7 @@ namespace PuertsStaticWrap
                         
                         var result = obj.GetEnumerator();
                         
-                        Puerts.StaticTranslate<System.Collections.Generic.List<int>.Enumerator>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -734,7 +734,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.GetInt32(false);
                         var result = obj.GetRange(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<System.Collections.Generic.List<int>>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -1241,7 +1241,7 @@ namespace PuertsStaticWrap
                         
                         var result = obj.ToArray();
                         
-                        Puerts.StaticTranslate<int[]>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }

@@ -28,7 +28,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to Spine.AnimationState constructor");
             }
             catch (Exception e)
             {
@@ -188,7 +188,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetBoolean(false);
                         var result = obj.SetAnimation(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<Spine.TrackEntry>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false)
@@ -201,7 +201,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetBoolean(false);
                         var result = obj.SetAnimation(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<Spine.TrackEntry>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -237,7 +237,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetBoolean(false);
                         var result = obj.SetAnimationByIndex(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<Spine.TrackEntry>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -278,7 +278,7 @@ namespace PuertsStaticWrap
                         var Arg3 = argHelper3.GetFloat(false);
                         var result = obj.AddAnimation(Arg0,Arg1,Arg2,Arg3);
                         
-                        Puerts.StaticTranslate<Spine.TrackEntry>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false)
@@ -293,7 +293,7 @@ namespace PuertsStaticWrap
                         var Arg3 = argHelper3.GetFloat(false);
                         var result = obj.AddAnimation(Arg0,Arg1,Arg2,Arg3);
                         
-                        Puerts.StaticTranslate<Spine.TrackEntry>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -327,7 +327,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.GetFloat(false);
                         var result = obj.SetEmptyAnimation(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<Spine.TrackEntry>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -363,7 +363,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetFloat(false);
                         var result = obj.AddEmptyAnimation(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<Spine.TrackEntry>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -427,7 +427,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.GetInt32(false);
                         var result = obj.GetCurrent(Arg0);
                         
-                        Puerts.StaticTranslate<Spine.TrackEntry>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -479,7 +479,7 @@ namespace PuertsStaticWrap
             {
                 Spine.AnimationState obj = Puerts.Utils.GetSelf((int)data, self) as Spine.AnimationState;
                 var result = obj.Data;
-                Puerts.StaticTranslate<Spine.AnimationStateData>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -496,7 +496,7 @@ namespace PuertsStaticWrap
             {
                 Spine.AnimationState obj = Puerts.Utils.GetSelf((int)data, self) as Spine.AnimationState;
                 var result = obj.Tracks;
-                Puerts.StaticTranslate<Spine.ExposedList<Spine.TrackEntry>>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {

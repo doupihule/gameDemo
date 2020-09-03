@@ -11,7 +11,7 @@ namespace PuertsStaticWrap
             try
             {
                 
-                
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Transform constructor");
             }
             catch (Exception e)
             {
@@ -507,7 +507,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
                         var result = obj.TransformDirection(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -530,7 +530,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetFloat(false);
                         var result = obj.TransformDirection(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -562,7 +562,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
                         var result = obj.InverseTransformDirection(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -585,7 +585,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetFloat(false);
                         var result = obj.InverseTransformDirection(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -617,7 +617,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
                         var result = obj.TransformVector(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -640,7 +640,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetFloat(false);
                         var result = obj.TransformVector(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -672,7 +672,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
                         var result = obj.InverseTransformVector(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -695,7 +695,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetFloat(false);
                         var result = obj.InverseTransformVector(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -727,7 +727,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
                         var result = obj.TransformPoint(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -750,7 +750,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetFloat(false);
                         var result = obj.TransformPoint(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -782,7 +782,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
                         var result = obj.InverseTransformPoint(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -805,7 +805,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetFloat(false);
                         var result = obj.InverseTransformPoint(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -989,7 +989,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.GetString(false);
                         var result = obj.Find(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Transform>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -1053,7 +1053,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.GetString(false);
                         var result = obj.Find(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Transform>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -1083,7 +1083,7 @@ namespace PuertsStaticWrap
                         
                         var result = obj.GetEnumerator();
                         
-                        Puerts.StaticTranslate<System.Collections.IEnumerator>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -1149,7 +1149,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.GetInt32(false);
                         var result = obj.GetChild(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Transform>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -1201,7 +1201,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.position;
-                Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1232,7 +1232,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.localPosition;
-                Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1263,7 +1263,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.eulerAngles;
-                Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1294,7 +1294,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.localEulerAngles;
-                Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1325,7 +1325,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.right;
-                Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1356,7 +1356,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.up;
-                Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1387,7 +1387,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.forward;
-                Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1418,7 +1418,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.rotation;
-                Puerts.StaticTranslate<UnityEngine.Quaternion>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1449,7 +1449,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.localRotation;
-                Puerts.StaticTranslate<UnityEngine.Quaternion>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1480,7 +1480,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.localScale;
-                Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1511,7 +1511,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.parent;
-                Puerts.StaticTranslate<UnityEngine.Transform>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1542,7 +1542,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.worldToLocalMatrix;
-                Puerts.StaticTranslate<UnityEngine.Matrix4x4>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1559,7 +1559,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.localToWorldMatrix;
-                Puerts.StaticTranslate<UnityEngine.Matrix4x4>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1576,7 +1576,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.root;
-                Puerts.StaticTranslate<UnityEngine.Transform>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -1610,7 +1610,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.lossyScale;
-                Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {

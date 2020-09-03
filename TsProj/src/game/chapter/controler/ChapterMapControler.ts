@@ -30,7 +30,7 @@ export default class ChapterMapControler {
 	//初始化设置数据 章节id
 	public setData(chapterId) {
 		this.chapterData = ChapterFunc.instance.getCfgDatas("Chapter", chapterId);
-		this.ctn1 = ViewTools.createContainer();
+		this.ctn1 = ViewTools.createContainer("ctn1");
 		this.ctn1.y = -ScreenAdapterTools.sceneOffsetY - ScreenAdapterTools.UIOffsetY;
 		this.controler.chapterLayerControler.a21.y = -ScreenAdapterTools.sceneOffsetY - ScreenAdapterTools.UIOffsetY;
 		this.controler.chapterLayerControler.a1.addChild(this.ctn1);

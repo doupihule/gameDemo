@@ -11,7 +11,7 @@ namespace PuertsStaticWrap
             try
             {
                 
-                
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to System.Delegate constructor");
             }
             catch (Exception e)
             {
@@ -48,7 +48,7 @@ namespace PuertsStaticWrap
                         var Arg3 = argHelper3.GetBoolean(false);
                         var result = System.Delegate.CreateDelegate(Arg0,Arg1,Arg2,Arg3);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Type), false, false)
@@ -63,7 +63,7 @@ namespace PuertsStaticWrap
                         var Arg3 = argHelper3.GetBoolean(false);
                         var result = System.Delegate.CreateDelegate(Arg0,Arg1,Arg2,Arg3);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Type), false, false)
@@ -78,7 +78,7 @@ namespace PuertsStaticWrap
                         var Arg3 = argHelper3.GetBoolean(false);
                         var result = System.Delegate.CreateDelegate(Arg0,Arg1,Arg2,Arg3);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -101,7 +101,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.Get<System.Reflection.MethodInfo>(false);
                         var result = System.Delegate.CreateDelegate(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Type), false, false)
@@ -114,7 +114,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetBoolean(false);
                         var result = System.Delegate.CreateDelegate(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Type), false, false)
@@ -127,7 +127,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetString(false);
                         var result = System.Delegate.CreateDelegate(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Type), false, false)
@@ -140,7 +140,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetString(false);
                         var result = System.Delegate.CreateDelegate(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -160,7 +160,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.Get<System.Reflection.MethodInfo>(false);
                         var result = System.Delegate.CreateDelegate(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -189,7 +189,7 @@ namespace PuertsStaticWrap
                         var Arg4 = argHelper4.GetBoolean(false);
                         var result = System.Delegate.CreateDelegate(Arg0,Arg1,Arg2,Arg3,Arg4);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Type), false, false)
@@ -206,7 +206,7 @@ namespace PuertsStaticWrap
                         var Arg4 = argHelper4.GetBoolean(false);
                         var result = System.Delegate.CreateDelegate(Arg0,Arg1,Arg2,Arg3,Arg4);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -238,7 +238,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.GetParams<System.Object>(info, 0, paramLen);
                         var result = obj.DynamicInvoke(Arg0);
                         
-                        Puerts.StaticTranslate<System.Object>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -268,7 +268,7 @@ namespace PuertsStaticWrap
                         
                         var result = obj.Clone();
                         
-                        Puerts.StaticTranslate<System.Object>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -394,7 +394,7 @@ namespace PuertsStaticWrap
                         
                         var result = obj.GetInvocationList();
                         
-                        Puerts.StaticTranslate<System.Delegate[]>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -429,7 +429,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.Get<System.Delegate>(false);
                         var result = System.Delegate.Combine(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -446,7 +446,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.GetParams<System.Delegate>(info, 0, paramLen);
                         var result = System.Delegate.Combine(Arg0);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -480,7 +480,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.Get<System.Delegate>(false);
                         var result = System.Delegate.Remove(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -514,7 +514,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.Get<System.Delegate>(false);
                         var result = System.Delegate.RemoveAll(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<System.Delegate>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -536,7 +536,7 @@ namespace PuertsStaticWrap
             {
                 System.Delegate obj = Puerts.Utils.GetSelf((int)data, self) as System.Delegate;
                 var result = obj.Method;
-                Puerts.StaticTranslate<System.Reflection.MethodInfo>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -553,7 +553,7 @@ namespace PuertsStaticWrap
             {
                 System.Delegate obj = Puerts.Utils.GetSelf((int)data, self) as System.Delegate;
                 var result = obj.Target;
-                Puerts.StaticTranslate<System.Object>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {

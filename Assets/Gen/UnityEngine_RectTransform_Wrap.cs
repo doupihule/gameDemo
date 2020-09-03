@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.RectTransform constructor");
             }
             catch (Exception e)
             {
@@ -208,7 +208,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.RectTransform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.RectTransform;
                 var result = obj.rect;
-                Puerts.StaticTranslate<UnityEngine.Rect>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -225,7 +225,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.RectTransform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.RectTransform;
                 var result = obj.anchorMin;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -256,7 +256,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.RectTransform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.RectTransform;
                 var result = obj.anchorMax;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -287,7 +287,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.RectTransform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.RectTransform;
                 var result = obj.anchoredPosition;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -318,7 +318,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.RectTransform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.RectTransform;
                 var result = obj.sizeDelta;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -349,7 +349,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.RectTransform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.RectTransform;
                 var result = obj.pivot;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -380,7 +380,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.RectTransform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.RectTransform;
                 var result = obj.anchoredPosition3D;
-                Puerts.StaticTranslate<UnityEngine.Vector3>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -411,7 +411,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.RectTransform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.RectTransform;
                 var result = obj.offsetMin;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -442,7 +442,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.RectTransform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.RectTransform;
                 var result = obj.offsetMax;
-                Puerts.StaticTranslate<UnityEngine.Vector2>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {

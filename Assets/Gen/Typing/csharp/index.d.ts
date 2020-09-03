@@ -845,12 +845,19 @@ declare module 'csharp' {
             
         }
         class UnityEvent extends UnityEngine.Events.UnityEventBase {
+            public constructor();
+            public AddListener(call: UnityEngine.Events.UnityAction):void;
+            public RemoveListener(call: UnityEngine.Events.UnityAction):void;
+            public Invoke():void;
             
         }
+        type UnityAction = () => void;
+        var UnityAction: {new (func: () => void): UnityAction;}
         
     }
     namespace UnityEngine.UI.Button {
         class ButtonClickedEvent extends UnityEngine.Events.UnityEvent {
+            public constructor();
             
         }
         

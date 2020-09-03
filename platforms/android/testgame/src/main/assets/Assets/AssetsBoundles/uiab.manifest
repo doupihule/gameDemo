@@ -38,4 +38,4 @@ Assets:
 - Assets/UI/Prefabs/main/GameMainUI.prefab
 - Assets/UI/Prefabs/base/BaseLabel.prefab
 Dependencies:
-- C:/work/unity/gameDemo/Assets/AssetsBoundles/uiimage
+- C:/work/unity/gameDemo_lua/Assets/AssetsBoundles/uiimage

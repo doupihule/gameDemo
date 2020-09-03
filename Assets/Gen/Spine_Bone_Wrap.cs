@@ -32,7 +32,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to Spine.Bone constructor");
             }
             catch (Exception e)
             {
@@ -381,7 +381,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.Data;
-                Puerts.StaticTranslate<Spine.BoneData>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -398,7 +398,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.Skeleton;
-                Puerts.StaticTranslate<Spine.Skeleton>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -415,7 +415,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.Parent;
-                Puerts.StaticTranslate<Spine.Bone>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -432,7 +432,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.Children;
-                Puerts.StaticTranslate<Spine.ExposedList<Spine.Bone>>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {

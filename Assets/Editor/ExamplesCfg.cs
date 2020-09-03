@@ -44,6 +44,8 @@ public class ExamplesCfg
                 typeof(Sprite),
                 typeof(Text),
                 typeof(Button),
+                typeof(Button.ButtonClickedEvent),
+                typeof(UnityEngine.Events.UnityEvent),
                 typeof(Outline),
                 typeof(Shadow),
 

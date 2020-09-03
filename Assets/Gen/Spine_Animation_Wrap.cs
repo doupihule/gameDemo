@@ -32,7 +32,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to Spine.Animation constructor");
             }
             catch (Exception e)
             {
@@ -113,7 +113,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Animation obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Animation;
                 var result = obj.Timelines;
-                Puerts.StaticTranslate<Spine.ExposedList<Spine.Timeline>>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {

@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.CanvasGroup constructor");
             }
             catch (Exception e)
             {

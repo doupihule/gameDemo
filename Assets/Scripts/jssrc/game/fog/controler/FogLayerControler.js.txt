@@ -6,15 +6,15 @@ class FogLayerControler {
     constructor(fogControler, rootCtn) {
         this.fogControler = fogControler;
         this.rootCtn = rootCtn;
-        this.a = ViewTools_1.default.createContainer();
-        this.a1 = ViewTools_1.default.createContainer();
-        this.a2 = ViewTools_1.default.createContainer();
-        this.a3 = ViewTools_1.default.createContainer();
-        this.a2Offset = ViewTools_1.default.createContainer();
-        this.a21 = ViewTools_1.default.createContainer();
-        this.a22 = ViewTools_1.default.createContainer();
-        this.a23 = ViewTools_1.default.createContainer();
-        this.a24 = ViewTools_1.default.createContainer();
+        this.a = ViewTools_1.default.createContainer("a");
+        this.a1 = ViewTools_1.default.createContainer("a1");
+        this.a2 = ViewTools_1.default.createContainer("a2");
+        this.a3 = ViewTools_1.default.createContainer("a3");
+        this.a2Offset = ViewTools_1.default.createContainer("a2offset");
+        this.a21 = ViewTools_1.default.createContainer("a21");
+        this.a22 = ViewTools_1.default.createContainer("a22");
+        this.a23 = ViewTools_1.default.createContainer("a23");
+        this.a24 = ViewTools_1.default.createContainer("a24");
         rootCtn.addChild(this.a);
         this.a.addChild(this.a1);
         this.a.addChild(this.a2);

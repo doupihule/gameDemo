@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to Spine.Unity.SkeletonGraphic constructor");
             }
             catch (Exception e)
             {
@@ -56,7 +56,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.Get<UnityEngine.Transform>(false);
                         var result = Spine.Unity.SkeletonGraphic.NewSkeletonGraphicGameObject(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<Spine.Unity.SkeletonGraphic>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -90,7 +90,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.Get<Spine.Unity.SkeletonDataAsset>(false);
                         var result = Spine.Unity.SkeletonGraphic.AddSkeletonGraphicComponent(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<Spine.Unity.SkeletonGraphic>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -229,7 +229,7 @@ namespace PuertsStaticWrap
                         
                         var result = obj.GetLastMesh();
                         
-                        Puerts.StaticTranslate<UnityEngine.Mesh>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -343,7 +343,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.SkeletonDataAsset;
-                Puerts.StaticTranslate<Spine.Unity.SkeletonDataAsset>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -360,7 +360,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.OverrideTexture;
-                Puerts.StaticTranslate<UnityEngine.Texture>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -391,7 +391,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.mainTexture;
-                Puerts.StaticTranslate<UnityEngine.Texture>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -408,7 +408,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.Skeleton;
-                Puerts.StaticTranslate<Spine.Skeleton>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -425,7 +425,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.SkeletonData;
-                Puerts.StaticTranslate<Spine.SkeletonData>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -459,7 +459,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.AnimationState;
-                Puerts.StaticTranslate<Spine.AnimationState>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -476,7 +476,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.MeshGenerator;
-                Puerts.StaticTranslate<Spine.Unity.MeshGenerator>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {
@@ -493,7 +493,7 @@ namespace PuertsStaticWrap
             {
                 Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.skeletonDataAsset;
-                Puerts.StaticTranslate<Spine.Unity.SkeletonDataAsset>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
             {

@@ -15,7 +15,7 @@ export default class TipsUI extends UIBaseView {
 
 	constructor() {
 		super();
-		this.tipsbg = ViewTools.createContainer();
+		this.tipsbg = ViewTools.createContainer("tipsbg");
 		this.tipsbg.alpha = 0.5;
 		this.tipsbg.mouseEnabled = true;
 		this.tipsbg.mouseThrough = false;

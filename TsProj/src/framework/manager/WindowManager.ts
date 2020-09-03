@@ -62,16 +62,16 @@ export default class WindowManager {
 	}
 
 	public static SwitchUIAPI(openUIName: any, rootNode: any, closeUIName: any, args=null) {
-		this.SwitchMaskUI(true);
+		// this.SwitchMaskUI(true);
 		WindowManager.SwitchUIComplete(openUIName, rootNode, closeUIName, args);
 	}
 
 	private static SwitchUIComplete(openUIName: any, rootNode: any, closeUIName: any, args) {
-		this.SwitchMaskUI(false);
-		Message.instance.send(WindowEvent.WINDOW_EVENT_SWITCHUISTART, {
-			openUIName: openUIName,
-			closeUIName: closeUIName
-		});
+		// this.SwitchMaskUI(false);
+		// Message.instance.send(WindowEvent.WINDOW_EVENT_SWITCHUISTART, {
+		// 	openUIName: openUIName,
+		// 	closeUIName: closeUIName
+		// });
 		//如果有打开某个界面
 		if (openUIName){
 			var targetUI:UIBaseView = WindowManager.UIInstance[openUIName]
@@ -82,7 +82,7 @@ export default class WindowManager {
 				var uiCobj =ResourceManager.loadUIPrefab(uiCfgs.prefabPath+"/"+ openUIName,ResourceConst.boundle_ui);
 				targetUI.setCObject(uiCobj);
 				if (!rootNode) {
-					targetUI.setSize(ScreenAdapterTools.width,ScreenAdapterTools.height);
+					// targetUI.setSize(ScreenAdapterTools.width,ScreenAdapterTools.height);
 				}
 				WindowManager.UIInstance[openUIName] = targetUI;
 			}
@@ -91,11 +91,10 @@ export default class WindowManager {
 				rootNode.addChild(targetUI);
 			} else {
 				var ctn = this.getWindowCtn(openUIName);
-				ctn.mouseEnabled = true;
 				ctn.addChild(targetUI);
 			}
 			//给ui赋值属性windowName
-			targetUI.windowName = openUIName;
+			targetUI.setWindowName(openUIName);
 			//如果是开启模态的 而且是非全屏ui
 			if (uiCfgs.modal == 1 && !uiCfgs.full) {
 				if (!targetUI.__modalView) {
@@ -123,10 +122,10 @@ export default class WindowManager {
 		}
 
 		this.updateUiVisible();
-		Message.instance.send(WindowEvent.WINDOW_EVENT_SWITCHUIFIN, {
-			openUINames: openUIName,
-			closeUINames: closeUIName
-		});
+		// Message.instance.send(WindowEvent.WINDOW_EVENT_SWITCHUIFIN, {
+		// 	openUINames: openUIName,
+		// 	closeUINames: closeUIName
+		// });
 
 	}
 
@@ -135,7 +134,7 @@ export default class WindowManager {
 		if (alpha == null) {
 			alpha = 0.3;
 		}
-		var modalView = ViewTools.createContainer();
+		var modalView = ViewTools.createContainer(ctn.windowName+"_modal");
 		modalView.mouseEnabled = true;
 		modalView.mouseThrough = false;
 		modalView.alpha = alpha;
@@ -412,8 +411,8 @@ export default class WindowManager {
 	}
 
 	static initMaskUI() {
-		var mask = ViewTools.createContainer();;
-		var background = ViewTools.createContainer();
+		var mask = ViewTools.createContainer("admask");
+		var background = ViewTools.createContainer("admaskbg");
 
 		mask.addChild(background);
 

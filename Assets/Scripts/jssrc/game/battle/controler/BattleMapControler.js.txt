@@ -44,7 +44,7 @@ class BattleMapControler {
         var startOffest = Number(backInfo[2]);
         this._maxSceneWidth = sceneInfo.long;
         this.setMapSize();
-        var ctn1 = ViewTools_1.default.createContainer();
+        var ctn1 = ViewTools_1.default.createContainer("mapctn");
         ctn1.x = -ScreenAdapterTools_1.default.sceneOffsetX - ScreenAdapterTools_1.default.UIOffsetX - startOffest;
         this.controler.layerControler.a1.addChild(ctn1);
         this._mapInfo = {

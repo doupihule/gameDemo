@@ -49,7 +49,7 @@ export default class AlertUILocal extends UIBaseView {
 		var contentBgX = (stageWidth - contentBgWidth) / 2;
 		var contentBgY = (stageHeight - contentBgHeight) / 2;
 		if (this.bgCover == null) {
-			this.bgCover = ViewTools.createContainer();
+			this.bgCover = ViewTools.createContainer("bgCover");
 			var path = [
 				["moveTo", 0, 0], //起点左上角
 				["lineTo", stageWidth, 0],//画到右上角
@@ -64,7 +64,7 @@ export default class AlertUILocal extends UIBaseView {
 		}
 		if (this.contentBg == null) {
 			var splitY = 70;
-			this.contentBg = ViewTools.createContainer();
+			this.contentBg = ViewTools.createContainer("contentBg");
 			var path = [
 				["moveTo", 0, 0],
 				["lineTo", contentBgWidth, 0],
@@ -115,8 +115,7 @@ export default class AlertUILocal extends UIBaseView {
 	}
 
 	private createBtn(str: string, func: any, thisObj: any, x, y) {
-		var sp = ViewTools.createContainer();
-		sp = ViewTools.createContainer();
+		var sp = ViewTools.createContainer("btn");
 		sp.setSize(166,50);
 		var path = [
 			["moveTo", 0, 0],

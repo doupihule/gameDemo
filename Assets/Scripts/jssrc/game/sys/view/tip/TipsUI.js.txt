@@ -8,7 +8,7 @@ const TimerManager_1 = require("../../../../framework/manager/TimerManager");
 class TipsUI extends UIBaseView_1.default {
     constructor() {
         super();
-        this.tipsbg = ViewTools_1.default.createContainer();
+        this.tipsbg = ViewTools_1.default.createContainer("tipsbg");
         this.tipsbg.alpha = 0.5;
         this.tipsbg.mouseEnabled = true;
         this.tipsbg.mouseThrough = false;

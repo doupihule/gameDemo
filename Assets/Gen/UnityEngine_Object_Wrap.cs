@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Object constructor");
             }
             catch (Exception e)
             {
@@ -152,7 +152,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.Get<UnityEngine.Quaternion>(false);
                         var result = UnityEngine.Object.Instantiate(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<UnityEngine.Object>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Object), false, false)
@@ -165,7 +165,7 @@ namespace PuertsStaticWrap
                         var Arg2 = argHelper2.GetBoolean(false);
                         var result = UnityEngine.Object.Instantiate(Arg0,Arg1,Arg2);
                         
-                        Puerts.StaticTranslate<UnityEngine.Object>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -191,7 +191,7 @@ namespace PuertsStaticWrap
                         var Arg3 = argHelper3.Get<UnityEngine.Transform>(false);
                         var result = UnityEngine.Object.Instantiate(Arg0,Arg1,Arg2,Arg3);
                         
-                        Puerts.StaticTranslate<UnityEngine.Object>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -208,7 +208,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<UnityEngine.Object>(false);
                         var result = UnityEngine.Object.Instantiate(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Object>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -228,7 +228,7 @@ namespace PuertsStaticWrap
                         var Arg1 = argHelper1.Get<UnityEngine.Transform>(false);
                         var result = UnityEngine.Object.Instantiate(Arg0,Arg1);
                         
-                        Puerts.StaticTranslate<UnityEngine.Object>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         return;
                     }
                 }
@@ -364,7 +364,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<System.Type>(false);
                         var result = UnityEngine.Object.FindObjectsOfType(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Object[]>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -480,7 +480,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<System.Type>(false);
                         var result = UnityEngine.Object.FindSceneObjectsOfType(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Object[]>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -512,7 +512,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<System.Type>(false);
                         var result = UnityEngine.Object.FindObjectsOfTypeIncludingAssets(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Object[]>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -544,7 +544,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<System.Type>(false);
                         var result = UnityEngine.Object.FindObjectsOfTypeAll(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Object[]>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }
@@ -576,7 +576,7 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<System.Type>(false);
                         var result = UnityEngine.Object.FindObjectOfType(Arg0);
                         
-                        Puerts.StaticTranslate<UnityEngine.Object>.Set((int)data, isolate, Puerts.NativeValueApi.SetValueToResult, info, result);
+                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
                     }
                 }

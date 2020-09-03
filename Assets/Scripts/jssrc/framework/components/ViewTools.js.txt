@@ -71,8 +71,10 @@ class ViewTools {
         }
         return null;
     }
-    static createContainer() {
-        return new BaseContainer_1.default();
+    static createContainer(name) {
+        var ctn = new BaseContainer_1.default();
+        ctn.name = name;
+        return ctn;
     }
     //第一次创建图片的时候 必定 调整尺寸
     static createImage(url = "", boundleName = ResourceConst_1.default.boundle_uiimage) {

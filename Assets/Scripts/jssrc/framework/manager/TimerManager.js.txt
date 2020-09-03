@@ -134,7 +134,6 @@ class TimerManager {
     }
     //循环结束后的检测时钟
     tickHandlerLater() {
-        LogsManager_1.default.echo("-------------test");
     }
     //做一次刷新
     onceUpdateFrame() {

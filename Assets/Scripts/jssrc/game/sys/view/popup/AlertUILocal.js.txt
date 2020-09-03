@@ -39,7 +39,7 @@ class AlertUILocal extends UIBaseView_1.default {
         var contentBgX = (stageWidth - contentBgWidth) / 2;
         var contentBgY = (stageHeight - contentBgHeight) / 2;
         if (this.bgCover == null) {
-            this.bgCover = ViewTools_1.default.createContainer();
+            this.bgCover = ViewTools_1.default.createContainer("bgCover");
             var path = [
                 ["moveTo", 0, 0],
                 ["lineTo", stageWidth, 0],
@@ -54,7 +54,7 @@ class AlertUILocal extends UIBaseView_1.default {
         }
         if (this.contentBg == null) {
             var splitY = 70;
-            this.contentBg = ViewTools_1.default.createContainer();
+            this.contentBg = ViewTools_1.default.createContainer("contentBg");
             var path = [
                 ["moveTo", 0, 0],
                 ["lineTo", contentBgWidth, 0],
@@ -101,8 +101,7 @@ class AlertUILocal extends UIBaseView_1.default {
         WindowManager_1.default.CloseUI(WindowCfgs_1.WindowCfgs.AlertUILocal);
     }
     createBtn(str, func, thisObj, x, y) {
-        var sp = ViewTools_1.default.createContainer();
-        sp = ViewTools_1.default.createContainer();
+        var sp = ViewTools_1.default.createContainer("btn");
         sp.setSize(166, 50);
         var path = [
             ["moveTo", 0, 0],

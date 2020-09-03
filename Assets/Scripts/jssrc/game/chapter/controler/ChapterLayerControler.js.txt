@@ -13,10 +13,10 @@ class ChapterLayerControler {
         this.timeCode = 0;
         this.controler = controler;
         this.rootCtn = rootCtn;
-        this.a = ViewTools_1.default.createContainer();
-        this.a1 = ViewTools_1.default.createContainer();
-        this.a2 = ViewTools_1.default.createContainer();
-        this.a21 = ViewTools_1.default.createContainer();
+        this.a = ViewTools_1.default.createContainer("a");
+        this.a1 = ViewTools_1.default.createContainer("a1");
+        this.a2 = ViewTools_1.default.createContainer("a2");
+        this.a21 = ViewTools_1.default.createContainer("a21");
         rootCtn.addChild(this.a);
         this.a.addChild(this.a1);
         this.a.addChild(this.a2);
