@@ -28,7 +28,7 @@ import ModelToServerMapCommon from "../consts/ModelToServerMapCommon";
 import KariqiShareManager from './KariqiShareManager';
 import KariquShareConst from '../consts/KariquShareConst';
 import ViewTools from "../components/ViewTools";
-import Base3dViewExpand from "../components/Base3dViewExpand";
+import Base3dViewExpand from "../components/d3/Base3dViewExpand";
 import ResourceCommonConst from "../consts/ResourceCommonConst";
 
 export default class MainModule implements IMessage {
@@ -86,7 +86,7 @@ export default class MainModule implements IMessage {
 		var childCount = child.numChildren;
 		var inddex = this._childNums % childCount;
 		var targetView = child.getChildAt(inddex);
-		var cloneObj:Base3dViewExpand = ViewTools.cloneOneView(targetView);
+		var cloneObj:Base3dViewExpand = ViewTools.cloneOneView(targetView) as Base3dViewExpand;
 		cloneObj.set3dPos(targetView.x,targetView.y +10,targetView.z);
 		this._model.addChild(cloneObj);
 	}

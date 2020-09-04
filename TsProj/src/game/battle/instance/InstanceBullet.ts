@@ -1,524 +1,433 @@
 import InstanceMove from "./InstanceMove";
-import InstanceLogical from "./InstanceLogical";
+import InstancePlayer from "./InstancePlayer";
+import TableUtils from "../../../framework/utils/TableUtils";
+import UserInfo from "../../sys/common/UserInfo";
+import InstanceRole from "./InstanceRole";
+import ColliderController from "../controler/ColliderController";
 import BattleFunc from "../../sys/func/BattleFunc";
+import GlobalParamsFunc from "../../sys/func/GlobalParamsFunc";
 import BattleConst from "../../sys/consts/BattleConst";
-import SkillActionData from "../data/SkillActionData";
+import SoundManager from "../../../framework/manager/SoundManager";
+import { MusicConst } from "../../sys/consts/MusicConst";
+import UICompConst from "../../../framework/consts/UICompConst";
+import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand";
+import ViewTools from "../../../framework/components/ViewTools";
 
-import ChooseTrigger from "../trigger/ChooseTrigger";
-import SkillActionTrigger from "../trigger/SkillActionTrigger";
-import RandomUtis from "../../../framework/utils/RandomUtis";
-import PoolTools from "../../../framework/utils/PoolTools";
-import BattleAoeData from "../data/BattleAoeData";
-import PoolCode from "../../sys/consts/PoolCode";
-
-//子弹基类
 export default class InstanceBullet extends InstanceMove {
 
-	public owner: InstanceLogical;
-	public skillAction: SkillActionData
-	public cfgData: any;
-	public moveSpeed: number = 0;
-	public moveLength: number = 0;
-	//剩余检测碰撞次数
-	public leftCollisionTimes: number = 1;
-	private _hasHitNums: number = 0;
-
-	//重复检测帧数
-	private _repeatCheckFrame: number = 0;
-
-	//运动时长
-	public moveFrame: number = 0;
-
-	private _chooseTargetArr: InstanceLogical[];
-
-	private collisionType: number;   //碰撞类型
-	private collisionParams: any[]
-
-	private skillActionArr: SkillActionData[];
-	private hitLandActionArr: SkillActionData[]
-	//命中过的人数组缓存起来防止重复检测
-	private _mingzhongArr: InstanceLogical[]
-
-	//旋转角度样式
-	private _rotationStyle: number
-
-	//碰撞后的行为
-	private _collisionParams: number[];
-	//当前跟随的role
-	private _followRole: InstanceLogical;
-
-	private _bulletMoveType: number;
-
-	//初始y坐标偏移
-	public initOffsetY: number = 0;
-
-
-	constructor(controler) {
-		super(controler);
-		this.classModel = BattleConst.model_bullet;
-	}
-
-	//初始化数据
-	public setData(data: any) {
-		if (!this._mingzhongArr) {
-			this._mingzhongArr = []
-		} else {
-			this._mingzhongArr.length = 0;
-		}
-		super.setData(data);
-		this._followRole = null
-		this.setViewWay(1);
-		this.setRotation(0);
-		this.cfgData = BattleFunc.instance.getCfgDatas("Bullet", data.id);
-		this.collisionType = this.cfgData.collisionRange;
-		this.collisionParams = this.cfgData.rangeParams;
-		if (!this.skillActionArr) {
-			this.skillActionArr = []
-		}
-		if (!this.hitLandActionArr) {
-			this.hitLandActionArr = []
-		}
-
-		// this.skillActionArr =[];
-
-	}
-
-	//设置数据 rotation角度
-	public setOwner(owner: InstanceLogical, skillAction: SkillActionData, rotation: number, targetRole: InstanceLogical) {
-		this.owner = owner;
-		this.cfgScale = owner.cfgScale
-		this.skillAction = skillAction;
-		this._rotationStyle = rotation;
-		var collisionParams = this.cfgData.collisionAction;
-		var tagStr = "Bullet:" + this.dataId;
-		if (collisionParams) {
-			this._collisionParams = [];
-			this._collisionParams[0] = Number(collisionParams[0]);
-			//执行碰撞行为的概率
-			this._collisionParams[1] = this.skillAction.skill.getSkillValue(collisionParams[1], tagStr);
-
-			//如果是反弹的 默认重复检测间隔为60帧
-			if (this._collisionParams[0] == BattleConst.bullet_hit_bounce) {
-				this._repeatCheckFrame = 60
-			} else {
-				this._repeatCheckFrame = Number(collisionParams[2]);
-				if (this._repeatCheckFrame > 0) {
-					this._repeatCheckFrame = BattleFunc.instance.turnMinisecondToframe(this._repeatCheckFrame);
-				}
-			}
-
-		}
-		if (this._myView) {
-			this._myView.play(0, true, true);
-		}
-		//记录y坐标差
-		this.initOffsetY = this.pos.y - owner.pos.y;
-		//如果主角是有多个视图的 那么放多个子弹
-		if (owner._myView && this._myView) {
-			this._myView.setSpace(owner._myView._xSpace, owner._myView._ySpace);
-			this._myView.changeViewNums(owner._myView.currentViewNums);
-		}
-
-		//根据运动类型决定 怎么运动
-		//如果是按直线运动了
-		this.leftCollisionTimes = Number(this.cfgData.collisionTimes);
-		this._hasHitNums = 0;
-		var targetType = this.cfgData.targetType;
-		if (targetType == 1) {
-			if (!targetRole) {
-				LogsManager.errorTag("bulletError", "没有传入目标角色");
-				this._chooseTargetArr = []
-			} else {
-				this._chooseTargetArr = [targetRole];
-			}
-
-		} else if (targetType == 2) {
-			this._chooseTargetArr = owner.campArr;
-		} else {
-			this._chooseTargetArr = owner.toCampArr;
-		}
-
-		var skillEff = this.cfgData.skillEffect;
-		if (skillEff) {
-			for (var i = 0; i < skillEff.length; i++) {
-				if (!this.skillActionArr[i]) {
-					var skillAction = new SkillActionData(String(skillEff[i]), owner, skillAction.skill, 0, 0, 0, 0, 0);
-					this.skillActionArr[i] = skillAction;
-				} else {
-					//刷新数据即可
-					this.skillActionArr[i].updateData(owner, skillAction.skill);
-				}
-
-			}
-		}
-
-		this.resetMoveAct(targetRole)
-		var offset = this.cfgData.offset || 0;
-		if (offset) {
-			this.adjustInitPos(targetRole);
-			this.initOffsetY = this.pos.y - owner.pos.y;
-			this.resetMoveAct(targetRole)
-		}
-
-
-	}
-
-	//调整初始位置
-	private adjustInitPos(targetRole: InstanceLogical) {
-		var offset = (this.cfgData.offset || 0) * this.cfgScale;
-		if (!offset) {
-			return;
-		}
-
-		var spdAbs = Math.sqrt(this.speed.x * this.speed.x + this.speed.y * this.speed.y + this.speed.z * this.speed.z);
-		if (spdAbs == 0) {
-			return;
-		}
-		var ofx = this.speed.x / spdAbs * offset
-		var ofy = this.speed.y / spdAbs * offset
-		var ofz = this.speed.z / spdAbs * offset
-		this.setPos(this.pos.x + ofx, this.pos.y + ofy, this.pos.z + ofz);
-
-		var disX1 = targetRole.pos.x - this.owner.pos.x;
-		var disZ1 = targetRole.pos.z - this.owner.pos.z;
-
-		var disX2 = this.pos.x - this.owner.pos.x
-		var disZ2 = this.pos.z - this.owner.pos.z
-
-		var disSq1 = disX1 * disX1 + disZ1 * disZ1;
-		var disSq2 = disX2 * disX2 + disZ2 * disZ2;
-		//如果敌人在我和子弹中间.  那么把我调整到 中间去
-		if (disSq2 > disSq1) {
-			this.setPos((targetRole.pos.x + this.owner.pos.x) / 2, this.pos.y, (targetRole.pos.z + this.owner.pos.z) / 2)
-		}
-
-
-	}
-
-
-	//执行ai逻辑
-	public doAiLogical() {
-
-
-		//判断调整速度
-		this.checkAdjustAngle()
-		//判断跟随
-		this.checkFollowRole();
-		//检测碰人ai
-		this.checkAttack(this.skillActionArr);
-
-		//判断子弹是否销毁
-		this.updateLeftTime();
-
-		//判断落地
-		this.checkHitLandAction();
-
-	}
-
-	//判断逻辑行为
-	private checkHitLandAction() {
-		if (this.speed.y <= 0) {
-			return;
-		}
-
-		//落地成功
-		if (this.pos.y - this.speed.y <= 10) {
-			return;
-		}
-		this.speed.y = 0;
-
-		var fallEffect = this.cfgData.fallEffect
-		if (fallEffect) {
-			for (var i = 0; i < fallEffect.length; i++) {
-				var aoeId = fallEffect[i];
-				var aoeData: BattleAoeData = PoolTools.getItem(PoolCode.POOL_AOEDATA + aoeId);
-				if (!aoeData) {
-					aoeData = new BattleAoeData(aoeId);
-				}
-				aoeData.setData(this.skillActionArr[0], this.owner);
-				//开始执行aoe效果
-				aoeData.doAoeAction(this.owner, this.pos, this);
-			}
-		}
-
-		// this.checkAttack(this.hitLandActionArr);
-		//销毁自己
-		this.controler.destroyBullet(this);
-
-	}
-
-
-	//判断抛物线调整角度
-	private checkAdjustAngle() {
-		if (this._myState != BattleConst.state_jump) {
-			return;
-		}
-		//每2帧调整一次
-		if (this.updateCount % 2 == 0) {
-			return;
-		}
-
-		var ang = Math.atan2(this.speed.z + this.speed.y, this.speed.x);
-		this.setRotationRad(ang);
-
-	}
-
-
-	//判断跟随角色
-	private checkFollowRole() {
-		if (!this._followRole) {
-			return;
-		}
-		//如果已经挂了 也不执行
-		if (this._followRole.hp <= 0) {
-			this._followRole = null;
-			this.controler.destroyBullet(this);
-			return;
-		}
-
-		this.resetMoveAct(this._followRole);
-
-	}
-
-	//检测攻击. 子弹因为速度快.所以需要每帧都计算 注意运算效率
-	private checkAttack(skillActionArr: SkillActionData[]) {
-		if (this.leftCollisionTimes == 0) {
-			return;
-		}
-		//检测距离
-		var tempArr = BattleFunc.getOneTempArr();
-		//
-		if (this.collisionType == ChooseTrigger.RANGE_CIRCLE) {
-			ChooseTrigger.chooseRoleByCircle(this, this.collisionParams[0] * this.cfgScale, 0, 0, this._chooseTargetArr, 1, tempArr, this._mingzhongArr);
-		} else if (this.collisionType == ChooseTrigger.RANGE_RECT) {
-			ChooseTrigger.chooseRoleByRect(this, this.collisionParams[0] * this.cfgScale, this.collisionParams[1] * this.cfgScale, 0, 0, this._chooseTargetArr, 1, tempArr, this._mingzhongArr);
-		}
-		//剔除掉不能被选中的人
-		ChooseTrigger.excludeUnChooseRole(this.owner, tempArr);
-
-		//对碰到的人执行效果
-		if (tempArr.length > 0) {
-			this.leftCollisionTimes--;
-			this._hasHitNums++;
-			for (var i = 0; i < tempArr.length; i++) {
-				this._mingzhongArr.push(tempArr[i]);
-			}
-
-			var hitRatio = 0;
-			if (this.cfgData.collisionDamage) {
-				hitRatio = this.cfgData.collisionDamage[this._hasHitNums - 2] || 0;
-
-			}
-
-			//遍历所有的技能效果执行
-			for (var s = 0; s < skillActionArr.length; s++) {
-				//读取碰撞伤害率
-				// var value = this.d
-				if (hitRatio != 0) {
-					//那么增加最终伤害
-					this.owner.attrData.changeOneTempAttr(BattleConst.attr_final_damage, hitRatio, 0);
-				}
-				SkillActionTrigger.checkSkillAction(this.owner, skillActionArr[s], tempArr);
-			}
-
-			if (this._repeatCheckFrame > 0) {
-				this.controler.setCallBack(this._repeatCheckFrame, this.clearHitArr, this);
-			}
-			//如果没有可攻击的人了 就销毁子弹
-			if (this.leftCollisionTimes == 0) {
-				this.controler.destroyBullet(this);
-			} else {
-				//执行碰到后行为
-				this.doAfterHit();
-			}
-
-		}
-		BattleFunc.cacheOneTempArr(tempArr);
-	}
-
-	//清除击中过的人
-	private clearHitArr() {
-		this._mingzhongArr.length = 0;
-	}
-
-	//碰撞后做的事情
-	private doAfterHit() {
-		if (!this._collisionParams) {
-			return;
-		}
-		var type = this._collisionParams[0];
-		//0穿透 1 弹射, 2返回
-		if (type == BattleConst.bullet_hit_through) {
-			return;
-		} else if (type == BattleConst.bullet_hit_bounce) {
-
-
-			if (!this.checkHitRatio()) {
-				this._followRole = null;
-				//销毁子弹
-				this.controler.destroyBullet(this);
-				return
-			}
-
-			//选择最近的一个目标
-			var nearRole = ChooseTrigger.chooseAbsNearRole(this, this._chooseTargetArr, this._mingzhongArr, this.cfgData.pathParams[1]);
-			if (nearRole) {
-				this.resetMoveAct(nearRole);
-			} else {
-				//如果没有最近的目标 而且命中目标人数超过2人. 那么重新选上一次命中过的人
-				if (this._mingzhongArr.length >= 2) {
-					this._mingzhongArr.splice(0, this._mingzhongArr.length - 1);
-					nearRole = ChooseTrigger.chooseAbsNearRole(this, this._chooseTargetArr, this._mingzhongArr, this.cfgData.pathParams[1]);
-					//那么再选一次
-					if (nearRole) {
-						this.resetMoveAct(nearRole);
-						return;
-					}
-				}
-
-				this._followRole = null;
-			}
-			if (!nearRole) {
-				this.controler.destroyBullet(this);
-			}
-
-		} else if (type == BattleConst.bullet_hit_back) {
-			//如果不满足碰后概率
-			if (!this.checkHitRatio()) {
-				return
-			}
-			//那么回到发射者那里去
-			this.resetMoveAct(this.owner);
-		}
-
-	}
-
-	//判断是否满足碰撞后的概率
-	private checkHitRatio() {
-		var raqtio = this._collisionParams[1];
-		if (!raqtio) {
-			return true;
-		}
-		var random = RandomUtis.getOneRandom();
-		if (random * 10000 > raqtio) {
-			return false;
-		}
-		return true
-	}
-
-	//重置朝目标移动
-	private resetMoveAct(targetRole: InstanceLogical) {
-		var rotation = this._rotationStyle;
-		var moveType = this.cfgData.type
-		this._bulletMoveType = moveType;
-		var xspd: number;
-		var yspd: number = 0;
-		var zspd: number;
-		var ang: number;
-		var spdValue = BattleFunc.instance.turnSpeedToFrame(this.cfgData.pathParams[0]);
-		var dy: number = targetRole.pos.y - this.pos.y + this.initOffsetY;
-		var dx: number = targetRole.pos.x - this.pos.x;
-		var dz: number = targetRole.pos.z - this.pos.z;
-		var absDy = Math.abs(dy);
-		var dis
-
-		var pathParams = this.cfgData.pathParams;
-		var tempArr
-		//如果是空中单位.那么抛物线强制改成 直线运动
-		if (targetRole.lifeType == BattleConst.LIFE_AIRHERO) {
-			moveType = BattleConst.BULLET_MOVE_LINE;
-			//这里需要把抛物线运动参数转化成直线运动
-			tempArr = BattleFunc.getOneTempArr();
-			tempArr[0] = pathParams[0] * 1.2
-			tempArr[1] = 1000
-			pathParams = tempArr
-		}
-
-		if (moveType == BattleConst.BULLET_MOVE_LINE) {
-
-			//水平运动子弹不受重力
-			this.gravityAble = false;
-			//如果角度是-1 那么根据敌人算角度
-			if (rotation == -1) {
-				if (absDy > 10) {
-					//那么要计算实际y坐标
-					dis = Math.sqrt(dx * dx + dz * dz + dy * dy);
-					var spdperDis = spdValue / dis;
-					yspd = dy * spdperDis;
-					xspd = dx * spdperDis;
-					zspd = dz * spdperDis;
-				} else {
-					dis = Math.sqrt(dx * dx + dz * dz);
-					var spdperDis = spdValue / dis;
-					xspd = dx * spdperDis;
-					zspd = dz * spdperDis;
-				}
-				var r = Math.atan2(yspd + zspd, xspd);
-				ang = r;
-				rotation = r * BattleFunc.radtoAngle;
-
-			} else {
-				//如果是反向运动的
-				if (this.owner._viewWay == -1) {
-					rotation = 180 - rotation;
-					this.setViewWay(-1)
-				}
-				ang = rotation * BattleFunc.angletoRad;
-				xspd = Math.cos(ang) * spdValue;
-				zspd = Math.sin(ang) * spdValue;
-			}
-			if (this.owner._viewWay == -1) {
-				this.setRotation(rotation + 180);
-			} else {
-				this.setRotation(rotation);
-			}
-			//因为子弹没有设置scale -1
-			//如果不存在跟随目标或者本次跟随目标不等于上次的目标再重算移动距离
-			if (!this._followRole || this._followRole != targetRole) {
-				//移动时长
-				this.moveFrame = Math.floor(pathParams[1] / spdValue)
-			}
-			//忽略调整方向
-			this.initMove(xspd, yspd, zspd, true);
-			//如果是反弹的子弹 那么一定会跟随目标
-			if (this._collisionParams[0] == BattleConst.bullet_hit_bounce) {
-				this._followRole = targetRole;
-			}
-		} else if (moveType == BattleConst.BULLET_MOVE_CURVE) {
-			this.gravityAble = true;
-			dis = Math.sqrt(dx * dx + dz * dz);
-			var flyDisTance = pathParams[1] / 10000 * dis;
-			var maxFlyDis = pathParams[2]
-			if (flyDisTance > maxFlyDis) {
-				flyDisTance = maxFlyDis;
-			}
-			this.moveFrame = Math.ceil(dis / spdValue);
-			var ang = Math.atan2(dz, dx);
-			xspd = Math.cos(ang) * spdValue;
-			zspd = Math.sin(ang) * spdValue;
-			//忽略调整方向
-			this.initMove(xspd, 0, zspd, true);
-			var halft = this.moveFrame / 2;
-			//计算y速度
-			this.addSpeed.y = flyDisTance * 2 / (halft * halft);
-			//初始化跳跃
-			this.initJump(-this.addSpeed.y * halft)
-			this.moveFrame += 120;
-
-		}
-		if (tempArr) {
-			BattleFunc.cacheOneTempArr(tempArr);
-		}
-	}
-
-	//更新剩余存活时间
-	private updateLeftTime() {
-		if (!this.checkIsUsing()) {
-			return
-		}
-		this.moveFrame--;
-		if (this.moveFrame == 0) {
-			this.controler.destroyBullet(this);
-		}
-	}
+    //是谁发出的子弹
+    public owner: InstancePlayer;
+    //攻击力
+    public attack: number = 1;
+    //穿透值 碰到一个人减少1点穿透值
+    public throuthLenth: number = 1;
+    //速度的平方. 是为了碰撞检测时 减少计算量
+    private speedSqure: number = 0;
+
+    //速度大小
+    public speedAbs: number;
+
+    //边界数组 [minx,maxx,miny,maxy];
+    private _borderPos: any[];
+
+    public type = "Bullet"
+
+    //击中过的人数组
+    protected hitedArr: InstanceRole[];
+
+    private colliderCtrl: ColliderController;
+
+    public rigid: Laya.Rigidbody3D;
+
+    public trail: Laya.TrailSprite3D;
+
+    private ray = new Laya.Ray(this.pos, this.speed);
+
+    private rayHit = new Laya.HitResult();
+
+    private coll;
+
+    public isSimulate;
+
+    public fakeSpeed = 100;
+
+    constructor(controller) {
+        super(controller);
+        this.hitedArr = [];
+    }
+
+    //设置数据
+    public setData(data) {
+        super.setData(data);
+        // this.cfgsData = BattleFunc.instance.getCfgDatas("Bullet", this.dataId);
+        this.knockSizeBox = TableUtils.copyOneArr([600, 3500]);
+        //单位转化
+        this.knockSizeBox[0] /= 10000;
+        this.knockSizeBox[1] /= 10000;
+
+        this.coll = null;
+
+
+        //清空击中过的怪
+        this.hitedArr.splice(0, this.hitedArr.length);
+        // this._borderPos = BattleFunc.borderPos;
+        if (!this.colliderCtrl) {
+            this.rigid = this._myView.getComponent(UICompConst.comp_rigidbody3d);
+            this.colliderCtrl = this._myView.addComponent(ColliderController);
+            this.colliderCtrl.instance = this;
+            this.colliderCtrl.controller = this.controller;
+            // this.rigid.overrideGravity = true;
+            this.rigid.canCollideWith = 16 | 32;
+
+            this.rigid.collisionGroup = 64;
+            // this.rigid.ccdMotionThreshold = 0.00001;
+            // this.rigid.isKinematic = true;
+        }
+        if (!this.trail) {
+            this.trail = this.getView().getChildByName("trail") as Laya.TrailSprite3D;
+            this.trail.removeSelf();
+            this.trail.trailFilter._time = GlobalParamsFunc.instance.getDataNum("bulletTailFlyTime") / 1000;
+        }
+
+        var trail = this.getView().getChildByName("trail") as Laya.TrailSprite3D;
+        if (trail) {
+            trail.destroy();
+        }
+        trail = ViewTools.cloneOneView(this.trail)  ;
+        this.getView().addChild(trail);
+    }
+
+    //设置速度
+    public setSpeedByAng(spd, rx, ry, rz) {
+        this.initMove(spd * rx, spd * ry, spd * rz);
+    }
+
+    //初始化运动 ,子类可根据这个继承,并改变视图的朝向或者 动作显示
+    // initMove(x: number = 0, y: number = 0, z: number = 0) {
+    //     this.speed.x = x;
+    //     this.speed.y = y;
+    //     this.speed.z = z;
+    //     (this.rigid as Laya.Rigidbody3D).applyImpulse(VectorTools.createVec3(x, y, z));
+
+    // }
+
+    //设置角度
+    public setAngBySpeed() {
+        var ang = 1;
+        if (this.speed.z) {
+            ang = Math.atan(this.speed.x / this.speed.z);
+        }
+        this.setRadian(0, ang, 0);
+    }
+
+    //实现坐标
+    realShowView() {
+        if (!this._myView) {
+            return
+        }
+        var sp: Base3dViewExpand;
+
+        this.pos = this._myView.transform.position;
+        this._myView.transform.localPosition = this.pos
+        // this._myView.transform.x = this.pos.x;
+        // this._myView.transform.y = this.pos.y;
+        // this._myView.transform.z = this.pos.z;
+    }
+
+    //设置坐标
+    setPos(x: number = 0, y: number = 0, z: number = 0) {
+        if (this.rigid) {
+            this.rigid.isKinematic = true;
+            this._myView.transform.position.x = x;
+            this._myView.transform.position.y = y;
+            this._myView.transform.position.z = z;
+            this._myView.transform.position = this._myView.transform.position;
+
+            this.realShowView()
+        }
+    }
+
+    //设置主人 
+    public setOwner(owner: InstancePlayer) {
+        this.owner = owner;
+        this.throuthLenth = 100;
+        //定义子弹速度大小
+        this.speedAbs = 100;
+        //拿到攻击力
+        this.attack = 100;
+
+    }
+
+    //执行子弹ai逻辑
+    public doAiLogical() {
+        //碰撞检测
+        this.checkHit();
+        //边界检测
+        this.checkBorder();
+    }
+
+    //碰撞检测
+    private checkHit() {
+        var flag = false;
+        this.isSimulate = false;
+        this.ray.origin = this.pos;
+        this.ray.direction = this.speed;
+        var length = VectorTools.scalarLength(this.speed) * 0.999
+        this.controller.battleScene.physicsSimulation.rayCast(this.ray, this.rayHit, 300, 32, 16 | 32);
+        if (!this.rayHit.succeeded) return;
+        if (this.rayHit.collider) {
+            var tempVector3_1 = VectorTools.createVec3();
+            var tempVector3_2 = VectorTools.createVec3();
+            var tempVector3_3 = VectorTools.createVec3();
+            var tempVector3_4 = VectorTools.createVec3();
+            // console.log(VectorTools.distanceSquared(this.ray.origin, this.rayHit.point)+" "+length)
+            VectorTools.subtract(this.rayHit.point, this.ray.origin, tempVector3_1)
+            if (VectorTools.distance(this.ray.origin, this.rayHit.point) < length) {
+
+                if (this.coll == this.rayHit.collider) {
+                    this.coll = null;
+                    return;
+                }
+                else {
+                    // this.pos = this.rayHit.point;
+                    this.coll = this.rayHit.collider;
+                }
+                // if (this.ray.direction.x / tempVector3_1.x >= 0 && this.ray.direction.y / tempVector3_1.y >= 0 && this.ray.direction.z / tempVector3_1.z >= 0) {
+                // VectorTools.add(this.pos, this.rayHit.point, this.pos);
+                if (this.rayHit.collider.owner.name.indexOf("border") != -1) {
+                    this.controller.destoryBullet(this);
+                    return;
+                }
+
+                var collObj = this.rayHit.collider.owner && this.rayHit.collider.owner["instance"];
+                if (collObj) {
+                    if (collObj.type == "Target") {
+                        if (collObj.param.pierce) {
+
+                        }
+                        else {
+                            this.controller.destoryBullet(this);
+                        }
+                        if (this.controller.roleDead(collObj, true, this.speed)) {
+                            SoundManager.playSE(MusicConst.SOUND_HITDIE);
+                            collObj.collider.collisionGroup = 64;
+                            flag = true;
+                        }
+                        // this.controller.checkResult();
+                    }
+                    if (collObj.param.portalIn) {
+                        for (var index in this.controller.roleArr) {
+                            var roleInstance = this.controller.roleArr[index];
+                            if (roleInstance == collObj) continue;
+                            if (roleInstance.param.portalOut && roleInstance.param.portalId == collObj.param.portalId) {
+                                VectorTools.normalize(this.speed, tempVector3_1);
+                                var time = this.speed.x / tempVector3_1.x;
+
+                                this.ray.origin = this.pos;
+                                this.ray.direction = this.speed;
+                                this.controller.battleScene.physicsSimulation.rayCast(this.ray, this.rayHit, 300);
+
+                                var normal = this.rayHit.normal;
+
+                                VectorTools.scale(normal, -2 * (VectorTools.dot(tempVector3_1, normal)), tempVector3_2)
+                                VectorTools.add(tempVector3_1, tempVector3_2, tempVector3_3);
+                                VectorTools.scale(tempVector3_3, time, tempVector3_4);
+
+                                if (Math.pow(tempVector3_4.x - this.speed.x, 2) + Math.pow(tempVector3_4.y - this.speed.y, 2) + Math.pow(tempVector3_4.z - this.speed.z, 2) > 0.001) {
+                                    this.speed.x = tempVector3_4.x;
+                                    this.speed.y = tempVector3_4.y;
+                                    this.speed.z = tempVector3_4.z;
+
+                                    var deltaRotY = roleInstance._myView.transform.localRotationEulerY - collObj._myView.transform.localRotationEulerY;
+
+                                    // var c = 1;
+                                    // if (this.instance.speed.z) {
+                                    //     ang = Math.atan(this.instance.speed.x / this.instance.speed.z);
+                                    // }
+                                    // ang += deltaRotY * BattleFunc.angletoRad;
+                                    // var speed = Math.sqrt(Math.pow(this.instance.speed.x, 2) + Math.pow(this.instance.speed.z, 2));
+                                    // var xdis = this.instance.speed.x / Math.abs(this.instance.speed.x)
+                                    // var zdis = this.instance.speed.z / Math.abs(this.instance.speed.z)
+                                    // this.instance.speed.x = xdis * speed * Math.abs(Math.sin(ang));
+                                    // this.instance.speed.z = zdis * speed * Math.abs(Math.cos(ang));
+
+                                    var ang = -deltaRotY * BattleFunc.angletoRad;
+                                    var speed = Math.sqrt(Math.pow(this.speed.x, 2) + Math.pow(this.speed.z, 2));
+                                    var x = this.speed.x / speed
+                                    var z = this.speed.z / speed
+                                    this.speed.x = speed * (x * Math.cos(ang) - z * Math.sin(ang));
+                                    this.speed.z = speed * (x * Math.sin(ang) + z * Math.cos(ang));
+
+                                    var detlaPos = VectorTools.createVec3;
+                                    VectorTools.subtract(this.rayHit.point, collObj.pos, detlaPos);
+                                    detlaPos.x /= collObj._myView.transform.localScaleX;
+                                    detlaPos.y /= collObj._myView.transform.localScaleY;
+                                    detlaPos.z /= collObj._myView.transform.localScaleZ;
+
+
+                                    x = detlaPos.x
+                                    z = detlaPos.z
+                                    detlaPos.x = 1 * (x * Math.cos(ang) - z * Math.sin(ang));
+                                    detlaPos.z = 1 * (x * Math.sin(ang) + z * Math.cos(ang));
+
+                                    // var ang = 1;
+                                    // if (detlaPos.z) {
+                                    //     ang = Math.atan(detlaPos.x / detlaPos.z);
+                                    // }
+                                    // ang += deltaRotY * BattleFunc.angletoRad;
+                                    // xdis = detlaPos.x / Math.abs(detlaPos.x)
+                                    // zdis = detlaPos.z / Math.abs(detlaPos.z)
+                                    // var DeltaDis = Math.sqrt(Math.pow(detlaPos.x, 2) + Math.pow(detlaPos.z, 2));
+                                    // detlaPos.x = xdis * DeltaDis * Math.abs(Math.sin(ang));
+                                    // detlaPos.z = zdis * DeltaDis * Math.abs(Math.cos(ang));
+
+                                    detlaPos.x *= roleInstance._myView.transform.localScaleX;
+                                    detlaPos.y *= roleInstance._myView.transform.localScaleY;
+                                    detlaPos.z *= roleInstance._myView.transform.localScaleZ;
+
+                                    this.pos.x = detlaPos.x + roleInstance.pos.x;
+                                    this.pos.y = detlaPos.y + roleInstance.pos.y;
+                                    this.pos.z = detlaPos.z + roleInstance.pos.z;
+
+                                    // flag = true;
+                                    this.isSimulate = true;
+                                    break;
+                                }
+                                else {
+
+                                }
+
+                            }
+                        }
+                    }
+                    else if (collObj.param.rebound) {
+                        if (collObj.param.move) {
+                            var collObj2 = collObj.getView()
+                            VectorTools.scale(this.speed, this.fakeSpeed, tempVector3_2)
+
+                            collObj2.getComponent(Laya.Rigidbody3D).applyImpulse(tempVector3_2);
+                        }
+                        this.ray.origin = this.pos;
+                        // VectorTools.scale(this.speed, 1, this.ray.origin);
+                        // VectorTools.subtract(this.pos, this.speed, this.ray.origin);
+                        this.ray.direction = this.speed;
+                        this.controller.battleScene.physicsSimulation.rayCast(this.ray, this.rayHit, 300, 16, 16);
+
+                        VectorTools.normalize(this.speed, tempVector3_1);
+                        var time = this.speed.x / tempVector3_1.x;
+                        var normal = this.rayHit.normal;
+                        VectorTools.scale(normal, -2 * (VectorTools.dot(tempVector3_1, normal)), tempVector3_2)
+                        VectorTools.add(tempVector3_1, tempVector3_2, tempVector3_3);
+                        VectorTools.scale(tempVector3_3, time, tempVector3_4);
+
+                        if (Math.pow(tempVector3_4.x - this.speed.x, 2) + Math.pow(tempVector3_4.y - this.speed.y, 2) + Math.pow(tempVector3_4.z - this.speed.z, 2) > 0.001) {
+                            this.initMove(tempVector3_4.x, tempVector3_4.y, tempVector3_4.z)
+                            this.setAngBySpeed();
+                        }
+
+
+                        VectorTools.scale(this.speed, 0.0001, tempVector3_4)
+                        VectorTools.subtract(this.rayHit.point, tempVector3_4, this.pos)
+                        this.isSimulate = true;
+
+                        SoundManager.playSE(MusicConst.SOUND_CRASH);
+                        // this.pos = this.rayHit.point;
+                    } else {
+                        if (collObj.param.pierce) {
+
+                        }
+                        else {
+                            if (collObj.param.move) {
+                                var collObj2 = collObj.getView()
+                                VectorTools.scale(this.speed, this.fakeSpeed, tempVector3_2)
+
+                                collObj2.getComponent(Laya.Rigidbody3D).applyImpulse(tempVector3_2);
+                            }
+                            this.controller.destoryBullet(this);
+
+                        }
+                    }
+                    if (collObj.param.explodeButton) {
+                        for (var index in this.controller.roleArr) {
+                            var role = this.controller.roleArr[index];
+                            if (role.param.explodeBox) {
+                                if (collObj.param.explodeId == role.param.explodeId) {
+                                    role.explode();
+                                }
+                            }
+                        }
+                        // this.controller.destoryRole(otherInstance);
+                    }
+                    if (collObj.param.break) {
+                        this.controller.destoryRole(collObj);
+                    }
+                }
+
+            }
+        }
+        if (flag) {
+            this.checkHit();
+        }
+        this.setAngBySpeed();
+    }
+
+    //重写运动函数 主要是更新坐标
+    movePos() {
+        //如果是激活旋转的 那么让view的第一去旋转这么多角度
+        if (this.isSimulate) {
+            return;
+        }
+        if (this.enbleRotate) {
+            //设置弧度
+            this.setRadian(this.rotationRad.x + this.rotateSpeed.x, this.rotationRad.y + this.rotateSpeed.y, this.rotationRad.z + this.rotateSpeed.z);
+        }
+        //stand状态不执行
+        if (this._myState == BattleConst.state_stand) {
+            return;
+        }
+        this.pos.x += this.speed.x + this.blookSpeed.x;
+        this.pos.y += this.speed.y + this.blookSpeed.y;
+        this.pos.z += this.speed.z + this.blookSpeed.z;
+        //如果坐标小于0 而且是朝地面运动状态  而且是受重力影响的 那么才会去检测落地
+        if (this.speed.y < 0 && this.pos.y <= this.landPos && this._myState == BattleConst.state_move && this.gravityAble) {
+            this.onHitLand();
+        }
+
+
+    }
+
+
+    //判断边界
+    protected checkBorder() {
+        var isOutScreen = false
+        var border = this._borderPos;
+        // if (this.pos.x < border[0] || this.pos.x > border[1]) {
+        //     isOutScreen = true
+        // } else if (this.pos.y < border[2] || this.pos.y > border[3]) {
+        //     isOutScreen = true;
+        // }
+
+        //如果移除屏幕了 那么
+        if (isOutScreen) {
+            this.controller.destoryBullet(this);
+        }
+    }
+
+    //重写着陆函数. 同时控制器销毁自己
+    protected onHitLand() {
+        this.controller.destoryBullet(this);
+    }
+
+    //碰到怪物了 dx,dy 是用来做击退位移效果的
+    protected onHitMonster(monster: InstanceRole, dx, dy) {
+        if (this.throuthLenth == 0) {
+            this.controller.destoryBullet(this);
+            return;
+        }
+        this.throuthLenth--;
+        this.hitedArr.push(monster);
+        // monster.onBeHited(this);
+        //创建击中特效
+        this.createEfect(this.cfgsData.hitEffect, this.pos.x, this.pos.y, 1.3, true, 60);
+    }
 }

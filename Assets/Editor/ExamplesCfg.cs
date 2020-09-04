@@ -48,12 +48,19 @@ public class ExamplesCfg
                 typeof(UnityEngine.Events.UnityEvent),
                 typeof(Outline),
                 typeof(Shadow),
+                typeof(Camera),
+                typeof(Plane),
+                typeof(Quaternion),
+
+                typeof(UnityEngine.Physics),
 
                 typeof(Spine.Animation),
                 typeof(Spine.AnimationState),
                 typeof(Spine.Bone),
                 typeof(SkeletonGraphic),
                 typeof(MeshGeneratorBuffers),
+                
+                
                 
 
                 typeof(ResourceManager),

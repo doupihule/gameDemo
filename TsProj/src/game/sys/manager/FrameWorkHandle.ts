@@ -55,7 +55,6 @@ export default class FrameWorkHandle implements IMessage {
 		var guideStep = UserModel.instance.getMainGuide();
 		//如果没有引导进度信息并且当前最高关卡是0 进入引导
 		if (guideStep == 0 && !UserModel.instance.getMaxBattleLevel()) {
-			BattleFunc.curBattleType = BattleConst.BATTLETYPE_NORMAL;
 			var cartoonSwitch = GlobalParamsFunc.instance.getDataNum("cartoonSwitch");
 			if (cartoonSwitch) {
 				WindowManager.SwitchUIFromLoading(WindowCfgs.CartoonPicUI, WindowCfgs.LoginUI);

@@ -10,10 +10,36 @@ import LabelExpand from "./LabelExpand";
 import SpineGraphicExpand from "./SpineGraphicExpand";
 import ResourceCommonConst from "../consts/ResourceCommonConst";
 import ResourceManager from "../manager/ResourceManager";
-import Base3dViewExpand from "./Base3dViewExpand";
+import Base3dViewExpand from "./d3/Base3dViewExpand";
 import UIBaseView from "./UIBaseView";
+import PlaneExpand from "./d3/PlaneExpand";
+import CameraExpand from "./d3/CameraExpand";
+import PhysicsColliderExpand from "./physics/PhysicsColliderExpand";
+import Animation3DExpand from "./d3/Animation3DExpand";
+import Particle3dExpand from "./d3/Particle3dExpand";
 
 export default class ViewTools {
+
+	static  compClassMap:any = {
+		base:{cl: BaseViewExpand,cname:"GameObject"},
+		btn: {cl:ButtonExpand,cname:"Button"},
+		img: {cl:ImageExpand,cname:"Image"},
+		ctn: {cl:BaseContainer,cname:"GameObject"},
+		label: {cl:LabelExpand,cname:"Label"},
+		input:{cl: LabelExpand,cname:"Label"},
+		list: {cl:ListExpand,cname:"List"},
+		spine: {cl:SpineGraphicExpand,cname:"SpineGraphic"},
+		ui: {cl:UIBaseView,cname:"GameObject"},
+		base3d:{cl:Base3dViewExpand,cname:"GameObject"},
+		camera:{cl:CameraExpand,cname:"Camera"},
+		plane:{cl:PlaneExpand,cname:"Plane"},
+		animator3d:{cl:Animation3DExpand,cname:"Animator"},
+		particle3d:{cl:Particle3dExpand,cname:"Particle"},
+		collider:{cl:PhysicsColliderExpand,cname:"Collider"},
+
+
+	}
+
 	static  cobjMap:Map<UnityEngine.GameObject,BaseViewExpand> = new Map<UnityEngine.GameObject, BaseViewExpand>();
 	//自动绑定cobj
 	static autoBindingCObj(cobj:UnityEngine.GameObject,forceBinding:boolean =false,targetCompType:string =null){
@@ -49,7 +75,7 @@ export default class ViewTools {
 		} else{
 			uiType = name.split("_")[0];
 		}
-		var viewClassName = UICompConst.classMap[uiType];
+		var viewClassName = this.compClassMap[uiType];
 		if (!viewClassName){
 			if (forceBinding){
 				LogsManager.echo("这个对象没有指定合法命名",name);
@@ -113,6 +139,24 @@ export default class ViewTools {
 		return new LabelExpand(null);
 	}
 
+	//创建一个平面
+	static  createPlaneBy3p(v1,v2,v3){
+		var plane = new PlaneExpand();
+		return plane
+	}
+
+	//创建一个3d容器
+	static  create3dContainer(name){
+		var ctn = new Base3dViewExpand();
+		var cobj = new UnityEngine.GameObject();
+		ctn.name = name;
+		ctn.setCObject(cobj);
+		return ctn;
+
+	}
+
+
+
 
 	//创建3d模型 role1, role目录
 	static create3DModel(modelName,shortPath:string , boundlename:string=ResourceCommonConst.boundle_model3d, outclone:boolean =false, compType:string = UICompConst.comp_base3d):any{
@@ -120,9 +164,13 @@ export default class ViewTools {
 		return this.autoBindingCObj(cobj,true,compType) as any;
 	}
 
-	//clone一个对象
-	static  cloneOneView(obj:any,compType:string = UICompConst.comp_base ){
+
+	//clone一个对象 compType为空 会使用obj的uitype
+	static  cloneOneView(obj:any,compType:string = null ){
 		var cloneCobj ;
+		if (compType == null){
+			compType = obj.uiType;
+		}
 		//如果是baseview
 		if (obj.__cobject){
 			cloneCobj = UnityEngine.GameObject.Instantiate(obj.__cobject);
@@ -131,5 +179,6 @@ export default class ViewTools {
 		}
 		return this.autoBindingCObj(cloneCobj,true, compType);
 	}
+
 
 }

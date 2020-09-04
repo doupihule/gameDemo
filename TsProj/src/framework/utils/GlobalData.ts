@@ -4,7 +4,7 @@ import CacheManager from "../manager/CacheManager";
 import StorageCode from "../../game/sys/consts/StorageCode";
 import BaseViewExpand from "../components/BaseViewExpand";
 import ViewTools from "../components/ViewTools";
-import Base3dViewExpand from "../components/Base3dViewExpand";
+import Base3dViewExpand from "../components/d3/Base3dViewExpand";
 import UICompConst from "../consts/UICompConst";
 
 

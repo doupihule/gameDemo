@@ -54,91 +54,11 @@ export class WindowCfgs {
 	static GameMainUI: string = "GameMainUI";
 	static BattleUI: string = "BattleUI";
 	static BattleResultUI: string = "BattleResultUI";
-	static RoleInfoUI: string = "RoleInfoUI";
-	static OfflineIncomeUI: string = "OfflineIncomeUI";
-	static TurnableUI: string = "TurnableUI";
+	static  StageSelectUI:string = "StageSelectUI";
 	static MainJumpZhiseUI: string = "MainJumpZhiseUI";
 	static JumpListZhiseUI: string = "JumpListZhiseUI";
-	static FreeResourceUI: string = "FreeResourceUI";
-	static FlatItemUI: string = "FlatItemUI";
-	static HomeUpgradeUI: string = "HomeUpgradeUI";
-	static BattleDetailUI: string = "BattleDetailUI";
-	static RoleInLineUI: string = "RoleInLineUI";
-	static RoleItemUI: string = "RoleItemUI";
-	static RoleLineItemUI: string = "RoleLineItemUI";
-	static SevenDaysUI: string = "SevenDaysUI";
-	static BoxInfoUI: string = "BoxInfoUI";
-	static UnlockRoleUI: string = "UnlockRoleUI";
-	static DailyGoldUI: string = "DailyGoldUI";
-	static ComRewardDoubleUI: string = "ComRewardDoubleUI";
-	static AirDropDetailUI: string = "AirDropDetailUI";
-	static BattleFullEnergyUI: string = "BattleFullEnergyUI";
-	static InviteUI: string = "InviteUI";
-	static InviteListUI: string = "InviteListUI";
-	static RoleDetailUI: string = "RoleDetailUI";
-	static RoleEquipmentUI: string = "RoleEquipmentUI";
-	static EquipItemUI: string = "EquipItemUI";
-	static EquipComposeUI: string = "EquipComposeUI";
-	static EvoPreviewUI: string = "EvoPreviewUI";
-	static EvoRewardUI: string = "EvoRewardUI";
-	static EquipPieceGetUI: string = "EquipPieceGetUI";
-	static RoleBarrageUI: string = "RoleBarrageUI";
-	static CartoonPicUI: string = "CartoonPicUI";
-	static FogCartoonPicUI: string = "FogCartoonPicUI";
-	static FogInitRoleUI: string = "FogInitRoleUI";
-	static FogRoleItemUI: string = "FogRoleItemUI";
-	static FogMainUI: string = "FogMainUI";
-	static FogVideoEnterUI: string = "FogVideoEnterUI";
-	static FogBusUI: string = "FogBusUI";
-	static FogBagItemUI: string = "FogBagItemUI";
-	static FogBagUI: string = "FogBagUI";
-	static FogBagItemDetailUI: string = "FogBagItemDetailUI";
-	static FogMultiRewardUI: string = "FogMultiRewardUI";
-	static FogShopUI: string = "FogShopUI";
-	static FogBusinessmanUI: string = "FogBusinessmanUI";
-	static FogComRewardUI: string = "FogComRewardUI";
-	static FogChooseUI: string = "FogChooseUI";
-	static FogAnswerUI: string = "FogAnswerUI";
-	static FogHandinUI: string = "FogHandinUI";
-	static FogBoxUI: string = "FogBoxUI";
-	static FogBagItemFullLevelUI: string = "FogBagItemFullLevelUI";
-	static FogFreeActUI: string = "FogFreeActUI";
-	static FogRoleLineItemUI: string = "FogRoleLineItemUI";
-	static FogUserRoleUI: string = "FogUserRoleUI";
-	static FogObstacleUI: string = "FogObstacleUI";
-	static FogNpcTalkUI: string = "FogNpcTalkUI";
-	static FogDoorUI: string = "FogDoorUI";
-	static FogTipUI: string = "FogTipUI";
-	static FogStartWarUI: string = "FogStartWarUI";
-	static FogResultUI: string = "FogResultUI";
-	static FogResultRewardUI: string = "FogResultRewardUI";
-	static FogRewardItemUI: string = "FogRewardItemUI";
-	static FogShopItemDetailUI: string = "FogShopItemDetailUI";
-	static FogBattleStartAlertUI: string = "FogBattleStartAlertUI";
-	static SettingUI: string = "SettingUI";
-	static ChapterListUI: string = "ChapterListUI";
-	static ChapterMapUI: string = "ChapterMapUI";
-	static ChapterBoxRewardUI: string = "ChapterBoxRewardUI";
-	static ChapterBoxDoubleUI: string = "ChapterBoxDoubleUI";
-	static TaskUI: string = "TaskUI";
-	static DailyTaskUI: string = "DailyTaskUI";
-	static ChatTaskUI: string = "ChatTaskUI";
-	static TaskDoubleRewardUI: string = "TaskDoubleRewardUI";
-	static ChatDetailUI: string = "ChatDetailUI";
-	static ChatDialoglUI: string = "ChatDialoglUI";
-	static ChatItemUI: string = "ChatItemUI";
+
 	static MainJumpKariquUI: string = "MainJumpKariquUI";
-	static FogBattleReviveUI: string = "FogBattleReviveUI";
-	static BattleReviveUI: string = "BattleReviveUI";
-	static OfflineRewardDoubleUI: string = "OfflineRewardDoubleUI";
-	static BattleUseSkillUI: string = "BattleUseSkillUI";
-	static BattleHelpRoleUI: string = "BattleHelpRoleUI";
-	static MainShopUI: string = "MainShopUI";
-	static MainShopItemUI: string = "MainShopItemUI";
-	static WorkDetailUI: string = "WorkDetailUI";
-	static WorkRoleUI: string = "WorkRoleUI";
-	static WorkRoleItemUI: string = "WorkRoleItemUI";
-	static WorkCompanyUI: string = "WorkCompanyUI";
 	//通用配置,如果不配置 就没有
 	static commonCfgs: any = {
 		modal: 1,	//ui默认是有模态的,
@@ -218,6 +138,10 @@ export class WindowCfgs {
 					path: BattleUI,
 					full: true
 				},
+				[WindowCfgs.StageSelectUI]:{
+					path: StageSelectUI,
+					full: true
+				}
 
 
 			}

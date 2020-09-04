@@ -5,11 +5,12 @@ const CS = require('csharp');
 
 import ViewTools from "./ViewTools";
 import UICompConst from "../consts/UICompConst";
+import BaseCompExpand from "./BaseCompExpand";
+import CameraExpand from "./d3/CameraExpand";
 export default class BaseViewExpand {
 	//对应的c对象
 	public __cobject:UnityEngine.GameObject;
 	public  __ctransform:UnityEngine.RectTransform;
-	public  __c3dtransform:UnityEngine.RectTransform;
 	public  positionTrans:any = {x:0,y:0,z:0};
 	//旋转
 	public rotationTrans:any = {x:0,y:0,z:0};
@@ -24,6 +25,10 @@ export default class BaseViewExpand {
 
 	//坐标样式 1是2d, 2是3d
 	public  posStyle:number = 1;
+
+	//组件map表  {key:value,}
+	private  _compMap:{[key:string]:BaseCompExpand} = {}
+
 
 	constructor() {
 		this.uitype ="base";
@@ -70,13 +75,7 @@ export default class BaseViewExpand {
 		GameUtils.ViewExtensionMethods.SetObj2dPos(this.__ctransform, x,y);
 	}
 
-	//设置3d坐标
-	public  set3dPos(x:number,y:number,z:number){
-		this.positionTrans.x = x;
-		this.positionTrans.y = y;
-		this.positionTrans.z = z;
-		GameUtils.ViewExtensionMethods.SetObj3dPos(this.__ctransform, x,y,z);
-	}
+
 
 
 	//设置2d旋转
@@ -201,6 +200,7 @@ export default class BaseViewExpand {
 			//如果是需要bangding对象的
 			return ViewTools.autoBindingCObj(childObj,true,targetCompType);
 		}
+		return  null;
 
 	}
 
@@ -274,9 +274,27 @@ export default class BaseViewExpand {
 		return this._mouseThrough;
 	}
 
-	//获取组件
-	public  getComponent(comp:string){
-		return this.__cobject.GetComponent(comp);
+	//获取组件 一定要配置绑定哪个类型
+	public  getComponent(comp:string):any{
+		if(this._compMap[comp]){
+			return this._compMap[comp];
+		}
+		var info =  ViewTools.compClassMap[comp];
+		if(!info){
+			LogsManager.warn("组件类型错误:",this.name,",comp:", comp);
+			return null
+		}
+		var cobjcomp = this.__cobject.GetComponent(info.cname);
+		if(!cobjcomp){
+			LogsManager.warn("没有找到组件:",this.name,",cname:", info.cname);
+			return null;
+		}
+
+		var classObj = info.cl
+		var compExpand:BaseCompExpand = new classObj();
+		compExpand.initComponent(cobjcomp,this);
+		this._compMap[comp] = compExpand;
+		return compExpand
 	}
 
 	//销毁函数

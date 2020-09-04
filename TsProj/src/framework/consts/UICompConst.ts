@@ -11,23 +11,18 @@ export default class UICompConst {
 	static comp_ui = "ui";			//ui也是一个类型 代表是子ui
 	static  comp_base3d = "base3d"	//基础3d模型
 
+	static  comp_compbase = "compbase";	//基础组件
+	//3d组件
+	static  comp_plane = "plane";		//底面
+	static  comp_camera = "camera";
+	static  comp_animator3d = "animator3d";	//动画3d
+	static  comp_particle3d = "particle3d";	//粒子 3d
+	static  comp_collider = "collider";		//碰撞器
+	static  comp_rigidbody3d = "rigidbody3d";	//3d刚体
+
+
 	static  posStyle_2d:number = 1;
 	static  posStyle_3d:number = 2;
 
 
-
-//组件对应的类
-	static classMap = {
-		base: "BaseViewExpand",
-		btn: "ButtonExpand",
-		img: "ImageExpand",
-		ctn: "BaseContainer",
-		label: "LabelExpand",
-		input: "InputExpand",
-		list: "ListExpand",
-		spine: "SpineGraphicExpand",
-		ui:"UI",
-		base3d:"Base3dViewExpand",
-
-	}
 }

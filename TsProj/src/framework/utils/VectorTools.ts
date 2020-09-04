@@ -12,6 +12,12 @@ export default class VectorTools {
 	//单位向量
 	static unitPoint: any = VectorTools.createVec3(1, 1, 1);
 
+	static  cloneTo(formV3:{x,y,z},toV3:{x,y,z}){
+		toV3.x = formV3.x;
+		toV3.y = formV3.y;
+		toV3.z = formV3.z;
+	}
+
 
 	//向量乘法
 	static multyByNumToSelf(vec: any, mul: number) {
@@ -55,6 +61,13 @@ export default class VectorTools {
 		out.z = a.z * scale;
 
 	}
+
+	static  add(a:{x,y,z},b:{x,y,z},out:{x,y,z}){
+		out.x = a.x +b.x;
+		out.y = a.y +b.y;
+		out.z = a.z +b.z;
+	}
+
 
 	//向量加法,加到第一个向量上
 	static addToSelf(vec: any, vec2: any) {

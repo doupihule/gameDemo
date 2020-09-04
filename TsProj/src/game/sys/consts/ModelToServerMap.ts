@@ -1,12 +1,9 @@
 import UserModel from "../model/UserModel";
 import SwitchModel from "../model/SwitchModel";
 import UserExtModel from "../model/UserExtModel";
-import RolesModel from "../model/RolesModel";
 
 import Client from "../../../framework/common/kakura/Client";
 import GlobalParamsFunc from "../func/GlobalParamsFunc";
-import TalentSkillsModel from "../model/TalentSkillsModel";
-import FogModel from "../model/FogModel";
 
 //本地模块和服务器数据映射表
 export default class ModelToServerMap {
@@ -27,9 +24,6 @@ export default class ModelToServerMap {
 			{key: "user", model: UserModel},		//用户模块
 			{key: "switches", model: SwitchModel},	//音乐开关
 			{key: "userExt", model: UserExtModel},	//userExt模块
-			{key: "roles", model: RolesModel},	//roles模块
-
-			{key: "talentSkills", model: TalentSkillsModel}, //天赋技能列表
 
 		]
 	}

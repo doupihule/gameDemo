@@ -30,7 +30,7 @@ export default class UIBaseView extends BaseViewExpand {
             var childTrans = transform.GetChild(i);
             var name = childTrans.name;
             var uiType = name.split("_")[0];
-            var className = UICompConst.classMap[uiType];
+            var className = ViewTools.compClassMap[uiType];
             if (className){
                 var childGameObj = childTrans.gameObject;
                 var childViewInstance:BaseViewExpand = ViewTools.autoBindingCObj(childGameObj,true);
