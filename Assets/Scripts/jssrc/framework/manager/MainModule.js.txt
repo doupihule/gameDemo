@@ -12,6 +12,7 @@ const GameSwitch_1 = require("../common/GameSwitch");
 const KakuraClient_1 = require("../common/kakura/KakuraClient");
 const Message_1 = require("../common/Message");
 const UserModel_1 = require("../../game/sys/model/UserModel");
+const TimerManager_1 = require("./TimerManager");
 const MusicConst_1 = require("../../game/sys/consts/MusicConst");
 const MsgCMD_1 = require("../../game/sys/common/MsgCMD");
 const UserGlobalModel_1 = require("../model/UserGlobalModel");
@@ -21,9 +22,11 @@ const ModelToServerMapCommon_1 = require("../consts/ModelToServerMapCommon");
 const KariqiShareManager_1 = require("./KariqiShareManager");
 const KariquShareConst_1 = require("../consts/KariquShareConst");
 const ViewTools_1 = require("../components/ViewTools");
+const ResourceCommonConst_1 = require("../consts/ResourceCommonConst");
 class MainModule {
     constructor() {
         this.timeLock = 0;
+        this._childNums = 0;
         //完成任务列表
         this._taskCompMap = {};
         MainModule.instance = this;
@@ -34,8 +37,29 @@ class MainModule {
         Message_1.default.instance.add(MsgCMD_1.default.VIDEO_STOP, this);
         Message_1.default.instance.add(MsgCMD_1.default.VIDEO_PLAY, this);
         WindowManager_1.default.OpenUI(WindowCfgs_1.WindowCfgs.GameMainUI);
-        var model = ViewTools_1.default.create3DModel("battle_prefab", "Main");
-        GlobalData_1.default.stage.addChild(model);
+        TimerManager_1.default.instance.add(this.delayInitCreat, this, 2000, 1);
+    }
+    delayInitCreat() {
+        this._model = ViewTools_1.default.create3DModel("battle_prefab", "Main", ResourceCommonConst_1.default.boundle_model3d, true);
+        // var child:Base3dViewExpand = this._model.getChildByName("element_group_rigid");
+        // child.setActive(false);
+        // GlobalData.stage.addChild(this._model);
+        // TimerManager.instance.registObjUpdate(this.updateFrame,this);
+        TimerManager_1.default.instance.add(this.updateFrame, this, 1000, 9999);
+    }
+    updateFrame() {
+        this._childNums++;
+        if (this._childNums > 50) {
+            return;
+        }
+        var child = this._model.getChildByName("element_group_rigid");
+        child.setActive(false);
+        var childCount = child.numChildren;
+        var inddex = this._childNums % childCount;
+        var targetView = child.getChildAt(inddex);
+        var cloneObj = ViewTools_1.default.cloneOneView(targetView);
+        cloneObj.set3dPos(targetView.x, targetView.y + 10, targetView.z);
+        this._model.addChild(cloneObj);
     }
     //Loading页面显示后开始加载资源
     onLoadingUIComplete() {

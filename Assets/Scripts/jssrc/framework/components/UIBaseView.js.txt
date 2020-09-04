@@ -13,6 +13,7 @@ class UIBaseView extends BaseViewExpand_1.default {
         super.setCObject(cui);
         this.bindChild(cui);
         this.doAfterInit();
+        return this;
     }
     //bing子对象
     bindChild(cuiobj, parentViewInstance = null, path = "") {

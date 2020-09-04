@@ -10,6 +10,10 @@ class Base3dViewExpand extends BaseViewExpand_1.default {
         this.posStyle = UICompConst_1.default.posStyle_3d;
         this.uitype = UICompConst_1.default.comp_base3d;
     }
+    setCObject(cobj) {
+        super.setCObject(cobj);
+        return this;
+    }
 }
 exports.default = Base3dViewExpand;
 //# sourceMappingURL=Base3dViewExpand.js.map

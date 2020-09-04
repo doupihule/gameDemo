@@ -27,6 +27,7 @@ class BaseViewExpand {
         this.__cobject = cobj;
         this.__ctransform = cobj.transform;
         ViewTools_1.default.bindCobjToBaseView(cobj, this);
+        return this;
     }
     //-------------------------------------------------------------------------------------
     //---------------------------坐标旋转缩放透明度-----------------------------------------
@@ -137,6 +138,9 @@ class BaseViewExpand {
     //获取子对象 targetCompType是否指定绑定类型
     getChildAt(index, targetCompType = null) {
         var childTrans = this.__ctransform.GetChild(index);
+        if (targetCompType == null) {
+            targetCompType = this.getDefaultCompType();
+        }
         //绑定lua和c对象
         if (childTrans) {
             //如果是需要bangding对象的
@@ -144,15 +148,23 @@ class BaseViewExpand {
         }
         return null;
     }
+    getDefaultCompType() {
+        if (this.posStyle == UICompConst_1.default.posStyle_3d) {
+            return UICompConst_1.default.comp_base3d;
+        }
+        else {
+            return UICompConst_1.default.comp_base;
+        }
+    }
     //获取子对象 根据名字
-    getChildByName(name, outbinding = false) {
+    getChildByName(name, targetCompType = null) {
         var childObj = csharp_1.GameUtils.ViewExtensionMethods.GetChildByName(this.__ctransform, name);
-        if (outbinding) {
-            return;
+        if (targetCompType == null) {
+            targetCompType = this.getDefaultCompType();
         }
         if (childObj) {
             //如果是需要bangding对象的
-            return ViewTools_1.default.autoBindingCObj(childObj, true);
+            return ViewTools_1.default.autoBindingCObj(childObj, true, targetCompType);
         }
     }
     //设置颜色 子类重写

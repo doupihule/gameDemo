@@ -75,7 +75,7 @@ export default class ViewTools {
 			} else if(uiType == UICompConst.comp_spine){
 				return  new SpineGraphicExpand(null,null,cobj);
 			} else if(uiType == UICompConst.comp_base3d){
-				return  new Base3dViewExpand();
+				return  new Base3dViewExpand().setCObject(cobj);
 			} else if(uiType == UICompConst.comp_ui){
 				return  new UIBaseView().setCObject(cobj);
 			} else if(uiType == UICompConst.comp_base){

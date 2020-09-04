@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const csharp_1 = require("csharp");
 const BaseViewExpand_1 = require("./BaseViewExpand");
 const UICompConst_1 = require("../consts/UICompConst");
 const ButtonExpand_1 = require("./ButtonExpand");
@@ -78,12 +79,16 @@ class ViewTools {
                 return new SpineGraphicExpand_1.default(null, null, cobj);
             }
             else if (uiType == UICompConst_1.default.comp_base3d) {
-                return new Base3dViewExpand_1.default();
+                return new Base3dViewExpand_1.default().setCObject(cobj);
             }
             else if (uiType == UICompConst_1.default.comp_ui) {
-                return new UIBaseView_1.default();
+                return new UIBaseView_1.default().setCObject(cobj);
+            }
+            else if (uiType == UICompConst_1.default.comp_base) {
+                return new BaseViewExpand_1.default().setCObject(cobj);
             }
         }
+        LogsManager.warn("没有找到对应的类型--", name, uiType);
         return null;
     }
     static createContainer(name) {
@@ -109,11 +114,21 @@ class ViewTools {
         return new LabelExpand_1.default(null);
     }
     //创建3d模型 role1, role目录
-    static create3DModel(modelName, shortPath, boundlename = ResourceCommonConst_1.default.boundle_model3d, compType = UICompConst_1.default.comp_base3d) {
-        var cobj = ResourceManager_1.default.get3dmodelRes(modelName, shortPath, boundlename);
-        if (compType == UICompConst_1.default.comp_base3d) {
-            return this.autoBindingCObj(cobj, true, compType);
+    static create3DModel(modelName, shortPath, boundlename = ResourceCommonConst_1.default.boundle_model3d, outclone = false, compType = UICompConst_1.default.comp_base3d) {
+        var cobj = ResourceManager_1.default.get3dmodelRes(modelName, shortPath, boundlename, outclone);
+        return this.autoBindingCObj(cobj, true, compType);
+    }
+    //clone一个对象
+    static cloneOneView(obj, compType = UICompConst_1.default.comp_base) {
+        var cloneCobj;
+        //如果是baseview
+        if (obj.__cobject) {
+            cloneCobj = csharp_1.UnityEngine.GameObject.Instantiate(obj.__cobject);
         }
+        else {
+            cloneCobj = csharp_1.UnityEngine.GameObject.Instantiate(obj);
+        }
+        return this.autoBindingCObj(cloneCobj, true, compType);
     }
 }
 exports.default = ViewTools;

@@ -11,7 +11,7 @@ class GlobalData {
         this._cstage = cstage;
         this._cuiroot = cuiroot;
         this.stage = ViewTools_1.default.autoBindingCObj(cstage, true, UICompConst_1.default.comp_base3d);
-        this.uiRoot = ViewTools_1.default.autoBindingCObj(cuiroot, true);
+        this.uiRoot = ViewTools_1.default.autoBindingCObj(cuiroot, true, UICompConst_1.default.comp_base);
     }
     static setPhoneSys(sysInfo) {
         var phoneModel = sysInfo.model;

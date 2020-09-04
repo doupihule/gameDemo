@@ -18,13 +18,15 @@ UICompConst.posStyle_2d = 1;
 UICompConst.posStyle_3d = 2;
 //组件对应的类
 UICompConst.classMap = {
-    base: "BaseView",
-    btn: "Button",
-    img: "Image",
-    ctn: "Container",
-    label: "Label",
-    input: "Input",
-    list: "List",
-    spine: "Spine",
+    base: "BaseViewExpand",
+    btn: "ButtonExpand",
+    img: "ImageExpand",
+    ctn: "BaseContainer",
+    label: "LabelExpand",
+    input: "InputExpand",
+    list: "ListExpand",
+    spine: "SpineGraphicExpand",
+    ui: "UI",
+    base3d: "Base3dViewExpand",
 };
 //# sourceMappingURL=UICompConst.js.map

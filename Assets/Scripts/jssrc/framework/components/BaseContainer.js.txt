@@ -16,6 +16,7 @@ class BaseContainer extends BaseViewExpand_1.default {
     setCObject(cobj) {
         super.setCObject(cobj);
         this.__imageComp = cobj.GetComponent(puerts_1.$typeof(csharp_1.UnityEngine.UI.Image));
+        return this;
     }
     setColor(r, g, b, a = 255) {
         csharp_1.GameUtils.ViewExtensionMethods.SetImageColor(this.__imageComp, r, g, b, a);

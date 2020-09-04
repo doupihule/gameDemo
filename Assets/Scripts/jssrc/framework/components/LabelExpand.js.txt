@@ -18,6 +18,7 @@ class LabelExpand extends BaseViewExpand_1.default {
     setCObject(cobj) {
         super.setCObject(cobj);
         this.__textComp = cobj.GetComponent(puerts_1.$typeof(csharp_1.UnityEngine.UI.Text));
+        return this;
     }
     get text() {
         return this._text;

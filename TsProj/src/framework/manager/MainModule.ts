@@ -60,20 +60,28 @@ export default class MainModule implements IMessage {
 		Message.instance.add(MsgCMD.VIDEO_STOP, this);
 		Message.instance.add(MsgCMD.VIDEO_PLAY, this);
 		WindowManager.OpenUI(WindowCfgs.GameMainUI);
+		TimerManager.instance.add(this.delayInitCreat,this,2000,1);
+
+	}
+
+	private  delayInitCreat(){
 		this._model = ViewTools.create3DModel("battle_prefab","Main",ResourceCommonConst.boundle_model3d,true);
-		var child:Base3dViewExpand = this._model.getChildByName("element_group");
-		child.setActive(false);
-		GlobalData.stage.addChild(this._model);
+		// var child:Base3dViewExpand = this._model.getChildByName("element_group_rigid");
+		// child.setActive(false);
+		// GlobalData.stage.addChild(this._model);
 		// TimerManager.instance.registObjUpdate(this.updateFrame,this);
 
 		TimerManager.instance.add(this.updateFrame,this,1000,9999);
+
 	}
+
+
 	public  updateFrame(){
 		this._childNums ++;
 		if (this._childNums > 50){
 			return;
 		}
-		var child:Base3dViewExpand = this._model.getChildByName("element_group");
+		var child:Base3dViewExpand = this._model.getChildByName("element_group_rigid");
 		child.setActive(false);
 		var childCount = child.numChildren;
 		var inddex = this._childNums % childCount;
