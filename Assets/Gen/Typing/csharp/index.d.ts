@@ -424,6 +424,62 @@ declare module 'csharp' {
             
         }
         class Quaternion extends System.ValueType {
+            public x: number;
+            public y: number;
+            public z: number;
+            public w: number;
+            public static kEpsilon: number;
+            public Item: number;
+            public static identity: UnityEngine.Quaternion;
+            public eulerAngles: UnityEngine.Vector3;
+            public normalized: UnityEngine.Quaternion;
+            public constructor(x: number, y: number, z: number, w: number);
+            public static FromToRotation(fromDirection: UnityEngine.Vector3, toDirection: UnityEngine.Vector3):UnityEngine.Quaternion;
+            public static Inverse(rotation: UnityEngine.Quaternion):UnityEngine.Quaternion;
+            public static Slerp(a: UnityEngine.Quaternion, b: UnityEngine.Quaternion, t: number):UnityEngine.Quaternion;
+            public static SlerpUnclamped(a: UnityEngine.Quaternion, b: UnityEngine.Quaternion, t: number):UnityEngine.Quaternion;
+            public static Lerp(a: UnityEngine.Quaternion, b: UnityEngine.Quaternion, t: number):UnityEngine.Quaternion;
+            public static LerpUnclamped(a: UnityEngine.Quaternion, b: UnityEngine.Quaternion, t: number):UnityEngine.Quaternion;
+            public static AngleAxis(angle: number, axis: UnityEngine.Vector3):UnityEngine.Quaternion;
+            public static LookRotation(forward: UnityEngine.Vector3, upwards: UnityEngine.Vector3):UnityEngine.Quaternion;
+            public static LookRotation(forward: UnityEngine.Vector3):UnityEngine.Quaternion;
+            public get_Item(index: number):number;
+            public set_Item(index: number, value: number):void;
+            public Set(newX: number, newY: number, newZ: number, newW: number):void;
+            public static op_Multiply(lhs: UnityEngine.Quaternion, rhs: UnityEngine.Quaternion):UnityEngine.Quaternion;
+            public static op_Multiply(rotation: UnityEngine.Quaternion, point: UnityEngine.Vector3):UnityEngine.Vector3;
+            public static op_Equality(lhs: UnityEngine.Quaternion, rhs: UnityEngine.Quaternion):boolean;
+            public static op_Inequality(lhs: UnityEngine.Quaternion, rhs: UnityEngine.Quaternion):boolean;
+            public static Dot(a: UnityEngine.Quaternion, b: UnityEngine.Quaternion):number;
+            public SetLookRotation(view: UnityEngine.Vector3):void;
+            public SetLookRotation(view: UnityEngine.Vector3, up: UnityEngine.Vector3):void;
+            public static Angle(a: UnityEngine.Quaternion, b: UnityEngine.Quaternion):number;
+            public static Euler(x: number, y: number, z: number):UnityEngine.Quaternion;
+            public static Euler(euler: UnityEngine.Vector3):UnityEngine.Quaternion;
+            public ToAngleAxis(angle: $Ref<number>, axis: $Ref<UnityEngine.Vector3>):void;
+            public SetFromToRotation(fromDirection: UnityEngine.Vector3, toDirection: UnityEngine.Vector3):void;
+            public static RotateTowards(from: UnityEngine.Quaternion, to: UnityEngine.Quaternion, maxDegreesDelta: number):UnityEngine.Quaternion;
+            public static Normalize(q: UnityEngine.Quaternion):UnityEngine.Quaternion;
+            public Normalize():void;
+            public GetHashCode():number;
+            public Equals(other: any):boolean;
+            public Equals(other: UnityEngine.Quaternion):boolean;
+            public ToString():string;
+            public ToString(format: string):string;
+            public static EulerRotation(x: number, y: number, z: number):UnityEngine.Quaternion;
+            public static EulerRotation(euler: UnityEngine.Vector3):UnityEngine.Quaternion;
+            public SetEulerRotation(x: number, y: number, z: number):void;
+            public SetEulerRotation(euler: UnityEngine.Vector3):void;
+            public ToEuler():UnityEngine.Vector3;
+            public static EulerAngles(x: number, y: number, z: number):UnityEngine.Quaternion;
+            public static EulerAngles(euler: UnityEngine.Vector3):UnityEngine.Quaternion;
+            public ToAxisAngle(axis: $Ref<UnityEngine.Vector3>, angle: $Ref<number>):void;
+            public SetEulerAngles(x: number, y: number, z: number):void;
+            public SetEulerAngles(euler: UnityEngine.Vector3):void;
+            public static ToEulerAngles(rotation: UnityEngine.Quaternion):UnityEngine.Vector3;
+            public ToEulerAngles():UnityEngine.Vector3;
+            public SetAxisAngle(axis: UnityEngine.Vector3, angle: number):void;
+            public static AxisAngle(axis: UnityEngine.Vector3, angle: number):UnityEngine.Quaternion;
             
         }
         class Matrix4x4 extends System.ValueType {
@@ -516,6 +572,133 @@ declare module 'csharp' {
             
         }
         class Camera extends UnityEngine.Behaviour {
+            public static onPreCull: UnityEngine.Camera.CameraCallback;
+            public static onPreRender: UnityEngine.Camera.CameraCallback;
+            public static onPostRender: UnityEngine.Camera.CameraCallback;
+            public nearClipPlane: number;
+            public farClipPlane: number;
+            public fieldOfView: number;
+            public renderingPath: UnityEngine.RenderingPath;
+            public actualRenderingPath: UnityEngine.RenderingPath;
+            public allowHDR: boolean;
+            public allowMSAA: boolean;
+            public allowDynamicResolution: boolean;
+            public forceIntoRenderTexture: boolean;
+            public orthographicSize: number;
+            public orthographic: boolean;
+            public opaqueSortMode: UnityEngine.Rendering.OpaqueSortMode;
+            public transparencySortMode: UnityEngine.TransparencySortMode;
+            public transparencySortAxis: UnityEngine.Vector3;
+            public depth: number;
+            public aspect: number;
+            public velocity: UnityEngine.Vector3;
+            public cullingMask: number;
+            public eventMask: number;
+            public layerCullSpherical: boolean;
+            public cameraType: UnityEngine.CameraType;
+            public layerCullDistances: number[];
+            public useOcclusionCulling: boolean;
+            public cullingMatrix: UnityEngine.Matrix4x4;
+            public backgroundColor: UnityEngine.Color;
+            public clearFlags: UnityEngine.CameraClearFlags;
+            public depthTextureMode: UnityEngine.DepthTextureMode;
+            public clearStencilAfterLightingPass: boolean;
+            public usePhysicalProperties: boolean;
+            public sensorSize: UnityEngine.Vector2;
+            public lensShift: UnityEngine.Vector2;
+            public focalLength: number;
+            public gateFit: UnityEngine.Camera.GateFitMode;
+            public rect: UnityEngine.Rect;
+            public pixelRect: UnityEngine.Rect;
+            public pixelWidth: number;
+            public pixelHeight: number;
+            public scaledPixelWidth: number;
+            public scaledPixelHeight: number;
+            public targetTexture: UnityEngine.RenderTexture;
+            public activeTexture: UnityEngine.RenderTexture;
+            public targetDisplay: number;
+            public cameraToWorldMatrix: UnityEngine.Matrix4x4;
+            public worldToCameraMatrix: UnityEngine.Matrix4x4;
+            public projectionMatrix: UnityEngine.Matrix4x4;
+            public nonJitteredProjectionMatrix: UnityEngine.Matrix4x4;
+            public useJitteredProjectionMatrixForTransparentRendering: boolean;
+            public previousViewProjectionMatrix: UnityEngine.Matrix4x4;
+            public static main: UnityEngine.Camera;
+            public static current: UnityEngine.Camera;
+            public scene: UnityEngine.SceneManagement.Scene;
+            public stereoEnabled: boolean;
+            public stereoSeparation: number;
+            public stereoConvergence: number;
+            public areVRStereoViewMatricesWithinSingleCullTolerance: boolean;
+            public stereoTargetEye: UnityEngine.StereoTargetEyeMask;
+            public stereoActiveEye: UnityEngine.Camera.MonoOrStereoscopicEye;
+            public static allCamerasCount: number;
+            public static allCameras: UnityEngine.Camera[];
+            public commandBufferCount: number;
+            public near: number;
+            public far: number;
+            public fov: number;
+            public hdr: boolean;
+            public constructor();
+            public Reset():void;
+            public ResetTransparencySortSettings():void;
+            public ResetAspect():void;
+            public ResetCullingMatrix():void;
+            public SetReplacementShader(shader: UnityEngine.Shader, replacementTag: string):void;
+            public ResetReplacementShader():void;
+            public SetTargetBuffers(colorBuffer: UnityEngine.RenderBuffer, depthBuffer: UnityEngine.RenderBuffer):void;
+            public SetTargetBuffers(colorBuffer: UnityEngine.RenderBuffer[], depthBuffer: UnityEngine.RenderBuffer):void;
+            public ResetWorldToCameraMatrix():void;
+            public ResetProjectionMatrix():void;
+            public CalculateObliqueMatrix(clipPlane: UnityEngine.Vector4):UnityEngine.Matrix4x4;
+            public WorldToScreenPoint(position: UnityEngine.Vector3, eye: UnityEngine.Camera.MonoOrStereoscopicEye):UnityEngine.Vector3;
+            public WorldToViewportPoint(position: UnityEngine.Vector3, eye: UnityEngine.Camera.MonoOrStereoscopicEye):UnityEngine.Vector3;
+            public ViewportToWorldPoint(position: UnityEngine.Vector3, eye: UnityEngine.Camera.MonoOrStereoscopicEye):UnityEngine.Vector3;
+            public ScreenToWorldPoint(position: UnityEngine.Vector3, eye: UnityEngine.Camera.MonoOrStereoscopicEye):UnityEngine.Vector3;
+            public WorldToScreenPoint(position: UnityEngine.Vector3):UnityEngine.Vector3;
+            public WorldToViewportPoint(position: UnityEngine.Vector3):UnityEngine.Vector3;
+            public ViewportToWorldPoint(position: UnityEngine.Vector3):UnityEngine.Vector3;
+            public ScreenToWorldPoint(position: UnityEngine.Vector3):UnityEngine.Vector3;
+            public ScreenToViewportPoint(position: UnityEngine.Vector3):UnityEngine.Vector3;
+            public ViewportToScreenPoint(position: UnityEngine.Vector3):UnityEngine.Vector3;
+            public ViewportPointToRay(pos: UnityEngine.Vector3, eye: UnityEngine.Camera.MonoOrStereoscopicEye):UnityEngine.Ray;
+            public ViewportPointToRay(pos: UnityEngine.Vector3):UnityEngine.Ray;
+            public ScreenPointToRay(pos: UnityEngine.Vector3, eye: UnityEngine.Camera.MonoOrStereoscopicEye):UnityEngine.Ray;
+            public ScreenPointToRay(pos: UnityEngine.Vector3):UnityEngine.Ray;
+            public CalculateFrustumCorners(viewport: UnityEngine.Rect, z: number, eye: UnityEngine.Camera.MonoOrStereoscopicEye, outCorners: UnityEngine.Vector3[]):void;
+            public static CalculateProjectionMatrixFromPhysicalProperties(output: $Ref<UnityEngine.Matrix4x4>, focalLength: number, sensorSize: UnityEngine.Vector2, lensShift: UnityEngine.Vector2, nearClip: number, farClip: number, gateFitParameters: UnityEngine.Camera.GateFitParameters):void;
+            public static FocalLengthToFOV(focalLength: number, sensorSize: number):number;
+            public static FOVToFocalLength(fov: number, sensorSize: number):number;
+            public GetStereoNonJitteredProjectionMatrix(eye: UnityEngine.Camera.StereoscopicEye):UnityEngine.Matrix4x4;
+            public GetStereoViewMatrix(eye: UnityEngine.Camera.StereoscopicEye):UnityEngine.Matrix4x4;
+            public CopyStereoDeviceProjectionMatrixToNonJittered(eye: UnityEngine.Camera.StereoscopicEye):void;
+            public GetStereoProjectionMatrix(eye: UnityEngine.Camera.StereoscopicEye):UnityEngine.Matrix4x4;
+            public SetStereoProjectionMatrix(eye: UnityEngine.Camera.StereoscopicEye, matrix: UnityEngine.Matrix4x4):void;
+            public ResetStereoProjectionMatrices():void;
+            public SetStereoViewMatrix(eye: UnityEngine.Camera.StereoscopicEye, matrix: UnityEngine.Matrix4x4):void;
+            public ResetStereoViewMatrices():void;
+            public static GetAllCameras(cameras: UnityEngine.Camera[]):number;
+            public RenderToCubemap(cubemap: UnityEngine.Cubemap, faceMask: number):boolean;
+            public RenderToCubemap(cubemap: UnityEngine.Cubemap):boolean;
+            public RenderToCubemap(cubemap: UnityEngine.RenderTexture, faceMask: number):boolean;
+            public RenderToCubemap(cubemap: UnityEngine.RenderTexture):boolean;
+            public RenderToCubemap(cubemap: UnityEngine.RenderTexture, faceMask: number, stereoEye: UnityEngine.Camera.MonoOrStereoscopicEye):boolean;
+            public Render():void;
+            public RenderWithShader(shader: UnityEngine.Shader, replacementTag: string):void;
+            public RenderDontRestore():void;
+            public static SetupCurrent(cur: UnityEngine.Camera):void;
+            public CopyFrom(other: UnityEngine.Camera):void;
+            public RemoveCommandBuffers(evt: UnityEngine.Rendering.CameraEvent):void;
+            public RemoveAllCommandBuffers():void;
+            public AddCommandBuffer(evt: UnityEngine.Rendering.CameraEvent, buffer: UnityEngine.Rendering.CommandBuffer):void;
+            public AddCommandBufferAsync(evt: UnityEngine.Rendering.CameraEvent, buffer: UnityEngine.Rendering.CommandBuffer, queueType: UnityEngine.Rendering.ComputeQueueType):void;
+            public RemoveCommandBuffer(evt: UnityEngine.Rendering.CameraEvent, buffer: UnityEngine.Rendering.CommandBuffer):void;
+            public GetCommandBuffers(evt: UnityEngine.Rendering.CameraEvent):UnityEngine.Rendering.CommandBuffer[];
+            public ResetFieldOfView():void;
+            public SetStereoViewMatrices(leftMatrix: UnityEngine.Matrix4x4, rightMatrix: UnityEngine.Matrix4x4):void;
+            public SetStereoProjectionMatrices(leftMatrix: UnityEngine.Matrix4x4, rightMatrix: UnityEngine.Matrix4x4):void;
+            public GetStereoViewMatrices():UnityEngine.Matrix4x4[];
+            public GetStereoProjectionMatrices():UnityEngine.Matrix4x4[];
             
         }
         class MonoBehaviour extends UnityEngine.Behaviour {
@@ -581,6 +764,249 @@ declare module 'csharp' {
         class TextGenerationSettings extends System.ValueType {
             
         }
+        enum RenderingPath { UsePlayerSettings = -1, VertexLit = 0, Forward = 1, DeferredLighting = 2, DeferredShading = 3 }
+        enum TransparencySortMode { Default = 0, Perspective = 1, Orthographic = 2, CustomAxis = 3 }
+        enum CameraType { Game = 1, SceneView = 2, Preview = 4, VR = 8, Reflection = 16 }
+        enum CameraClearFlags { Skybox = 1, Color = 2, SolidColor = 2, Depth = 3, Nothing = 4 }
+        enum DepthTextureMode { None = 0, Depth = 1, DepthNormals = 2, MotionVectors = 4 }
+        class Shader extends UnityEngine.Object {
+            
+        }
+        class RenderTexture extends UnityEngine.Texture {
+            
+        }
+        class RenderBuffer extends System.ValueType {
+            
+        }
+        class Ray extends System.ValueType {
+            public origin: UnityEngine.Vector3;
+            public direction: UnityEngine.Vector3;
+            public constructor(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3);
+            public GetPoint(distance: number):UnityEngine.Vector3;
+            public ToString():string;
+            public ToString(format: string):string;
+            
+        }
+        enum StereoTargetEyeMask { None = 0, Left = 1, Right = 2, Both = 3 }
+        class Cubemap extends UnityEngine.Texture {
+            
+        }
+        class Plane extends System.ValueType {
+            public normal: UnityEngine.Vector3;
+            public distance: number;
+            public flipped: UnityEngine.Plane;
+            public constructor(inNormal: UnityEngine.Vector3, inPoint: UnityEngine.Vector3);
+            public constructor(inNormal: UnityEngine.Vector3, d: number);
+            public constructor(a: UnityEngine.Vector3, b: UnityEngine.Vector3, c: UnityEngine.Vector3);
+            public SetNormalAndPosition(inNormal: UnityEngine.Vector3, inPoint: UnityEngine.Vector3):void;
+            public Set3Points(a: UnityEngine.Vector3, b: UnityEngine.Vector3, c: UnityEngine.Vector3):void;
+            public Flip():void;
+            public Translate(translation: UnityEngine.Vector3):void;
+            public static Translate(plane: UnityEngine.Plane, translation: UnityEngine.Vector3):UnityEngine.Plane;
+            public ClosestPointOnPlane(point: UnityEngine.Vector3):UnityEngine.Vector3;
+            public GetDistanceToPoint(point: UnityEngine.Vector3):number;
+            public GetSide(point: UnityEngine.Vector3):boolean;
+            public SameSide(inPt0: UnityEngine.Vector3, inPt1: UnityEngine.Vector3):boolean;
+            public Raycast(ray: UnityEngine.Ray, enter: $Ref<number>):boolean;
+            public ToString():string;
+            public ToString(format: string):string;
+            
+        }
+        class Physics extends System.Object {
+            public static IgnoreRaycastLayer: number;
+            public static DefaultRaycastLayers: number;
+            public static AllLayers: number;
+            public static gravity: UnityEngine.Vector3;
+            public static defaultContactOffset: number;
+            public static sleepThreshold: number;
+            public static queriesHitTriggers: boolean;
+            public static queriesHitBackfaces: boolean;
+            public static bounceThreshold: number;
+            public static defaultSolverIterations: number;
+            public static defaultSolverVelocityIterations: number;
+            public static bounceTreshold: number;
+            public static sleepVelocity: number;
+            public static sleepAngularVelocity: number;
+            public static solverIterationCount: number;
+            public static solverVelocityIterationCount: number;
+            public static penetrationPenaltyForce: number;
+            public static defaultPhysicsScene: UnityEngine.PhysicsScene;
+            public static autoSimulation: boolean;
+            public static autoSyncTransforms: boolean;
+            public static reuseCollisionCallbacks: boolean;
+            public static interCollisionDistance: number;
+            public static interCollisionStiffness: number;
+            public static interCollisionSettingsToggle: boolean;
+            public constructor();
+            public static IgnoreCollision(collider1: UnityEngine.Collider, collider2: UnityEngine.Collider, ignore: boolean):void;
+            public static IgnoreCollision(collider1: UnityEngine.Collider, collider2: UnityEngine.Collider):void;
+            public static IgnoreLayerCollision(layer1: number, layer2: number, ignore: boolean):void;
+            public static IgnoreLayerCollision(layer1: number, layer2: number):void;
+            public static GetIgnoreLayerCollision(layer1: number, layer2: number):boolean;
+            public static Raycast(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static Raycast(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, maxDistance: number, layerMask: number):boolean;
+            public static Raycast(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, maxDistance: number):boolean;
+            public static Raycast(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3):boolean;
+            public static Raycast(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static Raycast(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number, layerMask: number):boolean;
+            public static Raycast(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number):boolean;
+            public static Raycast(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>):boolean;
+            public static Raycast(ray: UnityEngine.Ray, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static Raycast(ray: UnityEngine.Ray, maxDistance: number, layerMask: number):boolean;
+            public static Raycast(ray: UnityEngine.Ray, maxDistance: number):boolean;
+            public static Raycast(ray: UnityEngine.Ray):boolean;
+            public static Raycast(ray: UnityEngine.Ray, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static Raycast(ray: UnityEngine.Ray, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number, layerMask: number):boolean;
+            public static Raycast(ray: UnityEngine.Ray, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number):boolean;
+            public static Raycast(ray: UnityEngine.Ray, hitInfo: $Ref<UnityEngine.RaycastHit>):boolean;
+            public static Linecast(start: UnityEngine.Vector3, end: UnityEngine.Vector3, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static Linecast(start: UnityEngine.Vector3, end: UnityEngine.Vector3, layerMask: number):boolean;
+            public static Linecast(start: UnityEngine.Vector3, end: UnityEngine.Vector3):boolean;
+            public static Linecast(start: UnityEngine.Vector3, end: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static Linecast(start: UnityEngine.Vector3, end: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, layerMask: number):boolean;
+            public static Linecast(start: UnityEngine.Vector3, end: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>):boolean;
+            public static CapsuleCast(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static CapsuleCast(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, maxDistance: number, layerMask: number):boolean;
+            public static CapsuleCast(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, maxDistance: number):boolean;
+            public static CapsuleCast(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3):boolean;
+            public static CapsuleCast(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static CapsuleCast(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number, layerMask: number):boolean;
+            public static CapsuleCast(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number):boolean;
+            public static CapsuleCast(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>):boolean;
+            public static SphereCast(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static SphereCast(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number, layerMask: number):boolean;
+            public static SphereCast(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number):boolean;
+            public static SphereCast(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>):boolean;
+            public static SphereCast(ray: UnityEngine.Ray, radius: number, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static SphereCast(ray: UnityEngine.Ray, radius: number, maxDistance: number, layerMask: number):boolean;
+            public static SphereCast(ray: UnityEngine.Ray, radius: number, maxDistance: number):boolean;
+            public static SphereCast(ray: UnityEngine.Ray, radius: number):boolean;
+            public static SphereCast(ray: UnityEngine.Ray, radius: number, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static SphereCast(ray: UnityEngine.Ray, radius: number, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number, layerMask: number):boolean;
+            public static SphereCast(ray: UnityEngine.Ray, radius: number, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number):boolean;
+            public static SphereCast(ray: UnityEngine.Ray, radius: number, hitInfo: $Ref<UnityEngine.RaycastHit>):boolean;
+            public static BoxCast(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, orientation: UnityEngine.Quaternion, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static BoxCast(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, orientation: UnityEngine.Quaternion, maxDistance: number, layerMask: number):boolean;
+            public static BoxCast(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, orientation: UnityEngine.Quaternion, maxDistance: number):boolean;
+            public static BoxCast(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, orientation: UnityEngine.Quaternion):boolean;
+            public static BoxCast(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3):boolean;
+            public static BoxCast(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, orientation: UnityEngine.Quaternion, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static BoxCast(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, orientation: UnityEngine.Quaternion, maxDistance: number, layerMask: number):boolean;
+            public static BoxCast(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, orientation: UnityEngine.Quaternion, maxDistance: number):boolean;
+            public static BoxCast(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, orientation: UnityEngine.Quaternion):boolean;
+            public static BoxCast(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>):boolean;
+            public static RaycastAll(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):UnityEngine.RaycastHit[];
+            public static RaycastAll(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, maxDistance: number, layerMask: number):UnityEngine.RaycastHit[];
+            public static RaycastAll(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, maxDistance: number):UnityEngine.RaycastHit[];
+            public static RaycastAll(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3):UnityEngine.RaycastHit[];
+            public static RaycastAll(ray: UnityEngine.Ray, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):UnityEngine.RaycastHit[];
+            public static RaycastAll(ray: UnityEngine.Ray, maxDistance: number, layerMask: number):UnityEngine.RaycastHit[];
+            public static RaycastAll(ray: UnityEngine.Ray, maxDistance: number):UnityEngine.RaycastHit[];
+            public static RaycastAll(ray: UnityEngine.Ray):UnityEngine.RaycastHit[];
+            public static RaycastNonAlloc(ray: UnityEngine.Ray, results: UnityEngine.RaycastHit[], maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):number;
+            public static RaycastNonAlloc(ray: UnityEngine.Ray, results: UnityEngine.RaycastHit[], maxDistance: number, layerMask: number):number;
+            public static RaycastNonAlloc(ray: UnityEngine.Ray, results: UnityEngine.RaycastHit[], maxDistance: number):number;
+            public static RaycastNonAlloc(ray: UnityEngine.Ray, results: UnityEngine.RaycastHit[]):number;
+            public static RaycastNonAlloc(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):number;
+            public static RaycastNonAlloc(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], maxDistance: number, layerMask: number):number;
+            public static RaycastNonAlloc(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], maxDistance: number):number;
+            public static RaycastNonAlloc(origin: UnityEngine.Vector3, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[]):number;
+            public static CapsuleCastAll(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):UnityEngine.RaycastHit[];
+            public static CapsuleCastAll(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, maxDistance: number, layerMask: number):UnityEngine.RaycastHit[];
+            public static CapsuleCastAll(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, maxDistance: number):UnityEngine.RaycastHit[];
+            public static CapsuleCastAll(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3):UnityEngine.RaycastHit[];
+            public static SphereCastAll(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):UnityEngine.RaycastHit[];
+            public static SphereCastAll(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, maxDistance: number, layerMask: number):UnityEngine.RaycastHit[];
+            public static SphereCastAll(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, maxDistance: number):UnityEngine.RaycastHit[];
+            public static SphereCastAll(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3):UnityEngine.RaycastHit[];
+            public static SphereCastAll(ray: UnityEngine.Ray, radius: number, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):UnityEngine.RaycastHit[];
+            public static SphereCastAll(ray: UnityEngine.Ray, radius: number, maxDistance: number, layerMask: number):UnityEngine.RaycastHit[];
+            public static SphereCastAll(ray: UnityEngine.Ray, radius: number, maxDistance: number):UnityEngine.RaycastHit[];
+            public static SphereCastAll(ray: UnityEngine.Ray, radius: number):UnityEngine.RaycastHit[];
+            public static OverlapCapsule(point0: UnityEngine.Vector3, point1: UnityEngine.Vector3, radius: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):UnityEngine.Collider[];
+            public static OverlapCapsule(point0: UnityEngine.Vector3, point1: UnityEngine.Vector3, radius: number, layerMask: number):UnityEngine.Collider[];
+            public static OverlapCapsule(point0: UnityEngine.Vector3, point1: UnityEngine.Vector3, radius: number):UnityEngine.Collider[];
+            public static OverlapSphere(position: UnityEngine.Vector3, radius: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):UnityEngine.Collider[];
+            public static OverlapSphere(position: UnityEngine.Vector3, radius: number, layerMask: number):UnityEngine.Collider[];
+            public static OverlapSphere(position: UnityEngine.Vector3, radius: number):UnityEngine.Collider[];
+            public static Simulate(step: number):void;
+            public static SyncTransforms():void;
+            public static ComputePenetration(colliderA: UnityEngine.Collider, positionA: UnityEngine.Vector3, rotationA: UnityEngine.Quaternion, colliderB: UnityEngine.Collider, positionB: UnityEngine.Vector3, rotationB: UnityEngine.Quaternion, direction: $Ref<UnityEngine.Vector3>, distance: $Ref<number>):boolean;
+            public static ClosestPoint(point: UnityEngine.Vector3, collider: UnityEngine.Collider, position: UnityEngine.Vector3, rotation: UnityEngine.Quaternion):UnityEngine.Vector3;
+            public static OverlapSphereNonAlloc(position: UnityEngine.Vector3, radius: number, results: UnityEngine.Collider[], layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):number;
+            public static OverlapSphereNonAlloc(position: UnityEngine.Vector3, radius: number, results: UnityEngine.Collider[], layerMask: number):number;
+            public static OverlapSphereNonAlloc(position: UnityEngine.Vector3, radius: number, results: UnityEngine.Collider[]):number;
+            public static CheckSphere(position: UnityEngine.Vector3, radius: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static CheckSphere(position: UnityEngine.Vector3, radius: number, layerMask: number):boolean;
+            public static CheckSphere(position: UnityEngine.Vector3, radius: number):boolean;
+            public static CapsuleCastNonAlloc(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):number;
+            public static CapsuleCastNonAlloc(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], maxDistance: number, layerMask: number):number;
+            public static CapsuleCastNonAlloc(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], maxDistance: number):number;
+            public static CapsuleCastNonAlloc(point1: UnityEngine.Vector3, point2: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[]):number;
+            public static SphereCastNonAlloc(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):number;
+            public static SphereCastNonAlloc(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], maxDistance: number, layerMask: number):number;
+            public static SphereCastNonAlloc(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], maxDistance: number):number;
+            public static SphereCastNonAlloc(origin: UnityEngine.Vector3, radius: number, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[]):number;
+            public static SphereCastNonAlloc(ray: UnityEngine.Ray, radius: number, results: UnityEngine.RaycastHit[], maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):number;
+            public static SphereCastNonAlloc(ray: UnityEngine.Ray, radius: number, results: UnityEngine.RaycastHit[], maxDistance: number, layerMask: number):number;
+            public static SphereCastNonAlloc(ray: UnityEngine.Ray, radius: number, results: UnityEngine.RaycastHit[], maxDistance: number):number;
+            public static SphereCastNonAlloc(ray: UnityEngine.Ray, radius: number, results: UnityEngine.RaycastHit[]):number;
+            public static CheckCapsule(start: UnityEngine.Vector3, end: UnityEngine.Vector3, radius: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static CheckCapsule(start: UnityEngine.Vector3, end: UnityEngine.Vector3, radius: number, layerMask: number):boolean;
+            public static CheckCapsule(start: UnityEngine.Vector3, end: UnityEngine.Vector3, radius: number):boolean;
+            public static CheckBox(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, orientation: UnityEngine.Quaternion, layermask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public static CheckBox(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, orientation: UnityEngine.Quaternion, layerMask: number):boolean;
+            public static CheckBox(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, orientation: UnityEngine.Quaternion):boolean;
+            public static CheckBox(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3):boolean;
+            public static OverlapBox(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, orientation: UnityEngine.Quaternion, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):UnityEngine.Collider[];
+            public static OverlapBox(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, orientation: UnityEngine.Quaternion, layerMask: number):UnityEngine.Collider[];
+            public static OverlapBox(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, orientation: UnityEngine.Quaternion):UnityEngine.Collider[];
+            public static OverlapBox(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3):UnityEngine.Collider[];
+            public static OverlapBoxNonAlloc(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, results: UnityEngine.Collider[], orientation: UnityEngine.Quaternion, mask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):number;
+            public static OverlapBoxNonAlloc(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, results: UnityEngine.Collider[], orientation: UnityEngine.Quaternion, mask: number):number;
+            public static OverlapBoxNonAlloc(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, results: UnityEngine.Collider[], orientation: UnityEngine.Quaternion):number;
+            public static OverlapBoxNonAlloc(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, results: UnityEngine.Collider[]):number;
+            public static BoxCastNonAlloc(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], orientation: UnityEngine.Quaternion, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):number;
+            public static BoxCastNonAlloc(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], orientation: UnityEngine.Quaternion):number;
+            public static BoxCastNonAlloc(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], orientation: UnityEngine.Quaternion, maxDistance: number):number;
+            public static BoxCastNonAlloc(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[], orientation: UnityEngine.Quaternion, maxDistance: number, layerMask: number):number;
+            public static BoxCastNonAlloc(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, results: UnityEngine.RaycastHit[]):number;
+            public static BoxCastAll(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, orientation: UnityEngine.Quaternion, maxDistance: number, layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):UnityEngine.RaycastHit[];
+            public static BoxCastAll(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, orientation: UnityEngine.Quaternion, maxDistance: number, layerMask: number):UnityEngine.RaycastHit[];
+            public static BoxCastAll(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, orientation: UnityEngine.Quaternion, maxDistance: number):UnityEngine.RaycastHit[];
+            public static BoxCastAll(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3, orientation: UnityEngine.Quaternion):UnityEngine.RaycastHit[];
+            public static BoxCastAll(center: UnityEngine.Vector3, halfExtents: UnityEngine.Vector3, direction: UnityEngine.Vector3):UnityEngine.RaycastHit[];
+            public static OverlapCapsuleNonAlloc(point0: UnityEngine.Vector3, point1: UnityEngine.Vector3, radius: number, results: UnityEngine.Collider[], layerMask: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):number;
+            public static OverlapCapsuleNonAlloc(point0: UnityEngine.Vector3, point1: UnityEngine.Vector3, radius: number, results: UnityEngine.Collider[], layerMask: number):number;
+            public static OverlapCapsuleNonAlloc(point0: UnityEngine.Vector3, point1: UnityEngine.Vector3, radius: number, results: UnityEngine.Collider[]):number;
+            public static RebuildBroadphaseRegions(worldBounds: UnityEngine.Bounds, subdivisions: number):void;
+            
+        }
+        class PhysicsScene extends System.ValueType {
+            
+        }
+        class Collider extends UnityEngine.Component {
+            
+        }
+        enum QueryTriggerInteraction { UseGlobal = 0, Ignore = 1, Collide = 2 }
+        class RaycastHit extends System.ValueType {
+            public collider: UnityEngine.Collider;
+            public point: UnityEngine.Vector3;
+            public normal: UnityEngine.Vector3;
+            public barycentricCoordinate: UnityEngine.Vector3;
+            public distance: number;
+            public triangleIndex: number;
+            public textureCoord: UnityEngine.Vector2;
+            public textureCoord2: UnityEngine.Vector2;
+            public textureCoord1: UnityEngine.Vector2;
+            public transform: UnityEngine.Transform;
+            public rigidbody: UnityEngine.Rigidbody;
+            public lightmapCoord: UnityEngine.Vector2;
+            
+        }
+        class Rigidbody extends UnityEngine.Component {
+            
+        }
         class ScriptableObject extends UnityEngine.Object {
             
         }
@@ -588,9 +1014,6 @@ declare module 'csharp' {
             
         }
         class Color32 extends System.ValueType {
-            
-        }
-        class Shader extends UnityEngine.Object {
             
         }
         
@@ -860,6 +1283,26 @@ declare module 'csharp' {
             public constructor();
             
         }
+        
+    }
+    namespace UnityEngine.Camera {
+        type CameraCallback = (cam: UnityEngine.Camera) => void;
+        var CameraCallback: {new (func: (cam: UnityEngine.Camera) => void): CameraCallback;}
+        enum GateFitMode { Vertical = 1, Horizontal = 2, Fill = 3, Overscan = 4, None = 0 }
+        enum MonoOrStereoscopicEye { Left = 0, Right = 1, Mono = 2 }
+        class GateFitParameters extends System.ValueType {
+            
+        }
+        enum StereoscopicEye { Left = 0, Right = 1 }
+        
+    }
+    namespace UnityEngine.Rendering {
+        enum OpaqueSortMode { Default = 0, FrontToBack = 1, NoDistanceSort = 2 }
+        enum CameraEvent { BeforeDepthTexture = 0, AfterDepthTexture = 1, BeforeDepthNormalsTexture = 2, AfterDepthNormalsTexture = 3, BeforeGBuffer = 4, AfterGBuffer = 5, BeforeLighting = 6, AfterLighting = 7, BeforeFinalPass = 8, AfterFinalPass = 9, BeforeForwardOpaque = 10, AfterForwardOpaque = 11, BeforeImageEffectsOpaque = 12, AfterImageEffectsOpaque = 13, BeforeSkybox = 14, AfterSkybox = 15, BeforeForwardAlpha = 16, AfterForwardAlpha = 17, BeforeImageEffects = 18, AfterImageEffects = 19, AfterEverything = 20, BeforeReflections = 21, AfterReflections = 22, BeforeHaloAndLensFlares = 23, AfterHaloAndLensFlares = 24 }
+        class CommandBuffer extends System.Object {
+            
+        }
+        enum ComputeQueueType { Default = 0, Background = 1, Urgent = 2 }
         
     }
     namespace Spine {

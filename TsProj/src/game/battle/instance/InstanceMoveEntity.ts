@@ -1,3 +1,4 @@
+import VectorTools from "../../../framework/utils/VectorTools";
 
 export default class InstanceMoveEntity {
 

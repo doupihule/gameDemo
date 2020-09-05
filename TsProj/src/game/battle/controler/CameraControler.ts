@@ -1,10 +1,12 @@
 import BattleFunc from "../../sys/func/BattleFunc";
 import BattleLogicalControler from "./BattleLogicalControler";
 import VectorTools from "../../../framework/utils/VectorTools";
+import CameraExpand from "../../../framework/components/d3/CameraExpand";
+import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand";
 
 export default class CameraControler {
     //摄像机实例
-    public camera: Laya.Camera;
+    public camera: CameraExpand;
     public controller: BattleLogicalControler;
 
     //相机的初始位置
@@ -51,10 +53,9 @@ export default class CameraControler {
         this.targetCamerePos.x = this.controller.player.pos.x + this._followOffsetPos.x;
         this.targetCamerePos.y = this._followOffsetPos.y;
         this.targetCamerePos.z = this.controller.player.pos.z + this._followOffsetPos.z;
-        this.camera.transform.localPosition = this.targetCamerePos;
+        (this.camera.__owner as Base3dViewExpand).set3dPos(this.targetCamerePos.x,this.targetCamerePos.y,this.targetCamerePos.z);
         this.isFollowPlayer = true;
-
-        this.camera.transform.localPosition.cloneTo(this._initCameraPos);
+        VectorTools.cloneTo(this.targetCamerePos,this._initCameraPos);
         this.controller.registObjUpdate(this.updateFrame,this);
     }
 

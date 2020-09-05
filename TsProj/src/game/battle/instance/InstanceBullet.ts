@@ -1,7 +1,6 @@
 import InstanceMove from "./InstanceMove";
 import InstancePlayer from "./InstancePlayer";
 import TableUtils from "../../../framework/utils/TableUtils";
-import UserInfo from "../../sys/common/UserInfo";
 import InstanceRole from "./InstanceRole";
 import ColliderController from "../controler/ColliderController";
 import BattleFunc from "../../sys/func/BattleFunc";
@@ -12,6 +11,9 @@ import { MusicConst } from "../../sys/consts/MusicConst";
 import UICompConst from "../../../framework/consts/UICompConst";
 import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand";
 import ViewTools from "../../../framework/components/ViewTools";
+import RigidbodyExpand from "../../../framework/components/physics/RigidbodyExpand";
+import PhysicsTools from "../../../framework/components/physics/PhysicsTools";
+import VectorTools from "../../../framework/utils/VectorTools";
 
 export default class InstanceBullet extends InstanceMove {
 
@@ -37,13 +39,14 @@ export default class InstanceBullet extends InstanceMove {
 
     private colliderCtrl: ColliderController;
 
-    public rigid: Laya.Rigidbody3D;
+    public rigid: RigidbodyExpand;
 
-    public trail: Laya.TrailSprite3D;
+    private  ray:any;
 
-    private ray = new Laya.Ray(this.pos, this.speed);
+    private  rayOrigin:{x,y,z};
+    private  rayDirection:{x,y,z};
 
-    private rayHit = new Laya.HitResult();
+    private rayHit;
 
     private coll;
 
@@ -53,6 +56,10 @@ export default class InstanceBullet extends InstanceMove {
 
     constructor(controller) {
         super(controller);
+        this.ray = PhysicsTools.createRay(this.pos, this.speed);
+        this.rayOrigin = VectorTools.cloneTo(this.pos);
+        this.rayDirection = VectorTools.cloneTo(this.speed);
+        this.rayHit = PhysicsTools.createHitInfo()
         this.hitedArr = [];
     }
 
@@ -83,18 +90,7 @@ export default class InstanceBullet extends InstanceMove {
             // this.rigid.ccdMotionThreshold = 0.00001;
             // this.rigid.isKinematic = true;
         }
-        if (!this.trail) {
-            this.trail = this.getView().getChildByName("trail") as Laya.TrailSprite3D;
-            this.trail.removeSelf();
-            this.trail.trailFilter._time = GlobalParamsFunc.instance.getDataNum("bulletTailFlyTime") / 1000;
-        }
 
-        var trail = this.getView().getChildByName("trail") as Laya.TrailSprite3D;
-        if (trail) {
-            trail.destroy();
-        }
-        trail = ViewTools.cloneOneView(this.trail)  ;
-        this.getView().addChild(trail);
     }
 
     //设置速度
@@ -127,8 +123,9 @@ export default class InstanceBullet extends InstanceMove {
         }
         var sp: Base3dViewExpand;
 
-        this.pos = this._myView.transform.position;
-        this._myView.transform.localPosition = this.pos
+        //@xd_test
+        // this.pos = this._myView.transform.position;
+        this._myView.set3dPos(this.pos.x,this.pos.y,this.pos.z);
         // this._myView.transform.x = this.pos.x;
         // this._myView.transform.y = this.pos.y;
         // this._myView.transform.z = this.pos.z;
@@ -136,13 +133,13 @@ export default class InstanceBullet extends InstanceMove {
 
     //设置坐标
     setPos(x: number = 0, y: number = 0, z: number = 0) {
+        this.pos.x = x;
+        this.pos.y = y;
+        this.pos.z = z;
         if (this.rigid) {
             this.rigid.isKinematic = true;
-            this._myView.transform.position.x = x;
-            this._myView.transform.position.y = y;
-            this._myView.transform.position.z = z;
-            this._myView.transform.position = this._myView.transform.position;
 
+            this._myView.set3dPos(x,y,z);
             this.realShowView()
         }
     }
@@ -170,19 +167,18 @@ export default class InstanceBullet extends InstanceMove {
     private checkHit() {
         var flag = false;
         this.isSimulate = false;
-        this.ray.origin = this.pos;
-        this.ray.direction = this.speed;
+        VectorTools.cloneTo(this.pos,this.rayOrigin);
+        VectorTools.cloneTo(this.speed,this.rayDirection);
         var length = VectorTools.scalarLength(this.speed) * 0.999
-        this.controller.battleScene.physicsSimulation.rayCast(this.ray, this.rayHit, 300, 32, 16 | 32);
+        PhysicsTools.rayCast(this.rayOrigin, this.rayDirection, this.rayHit, 300, 32, 16 | 32);
         if (!this.rayHit.succeeded) return;
         if (this.rayHit.collider) {
             var tempVector3_1 = VectorTools.createVec3();
             var tempVector3_2 = VectorTools.createVec3();
             var tempVector3_3 = VectorTools.createVec3();
             var tempVector3_4 = VectorTools.createVec3();
-            // console.log(VectorTools.distanceSquared(this.ray.origin, this.rayHit.point)+" "+length)
-            VectorTools.subtract(this.rayHit.point, this.ray.origin, tempVector3_1)
-            if (VectorTools.distance(this.ray.origin, this.rayHit.point) < length) {
+            VectorTools.subtract(this.rayHit.point, this.rayOrigin, tempVector3_1)
+            if (VectorTools.distance(this.rayOrigin, this.rayHit.point) < length) {
 
                 if (this.coll == this.rayHit.collider) {
                     this.coll = null;
@@ -192,8 +188,6 @@ export default class InstanceBullet extends InstanceMove {
                     // this.pos = this.rayHit.point;
                     this.coll = this.rayHit.collider;
                 }
-                // if (this.ray.direction.x / tempVector3_1.x >= 0 && this.ray.direction.y / tempVector3_1.y >= 0 && this.ray.direction.z / tempVector3_1.z >= 0) {
-                // VectorTools.add(this.pos, this.rayHit.point, this.pos);
                 if (this.rayHit.collider.owner.name.indexOf("border") != -1) {
                     this.controller.destoryBullet(this);
                     return;
@@ -225,7 +219,7 @@ export default class InstanceBullet extends InstanceMove {
 
                                 this.ray.origin = this.pos;
                                 this.ray.direction = this.speed;
-                                this.controller.battleScene.physicsSimulation.rayCast(this.ray, this.rayHit, 300);
+                                PhysicsTools.rayCast(this.ray, this.rayHit, 300);
 
                                 var normal = this.rayHit.normal;
 

@@ -94,21 +94,6 @@ export default class ColliderController extends BaseCompExpand {
                 return;
             }
             if (otherInstance.param.rebound) {
-                // VectorTools.normalize(this.instance.speed, this.tempVector3_1);
-                // var time = this.instance.speed.x / this.tempVector3_1.x;
-                // var normal = collEvent.contacts[collEvent.contacts.length - 1].normal;
-                // VectorTools.scale(normal, -2 * (VectorTools.dot(this.tempVector3_1, normal)), this.tempVector3_2)
-                // VectorTools.add(this.tempVector3_1, this.tempVector3_2, this.tempVector3_3);
-                // VectorTools.scale(this.tempVector3_3, time, this.tempVector3_4);
-
-                // if (Math.pow(this.tempVector3_4.x - this.instance.speed.x, 2) + Math.pow(this.tempVector3_4.y - this.instance.speed.y, 2) + Math.pow(this.tempVector3_4.z - this.instance.speed.z, 2) > 0.001) {
-                //     this.instance.speed.x = this.tempVector3_4.x;
-                //     this.instance.speed.y = this.tempVector3_4.y;
-                //     this.instance.speed.z = this.tempVector3_4.z;
-                // }
-                // else {
-                //     var tmp = 1;
-                // }
 
             }
             if (otherInstance.type == "Target") {

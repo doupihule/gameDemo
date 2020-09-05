@@ -75,7 +75,13 @@ export default class BaseViewExpand {
 		GameUtils.ViewExtensionMethods.SetObj2dPos(this.__ctransform, x,y);
 	}
 
-
+	//设置3d坐标
+	public  set3dPos(x:number,y:number,z:number){
+		this.positionTrans.x = x;
+		this.positionTrans.y = y;
+		this.positionTrans.z = z;
+		GameUtils.ViewExtensionMethods.SetObj3dPos(this.__ctransform, x,y,z);
+	}
 
 
 	//设置2d旋转

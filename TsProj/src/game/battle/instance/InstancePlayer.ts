@@ -5,6 +5,9 @@ import SoundManager from "../../../framework/manager/SoundManager";
 import InstanceRole from "./InstanceRole";
 import GlobalParamsFunc from "../../sys/func/GlobalParamsFunc";
 import { MusicConst } from "../../sys/consts/MusicConst";
+import CameraExpand from "../../../framework/components/d3/CameraExpand";
+import VectorTools from "../../../framework/utils/VectorTools";
+import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand";
 
 //主角类
 export default class InstancePlayer extends InstanceRole {
@@ -60,7 +63,7 @@ export default class InstancePlayer extends InstanceRole {
 
 
     //主摄像头
-    private mainCamera: Laya.Camera;
+    private mainCamera: CameraExpand;
     //触摸点对应的射线 
     public touchRay: Laya.Ray;
 
@@ -111,10 +114,9 @@ export default class InstancePlayer extends InstanceRole {
 
         // if (!this.line) {
         this.line = this.controller.line;
-        this.line.active = false;
+        this.line.setActive(false);
         this._myView.addChild(this.line);
-        this.line.transform.localPositionY = this.controller.bulletHeight;
-        this.line.transform.localPositionZ = -this.shootOffset;
+        this.line.set3dPos(this.line.x,this.controller.bulletHeight,-this.shootOffset);
         this.initRadian();
 
         // this.controller.player = this;
@@ -244,8 +246,9 @@ export default class InstancePlayer extends InstanceRole {
 
         this.checkHit();
 
-        Laya.timer.clear(this, this.checkHit);
-        Laya.timer.loop(1, this, this.checkHit);
+        TimerManager.instance.deleteObjUpdate(null,this.checkHit,this);
+        TimerManager.instance.registObjUpdate(this.checkHit,this);
+
 
     }
 
@@ -281,8 +284,8 @@ export default class InstancePlayer extends InstanceRole {
 
             this.checkHit(1);
 
-            Laya.timer.clear(this, this.checkHit);
             this.line.active = false;
+            TimerManager.instance.deleteObjUpdate(null,this.checkHit,this);
 
             this.checkShoot();
         }

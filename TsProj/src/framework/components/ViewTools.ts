@@ -17,6 +17,7 @@ import CameraExpand from "./d3/CameraExpand";
 import PhysicsColliderExpand from "./physics/PhysicsColliderExpand";
 import Animation3DExpand from "./d3/Animation3DExpand";
 import Particle3dExpand from "./d3/Particle3dExpand";
+import RigidbodyExpand from "./physics/RigidbodyExpand";
 
 export default class ViewTools {
 
@@ -36,6 +37,7 @@ export default class ViewTools {
 		animator3d:{cl:Animation3DExpand,cname:"Animator"},
 		particle3d:{cl:Particle3dExpand,cname:"Particle"},
 		collider:{cl:PhysicsColliderExpand,cname:"Collider"},
+		rigidbody3d:{cl:RigidbodyExpand,cname:"Rigidbody"},
 
 
 	}

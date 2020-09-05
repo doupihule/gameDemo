@@ -1,5 +1,6 @@
 import InstanceBasic from "./InstanceBasic";
 import BattleControler from "../controler/BattleControler";
+import VectorTools from "../../../framework/utils/VectorTools";
 
 /**
  * 游戏中的特效基类

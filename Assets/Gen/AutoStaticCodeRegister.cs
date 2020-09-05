@@ -25,6 +25,13 @@
             jsEnv.AddLazyStaticWrapLoader(typeof(UnityEngine.Events.UnityEvent), UnityEngine_Events_UnityEvent_Wrap.GetRegisterInfo);
             jsEnv.AddLazyStaticWrapLoader(typeof(UnityEngine.UI.Outline), UnityEngine_UI_Outline_Wrap.GetRegisterInfo);
             jsEnv.AddLazyStaticWrapLoader(typeof(UnityEngine.UI.Shadow), UnityEngine_UI_Shadow_Wrap.GetRegisterInfo);
+            jsEnv.AddLazyStaticWrapLoader(typeof(UnityEngine.Camera), UnityEngine_Camera_Wrap.GetRegisterInfo);
+            jsEnv.AddLazyStaticWrapLoader(typeof(UnityEngine.Plane), UnityEngine_Plane_Wrap.GetRegisterInfo);
+            jsEnv.AddLazyStaticWrapLoader(typeof(UnityEngine.Quaternion), UnityEngine_Quaternion_Wrap.GetRegisterInfo);
+            jsEnv.AddLazyStaticWrapLoader(typeof(UnityEngine.Physics), UnityEngine_Physics_Wrap.GetRegisterInfo);
+            jsEnv.AddLazyStaticWrapLoader(typeof(UnityEngine.RaycastHit), UnityEngine_RaycastHit_Wrap.GetRegisterInfo);
+            jsEnv.AddLazyStaticWrapLoader(typeof(UnityEngine.Ray), UnityEngine_Ray_Wrap.GetRegisterInfo);
+            jsEnv.AddLazyStaticWrapLoader(typeof(UnityEngine.Physics), UnityEngine_Physics_Wrap.GetRegisterInfo);
             jsEnv.AddLazyStaticWrapLoader(typeof(Spine.Animation), Spine_Animation_Wrap.GetRegisterInfo);
             jsEnv.AddLazyStaticWrapLoader(typeof(Spine.AnimationState), Spine_AnimationState_Wrap.GetRegisterInfo);
             jsEnv.AddLazyStaticWrapLoader(typeof(Spine.Bone), Spine_Bone_Wrap.GetRegisterInfo);

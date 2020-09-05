@@ -6,6 +6,8 @@ import BattleFunc from "../../sys/func/BattleFunc";
 import LogsManager from "../../../framework/manager/LogsManager";
 import BattleConst from "../../sys/consts/BattleConst";
 import Equation from "../../../framework/utils/Equation";
+import VectorTools from "../../../framework/utils/VectorTools";
+import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand";
 
 /**
  * 游戏中所有可以运动的对象的基类
@@ -493,18 +495,18 @@ export default class InstanceMove extends InstanceBasic {
 
 	//设置子对象的旋转
 	protected setChildViewRotation(r) {
-		var child: Base3dViewExpand = this._myView.getChildAt(0);
-		child.transform.localRotationEuler = r;
+		var child: Base3dViewExpand = this._myView.getChildAt(0) as Base3dViewExpand;
+		child.set3dRotation(r.x,r.y,r.z);
 	}
 
 	//设置子对象的坐标
 	protected setChildViewPos(p) {
-		var child: Base3dViewExpand = this._myView.getChildAt(0);
+		var child: Base3dViewExpand = this._myView.getChildAt(0) as Base3dViewExpand;
 		var temp = BattleFunc.tempPoint4;
 		temp.x = p.x + this.initRotateCtnPos.x
 		temp.y = p.x + this.initRotateCtnPos.y
 		temp.z = p.x + this.initRotateCtnPos.z
-		child.transform.localPosition = temp;
+		child.set3dPos( p.x + this.initRotateCtnPos.x,p.y + this.initRotateCtnPos.y,p.z+this.initRotateCtnPos.z);
 	}
 
 
@@ -526,7 +528,7 @@ export default class InstanceMove extends InstanceBasic {
 			return;
 		}
 		this.isViewShow = value
-		this._myView.active = value;
+		this._myView.setActive(value);
 	}
 
 

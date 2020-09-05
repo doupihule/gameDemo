@@ -12,10 +12,14 @@ export default class VectorTools {
 	//单位向量
 	static unitPoint: any = VectorTools.createVec3(1, 1, 1);
 
-	static  cloneTo(formV3:{x,y,z},toV3:{x,y,z}){
+	static  cloneTo(formV3:{x,y,z},toV3:{x,y,z} = null){
+		if (!toV3){
+			toV3 = this.createVec3();
+		}
 		toV3.x = formV3.x;
 		toV3.y = formV3.y;
 		toV3.z = formV3.z;
+		return toV3;
 	}
 
 

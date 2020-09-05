@@ -34,13 +34,7 @@ export  default  class  Base3dViewExpand extends  BaseViewExpand{
 		ratotion3d.z = vec.z;
 		return ratotion3d;
 	}
-	//设置3d坐标
-	public  set3dPos(x:number,y:number,z:number){
-		this.positionTrans.x = x;
-		this.positionTrans.y = y;
-		this.positionTrans.z = z;
-		GameUtils.ViewExtensionMethods.SetObj3dPos(this.__ctransform, x,y,z);
-	}
+	
 
 	//设置3d旋转视角
 	public  set3dRotation(x,y,z){

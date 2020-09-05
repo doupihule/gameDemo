@@ -1,6 +1,9 @@
 import BattleLogicalControler from "../controler/BattleLogicalControler";
 import BattleFunc from "../../sys/func/BattleFunc";
 import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand";
+import PhysicsColliderExpand from "../../../framework/components/physics/PhysicsColliderExpand";
+import VectorTools from "../../../framework/utils/VectorTools";
+import UICompConst from "../../../framework/consts/UICompConst";
 
 /**
  * author:xd
@@ -11,7 +14,7 @@ export default class InstanceBasic {
 	//备注:如果要实现复盘逻辑. 这个对象是可以不需要view的
 	//我的显示对象
 	public _myView: Base3dViewExpand;
-	public collider: Laya.PhysicsCollider;
+	public collider: PhysicsColliderExpand;
 
 	expendZorder: number = 0;		//扩展的深度排序,特殊情况下 需要设置这个值 保证我的显示在最前面或者最后面
 
@@ -82,7 +85,7 @@ export default class InstanceBasic {
 		this._myView = view;
 		this.setPos(x, y, z);
 		this.updateView();
-		this.collider = this._myView.getComponent(Laya.PhysicsCollider);
+		this.collider = this._myView.getComponent(UICompConst.comp_collider);
 	}
 
 	//设置坐标
@@ -130,7 +133,7 @@ export default class InstanceBasic {
 		}
 		var sp: Base3dViewExpand;
 		if (!this.rigid) {
-			this._myView.transform.localPosition = this.pos
+			this._myView.set3dPos(this.pos.x,this.pos.y,this.pos.z);
 		}
 		// this._myView.transform.x = this.pos.x;
 		// this._myView.transform.y = this.pos.y;
@@ -180,7 +183,7 @@ export default class InstanceBasic {
 			return;
 		}
 		//设置当前view的角度
-		childView.transform.localRotationEuler = this.rotation;
+		childView.set3dRotation(this.rotation.x,this.rotation.y,this.rotation.z);
 	}
 
 	//初始化旋转弧度
@@ -190,7 +193,8 @@ export default class InstanceBasic {
 			return;
 		}
 		//设置当前view的角度
-		this.rotation = childView.transform.localRotationEuler;
+		var viewR = childView.get3dRotation();
+		VectorTools.cloneTo(viewR,this.rotation);
 	}
 
 	public setViewScale(scale) {
@@ -201,8 +205,7 @@ export default class InstanceBasic {
 		}
 		var tempP = BattleFunc.tempPoint;
 		tempP.x = tempP.y = tempP.z = scale;
-		//设置当前view的角度
-		childView.transform.localScale = tempP;
+		childView.setScale(scale,scale,scale);
 	}
 
 	//设置网格坐标
@@ -233,8 +236,8 @@ export default class InstanceBasic {
 	//如果有缓存需求,也可以让子类重写
 	private disposeView() {
 		if (this._myView) {
-			this._myView.active = false;
-			this._myView.destroy();
+			this._myView.setActive(false);
+			this._myView.dispose();
 			this._myView = null;
 		}
 	}
@@ -252,12 +255,8 @@ export default class InstanceBasic {
 	onSetToCache() {
 		var view: Base3dViewExpand = this._myView;
 		if (view) {
-			view.active = false;
+			view.setActive(false);
 			view.removeSelf();
-			var rigid: Laya.Rigidbody3D = view.getComponent(Laya.Rigidbody3D);
-			if (rigid) {
-				// rigid.isKinematic = true;
-			}
 		}
 
 	}

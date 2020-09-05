@@ -50,7 +50,14 @@ public class ExamplesCfg
                 typeof(Shadow),
                 typeof(Camera),
                 typeof(Plane),
+                typeof(TrailRenderer),
+
                 typeof(Quaternion),
+
+
+                typeof(Physics),
+                typeof(RaycastHit),
+                typeof(Ray),
 
                 typeof(UnityEngine.Physics),
 
