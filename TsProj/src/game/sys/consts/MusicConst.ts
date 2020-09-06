@@ -17,6 +17,7 @@ export class MusicConst {
 	/** 通用按钮音效 */
 	static SOUND_BUTTON_CLICK: string = "click"
 
+	static  SOUND_HITDIE:string = "click"
 
 	//音效参数定义.暂时定义时长. 后面会定义 是否循环.时间等
 	static soundCfgs = {}

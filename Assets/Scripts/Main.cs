@@ -31,6 +31,7 @@ public class Main : MonoBehaviour
     }
     void Update()
     {
+        
         JSEnvExpand.globalEnv.Tick();
         //luaUpdate(timerManager);
         JSEnvExpand.globalEnv.Eval("window.TimeManager.instance.tickHandler()");

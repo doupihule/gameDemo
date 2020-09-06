@@ -219,7 +219,7 @@ export default class InstanceBullet extends InstanceMove {
 
                                 this.ray.origin = this.pos;
                                 this.ray.direction = this.speed;
-                                PhysicsTools.rayCast(this.ray, this.rayHit, 300);
+                                PhysicsTools.rayCast(this.rayOrigin,this.rayDirection, this.rayHit, 300);
 
                                 var normal = this.rayHit.normal;
 
