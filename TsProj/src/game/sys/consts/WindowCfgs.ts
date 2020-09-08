@@ -7,6 +7,8 @@ import GameMainUI from "../view/main/GameMainUI";
 import ResultJumpUI from "../view/jump/ResultJumpUI";
 import {BattleUI} from "../view/battle/BattleUI";
 import JumpListUI from "../view/jump/JumpListUI";
+import { StageSelectUI } from "../view/main/StageSelectUI";
+import FreePowerUI from "../view/reward/FreePowerUI";
 
 export class WindowCfgs {
 
@@ -59,6 +61,11 @@ export class WindowCfgs {
 	static JumpListZhiseUI: string = "JumpListZhiseUI";
 
 	static MainJumpKariquUI: string = "MainJumpKariquUI";
+
+
+	static FreePowerUI:string = "FreePowerUI";
+	static  CommonRewardUI:string = "CommonRewardUI";
+
 	//通用配置,如果不配置 就没有
 	static commonCfgs: any = {
 		modal: 1,	//ui默认是有模态的,
@@ -141,8 +148,8 @@ export class WindowCfgs {
 				[WindowCfgs.StageSelectUI]:{
 					path: StageSelectUI,
 					full: true
-				}
-
+				},
+				[WindowCfgs.FreePowerUI]: { modal: 1, path: FreePowerUI, modalAlpha: 0.01, group: ["gameui/FreePower.scene"], subPackage: ["uisource", "atlas_source"] },
 
 			}
 

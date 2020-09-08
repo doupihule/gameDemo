@@ -17,8 +17,12 @@ export class MusicConst {
 	/** 通用按钮音效 */
 	static SOUND_BUTTON_CLICK: string = "click"
 
-	static  SOUND_HITDIE:string = "click"
-
+	//开枪音效
+	static SOUND_SHOOT: string = "shoot"
+	//子弹遇到墙体碰撞
+	static SOUND_CRASH: string = "crash"
+	//击中死亡
+	static SOUND_HITDIE: string = "hitdie"
 	//音效参数定义.暂时定义时长. 后面会定义 是否循环.时间等
 	static soundCfgs = {}
 

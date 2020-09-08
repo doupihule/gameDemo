@@ -25,8 +25,9 @@ export default class BattleConst {
 
 	static model_bullet_model: string = "bullet_01"
 
-
-
+	static  collion_layer_1:number = 9;
+	static  collion_layer_2:number = 10;
+	static  collion_layer_3:number = 11;
 
 
 	//如果要配置运动+旋转 那么 用1|2的方式

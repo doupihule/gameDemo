@@ -1,8 +1,7 @@
-import { ui } from "../../../../ui/layaMaxUI";
+
 import IMessage from "../../interfaces/IMessage";
 import WindowManager from "../../../../framework/manager/WindowManager";
 import { WindowCfgs } from "../../consts/WindowCfgs";
-import TweenAniManager from "../../manager/TweenAniManager";
 import BattleServer from "../../server/BattleServer";
 import LevelFunc from "../../func/LevelFunc";
 import BattleSceneManager from "../../manager/BattleSceneManager";
@@ -16,9 +15,13 @@ import GlobalParamsFunc from "../../func/GlobalParamsFunc";
 import TranslateFunc from "../../../../framework/func/TranslateFunc";
 import ShareOrTvManager from "../../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "../../func/ShareTvOrderFunc";
-import { DataResourceType } from "../../func/DataResourceFunc";
+import DataResourceConst from "../../consts/DataResourceConst";
+import ButtonExpand from "../../../../framework/components/ButtonExpand";
+import LabelExpand from "../../../../framework/components/LabelExpand";
+import ImageExpand from "../../../../framework/components/ImageExpand";
+import UIBaseView from "../../../../framework/components/UIBaseView";
 
-export default class BattleResultUI extends ui.gameui.BattleResultUI implements IMessage {
+export default class BattleResultUI extends UIBaseView implements IMessage {
     public static res = ["gameui/BattleResult.scene",
     ];
 
@@ -29,7 +32,16 @@ export default class BattleResultUI extends ui.gameui.BattleResultUI implements 
     private rank;
     private nameList;
 
-    private isWin: boolean = false;
+    public  nextBtn:ButtonExpand;
+    public  returnBtn:ButtonExpand;
+    public  restartBtn:ButtonExpand;
+    public  upgradeBtn:ButtonExpand;
+    public  resultText:LabelExpand;
+    public  bg:ButtonExpand;
+    public  coinNum:LabelExpand;
+    public  star1:ImageExpand
+    public  star2:ImageExpand
+    public  star3:ImageExpand
 
     constructor() {
         super();
@@ -54,19 +66,6 @@ export default class BattleResultUI extends ui.gameui.BattleResultUI implements 
         this.levelId = data.levelId;
         this.rank = data.rank;
 
-        StatisticsManager.ins.onEvent(StatisticsManager.LEVEL_VICTORY, { levelId: this.levelId });
-
-        switch (this.rank) {
-            case 1:
-                StatisticsManager.ins.onEvent(StatisticsManager.LEVEL_VICTORY_ONESTAR, { levelId: this.levelId });
-                break;
-            case 2:
-                StatisticsManager.ins.onEvent(StatisticsManager.LEVEL_VICTORY_TWOSTAR, { levelId: this.levelId });
-                break;
-            case 3:
-                StatisticsManager.ins.onEvent(StatisticsManager.LEVEL_VICTORY_THREESTAR, { levelId: this.levelId });
-                break;
-        }
 
         // SoundManager.playSE(MusicConst.SOUND_RACE_WIN);
 
@@ -82,7 +81,7 @@ export default class BattleResultUI extends ui.gameui.BattleResultUI implements 
             if (rewardInfo[0] == 3) {
                 getGold += Number(rewardInfo[1]);
             }
-            this.resultText.changeText("完美通关");
+            this.resultText.setText("完美通关");
             this.restartBtn.visible = true;
             this.upgradeBtn.visible = false;
         }
@@ -121,12 +120,12 @@ export default class BattleResultUI extends ui.gameui.BattleResultUI implements 
         this.showTween();
         this.bg.alpha = this.bgAlpha;
 
-        this.coinNum.text = "+" + StringUtils.getCoinStr(getCoin);
+        this.coinNum.text = "+" + StringUtils.getCoinStr(String(getCoin) );
         // this.goldNum.text = StringUtils.getCoinStr(UserModel.instance.getGold());
 
-        this.star1.skin = "native/main/common_image_xing2.png";
-        this.star2.skin = "native/main/common_image_xing2.png";
-        this.star3.skin = "native/main/common_image_xing2.png";
+        this.star1.setSkin( "native/main/common_image_xing2.png");
+        this.star2.setSkin( "native/main/common_image_xing2.png");
+        this.star3.setSkin( "native/main/common_image_xing2.png");
 
         BattleServer.battleResult(this.levelId, this.rank, null, this);
 
@@ -141,7 +140,7 @@ export default class BattleResultUI extends ui.gameui.BattleResultUI implements 
         }
         else {
             this.nextBtn.visible = true;
-        }
+        }8
     }
 
     onClose() {
@@ -178,43 +177,16 @@ export default class BattleResultUI extends ui.gameui.BattleResultUI implements 
     private starAnime(star, index, time, scale) {
         // star.visible = false;
 
-        Laya.timer.once(time * index, this, () => {
-            star.visible = true;
-            star.skin = "native/main/common_image_xing1.png";
-            star.scale(scale, scale);
-            TweenAniManager.instance.scaleOnlyAni(star, 1, 1, time)
-            TweenAniManager.instance.fadeInAni(star, null, time, this, 0.3, 1);
-        });
     }
 
-    setVisableAndPos(item, startX, endX, waitTime = 0, duration = 300) {
-        Laya.timer.once(waitTime, this, () => {
-            item.visible = true;
-            item.x = startX;
-            TweenAniManager.instance.horizontalAni(item, endX, null, null, duration, Laya.Ease.backOut);
-        })
-    }
 
-    private deltaNum(num, rate) {
-        return Math.ceil(Math.random() * (num / rate));
-    }
 
     public showTween() {
-        this.bgAlpha = 0.5;
-        this.setBgAlphaShow();
-        Laya.timer.loop(50, this, this.setBgAlphaShow)
+
     }
 
     public setBgAlphaShow() {
-        this.bgAlpha += 0.05;
 
-        if (this.bgAlpha > 1) {
-            this.bgAlpha = 1;
-            Laya.timer.clear(this, this.setBgAlphaShow)
-            this.anime();
-        }
-
-        this.bg.alpha = this.bgAlpha;
     }
 
     private onNextBtnClick() {
@@ -232,7 +204,7 @@ export default class BattleResultUI extends ui.gameui.BattleResultUI implements 
             var freeSpType = ShareOrTvManager.instance.getShareOrTvType(ShareTvOrderFunc.SHARELINE_FREE_SP);
             //没有视频或者分享，加体力按钮隐藏
             if (freeSpType != ShareOrTvManager.TYPE_QUICKRECEIVE) {
-                WindowManager.OpenUI(WindowCfgs.FreePowerUI, { type: DataResourceType.SP });
+                WindowManager.OpenUI(WindowCfgs.FreePowerUI, { type: DataResourceConst.SP });
             }
             else {
                 WindowManager.ShowTip(TranslateFunc.instance.getTranslate("#tid_power_01"));

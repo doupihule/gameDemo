@@ -1,12 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const CameraControler_1 = require("./CameraControler");
+const BattleSceneManager_1 = require("../../sys/manager/BattleSceneManager");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
 const GameConsts_1 = require("../../sys/consts/GameConsts");
 const BattleTweenControler_1 = require("./BattleTweenControler");
-const PerformanceControler_1 = require("./PerformanceControler");
-const BattleLogsManager_1 = require("../../sys/manager/BattleLogsManager");
-const BattleDebugTool_1 = require("./BattleDebugTool");
 const Client_1 = require("../../../framework/common/kakura/Client");
 /**
  * 游戏的控制器 基类.
@@ -17,35 +15,23 @@ class BattleControler {
     constructor(ctn) {
         //是否是游戏暂停
         this._isGamePause = false;
-        //是否是技能暂停
-        this.isSkillPause = false;
         this._leftFrameDt = 0;
         this.callFuncNums = 0;
         //当前更新次数
         this.updateCount = 0;
         this._lastFrameTime = 0;
-        //游戏硬直时间
-        this.stillFrame = 0;
-        //游戏加速倍率 默认是1
-        this.updateScale = 1;
-        this._leftScaleFrame = 0; //剩余要追scale的帧数
-        this._leftCatchTime = 0;
-        this.performanceControler = new PerformanceControler_1.default(this);
         this._allInstanceArr = [];
+        this.battleCamera = BattleSceneManager_1.default.instance.battleCamera;
+        this._playerArr = [];
+        this._monsterArr = [];
         this.battleState = BattleConst_1.default.battleState_out;
         this.cameraControler = new CameraControler_1.default(this);
         this._timeList = [];
-        this._cacheTimeArr = [];
         this.updateCallFuncGroup = {};
         //一帧对应的毫秒数
         this._oneFrameDt = Math.round(1000 / GameConsts_1.default.gameFrameRate);
         this._maxFrameDt = 5 * this._oneFrameDt;
         this.tweenControler = new BattleTweenControler_1.default(this);
-        this.battleDebugTool = new BattleDebugTool_1.default(this);
-        this.updateScale = BattleDebugTool_1.default.getBattleAddSped();
-        if (!this.updateScale) {
-            this.updateScale = 1;
-        }
     }
     onceUpdateFrame() {
         /**
@@ -63,31 +49,24 @@ class BattleControler {
         var nums = Math.floor(this._leftFrameDt / this._oneFrameDt);
         this._leftFrameDt -= nums * this._oneFrameDt;
         for (var i = 0; i < nums; i++) {
-            if (this.updateScale == 1) {
-                this.updateFrame();
-            }
-            else {
-                this._leftScaleFrame += this.updateScale;
-                var s = 0;
-                for (s = 0; s < this._leftScaleFrame; s++) {
-                    this.updateFrame();
-                }
-                this._leftScaleFrame -= s;
-            }
+            this.updateFrame();
+            this.updatePhysics();
         }
     }
-    //总的追帧刷新函数
     updateFrame() {
+        if (this._isGamePause) {
+            return;
+        }
+        if (this._isDisposed) {
+            return;
+        }
         //做更新次数+1
         this.updateCount++;
-        this.refreshControler.updateFrame();
         //所有对象的刷新
         this.runInstanceUpdate();
-        this.cameraControler.updateFrame();
         //后面还会扩展 比如 刷怪控制器
         // 逻辑ai控制
         // 摄像头控制器 等等.
-        this.tweenControler.updateFrame();
         //执行延迟回调
         this.doDelayCallFunc();
         //执行注册的刷新回调
@@ -101,156 +80,41 @@ class BattleControler {
                 }
             }
         }
-        this.sortChildren();
-        //this.checkHasSameInstance()
     }
-    checkHasSameInstance() {
-        if (this.updateCount % 100 != 0) {
-            return;
-        }
-        for (var i = 0; i < this._allInstanceArr.length - 1; i++) {
-            var instance1 = this._allInstanceArr[i];
-            for (var j = i + 1; j < this._allInstanceArr.length; j++) {
-                var instance2 = this._allInstanceArr[j];
-                if (instance1 == instance2) {
-                    LogsManager.errorTag("instanceError", "对象重复了--", instance1);
-                }
-            }
-        }
-    }
-    //深度排列
-    sortChildren(isForce = false) {
-        //目前只对角色做深度排列
-        //1秒算一次
-        if ((!isForce) && this.updateCount % 60 != 0) {
-            return;
-        }
-        this.sortOneArr(this._allInstanceArr);
-    }
-    //每一秒更新一次所有对象的zorder
-    sortOneArr(campArr) {
-        for (var i = 0; i < campArr.length; i++) {
-            var role = campArr[i];
-            role.updateViewZorder();
-        }
+    updatePhysics() {
     }
     //执行延迟回调函数 
     doDelayCallFunc() {
         if (this._timeList.length == 0) {
             return;
         }
-        //这里分一下技能暂停和非技能暂停处理. 为了提高效率 . 分2个逻辑执行
-        if (!this.isSkillPause) {
-            for (var i = this._timeList.length - 1; i >= 0; i--) {
-                var info = this._timeList[i];
-                if (!info) {
-                    BattleLogsManager_1.default.battleEcho("_在延迟回调里面做了清理延迟回调事情,导致序列变了");
-                    continue;
-                }
-                //执行一次回调判断
-                this.doOneCallInfo(info, i);
-                var obj = info.thisObj;
-                if (obj && obj.upTimeScale) {
-                    info.frame -= obj.upTimeScale;
-                }
-                else {
-                    info.frame -= 1;
-                }
-            }
-        }
-        else {
-            for (var i = this._timeList.length - 1; i >= 0; i--) {
-                var info = this._timeList[i];
-                if (!info) {
-                    BattleLogsManager_1.default.battleEcho("_在延迟回调里面做了清理延迟回调事情,导致序列变了");
-                    continue;
-                }
-                var thisObj = info.thisObj;
-                var isRunWithSkillPause = true;
-                if (thisObj && thisObj.isRunWithSkillPause && !thisObj.isRunWithSkillPause()) {
-                    isRunWithSkillPause = false;
-                }
-                if (isRunWithSkillPause) {
-                    //执行一次回调判断
-                    this.doOneCallInfo(info, i);
-                    if (thisObj && thisObj.upTimeScale) {
-                        info.frame -= thisObj.upTimeScale;
+        for (var i = this._timeList.length - 1; i >= 0; i--) {
+            var info = this._timeList[i];
+            info.frame--;
+            //先移除 在执行回调.因为回调函数里面可能 会继续插入回调 导致栈混乱 
+            if (info.frame <= 0) {
+                this._timeList.splice(i, 1);
+                //如果有回调函数 那么执行回调函数 
+                if (info.callBack) {
+                    if (info.doApplyOrCall) {
+                        info.callBack.apply(info.thisObj, info.params);
                     }
                     else {
-                        info.frame -= 1;
+                        info.callBack.call(info.thisObj, info.params);
                     }
                 }
             }
-        }
-    }
-    //执行一次
-    doOneCallInfo(info, i = -1) {
-        //先移除 在执行回调.因为回调函数里面可能 会继续插入回调 导致栈混乱 
-        if (info.frame <= 0) {
-            if (info.times > 0) {
-                info.times--;
-            }
-            var doApplyOrCall = info.doApplyOrCall;
-            var callBack = info.callBack;
-            var thisObj = info.thisObj;
-            var params = info.params;
-            var endCallBack = info.endCallBack;
-            var endParams = info.endParams;
-            if (info.times == 0) {
-                //缓存起来
-                this._cacheTimeArr.push(info);
-                if (i != -1) {
-                    this._timeList.splice(i, 1);
-                }
-                //如果有end回调的执行end回调 
-                if (endCallBack) {
-                    if (doApplyOrCall) {
-                        endCallBack.apply(thisObj, endParams);
-                    }
-                    else {
-                        endCallBack.call(thisObj, endParams);
-                    }
-                }
-            }
-            else {
-                //重新开始
-                info.frame = info.interval;
-                // BattleLogsManager.battleEcho("_重新开始计数",info.times);
-            }
-            //如果有回调函数 那么执行回调函数 
-            if (callBack) {
-                if (doApplyOrCall) {
-                    callBack.apply(thisObj, params);
-                }
-                else {
-                    callBack.call(thisObj, params);
-                }
-            }
-        }
-    }
-    //获取一个缓存的timeobj
-    getOneCacheTimeObj() {
-        if (this._cacheTimeArr.length == 0) {
-            return {};
-        }
-        else {
-            return this._cacheTimeArr.shift();
         }
     }
     //更新所有实例
     runInstanceUpdate() {
-        if (this.player) {
-            this.player.updateFrame();
-        }
         //这里要倒着遍历. 因为在执行每个对象的update的过程中 可能会销毁某个对象 导致数组变化
         var len = this._allInstanceArr.length;
         for (var i = len - 1; i >= 0; i--) {
             var instance = this._allInstanceArr[i];
             //只有当这个对象没有被销毁的时候 才执行刷新函数
-            if (instance && instance.checkIsUsing()) {
-                if (!this.isSkillPause || instance.isRunWithSkillPause()) {
-                    instance.updateFrame();
-                }
+            if (instance && !instance.checkIsDispose()) {
+                instance.updateFrame();
             }
         }
         //检测碰撞碰撞会更新速度
@@ -259,10 +123,8 @@ class BattleControler {
         for (var i = len - 1; i >= 0; i--) {
             var instance = this._allInstanceArr[i];
             //只有当这个对象没有被销毁的时候 才执行刷新函数
-            if (instance && instance.checkIsUsing()) {
-                if (!this.isSkillPause || instance.isRunWithSkillPause()) {
-                    instance.updateFrameLater();
-                }
+            if (instance && !instance.checkIsDispose()) {
+                instance.updateFrameLater();
             }
         }
     }
@@ -278,58 +140,17 @@ class BattleControler {
      *  如果doApplyOrCall是true , 那么 params必须是数组格式
      */
     setCallBack(frame, callBack, thisObj, params = null, doApplyOrCall = false) {
-        if (frame == null || isNaN(frame)) {
-            LogsManager.errorTag("battleerror", "没有传入frame,直接做回调");
-        }
-        var obj = this.getOneCacheTimeObj();
-        if (!frame) {
-            if (doApplyOrCall) {
-                callBack.apply(thisObj, params);
-            }
-            else {
-                callBack.call(thisObj, params);
-            }
-            return;
-        }
-        obj.frame = frame;
-        obj.interval = frame;
-        obj.times = 1;
-        obj.callBack = callBack;
-        obj.thisObj = thisObj;
-        obj.params = params;
-        obj.doApplyOrCall = doApplyOrCall;
+        var obj = {
+            frame: frame,
+            callBack: callBack,
+            thisObj: thisObj,
+            params: params,
+            doApplyOrCall: doApplyOrCall
+        };
         this._timeList.push(obj);
     }
-    /**
-     * 设置持续回调
-     * @param delay  延迟帧数
-     * @param interval  间隔帧数
-     * @param times  执行次数 -1表示永久. 必须手动清除
-     * @param callBack  回调
-     * @param thisObj  作用指针
-     * @param params  回调附带参数
-     * @param doApplyOrCall
-     */
-    setLastCallBack(delay, interval, times, callBack, thisObj, params = null, endCallBack = null, endParams = null, doApplyOrCall = false) {
-        if (delay == null || isNaN(delay)) {
-            LogsManager.errorTag("battleerror", "没有传入frame");
-            return;
-        }
-        var obj = this.getOneCacheTimeObj();
-        obj.frame = delay;
-        obj.interval = interval;
-        obj.times = times;
-        obj.callBack = callBack;
-        obj.thisObj = thisObj;
-        obj.params = params;
-        obj.doApplyOrCall = doApplyOrCall;
-        obj.endCallBack = endCallBack;
-        obj.endParams = endParams;
-        this._timeList.push(obj);
-        this.doOneCallInfo(obj, this._timeList.length - 1);
-    }
-    //清除回调函数 , 如果不传callBack 表示删除 这个对象注册的所有回调, params,同时匹配参数是否相等才清除回调
-    clearCallBack(thisObj, callBack = null, params = null) {
+    //清除回调函数 , 如果不传callBack 表示删除 这个对象注册的所有回调
+    clearCallBack(thisObj, callBack = null) {
         for (var i = this._timeList.length - 1; i >= 0; i--) {
             var obj = this._timeList[i];
             if (thisObj == obj.thisObj) {
@@ -338,14 +159,8 @@ class BattleControler {
                 }
                 else {
                     if (callBack == obj.callBack) {
-                        if (params == null) {
-                            this._timeList.splice(i, 1);
-                        }
-                        else {
-                            if (params == obj.params) {
-                                this._timeList.splice(i, 1);
-                            }
-                        }
+                        this._timeList.splice(i, 1);
+                        break;
                     }
                 }
             }
@@ -362,22 +177,6 @@ class BattleControler {
         };
         return this.callFuncNums;
     }
-    //删除注册的刷新回调
-    deleteObjUpdate(callFuncNums = null, callFunc, callThisObj) {
-        for (var index = 0; index < this.updateCallFuncGroup.length; index++) {
-            if (callFuncNums == index) {
-                delete this.updateCallFuncGroup[index];
-                break;
-            }
-        }
-    }
-    //插入一个实例
-    insterInstanceToArr(instance) {
-        if (this._allInstanceArr.indexOf(instance) == -1) {
-            this._allInstanceArr.push(instance);
-        }
-    }
-    //获取所有的实例 
     getAllInstanceArr() {
         return this._allInstanceArr;
     }
@@ -394,6 +193,13 @@ class BattleControler {
         if (this._isDisposed) {
             return;
         }
+        this._isDisposed = true;
+        for (var i in this._allInstanceArr) {
+            this._allInstanceArr[i].dispose();
+        }
+        this._playerArr = null;
+        this._monsterArr = null;
+        this._allInstanceArr = null;
         this._timeList = [];
     }
 }

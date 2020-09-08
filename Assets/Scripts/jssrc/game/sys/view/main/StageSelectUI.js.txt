@@ -1,0 +1,190 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.StageSelectUI = void 0;
+const UserModel_1 = require("../../model/UserModel");
+const WindowManager_1 = require("../../../../framework/manager/WindowManager");
+const WindowCfgs_1 = require("../../consts/WindowCfgs");
+const BattleSceneManager_1 = require("../../manager/BattleSceneManager");
+const ButtonUtils_1 = require("../../../../framework/utils/ButtonUtils");
+const StringUtils_1 = require("../../../../framework/utils/StringUtils");
+const ButtonConst_1 = require("../../../../framework/consts/ButtonConst");
+const LevelFunc_1 = require("../../func/LevelFunc");
+const UserExtModel_1 = require("../../model/UserExtModel");
+const Client_1 = require("../../../../framework/common/kakura/Client");
+const GlobalParamsFunc_1 = require("../../func/GlobalParamsFunc");
+const TranslateFunc_1 = require("../../../../framework/func/TranslateFunc");
+const ShareOrTvManager_1 = require("../../../../framework/manager/ShareOrTvManager");
+const ShareTvOrderFunc_1 = require("../../func/ShareTvOrderFunc");
+const DataResourceConst_1 = require("../../consts/DataResourceConst");
+const UIBaseView_1 = require("../../../../framework/components/UIBaseView");
+const BattleServer_1 = require("../../server/BattleServer");
+const TableUtils_1 = require("../../../../framework/utils/TableUtils");
+;
+class StageSelectUI extends UIBaseView_1.default {
+    constructor() {
+        super();
+        this.page = 1;
+        this.maxPage = 1;
+        new ButtonUtils_1.ButtonUtils(this.returnBtn, this.onReturnClick, this);
+        var leftBtn = new ButtonUtils_1.ButtonUtils(this.leftBtn, this.onLeftBtnClick, this);
+        var rightBtn = new ButtonUtils_1.ButtonUtils(this.rightBtn, this.onRightBtnClick, this);
+        leftBtn.setBtnType(ButtonConst_1.default.BUTTON_TYPE_2);
+        rightBtn.setBtnType(ButtonConst_1.default.BUTTON_TYPE_2);
+        // new ButtonUtils(this.stageSelectBtn, this.onSelectStageClick, this);
+    }
+    onReturnClick() {
+        WindowManager_1.default.SwitchUI(WindowCfgs_1.WindowCfgs.GameMainUI, WindowCfgs_1.WindowCfgs.StageSelectUI);
+    }
+    //设置数据
+    setData(data) {
+        this.refreshCoin();
+        this.page = 1;
+        var allInfo = LevelFunc_1.default.instance.getLevel();
+        var info = allInfo.scenes[0].level;
+        var levelNum = 0;
+        for (var index in info) {
+            levelNum++;
+        }
+        this.maxPage = Math.floor(levelNum / 20) + 1;
+        this.refreshList();
+    }
+    refreshList() {
+        var page = this.page;
+        switch (page) {
+            case 1:
+                this.bg.setSkin("native/main/main_ba_beijing.png");
+                break;
+            case 2:
+                this.bg.setSkin("native/main/main_ba_beijing.png");
+                break;
+        }
+        if (page <= 0) {
+            this.page = 1;
+            return;
+        }
+        if (page > this.maxPage) {
+            this.page = this.maxPage;
+            return;
+        }
+        var list = [];
+        var allInfo = LevelFunc_1.default.instance.getLevel();
+        var info = allInfo.scenes[0].level;
+        for (var key in info) {
+            var index = Number(key.split("_")[1]);
+            if (index > 20 * (page - 1) && index <= 20 * page)
+                list.push(index);
+        }
+        list.sort(this.compare);
+        this.m_list.repeatY = list.length;
+        this.m_list.array = list; //FuncRoom.getInstance().getRooms();
+        this.m_list.renderHandler = TableUtils_1.default.c_func(this, this.onListRender);
+        var pointList = [];
+        for (var index = 0; index < this.maxPage; index++) {
+            pointList.push(index + 1);
+        }
+        this.pointList.repeatX = pointList.length;
+        this.pointList.array = pointList; //FuncRoom.getInstance().getRooms();
+        this.pointList.renderHandler = TableUtils_1.default.c_func(this, this.onPointListRender);
+        this.pointList.set2dPos(372 - this.pointList.width / 2, this.pointList.y);
+    }
+    compare(a, b) {
+        return a - b;
+    }
+    onPointListRender(cell, index) {
+        var data = this.pointList.array[index];
+        var point = cell.getChildByName("point");
+        if (data == this.page) {
+            point.setSkin("native/main/battle_image_fanye2.png");
+        }
+        else {
+            point.setSkin("native/main/battle_image_fanye1.png");
+        }
+    }
+    onListRender(cell, index) {
+        var id = this.m_list.array[index];
+        var box = cell.getChildByName("box");
+        var levelId = box.getChildByName("levelId");
+        levelId.text = "" + (id);
+        var star1 = box.getChildByName("star1");
+        var star2 = box.getChildByName("star2");
+        var star3 = box.getChildByName("star3");
+        var rank = UserModel_1.default.instance.getstageRank(id);
+        star1.setSkin("native/main/common_image_xing2.png");
+        star2.setSkin("native/main/common_image_xing2.png");
+        star3.setSkin("native/main/common_image_xing2.png");
+        if (rank >= 1) {
+            star1.setSkin("native/main/common_image_xing1.png");
+            if (rank >= 2) {
+                star2.setSkin("native/main/common_image_xing1.png");
+                if (rank >= 3) {
+                    star3.setSkin("native/main/common_image_xing1.png");
+                }
+            }
+        }
+        if (cell["button"] && cell["button"]._button) {
+            cell["button"].destoryButtonUtil();
+        }
+        if (Number(id) > Number(UserModel_1.default.instance.getMaxBattleLevel()) + 1) {
+            cell.gray = true;
+        }
+        else {
+            cell.gray = false;
+            cell["button"] = new ButtonUtils_1.ButtonUtils(box, this.onSelectEnterStage, this, null, null, { id: Number(id) });
+        }
+    }
+    onSelectEnterStage(param) {
+        //判断体力是否足够
+        var nowPower = UserExtModel_1.default.instance.getLastFreshPower() + Math.floor((Client_1.default.instance.serverTime - UserExtModel_1.default.instance.getLastPowerFreshTime()) / GlobalParamsFunc_1.default.instance.getDataNum('spRestoreTime'));
+        var maxSp = GlobalParamsFunc_1.default.instance.getDataNum('maxSp');
+        if (UserExtModel_1.default.instance.getLastFreshPower() > maxSp) {
+            //如果服务器告诉的体力大于最大的  则体力等于服务器给的
+            nowPower = UserExtModel_1.default.instance.getLastFreshPower();
+        }
+        else if (nowPower > maxSp) {
+            nowPower = maxSp;
+        }
+        if (nowPower < GlobalParamsFunc_1.default.instance.getDataNum('levelSpCost')) {
+            var freeSpType = ShareOrTvManager_1.default.instance.getShareOrTvType(ShareTvOrderFunc_1.default.SHARELINE_FREE_SP);
+            //没有视频或者分享，加体力按钮隐藏
+            if (freeSpType != ShareOrTvManager_1.default.TYPE_QUICKRECEIVE) {
+                WindowManager_1.default.OpenUI(WindowCfgs_1.WindowCfgs.FreePowerUI, { type: DataResourceConst_1.default.SP });
+            }
+            else {
+                WindowManager_1.default.ShowTip(TranslateFunc_1.default.instance.getTranslate("#tid_power_01"));
+            }
+            return;
+        }
+        BattleServer_1.default.battleStart(null, this);
+        BattleSceneManager_1.default.instance.enterBattle({ levelId: param.id });
+    }
+    refreshCoin() {
+        this.coinNum.text = StringUtils_1.default.getCoinStr(UserModel_1.default.instance.getDisplayCoin());
+        this.goldNum.text = StringUtils_1.default.getCoinStr(UserModel_1.default.instance.getGold());
+    }
+    onLeftBtnClick() {
+        this.page--;
+        this.refreshList();
+    }
+    onRightBtnClick() {
+        this.page++;
+        this.refreshList();
+    }
+    recvMsg(cmd, data) {
+        switch (cmd) {
+            // case BattleEvent.BATTLEEVENT_BATTLESTART:
+            //     this.onBattleStart();
+            //     break;
+            // case BattleEvent.BATTLEEVENT_BATTLEEXIT:
+            //     this.onBattleExit();
+            //     break;
+            // // case BattleEvent.BATTLEEVENT_SPEEDCHANGE:
+            // //     this.refreshSpeed();
+            // //     break;
+            // case GuideEvent.GUIDEEVENT_OVERTAKEGUIDE:
+            //     this.overtakeGuide(data);
+            //     break;
+        }
+    }
+}
+exports.StageSelectUI = StageSelectUI;
+//# sourceMappingURL=StageSelectUI.js.map

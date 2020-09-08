@@ -16,4 +16,10 @@ export default class CameraExpand extends  BaseCompExpand{
 		return null;
 	}
 
+	public  viewportPointToRay(v2:{x,y},ray:any){
+		var tempV3 = GameUtils.ViewExtensionMethods.initVec3(v2.x,v2.y,0);
+		var cray:UnityEngine.Ray = this.__comp.ViewportPointToRay(tempV3);
+		return cray;
+	}
+
 }

@@ -30,6 +30,7 @@ import KariquShareConst from '../consts/KariquShareConst';
 import ViewTools from "../components/ViewTools";
 import Base3dViewExpand from "../components/d3/Base3dViewExpand";
 import ResourceCommonConst from "../consts/ResourceCommonConst";
+import BattleSceneManager from "../../game/sys/manager/BattleSceneManager";
 
 export default class MainModule implements IMessage {
 	//实例
@@ -59,19 +60,14 @@ export default class MainModule implements IMessage {
 		Message.instance.add(MsgCMD.GAME_ONSHOW, this);
 		Message.instance.add(MsgCMD.VIDEO_STOP, this);
 		Message.instance.add(MsgCMD.VIDEO_PLAY, this);
-		WindowManager.OpenUI(WindowCfgs.GameMainUI);
-		TimerManager.instance.add(this.delayInitCreat,this,2000,1);
+		// WindowManager.OpenUI(WindowCfgs.GameMainUI);
+		FuncManager.init(null,null);
+		BattleSceneManager.instance.enterBattle({ roleId: 1, levelId: 1 })
 
 	}
 
 	private  delayInitCreat(){
-		this._model = ViewTools.create3DModel("battle_prefab","Main",ResourceCommonConst.boundle_model3d,true);
-		// var child:Base3dViewExpand = this._model.getChildByName("element_group_rigid");
-		// child.setActive(false);
-		// GlobalData.stage.addChild(this._model);
-		// TimerManager.instance.registObjUpdate(this.updateFrame,this);
 
-		TimerManager.instance.add(this.updateFrame,this,1000,9999);
 
 	}
 

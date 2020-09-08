@@ -491,7 +491,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
-                var result = obj.alphaHitTestMinimumThreshold;
+                var result = obj.eventAlphaThreshold;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)
@@ -507,7 +507,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.alphaHitTestMinimumThreshold = argHelper.GetFloat(false);
+                obj.eventAlphaThreshold = argHelper.GetFloat(false);
             }
             catch (Exception e)
             {

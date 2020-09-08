@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const csharp_1 = require("csharp");
+const BaseCompExpand_1 = require("../BaseCompExpand");
+class CameraExpand extends BaseCompExpand_1.default {
+    constructor() {
+        super();
+    }
+    viewPortProject(targetPos, projectionViewMatrix, out) {
+    }
+    get projectionViewMatrix() {
+        return null;
+    }
+    viewportPointToRay(v2, ray) {
+        var tempV3 = csharp_1.GameUtils.ViewExtensionMethods.initVec3(v2.x, v2.y, 0);
+        var cray = this.__comp.ViewportPointToRay(tempV3);
+        return cray;
+    }
+}
+exports.default = CameraExpand;
+//# sourceMappingURL=CameraExpand.js.map

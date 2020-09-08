@@ -1,7 +1,4 @@
 "use strict";
-/**
- * 一些json对象工具
- */
 Object.defineProperty(exports, "__esModule", { value: true });
 //
 class TableUtils {
@@ -356,6 +353,16 @@ class TableUtils {
         }
         return rt;
     }
+    static c_func(thisObj, func, ...args) {
+        return function (...agrs2) {
+            var tempArr = TableUtils.tempArr;
+            tempArr.length = 0;
+            TableUtils.copyOneArr(args, tempArr);
+            TableUtils.copyOneArr(agrs2, tempArr);
+            func.apply(thisObj, tempArr);
+        };
+    }
 }
 exports.default = TableUtils;
+TableUtils.tempArr = [];
 //# sourceMappingURL=TableUtils.js.map

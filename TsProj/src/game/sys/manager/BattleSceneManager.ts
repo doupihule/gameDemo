@@ -37,9 +37,11 @@ export default class BattleSceneManager {
         return this._instance;
     }
 
-    public scene: any;
+    public scene: Base3dViewExpand;
     public prefab: Base3dViewExpand;
     public battleCamera: CameraExpand
+
+    public cameraCtn:Base3dViewExpand;
 
     //主场景拿着游戏控制器 
     public battleControler: BattleLogicalControler;
@@ -75,7 +77,8 @@ export default class BattleSceneManager {
         LogsManager.echo("-进入战斗")
         //打开战斗界面
 
-        WindowManager.SwitchUI(WindowCfgs.BattleUI, [WindowCfgs.GameMainUI, WindowCfgs.StageSelectUI], data);
+        // WindowManager.SwitchUI(WindowCfgs.BattleUI, [WindowCfgs.GameMainUI, WindowCfgs.StageSelectUI], data);
+        this.startLoadBattleRes(data);
 
     }
 
@@ -104,21 +107,12 @@ export default class BattleSceneManager {
     //开始加载场景
     public startLoadScene(modelList = []) {
 
-        //下载对应分包
-        //monster,LayaScene_scene_battle,effect,bullet,role
         var roleId = this._levelData.roleId;
-        // var roleModelName = BattleFunc.instance.getRoleInfoData(roleId).model
 
         var resArr = [
-            //roleModelName//, "eff_chaoche_chetou", "eff_chaoche_chewei", "eff_daiji"
-            // ResourceConst.RESOURCE_MAINSCENE,
             ResourceConst.EFFECT_EXPLODE,
             ResourceConst.EFFECT_BLOOD,
             ResourceConst.EFFECT_SHOOT,
-            // // BattleFunc.instance.getViewUrlByModelId(roleModelName, "role"),
-            // BattleFunc.instance.getViewUrlByModelId("eff_chaoche_chetou", "effect"),
-            // BattleFunc.instance.getViewUrlByModelId("eff_chaoche_chewei", "effect"),
-            // BattleFunc.instance.getViewUrlByModelId("eff_daiji", "effect"),
         ]
         // var resArr = this.getCurModelArrByLevel();
 
@@ -126,13 +120,6 @@ export default class BattleSceneManager {
             resArr.push(modelList[index])
         }
 
-        // //进战斗需要加载的分包
-        // var subArr = [
-        //     SubPackageConst.packName_role_3d,
-        //     SubPackageConst.packName_scene_3d,
-        //     SubPackageConst.packName_effect_3d,
-        //     SubPackageConst.packName_other_3d,
-        // ];
         //加载分包
         // LoadManager.instance.createPackAndRes(subArr, resArr, Laya.Handler.create(this, this.onSceneComplete));
         ResourceManager.loadMult3dmodel(resArr, ResourceConst.RESOURCE_MAINSCENE, this.onSceneComplete, this);
@@ -155,10 +142,12 @@ export default class BattleSceneManager {
         //如果已经有战斗场景了 return
         if (!this.scene) {
             this.scene = GlobalData.stage;
-            this.prefab = ViewTools.create3DModel(ResourceConst.RESOURCE_MAINSCENE, "Main",ResourceCommonConst.boundle_model3d,true);
-
-            this.battleCamera = (this.prefab.getChildByName("main_camera")).getComponent(UICompConst.comp_camera) as CameraExpand;
+            this.prefab = ViewTools.create3DModel(ResourceConst.RESOURCE_MAINSCENE, "Main",ResourceCommonConst.boundle_model3d);
+            this.prefab .setActive(true);
+            this.cameraCtn  = ViewTools.findObject("main_camera",UICompConst.comp_base3d);
+            this.battleCamera = this.cameraCtn.getComponent(UICompConst.comp_camera) as CameraExpand;
             VectorTools.cloneTo((this.battleCamera.__owner as Base3dViewExpand).get3dRotation(),BattleFunc.cameraFollowRotation);
+            this.scene.addChild(this.prefab);
         }
         this.mainSprite = this.prefab.getChildByName("element_group") as Base3dViewExpand;
         this.mainSprite.setActive(false);
@@ -167,7 +156,7 @@ export default class BattleSceneManager {
         this.mainSpriteRigid.setActive(false);
         //这里对地形资源做缓存
         var t1 = Client.instance.miniserverTime;
-        this.cacheSceneSprite();
+        // this.cacheSceneSprite();
         LogsManager.echo("xd cache sprite cost time:", Client.instance.miniserverTime - t1);
 
         //缓存3d特效
@@ -237,6 +226,7 @@ export default class BattleSceneManager {
         //如果缓存的对象数量不够
         if (!cacheItems || cacheItems.length < nums) {
             var sp = this.getOneSceneView(model);
+            sp.setActive(false);
             //缓存一个对象.方便战斗类里面直接拿
             PoolTools.cacheItem(model, sp, PoolCode.pool_model_scene);
         }
@@ -261,23 +251,18 @@ export default class BattleSceneManager {
     //判断是否进入战斗(这个时候代表资源已经加载完毕了)
     private checkEnterBattle() {
         //这个时候需要激活战斗场景
-        this.scene.active = true;
+        this.scene.setActive(true) ;
         if (!this.battleControler) {
             this.battleControler = new BattleLogicalControler(this.scene, this.prefab);
         }
         this.battleControler.setData(this._levelData);
-        if (WindowManager.loadingUI) {
-            WindowManager.loadingUI.setProgress(100);
-        }
-        //关闭loadingui延迟3毫秒关闭ui
-        TimerManager.instance.add(WindowManager.CloseLoadingUI, WindowManager, 100, 1);
         //  WindowManager.CloseLoadingUI();
     }
 
     //退出战斗之后
     public exitBattle() {
         //取消激活战斗场景
-        this.scene.active = false;
+        this.scene.setActive(false);
         this._isInBattle = false;
         if (this.battleControler) {
             //退出战斗

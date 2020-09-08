@@ -3,8 +3,9 @@ import BaseViewExpand from "./BaseViewExpand";
 import UICompConst from "../consts/UICompConst";
 import ViewTools from "./ViewTools";
 import Message from "../common/Message";
+import IMessage from "../../game/sys/interfaces/IMessage";
 
-export default class UIBaseView extends BaseViewExpand {
+export default class UIBaseView extends BaseViewExpand  implements IMessage{
     public  windowName:string;
     public  __modalView:BaseViewExpand;
     constructor() {
@@ -68,6 +69,9 @@ export default class UIBaseView extends BaseViewExpand {
 
     public  close(){
 
+    }
+
+    public  recvMsg(cmd: string, data: any): void {
     }
 
     public dispose() {

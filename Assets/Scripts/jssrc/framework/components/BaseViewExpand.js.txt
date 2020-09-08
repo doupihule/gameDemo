@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const csharp_1 = require("csharp");
 const puerts_1 = require("puerts");
-const CS = require('csharp');
 const ViewTools_1 = require("./ViewTools");
 const UICompConst_1 = require("../consts/UICompConst");
 class BaseViewExpand {
@@ -15,6 +14,8 @@ class BaseViewExpand {
         this._alpha = 1;
         //坐标样式 1是2d, 2是3d
         this.posStyle = 1;
+        //组件map表  {key:value,}
+        this._compMap = {};
         this._visible = true;
         //--触摸事件相关
         this._mouseEnabled = false;
@@ -32,15 +33,6 @@ class BaseViewExpand {
     //-------------------------------------------------------------------------------------
     //---------------------------坐标旋转缩放透明度-----------------------------------------
     //-------------------------------------------------------------------------------------
-    set x(value) {
-        this.positionTrans.x = value;
-    }
-    set y(value) {
-        this.positionTrans.y = value;
-    }
-    set z(value) {
-        this.positionTrans.z = value;
-    }
     get x() {
         return this.positionTrans.x;
     }
@@ -69,6 +61,10 @@ class BaseViewExpand {
         this.rotationTrans.z = value;
         this.__ctransform.eulerAngles = csharp_1.GameUtils.ViewExtensionMethods.initVec3(0, 0, this.rotationTrans.z);
     }
+    //获取2d旋转
+    get2dRotation() {
+        return this.rotationTrans.z;
+    }
     //设置缩放
     setScale(sx, sy, sz = 1) {
         var trans = this.scaleTrans;
@@ -77,11 +73,17 @@ class BaseViewExpand {
         trans.z = sz;
         csharp_1.GameUtils.ViewExtensionMethods.SetObjScale(this.__ctransform, sx, sy, sz);
     }
-    get scale() {
-        return this.scaleTrans.x;
+    getScale() {
+        return this.scaleTrans;
     }
-    get rotation() {
-        return this.__ctransform.rotation;
+    set3dRotation(x, y, z) {
+        this.rotationTrans.x = x;
+        this.rotationTrans.y = y;
+        this.rotationTrans.z = z;
+        this.__ctransform.eulerAngles = csharp_1.GameUtils.ViewExtensionMethods.initVec3(x, y, z);
+    }
+    get3dRotation() {
+        return this.rotationTrans;
     }
     //设置锚点
     setAnchor(x, y) {
@@ -166,6 +168,7 @@ class BaseViewExpand {
             //如果是需要bangding对象的
             return ViewTools_1.default.autoBindingCObj(childObj, true, targetCompType);
         }
+        return null;
     }
     //设置颜色 子类重写
     setColor(r, g, b, a) {
@@ -192,6 +195,9 @@ class BaseViewExpand {
     setActive(value) {
         this.__cobject.SetActive(value);
     }
+    isActive() {
+        return this.__cobject.active;
+    }
     //设置深度
     setZorder(value) {
     }
@@ -213,9 +219,36 @@ class BaseViewExpand {
     get mouseThrough() {
         return this._mouseThrough;
     }
-    //获取组件
-    getComponent(comp) {
-        return this.__cobject.GetComponent(comp);
+    //获取组件 一定要配置绑定哪个类型
+    getComponent(comp, compExpand = null) {
+        if (this._compMap[comp]) {
+            return this._compMap[comp];
+        }
+        var info = ViewTools_1.default.compClassMap[comp];
+        if (!info) {
+            LogsManager.warn("组件类型错误:", this.name, ",comp:", comp);
+            return null;
+        }
+        var cobjcomp = this.__cobject.GetComponent(info.cname);
+        if (!cobjcomp) {
+            LogsManager.warn("没有找到组件:", this.name, ",cname:", info.cname);
+            return null;
+        }
+        //如果没有传 组件继承. 那么就采用默认的组件
+        if (!compExpand) {
+            var classObj = info.cl;
+            compExpand = new classObj();
+        }
+        compExpand.initComponent(cobjcomp, this);
+        this._compMap[comp] = compExpand;
+        return compExpand;
+    }
+    //获取原生组件类型
+    getOriginComponent(comp) {
+        return this.__cobject.GetComponent;
+    }
+    clone() {
+        return ViewTools_1.default.cloneOneView(this.__cobject, this.uitype);
     }
     //销毁函数
     dispose() {

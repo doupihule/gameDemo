@@ -29,7 +29,7 @@ export default class ResourceManager {
 	//示例:loadMult3dmodel(["role_001","role_101","effect_110"],"scene_battle");
 	// params 自带的回调参数
 	static loadMult3dmodel(models: string[], sceneModel = null, callBack = null, thisObj = null, params = null) {
-
+		callBack && callBack.call(thisObj,params);
 	}
 
 	//判断是否3d模块需要分包
@@ -40,7 +40,7 @@ export default class ResourceManager {
 
 	//加载一个3dmodel
 	static load3dmodel(modelName, isScene: boolean, callBack, thisObj, params = null) {
-
+		callBack && callBack.call(thisObj,params);
 	}
 
 	//获取一个3dmodel的分包名
@@ -60,7 +60,7 @@ export default class ResourceManager {
 		var targetPath = "Assets/Model3d/"+shortPath+"/Prefabs/"+modelName +".prefab";
 		LogsManager.echo("targetPath",targetPath);
 		var obj =Resource.ResourceManager.Instance.luaLoadAsset(targetPath, targetPath, boundlename);
-		if (!outclone){
+		if (outclone){
 			return obj;
 		}
 		return UnityEngine.Object.Instantiate(obj);

@@ -1,12 +1,259 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BattleUI = void 0;
+const UserModel_1 = require("../../model/UserModel");
+const WindowManager_1 = require("../../../../framework/manager/WindowManager");
+const WindowCfgs_1 = require("../../consts/WindowCfgs");
+const BattleSceneManager_1 = require("../../manager/BattleSceneManager");
+const Message_1 = require("../../../../framework/common/Message");
+const BattleEvent_1 = require("../../event/BattleEvent");
+const ButtonUtils_1 = require("../../../../framework/utils/ButtonUtils");
+const ScreenAdapterTools_1 = require("../../../../framework/utils/ScreenAdapterTools");
+const GuideManager_1 = require("../../manager/GuideManager");
+const GuideEvent_1 = require("../../event/GuideEvent");
+const ShareOrTvManager_1 = require("../../../../framework/manager/ShareOrTvManager");
+const ShareTvOrderFunc_1 = require("../../func/ShareTvOrderFunc");
 const UIBaseView_1 = require("../../../../framework/components/UIBaseView");
+const TableUtils_1 = require("../../../../framework/utils/TableUtils");
+const TouchManager_1 = require("../../../../framework/manager/TouchManager");
 class BattleUI extends UIBaseView_1.default {
     constructor() {
         super();
+        //进度条的最大宽度
+        this._currentStar = -1;
+        Message_1.default.instance.add(BattleEvent_1.default.BATTLEEVENT_BATTLESTART, this);
+        Message_1.default.instance.add(BattleEvent_1.default.BATTLEEVENT_BATTLEEXIT, this);
+        Message_1.default.instance.add(GuideEvent_1.default.GUIDEEVENT_OVERTAKEGUIDE, this);
+        TouchManager_1.default.addTouchDown(this.battleCtn, this.onMouseDown, this);
+        TouchManager_1.default.addTouchMove(this.battleCtn, this.onMouseMove, this);
+        TouchManager_1.default.addTouchUp(this.battleCtn, this.onMouseEnd, this);
+        TouchManager_1.default.addTouchOut(this.battleCtn, this.onMouseEnd, this);
+        new ButtonUtils_1.ButtonUtils(this.leftBtn, this.onLeftBtn, this);
+        new ButtonUtils_1.ButtonUtils(this.levelTxt, this.onReplayGame, this);
+        new ButtonUtils_1.ButtonUtils(this.rightBtn, this.onRightBtn, this);
+        new ButtonUtils_1.ButtonUtils(this.skipBtn, this.onSkipBtnClick, this);
+        new ButtonUtils_1.ButtonUtils(this.skipBtn2, this.onSkipBtnClick, this);
+        new ButtonUtils_1.ButtonUtils(this.restartBtn, this.onReplayGame, this);
+        new ButtonUtils_1.ButtonUtils(this.restartBtn2, this.onReplayGame, this);
+        new ButtonUtils_1.ButtonUtils(this.returnBtn, this.onClickMainBtn, this);
+        new ButtonUtils_1.ButtonUtils(this.skip_skipBtn, this.onSkipSkipBtnClick, this);
+        new ButtonUtils_1.ButtonUtils(this.skip_closeBtn, this.onSkipCloseBtnClick, this);
+        ScreenAdapterTools_1.default.alignNotch(this.topGroup, ScreenAdapterTools_1.default.Align_MiddleTop);
+    }
+    onLeftBtn() {
+        if (this.controller.battleData.levelId > 1) {
+            this.controller.battleData.levelId = this.controller.battleData.levelId - 1;
+            this.onReplayGame();
+        }
+    }
+    onRightBtn() {
+        this.controller.battleData.levelId = this.controller.battleData.levelId + 1;
+        this.onReplayGame();
+    }
+    //停止声音
+    stopSound() {
+    }
+    //重玩关卡
+    //继续比赛
+    onReplayGame() {
+        if (UserModel_1.default.instance.getMainGuide() == 0)
+            return;
+        // if (this.controller.battleInfo.indexOf(this.controller.battleData.levelId) == -1) {
+        //     BattleSceneManager.instance.replayBattle();
+        //     this.controller.battleInfo.push(this.controller.battleData.levelId);
+        // }
+        if (this.controller && !this.controller.battleEnd) {
+            BattleSceneManager_1.default.instance.replayBattle();
+            this.resetStatus();
+        }
+        //初始化设置暂停界面不可见
+        // this.initUI();
+        // this.setData(this._battleData)
+    }
+    //重置状态
+    resetStatus() {
+        this.gameStart = false;
+    }
+    refreshBullet(isInit) {
+        var num = this.controller.bulletNum;
+        var list = [];
+        for (var index = 0; index < this.controller.bulletNum; index++) {
+            list.push(index);
+        }
+        this.m_list.repeatX = list.length;
+        this.m_list.array = list; //FuncRoom.getInstance().getRooms();
+        this.m_list.renderHandler = TableUtils_1.default.c_func(this, this.onListRender);
+        if (isInit) {
+            this.m_list.set2dPos(320 - this.m_list.width / 2, this.m_list.y);
+        }
+    }
+    onListRender(cell, index) {
+        if (index < this.controller.bulletNum) {
+            cell.visible = true;
+        }
+        else {
+            cell.visible = false;
+        }
+        var img = cell.getChildByName("bulletImg");
+        if (index < this.controller.basicBulletNum) {
+            img.setSkin("native/main/battle_image_zidan.png");
+        }
+        else {
+            img.setSkin("native/main/battle_image_zidanjin.png");
+        }
+    }
+    lose() {
+        this.battleBtn.visible = false;
+        this.losePanel.visible = true;
+        if (this.controller)
+            this.controller.battleEnd = false;
+    }
+    //点击回主界面
+    onClickMainBtn() {
+        if (UserModel_1.default.instance.getMainGuide() == 0)
+            return;
+        WindowManager_1.default.OpenUI(WindowCfgs_1.WindowCfgs.GameMainUI);
+        BattleSceneManager_1.default.instance.exitBattle();
+    }
+    showItem(cd) {
+    }
+    //设置数据
+    setData(data) {
+        this._battleData = data;
+        //进入主界面后测试直接进入战斗 
+        BattleSceneManager_1.default.instance.startLoadBattleRes(data);
+        //初始化设置暂停界面不可见
+        // if (Number(data.level) == 1) {
+        //     WindowManager.OpenUI(WindowCfgs.GameGuideUI);
+        // }
+        // this.label_jiasu.visible =false;
+    }
+    /**
+     * 设置战斗界面进度条进度
+     * @param progress 进度值，0-1
+     */
+    refreshProgress(progress) {
+        if (this.gameStart && this.controller) {
+            // this.progressImg.scaleX = progress;
+        }
+    }
+    onMouseDown(e) {
+        if (!this.controller || !this.controller.player) {
+            return;
+        }
+        if (!this.gameStart) {
+            // this.guideGroup.visible = false;
+            this.gameStart = true;
+        }
+        // if (UserModel.instance.getMainGuide() == 0) {
+        //     var guideId = GuideManager.ins.nowGuideId;
+        //     if (guideId == 1) {
+        //         GuideManager.ins.setGuideData(2, GuideManager.GuideType.Static, this, this, null, null, null, null, { pos1: new Laya.Point(150, 750), pos2: new Laya.Point(320, 750) });
+        //         GuideManager.ins.openGuideUI(2);
+        //         GuideManager.ins.setGuideTipVisible(1, true);
+        //     }
+        // }
+        this.controller.player.onToucheDown(e.stageX, e.stageY);
+    }
+    onMouseMove(e) {
+        if (!this.controller || !this.controller.player) {
+            return;
+        }
+        this.controller.player.onTouchMove(e.stageX, e.stageY);
+    }
+    onMouseEnd(e) {
+        if (!this.controller || !this.controller.player) {
+            return;
+        }
+        this.controller.player.onTouchEnd(e.stageX, e.stageY);
+        // if (GuideManager.ins.nowGuideId == 2) {
+        //
+        //     GuideManager.ins.setGuideTipVisible(1, false);
+        //     GuideManager.ins.setGuideData(3, GuideManager.GuideType.None);
+        //     GuideManager.ins.openGuideUI(3);
+        //     TimerManager.instance.setTimeout(() => {
+        //         if (GuideManager.ins.nowGuideId == 3) {
+        //             this.controller.bulletNum++;
+        //             this.refreshBullet();
+        //             GuideManager.ins.setGuideData(1, GuideManager.GuideType.None, this.battleCtn, this, 200, 200, 100, 650);
+        //             GuideManager.ins.openGuideUI(1);
+        //         }
+        //     }, this, GlobalParamsFunc.instance.getDataNum("guideAgainTime"));
+        // }
+    }
+    //战斗开始
+    onBattleStart() {
+        this.controller = BattleSceneManager_1.default.instance.battleControler;
+        this.initUI();
+        // this.controller.registObjUpdate(this.refreshUI, this);
+        this.refreshBullet(true);
+        this.battleBtn.visible = true;
+        this.losePanel.visible = false;
+        this.skipPanel.visible = false;
+        this.levelTxt.text = "关卡" + this.controller.battleData.levelId;
+        var guideStep = UserModel_1.default.instance.getMainGuide();
+        if (guideStep == 0 && this._battleData.levelId == 1) {
+            GuideManager_1.default.ins.setGuideData(1, GuideManager_1.default.GuideType.None, this.battleCtn, this, 200, 200, 100, 650);
+            GuideManager_1.default.ins.openGuideUI(1);
+            this.skipBtn.visible = false;
+            this.skipBtn2.visible = false;
+        }
+        else {
+            if (guideStep == 0) {
+                GuideManager_1.default.ins.guideFin(3, () => {
+                }, this, true);
+            }
+            this.skipBtn.visible = false;
+            this.skipBtn2.visible = false;
+        }
+    }
+    onSkipBtnClick() {
+        this.skipPanel.visible = true;
+    }
+    onSkipSkipBtnClick() {
+        ShareOrTvManager_1.default.instance.shareOrTv(ShareTvOrderFunc_1.default.SHARELINE_SKIPBATTLE, ShareOrTvManager_1.default.TYPE_ADV, {
+            id: "1",
+            extraData: {}
+        }, this.successCall, this.onSkipCloseBtnClick, this);
+    }
+    successCall() {
+        WindowManager_1.default.OpenUI(WindowCfgs_1.WindowCfgs.BattleResultUI, { levelId: this._battleData.levelId, rank: 1 });
+        this.onSkipCloseBtnClick();
+    }
+    onSkipCloseBtnClick() {
+        this.skipPanel.visible = false;
+    }
+    initUI() {
+        this.bg.visible = true;
+        this.gameStart = false;
+        this.guideTween();
+    }
+    guideTween() {
+        // if (this.guideGroup.visible) {
+        //     TweenAniManager.instance.horizontalAni(this.guideFinger, this.guideBar.width, () => {
+        //         TweenAniManager.instance.horizontalAni(this.guideFinger, 0, () => {
+        //             this.guideTween()
+        //         }, this, 800);
+        //     }, this, 800);
+        // }
+    }
+    //退出战斗
+    onBattleExit() {
+        this.gameStart = false;
+        WindowManager_1.default.CloseUI(WindowCfgs_1.WindowCfgs.BattleUI);
     }
     recvMsg(cmd, data) {
+        switch (cmd) {
+            case BattleEvent_1.default.BATTLEEVENT_BATTLESTART:
+                this.onBattleStart();
+                break;
+            case BattleEvent_1.default.BATTLEEVENT_BATTLEEXIT:
+                this.onBattleExit();
+                break;
+            // case BattleEvent.BATTLEEVENT_SPEEDCHANGE:
+            //     this.refreshSpeed();
+            //     break;
+        }
     }
 }
 exports.BattleUI = BattleUI;

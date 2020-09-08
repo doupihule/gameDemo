@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const csharp_1 = require("csharp");
+class PhysicsTools {
+    //射线检测
+    static rayCast(origin, direction, hitInfo, maxDistance, layerMask = 0) {
+        var v1 = csharp_1.GameUtils.ViewExtensionMethods.initVec3(origin.x, origin.y, origin.z);
+        var v2 = csharp_1.GameUtils.ViewExtensionMethods.initVec3(direction.x, direction.y, direction.z);
+        return csharp_1.UnityEngine.Physics.Raycast(v1, v2, hitInfo, maxDistance, layerMask);
+    }
+    //初始化hitInfo
+    static createHitInfo() {
+        return new csharp_1.UnityEngine.RaycastHit();
+    }
+    static createRay(origin, direction) {
+        return new csharp_1.UnityEngine.Ray(origin, direction);
+    }
+}
+exports.default = PhysicsTools;
+//# sourceMappingURL=PhysicsTools.js.map

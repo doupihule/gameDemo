@@ -37,14 +37,6 @@ class InstanceMoveMultyEntity {
             return null;
         }
         this.currentEntity.target = this.pointArr[this.currentStep - 1];
-        if (this.expandParams && this.expandParams.length > 0) {
-            if (this.expandParams.length == 1) {
-                this.currentEntity.expandParams = this.expandParams[0];
-            }
-            else {
-                this.currentEntity.expandParams = this.expandParams[this.currentStep - 1];
-            }
-        }
         return this.currentEntity;
     }
     //获取循环方式获得的坐标

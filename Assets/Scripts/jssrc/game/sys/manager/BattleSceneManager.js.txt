@@ -1,14 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const ResourceConst_1 = require("../consts/ResourceConst");
 const BattleLogicalControler_1 = require("../../battle/controler/BattleLogicalControler");
+const BattleFunc_1 = require("../func/BattleFunc");
+const Message_1 = require("../../../framework/common/Message");
+const BattleEvent_1 = require("../event/BattleEvent");
 const TimerManager_1 = require("../../../framework/manager/TimerManager");
-const ShareOrTvManager_1 = require("../../../framework/manager/ShareOrTvManager");
-const UserInfo_1 = require("../../../framework/common/UserInfo");
+const LevelFunc_1 = require("../func/LevelFunc");
+const LogsManager_1 = require("../../../framework/manager/LogsManager");
+const PoolTools_1 = require("../../../framework/utils/PoolTools");
+const PoolCode_1 = require("../consts/PoolCode");
+const TableUtils_1 = require("../../../framework/utils/TableUtils");
+const LogsErrorCode_1 = require("../../../framework/consts/LogsErrorCode");
+const ResourceManager_1 = require("../../../framework/manager/ResourceManager");
+const ViewTools_1 = require("../../../framework/components/ViewTools");
+const ResourceCommonConst_1 = require("../../../framework/consts/ResourceCommonConst");
+const Client_1 = require("../../../framework/common/kakura/Client");
+const VectorTools_1 = require("../../../framework/utils/VectorTools");
+const UICompConst_1 = require("../../../framework/consts/UICompConst");
 class BattleSceneManager {
-    //挂机游戏可以有2个战斗控制器
     constructor() {
-        //战斗状态 0 非战斗.1 战斗中 这个针对副本战斗
-        this._battestate = 0;
+        this._isInBattle = false;
+        //初始化全局变量配置
+        BattleFunc_1.default.initGlobalParams();
     }
     static get instance() {
         if (!this._instance) {
@@ -20,67 +34,180 @@ class BattleSceneManager {
         @param data 根据游戏自己定义 比如 levelid
     */
     //进入战斗
-    enterBattle(data, ctn, ui) {
-        this._battestate = 1;
-        this.autoBattleControler = new BattleLogicalControler_1.default(ctn, ui);
-        this.autoBattleControler.setData(data);
-        if (ShareOrTvManager_1.default.instance.canShareVideo()) {
-            UserInfo_1.default.platform.recordStart();
+    enterBattle(data) {
+        // data = {id:"1"}
+        this._isInBattle = true;
+        this._levelData = data;
+        //播放背景音乐
+        // SoundManager.playBGM(MusicConst.MUSIC_BGM);
+        //打开loadingui
+        LogsManager_1.default.echo("-进入战斗");
+        //打开战斗界面
+        // WindowManager.SwitchUI(WindowCfgs.BattleUI, [WindowCfgs.GameMainUI, WindowCfgs.StageSelectUI], data);
+        this.startLoadBattleRes(data);
+    }
+    //重玩 
+    replayBattle() {
+        //先退出战斗 在直接进入战斗
+        if (this.battleControler) {
+            this.battleControler.exitBattle();
+        }
+        this.checkEnterBattle();
+    }
+    //加载战斗场景资源
+    startLoadBattleRes(data) {
+        var modelList = [];
+        modelList.push("bullet_01");
+        this.startLoadScene(modelList);
+    }
+    //开始加载场景
+    startLoadScene(modelList = []) {
+        var roleId = this._levelData.roleId;
+        var resArr = [
+            ResourceConst_1.default.EFFECT_EXPLODE,
+            ResourceConst_1.default.EFFECT_BLOOD,
+            ResourceConst_1.default.EFFECT_SHOOT,
+        ];
+        // var resArr = this.getCurModelArrByLevel();
+        for (var index in modelList) {
+            resArr.push(modelList[index]);
+        }
+        //加载分包
+        // LoadManager.instance.createPackAndRes(subArr, resArr, Laya.Handler.create(this, this.onSceneComplete));
+        ResourceManager_1.default.loadMult3dmodel(resArr, ResourceConst_1.default.RESOURCE_MAINSCENE, this.onSceneComplete, this);
+        // LoadManager.instance.create(resArr, Laya.Handler.create(this, this.onSceneComplete));
+    }
+    //场景加载完成
+    onSceneComplete() {
+        // 加载地图
+        // LoadManager.instance.load("mapcfg/map1.json", Laya.Handler.create(this, this.onMapCfgComplete));
+        this.onMapCfgComplete();
+    }
+    onMapCfgComplete() {
+        //如果已经有战斗场景了 return
+        if (!this.scene) {
+            this.scene = GlobalData.stage;
+            this.prefab = ViewTools_1.default.create3DModel(ResourceConst_1.default.RESOURCE_MAINSCENE, "Main", ResourceCommonConst_1.default.boundle_model3d);
+            this.prefab.setActive(true);
+            this.cameraCtn = ViewTools_1.default.findObject("main_camera", UICompConst_1.default.comp_base3d);
+            this.battleCamera = this.cameraCtn.getComponent(UICompConst_1.default.comp_camera);
+            VectorTools_1.default.cloneTo(this.battleCamera.__owner.get3dRotation(), BattleFunc_1.default.cameraFollowRotation);
+            this.scene.addChild(this.prefab);
+        }
+        this.mainSprite = this.prefab.getChildByName("element_group");
+        this.mainSprite.setActive(false);
+        this.mainSpriteRigid = this.prefab.getChildByName("element_group_rigid");
+        this.mainSpriteRigid.setActive(false);
+        //这里对地形资源做缓存
+        var t1 = Client_1.default.instance.miniserverTime;
+        // this.cacheSceneSprite();
+        LogsManager_1.default.echo("xd cache sprite cost time:", Client_1.default.instance.miniserverTime - t1);
+        //缓存3d特效
+        //这里需要延迟1帧进入战斗.防止一瞬间做的时间太多导致卡顿
+        TimerManager_1.default.instance.add(this.checkEnterBattle, this, 50, 1);
+    }
+    //缓存场景资源
+    cacheSceneSprite() {
+        this._cacheSpriteMap = {};
+        var cacheInfo = PoolTools_1.default.getModelItems(PoolCode_1.default.pool_model_scene);
+        //先获取关卡配置
+        var levelCfgs = LevelFunc_1.default.instance.getCfgDatas("Level", this._levelData.levelId);
+        var terrainArr; //: string[] = BattleFunc.instance.turnRoadList(TableUtils.turnCsvArrToGameArr(levelCfgs.roadList));
+        terrainArr = LevelFunc_1.default.instance.getLevel().scenes[0].level["level_" + this._levelData.levelId];
+        if (!terrainArr) {
+            terrainArr = [];
+        }
+        this.roadListArr = terrainArr;
+        //第一版先做全部缓存
+        for (var i = 0; i < terrainArr.length; i++) {
+            var terrainCfg = terrainArr[i];
+            this.checkCacheModel(terrainCfg.name, BattleFunc_1.default.terrainShowNums + 2);
+        }
+        //装饰
+        var decorateArr = levelCfgs.sceneDecoration;
+        if (decorateArr && decorateArr.length > 0) {
+            decorateArr = TableUtils_1.default.turnCsvArrToGameArr(decorateArr, false);
+            for (var i = 0; i < decorateArr.length; i++) {
+                var tempArr = decorateArr[i];
+                for (var ii = 1; ii < tempArr.length; ii++) {
+                    var id = tempArr[ii];
+                    //如果装饰不为0 
+                    if (id != 0) {
+                        var decoratecfg = BattleFunc_1.default.instance.getDecorateData(id);
+                        this.checkCacheModel(decoratecfg.model, BattleFunc_1.default.terrainShowNums * 2);
+                    }
+                }
+            }
+        }
+        //道具缓存
+    }
+    //判断是否需要缓存
+    checkCacheModel(model, maxNums = 9999) {
+        var nums = this._cacheSpriteMap[model];
+        if (!nums) {
+            this._cacheSpriteMap[model] = 1;
+        }
+        else {
+            //如果已经缓存超过最大数量了 不缓存了
+            if (nums >= maxNums) {
+                return;
+            }
+            this._cacheSpriteMap[model] += 1;
+        }
+        nums = this._cacheSpriteMap[model];
+        var cacheItems = PoolTools_1.default.getItems(model, PoolCode_1.default.pool_model_scene);
+        //如果缓存的对象数量不够
+        if (!cacheItems || cacheItems.length < nums) {
+            var sp = this.getOneSceneView(model);
+            sp.setActive(false);
+            //缓存一个对象.方便战斗类里面直接拿
+            PoolTools_1.default.cacheItem(model, sp, PoolCode_1.default.pool_model_scene);
         }
     }
-    //重玩
-    replayBattle(inBattle = false) {
-        var battleui = this.autoBattleControler.battleUI;
-        var helpRole;
-        if (inBattle) {
-            helpRole = this.autoBattleControler.helpRoleId;
+    //获取场景里面的一个视图对象
+    getOneSceneView(viewName) {
+        //这里需要将对象包一层.方便处理旋转
+        var sp = this.mainSprite.getChildByName(viewName);
+        if (!sp) {
+            LogsManager_1.default.errorTag(LogsErrorCode_1.default.BATTLE_RES_ERROR, "场景没有这个view:", viewName, "返回一个空sprite");
+            return ViewTools_1.default.create3dContainer(viewName);
         }
-        if (this.autoBattleControler) {
-            this.autoBattleControler.exitBattle();
+        sp.set3dPos(0, 0, 0);
+        sp = ViewTools_1.default.cloneOneView(sp);
+        var ctn = ViewTools_1.default.create3dContainer(viewName);
+        ctn.addChild(sp);
+        return ctn;
+    }
+    //判断是否进入战斗(这个时候代表资源已经加载完毕了)
+    checkEnterBattle() {
+        //这个时候需要激活战斗场景
+        this.scene.setActive(true);
+        if (!this.battleControler) {
+            this.battleControler = new BattleLogicalControler_1.default(this.scene, this.prefab);
         }
-        // 重玩开始录屏时还没有结束录屏的回调，延迟加开始录屏
-        if (ShareOrTvManager_1.default.instance.canShareVideo()) {
-            TimerManager_1.default.instance.setTimeout(() => {
-                LogsManager.echo("whn replay recordStart----------");
-                UserInfo_1.default.platform.recordStart();
-            }, this, 200);
-        }
-        battleui.setData({ "isShowTalk": 2, levelId: battleui.levelId, name: battleui.levelName, helpRole: helpRole });
-    }
-    //触发角色节能
-    onClickRoleSkill(rid) {
-        var control = this.getCurrentBattleControler();
-        control.onClickRole(rid);
-    }
-    //使用战斗中的道具
-    useProp(propId) {
-    }
-    getCurrentBattleControler() {
-        if (this.bossBattleControler) {
-            return this.bossBattleControler;
-        }
-        return this.autoBattleControler;
-    }
-    //设置游戏播放或者暂停
-    setGamePlayOrPause(value) {
-        this.getCurrentBattleControler().setGamePlayOrPause(value);
-    }
-    //当触发点击
-    onTouchClick(e = null) {
+        this.battleControler.setData(this._levelData);
+        //  WindowManager.CloseLoadingUI();
     }
     //退出战斗之后
     exitBattle() {
-        this._battestate = 0;
-        if (this.autoBattleControler) {
-            //恢复游戏暂停
-            this.autoBattleControler.exitBattle();
-            this.autoBattleControler = null;
+        //取消激活战斗场景
+        this.scene.setActive(false);
+        this._isInBattle = false;
+        if (this.battleControler) {
+            //退出战斗
+            this.battleControler.exitBattle();
         }
+        // 发送退出战斗事件侦听
+        Message_1.default.instance.send(BattleEvent_1.default.BATTLEEVENT_BATTLEEXIT);
     }
     /**获取本关所需要的所有模型arr */
     getCurModelArrByLevel() {
         //monsterList  根据ai车辆去判断加载哪些模型
         return [];
+    }
+    //判断是否在战斗中
+    isInBattle() {
+        return this._isInBattle;
     }
     recvMsg(e) {
     }

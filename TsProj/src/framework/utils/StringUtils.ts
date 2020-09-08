@@ -34,7 +34,7 @@ export default class StringUtils {
 	/*
 	钱币数格式:千进制显示
 	*/
-	public static getCoinStr(coin: string): string {
+	public static getCoinStr(coin: string|number): string {
 		//金币显示支持千进值，即当金币数>=10000时，以K,M,B,T等系列千进值显示，保留1位小数（最后1位四舍五入），例如1160000显示为1.2M；
 		var coinStr = "";
 		var tempCoin = coin;
@@ -58,7 +58,7 @@ export default class StringUtils {
 			}
 
 		} else {
-			coinStr = coin;
+			coinStr = String(coin);
 		}
 
 		return coinStr;
@@ -190,6 +190,57 @@ export default class StringUtils {
 
 		}
 		return rtStr;
+	}
+
+	/**
+	 * 转换时间
+	 * @param time 时间(秒)
+	 * @param type 0(时分秒)  1(06:59:59)
+	 */
+	static convertTime(time: number, type: number = 1, showAll: boolean = true, showHour: boolean = true): string {
+		var day: number = Math.floor(time / 86400);
+		var $day: number = day * 86400;
+		var hour: number = Math.floor((time - $day) / 3600);
+		var $hour: number = hour * 3600;
+		var min: number = Math.floor((time - $day - $hour) / 60);
+		var $min: number = min * 60;
+		var sen: number = Math.floor(time - $day - $hour - $min);
+		var str: string = "";
+		if (type == 0) {
+		}
+		else if (type == 1) {
+			if (showHour) {
+				hour += day * 24;
+				if (hour > 0) {
+					if (hour < 10) {
+						str += "0";
+					}
+					str += hour.toString() + ":";
+				}
+				else {
+					if (showAll) str += "00:";
+				}
+			}
+			if (min > 0) {
+				if (min < 10) {
+					str += "0";
+				}
+				str += min.toString() + ":";
+			}
+			else {
+				str += "00:";
+			}
+			if (sen > 0) {
+				if (sen < 10) {
+					str += "0";
+				}
+				str += sen.toString();
+			}
+			else {
+				str += "00";
+			}
+		}
+		return str;
 	}
 
 

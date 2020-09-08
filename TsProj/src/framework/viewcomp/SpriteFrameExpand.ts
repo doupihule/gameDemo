@@ -219,8 +219,7 @@ export default class SpriteFrameExpand extends BaseContainer {
 		if (offset) {
 			var posArr = offset[frameIndex];
 			if (posArr) {
-				this._childView.x = posArr[0]
-				this._childView.y = posArr[1]
+				this._childView.set2dPos(posArr[0],posArr[1]);
 			}
 
 		}

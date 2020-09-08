@@ -1,6 +1,5 @@
 import {UnityEngine, System,GameUtils} from 'csharp'
 import {$ref, $unref, $generic, $promise, $typeof} from 'puerts'
-const CS = require('csharp');
 
 
 import ViewTools from "./ViewTools";
@@ -47,15 +46,7 @@ export default class BaseViewExpand {
 	//---------------------------坐标旋转缩放透明度-----------------------------------------
 	//-------------------------------------------------------------------------------------
 
-	public  set x(value:number){
-		this.positionTrans.x = value;
-	}
-	public  set y(value:number){
-		this.positionTrans.y = value;
-	}
-	public  set z(value:number){
-		this.positionTrans.z = value;
-	}
+	
 
 	public  get x(){
 		return this.positionTrans.x;
@@ -87,9 +78,13 @@ export default class BaseViewExpand {
 	//设置2d旋转
 	public  set2dRotation(value:number){
 		this.rotationTrans.z = value;
-
 		this.__ctransform.eulerAngles = GameUtils.ViewExtensionMethods.initVec3(0,0,this.rotationTrans.z);
 	}
+	//获取2d旋转
+	public  get2dRotation(){
+		return this.rotationTrans.z;
+	}
+
 
 	//设置缩放
 	public  setScale(sx:number,sy:number,sz:number =1){
@@ -100,12 +95,19 @@ export default class BaseViewExpand {
 		GameUtils.ViewExtensionMethods.SetObjScale(this.__ctransform,sx,sy,sz);
 	}
 
-	public  get scale(){
-		return this.scaleTrans.x;
+	public  getScale(){
+		return this.scaleTrans;
 	}
 
-	public  get rotation(){
-		return this.__ctransform.rotation
+	public  set3dRotation(x,y,z){
+		this.rotationTrans.x = x;
+		this.rotationTrans.y = y;
+		this.rotationTrans.z = z;
+		this.__ctransform.eulerAngles = GameUtils.ViewExtensionMethods.initVec3(x,y,z);
+	}
+
+	public  get3dRotation(){
+		return this.rotationTrans
 	}
 
 	//设置锚点
@@ -245,6 +247,9 @@ export default class BaseViewExpand {
 		this.__cobject.SetActive(value);
 	}
 
+	public isActive(){
+		return this.__cobject.active;
+	}
 
 
 	//设置深度
@@ -281,7 +286,7 @@ export default class BaseViewExpand {
 	}
 
 	//获取组件 一定要配置绑定哪个类型
-	public  getComponent(comp:string):any{
+	public  getComponent(comp:string,compExpand:BaseCompExpand = null):any{
 		if(this._compMap[comp]){
 			return this._compMap[comp];
 		}
@@ -296,11 +301,23 @@ export default class BaseViewExpand {
 			return null;
 		}
 
-		var classObj = info.cl
-		var compExpand:BaseCompExpand = new classObj();
+		//如果没有传 组件继承. 那么就采用默认的组件
+		if(!compExpand){
+			var classObj = info.cl
+			compExpand = new classObj();
+		}
 		compExpand.initComponent(cobjcomp,this);
 		this._compMap[comp] = compExpand;
 		return compExpand
+	}
+
+	//获取原生组件类型
+	public  getOriginComponent(comp:string){
+		return   this.__cobject.GetComponent
+	}
+
+	public  clone(){
+		return ViewTools.cloneOneView(this.__cobject,this.uitype);
 	}
 
 	//销毁函数

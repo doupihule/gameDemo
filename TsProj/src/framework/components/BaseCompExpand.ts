@@ -14,4 +14,9 @@ export  default  class BaseCompExpand {
 		this.__owner = owner;
 	}
 
+	public  dispose(){
+		this.__owner = null;
+		this.__comp = null;
+	}
+
 }

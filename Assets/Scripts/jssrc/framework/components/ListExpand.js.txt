@@ -5,6 +5,14 @@ class ListExpand extends BaseViewExpand_1.default {
     constructor(cobj) {
         super();
     }
+    set repeatX(value) {
+    }
+    set repeatY(value) {
+    }
+    set array(data) {
+    }
+    set renderHandler(func) {
+    }
 }
 exports.default = ListExpand;
 //# sourceMappingURL=ListExpand.js.map

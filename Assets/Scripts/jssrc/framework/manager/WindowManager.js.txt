@@ -18,7 +18,7 @@ class WindowManager {
     static OpenUI(UIName, params = null) {
         WindowManager.SwitchUIAPI(UIName, null, null, params);
     }
-    static SwitchUI(openUIName, closeUIName, args) {
+    static SwitchUI(openUIName, closeUIName, args = null) {
         WindowManager.SwitchUIAPI(openUIName, null, closeUIName, args);
     }
     static SwitchUIAPI(openUIName, rootNode, closeUIName, args = null) {

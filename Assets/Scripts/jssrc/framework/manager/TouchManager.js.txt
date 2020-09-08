@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class TouchManager {
+    //触摸按下
+    static addTouchDown(baseView, func, thisObj, params = null) {
+    }
+    static addTouchMove(baseView, func, thisObj, params = null) {
+    }
+    static addTouchUp(baseView, func, thisObj, params = null) {
+    }
+    static addTouchOut(baseView, func, thisObj, params = null) {
+    }
+}
+exports.default = TouchManager;
+//# sourceMappingURL=TouchManager.js.map

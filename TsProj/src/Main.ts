@@ -27,28 +27,7 @@ class Main {
 		var thisObj = this;
 		global.initGame = function(stageRoot,uiRoot){
 			thisObj.initWindowEnv();
-			GlobalData.initStage(stageRoot,uiRoot);
-			ViewTools.init()
-			BaseFunc.setCfgExportType(BaseFunc.exportType_New);
-			var  size = GlobalData.uiRoot.getViewRect();
-			ScreenAdapterTools.checkScreenFixMode(size.x, size.y)
-			// //初始化全局变量
-
-			FrameWorkHandle.init();
-			//
-			PackConfigManager.initCfgs();
-			UserInfo.init();
-			if (UserInfo.isSystemIos()) {
-				UserInfo.adMediaType = PlatformIdType.adMedia_gdt;
-			}
-
-			FileUtils.initRootCachePath();
-			//初始化引擎扩展
-			EngineExpand.initEngineExpand();
-
-			UserInfo.platform.setSystemInfo();
-
-			new MainModule();
+			TimerManager.instance.setTimeout(thisObj.delayEnterGame,thisObj,2000,stageRoot,uiRoot);
 		}
 
 
@@ -57,6 +36,32 @@ class Main {
 
 		this.showMainModule();
 
+	}
+
+	private delayEnterGame(stageRoot,uiRoot){
+		
+		GlobalData.initStage(stageRoot,uiRoot);
+		ViewTools.init()
+		BaseFunc.setCfgExportType(BaseFunc.exportType_New);
+		var  size = GlobalData.uiRoot.getViewRect();
+		ScreenAdapterTools.checkScreenFixMode(size.x, size.y)
+		// //初始化全局变量
+
+		FrameWorkHandle.init();
+		//
+		PackConfigManager.initCfgs();
+		UserInfo.init();
+		if (UserInfo.isSystemIos()) {
+			UserInfo.adMediaType = PlatformIdType.adMedia_gdt;
+		}
+
+		FileUtils.initRootCachePath();
+		//初始化引擎扩展
+		EngineExpand.initEngineExpand();
+
+		UserInfo.platform.setSystemInfo();
+
+		new MainModule();
 	}
 
 

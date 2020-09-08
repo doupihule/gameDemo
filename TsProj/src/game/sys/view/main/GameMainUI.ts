@@ -1,4 +1,4 @@
-import { ui } from "../../../../ui/layaMaxUI";
+
 import { WindowCfgs } from "../../consts/WindowCfgs";
 import IMessage from "../../interfaces/IMessage";
 import BattleSceneManager from "../../manager/BattleSceneManager";
@@ -14,7 +14,6 @@ import SubPackageConst from "../../consts/SubPackageConst";
 import SoundManager from "../../../../framework/manager/SoundManager";
 import GuideManager from "../../manager/GuideManager";
 import GuideEvent from "../../event/GuideEvent";
-import UtilsServer from "../../server/UtilsServer";
 import StringUtils from "../../../../framework/utils/StringUtils";
 import GuideConst from "../../consts/GuideConst";
 import { ButtonUtils } from "../../../../framework/utils/ButtonUtils";
@@ -22,17 +21,19 @@ import Message from "../../../../framework/common/Message";
 import UserEvent from "../../event/UserEvent";
 import UserExtModel from "../../model/UserExtModel";
 import Client from "../../../../framework/common/kakura/Client";
-import GameUtils from "../../../../utils/GameUtils";
 import GlobalParamsFunc from "../../func/GlobalParamsFunc";
 import TranslateFunc from "../../../../framework/func/TranslateFunc";
 import BattleServer from "../../server/BattleServer";
 import ShareOrTvManager from "../../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "../../func/ShareTvOrderFunc";
-import UserInfo from "../../../../framework/common/UserInfo";
-import { DataResourceType } from "../../func/DataResourceFunc";
 import ButtonConst from "../../../../framework/consts/ButtonConst";
+import ButtonExpand from "../../../../framework/components/ButtonExpand";
+import DataResourceConst from "../../consts/DataResourceConst";
+import BaseContainer from "../../../../framework/components/BaseContainer";
+import LabelExpand from "../../../../framework/components/LabelExpand";
+import UIBaseView from "../../../../framework/components/UIBaseView";
 
-export default class GameMainUI extends ui.native.GameMainUI implements IMessage {
+export default class GameMainUI extends UIBaseView  {
 
     /**体力回复倒计时计时器 */
     private powerAddTimer: number;
@@ -42,6 +43,18 @@ export default class GameMainUI extends ui.native.GameMainUI implements IMessage
     private _nowPower: number;
     /**下一次恢复体力需要的时间  （秒） */
     private _addPowerNeedTime: number = -1;
+
+    public  startBtn:ButtonExpand;
+    public  stageSelectBtn:ButtonExpand;
+    public  freePowerBtn:ButtonExpand;
+    public  coinGroup:BaseContainer;
+    public  goldGroup:BaseContainer;
+    public  spGroup:BaseContainer;
+    public  powerTimerLab:LabelExpand;
+    public  powerCountLab:LabelExpand;
+    public  coinNum:LabelExpand;
+    public  goldNum:LabelExpand;
+
 
     constructor() {
         super();
@@ -56,14 +69,6 @@ export default class GameMainUI extends ui.native.GameMainUI implements IMessage
         new ButtonUtils(this.freePowerBtn, this.onFreePowerClick, this).setBtnType(ButtonConst.BUTTON_TYPE_4);;
 
         this.maxSp = GlobalParamsFunc.instance.getDataNum('maxSp');
-
-        if (UserModel.instance.checkIsOld()) {
-            StatisticsManager.ins.onEvent(StatisticsManager.LOADING_2);
-        } else {
-            UtilsServer.setIsOldFlag(() => {
-                StatisticsManager.ins.onEvent(StatisticsManager.NEW_LOADING_2);
-            }, this);
-        }
 
         ScreenAdapterTools.alignNotch(this.coinGroup, ScreenAdapterTools.Align_MiddleTop);
         ScreenAdapterTools.alignNotch(this.goldGroup, ScreenAdapterTools.Align_MiddleTop);
@@ -125,7 +130,7 @@ export default class GameMainUI extends ui.native.GameMainUI implements IMessage
      */
     showPowerFreshTimer() {
         this.powerTimerLab.visible = true;
-        this.powerTimerLab.changeText(GameUtils.convertTime(this._addPowerNeedTime, 1, false, false));
+        this.powerTimerLab.changeText(StringUtils.convertTime(this._addPowerNeedTime, 1, false, false));
     }
     /**
      * 隐藏体力
@@ -221,13 +226,7 @@ export default class GameMainUI extends ui.native.GameMainUI implements IMessage
         }
 
         if (this._nowPower < GlobalParamsFunc.instance.getDataNum('levelSpCost')) {
-            var freeSpType = ShareOrTvManager.instance.getShareOrTvType(ShareTvOrderFunc.SHARELINE_FREE_SP);
-            if (freeSpType != ShareOrTvManager.TYPE_QUICKRECEIVE) {
-                WindowManager.OpenUI(WindowCfgs.FreePowerUI, { type: DataResourceType.SP });
-            }
-            else {
-                WindowManager.ShowTip(TranslateFunc.instance.getTranslate("#tid_power_01"));
-            }
+            WindowManager.ShowTip(TranslateFunc.instance.getTranslate("#tid_power_01"));
             return;
         }
 
@@ -270,9 +269,8 @@ export default class GameMainUI extends ui.native.GameMainUI implements IMessage
             WindowManager.ShowTip("功能暂未开启");
             return;
         }
-        // StatisticsManager.ins.onEvent(StatisticsManager.SHARE_POWER_RECOVERY_CLICK);
 
-        WindowManager.OpenUI(WindowCfgs.FreePowerUI, { type: DataResourceType.SP });
+        WindowManager.OpenUI(WindowCfgs.FreePowerUI, { type: DataResourceConst.SP });
     }
 
     onClose() {

@@ -1,7 +1,6 @@
 import UserInfo from "../common/UserInfo";
 import UserGlobalModel from "../model/UserGlobalModel";
 import WindowManager from "./WindowManager";
-import ResourceCommonConst from "../../game/sys/consts/ResourceCommonConst";
 import ShareTvOrderFunc from "../../game/sys/func/ShareTvOrderFunc";
 import ShareOrTvServer from "../server/ShareOrTvServer";
 import TranslateFunc from "../func/TranslateFunc";
@@ -16,6 +15,7 @@ import {BannerComp} from "../platform/comp/BannerComp";
 import TableUtils from "../utils/TableUtils";
 import CountsCommonModel from "../model/CountsCommonModel";
 import ResourceConst from "../../game/sys/consts/ResourceConst";
+import ResourceCommonConst from "../consts/ResourceCommonConst";
 
 /**
  * 分享或视频广告序列管理类

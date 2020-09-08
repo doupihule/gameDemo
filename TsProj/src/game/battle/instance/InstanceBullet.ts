@@ -14,6 +14,7 @@ import ViewTools from "../../../framework/components/ViewTools";
 import RigidbodyExpand from "../../../framework/components/physics/RigidbodyExpand";
 import PhysicsTools from "../../../framework/components/physics/PhysicsTools";
 import VectorTools from "../../../framework/utils/VectorTools";
+import {UnityEngine, System,GameUtils} from 'csharp'
 
 export default class InstanceBullet extends InstanceMove {
 
@@ -32,7 +33,7 @@ export default class InstanceBullet extends InstanceMove {
     //边界数组 [minx,maxx,miny,maxy];
     private _borderPos: any[];
 
-    public type = "Bullet"
+
 
     //击中过的人数组
     protected hitedArr: InstanceRole[];
@@ -41,12 +42,11 @@ export default class InstanceBullet extends InstanceMove {
 
     public rigid: RigidbodyExpand;
 
-    private  ray:any;
 
     private  rayOrigin:{x,y,z};
     private  rayDirection:{x,y,z};
 
-    private rayHit;
+    private rayHit:UnityEngine.RaycastHit;
 
     private coll;
 
@@ -56,7 +56,7 @@ export default class InstanceBullet extends InstanceMove {
 
     constructor(controller) {
         super(controller);
-        this.ray = PhysicsTools.createRay(this.pos, this.speed);
+        this.type = "Bullet";
         this.rayOrigin = VectorTools.cloneTo(this.pos);
         this.rayDirection = VectorTools.cloneTo(this.speed);
         this.rayHit = PhysicsTools.createHitInfo()
@@ -80,13 +80,13 @@ export default class InstanceBullet extends InstanceMove {
         // this._borderPos = BattleFunc.borderPos;
         if (!this.colliderCtrl) {
             this.rigid = this._myView.getComponent(UICompConst.comp_rigidbody3d);
-            this.colliderCtrl = this._myView.addComponent(ColliderController);
+            this.colliderCtrl = this._myView.getComponent( UICompConst.comp_colliderListener,new  ColliderController());
             this.colliderCtrl.instance = this;
             this.colliderCtrl.controller = this.controller;
             // this.rigid.overrideGravity = true;
             this.rigid.canCollideWith = 16 | 32;
 
-            this.rigid.collisionGroup = 64;
+            this.rigid.collisionGroup = BattleConst.collion_layer_3;
             // this.rigid.ccdMotionThreshold = 0.00001;
             // this.rigid.isKinematic = true;
         }
@@ -98,14 +98,6 @@ export default class InstanceBullet extends InstanceMove {
         this.initMove(spd * rx, spd * ry, spd * rz);
     }
 
-    //初始化运动 ,子类可根据这个继承,并改变视图的朝向或者 动作显示
-    // initMove(x: number = 0, y: number = 0, z: number = 0) {
-    //     this.speed.x = x;
-    //     this.speed.y = y;
-    //     this.speed.z = z;
-    //     (this.rigid as Laya.Rigidbody3D).applyImpulse(VectorTools.createVec3(x, y, z));
-
-    // }
 
     //设置角度
     public setAngBySpeed() {
@@ -170,8 +162,8 @@ export default class InstanceBullet extends InstanceMove {
         VectorTools.cloneTo(this.pos,this.rayOrigin);
         VectorTools.cloneTo(this.speed,this.rayDirection);
         var length = VectorTools.scalarLength(this.speed) * 0.999
-        PhysicsTools.rayCast(this.rayOrigin, this.rayDirection, this.rayHit, 300, 32, 16 | 32);
-        if (!this.rayHit.succeeded) return;
+        var rt = PhysicsTools.rayCast(this.rayOrigin, this.rayDirection, this.rayHit, 300, (1<< BattleConst.collion_layer_1) | (1<<BattleConst.collion_layer_2));
+        if (!rt) return;
         if (this.rayHit.collider) {
             var tempVector3_1 = VectorTools.createVec3();
             var tempVector3_2 = VectorTools.createVec3();
@@ -185,15 +177,14 @@ export default class InstanceBullet extends InstanceMove {
                     return;
                 }
                 else {
-                    // this.pos = this.rayHit.point;
                     this.coll = this.rayHit.collider;
                 }
-                if (this.rayHit.collider.owner.name.indexOf("border") != -1) {
+                if (this.rayHit.collider.gameObject.name.indexOf("border") != -1) {
                     this.controller.destoryBullet(this);
                     return;
                 }
 
-                var collObj = this.rayHit.collider.owner && this.rayHit.collider.owner["instance"];
+                var collObj = this.controller.getInstanceByComp(this.rayHit.collider.gameObject);
                 if (collObj) {
                     if (collObj.type == "Target") {
                         if (collObj.param.pierce) {
@@ -204,7 +195,7 @@ export default class InstanceBullet extends InstanceMove {
                         }
                         if (this.controller.roleDead(collObj, true, this.speed)) {
                             SoundManager.playSE(MusicConst.SOUND_HITDIE);
-                            collObj.collider.collisionGroup = 64;
+                            collObj.collider.collisionGroup = BattleConst.collion_layer_3;
                             flag = true;
                         }
                         // this.controller.checkResult();
@@ -217,8 +208,8 @@ export default class InstanceBullet extends InstanceMove {
                                 VectorTools.normalize(this.speed, tempVector3_1);
                                 var time = this.speed.x / tempVector3_1.x;
 
-                                this.ray.origin = this.pos;
-                                this.ray.direction = this.speed;
+                                VectorTools.cloneTo(this.pos,this.rayOrigin);
+                                VectorTools.cloneTo(this.speed,this.rayDirection);
                                 PhysicsTools.rayCast(this.rayOrigin,this.rayDirection, this.rayHit, 300);
 
                                 var normal = this.rayHit.normal;
@@ -232,18 +223,8 @@ export default class InstanceBullet extends InstanceMove {
                                     this.speed.y = tempVector3_4.y;
                                     this.speed.z = tempVector3_4.z;
 
-                                    var deltaRotY = roleInstance._myView.transform.localRotationEulerY - collObj._myView.transform.localRotationEulerY;
+                                    var deltaRotY = roleInstance._myView.get3dRotation().y - collObj._myView.get3dRotation().y;
 
-                                    // var c = 1;
-                                    // if (this.instance.speed.z) {
-                                    //     ang = Math.atan(this.instance.speed.x / this.instance.speed.z);
-                                    // }
-                                    // ang += deltaRotY * BattleFunc.angletoRad;
-                                    // var speed = Math.sqrt(Math.pow(this.instance.speed.x, 2) + Math.pow(this.instance.speed.z, 2));
-                                    // var xdis = this.instance.speed.x / Math.abs(this.instance.speed.x)
-                                    // var zdis = this.instance.speed.z / Math.abs(this.instance.speed.z)
-                                    // this.instance.speed.x = xdis * speed * Math.abs(Math.sin(ang));
-                                    // this.instance.speed.z = zdis * speed * Math.abs(Math.cos(ang));
 
                                     var ang = -deltaRotY * BattleFunc.angletoRad;
                                     var speed = Math.sqrt(Math.pow(this.speed.x, 2) + Math.pow(this.speed.z, 2));
@@ -252,11 +233,12 @@ export default class InstanceBullet extends InstanceMove {
                                     this.speed.x = speed * (x * Math.cos(ang) - z * Math.sin(ang));
                                     this.speed.z = speed * (x * Math.sin(ang) + z * Math.cos(ang));
 
-                                    var detlaPos = VectorTools.createVec3;
+                                    var detlaPos = VectorTools.createVec3();
                                     VectorTools.subtract(this.rayHit.point, collObj.pos, detlaPos);
-                                    detlaPos.x /= collObj._myView.transform.localScaleX;
-                                    detlaPos.y /= collObj._myView.transform.localScaleY;
-                                    detlaPos.z /= collObj._myView.transform.localScaleZ;
+                                    var scaleVec = collObj._myView.getScale();
+                                    detlaPos.x /= scaleVec.x;
+                                    detlaPos.y /= scaleVec.y;
+                                    detlaPos.z /= scaleVec.z;
 
 
                                     x = detlaPos.x
@@ -264,20 +246,10 @@ export default class InstanceBullet extends InstanceMove {
                                     detlaPos.x = 1 * (x * Math.cos(ang) - z * Math.sin(ang));
                                     detlaPos.z = 1 * (x * Math.sin(ang) + z * Math.cos(ang));
 
-                                    // var ang = 1;
-                                    // if (detlaPos.z) {
-                                    //     ang = Math.atan(detlaPos.x / detlaPos.z);
-                                    // }
-                                    // ang += deltaRotY * BattleFunc.angletoRad;
-                                    // xdis = detlaPos.x / Math.abs(detlaPos.x)
-                                    // zdis = detlaPos.z / Math.abs(detlaPos.z)
-                                    // var DeltaDis = Math.sqrt(Math.pow(detlaPos.x, 2) + Math.pow(detlaPos.z, 2));
-                                    // detlaPos.x = xdis * DeltaDis * Math.abs(Math.sin(ang));
-                                    // detlaPos.z = zdis * DeltaDis * Math.abs(Math.cos(ang));
-
-                                    detlaPos.x *= roleInstance._myView.transform.localScaleX;
-                                    detlaPos.y *= roleInstance._myView.transform.localScaleY;
-                                    detlaPos.z *= roleInstance._myView.transform.localScaleZ;
+                                    scaleVec = roleInstance._myView.getScale();
+                                    detlaPos.x *= scaleVec.x;
+                                    detlaPos.y *= scaleVec.y;
+                                    detlaPos.z *= scaleVec.z;
 
                                     this.pos.x = detlaPos.x + roleInstance.pos.x;
                                     this.pos.y = detlaPos.y + roleInstance.pos.y;
@@ -299,13 +271,11 @@ export default class InstanceBullet extends InstanceMove {
                             var collObj2 = collObj.getView()
                             VectorTools.scale(this.speed, this.fakeSpeed, tempVector3_2)
 
-                            collObj2.getComponent(Laya.Rigidbody3D).applyImpulse(tempVector3_2);
+                            collObj2.getComponent(UICompConst.comp_rigidbody3d).applyImpulse(tempVector3_2);
                         }
-                        this.ray.origin = this.pos;
-                        // VectorTools.scale(this.speed, 1, this.ray.origin);
-                        // VectorTools.subtract(this.pos, this.speed, this.ray.origin);
-                        this.ray.direction = this.speed;
-                        this.controller.battleScene.physicsSimulation.rayCast(this.ray, this.rayHit, 300, 16, 16);
+                        VectorTools.cloneTo(this.pos,this.rayOrigin);
+                        VectorTools.cloneTo(this.speed,this.rayDirection);
+                        PhysicsTools.rayCast(this.rayOrigin,this.rayDirection, this.rayHit, 300, BattleConst.collion_layer_1);
 
                         VectorTools.normalize(this.speed, tempVector3_1);
                         var time = this.speed.x / tempVector3_1.x;
@@ -335,7 +305,7 @@ export default class InstanceBullet extends InstanceMove {
                                 var collObj2 = collObj.getView()
                                 VectorTools.scale(this.speed, this.fakeSpeed, tempVector3_2)
 
-                                collObj2.getComponent(Laya.Rigidbody3D).applyImpulse(tempVector3_2);
+                                collObj2.getComponent(UICompConst.comp_rigidbody3d).applyImpulse(tempVector3_2);
                             }
                             this.controller.destoryBullet(this);
 

@@ -5,21 +5,12 @@ const Message_1 = require("../../../framework/common/Message");
 const UserInfo_1 = require("../../../framework/common/UserInfo");
 const Client_1 = require("../../../framework/common/kakura/Client");
 const GlobalParamsFunc_1 = require("../func/GlobalParamsFunc");
-const GameTools_1 = require("../../../utils/GameTools");
 const CacheManager_1 = require("../../../framework/manager/CacheManager");
-const StorageCode_1 = require("../consts/StorageCode");
 const SingleCommonServer_1 = require("../../../framework/server/SingleCommonServer");
 const GameMainEvent_1 = require("../event/GameMainEvent");
-const GlobalData_1 = require("../../../framework/utils/GlobalData");
-const RolesFunc_1 = require("../func/RolesFunc");
 const UserGlobalModel_1 = require("../../../framework/model/UserGlobalModel");
-const BigNumUtils_1 = require("../../../framework/utils/BigNumUtils");
-const LevelFunc_1 = require("../func/LevelFunc");
 const SceneReference_1 = require("../../../framework/consts/SceneReference");
 const WhiteListFunc_1 = require("../../../framework/func/WhiteListFunc");
-const UserEvent_1 = require("../event/UserEvent");
-const FogEvent_1 = require("../event/FogEvent");
-const UserExtModel_1 = require("./UserExtModel");
 class UserModel extends BaseModel_1.default {
     constructor() {
         super(...arguments);
@@ -49,24 +40,11 @@ class UserModel extends BaseModel_1.default {
         SingleCommonServer_1.default.initData();
     }
     updateData(d) {
-        var coinFlag = false;
-        if (d.coin) {
-            if (BigNumUtils_1.default.compare(d.coin, UserModel.instance.getLogicCoin())) {
-                var oldNum = UserModel.instance.getLogicCoin();
-                coinFlag = true;
-            }
-        }
         super.updateData(d);
         //根据需要发送事件通知ui刷新
         /**刷新主界面钱 */
         if (d.coin || d.coin == 0 || d.giftGold || d.giftGold == 0 || d.gold || d.gold == 0) {
             Message_1.default.instance.send(GameMainEvent_1.default.GAMEMAIN_EVENT_FRESHMONEY);
-            if (coinFlag) {
-                Message_1.default.instance.send(UserEvent_1.default.USER_EVET_COIN_CHANGE_TWEEN, { oldNum: oldNum });
-            }
-        }
-        if (d.fogCoin || d.fogCoin == 0) {
-            Message_1.default.instance.send(FogEvent_1.default.FOGEVENT_REFRESH_FOGCOIN);
         }
         this.setGuideCache();
     }
@@ -78,16 +56,6 @@ class UserModel extends BaseModel_1.default {
     getUserName() {
         // console.log("my name is. :", this._data.maxScore);
         return this._data.name;
-    }
-    getHeadImage() {
-        // console.log("my headImg is :", this._data.headImage);
-        var newPath = GameTools_1.default.getHeadImg(this._data.userInfo.headImage);
-        if (newPath) {
-            return newPath;
-        }
-        else {
-            return this._data.userInfo.headImage;
-        }
     }
     /**获取真正的头像str */
     getUserHead() {
@@ -104,48 +72,50 @@ class UserModel extends BaseModel_1.default {
     }
     //获取用户的金币数
     getCoin() {
-        return this._data.coin || "0";
+        return Math.floor(Number(this._data.coin)) || 0;
+    }
+    //获取用户的显示金币数
+    getDisplayCoin() {
+        var totalIncomeCoin = 0;
+        for (var index in this.incomeCoin) {
+            totalIncomeCoin += this.incomeCoin[index];
+        }
+        return Math.floor(this.getCoin() + totalIncomeCoin);
     }
     //获取用户逻辑金币数
     getLogicCoin() {
-        return "1";
+        var coinNum = 0;
+        return Math.floor(this.getCoin() + coinNum);
+    }
+    //获取用户逻辑金币数
+    getCoinWithIncomeById(id) {
+        var coinNum = 0;
+        return Math.floor(this.getCoin() + coinNum);
     }
     //获取用户的钻石数
     getGold() {
-        return BigNumUtils_1.default.sum((this._data.gold || "0"), (this._data.giftGold || "0"));
+        return (Number(this._data.gold) || 0) + (Number(this._data.giftGold) || 0); //
     }
     getGiftGold() {
-        return this._data.giftGold || "0";
+        return Number(this._data.giftGold) || 0;
     }
     /**钻石，返回剩余值[giftGold,chargeGold] */
     costGold(num) {
-        var giftGold = this._data.giftGold || "0";
-        var chargeGold = this._data.gold || "0";
-        if (!BigNumUtils_1.default.compare(BigNumUtils_1.default.sum(giftGold, chargeGold), String(num), true)) {
-            return ["0", "0"];
+        var giftGold = this._data.giftGold || 0;
+        var chargeGold = this._data.gold || 0;
+        if (giftGold + chargeGold < num) {
+            return;
         }
-        giftGold = BigNumUtils_1.default.substract(giftGold, num);
-        if (!BigNumUtils_1.default.compare(giftGold, 0)) {
-            chargeGold = BigNumUtils_1.default.sum(chargeGold, giftGold);
-            giftGold = "0";
+        giftGold -= num;
+        if (giftGold < 0) {
+            chargeGold += giftGold;
+            giftGold = 0;
         }
         return [giftGold, chargeGold];
     }
-    getVideo() {
-        if (this._data.userExt && this._data.userExt.video) {
-            return this._data.userExt.video;
-        }
-        return 0;
-    }
-    getShopVideo(id) {
-        if (this._data.userExt && this._data.userExt.shopVideo && this._data.userExt.shopVideo[id]) {
-            return this._data.userExt.shopVideo[id];
-        }
-        return 0;
-    }
     //获取用户的等级
     getLevel() {
-        return this.getMaxBattleLevel(); //TODO
+        return this.getMaxLevel(); //TODO
         // if (this._data.level) {
         // 	var curlevel = this._data.level <= 30 ? this._data.level : 30;
         // 	return curlevel;
@@ -153,12 +123,12 @@ class UserModel extends BaseModel_1.default {
         // return 1;
     }
     //获取合成单位的最高等级
-    getMaxLevel(id) {
-        if (this._data.userExt && this._data.userExt.goodsMaxLevel && this._data.userExt.goodsMaxLevel[id]) {
+    getMaxLevel() {
+        if (this._data.userExt && this._data.userExt.goodsMaxLevel) {
             // return (this._data.userExt.goodsMaxLevel;
-            return Number(this._data.userExt.goodsMaxLevel[id]);
+            return Number(this._data.userExt.goodsMaxLevel);
         }
-        return 0;
+        return 1;
     }
     //获取最高关卡等级
     getMaxBattleLevel() {
@@ -166,37 +136,45 @@ class UserModel extends BaseModel_1.default {
             return this._data.userExt.maxStage;
         }
         return 0;
+        // if (this._data.battleLevel) {
+        // 	var battleLevel = this._data.battleLevel;
+        // 	var maxLevel = 1;
+        // 	for (var index in battleLevel) {
+        // 		if (Number(index) > maxLevel) {
+        // 			maxLevel = Number(index);
+        // 		}
+        // 	}
+        // 	maxLevel++;
+        // 	var curlevel = maxLevel <= 30 ? maxLevel : 30;
+        // 	return curlevel;
+        // }
+        // return 1;
     }
-    /**获取迷雾最大层数 */
-    getMaxFogLayer() {
-        if (this._data.userExt && this._data.userExt.maxFogLayer) {
-            return this._data.userExt.maxFogLayer;
+    getstageRank(stageId) {
+        if (this._data.userExt && this._data.userExt.stageRank && this._data.userExt.stageRank[stageId]) {
+            return this._data.userExt.stageRank[stageId];
         }
         return 0;
+        // if (this._data.battleLevel) {
+        // 	var battleLevel = this._data.battleLevel;
+        // 	var maxLevel = 1;
+        // 	for (var index in battleLevel) {
+        // 		if (Number(index) > maxLevel) {
+        // 			maxLevel = Number(index);
+        // 		}
+        // 	}
+        // 	maxLevel++;
+        // 	var curlevel = maxLevel <= 30 ? maxLevel : 30;
+        // 	return curlevel;
+        // }
+        // return 1;
     }
-    getRoleBuyInfo(type, roleId = null) {
-        var time = 0;
+    getRoleBuyInfo(id, type) {
         if (this._data.market) {
-            if (roleId) {
-                var info = this._data.market[roleId];
-                if (info && info[type + "PurchaseTime"]) {
-                    time += Number(info[type + "PurchaseTime"]);
-                }
+            var info = this._data.market[id];
+            if (info && info[type + "PurchaseTime"]) {
+                return info[type + "PurchaseTime"];
             }
-            else {
-                for (var id in this._data.market) {
-                    var info = this._data.market[id];
-                    if (info && info[type + "PurchaseTime"]) {
-                        time += Number(info[type + "PurchaseTime"]);
-                    }
-                }
-            }
-        }
-        return time;
-    }
-    getRoleBuyTimes() {
-        if (this._data.userExt && this._data.userExt.buyTimes) {
-            return this._data.userExt.buyTimes;
         }
         return 0;
     }
@@ -206,13 +184,6 @@ class UserModel extends BaseModel_1.default {
             return this._data.userExt.equipedGoods;
         }
         return "1";
-    }
-    //判断当前关卡是否已经能复活过
-    isLandDeathRevive(levelId) {
-        if (this._data && this._data.levels && this._data.levels[levelId] && this._data.levels[levelId].deathRevive && this._data.levels[levelId].expireTime > Client_1.default.instance.serverTime) {
-            return true;
-        }
-        return false;
     }
     //获取关卡情况
     getBattleLevelById(id) {
@@ -231,17 +202,27 @@ class UserModel extends BaseModel_1.default {
     getExp() {
         return this._data.exp || 0;
     }
-    getSpeedUpTime() {
-        return (this._data && this._data.userExt && this._data.userExt.speedUpTime) || 0;
-    }
-    getSupplyBoxId() {
-        return (this._data && this._data.userExt && this._data.userExt.supplyBoxId) || 0;
-    }
-    getSupplyBoxTime() {
-        return (this._data && this._data.userExt && this._data.userExt.supplyBoxTime) || 0;
-    }
-    getTurnable() {
-        return (this._data && this._data.userExt && this._data.userExt.turnable) || 0;
+    //获取用户的体力
+    getSp() {
+        var humanLevel = UserModel.instance.getLevel() || 1;
+        // var maxPower = GameData.getExpNeed(humanLevel).power;
+        var maxPower = 10;
+        var sp = this._data.userExt.sp;
+        if (sp > maxPower)
+            return sp;
+        else {
+            var time = (this._data.userExt.upSpTime || 0) + GlobalParamsFunc_1.default.instance.getGlobalCfgDatas("SpRestoreTime").num;
+            var curT = Client_1.default.instance.serverTime;
+            time = time - curT;
+            while (time < 0) {
+                time += GlobalParamsFunc_1.default.instance.getGlobalCfgDatas("SpRestoreTime").num;
+                sp++;
+            }
+            if (sp > maxPower)
+                return maxPower;
+            else
+                return sp;
+        }
     }
     //判断是否为老用户
     checkIsOld() {
@@ -249,21 +230,9 @@ class UserModel extends BaseModel_1.default {
     }
     //获取用户的新手引导标志
     getMainGuide() {
-        var guide = Number((this._data && this._data.userExt && this._data.userExt.newGuide && Number(this._data.userExt.newGuide))) || 0;
-        //兼容线上已经进入过迷雾街区并且存储的引导id小于9 默认引导结束
-        if (UserExtModel_1.default.instance.getEnterFogFlag() && guide < 9)
-            return 17;
-        var level = this.getMaxBattleLevel();
-        //兼容线上已经错过首个碎片引导的玩家 默认已经完成所有引导
-        if (level >= GlobalParamsFunc_1.default.instance.getDataNum("equipUnlock") && guide < 6)
-            return 8;
-        if (guide == 0) {
-            //兼容老用户
-            if (level >= 1) {
-                return 2;
-            }
-        }
-        return guide;
+        //暂时关闭引导 返回一个很大的数
+        // return 999999;
+        return (this._data && this._data.userExt && this._data.userExt.newGuide && Number(this._data.userExt.newGuide)) || 0;
     }
     //获取用户打点类型（新用户/老用户）
     checkIsNew() {
@@ -277,9 +246,16 @@ class UserModel extends BaseModel_1.default {
     getSubGuide() {
         return this._data.guide || {};
     }
-    getSubGuideById(id) {
-        var guide = this.getSubGuide();
-        return guide[id] || 0;
+    /*
+    获取体力更新的剩余时间
+    */
+    getUpSpTime() {
+        var time = (this._data.userExt.upSpTime || 0) + GlobalParamsFunc_1.default.instance.getGlobalCfgDatas("SpRestoreTime").num;
+        var curT = Client_1.default.instance.serverTime;
+        time = time - curT;
+        while (time < 0)
+            time += GlobalParamsFunc_1.default.instance.getGlobalCfgDatas("SpRestoreTime").num;
+        return time;
     }
     /**获取授权状态 */
     get isAuthorized() {
@@ -299,14 +275,6 @@ class UserModel extends BaseModel_1.default {
     }
     /**根据用户数据记载是否已经授权 */
     setGuideCache() {
-        // var guideNum = Number(this.getGuide());
-        // if (guideNum >= 1) {
-        // }
-        //因为没有引导 所以登入后就判定为老用户
-        // CacheManager.instance.setFileStorageCache(StorageCode.storage_wxGuide, true);
-        if (GlobalData_1.default.isNew()) {
-            CacheManager_1.default.instance.setFileStorageCache(StorageCode_1.default.storage_isOldPlayer, true);
-        }
     }
     getUserExt() {
         return this._data.userExt;
@@ -340,24 +308,15 @@ class UserModel extends BaseModel_1.default {
             var signAddShareNum = GlobalParamsFunc_1.default.instance.getDataNum("shareDayNmb");
             UserGlobalModel_1.default.instance.setShareNum(signAddShareNum);
         }
-        var upData = {};
-        var upUserExtData = {};
-        upUserExtData["loginTime"] = Date.parse((new Date()).toString());
-        //登陆修改下宝箱累计时间
-        if (this.getGoodsAccumuStartTime()) {
-            if (this._data && this._data.sendTime && (Number(this._data.sendTime) * 1000 > this.getGoodsAccumuStartTime())) {
-                LogsManager.echo("登陆修改宝箱累计时间，原累计时间：" + this.getGoodsAccumuStartTime());
-                LogsManager.echo("最后一次同步数据时间：" + this._data.sendTime);
-                var newGoodsAccumuStartTime = Client_1.default.instance.serverTimeMicro - (Number(this._data.sendTime) * 1000 - this.getGoodsAccumuStartTime());
-                LogsManager.echo("新宝箱累计时间：" + newGoodsAccumuStartTime);
-                upUserExtData["goodsAccumuStartTime"] = newGoodsAccumuStartTime;
+        var upData = {
+            "userExt": {
+                loginTime: Date.parse((new Date()).toString())
             }
-        }
+        };
         // 如果没有设置过黑名单，并且
-        if (!this._data.sceneBlack && !SceneReference_1.default.checkWhiteSceneId(GlobalData_1.default.currentSceneId, WhiteListFunc_1.default.TYPE_LOGIN)) {
+        if (!this._data.sceneBlack && !SceneReference_1.default.checkWhiteSceneId(GlobalData.currentSceneId, WhiteListFunc_1.default.TYPE_LOGIN)) {
             upData["sceneBlack"] = 1;
         }
-        upData["userExt"] = upUserExtData;
         var backData = Client_1.default.instance.doDummyServerBack(null, upData, null);
         SingleCommonServer_1.default.startSaveClientData();
     }
@@ -380,99 +339,12 @@ class UserModel extends BaseModel_1.default {
         }
         return false;
     }
-    //获取关卡要求的最低车等级
-    getLevelMinRoleLevel(levelId) {
-        var levelInfo = LevelFunc_1.default.instance.getCfgDatas("Level", levelId);
-        return levelInfo.minCar || 1;
-    }
     /** 返回banner序列 */
     getBannerOrder() {
         return this._data.leadBanner || 0;
     }
     isSceneBlack() {
         return this._data.sceneBlack ? this._data.sceneBlack : 0;
-    }
-    getRecycleTime() {
-        return this._data.getRecycleTime ? Number(this._data.getRecycleTime) : 0;
-    }
-    getLand() {
-        var roleInfo = RolesFunc_1.default.instance.getAllRole();
-        var landNum = 0;
-        for (var id in roleInfo) {
-            var maxLevel = UserModel.instance.getMaxLevel(id);
-            for (var level in roleInfo[id]) {
-                if (Number(level) <= Number(maxLevel)) {
-                    if (roleInfo[id][level].land) {
-                        landNum++;
-                    }
-                }
-            }
-        }
-        return landNum;
-    }
-    getLastSendTime() {
-        return this._data.lastSendTime * 1000;
-    }
-    //获取邀请奖励领取状态
-    getInviteRewardStatus(id) {
-        if (!this._data.inviteReward || !this._data.inviteReward[id]) {
-            return false;
-        }
-        return this._data.inviteReward[id];
-    }
-    //获取局外商店列表
-    getFogShopGoodsList() {
-        var goodLsit = [];
-        var data = this.getData();
-        if (!data || !data.fogOuterShop || !Object.keys(data.fogOuterShop.goods).length) {
-            return goodLsit;
-        }
-        //判断是否过期
-        var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameTools_1.default.getNextRefreshTByTime(4);
-        if (expireTime < Client_1.default.instance.serverTime) {
-            return goodLsit;
-        }
-        var goods = data.fogOuterShop.goods;
-        for (var i = 0; i < Object.keys(goods).length; i++) {
-            goodLsit.push(goods[i + 1].id);
-        }
-        return goodLsit;
-    }
-    //获取局外商店的过期时间
-    getFogShopExpireTime() {
-        var data = this.getData();
-        if (!data || !data.fogOuterShop || !Object.keys(data.fogOuterShop.goods).length) {
-            return GameTools_1.default.getNextRefreshTByTime(4);
-        }
-        var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameTools_1.default.getNextRefreshTByTime(4);
-        return expireTime;
-    }
-    //获取迷雾商店种商品得状态
-    getFogShopStatus(index) {
-        var data = this.getData();
-        if (!data || !data.fogOuterShop || !data.fogOuterShop.goods || !data.fogOuterShop.goods[index] || !data.fogOuterShop.goods[index].status) {
-            return 0;
-        }
-        var expireTime = data.fogOuterShop.expireTime ? data.fogOuterShop.expireTime : GameTools_1.default.getNextRefreshTByTime(4);
-        if (expireTime < Client_1.default.instance.serverTime) {
-            LogsManager.echo("whn outshop 已经过期");
-            return false;
-        }
-        return data.fogOuterShop.goods[index].status;
-    }
-    //获取局外商店
-    getFogShopGoods() {
-        var goodLsit = [];
-        var data = this.getData();
-        if (!data || !data.fogOuterShop || !data.fogOuterShop.goods) {
-            return {};
-        }
-        return data.fogOuterShop.goods;
-    }
-    /**获取迷雾币数 */
-    getFogCoinNum() {
-        var data = this.getData();
-        return Number(data && data.fogCoin) || 0;
     }
 }
 exports.default = UserModel;

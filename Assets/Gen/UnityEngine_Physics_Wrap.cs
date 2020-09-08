@@ -4246,7 +4246,7 @@ namespace PuertsStaticWrap
             try
             {
                 
-                var result = UnityEngine.Physics.defaultSolverIterations;
+                var result = UnityEngine.Physics.solverIterationCount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)
@@ -4262,7 +4262,7 @@ namespace PuertsStaticWrap
             {
                 
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                UnityEngine.Physics.defaultSolverIterations = argHelper.GetInt32(false);
+                UnityEngine.Physics.solverIterationCount = argHelper.GetInt32(false);
             }
             catch (Exception e)
             {
@@ -4277,7 +4277,7 @@ namespace PuertsStaticWrap
             try
             {
                 
-                var result = UnityEngine.Physics.defaultSolverVelocityIterations;
+                var result = UnityEngine.Physics.solverVelocityIterationCount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)
@@ -4293,7 +4293,7 @@ namespace PuertsStaticWrap
             {
                 
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                UnityEngine.Physics.defaultSolverVelocityIterations = argHelper.GetInt32(false);
+                UnityEngine.Physics.solverVelocityIterationCount = argHelper.GetInt32(false);
             }
             catch (Exception e)
             {

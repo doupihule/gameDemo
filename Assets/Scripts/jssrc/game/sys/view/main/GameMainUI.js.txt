@@ -1,17 +1,248 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const WindowCfgs_1 = require("../../consts/WindowCfgs");
+const BattleSceneManager_1 = require("../../manager/BattleSceneManager");
+const SubPackageManager_1 = require("../../../../framework/manager/SubPackageManager");
+const TimerManager_1 = require("../../../../framework/manager/TimerManager");
+const LevelFunc_1 = require("../../func/LevelFunc");
+const WindowManager_1 = require("../../../../framework/manager/WindowManager");
+const UserModel_1 = require("../../model/UserModel");
+const GameMainEvent_1 = require("../../event/GameMainEvent");
+const ScreenAdapterTools_1 = require("../../../../framework/utils/ScreenAdapterTools");
+const StatisticsManager_1 = require("../../manager/StatisticsManager");
+const SubPackageConst_1 = require("../../consts/SubPackageConst");
+const SoundManager_1 = require("../../../../framework/manager/SoundManager");
+const GuideEvent_1 = require("../../event/GuideEvent");
+const StringUtils_1 = require("../../../../framework/utils/StringUtils");
+const ButtonUtils_1 = require("../../../../framework/utils/ButtonUtils");
+const Message_1 = require("../../../../framework/common/Message");
+const UserEvent_1 = require("../../event/UserEvent");
+const UserExtModel_1 = require("../../model/UserExtModel");
+const Client_1 = require("../../../../framework/common/kakura/Client");
+const GlobalParamsFunc_1 = require("../../func/GlobalParamsFunc");
+const TranslateFunc_1 = require("../../../../framework/func/TranslateFunc");
+const BattleServer_1 = require("../../server/BattleServer");
+const ShareOrTvManager_1 = require("../../../../framework/manager/ShareOrTvManager");
+const ShareTvOrderFunc_1 = require("../../func/ShareTvOrderFunc");
+const ButtonConst_1 = require("../../../../framework/consts/ButtonConst");
+const DataResourceConst_1 = require("../../consts/DataResourceConst");
 const UIBaseView_1 = require("../../../../framework/components/UIBaseView");
 class GameMainUI extends UIBaseView_1.default {
     constructor() {
         super();
+        /**最大体力 */
+        this.maxSp = 0;
+        /**下一次恢复体力需要的时间  （秒） */
+        this._addPowerNeedTime = -1;
+        this.addEvent();
+        StatisticsManager_1.default.onLoadingLog();
+        TimerManager_1.default.instance.setTimeout(() => {
+            SubPackageManager_1.default.loadSubPackage(SubPackageConst_1.default.packName_share);
+        }, this, 2000);
+        new ButtonUtils_1.ButtonUtils(this.startBtn, this.onGameStartBtnClick, this);
+        new ButtonUtils_1.ButtonUtils(this.stageSelectBtn, this.onSelectStageClick, this);
+        new ButtonUtils_1.ButtonUtils(this.freePowerBtn, this.onFreePowerClick, this).setBtnType(ButtonConst_1.default.BUTTON_TYPE_4);
+        ;
+        this.maxSp = GlobalParamsFunc_1.default.instance.getDataNum('maxSp');
+        ScreenAdapterTools_1.default.alignNotch(this.coinGroup, ScreenAdapterTools_1.default.Align_MiddleTop);
+        ScreenAdapterTools_1.default.alignNotch(this.goldGroup, ScreenAdapterTools_1.default.Align_MiddleTop);
+        ScreenAdapterTools_1.default.alignNotch(this.spGroup, ScreenAdapterTools_1.default.Align_MiddleTop);
+        ScreenAdapterTools_1.default.alignNotch(this.powerTimerLab, ScreenAdapterTools_1.default.Align_MiddleTop);
+        LevelFunc_1.default.instance.loadLevel();
     }
-    doAfterInit() {
-        this.btn_test.setClickFunc(this.onClickTest, this, 1);
-        this.btn_test.setClickFunc(this.onClickTest, this, 2);
-        this.btn_test.set2dPos(100, 100);
+    /**添加事件监听 */
+    addEvent() {
+        Message_1.default.instance.add(UserEvent_1.default.USER_SP_CHANGE, this);
     }
-    onClickTest(params) {
-        LogsManager.echo("__clickTest", params);
+    setData() {
+        // BattleSceneManager.instance.enterBattle({ roleId: 1, levelId: 1 });
+        // SoundManager.playBGM(MusicConst.SOUND_MAIN_BG);
+        this.refreshCoin();
+        // 初始化体力字段
+        this.countPower();
+    }
+    countPower() {
+        //否则计算体力 体力 = 服务器告诉的体力 + (当前服务器时间上次 - 上次服务器刷新体力的时间) / 体力恢复间隔   如果算出来的值比最大的大 则体力等于表里的最大值 即回满了
+        this._nowPower = UserExtModel_1.default.instance.getLastFreshPower() + Math.floor((Client_1.default.instance.serverTime - UserExtModel_1.default.instance.getLastPowerFreshTime()) / GlobalParamsFunc_1.default.instance.getDataNum('spRestoreTime'));
+        if (UserExtModel_1.default.instance.getLastFreshPower() > this.maxSp) {
+            //如果服务器告诉的体力大于最大的  则体力等于服务器给的
+            this._nowPower = UserExtModel_1.default.instance.getLastFreshPower();
+        }
+        else if (this._nowPower > this.maxSp) {
+            this._nowPower = this.maxSp;
+        }
+        this._addPowerNeedTime = UserExtModel_1.default.instance.getNextPowerRestoreTime();
+        //刷新文本
+        this.powerCountLab.changeText(this._nowPower + "");
+        if (this._nowPower < this.maxSp) {
+            //体力不满时 显示刷新倒计时
+            this.showPowerFreshTimer();
+        }
+        else {
+            this.hidePowerFreshTimer();
+        }
+        this.freshPower();
+        if (this.freePowerBtn) {
+            if (this._nowPower && this.freePowerBtn.visible) {
+                this.freePowerBtn.visible = false;
+            }
+            else if (!this._nowPower && !this.freePowerBtn.visible) {
+                var freeSpType = ShareOrTvManager_1.default.instance.getShareOrTvType(ShareTvOrderFunc_1.default.SHARELINE_FREE_SP);
+                //没有视频或者分享，加体力按钮隐藏
+                if (freeSpType != ShareOrTvManager_1.default.TYPE_QUICKRECEIVE) {
+                    this.freePowerBtn.visible = true;
+                }
+            }
+        }
+    }
+    /**
+     * 刷新体力
+     */
+    showPowerFreshTimer() {
+        this.powerTimerLab.visible = true;
+        this.powerTimerLab.changeText(StringUtils_1.default.convertTime(this._addPowerNeedTime, 1, false, false));
+    }
+    /**
+     * 隐藏体力
+     */
+    hidePowerFreshTimer() {
+        this.powerTimerLab.visible = false;
+    }
+    //刷新体力显示			获得焦点时需要立即调用一次
+    freshPower() {
+        //如果体力不是满的了 则启动回复体力的计时器
+        if (this._nowPower < this.maxSp) {
+            if (!this.powerAddTimer) {
+                this.powerAddTimer = TimerManager_1.default.instance.add(this.countPower, this, 1000); //每秒计算一次体力
+            }
+        }
+        else {
+            //满了就停止计时器
+            if (this.powerAddTimer) {
+                TimerManager_1.default.instance.remove(this.powerAddTimer);
+            }
+        }
+    }
+    clearSubGuide(e, restart) {
+        // Laya.timer.clear(this, this.checkSubGuide);
+        // if (GuideManager.ins.nowGuideId == 10001) {
+        //     WindowManager.CloseGuideUI(WindowCfgs.GuideUI);
+        // }
+        // if (restart) {
+        //     Laya.timer.loop(8000, this, this.checkSubGuide);
+        // }
+    }
+    checkSubGuide() {
+        // if (!WindowManager.isUIOpened(WindowCfgs.GameMainUI)) return;
+        // if (WindowManager.isUIOpened(WindowCfgs.GuideUI)) return;
+        // var guideStep = UserModel.instance.getMainGuide();
+        // if (guideStep > 8) {
+        //     GuideManager.ins.setGuideData(GuideConst.GUIDE_GAMEMAIN_10001, GuideManager.GuideType.Static, this.startBtn, this);//新手引导8-1：进入关卡
+        //     GuideManager.ins.openGuideUI(GuideConst.GUIDE_GAMEMAIN_10001);
+        // }
+    }
+    //主界面检测引导进度
+    checkGuide() {
+        // WindowManager.CloseGuideUI(WindowCfgs.GuideUI);
+        // if (!WindowManager.isUIOpened(WindowCfgs.GameMainUI)) return;
+        // var guideStep = UserModel.instance.getMainGuide();
+        // if (guideStep == 0) {
+        //     // GuideManager.ins.guideFin(GuideConst.GUIDE_BATTLE_1, this.checkGuide, this, true);
+        //     BattleSceneManager.instance.enterBattle({ roleId: UserModel.instance.getRole(), levelId: 1 });
+        //     return;
+        // }
+        // if (guideStep == 1 || guideStep == 2) {
+        //     var instances = MergeManager.ins.controller.getAllInstance();
+        //     if (instances.length != 1) {
+        //         GuideManager.ins.guideFin(GuideConst.GUIDE_GAMEMAIN_801, null, this, true);
+        //         return;
+        //     }
+        //     else {
+        //         if (instances[0] && instances[0].getData()) {
+        //             var data = instances[0].getData();
+        //             if (!data.id || data.id != "1") {
+        //                 GuideManager.ins.guideFin(GuideConst.GUIDE_GAMEMAIN_801, null, this, true);
+        //                 return;
+        //             }
+        //         }
+        //     }
+        // }
+        // var GuideType = GuideManager.GuideType;
+        // var param;
+        // switch (guideStep) {
+        //     case 1:
+        //         break;
+        //     case 2:
+        //         break;
+        //     default:
+        //         // WindowManager.CloseGuideUI(WindowCfgs.GuideUI);
+        //         break;
+        // }
+    }
+    refreshCoin() {
+        this.coinNum.text = StringUtils_1.default.getCoinStr(UserModel_1.default.instance.getDisplayCoin());
+        this.goldNum.text = StringUtils_1.default.getCoinStr(UserModel_1.default.instance.getGold());
+    }
+    onGameStartBtnClick() {
+        if (!LevelFunc_1.default.instance.getLevel()) {
+            return;
+        }
+        if (this._nowPower < GlobalParamsFunc_1.default.instance.getDataNum('levelSpCost')) {
+            WindowManager_1.default.ShowTip(TranslateFunc_1.default.instance.getTranslate("#tid_power_01"));
+            return;
+        }
+        // SoundManager.playSE(MusicConst.SOUND_START_RACE);
+        SoundManager_1.default.stopMusic();
+        var nextLevel = Number(UserModel_1.default.instance.getMaxBattleLevel()) + 1;
+        if (nextLevel > LevelFunc_1.default.instance.getMaxLevel()) {
+            nextLevel = LevelFunc_1.default.instance.getMaxLevel();
+        }
+        var allInfo = LevelFunc_1.default.instance.getLevel();
+        var info = allInfo.scenes[0].level;
+        var levelNum = 0;
+        for (var index in info) {
+            levelNum++;
+        }
+        BattleServer_1.default.battleStart(null, this);
+        BattleSceneManager_1.default.instance.enterBattle({ levelId: Math.min(nextLevel, levelNum) });
+        // WindowManager.OpenUI(WindowCfgs.BattleResultUI, {
+        //     levelId: (Number(UserModel.instance.getMaxBattleLevel()) + 1),
+        //     rank:
+        //         [{ id: "1", rank: 1, isRole: true },
+        //         { id: "1002", rank: 2, isRole: false },
+        //         { id: "1003", rank: 3, isRole: false }]
+        // });
+    }
+    onSelectStageClick() {
+        if (!LevelFunc_1.default.instance.getLevel()) {
+            return;
+        }
+        WindowManager_1.default.SwitchUI(WindowCfgs_1.WindowCfgs.StageSelectUI, WindowCfgs_1.WindowCfgs.GameMainUI);
+    }
+    onFreePowerClick() {
+        var freeSpType = ShareOrTvManager_1.default.instance.getShareOrTvType(ShareTvOrderFunc_1.default.SHARELINE_FREE_SP);
+        //没有视频或者分享，加体力按钮隐藏
+        if (freeSpType == ShareOrTvManager_1.default.TYPE_QUICKRECEIVE) {
+            WindowManager_1.default.ShowTip("功能暂未开启");
+            return;
+        }
+        WindowManager_1.default.OpenUI(WindowCfgs_1.WindowCfgs.FreePowerUI, { type: DataResourceConst_1.default.SP });
+    }
+    onClose() {
+    }
+    /***********************************************红点相关 *********************************************************/
+    refreshAllRed() {
+        // this.refreshGunTabRed();
+    }
+    recvMsg(cmd, data) {
+        switch (cmd) {
+            case GameMainEvent_1.default.GAMEMAIN_EVENT_FRESHMONEY:
+                this.refreshCoin();
+                break;
+            case GuideEvent_1.default.GUIDEEVENT_CHECKGUIDE:
+                this.checkGuide();
+                break;
+        }
     }
 }
 exports.default = GameMainUI;

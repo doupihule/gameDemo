@@ -10,8 +10,8 @@ class GlobalData {
     static initStage(cstage, cuiroot) {
         this._cstage = cstage;
         this._cuiroot = cuiroot;
-        this.stage = ViewTools_1.default.autoBindingCObj(cstage, true, UICompConst_1.default.comp_base3d);
         this.uiRoot = ViewTools_1.default.autoBindingCObj(cuiroot, true, UICompConst_1.default.comp_base);
+        this.stage = ViewTools_1.default.autoBindingCObj(cstage, true, UICompConst_1.default.comp_base3d);
     }
     static setPhoneSys(sysInfo) {
         var phoneModel = sysInfo.model;

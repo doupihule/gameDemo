@@ -14,6 +14,7 @@ class ResourceManager {
     //示例:loadMult3dmodel(["role_001","role_101","effect_110"],"scene_battle");
     // params 自带的回调参数
     static loadMult3dmodel(models, sceneModel = null, callBack = null, thisObj = null, params = null) {
+        callBack && callBack.call(thisObj, params);
     }
     //判断是否3d模块需要分包
     static check3dIsSubpack() {
@@ -21,6 +22,7 @@ class ResourceManager {
     }
     //加载一个3dmodel
     static load3dmodel(modelName, isScene, callBack, thisObj, params = null) {
+        callBack && callBack.call(thisObj, params);
     }
     //获取一个3dmodel的分包名
     static get3dodelPackName(modelName) {
@@ -37,7 +39,7 @@ class ResourceManager {
         var targetPath = "Assets/Model3d/" + shortPath + "/Prefabs/" + modelName + ".prefab";
         LogsManager.echo("targetPath", targetPath);
         var obj = csharp_1.Resource.ResourceManager.Instance.luaLoadAsset(targetPath, targetPath, boundlename);
-        if (!outclone) {
+        if (outclone) {
             return obj;
         }
         return csharp_1.UnityEngine.Object.Instantiate(obj);

@@ -10,6 +10,8 @@ const GameMainUI_1 = require("../view/main/GameMainUI");
 const ResultJumpUI_1 = require("../view/jump/ResultJumpUI");
 const BattleUI_1 = require("../view/battle/BattleUI");
 const JumpListUI_1 = require("../view/jump/JumpListUI");
+const StageSelectUI_1 = require("../view/main/StageSelectUI");
+const FreePowerUI_1 = require("../view/reward/FreePowerUI");
 class WindowCfgs {
     //窗口的一些配置参数配置, 比如 是否配置模板, 是否是全屏窗口,是否需要额外加载什么资源
     constructor() {
@@ -64,6 +66,11 @@ class WindowCfgs {
                     path: BattleUI_1.BattleUI,
                     full: true
                 },
+                [WindowCfgs.StageSelectUI]: {
+                    path: StageSelectUI_1.StageSelectUI,
+                    full: true
+                },
+                [WindowCfgs.FreePowerUI]: { modal: 1, path: FreePowerUI_1.default, modalAlpha: 0.01, group: ["gameui/FreePower.scene"], subPackage: ["uisource", "atlas_source"] },
             };
         }
         return this._windowcfgs;
@@ -104,91 +111,12 @@ WindowCfgs.ResultJumpDoubleUI = "ResultJumpDoubleUI";
 WindowCfgs.GameMainUI = "GameMainUI";
 WindowCfgs.BattleUI = "BattleUI";
 WindowCfgs.BattleResultUI = "BattleResultUI";
-WindowCfgs.RoleInfoUI = "RoleInfoUI";
-WindowCfgs.OfflineIncomeUI = "OfflineIncomeUI";
-WindowCfgs.TurnableUI = "TurnableUI";
+WindowCfgs.StageSelectUI = "StageSelectUI";
 WindowCfgs.MainJumpZhiseUI = "MainJumpZhiseUI";
 WindowCfgs.JumpListZhiseUI = "JumpListZhiseUI";
-WindowCfgs.FreeResourceUI = "FreeResourceUI";
-WindowCfgs.FlatItemUI = "FlatItemUI";
-WindowCfgs.HomeUpgradeUI = "HomeUpgradeUI";
-WindowCfgs.BattleDetailUI = "BattleDetailUI";
-WindowCfgs.RoleInLineUI = "RoleInLineUI";
-WindowCfgs.RoleItemUI = "RoleItemUI";
-WindowCfgs.RoleLineItemUI = "RoleLineItemUI";
-WindowCfgs.SevenDaysUI = "SevenDaysUI";
-WindowCfgs.BoxInfoUI = "BoxInfoUI";
-WindowCfgs.UnlockRoleUI = "UnlockRoleUI";
-WindowCfgs.DailyGoldUI = "DailyGoldUI";
-WindowCfgs.ComRewardDoubleUI = "ComRewardDoubleUI";
-WindowCfgs.AirDropDetailUI = "AirDropDetailUI";
-WindowCfgs.BattleFullEnergyUI = "BattleFullEnergyUI";
-WindowCfgs.InviteUI = "InviteUI";
-WindowCfgs.InviteListUI = "InviteListUI";
-WindowCfgs.RoleDetailUI = "RoleDetailUI";
-WindowCfgs.RoleEquipmentUI = "RoleEquipmentUI";
-WindowCfgs.EquipItemUI = "EquipItemUI";
-WindowCfgs.EquipComposeUI = "EquipComposeUI";
-WindowCfgs.EvoPreviewUI = "EvoPreviewUI";
-WindowCfgs.EvoRewardUI = "EvoRewardUI";
-WindowCfgs.EquipPieceGetUI = "EquipPieceGetUI";
-WindowCfgs.RoleBarrageUI = "RoleBarrageUI";
-WindowCfgs.CartoonPicUI = "CartoonPicUI";
-WindowCfgs.FogCartoonPicUI = "FogCartoonPicUI";
-WindowCfgs.FogInitRoleUI = "FogInitRoleUI";
-WindowCfgs.FogRoleItemUI = "FogRoleItemUI";
-WindowCfgs.FogMainUI = "FogMainUI";
-WindowCfgs.FogVideoEnterUI = "FogVideoEnterUI";
-WindowCfgs.FogBusUI = "FogBusUI";
-WindowCfgs.FogBagItemUI = "FogBagItemUI";
-WindowCfgs.FogBagUI = "FogBagUI";
-WindowCfgs.FogBagItemDetailUI = "FogBagItemDetailUI";
-WindowCfgs.FogMultiRewardUI = "FogMultiRewardUI";
-WindowCfgs.FogShopUI = "FogShopUI";
-WindowCfgs.FogBusinessmanUI = "FogBusinessmanUI";
-WindowCfgs.FogComRewardUI = "FogComRewardUI";
-WindowCfgs.FogChooseUI = "FogChooseUI";
-WindowCfgs.FogAnswerUI = "FogAnswerUI";
-WindowCfgs.FogHandinUI = "FogHandinUI";
-WindowCfgs.FogBoxUI = "FogBoxUI";
-WindowCfgs.FogBagItemFullLevelUI = "FogBagItemFullLevelUI";
-WindowCfgs.FogFreeActUI = "FogFreeActUI";
-WindowCfgs.FogRoleLineItemUI = "FogRoleLineItemUI";
-WindowCfgs.FogUserRoleUI = "FogUserRoleUI";
-WindowCfgs.FogObstacleUI = "FogObstacleUI";
-WindowCfgs.FogNpcTalkUI = "FogNpcTalkUI";
-WindowCfgs.FogDoorUI = "FogDoorUI";
-WindowCfgs.FogTipUI = "FogTipUI";
-WindowCfgs.FogStartWarUI = "FogStartWarUI";
-WindowCfgs.FogResultUI = "FogResultUI";
-WindowCfgs.FogResultRewardUI = "FogResultRewardUI";
-WindowCfgs.FogRewardItemUI = "FogRewardItemUI";
-WindowCfgs.FogShopItemDetailUI = "FogShopItemDetailUI";
-WindowCfgs.FogBattleStartAlertUI = "FogBattleStartAlertUI";
-WindowCfgs.SettingUI = "SettingUI";
-WindowCfgs.ChapterListUI = "ChapterListUI";
-WindowCfgs.ChapterMapUI = "ChapterMapUI";
-WindowCfgs.ChapterBoxRewardUI = "ChapterBoxRewardUI";
-WindowCfgs.ChapterBoxDoubleUI = "ChapterBoxDoubleUI";
-WindowCfgs.TaskUI = "TaskUI";
-WindowCfgs.DailyTaskUI = "DailyTaskUI";
-WindowCfgs.ChatTaskUI = "ChatTaskUI";
-WindowCfgs.TaskDoubleRewardUI = "TaskDoubleRewardUI";
-WindowCfgs.ChatDetailUI = "ChatDetailUI";
-WindowCfgs.ChatDialoglUI = "ChatDialoglUI";
-WindowCfgs.ChatItemUI = "ChatItemUI";
 WindowCfgs.MainJumpKariquUI = "MainJumpKariquUI";
-WindowCfgs.FogBattleReviveUI = "FogBattleReviveUI";
-WindowCfgs.BattleReviveUI = "BattleReviveUI";
-WindowCfgs.OfflineRewardDoubleUI = "OfflineRewardDoubleUI";
-WindowCfgs.BattleUseSkillUI = "BattleUseSkillUI";
-WindowCfgs.BattleHelpRoleUI = "BattleHelpRoleUI";
-WindowCfgs.MainShopUI = "MainShopUI";
-WindowCfgs.MainShopItemUI = "MainShopItemUI";
-WindowCfgs.WorkDetailUI = "WorkDetailUI";
-WindowCfgs.WorkRoleUI = "WorkRoleUI";
-WindowCfgs.WorkRoleItemUI = "WorkRoleItemUI";
-WindowCfgs.WorkCompanyUI = "WorkCompanyUI";
+WindowCfgs.FreePowerUI = "FreePowerUI";
+WindowCfgs.CommonRewardUI = "CommonRewardUI";
 //通用配置,如果不配置 就没有
 WindowCfgs.commonCfgs = {
     modal: 1,

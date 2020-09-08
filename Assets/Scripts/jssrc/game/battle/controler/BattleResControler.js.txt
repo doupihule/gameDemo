@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BattleControler_1 = require("./BattleControler");
+class BattleResControler {
+    constructor(controller) {
+        this.controller = controller;
+        BattleControler_1.default;
+    }
+    //刷新函数 比如需要分帧加载游戏
+    updateFrame() {
+    }
+    //销毁函数
+    dispose() {
+        this.controller = null;
+    }
+}
+exports.default = BattleResControler;
+//# sourceMappingURL=BattleResControler.js.map

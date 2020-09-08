@@ -202,6 +202,9 @@ export default class BattleFunc extends BaseFunc {
 	}
 
 
+
+
+
 	//初始化全局参数. 策划配置的数需要转化.而且为了访问方便.
 	public static initGlobalParams (){
 		this.extraTurnPowerRatio = GlobalParamsFunc.instance.getDataNum("extraTurnPowerTime")/10000;

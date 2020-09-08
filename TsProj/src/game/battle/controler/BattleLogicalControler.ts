@@ -7,7 +7,6 @@ import TableUtils from "../../../framework/utils/TableUtils";
 import BattleFunc from "../../sys/func/BattleFunc";
 import Message from "../../../framework/common/Message";
 import BattleEvent from "../../sys/event/BattleEvent";
-import GameConsts from "../../sys/consts/GameConsts";
 import { BattleUI } from "../../sys/view/battle/BattleUI";
 import WindowManager from "../../../framework/manager/WindowManager";
 import { WindowCfgs } from "../../sys/consts/WindowCfgs";
@@ -16,7 +15,6 @@ import LevelFunc from "../../sys/func/LevelFunc";
 import InstanceEffect from "../instance/InstanceEffect";
 import LogsManager from "../../../framework/manager/LogsManager";
 import LogsErrorCode from "../../../framework/consts/LogsErrorCode";
-import TweenAniManager from "../../sys/manager/TweenAniManager";
 import BattleMapControler from "./BattleMapControler";
 import BattleConst from "../../sys/consts/BattleConst";
 import InstanceRole from "../instance/InstanceRole";
@@ -28,7 +26,6 @@ import InstanceBullet from "../instance/InstanceBullet";
 import GlobalParamsFunc from "../../sys/func/GlobalParamsFunc";
 import TimerManager from "../../../framework/manager/TimerManager";
 import GuideManager from "../../sys/manager/GuideManager";
-import BattleSceneManager from "../../sys/manager/BattleSceneManager";
 import VectorTools from "../../../framework/utils/VectorTools";
 import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand";
 import Client from "../../../framework/common/kakura/Client";
@@ -37,7 +34,8 @@ import UICompConst from "../../../framework/consts/UICompConst";
 import PlaneExpand from "../../../framework/components/d3/PlaneExpand";
 import Animation3DExpand from "../../../framework/components/d3/Animation3DExpand";
 import PhysicsColliderExpand from "../../../framework/components/physics/PhysicsColliderExpand";
-import ImageExpand from "../../../framework/components/ImageExpand";
+import BaseViewExpand from "../../../framework/components/BaseViewExpand";
+import {UnityEngine, System,GameUtils} from 'csharp'
 
 export default class BattleLogicalControler extends BattleControler implements IMessage {
 
@@ -53,7 +51,6 @@ export default class BattleLogicalControler extends BattleControler implements I
 
 	public leftTime: number = 0;	//剩余帧数
 	public battlePrefab: Base3dViewExpand;
-	public elementField;
 
 	//当前分数
 	public currentScore: number = 0;
@@ -140,6 +137,8 @@ export default class BattleLogicalControler extends BattleControler implements I
 	public activeShootEffectArr;
 
 	public battleEnd;
+	//战斗容器
+	public battleCtn:Base3dViewExpand;
 
 	public constructor(ctn: any, ctn2) {
 		super(ctn);
@@ -154,7 +153,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this.explodeEffect = ViewTools.create3DModel(ResourceConst.EFFECT_EXPLODE,"Effect").getChildAt(0);
 		this.bloodEffect = ViewTools.create3DModel(ResourceConst.EFFECT_BLOOD, "Effect");
 		this.shootEffect = ViewTools.create3DModel(ResourceConst.EFFECT_SHOOT, "Effect").getChildAt(0);
-		this.elementField = this.battlePrefab.getChildByName("element_field") as Base3dViewExpand;
+		this.battleCtn = this.battlePrefab.getChildByName("element_field");
 		this.effectArr = [];
 		this.roleArr = []
 		this.bulletArr = [];
@@ -179,35 +178,26 @@ export default class BattleLogicalControler extends BattleControler implements I
 	public setData(data) {
 
 		while (this.activeExplodeEffectArr.length) {
-			var explodeEffect = this.activeExplodeEffectArr.pop();
-			explodeEffect.active = false;
+			var explodeEffect:Base3dViewExpand = this.activeExplodeEffectArr.pop();
+			explodeEffect.setActive(false) ;
 			this.explodeEffectArr.push(explodeEffect);
 		}
 		while (this.activeBloodEffectArr.length) {
 			var bloodEffect = this.activeBloodEffectArr.pop();
-			bloodEffect.active = false;
+			bloodEffect.setActive(false) ;
 			this.bloodEffectArr.push(bloodEffect);
 		}
 		while (this.activeShootEffectArr.length) {
 			var shootEffect = this.activeShootEffectArr.pop();
-			shootEffect.active = false;
+			shootEffect.setActive(false) ;
 			this.shootEffectArr.push(shootEffect);
 		}
 		//初始化统计控制器
 		this.statistControler.setData();
 		this.battleData = data;
 		this.preCreateEffGroup();
-		// this.levelCfgData = LevelFunc.instance.getLevelInfoById(data.levelId);
-		// this.battleState = BattleConst.battleState_in;
-		// this.currentTerrainIndex = 0;
-		// this._isGamePause = false
-		// this.rankInfo =[];
 		this.updateCallFuncGroup = {};
-		// //地图信息
-		// this.mapInfoArr = [];
 		this.mapControler.setData(data);
-		// // this.propControler.setData();
-		// this.tweenControler.setData();
 		this.initGame(data);
 
 	}
@@ -352,18 +342,22 @@ export default class BattleLogicalControler extends BattleControler implements I
 			instance.getView().active = true;
 			instance.setData(data);
 			view = instance.getView();
-			this.battleScene.addChild(view);
+			this.battleCtn.addChild(view);
 		} else {
 			instance = new classModel(this);
 			var resurl: string = resName
-			view = ViewTools.create3DModel(resurl, "Effect").getChildAt(0);
+			if(model == BattleConst.model_bullet){
+				view = ViewTools.create3DModel(resurl, "Bullet").getChildAt(0);
+			} else if(model == BattleConst.model_effect){
+				view = ViewTools.create3DModel(resurl, "Effect").getChildAt(0);
+			}
+			
 			if (!view) {
 				LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "这个资源不存在:", resurl);
 			}
-			view = ViewTools.cloneOneView(view);
 			instance.setView(view);
 			instance.setData(data);
-			this.battleScene.addChild(view);
+			this.battleCtn.addChild(view);
 			//如果是角色 那么记录初始坐标
 			if (model == BattleConst.model_role) {
 				var childView: Base3dViewExpand = view.getChildAt(0)
@@ -397,8 +391,8 @@ export default class BattleLogicalControler extends BattleControler implements I
 	 * @param viewScale  视图缩放系数
 	 */
 	public createInstanceDefault(info: any, cacheId, object, classModel, shadow = null) {
-		var instance = PoolTools.getItem(cacheId, PoolCode.pool_model_battle);
-		var view;
+		var instance:any = PoolTools.getItem(cacheId, PoolCode.pool_model_battle);
+		var view:Base3dViewExpand;
 		var data = { id: info.name + "_" + info.id, type: info.type }
 		LogsManager.echo("battle", "创建实例:", "model:");
 		if (instance) {
@@ -418,33 +412,29 @@ export default class BattleLogicalControler extends BattleControler implements I
 		if (!view) {
 			LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "这个资源不存在");
 		}
-		view = view.clone();
+		view =ViewTools.cloneOneView(view,UICompConst.comp_base3d);
 
 		instance.setView(view, info.transform[0], info.transform[1], info.transform[2]);
 		instance.setData(data);
 
 
 
-		this.elementField.addChild(view);
+		this.battleCtn.addChild(view);
 
-		view.transform.localPositionX = info.transform[0];
-		view.transform.localPositionY = info.transform[1];
-		view.transform.localPositionZ = info.transform[2];
-		view.transform.localRotationEulerX = info.transform[3];
-		view.transform.localRotationEulerY = info.transform[4];
-		view.transform.localRotationEulerZ = info.transform[5];
-		view.transform.localScaleX = info.transform[6];
-		view.transform.localScaleY = info.transform[7];
-		view.transform.localScaleZ = info.transform[8];
+		view.set3dPos(info.transform[0],info.transform[1],info.transform[2]);
+		view.set3dRotation(info.transform[3],info.transform[4],info.transform[5]);
+		
+		view.setScale(info.transform[6],info.transform[7],info.transform[8])
 
 
-		view.instance = instance;
+
+		view["battleInstance"] = instance;
 
 		instance.param = {};
 		instance.param.transform = info.transform;
-		instance.param["x1"] = view.transform.localPositionX;
-		instance.param["y1"] = view.transform.localPositionY;
-		instance.param["z1"] = view.transform.localPositionZ;
+		instance.param["x1"] = info.transform[0];
+		instance.param["y1"] = info.transform[1];
+		instance.param["z1"] = info.transform[2];
 
 		for (var index in info.param) {
 			switch (info.param[index]) {
@@ -480,23 +470,6 @@ export default class BattleLogicalControler extends BattleControler implements I
 			TimerManager.instance.registObjUpdate(instance.patrol,instance);
 		}
 
-		if (shadow) {
-			var shadowObj = shadow.clone()
-			// view.addChild(shadowObj);
-			shadowObj.transform.localScaleX = instance.shape.sizeX * instance._myView.transform.localScaleX * GlobalParamsFunc.instance.getGlobalCfgDatas("shadowSize").num / 1000 || 1.5;
-			shadowObj.transform.localScaleY = instance.shape.sizeZ * instance._myView.transform.localScaleZ * GlobalParamsFunc.instance.getGlobalCfgDatas("shadowSize").num / 1000 || 1.5;
-			shadowObj.transform.localPositionX = instance._myView.transform.localPositionX;
-			shadowObj.transform.localPositionY = 0.2;
-			shadowObj.transform.localPositionZ = instance._myView.transform.localPositionZ;
-
-			shadowObj.transform.localRotationEulerX = 90;
-			shadowObj.transform.localRotationEulerY = instance._myView.transform.localRotationEulerY;
-
-			this.elementField.addChild(shadowObj);
-			shadowObj.instance = instance;
-			instance.shadow = shadowObj;
-			this.shadowList.push(shadowObj);
-		}
 
 		return instance;
 	}
@@ -578,7 +551,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 	public createExplode(pos, range) {
 		var dis = range;
 		// WindowManager.ShowTip("生成爆炸 距离" + dis);
-		var explodeEffect;
+		var explodeEffect:Base3dViewExpand;
 		if (this.explodeEffectArr.length) {
 			explodeEffect = this.explodeEffectArr.pop();
 		}
@@ -586,18 +559,16 @@ export default class BattleLogicalControler extends BattleControler implements I
 			explodeEffect = this.explodeEffect.clone();
 		}
 		this.activeExplodeEffectArr.push(explodeEffect);
-		this.battleScene.addChild(explodeEffect);
-		explodeEffect.transform.position.x = pos.x;
-		explodeEffect.transform.position.y = pos.y;
-		explodeEffect.transform.position.z = pos.z;
-		explodeEffect.transform.position = explodeEffect.transform.position;
-		for (var part of explodeEffect._children) {
-			part.transform.scale.x = part.transform.scale.y = part.transform.scale.z = range / 1.5;
-			part.transform.localScale = part.transform.scale;
-		}
-		explodeEffect.active = true;
+		this.battleCtn.addChild(explodeEffect);
+		explodeEffect.set3dPos(pos.x,pos.y,pos.z);
+
+		// for (var part of explodeEffect._children) {
+		// 	part.transform.scale.x = part.transform.scale.y = part.transform.scale.z = range / 1.5;
+		// 	part.transform.localScale = part.transform.scale;
+		// }
+		explodeEffect.setActive( true);
 		var tempFunc = ()=>{
-			if (explodeEffect.active) {
+			if (explodeEffect.isActive()) {
 				var roleArr = this.roleArr;
 				for(var i = roleArr.length-1;i>=0; i--){
 					var instance = roleArr[i];
@@ -739,6 +710,18 @@ export default class BattleLogicalControler extends BattleControler implements I
 				}, this, 1000);
 			}
 		}
+	}
+
+
+	//根据组件获取实例
+	public  getInstanceByComp(gameObj: UnityEngine.GameObject){
+		var view:BaseViewExpand =  ViewTools.getBaseViewByCobj(gameObj);
+		if(!view){
+			return null;
+		}
+		//给view动态赋值battleInstance
+		return view["battleInstance"];
+
 	}
 
 	//销毁游戏

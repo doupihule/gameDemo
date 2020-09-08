@@ -11,14 +11,20 @@ const LabelExpand_1 = require("./LabelExpand");
 const SpineGraphicExpand_1 = require("./SpineGraphicExpand");
 const ResourceCommonConst_1 = require("../consts/ResourceCommonConst");
 const ResourceManager_1 = require("../manager/ResourceManager");
-const Base3dViewExpand_1 = require("./Base3dViewExpand");
+const Base3dViewExpand_1 = require("./d3/Base3dViewExpand");
 const UIBaseView_1 = require("./UIBaseView");
+const PlaneExpand_1 = require("./d3/PlaneExpand");
+const CameraExpand_1 = require("./d3/CameraExpand");
+const PhysicsColliderExpand_1 = require("./physics/PhysicsColliderExpand");
+const Animation3DExpand_1 = require("./d3/Animation3DExpand");
+const Particle3dExpand_1 = require("./d3/Particle3dExpand");
+const RigidbodyExpand_1 = require("./physics/RigidbodyExpand");
 class ViewTools {
     //自动绑定cobj
     static autoBindingCObj(cobj, forceBinding = false, targetCompType = null) {
         var baseView = ViewTools.cobjMap.get(cobj);
         if (!baseView) {
-            baseView = this.getBaseViewByCobj(cobj, forceBinding, targetCompType);
+            baseView = this.createBaseViewByCobj(cobj, forceBinding, targetCompType);
             if (baseView) {
                 ViewTools.cobjMap.set(cobj, baseView);
             }
@@ -34,8 +40,11 @@ class ViewTools {
     static clearCobjToBaseView(cobj) {
         ViewTools.cobjMap.delete(cobj);
     }
+    static getBaseViewByCobj(cobj) {
+        return ViewTools.cobjMap.get(cobj);
+    }
     //forceBinding 是否强制绑定.主要是针对没有定义名字的对象. 比如有时也需要通过getChildAt获取
-    static getBaseViewByCobj(cobj, forceBinding = false, targetCompType = null) {
+    static createBaseViewByCobj(cobj, forceBinding = false, targetCompType = null) {
         var name = cobj.name;
         var uiType;
         //如果手动指定组件类型
@@ -45,7 +54,7 @@ class ViewTools {
         else {
             uiType = name.split("_")[0];
         }
-        var viewClassName = UICompConst_1.default.classMap[uiType];
+        var viewClassName = this.compClassMap[uiType];
         if (!viewClassName) {
             if (forceBinding) {
                 LogsManager.echo("这个对象没有指定合法命名", name);
@@ -113,14 +122,33 @@ class ViewTools {
     static createLabel(str, wid = 100, hei = 50, fontSize = 24, align = 4, supportRichText = false, fontStyle = 0, lineSpace = 1) {
         return new LabelExpand_1.default(null);
     }
+    //创建一个平面
+    static createPlaneBy3p(v1, v2, v3) {
+        var plane = new PlaneExpand_1.default();
+        return plane;
+    }
+    //创建一个3d容器
+    static create3dContainer(name) {
+        var ctn = new Base3dViewExpand_1.default();
+        var cobj = new csharp_1.UnityEngine.GameObject();
+        ctn.setCObject(cobj);
+        ctn.name = name;
+        return ctn;
+    }
     //创建3d模型 role1, role目录
     static create3DModel(modelName, shortPath, boundlename = ResourceCommonConst_1.default.boundle_model3d, outclone = false, compType = UICompConst_1.default.comp_base3d) {
         var cobj = ResourceManager_1.default.get3dmodelRes(modelName, shortPath, boundlename, outclone);
-        return this.autoBindingCObj(cobj, true, compType);
+        var basiView = this.autoBindingCObj(cobj, true, compType);
+        //初始化设置取消激活
+        basiView.setActive(false);
+        return basiView;
     }
-    //clone一个对象
-    static cloneOneView(obj, compType = UICompConst_1.default.comp_base) {
+    //clone一个对象 compType为空 会使用obj的uitype
+    static cloneOneView(obj, compType = null) {
         var cloneCobj;
+        if (compType == null) {
+            compType = obj.uitype;
+        }
         //如果是baseview
         if (obj.__cobject) {
             cloneCobj = csharp_1.UnityEngine.GameObject.Instantiate(obj.__cobject);
@@ -130,7 +158,35 @@ class ViewTools {
         }
         return this.autoBindingCObj(cloneCobj, true, compType);
     }
+    //全局搜索查找对象
+    static findObject(name, compType = null) {
+        var cobj = csharp_1.UnityEngine.GameObject.Find(name);
+        if (!cobj) {
+            LogsManager.warn("没有找到对象:", name);
+            return null;
+        }
+        return this.autoBindingCObj(cobj, true, compType);
+    }
 }
 exports.default = ViewTools;
+ViewTools.compClassMap = {
+    base: { cl: BaseViewExpand_1.default, cname: "GameObject" },
+    btn: { cl: ButtonExpand_1.default, cname: "Button" },
+    img: { cl: ImageExpand_1.default, cname: "Image" },
+    ctn: { cl: BaseContainer_1.default, cname: "GameObject" },
+    label: { cl: LabelExpand_1.default, cname: "Label" },
+    input: { cl: LabelExpand_1.default, cname: "Label" },
+    list: { cl: ListExpand_1.default, cname: "List" },
+    spine: { cl: SpineGraphicExpand_1.default, cname: "SpineGraphic" },
+    ui: { cl: UIBaseView_1.default, cname: "GameObject" },
+    base3d: { cl: Base3dViewExpand_1.default, cname: "GameObject" },
+    camera: { cl: CameraExpand_1.default, cname: "Camera" },
+    plane: { cl: PlaneExpand_1.default, cname: "Plane" },
+    animator3d: { cl: Animation3DExpand_1.default, cname: "Animator" },
+    particle3d: { cl: Particle3dExpand_1.default, cname: "Particle" },
+    collider: { cl: PhysicsColliderExpand_1.default, cname: "Collider" },
+    rigidbody3d: { cl: RigidbodyExpand_1.default, cname: "Rigidbody" },
+    colliderListener: { cname: "ColliderListenerExpand" },
+};
 ViewTools.cobjMap = new Map();
 //# sourceMappingURL=ViewTools.js.map

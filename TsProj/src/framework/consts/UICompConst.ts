@@ -20,6 +20,9 @@ export default class UICompConst {
 	static  comp_collider = "collider";		//碰撞器
 	static  comp_rigidbody3d = "rigidbody3d";	//3d刚体
 
+	//碰撞检测事件侦听. 这个一般自己绑定组件实现.继承BaseCompExpand即可
+	static  comp_colliderListener = "colliderListener";
+
 
 	static  posStyle_2d:number = 1;
 	static  posStyle_3d:number = 2;

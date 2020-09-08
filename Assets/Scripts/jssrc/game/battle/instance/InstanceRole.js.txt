@@ -1,0 +1,188 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const InstanceMove_1 = require("./InstanceMove");
+const BattleConst_1 = require("../../sys/consts/BattleConst");
+const ColliderController_1 = require("../controler/ColliderController");
+const UICompConst_1 = require("../../../framework/consts/UICompConst");
+//车的基类 
+class InstanceRole extends InstanceMove_1.default {
+    constructor(controller) {
+        super(controller);
+        //目前车的速度方式修改 x代表前进方向的速度. y代表 高度.z 代表换道时的速度
+        this.isPlayer = false;
+        //翻滚的角度
+        this._flyAng = 0;
+        this._initFlyAng = 0;
+        //当前的最大速度,  超车的时候 最大速度会变化 并且有持续时间
+        this.maxSpeed = 0;
+        //摆头角度
+        this._headRadian = 0;
+        this.dead = false;
+    }
+    setData(data) {
+        super.setData(data);
+        this.type = data.type;
+        this.explodeState = false;
+        this.initStand();
+        this.dead = false;
+        var collider = this._myView.getChildByName("collider");
+        if (collider) {
+            collider.setActive(true);
+        }
+    }
+    setColl(isRigid) {
+        if (isRigid) {
+            if (!this.colliderCtrl) {
+                this.colliderCtrl = this._myView.getComponent(UICompConst_1.default.comp_colliderListener, new ColliderController_1.default());
+                this.colliderCtrl.instance = this;
+                this.colliderCtrl.controller = this.controller;
+            }
+            this.rigid = this._myView.getComponent(UICompConst_1.default.comp_rigidbody3d);
+            if (this.rigid) {
+                var wall = this._myView;
+                // var shape = this.rigid.colliderShape as Laya.BoxColliderShape;
+                // shape.localOffset = VectorTools.createVec3(shape.localOffset.x * this.param.transform[6], shape.localOffset.y * this.param.transform[7], shape.localOffset.z * this.param.transform[8]);
+                if (this.param.weight > 0) {
+                    this.rigid.mass = this.param.weight;
+                    this.rigid.friction = 1;
+                    this.rigid.rollingFriction = 1;
+                    this.rigid.linearDamping = 0.2;
+                    this.rigid.angularDamping = 0.1;
+                }
+                this.shape = null;
+            }
+        }
+        else {
+            var physicsCollider;
+            physicsCollider = this._myView.getChildByName("collider").getComponent(UICompConst_1.default.comp_collider);
+            if (physicsCollider) {
+                // this.rigid.isKinematic = false;
+                var wall = this._myView;
+                // var rigid = wall.getComponent(Laya.Rigidbody3D) as Laya.Rigidbody3D;
+                // var shape = physicsCollider.colliderShape as Laya.BoxColliderShape;
+                // shape.localOffset = VectorTools.createVec3(shape.localOffset.x * this.param.transform[6], shape.localOffset.y * this.param.transform[7], shape.localOffset.z * this.param.transform[8]);
+                //
+                // this.shape = shape;
+            }
+        }
+    }
+    destroyPre() {
+    }
+    refreshShadow(shadow) {
+    }
+    //缓动结束 销毁自己
+    onTweenEnd() {
+        this.controller.destoryRole(this);
+    }
+    //当被设置成缓存
+    onSetToCache() {
+        super.onSetToCache();
+        this._shakeInfo = null;
+        if (this.weiqiEff) {
+            this.weiqiEff.getView().active = false;
+        }
+    }
+    explode() {
+        this.tweenExplode();
+        this.controller.createExplode(this.pos, this.param.explodeRange);
+    }
+    tweenExplode() {
+        // if (!this.colliderCtrl) {
+        //     this.colliderCtrl = this._myView.addComponent(ColliderController);
+        //     this.colliderCtrl.instance = this;
+        //     this.colliderCtrl.controller = this.controller;
+        // }
+        // this.explodeState = true;
+        // var transform = this._myView.transform;
+        // VectorTools.scale(transform.scale, 5, transform.scale);
+        // transform.scale = transform.scale;
+        // TimerManager.instance.setTimeout(() => {
+        //     this.controller.destoryRole(this)
+        // }, this, 500);
+    }
+    //重写执行逻辑函数
+    doAiLogical() {
+        this.checkMoveEnd();
+        if (this._myState == BattleConst_1.default.state_move) {
+            this.checkHit();
+        }
+    }
+    //碰撞检测
+    checkHit() {
+        //做碰撞检测 
+        var arr = this.controller.roleArr;
+        var speedSquared;
+        var hasHit = false;
+        //倒序遍历 防止中途删除怪物导致卡死
+        for (var i = arr.length - 1; i >= 0; i--) {
+            var monster = arr[i];
+            if (!monster.collider) {
+                continue;
+            }
+            if (monster == this) {
+                continue;
+            }
+            // if (!monster.checkCanBeHited()) {
+            //     continue;
+            // }
+            //如果已经击中过怪物了 不能继续打了
+            // if (this.hitedArr.indexOf(monster) != -1) {
+            //     continue;
+            // }
+            //计算距离
+            // var disSqure =  VectorTools.distanceSquared(this.pos,monster.pos);
+            var dx = monster.pos.x - this.pos.x;
+            var dy = monster.pos.z - this.pos.z;
+            var wid = 6.6; //monster.collider.colliderShape.sizeX//monster.knockSizeBox[0];
+            var hei = 1; //monster.collider.colliderShape.sizeZ//monster.knockSizeBox[1];
+            //
+            if (dx <= wid / 2 && dx >= -wid / 2 && dy < hei && dy > -hei) {
+                // LogsManager.echo("battle __打中怪物")
+                // this.onHitMonster(monster, dx, dy)
+                // hasHit = true;
+                this.param;
+                // this.initStand();
+            }
+            // if(disSqure < wid/2  || disSqure)
+        }
+        // //如果击中了怪物 那么震动 .放到外面的原因是防止 因为同时击中2个怪调用2次震动
+        // if (hasHit) {
+        //     //震屏
+        //     UserInfo.platform.vibrate(false);
+        // }
+    }
+    //实现坐标
+    realShowView() {
+        if (!this._myView) {
+            return;
+        }
+        var sp;
+        if (!this.rigid || this.rigid.isKinematic) {
+            this._myView.set3dPos(this.pos.x, this.pos.y, this.pos.z);
+        }
+    }
+    patrol() {
+        if (this) {
+            if (this.param.autoMoveSpeed) {
+                var speed = this.param.autoMoveSpeed * 0.05;
+                var dis = Math.sqrt(Math.pow(this.param.x2 - this.param.x1, 2) + Math.pow(this.param.y2 - this.param.y1, 2) + Math.pow(this.param.z2 - this.param.z1, 2));
+                if (!this.patrolFlag) {
+                    this.initMove((this.param.x2 - this.param.x1) / dis * speed, (this.param.y2 - this.param.y1) / dis * speed, (this.param.z2 - this.param.z1) / dis * speed);
+                    if (this.pos.x > this.param.x2) {
+                        this.patrolFlag = true;
+                    }
+                }
+                else {
+                    this.initMove((this.param.x1 - this.param.x2) / dis * speed, (this.param.y1 - this.param.y2) / dis * speed, (this.param.z1 - this.param.z2) / dis * speed);
+                    if (this.pos.x < this.param.x1) {
+                        this.patrolFlag = false;
+                    }
+                }
+            }
+        }
+        // if(this.param.patrolRotate){
+        // }
+    }
+}
+exports.default = InstanceRole;
+//# sourceMappingURL=InstanceRole.js.map

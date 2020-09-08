@@ -21,26 +21,29 @@ class Main {
         var thisObj = this;
         global.initGame = function (stageRoot, uiRoot) {
             thisObj.initWindowEnv();
-            GlobalData_1.default.initStage(stageRoot, uiRoot);
-            ViewTools_1.default.init();
-            BaseFunc_1.default.setCfgExportType(BaseFunc_1.default.exportType_New);
-            var size = GlobalData_1.default.uiRoot.getViewRect();
-            ScreenAdapterTools_1.default.checkScreenFixMode(size.x, size.y);
-            // //初始化全局变量
-            FrameWorkHandle_1.default.init();
-            //
-            PackConfigManager_1.default.initCfgs();
-            UserInfo_1.default.init();
-            if (UserInfo_1.default.isSystemIos()) {
-                UserInfo_1.default.adMediaType = UserInfo_1.PlatformIdType.adMedia_gdt;
-            }
-            FileUtils_1.default.initRootCachePath();
-            //初始化引擎扩展
-            EngineExpand_1.default.initEngineExpand();
-            UserInfo_1.default.platform.setSystemInfo();
-            new MainModule_1.default();
+            TimerManager_1.default.instance.setTimeout(thisObj.delayEnterGame, thisObj, 2000, stageRoot, uiRoot);
         };
         this.showMainModule();
+    }
+    delayEnterGame(stageRoot, uiRoot) {
+        GlobalData_1.default.initStage(stageRoot, uiRoot);
+        ViewTools_1.default.init();
+        BaseFunc_1.default.setCfgExportType(BaseFunc_1.default.exportType_New);
+        var size = GlobalData_1.default.uiRoot.getViewRect();
+        ScreenAdapterTools_1.default.checkScreenFixMode(size.x, size.y);
+        // //初始化全局变量
+        FrameWorkHandle_1.default.init();
+        //
+        PackConfigManager_1.default.initCfgs();
+        UserInfo_1.default.init();
+        if (UserInfo_1.default.isSystemIos()) {
+            UserInfo_1.default.adMediaType = UserInfo_1.PlatformIdType.adMedia_gdt;
+        }
+        FileUtils_1.default.initRootCachePath();
+        //初始化引擎扩展
+        EngineExpand_1.default.initEngineExpand();
+        UserInfo_1.default.platform.setSystemInfo();
+        new MainModule_1.default();
     }
     showMainModule() {
     }

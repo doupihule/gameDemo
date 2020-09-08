@@ -1,0 +1,103 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const SoundManager_1 = require("../../../framework/manager/SoundManager");
+const MusicConst_1 = require("../../sys/consts/MusicConst");
+const csharp_1 = require("csharp");
+const VectorTools_1 = require("../../../framework/utils/VectorTools");
+const BaseCompExpand_1 = require("../../../framework/components/BaseCompExpand");
+const PhysicsTools_1 = require("../../../framework/components/physics/PhysicsTools");
+class ColliderController extends BaseCompExpand_1.default {
+    constructor() {
+        super();
+        this.ray = PhysicsTools_1.default.createRay(VectorTools_1.default.createVec3(), VectorTools_1.default.createVec3());
+        this.rayHit = PhysicsTools_1.default.createHitInfo();
+    }
+    initComponent(targetcomp, owner) {
+        super.initComponent(targetcomp, owner);
+        targetcomp.OnCollisionEnterDelegate = new csharp_1.GameUtils.CollisionDelege(this.onCollisionEnter.bind(this));
+        targetcomp.OnTriggerEnterDelegate = new csharp_1.GameUtils.ColliderDelege(this.onTriggerEnter.bind(this));
+    }
+    //碰撞检测
+    onCollisionEnter(collEvent) {
+        this.collisionLogic(collEvent);
+    }
+    onCollisionStay(collEvent) {
+    }
+    onCollisionExit(collEvent) {
+    }
+    //触发器检测
+    onTriggerEnter(other) {
+        this.TriggerLogic(other);
+    }
+    //触发器碰撞停留
+    onTriggerStay(other) {
+    }
+    //触发器碰撞退出
+    onTriggerExit(other) {
+    }
+    collisionLogic(collEvent) {
+        var otherView = collEvent.other.gameObject;
+        var otherInstance = this.controller.getInstanceByComp(otherView);
+        if (otherView.name == "role_beijing") {
+            return;
+        }
+        if (!this.instance) {
+            return;
+        }
+        if (this.instance.type == "Bullet") {
+            this.TriggerLogic(collEvent.other);
+        }
+        else {
+            if (otherView.name.indexOf("border") != -1) {
+                this.instance.controller.destoryRole(this.instance);
+                return;
+            }
+            if (!otherInstance) {
+                return;
+            }
+            if (otherInstance.type == "Bullet") {
+                return;
+            }
+            if (otherInstance.param.rebound) {
+            }
+            if (otherInstance.type == "Target") {
+                if (this.controller.roleDead(otherInstance)) {
+                    SoundManager_1.default.playSE(MusicConst_1.MusicConst.SOUND_HITDIE);
+                }
+                return;
+            }
+        }
+    }
+    TriggerLogic(other) {
+        var otherView = other.gameObject;
+        var otherInstance = this.controller.getInstanceByComp(otherView);
+        if (!this.instance) {
+            return;
+        }
+        if (this.instance.type == "Bullet") {
+            return;
+        }
+        else {
+            if (otherView.name.indexOf("border") != -1) {
+                this.instance.controller.destoryRole(this.instance);
+                return;
+            }
+            if (!otherInstance) {
+                return;
+            }
+            if (otherInstance.type == "Bullet") {
+                return;
+            }
+            if (otherInstance.param.rebound) {
+            }
+            if (otherInstance.type == "Target") {
+                if (this.controller.roleDead(otherInstance)) {
+                    SoundManager_1.default.playSE(MusicConst_1.MusicConst.SOUND_HITDIE);
+                }
+                return;
+            }
+        }
+    }
+}
+exports.default = ColliderController;
+//# sourceMappingURL=ColliderController.js.map

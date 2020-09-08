@@ -1,0 +1,24 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BaseViewExpand_1 = require("../BaseViewExpand");
+const UICompConst_1 = require("../../consts/UICompConst");
+class Base3dViewExpand extends BaseViewExpand_1.default {
+    constructor() {
+        super();
+        //坐标样式是 1 3d坐标
+        this.posStyle = UICompConst_1.default.posStyle_3d;
+        this.uitype = UICompConst_1.default.comp_base3d;
+    }
+    setCObject(cobj) {
+        super.setCObject(cobj);
+        //初始化3d旋转视野
+        var vec = this.__ctransform.eulerAngles;
+        var ratotion3d = this.rotationTrans;
+        ratotion3d.x = vec.x;
+        ratotion3d.y = vec.y;
+        ratotion3d.z = vec.z;
+        return this;
+    }
+}
+exports.default = Base3dViewExpand;
+//# sourceMappingURL=Base3dViewExpand.js.map

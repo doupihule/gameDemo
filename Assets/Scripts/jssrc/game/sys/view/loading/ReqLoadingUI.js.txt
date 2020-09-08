@@ -10,8 +10,7 @@ class ReqLoadingUI extends BaseContainer_1.default {
         super();
         this.rollAsset = ViewTools_1.default.createLabel("loading...", 100, 30, 24);
         this.rollAsset.setColor(0xff, 0xff, 0xff);
-        this.rollAsset.x = GlobalData_1.default.uiRoot.width - 150;
-        this.rollAsset.y = GlobalData_1.default.uiRoot.height - 50;
+        this.rollAsset.set2dPos(GlobalData_1.default.uiRoot.width - 150, GlobalData_1.default.uiRoot.height - 50);
         this.addChild(this.rollAsset);
         this.mouseEnabled = true;
         this.mouseThrough = false;

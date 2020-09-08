@@ -1051,7 +1051,7 @@ namespace PuertsStaticWrap
                     {
                         
                         var Arg0 = argHelper0.GetString(false);
-                        var result = obj.Find(Arg0);
+                        var result = obj.FindChild(Arg0);
                         
                         Puerts.ResultHelper.Set((int)data, isolate, info, result);
                         
@@ -1177,7 +1177,7 @@ namespace PuertsStaticWrap
                     
                     {
                         
-                        var result = obj.childCount;
+                        var result = obj.GetChildCount();
                         
                         Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
                         

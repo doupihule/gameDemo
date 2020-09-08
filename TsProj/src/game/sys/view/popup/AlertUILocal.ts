@@ -92,8 +92,7 @@ export default class AlertUILocal extends UIBaseView {
 		}
 		if (this.msgLab == null) {
 			this.msgLab = ViewTools.createLabel("",contentBgWidth - 100,130,24);
-			this.msgLab.x = contentBgX + 50;
-			this.msgLab.y = contentBgY + 75;
+			this.msgLab.set2dPos(contentBgX + 50,contentBgY + 75);
 			this.msgLab.set2dPos(contentBgX + 50,contentBgY + 75);
 			this.msgLab.setColor(0xff,0xff,0xff,0xff)
 			this.msgLab.setWrapStyle();
@@ -149,12 +148,12 @@ export default class AlertUILocal extends UIBaseView {
 		if (data.type == 2) {
 			this.sureBtn.visible = true;
 			this.cancleBtn.visible = true;
-			this.sureBtn.x = this.btncenterX - this.btnOffset;
-			this.cancleBtn.x = this.btncenterX + this.btnOffset;
+			this.sureBtn.set2dPos(this.btncenterX - this.btnOffset,this.sureBtn.y);
+			this.cancleBtn.set2dPos(this.btncenterX - this.btnOffset,this.cancleBtn.y);
 		} else {
 			this.sureBtn.visible = true;
 			this.cancleBtn.visible = false;
-			this.sureBtn.x = this.btncenterX
+			this.sureBtn.set2dPos(this.btncenterX ,this.sureBtn.y);
 		}
 
 	}

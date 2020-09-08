@@ -38,7 +38,7 @@ export default class ViewTools {
 		particle3d:{cl:Particle3dExpand,cname:"Particle"},
 		collider:{cl:PhysicsColliderExpand,cname:"Collider"},
 		rigidbody3d:{cl:RigidbodyExpand,cname:"Rigidbody"},
-
+		colliderListener:{cname:"ColliderListenerExpand"},
 
 	}
 
@@ -47,7 +47,7 @@ export default class ViewTools {
 	static autoBindingCObj(cobj:UnityEngine.GameObject,forceBinding:boolean =false,targetCompType:string =null){
 		var baseView:BaseViewExpand = ViewTools.cobjMap.get(cobj) as BaseViewExpand;
 		if (!baseView){
-			 baseView = this.getBaseViewByCobj(cobj,forceBinding,targetCompType);
+			 baseView = this.createBaseViewByCobj(cobj,forceBinding,targetCompType);
 			 if (baseView){
 				 ViewTools.cobjMap.set(cobj,baseView);
 			 }
@@ -66,9 +66,13 @@ export default class ViewTools {
 		ViewTools.cobjMap.delete(cobj);
 	}
 
+	static  getBaseViewByCobj(cobj:UnityEngine.GameObject){
+		return ViewTools.cobjMap.get(cobj);
+	}
+
 
 	//forceBinding 是否强制绑定.主要是针对没有定义名字的对象. 比如有时也需要通过getChildAt获取
-	static  getBaseViewByCobj(cobj:UnityEngine.GameObject,forceBinding:boolean =false,targetCompType:string = null){
+	static  createBaseViewByCobj(cobj:UnityEngine.GameObject,forceBinding:boolean =false,targetCompType:string = null){
 		var name:string = cobj.name
 		var uiType:string ;
 		//如果手动指定组件类型
@@ -151,8 +155,9 @@ export default class ViewTools {
 	static  create3dContainer(name){
 		var ctn = new Base3dViewExpand();
 		var cobj = new UnityEngine.GameObject();
-		ctn.name = name;
 		ctn.setCObject(cobj);
+		ctn.name = name;
+		
 		return ctn;
 
 	}
@@ -163,7 +168,10 @@ export default class ViewTools {
 	//创建3d模型 role1, role目录
 	static create3DModel(modelName,shortPath:string , boundlename:string=ResourceCommonConst.boundle_model3d, outclone:boolean =false, compType:string = UICompConst.comp_base3d):any{
 		var cobj:any = ResourceManager.get3dmodelRes(modelName,shortPath,boundlename,outclone);
-		return this.autoBindingCObj(cobj,true,compType) as any;
+		var basiView:BaseViewExpand =  this.autoBindingCObj(cobj,true,compType) ;
+		//初始化设置取消激活
+		basiView.setActive(false);
+		return basiView as any;
 	}
 
 
@@ -171,7 +179,7 @@ export default class ViewTools {
 	static  cloneOneView(obj:any,compType:string = null ){
 		var cloneCobj ;
 		if (compType == null){
-			compType = obj.uiType;
+			compType = obj.uitype;
 		}
 		//如果是baseview
 		if (obj.__cobject){
@@ -180,6 +188,17 @@ export default class ViewTools {
 			cloneCobj = UnityEngine.GameObject.Instantiate(obj) as any;
 		}
 		return this.autoBindingCObj(cloneCobj,true, compType);
+	}
+
+	//全局搜索查找对象
+	static findObject(name:string,compType:string = null){
+		var cobj = UnityEngine.GameObject.Find(name);
+		if(!cobj){
+			LogsManager.warn("没有找到对象:",name);
+			return null
+		}
+
+		return this.autoBindingCObj(cobj,true, compType);
 	}
 
 

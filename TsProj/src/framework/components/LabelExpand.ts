@@ -35,6 +35,10 @@ export default class LabelExpand extends BaseViewExpand{
 		this.__textComp.text = str;
 	}
 
+	public  changeText(str:string){
+		this.setText(str);
+	}
+
 	public  set text(str:string){
 		this.setText(str);
 	}

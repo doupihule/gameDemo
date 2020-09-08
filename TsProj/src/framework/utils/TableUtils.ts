@@ -1,6 +1,7 @@
 /**
  * 一些json对象工具
  */
+import Table = WebAssembly.Table;
 
 //
 
@@ -375,6 +376,18 @@ export default class TableUtils {
 		}
 		return rt;
 	}
+
+	static  tempArr:any[] = [];
+	static  c_func(thisObj:any,func:Function,...args){
+		return function (...agrs2) {
+			var tempArr = TableUtils.tempArr
+			tempArr.length =0;
+			TableUtils.copyOneArr(args,tempArr);
+			TableUtils.copyOneArr(agrs2,tempArr);
+			func.apply(thisObj,tempArr);
+		}
+	}
+
 
 
 }

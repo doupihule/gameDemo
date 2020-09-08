@@ -1,7 +1,5 @@
 import BaseFunc from "../../../framework/func/BaseFunc";
-import ResourceConst from "../consts/ResourceConst";
 import WindowManager from "../../../framework/manager/WindowManager";
-import RolesFunc from "./RolesFunc";
 import DataResourceConst from "../consts/DataResourceConst";
 
 export default class DataResourceFunc extends BaseFunc {

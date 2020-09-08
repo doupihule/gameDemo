@@ -1,4 +1,4 @@
-import { ui } from "../../../../ui/layaMaxUI";
+
 import UserModel from "../../model/UserModel";
 import WindowManager from "../../../../framework/manager/WindowManager";
 import { WindowCfgs } from "../../consts/WindowCfgs";
@@ -12,18 +12,33 @@ import UserExtModel from "../../model/UserExtModel";
 import Client from "../../../../framework/common/kakura/Client";
 import GlobalParamsFunc from "../../func/GlobalParamsFunc";
 import TranslateFunc from "../../../../framework/func/TranslateFunc";
-import BattleServer from "../../server/BattleServer";
-import { DataResourceType } from "../../func/DataResourceFunc";
 import ShareOrTvManager from "../../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "../../func/ShareTvOrderFunc";
+import DataResourceConst from "../../consts/DataResourceConst";
+import ImageExpand from "../../../../framework/components/ImageExpand";
+import UIBaseView from "../../../../framework/components/UIBaseView";
+import ButtonExpand from "../../../../framework/components/ButtonExpand";
+import ListExpand from "../../../../framework/components/ListExpand";
+import LabelExpand from "../../../../framework/components/LabelExpand";
+import BattleServer from "../../server/BattleServer";
+import Table = WebAssembly.Table;
+import TableUtils from "../../../../framework/utils/TableUtils";
 
 ;
 
 
-export class StageSelectUI extends ui.gameui.StageSelectUI implements IMessage {
+export class StageSelectUI extends UIBaseView implements IMessage {
 
     page = 1;
     maxPage = 1;
+    public  returnBtn:ButtonExpand;
+    public  leftBtn:ButtonExpand;
+    public  rightBtn:ButtonExpand;
+    public  m_list:ListExpand;
+    public  pointList:ListExpand;
+    public  coinNum:LabelExpand;
+    public  goldNum:LabelExpand;
+    public  bg:ImageExpand;
 
     constructor() {
         super();
@@ -61,10 +76,10 @@ export class StageSelectUI extends ui.gameui.StageSelectUI implements IMessage {
         var page = this.page;
         switch (page) {
             case 1:
-                this.bg.skin = "native/main/main_ba_beijing.png";
+                this.bg.setSkin( "native/main/main_ba_beijing.png");
                 break;
             case 2:
-                this.bg.skin = "native/main/main_ba_beijing.png";
+                this.bg.setSkin( "native/main/main_ba_beijing.png");
                 break;
         }
         if (page <= 0) {
@@ -86,7 +101,7 @@ export class StageSelectUI extends ui.gameui.StageSelectUI implements IMessage {
         list.sort(this.compare);
         this.m_list.repeatY = list.length;
         this.m_list.array = list;//FuncRoom.getInstance().getRooms();
-        this.m_list.renderHandler = new Laya.Handler(this, this.onListRender);
+        this.m_list.renderHandler = TableUtils.c_func(this, this.onListRender);
 
         var pointList = [];
         for (var index = 0; index < this.maxPage; index++) {
@@ -94,32 +109,32 @@ export class StageSelectUI extends ui.gameui.StageSelectUI implements IMessage {
         }
         this.pointList.repeatX = pointList.length;
         this.pointList.array = pointList;//FuncRoom.getInstance().getRooms();
-        this.pointList.renderHandler = new Laya.Handler(this, this.onPointListRender);
-        this.pointList.x = 372 - this.pointList.width / 2;
+        this.pointList.renderHandler = TableUtils.c_func( this,this.onPointListRender);
+        this.pointList.set2dPos( 372 - this.pointList.width / 2,this.pointList.y);
     }
 
     public compare(a, b): any {
         return a - b;
     }
 
-    private onPointListRender(cell: Laya.Box, index: number): void {
+    private onPointListRender(cell: any, index: number): void {
         var data = this.pointList.array[index];
 
         var point = cell.getChildByName("point") as ImageExpand;
         if (data == this.page) {
-            point.skin = "native/main/battle_image_fanye2.png";
+            point.setSkin( "native/main/battle_image_fanye2.png");
         }
         else {
-            point.skin = "native/main/battle_image_fanye1.png";
+            point.setSkin( "native/main/battle_image_fanye1.png");
         }
     }
 
-    private onListRender(cell: Laya.Box, index: number): void {
+    private onListRender(cell: any, index: number): void {
         var id = this.m_list.array[index];
 
         var box = cell.getChildByName("box") as ImageExpand;
 
-        var levelId = box.getChildByName("levelId") as Laya.Label;
+        var levelId = box.getChildByName("levelId") as LabelExpand;
         levelId.text = "" + (id);
 
         var star1 = box.getChildByName("star1") as ImageExpand;
@@ -128,15 +143,15 @@ export class StageSelectUI extends ui.gameui.StageSelectUI implements IMessage {
 
         var rank = UserModel.instance.getstageRank(id);
 
-        star1.skin = "native/main/common_image_xing2.png";
-        star2.skin = "native/main/common_image_xing2.png";
-        star3.skin = "native/main/common_image_xing2.png";
+        star1.setSkin( "native/main/common_image_xing2.png");
+        star2.setSkin( "native/main/common_image_xing2.png");
+        star3.setSkin(  "native/main/common_image_xing2.png");
         if (rank >= 1) {
-            star1.skin = "native/main/common_image_xing1.png";
+            star1.setSkin(  "native/main/common_image_xing1.png");
             if (rank >= 2) {
-                star2.skin = "native/main/common_image_xing1.png";
+                star2.setSkin(  "native/main/common_image_xing1.png");
                 if (rank >= 3) {
-                    star3.skin = "native/main/common_image_xing1.png";
+                    star3.setSkin(  "native/main/common_image_xing1.png");
                 }
             }
         }
@@ -168,7 +183,7 @@ export class StageSelectUI extends ui.gameui.StageSelectUI implements IMessage {
             var freeSpType = ShareOrTvManager.instance.getShareOrTvType(ShareTvOrderFunc.SHARELINE_FREE_SP);
             //没有视频或者分享，加体力按钮隐藏
             if (freeSpType != ShareOrTvManager.TYPE_QUICKRECEIVE) {
-                WindowManager.OpenUI(WindowCfgs.FreePowerUI, { type: DataResourceType.SP });
+                WindowManager.OpenUI(WindowCfgs.FreePowerUI, { type: DataResourceConst.SP });
             }
             else {
                 WindowManager.ShowTip(TranslateFunc.instance.getTranslate("#tid_power_01"));

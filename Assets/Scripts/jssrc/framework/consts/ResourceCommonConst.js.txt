@@ -13,4 +13,6 @@ ResourceCommonConst.boundle_model3d = "model3dab";
 ResourceCommonConst.UIResPath = "Assets/UI/UIRes/";
 ResourceCommonConst.baseLabelPrefeb = "base/BaseLabel";
 ResourceCommonConst.baseContainerPrefeb = "base/BaseContainer";
+ResourceCommonConst.SHARE_IMG = "uisource/common/common_image_fenxiang.png";
+ResourceCommonConst.VIDEO_IMG = "uisource/common/common_image_shipin.png";
 //# sourceMappingURL=ResourceCommonConst.js.map

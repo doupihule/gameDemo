@@ -4,6 +4,7 @@ import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand"
 import PhysicsColliderExpand from "../../../framework/components/physics/PhysicsColliderExpand";
 import VectorTools from "../../../framework/utils/VectorTools";
 import UICompConst from "../../../framework/consts/UICompConst";
+import RigidbodyExpand from "../../../framework/components/physics/RigidbodyExpand";
 
 /**
  * author:xd
@@ -40,7 +41,8 @@ export default class InstanceBasic {
 	//视图缩放系数
 	public viewScale: number = 1;
 
-	public rigid;
+	public rigid:RigidbodyExpand;
+	public type:string = "Basic"
 
 	public constructor(controller: any) {
 		//拿到游戏控制器和数据

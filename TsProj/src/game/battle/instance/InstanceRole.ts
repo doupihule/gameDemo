@@ -3,6 +3,10 @@ import BattleFunc from "../../sys/func/BattleFunc";
 import InstanceEffect from "./InstanceEffect";
 import BattleConst from "../../sys/consts/BattleConst";
 import ColliderController from "../controler/ColliderController";
+import RigidbodyExpand from "../../../framework/components/physics/RigidbodyExpand";
+import UICompConst from "../../../framework/consts/UICompConst";
+import VectorTools from "../../../framework/utils/VectorTools";
+import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand";
 
 //车的基类 
 export default class InstanceRole extends InstanceMove {
@@ -53,13 +57,14 @@ export default class InstanceRole extends InstanceMove {
 
     private colliderCtrl: ColliderController;
 
-    public rigid: Laya.Rigidbody3D;
+    public rigid: RigidbodyExpand;
 
     public patrolFlag;
 
     public dead = false;
 
     public shape;
+    
 
     public shadow;
 
@@ -75,25 +80,23 @@ export default class InstanceRole extends InstanceMove {
         this.dead = false;
         var collider = this._myView.getChildByName("collider");
         if (collider) {
-            collider.active = true;
+            collider.setActive(true);
         }
     }
 
     public setColl(isRigid) {
         if (isRigid) {
             if (!this.colliderCtrl) {
-                this.colliderCtrl = this._myView.addComponent(ColliderController);
+                this.colliderCtrl = this._myView.getComponent(UICompConst.comp_colliderListener,new  ColliderController());
                 this.colliderCtrl.instance = this;
                 this.colliderCtrl.controller = this.controller;
             }
 
-            this.rigid = this._myView.getComponent(Laya.Rigidbody3D);
+            this.rigid = this._myView.getComponent(UICompConst.comp_rigidbody3d);
             if (this.rigid) {
-                // this.rigid.isKinematic = false;
                 var wall = this._myView;
-                // var rigid = wall.getComponent(Laya.Rigidbody3D) as Laya.Rigidbody3D;
-                var shape = this.rigid.colliderShape as Laya.BoxColliderShape;
-                shape.localOffset = VectorTools.createVec3(shape.localOffset.x * this.param.transform[6], shape.localOffset.y * this.param.transform[7], shape.localOffset.z * this.param.transform[8]);
+                // var shape = this.rigid.colliderShape as Laya.BoxColliderShape;
+                // shape.localOffset = VectorTools.createVec3(shape.localOffset.x * this.param.transform[6], shape.localOffset.y * this.param.transform[7], shape.localOffset.z * this.param.transform[8]);
 
                 if (this.param.weight > 0) {
                     this.rigid.mass = this.param.weight;
@@ -101,56 +104,31 @@ export default class InstanceRole extends InstanceMove {
                     this.rigid.rollingFriction = 1;
                     this.rigid.linearDamping = 0.2;
                     this.rigid.angularDamping = 0.1;
-                    //if (this.param.autoMoveSpeed) {
-                    //    this.rigid.isKinematic = true;
-                    //}
                 }
-
-                this.shape = shape;
+                this.shape = null;
             }
         }
         else {
-            var physicsCollider = this._myView.getComponent(Laya.PhysicsCollider);
+            var physicsCollider
+            physicsCollider = this._myView.getChildByName("collider").getComponent(UICompConst.comp_collider);
             if (physicsCollider) {
                 // this.rigid.isKinematic = false;
                 var wall = this._myView;
                 // var rigid = wall.getComponent(Laya.Rigidbody3D) as Laya.Rigidbody3D;
-                var shape = physicsCollider.colliderShape as Laya.BoxColliderShape;
-                shape.localOffset = VectorTools.createVec3(shape.localOffset.x * this.param.transform[6], shape.localOffset.y * this.param.transform[7], shape.localOffset.z * this.param.transform[8]);
-            }
-            physicsCollider = this._myView.getChildByName("collider").getComponent(Laya.PhysicsCollider);
-            if (physicsCollider) {
-                // this.rigid.isKinematic = false;
-                var wall = this._myView;
-                // var rigid = wall.getComponent(Laya.Rigidbody3D) as Laya.Rigidbody3D;
-                var shape = physicsCollider.colliderShape as Laya.BoxColliderShape;
-                shape.localOffset = VectorTools.createVec3(shape.localOffset.x * this.param.transform[6], shape.localOffset.y * this.param.transform[7], shape.localOffset.z * this.param.transform[8]);
-
-                this.shape = shape;
+                // var shape = physicsCollider.colliderShape as Laya.BoxColliderShape;
+                // shape.localOffset = VectorTools.createVec3(shape.localOffset.x * this.param.transform[6], shape.localOffset.y * this.param.transform[7], shape.localOffset.z * this.param.transform[8]);
+                //
+                // this.shape = shape;
             }
         }
 
     }
 
     destroyPre() {
-        if (this.shadow)
-            this.shadow.destroy();
     }
 
 
-    public refreshShadow(shadow) {
-        if (shadow) {
-            shadow.transform.localPositionX = shadow.instance._myView.transform.localPositionX;
-            // shadowObj.transform.localPositionY = 0.2;
-            shadow.transform.localPositionZ = shadow.instance._myView.transform.localPositionZ;
-
-            shadow.transform.localRotationEulerY = shadow.instance._myView.transform.localRotationEulerY;
-            
-            // console.log(shadow.instance.name);
-            // console.log(shadow.transform.localRotationEulerX);
-            // console.log(shadow.transform.localRotationEulerY);
-            // console.log(shadow.transform.localRotationEulerZ);
-        }
+    public refreshShadow(shadow:Base3dViewExpand) {
     }
 
     //缓动结束 销毁自己
@@ -194,7 +172,6 @@ export default class InstanceRole extends InstanceMove {
 
             this.checkHit();
         }
-        this.refreshShadow(this.shadow);
     }
 
     //碰撞检测
@@ -253,7 +230,7 @@ export default class InstanceRole extends InstanceMove {
         }
         var sp: Base3dViewExpand;
         if (!this.rigid || this.rigid.isKinematic) {
-            this._myView.transform.localPosition = this.pos
+            this._myView.set3dPos(this.pos.x,this.pos.y,this.pos.z);
         }
     }
 
@@ -264,9 +241,7 @@ export default class InstanceRole extends InstanceMove {
                 var dis = Math.sqrt(Math.pow(this.param.x2 - this.param.x1, 2) + Math.pow(this.param.y2 - this.param.y1, 2) + Math.pow(this.param.z2 - this.param.z1, 2));
                 if (!this.patrolFlag) {
                     this.initMove((this.param.x2 - this.param.x1) / dis * speed, (this.param.y2 - this.param.y1) / dis * speed, (this.param.z2 - this.param.z1) / dis * speed)
-                    // this.speed.x = ;
-                    // this.speed.y = ;
-                    // this.speed.z = ;
+                    
                     if (this.pos.x > this.param.x2) {
                         this.patrolFlag = true;
                     }
@@ -274,9 +249,7 @@ export default class InstanceRole extends InstanceMove {
                 else {
 
                     this.initMove((this.param.x1 - this.param.x2) / dis * speed, (this.param.y1 - this.param.y2) / dis * speed, (this.param.z1 - this.param.z2) / dis * speed)
-                    // this.speed.x = this.param.x1 - this.param.x2;
-                    // this.speed.y = this.param.y1 - this.param.y2;
-                    // this.speed.z = this.param.z1 - this.param.z2;
+                   
                     if (this.pos.x < this.param.x1) {
                         this.patrolFlag = false;
                     }

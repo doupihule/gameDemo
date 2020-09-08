@@ -57,7 +57,7 @@ export default class WindowManager {
 		WindowManager.SwitchUIAPI(UIName, null, null, params);
 	}
 
-	public static SwitchUI(openUIName: any, closeUIName: any, args) {
+	public static SwitchUI(openUIName: any, closeUIName: any, args = null) {
 		WindowManager.SwitchUIAPI(openUIName, null, closeUIName, args);
 	}
 

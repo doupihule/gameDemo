@@ -8,6 +8,8 @@ import { MusicConst } from "../../sys/consts/MusicConst";
 import CameraExpand from "../../../framework/components/d3/CameraExpand";
 import VectorTools from "../../../framework/utils/VectorTools";
 import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand";
+import PhysicsTools from "../../../framework/components/physics/PhysicsTools";
+import BattleConst from "../../sys/consts/BattleConst";
 
 //主角类
 export default class InstancePlayer extends InstanceRole {
@@ -36,7 +38,7 @@ export default class InstancePlayer extends InstanceRole {
 
 
     //目标射击点
-    public targetShootPos: {x,y,z};
+    public targetShootPos: { x, y, z };
     //枪口距离锚点的长度单位米 ,主要用来对子弹的 
     public shootOffset: number = 2.3;
     //换弹时间
@@ -65,7 +67,9 @@ export default class InstancePlayer extends InstanceRole {
     //主摄像头
     private mainCamera: CameraExpand;
     //触摸点对应的射线 
-    public touchRay: Laya.Ray;
+    public touchRay: { origin, direction };
+    public touchRayOrigin: { x, y, z };
+    public touchRayDirection: { x, y, z };
 
     //连击数 
     public combCount: number = 0;
@@ -82,15 +86,13 @@ export default class InstancePlayer extends InstanceRole {
     public maxEnergy: number = 100
 
 
-    private line;
+    private line: Base3dViewExpand;
 
-    private rayDir = VectorTools.createVec3();
 
-    private rayOri = VectorTools.createVec3();
 
-    private ray = new Laya.Ray(this.rayOri, this.rayDir);
+    private ray;
 
-    private rayHit = new Laya.HitResult();
+    private rayHit;
 
     private rayNoColl = 0;
 
@@ -99,7 +101,8 @@ export default class InstancePlayer extends InstanceRole {
 
     constructor(controller) {
         super(controller);
-        this.touchRay = new Laya.Ray(VectorTools.createVec3(0, 0, 0), VectorTools.createVec3(0, 0, 0));
+        this.touchRayOrigin = VectorTools.createVec3();
+        this.touchRayDirection = VectorTools.createVec3();
         this.mainCamera = this.controller.battleCamera;
         this.targetShootPos = VectorTools.createVec3();
 
@@ -116,12 +119,12 @@ export default class InstancePlayer extends InstanceRole {
         this.line = this.controller.line;
         this.line.setActive(false);
         this._myView.addChild(this.line);
-        this.line.set3dPos(this.line.x,this.controller.bulletHeight,-this.shootOffset);
+        this.line.set3dPos(this.line.x, this.controller.bulletHeight, -this.shootOffset);
         this.initRadian();
 
         // this.controller.player = this;
 
-        this.collider.collisionGroup = 64;
+        this.collider.collisionGroup = BattleConst.collion_layer_3;
     }
 
     //重置一些属性
@@ -186,7 +189,7 @@ export default class InstancePlayer extends InstanceRole {
         this._istouchDown = true;
         this.countGunRotate(stagex, stagey);
 
-        this.line.active = true;
+        this.line.setActive(true);
         this.checkHit();
 
     }
@@ -200,12 +203,12 @@ export default class InstancePlayer extends InstanceRole {
     //计算枪的角度 
     public countGunRotate(stagex, stagey) {
         //计算射线
-        var temp: any = new Laya.Vector2();
+        var temp: any = VectorTools.createVec2();
         temp.x = stagex
         temp.y = stagey
-        this.mainCamera.viewportPointToRay(temp, this.touchRay);
+        this.touchRay = this.mainCamera.viewportPointToRay(temp, this.touchRay);
         //计算射线和 游戏平面的交点
-        var rt = Equation3d.intersectsRayAndPlaneRP(this.touchRay, this.controller.gamePlane, this.targetShootPos);
+        var rt = VectorTools.intersectsRayAndPlaneRP(this.touchRay, this.controller.gamePlane, this.targetShootPos);
         if (!rt) {
             LogsManager.errorTag(null, "_为什么这个点和平面没有焦点?....");
         }
@@ -219,52 +222,31 @@ export default class InstancePlayer extends InstanceRole {
 
         var ang = Math.atan2(-dx, -dz);
 
-        this.rayOri.x = this.pos.x;
-        this.rayOri.y = this.pos.y + this.line.transform.localPositionY;
-        this.rayOri.z = this.pos.z;
-        this.rayDir.x = dx;
-        this.rayDir.y = 0;
-        this.rayDir.z = dz;
-        VectorTools.normalize(this.rayDir, this.rayDir)
-        // this.ray.direction = this.rayDir;
-
 
         //设置目标角度z
         this.setRadian(0, ang, 0);
         //设置y
-        //这里y角度单独设置 不作为逻辑依据
-        var rotateyCtn: Base3dViewExpand = this._myView//.getChildAt(0).getChildAt(0);
-
-        // this.line.transform.localScaleY = Math.sqrt(dx * dx + dz * dz) / 2;
-        // this.checkHit();
-
-
-        // rotateyCtn.transform.localRotationEulerY = angY * BattleFunc.radtoAngle
-
-        //设置目标角度y
-        // this.setRadian(null, ang, null);
-
         this.checkHit();
 
-        TimerManager.instance.deleteObjUpdate(null,this.checkHit,this);
-        TimerManager.instance.registObjUpdate(this.checkHit,this);
+        TimerManager.instance.deleteObjUpdate(null, this.checkHit, this);
+        TimerManager.instance.registObjUpdate(this.checkHit, this);
 
 
     }
 
     //碰撞检测
     public checkHit(tmp?) {
-        this.controller.battleScene.physicsSimulation.rayCast(this.ray, this.rayHit, 300, 16, 16);
-        if (!this.line.active) return;
+        PhysicsTools.rayCast(this.ray.origin, this.ray.direction, this.rayHit, 300, BattleConst.collion_layer_1);
+        if (!this.line.isActive()) return;
         if (this.rayHit.succeeded) {
             var dx = this.rayHit.point.x - this.pos.x;
             var dz = this.rayHit.point.z - this.pos.z;
-            this.line.transform.localScaleY = Math.sqrt(dx * dx + dz * dz) - this.shootOffset;
+            this.line.setScale(1, Math.sqrt(dx * dx + dz * dz) - this.shootOffset, 1);
 
             this.rayNoColl = 0;
         } else {
             if (this.rayNoColl >= 3) {
-                this.line.transform.localScaleY = 200;
+                this.line.setScale(1, 200, 1);
             }
             this.rayNoColl++;
         }
@@ -284,8 +266,8 @@ export default class InstancePlayer extends InstanceRole {
 
             this.checkHit(1);
 
-            this.line.active = false;
-            TimerManager.instance.deleteObjUpdate(null,this.checkHit,this);
+            this.line.setActive(false);
+            TimerManager.instance.deleteObjUpdate(null, this.checkHit, this);
 
             this.checkShoot();
         }
@@ -295,7 +277,7 @@ export default class InstancePlayer extends InstanceRole {
     //开始准备射击
     public checkShoot() {
         if (this.controller.bulletNum > 0 && !this.controller.battleEnd) {
-            this.createBullet([1, 0, 0, this._myView.transform.localRotationEulerY]);
+            this.createBullet([1, 0, 0, this._myView.get3dRotation().y]);
             this.controller.bulletNum--;
             this.controller.battleUi.refreshBullet();
         }
@@ -359,7 +341,7 @@ export default class InstancePlayer extends InstanceRole {
         bullet.setViewScale(12);
 
         SoundManager.playSE(MusicConst.SOUND_SHOOT);
-        var shootEffect;
+        var shootEffect:Base3dViewExpand;
         if (this.controller.shootEffectArr.length) {
             shootEffect = this.controller.shootEffectArr.pop();
         }
@@ -368,16 +350,14 @@ export default class InstancePlayer extends InstanceRole {
         }
         this.controller.activeShootEffectArr.push(shootEffect);
 
-        this.controller.battleScene.addChild(shootEffect);
-        shootEffect.transform.position.x = bullet.pos.x;
-        shootEffect.transform.position.y = bullet.pos.y - 1.3;
-        shootEffect.transform.position.z = bullet.pos.z;
-        shootEffect.transform.position = shootEffect.transform.position;
-        shootEffect.transform.rotationEuler = bullet.rotation;
+        this.controller.battleCtn.addChild(shootEffect);
+        shootEffect.set3dPos(bullet.pos.x,bullet.pos.y - 1.3,bullet.pos.z);
+        
+        shootEffect.set3dRotation( bullet.rotation.x, bullet.rotation.y, bullet.rotation.z);
 
-        shootEffect.transform.setWorldLossyScale(shootEffect.transform.getWorldLossyScale());
-        // shootEffect.active = false;
-        shootEffect.active = true;
+
+        // shootEffect._transform.setWorldLossyScale(shootEffect.transform.getWorldLossyScale());
+        shootEffect.setActive(true)
 
     }
 

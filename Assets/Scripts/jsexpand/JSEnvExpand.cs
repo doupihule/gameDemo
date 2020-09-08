@@ -11,7 +11,8 @@ namespace GameUtils
         public static void InitEnv(string debugRoot,int port)
         {
             globalEnv = new JsEnv(new JsAssetsLoader(debugRoot), port);
-
+            globalEnv.UsingAction<int>();
+            globalEnv.UsingAction<float>();
             globalEnv.Eval(@"
                 require('Main')
             ");

@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class BaseCompExpand {
+    //组件基类 一个对象可以绑定n个组件
+    constructor() {
+    }
+    //初始化组件
+    initComponent(targetcomp, owner) {
+        this.__comp = targetcomp;
+        this.__owner = owner;
+    }
+    dispose() {
+        this.__owner = null;
+        this.__comp = null;
+    }
+}
+exports.default = BaseCompExpand;
+//# sourceMappingURL=BaseCompExpand.js.map

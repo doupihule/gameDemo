@@ -1,4 +1,4 @@
-import { ui } from "../../../../ui/layaMaxUI";
+
 import UserModel from "../../model/UserModel";
 import WindowManager from "../../../../framework/manager/WindowManager";
 import { WindowCfgs } from "../../consts/WindowCfgs";
@@ -17,9 +17,17 @@ import TimerManager from "../../../../framework/manager/TimerManager";
 import GlobalParamsFunc from "../../func/GlobalParamsFunc";
 import ShareOrTvManager from "../../../../framework/manager/ShareOrTvManager";
 import ShareTvOrderFunc from "../../func/ShareTvOrderFunc";
+import ButtonExpand from "../../../../framework/components/ButtonExpand";
+import LabelExpand from "../../../../framework/components/LabelExpand";
+import BaseContainer from "../../../../framework/components/BaseContainer";
+import UIBaseView from "../../../../framework/components/UIBaseView";
+import ListExpand from "../../../../framework/components/ListExpand";
+import ImageExpand from "../../../../framework/components/ImageExpand";
+import TableUtils from "../../../../framework/utils/TableUtils";
+import TouchManager from "../../../../framework/manager/TouchManager";
 
 
-export class BattleUI extends ui.gameui.BattleUI implements IMessage {
+export class BattleUI extends UIBaseView implements IMessage {
 
 
     /**头条录制状态 */
@@ -28,6 +36,30 @@ export class BattleUI extends ui.gameui.BattleUI implements IMessage {
     //进度条的最大宽度
     private _currentStar: number = -1;
     private _battleData: any;
+
+    public  leftBtn:ButtonExpand;
+    public  levelTxt:LabelExpand;
+    public  rightBtn:ButtonExpand;
+    public  skipBtn:ButtonExpand;
+    public  skipBtn2:ButtonExpand;
+    public  restartBtn:ButtonExpand;
+    public  restartBtn2:ButtonExpand;
+    public  returnBtn:ButtonExpand;
+    public  skip_skipBtn:ButtonExpand;
+    public  skip_closeBtn:ButtonExpand;
+    public  topGroup:BaseContainer;
+
+    public  m_list:ListExpand;
+
+    public battleBtn:BaseContainer;
+    public  losePanel:BaseContainer;
+    public  skipPanel:BaseContainer;
+    public  battleCtn:BaseContainer;
+
+    public  bg:BaseContainer;
+
+
+
 
 
 
@@ -39,10 +71,10 @@ export class BattleUI extends ui.gameui.BattleUI implements IMessage {
         Message.instance.add(BattleEvent.BATTLEEVENT_BATTLEEXIT, this);
         Message.instance.add(GuideEvent.GUIDEEVENT_OVERTAKEGUIDE, this);
 
-        this.battleCtn.on(Laya.Event.MOUSE_DOWN, this, this.onMouseDown)
-        this.battleCtn.on(Laya.Event.MOUSE_MOVE, this, this.onMouseMove)
-        this.battleCtn.on(Laya.Event.MOUSE_UP, this, this.onMouseEnd)
-        this.battleCtn.on(Laya.Event.MOUSE_OUT, this, this.onMouseEnd)
+        TouchManager.addTouchDown(this.battleCtn,this.onMouseDown,this);
+        TouchManager.addTouchMove(this.battleCtn,this.onMouseMove,this);
+        TouchManager.addTouchUp(this.battleCtn,this.onMouseEnd,this);
+        TouchManager.addTouchOut(this.battleCtn,this.onMouseEnd,this);
 
         new ButtonUtils(this.leftBtn, this.onLeftBtn, this)
         new ButtonUtils(this.levelTxt, this.onReplayGame, this)
@@ -75,20 +107,8 @@ export class BattleUI extends ui.gameui.BattleUI implements IMessage {
 
     //停止声音
     private stopSound() {
-        SoundManager.setSoundSwitch(!SoundManager.soundSwitch)
-        SoundManager.setMusicSwitch(!SoundManager.musicSwitch)
     }
 
-    private createText(x, y, w, h, text) {
-        var label: Laya.Label = new Laya.Label(text);
-        label.width = w;
-        label.height = h;
-        label.x = x;
-        label.y = y;
-        label.fontSize = 30
-        this.addChild(label);
-        return label;
-    }
 
     //重玩关卡
     //继续比赛
@@ -121,13 +141,13 @@ export class BattleUI extends ui.gameui.BattleUI implements IMessage {
         }
         this.m_list.repeatX = list.length;
         this.m_list.array = list;//FuncRoom.getInstance().getRooms();
-        this.m_list.renderHandler = new Laya.Handler(this, this.onListRender);
+        this.m_list.renderHandler = TableUtils.c_func(this, this.onListRender);
         if (isInit) {
-            this.m_list.x = 320 - this.m_list.width / 2;
+            this.m_list.set2dPos( 320 - this.m_list.width / 2,this.m_list.y);
         }
     }
 
-    private onListRender(cell: Laya.Box, index: number): void {
+    private onListRender(cell: any, index: number): void {
         if (index < this.controller.bulletNum) {
             cell.visible = true;
         }
@@ -136,15 +156,14 @@ export class BattleUI extends ui.gameui.BattleUI implements IMessage {
         }
         var img = cell.getChildByName("bulletImg") as ImageExpand;
         if (index < this.controller.basicBulletNum) {
-            img.skin = "native/main/battle_image_zidan.png";
+            img.setSkin("native/main/battle_image_zidan.png" );
         }
         else {
-            img.skin = "native/main/battle_image_zidanjin.png";
+            img.setSkin( "native/main/battle_image_zidanjin.png");
         }
     }
 
     public lose() {
-        StatisticsManager.ins.onEvent(StatisticsManager.LEVEL_FAIL, { levelId: this._battleData.levelId });
         this.battleBtn.visible = false;
         this.losePanel.visible = true;
         if (this.controller) this.controller.battleEnd = false;
@@ -194,14 +213,14 @@ export class BattleUI extends ui.gameui.BattleUI implements IMessage {
             // this.guideGroup.visible = false;
             this.gameStart = true;
         }
-        if (UserModel.instance.getMainGuide() == 0) {
-            var guideId = GuideManager.ins.nowGuideId;
-            if (guideId == 1) {
-                GuideManager.ins.setGuideData(2, GuideManager.GuideType.Static, this, this, null, null, null, null, { pos1: new Laya.Point(150, 750), pos2: new Laya.Point(320, 750) });
-                GuideManager.ins.openGuideUI(2);
-                GuideManager.ins.setGuideTipVisible(1, true);
-            }
-        }
+        // if (UserModel.instance.getMainGuide() == 0) {
+        //     var guideId = GuideManager.ins.nowGuideId;
+        //     if (guideId == 1) {
+        //         GuideManager.ins.setGuideData(2, GuideManager.GuideType.Static, this, this, null, null, null, null, { pos1: new Laya.Point(150, 750), pos2: new Laya.Point(320, 750) });
+        //         GuideManager.ins.openGuideUI(2);
+        //         GuideManager.ins.setGuideTipVisible(1, true);
+        //     }
+        // }
         this.controller.player.onToucheDown(e.stageX, e.stageY);
     }
     private onMouseMove(e) {
@@ -216,26 +235,25 @@ export class BattleUI extends ui.gameui.BattleUI implements IMessage {
             return
         }
         this.controller.player.onTouchEnd(e.stageX, e.stageY);
-        if (GuideManager.ins.nowGuideId == 2) {
-
-            GuideManager.ins.setGuideTipVisible(1, false);
-            GuideManager.ins.setGuideData(3, GuideManager.GuideType.None);
-            GuideManager.ins.openGuideUI(3);
-            TimerManager.instance.setTimeout(() => {
-                if (GuideManager.ins.nowGuideId == 3) {
-                    this.controller.bulletNum++;
-                    this.refreshBullet();
-                    GuideManager.ins.setGuideData(1, GuideManager.GuideType.None, this.battleCtn, this, 200, 200, 100, 650);
-                    GuideManager.ins.openGuideUI(1);
-                }
-            }, this, GlobalParamsFunc.instance.getDataNum("guideAgainTime"));
-        }
+        // if (GuideManager.ins.nowGuideId == 2) {
+        //
+        //     GuideManager.ins.setGuideTipVisible(1, false);
+        //     GuideManager.ins.setGuideData(3, GuideManager.GuideType.None);
+        //     GuideManager.ins.openGuideUI(3);
+        //     TimerManager.instance.setTimeout(() => {
+        //         if (GuideManager.ins.nowGuideId == 3) {
+        //             this.controller.bulletNum++;
+        //             this.refreshBullet();
+        //             GuideManager.ins.setGuideData(1, GuideManager.GuideType.None, this.battleCtn, this, 200, 200, 100, 650);
+        //             GuideManager.ins.openGuideUI(1);
+        //         }
+        //     }, this, GlobalParamsFunc.instance.getDataNum("guideAgainTime"));
+        // }
     }
 
     //战斗开始
     private onBattleStart() {
         this.controller = BattleSceneManager.instance.battleControler;
-        StatisticsManager.ins.onEvent(StatisticsManager.LEVEL_START, { levelId: this._battleData.levelId });
         this.initUI();
         // this.controller.registObjUpdate(this.refreshUI, this);
         this.refreshBullet(true);
@@ -257,16 +275,8 @@ export class BattleUI extends ui.gameui.BattleUI implements IMessage {
                 GuideManager.ins.guideFin(3, () => {
                 }, this, true);
             }
-            var freeSpType = ShareOrTvManager.instance.getShareOrTvType(ShareTvOrderFunc.SHARELINE_UPGRADE);
-            //没有视频或者分享，加体力按钮隐藏
-            if (freeSpType != ShareOrTvManager.TYPE_QUICKRECEIVE) {
-                this.skipBtn.visible = true;
-                this.skipBtn2.visible = true;
-            }
-            else {
-                this.skipBtn.visible = false;
-                this.skipBtn2.visible = false;
-            }
+            this.skipBtn.visible = false;
+            this.skipBtn2.visible = false;
         }
     }
 

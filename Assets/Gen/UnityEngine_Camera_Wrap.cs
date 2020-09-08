@@ -3411,7 +3411,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.nearClipPlane;
+                var result = obj.near;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)
@@ -3427,7 +3427,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.nearClipPlane = argHelper.GetFloat(false);
+                obj.near = argHelper.GetFloat(false);
             }
             catch (Exception e)
             {
@@ -3442,7 +3442,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.farClipPlane;
+                var result = obj.far;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)
@@ -3458,7 +3458,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.farClipPlane = argHelper.GetFloat(false);
+                obj.far = argHelper.GetFloat(false);
             }
             catch (Exception e)
             {
@@ -3473,7 +3473,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.fieldOfView;
+                var result = obj.fov;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)
@@ -3489,7 +3489,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.fieldOfView = argHelper.GetFloat(false);
+                obj.fov = argHelper.GetFloat(false);
             }
             catch (Exception e)
             {
@@ -3504,7 +3504,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.allowHDR;
+                var result = obj.hdr;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
             catch (Exception e)
@@ -3520,7 +3520,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.allowHDR = argHelper.GetBoolean(false);
+                obj.hdr = argHelper.GetBoolean(false);
             }
             catch (Exception e)
             {

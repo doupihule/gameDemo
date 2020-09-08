@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BaseCompExpand_1 = require("../BaseCompExpand");
+class PhysicsColliderExpand extends BaseCompExpand_1.default {
+    set ccdMotionThreshold(value) {
+    }
+    set collisionGroup(value) {
+        this.__owner.__cobject.layer = value;
+    }
+    getBoxSize() {
+        return this.__comp.size;
+    }
+}
+exports.default = PhysicsColliderExpand;
+//# sourceMappingURL=PhysicsColliderExpand.js.map

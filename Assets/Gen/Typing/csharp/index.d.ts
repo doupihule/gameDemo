@@ -812,6 +812,188 @@ declare module 'csharp' {
             public ToString(format: string):string;
             
         }
+        class Renderer extends UnityEngine.Component {
+            
+        }
+        class TrailRenderer extends UnityEngine.Renderer {
+            public numPositions: number;
+            public time: number;
+            public startWidth: number;
+            public endWidth: number;
+            public widthMultiplier: number;
+            public autodestruct: boolean;
+            public emitting: boolean;
+            public numCornerVertices: number;
+            public numCapVertices: number;
+            public minVertexDistance: number;
+            public startColor: UnityEngine.Color;
+            public endColor: UnityEngine.Color;
+            public positionCount: number;
+            public shadowBias: number;
+            public generateLightingData: boolean;
+            public textureMode: UnityEngine.LineTextureMode;
+            public alignment: UnityEngine.LineAlignment;
+            public widthCurve: UnityEngine.AnimationCurve;
+            public colorGradient: UnityEngine.Gradient;
+            public constructor();
+            public SetPosition(index: number, position: UnityEngine.Vector3):void;
+            public GetPosition(index: number):UnityEngine.Vector3;
+            public Clear():void;
+            public BakeMesh(mesh: UnityEngine.Mesh, useTransform: boolean):void;
+            public BakeMesh(mesh: UnityEngine.Mesh, camera: UnityEngine.Camera, useTransform: boolean):void;
+            public GetPositions(positions: UnityEngine.Vector3[]):number;
+            public SetPositions(positions: UnityEngine.Vector3[]):void;
+            public AddPosition(position: UnityEngine.Vector3):void;
+            public AddPositions(positions: UnityEngine.Vector3[]):void;
+            
+        }
+        enum LineTextureMode { Stretch = 0, Tile = 1, DistributePerSegment = 2, RepeatPerSegment = 3 }
+        enum LineAlignment { View = 0, Local = 1, TransformZ = 1 }
+        class Mesh extends UnityEngine.Object {
+            
+        }
+        class AnimationCurve extends System.Object {
+            
+        }
+        class Gradient extends System.Object {
+            
+        }
+        class RaycastHit extends System.ValueType {
+            public collider: UnityEngine.Collider;
+            public point: UnityEngine.Vector3;
+            public normal: UnityEngine.Vector3;
+            public barycentricCoordinate: UnityEngine.Vector3;
+            public distance: number;
+            public triangleIndex: number;
+            public textureCoord: UnityEngine.Vector2;
+            public textureCoord2: UnityEngine.Vector2;
+            public textureCoord1: UnityEngine.Vector2;
+            public transform: UnityEngine.Transform;
+            public rigidbody: UnityEngine.Rigidbody;
+            public lightmapCoord: UnityEngine.Vector2;
+            
+        }
+        class Collider extends UnityEngine.Component {
+            public enabled: boolean;
+            public attachedRigidbody: UnityEngine.Rigidbody;
+            public isTrigger: boolean;
+            public contactOffset: number;
+            public bounds: UnityEngine.Bounds;
+            public sharedMaterial: UnityEngine.PhysicMaterial;
+            public material: UnityEngine.PhysicMaterial;
+            public constructor();
+            public ClosestPoint(position: UnityEngine.Vector3):UnityEngine.Vector3;
+            public Raycast(ray: UnityEngine.Ray, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number):boolean;
+            public ClosestPointOnBounds(position: UnityEngine.Vector3):UnityEngine.Vector3;
+            
+        }
+        class Rigidbody extends UnityEngine.Component {
+            public velocity: UnityEngine.Vector3;
+            public angularVelocity: UnityEngine.Vector3;
+            public drag: number;
+            public angularDrag: number;
+            public mass: number;
+            public useGravity: boolean;
+            public maxDepenetrationVelocity: number;
+            public isKinematic: boolean;
+            public freezeRotation: boolean;
+            public constraints: UnityEngine.RigidbodyConstraints;
+            public collisionDetectionMode: UnityEngine.CollisionDetectionMode;
+            public centerOfMass: UnityEngine.Vector3;
+            public worldCenterOfMass: UnityEngine.Vector3;
+            public inertiaTensorRotation: UnityEngine.Quaternion;
+            public inertiaTensor: UnityEngine.Vector3;
+            public detectCollisions: boolean;
+            public position: UnityEngine.Vector3;
+            public rotation: UnityEngine.Quaternion;
+            public interpolation: UnityEngine.RigidbodyInterpolation;
+            public solverIterations: number;
+            public sleepThreshold: number;
+            public maxAngularVelocity: number;
+            public solverVelocityIterations: number;
+            public sleepVelocity: number;
+            public sleepAngularVelocity: number;
+            public useConeFriction: boolean;
+            public solverIterationCount: number;
+            public solverVelocityIterationCount: number;
+            public constructor();
+            public SetDensity(density: number):void;
+            public MovePosition(position: UnityEngine.Vector3):void;
+            public MoveRotation(rot: UnityEngine.Quaternion):void;
+            public Sleep():void;
+            public IsSleeping():boolean;
+            public WakeUp():void;
+            public ResetCenterOfMass():void;
+            public ResetInertiaTensor():void;
+            public GetRelativePointVelocity(relativePoint: UnityEngine.Vector3):UnityEngine.Vector3;
+            public GetPointVelocity(worldPoint: UnityEngine.Vector3):UnityEngine.Vector3;
+            public SetMaxAngularVelocity(a: number):void;
+            public AddForce(force: UnityEngine.Vector3, mode: UnityEngine.ForceMode):void;
+            public AddForce(force: UnityEngine.Vector3):void;
+            public AddForce(x: number, y: number, z: number, mode: UnityEngine.ForceMode):void;
+            public AddForce(x: number, y: number, z: number):void;
+            public AddRelativeForce(force: UnityEngine.Vector3, mode: UnityEngine.ForceMode):void;
+            public AddRelativeForce(force: UnityEngine.Vector3):void;
+            public AddRelativeForce(x: number, y: number, z: number, mode: UnityEngine.ForceMode):void;
+            public AddRelativeForce(x: number, y: number, z: number):void;
+            public AddTorque(torque: UnityEngine.Vector3, mode: UnityEngine.ForceMode):void;
+            public AddTorque(torque: UnityEngine.Vector3):void;
+            public AddTorque(x: number, y: number, z: number, mode: UnityEngine.ForceMode):void;
+            public AddTorque(x: number, y: number, z: number):void;
+            public AddRelativeTorque(torque: UnityEngine.Vector3, mode: UnityEngine.ForceMode):void;
+            public AddRelativeTorque(torque: UnityEngine.Vector3):void;
+            public AddRelativeTorque(x: number, y: number, z: number, mode: UnityEngine.ForceMode):void;
+            public AddRelativeTorque(x: number, y: number, z: number):void;
+            public AddForceAtPosition(force: UnityEngine.Vector3, position: UnityEngine.Vector3, mode: UnityEngine.ForceMode):void;
+            public AddForceAtPosition(force: UnityEngine.Vector3, position: UnityEngine.Vector3):void;
+            public AddExplosionForce(explosionForce: number, explosionPosition: UnityEngine.Vector3, explosionRadius: number, upwardsModifier: number, mode: UnityEngine.ForceMode):void;
+            public AddExplosionForce(explosionForce: number, explosionPosition: UnityEngine.Vector3, explosionRadius: number, upwardsModifier: number):void;
+            public AddExplosionForce(explosionForce: number, explosionPosition: UnityEngine.Vector3, explosionRadius: number):void;
+            public ClosestPointOnBounds(position: UnityEngine.Vector3):UnityEngine.Vector3;
+            public SweepTest(direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):boolean;
+            public SweepTest(direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>, maxDistance: number):boolean;
+            public SweepTest(direction: UnityEngine.Vector3, hitInfo: $Ref<UnityEngine.RaycastHit>):boolean;
+            public SweepTestAll(direction: UnityEngine.Vector3, maxDistance: number, queryTriggerInteraction: UnityEngine.QueryTriggerInteraction):UnityEngine.RaycastHit[];
+            public SweepTestAll(direction: UnityEngine.Vector3, maxDistance: number):UnityEngine.RaycastHit[];
+            public SweepTestAll(direction: UnityEngine.Vector3):UnityEngine.RaycastHit[];
+            
+        }
+        class PhysicMaterial extends UnityEngine.Object {
+            
+        }
+        class BoxCollider extends UnityEngine.Collider {
+            public center: UnityEngine.Vector3;
+            public size: UnityEngine.Vector3;
+            public extents: UnityEngine.Vector3;
+            public constructor();
+            
+        }
+        class Collision extends System.Object {
+            public relativeVelocity: UnityEngine.Vector3;
+            public rigidbody: UnityEngine.Rigidbody;
+            public collider: UnityEngine.Collider;
+            public transform: UnityEngine.Transform;
+            public gameObject: UnityEngine.GameObject;
+            public contactCount: number;
+            public contacts: UnityEngine.ContactPoint[];
+            public impulse: UnityEngine.Vector3;
+            public impactForceSum: UnityEngine.Vector3;
+            public frictionForceSum: UnityEngine.Vector3;
+            public other: UnityEngine.Component;
+            public constructor();
+            public GetContact(index: number):UnityEngine.ContactPoint;
+            public GetContacts(contacts: UnityEngine.ContactPoint[]):number;
+            public GetEnumerator():System.Collections.IEnumerator;
+            
+        }
+        class ContactPoint extends System.ValueType {
+            
+        }
+        enum RigidbodyConstraints { None = 0, FreezePositionX = 2, FreezePositionY = 4, FreezePositionZ = 8, FreezeRotationX = 16, FreezeRotationY = 32, FreezeRotationZ = 64, FreezePosition = 14, FreezeRotation = 112, FreezeAll = 126 }
+        enum CollisionDetectionMode { Discrete = 0, Continuous = 1, ContinuousDynamic = 2, ContinuousSpeculative = 3 }
+        enum RigidbodyInterpolation { None = 0, Interpolate = 1, Extrapolate = 2 }
+        enum ForceMode { Force = 0, Acceleration = 5, Impulse = 1, VelocityChange = 2 }
+        enum QueryTriggerInteraction { UseGlobal = 0, Ignore = 1, Collide = 2 }
         class Physics extends System.Object {
             public static IgnoreRaycastLayer: number;
             public static DefaultRaycastLayers: number;
@@ -985,32 +1167,7 @@ declare module 'csharp' {
         class PhysicsScene extends System.ValueType {
             
         }
-        class Collider extends UnityEngine.Component {
-            
-        }
-        enum QueryTriggerInteraction { UseGlobal = 0, Ignore = 1, Collide = 2 }
-        class RaycastHit extends System.ValueType {
-            public collider: UnityEngine.Collider;
-            public point: UnityEngine.Vector3;
-            public normal: UnityEngine.Vector3;
-            public barycentricCoordinate: UnityEngine.Vector3;
-            public distance: number;
-            public triangleIndex: number;
-            public textureCoord: UnityEngine.Vector2;
-            public textureCoord2: UnityEngine.Vector2;
-            public textureCoord1: UnityEngine.Vector2;
-            public transform: UnityEngine.Transform;
-            public rigidbody: UnityEngine.Rigidbody;
-            public lightmapCoord: UnityEngine.Vector2;
-            
-        }
-        class Rigidbody extends UnityEngine.Component {
-            
-        }
         class ScriptableObject extends UnityEngine.Object {
-            
-        }
-        class Mesh extends UnityEngine.Object {
             
         }
         class Color32 extends System.ValueType {
@@ -1553,6 +1710,24 @@ declare module 'csharp' {
             public static GetChildByName(tran: UnityEngine.Transform, name: string):UnityEngine.GameObject;
             
         }
+        class ColliderListenerExpand extends UnityEngine.MonoBehaviour {
+            public OnTriggerEnterDelegate: GameUtils.ColliderDelege;
+            public OnTriggerExitDelegate: GameUtils.ColliderDelege;
+            public OnTriggerStayDelegate: GameUtils.ColliderDelege;
+            public OnCollisionEnterDelegate: GameUtils.CollisionDelege;
+            public OnCollisionExitDelegate: GameUtils.CollisionDelege;
+            public OnCollisionStayDelegate: GameUtils.CollisionDelege;
+            public OnControllerColliderHitDelegate: GameUtils.ControllerColliderDelege;
+            public constructor();
+            public destoryDelegate():void;
+            
+        }
+        type ColliderDelege = (other: UnityEngine.Collider) => void;
+        var ColliderDelege: {new (func: (other: UnityEngine.Collider) => void): ColliderDelege;}
+        type CollisionDelege = (collision: UnityEngine.Collision) => void;
+        var CollisionDelege: {new (func: (collision: UnityEngine.Collision) => void): CollisionDelege;}
+        type ControllerColliderDelege = (collision: UnityEngine.ControllerColliderHit) => void;
+        var ControllerColliderDelege: {new (func: (collision: UnityEngine.ControllerColliderHit) => void): ControllerColliderDelege;}
         
     }
     

@@ -11,10 +11,7 @@ const WindowCfgs_1 = require("../consts/WindowCfgs");
 const Message_1 = require("../../../framework/common/Message");
 const FrameWorkEvent_1 = require("../../../framework/event/FrameWorkEvent");
 const TranslateFunc_1 = require("../../../framework/func/TranslateFunc");
-const BattleFunc_1 = require("../func/BattleFunc");
-const BattleConst_1 = require("../consts/BattleConst");
-const SoundManager_1 = require("../../../framework/manager/SoundManager");
-const SwitchModel_1 = require("../model/SwitchModel");
+const LogsManager_1 = require("../../../framework/manager/LogsManager");
 //主要用来处理框架相关不同的逻辑每个游戏独立维护,比如分享不一样的地方.  进入主界面不一样的地方
 class FrameWorkHandle {
     //初始化函数. 需要侦听事件.每个游戏单独处理
@@ -35,8 +32,12 @@ class FrameWorkHandle {
     }
     //针对游戏单独处理
     onStartEnterGameMain() {
-        SoundManager_1.default.setSoundVolume(SwitchModel_1.default.instance.getSwitchByType(SwitchModel_1.default.sound_switch));
-        SoundManager_1.default.setMusicVol(SwitchModel_1.default.instance.getSwitchByType(SwitchModel_1.default.music_switch));
+        // var guideStep = UserModel.instance.getMainGuide();
+        // if (guideStep == 0) {
+        //     BattleSceneManager.instance.enterBattle({ roleId: UserModel.instance.getRole(), levelId: 1 });
+        //     return;
+        // }
+        WindowManager_1.default.SwitchUIFromLoading(WindowCfgs_1.WindowCfgs.GameMainUI, WindowCfgs_1.WindowCfgs.LoginUI);
         if (UserInfo_1.default.platform.shareLinkParams && UserInfo_1.default.platform.shareLinkParams.contentId) {
             StatisticsManager_1.default.ins.onEvent(StatisticsCommonConst_1.default.SHARE_CLICK_ENTER, { contentId: UserInfo_1.default.platform.shareLinkParams.contentId });
         }
@@ -48,52 +49,33 @@ class FrameWorkHandle {
                 UserGlobalModel_1.default.setOtherShareNum(UserInfo_1.default.platform.shareLinkParams.inviterRid, shareAddNum);
             }
         }
-        var guideStep = UserModel_1.default.instance.getMainGuide();
-        //如果没有引导进度信息并且当前最高关卡是0 进入引导
-        if (guideStep == 0 && !UserModel_1.default.instance.getMaxBattleLevel()) {
-            BattleFunc_1.default.curBattleType = BattleConst_1.default.BATTLETYPE_NORMAL;
-            var cartoonSwitch = GlobalParamsFunc_1.default.instance.getDataNum("cartoonSwitch");
-            if (cartoonSwitch) {
-                WindowManager_1.default.SwitchUIFromLoading(WindowCfgs_1.WindowCfgs.CartoonPicUI, WindowCfgs_1.WindowCfgs.LoginUI);
-            }
-            else {
-                WindowManager_1.default.SwitchUIFromLoading(WindowCfgs_1.WindowCfgs.BattleUI, { name: "1-1", levelId: 1 });
-            }
-        }
-        else {
-            WindowManager_1.default.SwitchUIFromLoading(WindowCfgs_1.WindowCfgs.GameMainUI, WindowCfgs_1.WindowCfgs.LoginUI);
-        }
     }
     //当判断是否分享成功. 不同项目自己扩展重写
     onCheckShareSucess(distime, shareExtraData) {
-        // 分享是否成功
-        var shareResult = false;
-        if (UserInfo_1.default.platform._shareNoWait || distime >= 3000) {
-            // 该分享不检查是否分享成功或者分享时长大于3秒
-            shareResult = true;
-        }
+        var shareResult = distime >= 3000;
+        var platformObj = UserInfo_1.default.platform;
         if (shareResult) {
-            UserInfo_1.default.platform.onShareComplete(true);
+            platformObj.onShareComplete(shareResult);
         }
         else {
             //根据不同游戏自己做判断
             var failHandleType = GlobalParamsFunc_1.default.instance.shareHandleType;
             if (failHandleType == 1) {
                 WindowManager_1.default.ShowTip("分享失败，请稍后再试");
-                UserInfo_1.default.platform.onShareComplete(false);
+                platformObj.onShareComplete(shareResult);
             }
             else if (failHandleType == 2) {
                 UserInfo_1.default.platform.showPopTip("提示", TranslateFunc_1.default.shareTranslateArr[Math.floor(Math.random() * TranslateFunc_1.default.shareTranslateArr.length)], {
                     confirmText: TranslateFunc_1.default.shareLabTranslate,
                     success(res) {
                         if (res.confirm) {
-                            LogsManager.echo('用户点击确定,再次拉起分享');
+                            LogsManager_1.default.echo('用户点击确定,再次拉起分享');
                             //再次拉起分享
-                            UserInfo_1.default.platform.share(UserInfo_1.default.platform._shareId, UserInfo_1.default.platform._shareExtraData, UserInfo_1.default.platform._shareCallback, UserInfo_1.default.platform._shareThisObj);
+                            platformObj.share(platformObj._shareId, platformObj._shareExtraData, platformObj.shareCallback, platformObj);
                         }
                         else if (res.cancel) {
-                            LogsManager.echo("用户取消了再次分享");
-                            UserInfo_1.default.platform.onShareComplete(false);
+                            LogsManager_1.default.echo("用户取消了再次分享");
+                            platformObj.onShareComplete(false);
                         }
                     }
                 });

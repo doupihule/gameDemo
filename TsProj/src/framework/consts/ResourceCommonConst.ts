@@ -11,4 +11,7 @@ export  default  class ResourceCommonConst{
 
 	static baseLabelPrefeb = "base/BaseLabel";
 	static baseContainerPrefeb = "base/BaseContainer";
+
+	public static SHARE_IMG = "uisource/common/common_image_fenxiang.png";
+	public static VIDEO_IMG = "uisource/common/common_image_shipin.png";
 }

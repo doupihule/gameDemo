@@ -26,7 +26,7 @@ class UIBaseView extends BaseViewExpand_1.default {
             var childTrans = transform.GetChild(i);
             var name = childTrans.name;
             var uiType = name.split("_")[0];
-            var className = UICompConst_1.default.classMap[uiType];
+            var className = ViewTools_1.default.compClassMap[uiType];
             if (className) {
                 var childGameObj = childTrans.gameObject;
                 var childViewInstance = ViewTools_1.default.autoBindingCObj(childGameObj, true);
@@ -58,6 +58,8 @@ class UIBaseView extends BaseViewExpand_1.default {
     setData(data) {
     }
     close() {
+    }
+    recvMsg(cmd, data) {
     }
     dispose() {
         super.dispose();

@@ -6,6 +6,7 @@ import ViewTools from "../../../framework/components/ViewTools";
 import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand";
 import PhysicsColliderExpand from "../../../framework/components/physics/PhysicsColliderExpand";
 import UICompConst from "../../../framework/consts/UICompConst";
+import BattleConst from "../../sys/consts/BattleConst";
 
 export default class BattleMapControler {
     private controller: BattleLogicalControler
@@ -80,14 +81,6 @@ export default class BattleMapControler {
         this.controller = controller;
         this._mapSpriteCache = []
         this._specailViewArr = [];
-        this._landSp = ViewTools.create3dContainer("_landSp");
-        this._landSp.name = "landSp";
-        this._terrainSp =  ViewTools.create3dContainer("_terrainSp");
-        this._terrainSp.name = "terrainSp"
-        this._signSp = ViewTools.create3dContainer("_signSp");
-        this._signSp.name = "signSp";
-        this._decorationSp = ViewTools.create3dContainer("_decorationSp");
-        this._decorationSp.name = "decorationSp"
     }
 
     //初始化设置数据
@@ -97,8 +90,9 @@ export default class BattleMapControler {
         var info = allInfo.scenes[0].level["level_" + data.levelId];
 
         var idList = {};
+        var objectInfo ;
         for (var index in info) {
-            var objectInfo = info[index];
+            objectInfo = info[index];
             if (idList[objectInfo]) {
                 idList[objectInfo]++;
             }
@@ -112,21 +106,20 @@ export default class BattleMapControler {
         var elementGroup = this.controller.battlePrefab.getChildByName("element_group") as Base3dViewExpand;
         var elementGroupRigid = this.controller.battlePrefab.getChildByName("element_group_rigid") as Base3dViewExpand;
 
-        var shadow = elementGroup.getChildByName("shadow") as Base3dViewExpand;
 
         var staticElement = this.controller.battlePrefab.getChildByName("static_element");
-        var childNums = staticElement.numChildren
+        var childNums = staticElement.numChildren;
         for (var s = 0; s < childNums; s++) {
             var object = staticElement.getChildAt(s);
             var rigids: PhysicsColliderExpand = object.getComponent(UICompConst.comp_collider) as PhysicsColliderExpand;
-            rigids.collisionGroup = 32;
+            rigids.collisionGroup = BattleConst.collion_layer_2;
         }
 
         if (!this.controller.line)
             this.controller.line = this.controller.battlePrefab.getChildByName("element_group").getChildByName("line");
 
         for (var index in info) {
-            var objectInfo = info[index];
+            objectInfo = info[index];
             var obj: Base3dViewExpand;
             var rigid;
             if (objectInfo.param.weight > 0) {
@@ -135,89 +128,36 @@ export default class BattleMapControler {
                 rigid = obj.getComponent(UICompConst.comp_rigidbody3d);
             }
             else {
-                object = (elementGroup.getChildByName(objectInfo.name) as Base3dViewExpand)//.clone() as Base3dViewExpand;
+                obj = (elementGroup.getChildByName(objectInfo.name) as Base3dViewExpand)//.clone() as Base3dViewExpand;
                 rigid = obj.getComponent(UICompConst.comp_collider);
             }
             if (objectInfo.type == "Target") {
-                rigid.collisionGroup = 32;
+                rigid.collisionGroup =  BattleConst.collion_layer_2;
             }
             else {
-                rigid.collisionGroup = 16;
+                rigid.collisionGroup =  BattleConst.collion_layer_1;
             }
             if (objectInfo.type == "Player") {
-                this.controller.player = this.controller.createPlayer(objectInfo, obj, shadow);
+                this.controller.player = this.controller.createPlayer(objectInfo, obj,null);
             }
             else {
-                this.controller.createRole(objectInfo, obj, shadow);
+                this.controller.createRole(objectInfo, obj, null);
             }
         }
 
 
-
-        // this.player = this.controller.player;
-        // this._terrainIndexArr = BattleSceneManager.instance.roadListArr;
-        // //场景装饰
-        // var tempArr = this.controller.levelCfgData.sceneDecoration
-        // this._sceneDecoration = {};
-        // if(tempArr && tempArr.length > 0){
-        //     tempArr = TableUtils.turnCsvArrToGameArr(tempArr);
-        //     for(var i=0; i < tempArr.length; i++){
-        //         var roadIndex = Number(tempArr[i][0]);
-        //         this._sceneDecoration[roadIndex] = tempArr[i];
-        //     }
-        // }
-
-
-        // var scene: Laya.Scene3D = this.controller.battleScene;
-        // if (!scene.getChildByName("landSp")) {
-        //     scene.addChildAt(this._landSp, 0);
-        // }
-
-        // if (!scene.getChildByName("terrainSp")) {
-        //     scene.addChildAt(this._terrainSp, 0);
-        // }
-
-        // var tempP = BattleFunc.tempPoint2;
-        // tempP.y = -10
-        // tempP.x= 0;
-        // tempP.z = 0;
-
-        // // this.initOneView("scene_prop_shuimian",this._landSp,BattleFunc.originPoint,tempP,this._specailViewArr);
-        // if (!scene.getChildByName("signSp")) {
-        //     scene.addChildAt(this._signSp, 1);
-        // }
-        // if (!scene.getChildByName("decorationSp")) {
-        //     scene.addChildAt(this._decorationSp, 2);
-        // }
-        // this._currentIndex = 0;
-        // this._mapSpriteCache = [];
-        // this.initMapInfo();
-        // //初始化controler的mapinfo
-        // this.onEnterNextTerrain(0);
-
-        // //创建起跑线和终点线
-        // // this.createStartAndEnd();
-
-        // //在控制器里面注册一个刷新回调
-        // this.controller.registObjUpdate(this.updateFrame,this);
 
     }
 
     //刷新函数 主要是用来处理动态的地图拼接
     public updateFrame() {
         var playerPos = this.controller.player.pos
-        this._landSp.set3dPos(playerPos.x,-0.1,playerPos.z);
+        // this._landSp.set3dPos(playerPos.x,-0.1,playerPos.z);
     }
 
     //销毁所有地形
     public destoryMap() {
     }
-
-    public get decorationSp() {
-        return this._decorationSp
-    }
-
-
 
 
 }

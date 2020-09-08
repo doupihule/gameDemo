@@ -55,10 +55,12 @@ public class ExamplesCfg
                 typeof(Quaternion),
 
 
-                typeof(Physics),
                 typeof(RaycastHit),
                 typeof(Ray),
-
+                typeof(Collider),
+                typeof(BoxCollider),
+                typeof(Collision),
+                typeof(Rigidbody),
                 typeof(UnityEngine.Physics),
 
                 typeof(Spine.Animation),
@@ -66,14 +68,16 @@ public class ExamplesCfg
                 typeof(Spine.Bone),
                 typeof(SkeletonGraphic),
                 typeof(MeshGeneratorBuffers),
-                
-                
-                
+
+
+
 
                 typeof(ResourceManager),
                 typeof(CommonUtil),
 
                 typeof(ViewExtensionMethods),
+
+                typeof(ColliderListenerExpand),
             };
         }
     }
@@ -86,7 +90,7 @@ public class ExamplesCfg
             return new List<Type>()
             {
                 //打开这个可以优化Vector3的GC，但需要开启unsafe编译
-                typeof(Vector3),
+                //typeof(Vector3),
             };
         }
     }
