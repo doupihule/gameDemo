@@ -68,8 +68,8 @@ export default class MainModule implements IMessage {
 		WindowManager.debugLayer.setSize(ScreenAdapterTools.stageWidth,ScreenAdapterTools.stageHeight);
 		TouchManager.addTouchDown(WindowManager.debugLayer,this.onMouseDown,this);
         TouchManager.addTouchMove(WindowManager.debugLayer,this.onMouseMove,this);
-        // TouchManager.addTouchUp(WindowManager.debugLayer,this.onMouseEnd,this);
-        TouchManager.addTouchOut(WindowManager.debugLayer,this.onMouseEnd,this);
+        TouchManager.addTouchUp(WindowManager.debugLayer,this.onMouseEnd,this);
+        // TouchManager.addTouchOut(WindowManager.debugLayer,this.onMouseEnd,this);
 
 
 	}
