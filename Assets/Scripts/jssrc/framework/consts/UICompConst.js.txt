@@ -1,5 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const puerts_1 = require("puerts");
+const csharp_1 = require("csharp");
 class UICompConst {
 }
 exports.default = UICompConst;
@@ -22,6 +24,17 @@ UICompConst.comp_animator3d = "animator3d"; //动画3d
 UICompConst.comp_particle3d = "particle3d"; //粒子 3d
 UICompConst.comp_collider = "collider"; //碰撞器
 UICompConst.comp_rigidbody3d = "rigidbody3d"; //3d刚体
+UICompConst.comp_trail = "trail"; //拖尾;
+UICompConst.ctype_image = puerts_1.$typeof(csharp_1.UnityEngine.UI.Image);
+UICompConst.ctype_button = puerts_1.$typeof(csharp_1.UnityEngine.UI.Button);
+UICompConst.ctype_label = puerts_1.$typeof(csharp_1.UnityEngine.UI.Text);
+UICompConst.ctype_camera = puerts_1.$typeof(csharp_1.UnityEngine.Camera);
+UICompConst.ctype_animator3d = puerts_1.$typeof(csharp_1.UnityEngine.Animator);
+UICompConst.ctype_particle3d = null; //
+UICompConst.ctype_collider = puerts_1.$typeof(csharp_1.UnityEngine.Collider);
+UICompConst.ctype_rigidbody3d = puerts_1.$typeof(csharp_1.UnityEngine.Rigidbody);
+UICompConst.ctype_colliderListener = puerts_1.$typeof(csharp_1.GameUtils.ColliderListenerExpand);
+UICompConst.ctype_trail = puerts_1.$typeof(csharp_1.UnityEngine.TrailRenderer);
 //碰撞检测事件侦听. 这个一般自己绑定组件实现.继承BaseCompExpand即可
 UICompConst.comp_colliderListener = "colliderListener";
 UICompConst.posStyle_2d = 1;

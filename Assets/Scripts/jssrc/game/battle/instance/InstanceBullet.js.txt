@@ -49,6 +49,7 @@ class InstanceBullet extends InstanceMove_1.default {
             // this.rigid.ccdMotionThreshold = 0.00001;
             // this.rigid.isKinematic = true;
         }
+        this._myView.getChildByName("trail").getComponent(UICompConst_1.default.comp_trail).clear();
     }
     //设置速度
     setSpeedByAng(spd, rx, ry, rz) {
@@ -112,25 +113,25 @@ class InstanceBullet extends InstanceMove_1.default {
         var rt = PhysicsTools_1.default.rayCast(this.rayOrigin, this.rayDirection, this.rayHit, 300, (1 << BattleConst_1.default.collion_layer_1) | (1 << BattleConst_1.default.collion_layer_2));
         if (!rt)
             return;
-        if (this.rayHit.collider) {
+        if (this.rayHit.hitInfo.collider) {
             var tempVector3_1 = VectorTools_1.default.createVec3();
             var tempVector3_2 = VectorTools_1.default.createVec3();
             var tempVector3_3 = VectorTools_1.default.createVec3();
             var tempVector3_4 = VectorTools_1.default.createVec3();
-            VectorTools_1.default.subtract(this.rayHit.point, this.rayOrigin, tempVector3_1);
-            if (VectorTools_1.default.distance(this.rayOrigin, this.rayHit.point) < length) {
-                if (this.coll == this.rayHit.collider) {
+            VectorTools_1.default.subtract(this.rayHit.hitInfo.point, this.rayOrigin, tempVector3_1);
+            if (VectorTools_1.default.distance(this.rayOrigin, this.rayHit.hitInfo.point) < length) {
+                if (this.coll == this.rayHit.hitInfo.collider) {
                     this.coll = null;
                     return;
                 }
                 else {
-                    this.coll = this.rayHit.collider;
+                    this.coll = this.rayHit.hitInfo.collider;
                 }
-                if (this.rayHit.collider.gameObject.name.indexOf("border") != -1) {
+                if (this.rayHit.hitInfo.collider.gameObject.name.indexOf("border") != -1) {
                     this.controller.destoryBullet(this);
                     return;
                 }
-                var collObj = this.controller.getInstanceByComp(this.rayHit.collider.gameObject);
+                var collObj = this.controller.getInstanceByComp(this.rayHit.hitInfo.collider.gameObject);
                 if (collObj) {
                     if (collObj.type == "Target") {
                         if (collObj.param.pierce) {
@@ -156,7 +157,7 @@ class InstanceBullet extends InstanceMove_1.default {
                                 VectorTools_1.default.cloneTo(this.pos, this.rayOrigin);
                                 VectorTools_1.default.cloneTo(this.speed, this.rayDirection);
                                 PhysicsTools_1.default.rayCast(this.rayOrigin, this.rayDirection, this.rayHit, 300);
-                                var normal = this.rayHit.normal;
+                                var normal = this.rayHit.hitInfo.normal;
                                 VectorTools_1.default.scale(normal, -2 * (VectorTools_1.default.dot(tempVector3_1, normal)), tempVector3_2);
                                 VectorTools_1.default.add(tempVector3_1, tempVector3_2, tempVector3_3);
                                 VectorTools_1.default.scale(tempVector3_3, time, tempVector3_4);
@@ -172,7 +173,7 @@ class InstanceBullet extends InstanceMove_1.default {
                                     this.speed.x = speed * (x * Math.cos(ang) - z * Math.sin(ang));
                                     this.speed.z = speed * (x * Math.sin(ang) + z * Math.cos(ang));
                                     var detlaPos = VectorTools_1.default.createVec3();
-                                    VectorTools_1.default.subtract(this.rayHit.point, collObj.pos, detlaPos);
+                                    VectorTools_1.default.subtract(this.rayHit.hitInfo.point, collObj.pos, detlaPos);
                                     var scaleVec = collObj._myView.getScale();
                                     detlaPos.x /= scaleVec.x;
                                     detlaPos.y /= scaleVec.y;
@@ -208,7 +209,7 @@ class InstanceBullet extends InstanceMove_1.default {
                         PhysicsTools_1.default.rayCast(this.rayOrigin, this.rayDirection, this.rayHit, 300, BattleConst_1.default.collion_layer_1);
                         VectorTools_1.default.normalize(this.speed, tempVector3_1);
                         var time = this.speed.x / tempVector3_1.x;
-                        var normal = this.rayHit.normal;
+                        var normal = this.rayHit.hitInfo.normal;
                         VectorTools_1.default.scale(normal, -2 * (VectorTools_1.default.dot(tempVector3_1, normal)), tempVector3_2);
                         VectorTools_1.default.add(tempVector3_1, tempVector3_2, tempVector3_3);
                         VectorTools_1.default.scale(tempVector3_3, time, tempVector3_4);
@@ -217,7 +218,7 @@ class InstanceBullet extends InstanceMove_1.default {
                             this.setAngBySpeed();
                         }
                         VectorTools_1.default.scale(this.speed, 0.0001, tempVector3_4);
-                        VectorTools_1.default.subtract(this.rayHit.point, tempVector3_4, this.pos);
+                        VectorTools_1.default.subtract(this.rayHit.hitInfo.point, tempVector3_4, this.pos);
                         this.isSimulate = true;
                         SoundManager_1.default.playSE(MusicConst_1.MusicConst.SOUND_CRASH);
                         // this.pos = this.rayHit.point;

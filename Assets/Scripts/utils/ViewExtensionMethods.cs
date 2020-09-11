@@ -23,7 +23,7 @@ namespace GameUtils
 
         private static Vector3 _tempVec3 = new Vector3();
         private static Color _tempColor = new Color();
-
+        private static RaycastHit _tempRayhit = new RaycastHit();
         public static bool MouseButtonDown()
         {
             bool pressed = false;
@@ -219,6 +219,11 @@ namespace GameUtils
                 }
             }
             return null;
+        }
+
+        public static RaycastHit GetRaycastHit()
+        {
+            return _tempRayhit;
         }
 
     }

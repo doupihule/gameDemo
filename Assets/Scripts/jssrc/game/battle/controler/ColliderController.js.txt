@@ -3,14 +3,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const SoundManager_1 = require("../../../framework/manager/SoundManager");
 const MusicConst_1 = require("../../sys/consts/MusicConst");
 const csharp_1 = require("csharp");
-const VectorTools_1 = require("../../../framework/utils/VectorTools");
 const BaseCompExpand_1 = require("../../../framework/components/BaseCompExpand");
-const PhysicsTools_1 = require("../../../framework/components/physics/PhysicsTools");
 class ColliderController extends BaseCompExpand_1.default {
     constructor() {
         super();
-        this.ray = PhysicsTools_1.default.createRay(VectorTools_1.default.createVec3(), VectorTools_1.default.createVec3());
-        this.rayHit = PhysicsTools_1.default.createHitInfo();
     }
     initComponent(targetcomp, owner) {
         super.initComponent(targetcomp, owner);

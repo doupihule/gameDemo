@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const csharp_1 = require("csharp");
 const BaseCompExpand_1 = require("../BaseCompExpand");
+const ScreenAdapterTools_1 = require("../../utils/ScreenAdapterTools");
 class CameraExpand extends BaseCompExpand_1.default {
     constructor() {
         super();
@@ -12,9 +13,17 @@ class CameraExpand extends BaseCompExpand_1.default {
         return null;
     }
     viewportPointToRay(v2, ray) {
-        var tempV3 = csharp_1.GameUtils.ViewExtensionMethods.initVec3(v2.x, v2.y, 0);
+        var tempV3 = csharp_1.GameUtils.ViewExtensionMethods.initVec3(v2.x / ScreenAdapterTools_1.default.screenWidth, v2.y / ScreenAdapterTools_1.default.screenHeight, 0);
         var cray = this.__comp.ViewportPointToRay(tempV3);
-        return cray;
+        var origin = cray.origin;
+        var direction = cray.direction;
+        ray.origin.x = origin.x;
+        ray.origin.y = origin.y;
+        ray.origin.z = origin.z;
+        ray.direction.x = direction.x;
+        ray.direction.y = direction.y;
+        ray.direction.z = direction.z;
+        return ray;
     }
 }
 exports.default = CameraExpand;

@@ -1,15 +1,49 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const csharp_1 = require("csharp");
+const csharp_2 = require("csharp");
 class TouchManager {
+    //所有的触摸事件回调 返回固定 (touchParams,自定义的额外参数)
     //触摸按下
     static addTouchDown(baseView, func, thisObj, params = null) {
+        this.registEventTriger(baseView, csharp_2.UnityEngine.EventSystems.EventTriggerType.PointerDown, func, thisObj, params);
     }
     static addTouchMove(baseView, func, thisObj, params = null) {
+        // this.registEventTriger(baseView,UnityEngine.EventSystems.EventTriggerType.MouseMove,func,thisObj,params);
     }
     static addTouchUp(baseView, func, thisObj, params = null) {
+        this.registEventTriger(baseView, csharp_2.UnityEngine.EventSystems.EventTriggerType.PointerUp, func, thisObj, params);
     }
     static addTouchOut(baseView, func, thisObj, params = null) {
+        this.registEventTriger(baseView, csharp_2.UnityEngine.EventSystems.EventTriggerType.PointerUp, func, thisObj, params);
+    }
+    //点击事件
+    static addTouchClick(baseView, func, thisObj, params = null) {
+        this.registEventTriger(baseView, csharp_2.UnityEngine.EventSystems.EventTriggerType.PointerClick, func, thisObj, params);
+    }
+    static registEventTriger(baseView, eventType, func, thisObj, params = null) {
+        var key = "__cacheEvent" + eventType;
+        var __tempMap = baseView[key];
+        if (!__tempMap) {
+            baseView[key] = {};
+            __tempMap = baseView[key];
+            var delegeFunc = new csharp_1.GameUtils.ComponentEventDelege((event) => {
+                var mousePos = csharp_2.UnityEngine.Input.mousePosition;
+                TouchManager.touchParams.x = mousePos.x;
+                TouchManager.touchParams.y = mousePos.y;
+                LogsManager.echo("event:", TouchManager.touchParams.x, TouchManager.touchParams.y, "_type:", eventType);
+                __tempMap.func && __tempMap.func.call(__tempMap.thisObj, TouchManager.touchParams, params);
+            });
+            //存着委托对象
+            __tempMap.delegeFunc = delegeFunc;
+            csharp_1.GameUtils.ComponentExtension.AddCompListener(baseView.__cobject, eventType, delegeFunc);
+        }
+        __tempMap.func = func;
+        __tempMap.thisObj = thisObj;
+        __tempMap.params = params;
     }
 }
 exports.default = TouchManager;
+//触摸事件回调相关参数
+TouchManager.touchParams = { x: 0, y: 0 };
 //# sourceMappingURL=TouchManager.js.map

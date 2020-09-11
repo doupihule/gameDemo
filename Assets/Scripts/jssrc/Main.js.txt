@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const csharp_1 = require("csharp");
 const ViewTools_1 = require("./framework/components/ViewTools");
 const GlobalData_1 = require("./framework/utils/GlobalData");
 const LogsManager_1 = require("./framework/manager/LogsManager");
@@ -30,7 +31,10 @@ class Main {
         ViewTools_1.default.init();
         BaseFunc_1.default.setCfgExportType(BaseFunc_1.default.exportType_New);
         var size = GlobalData_1.default.uiRoot.getViewRect();
+        LogsManager_1.default.echo("ScreenSize:", csharp_1.UnityEngine.Screen.width, csharp_1.UnityEngine.Screen.height);
         ScreenAdapterTools_1.default.checkScreenFixMode(size.x, size.y);
+        ScreenAdapterTools_1.default.screenWidth = csharp_1.UnityEngine.Screen.width;
+        ScreenAdapterTools_1.default.screenHeight = csharp_1.UnityEngine.Screen.height;
         // //初始化全局变量
         FrameWorkHandle_1.default.init();
         //
@@ -59,7 +63,7 @@ class Main {
             window["UserInfo"] = UserInfo_1.default;
         }
         //赋值timemanager
-        window["TimeManager"] = TimerManager_1.default;
+        window["TimerManager"] = TimerManager_1.default;
         window["GlobalData"] = GlobalData_1.default;
     }
 }

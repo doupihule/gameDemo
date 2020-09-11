@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const csharp_1 = require("csharp");
+const VectorTools_1 = require("../../utils/VectorTools");
+class RayExpand {
+    initRay(origin, direction) {
+        this.origin = origin;
+        this.direction = direction;
+        this.__comp = new csharp_1.UnityEngine.Ray(VectorTools_1.default.turnV3ToNativeV3(origin), VectorTools_1.default.turnV3ToNativeV3(direction));
+        return this;
+    }
+}
+exports.default = RayExpand;
+//# sourceMappingURL=RayExpand.js.map

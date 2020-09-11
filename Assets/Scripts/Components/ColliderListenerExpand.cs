@@ -45,7 +45,7 @@ namespace GameUtils
 
         private void OnTriggerEnter(Collider other)
         {
-            Debug.Log("---OnTriggerEnter----");
+            //Debug.Log("---OnTriggerEnter----");
             if (OnTriggerEnterDelegate != null)
             {
                 OnTriggerEnterDelegate(other);
@@ -54,7 +54,7 @@ namespace GameUtils
 
         private void OnTriggerExit(Collider other)
         {
-            Debug.Log("---OnTriggerExit----");
+            //Debug.Log("---OnTriggerExit----");
             if (OnTriggerExitDelegate != null)
             {
                 OnTriggerExitDelegate(other);
@@ -63,7 +63,6 @@ namespace GameUtils
 
         private void OnTriggerStay(Collider other)
         {
-            Debug.Log("---OnTriggerStay----");
             if (OnTriggerStayDelegate != null)
             {
                 OnTriggerStayDelegate(other);
@@ -73,7 +72,7 @@ namespace GameUtils
 
         private void OnCollisionEnter(Collision collision)
         {
-            Debug.Log("---OnCollisionEnter----");
+            //Debug.Log("---OnCollisionEnter----");
             if (OnCollisionEnterDelegate != null)
             {
                 OnCollisionEnterDelegate(collision);
@@ -86,7 +85,7 @@ namespace GameUtils
 
         private void OnCollisionExit(Collision collision)
         {
-            Debug.Log("---OnCollisionExit----");
+            //Debug.Log("---OnCollisionExit----");
             if (OnCollisionExitDelegate != null)
             {
                 OnCollisionExitDelegate(collision);
@@ -95,7 +94,7 @@ namespace GameUtils
 
         private void OnCollisionStay(Collision collision)
         {
-            Debug.Log("---OnCollisionStay----");
+            //Debug.Log("---OnCollisionStay----");
             if (OnCollisionStayDelegate != null)
             {
                 OnCollisionStayDelegate(collision);
@@ -104,7 +103,7 @@ namespace GameUtils
 
         private void OnControllerColliderHit(ControllerColliderHit hit)
         {
-            Debug.Log("---OnCollisionStay----");
+            //Debug.Log("---OnCollisionStay----");
             if (OnControllerColliderHitDelegate != null)
             {
                 OnControllerColliderHitDelegate(hit);

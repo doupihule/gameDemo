@@ -19,6 +19,7 @@ const PhysicsColliderExpand_1 = require("./physics/PhysicsColliderExpand");
 const Animation3DExpand_1 = require("./d3/Animation3DExpand");
 const Particle3dExpand_1 = require("./d3/Particle3dExpand");
 const RigidbodyExpand_1 = require("./physics/RigidbodyExpand");
+const TrailRendererExpand_1 = require("./d3/TrailRendererExpand");
 class ViewTools {
     //自动绑定cobj
     static autoBindingCObj(cobj, forceBinding = false, targetCompType = null) {
@@ -125,6 +126,7 @@ class ViewTools {
     //创建一个平面
     static createPlaneBy3p(v1, v2, v3) {
         var plane = new PlaneExpand_1.default();
+        plane.initWith3P(v1, v2, v3);
         return plane;
     }
     //创建一个3d容器
@@ -170,23 +172,24 @@ class ViewTools {
 }
 exports.default = ViewTools;
 ViewTools.compClassMap = {
-    base: { cl: BaseViewExpand_1.default, cname: "GameObject" },
-    btn: { cl: ButtonExpand_1.default, cname: "Button" },
-    img: { cl: ImageExpand_1.default, cname: "Image" },
+    base: { cl: BaseViewExpand_1.default, cname: "GameObject", ctype: UICompConst_1.default.ctype_image },
+    btn: { cl: ButtonExpand_1.default, cname: "Button", ctype: UICompConst_1.default.ctype_image },
+    img: { cl: ImageExpand_1.default, cname: "Image", ctype: UICompConst_1.default.ctype_image },
     ctn: { cl: BaseContainer_1.default, cname: "GameObject" },
-    label: { cl: LabelExpand_1.default, cname: "Label" },
-    input: { cl: LabelExpand_1.default, cname: "Label" },
+    label: { cl: LabelExpand_1.default, cname: "Label", ctype: UICompConst_1.default.ctype_label },
+    input: { cl: LabelExpand_1.default, cname: "Label", ctype: UICompConst_1.default.ctype_label },
     list: { cl: ListExpand_1.default, cname: "List" },
     spine: { cl: SpineGraphicExpand_1.default, cname: "SpineGraphic" },
     ui: { cl: UIBaseView_1.default, cname: "GameObject" },
     base3d: { cl: Base3dViewExpand_1.default, cname: "GameObject" },
-    camera: { cl: CameraExpand_1.default, cname: "Camera" },
+    camera: { cl: CameraExpand_1.default, cname: "Camera", ctype: UICompConst_1.default.ctype_camera },
     plane: { cl: PlaneExpand_1.default, cname: "Plane" },
-    animator3d: { cl: Animation3DExpand_1.default, cname: "Animator" },
+    animator3d: { cl: Animation3DExpand_1.default, cname: "Animator", ctype: UICompConst_1.default.ctype_animator3d },
     particle3d: { cl: Particle3dExpand_1.default, cname: "Particle" },
-    collider: { cl: PhysicsColliderExpand_1.default, cname: "Collider" },
-    rigidbody3d: { cl: RigidbodyExpand_1.default, cname: "Rigidbody" },
-    colliderListener: { cname: "ColliderListenerExpand" },
+    collider: { cl: PhysicsColliderExpand_1.default, cname: "Collider", ctype: UICompConst_1.default.ctype_collider },
+    rigidbody3d: { cl: RigidbodyExpand_1.default, cname: "Rigidbody", ctype: UICompConst_1.default.ctype_rigidbody3d },
+    colliderListener: { cname: "ColliderListenerExpand", ctype: UICompConst_1.default.ctype_colliderListener },
+    trail: { cl: TrailRendererExpand_1.default, cname: "TrailRenderer", ctype: UICompConst_1.default.ctype_trail }
 };
 ViewTools.cobjMap = new Map();
 //# sourceMappingURL=ViewTools.js.map

@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BaseCompExpand_1 = require("../BaseCompExpand");
+class TrailRendererExpand extends BaseCompExpand_1.default {
+    //清理拖尾
+    clear() {
+        this.__comp.Clear();
+        this.__comp.enabled = false;
+        this.__comp.enabled = true;
+    }
+}
+exports.default = TrailRendererExpand;
+//# sourceMappingURL=TrailRendererExpand.js.map

@@ -1,14 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const BaseCompExpand_1 = require("../BaseCompExpand");
+const csharp_1 = require("csharp");
 const VectorTools_1 = require("../../utils/VectorTools");
-class PlaneExpand extends BaseCompExpand_1.default {
+//plane
+class PlaneExpand {
     constructor() {
-        super();
         this._normalVec = VectorTools_1.default.createVec3();
     }
-    initComponent(targetcomp, owner) {
-        super.initComponent(targetcomp, owner);
+    initWith3P(v1, v2, v3) {
+        var p1 = csharp_1.GameUtils.ViewExtensionMethods.initVec3(v1.x, v1.y, v1.z);
+        var p2 = csharp_1.GameUtils.ViewExtensionMethods.initVec3(v2.x, v2.y, v2.z);
+        var p3 = csharp_1.GameUtils.ViewExtensionMethods.initVec3(v3.x, v3.y, v3.z);
+        this.__comp = new csharp_1.UnityEngine.Plane(p1, p2, p3);
         var normal = this.__comp.normal;
         VectorTools_1.default.cloneTo(normal, this._normalVec);
     }

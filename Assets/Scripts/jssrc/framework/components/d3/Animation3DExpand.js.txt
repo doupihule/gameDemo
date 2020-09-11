@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const BaseCompExpand_1 = require("../BaseCompExpand");
 class Animation3DExpand extends BaseCompExpand_1.default {
     play(label, loop = false) {
+        this.__comp.Play(label);
     }
 }
 exports.default = Animation3DExpand;

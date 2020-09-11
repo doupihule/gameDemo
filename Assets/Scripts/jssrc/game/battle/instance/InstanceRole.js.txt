@@ -33,7 +33,7 @@ class InstanceRole extends InstanceMove_1.default {
     setColl(isRigid) {
         if (isRigid) {
             if (!this.colliderCtrl) {
-                this.colliderCtrl = this._myView.getComponent(UICompConst_1.default.comp_colliderListener, new ColliderController_1.default());
+                this.colliderCtrl = this._myView.getComponent(UICompConst_1.default.comp_colliderListener, new ColliderController_1.default(), true);
                 this.colliderCtrl.instance = this;
                 this.colliderCtrl.controller = this.controller;
             }

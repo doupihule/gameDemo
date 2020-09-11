@@ -348,6 +348,9 @@ ScreenAdapterTools.phoneSys = "";
 ScreenAdapterTools.PHONE_BANGS = ["iPhone X", "PACM00", "ANE-AL00", "COL-AL10", "JSN-AL00a", "V1813BA", "PBEM00", "vivo Z3x", "MI 9", "PBAM00", "PAAT00", "PBCM10", "vivo X21A", "ONEPLUS A6000"];
 ScreenAdapterTools.windowWidth = 640;
 ScreenAdapterTools.windowHeight = 1136;
+//屏幕的宽高. 鼠标点返回的是屏幕坐标 
+ScreenAdapterTools.screenWidth = 640;
+ScreenAdapterTools.screenHeight = 1136;
 //刘海的位置 -1 对应左边或者 竖屏上面, 竖屏游戏一定是上边
 ScreenAdapterTools.toolBarWay = -1;
 //# sourceMappingURL=ScreenAdapterTools.js.map

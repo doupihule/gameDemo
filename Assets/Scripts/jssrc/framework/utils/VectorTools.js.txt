@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const csharp_1 = require("csharp");
 class VectorTools {
     static createVec2(x = 0, y = 0) {
         return { x: x, y: y };
@@ -231,6 +232,10 @@ class VectorTools {
     }
     static isZero(num) {
         return Math.abs(num) < 0.00000001;
+    }
+    //把v3转化为 c#端的vector3
+    static turnV3ToNativeV3(v3) {
+        return csharp_1.GameUtils.ViewExtensionMethods.initVec3(v3.x, v3.y, v3.z);
     }
 }
 exports.default = VectorTools;

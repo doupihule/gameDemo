@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const BaseCompExpand_1 = require("../BaseCompExpand");
+const csharp_1 = require("csharp");
 //刚体
 class RigidbodyExpand extends BaseCompExpand_1.default {
     set canCollideWith(value) {
@@ -13,7 +14,7 @@ class RigidbodyExpand extends BaseCompExpand_1.default {
     }
     //给与冲量
     applyImpulse(vec3) {
-        this.__comp;
+        this.__comp.AddForce(vec3.x, vec3.y, vec3.z, csharp_1.UnityEngine.ForceMode.Impulse);
     }
     set mass(value) {
         this.__comp.mass = value;

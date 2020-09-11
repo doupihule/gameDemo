@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const csharp_1 = require("csharp");
+class RaycastHitExpand {
+    initHit() {
+        this.__comp = new csharp_1.UnityEngine.RaycastHit();
+    }
+}
+exports.default = RaycastHitExpand;
+//# sourceMappingURL=RaycastHitExpand.js.map

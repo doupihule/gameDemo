@@ -12,6 +12,18 @@ public class Main : MonoBehaviour
     static Main instance;
     Action timerManager;
 
+    [RuntimeInitializeOnLoadMethod]
+    static void Initialize()
+    {
+        Debug.Log("currentScene:"+ SceneManager.GetActiveScene().name);
+        if (SceneManager.GetActiveScene().name == "SampleScene")
+        {
+            return;
+        }
+        SceneManager.LoadScene("SampleScene");
+    }
+
+
     protected Action luaUpdate = null;
     protected Action luaUpdateLate = null;
     public delegate void initStage(GameObject stage,GameObject uiroot);
@@ -26,18 +38,18 @@ public class Main : MonoBehaviour
         var initStage = JSEnvExpand.globalEnv.Eval<initStage>("global.initGame");
         GameObject uiRoot = GameObject.Find("uiRoot");
         initStage(this.gameObject, uiRoot);
-
+        TrailRenderer sss;
     }
     void Update()
     {
         
         JSEnvExpand.globalEnv.Tick();
         //luaUpdate(timerManager);
-        JSEnvExpand.globalEnv.Eval("window.TimeManager.instance.tickHandler()");
+        JSEnvExpand.globalEnv.Eval("window.TimerManager.instance.tickHandler()");
     }
     void LateUpdate()
     {
         //luaUpdateLate(timerManager);
-        JSEnvExpand.globalEnv.Eval("window.TimeManager.instance.tickHandlerLater()");
+        JSEnvExpand.globalEnv.Eval("window.TimerManager.instance.tickHandlerLater()");
     }
 }

@@ -9,6 +9,7 @@ const MusicConst_1 = require("../../sys/consts/MusicConst");
 const VectorTools_1 = require("../../../framework/utils/VectorTools");
 const PhysicsTools_1 = require("../../../framework/components/physics/PhysicsTools");
 const BattleConst_1 = require("../../sys/consts/BattleConst");
+const ViewTools_1 = require("../../../framework/components/ViewTools");
 //主角类
 class InstancePlayer extends InstanceRole_1.default {
     constructor(controller) {
@@ -31,7 +32,6 @@ class InstancePlayer extends InstanceRole_1.default {
         this.leftWaitCd = 0;
         //剩余换弹时间
         this.leftChangeBulletTime = 0;
-        this.bulletSpeed = GlobalParamsFunc_1.default.instance.getGlobalCfgDatas("bulletFlySpeed").num / 1000 || 0.5;
         //连击数 
         this.combCount = 0;
         //最大连击数
@@ -43,10 +43,14 @@ class InstancePlayer extends InstanceRole_1.default {
         //最大能量值
         this.maxEnergy = 100;
         this.rayNoColl = 0;
-        this.touchRayOrigin = VectorTools_1.default.createVec3();
-        this.touchRayDirection = VectorTools_1.default.createVec3();
+        this.rayOrigin = VectorTools_1.default.createVec3();
+        this.rayDirection = VectorTools_1.default.createVec3();
         this.mainCamera = this.controller.battleCamera;
         this.targetShootPos = VectorTools_1.default.createVec3();
+        this.rayHit = PhysicsTools_1.default.createHitInfo();
+        this.touchRay = { origin: {}, direction: {} };
+        this.bulletSpeed = GlobalParamsFunc_1.default.instance.getGlobalCfgDatas("bulletFlySpeed").num / 1000 || 3;
+        // this.bulletSpeed = 0.5;
     }
     //重写设置数据
     setData(data) {
@@ -62,6 +66,8 @@ class InstancePlayer extends InstanceRole_1.default {
         this.initRadian();
         // this.controller.player = this;
         this.collider.collisionGroup = BattleConst_1.default.collion_layer_3;
+        this._testCue = ViewTools_1.default.create3DModel("shadow", "Other");
+        this.controller.battleCtn.addChild(this._testCue);
     }
     //重置一些属性
     resetAttr() {
@@ -138,7 +144,15 @@ class InstancePlayer extends InstanceRole_1.default {
         var dx = this.targetShootPos.x - this.pos.x;
         var dy = this.targetShootPos.y - this.pos.y;
         var dz = this.targetShootPos.z - this.pos.z;
+        this._testCue.set3dPos(this.targetShootPos.x, this.targetShootPos.y, this.targetShootPos.z);
         var ang = Math.atan2(-dx, -dz);
+        this.rayOrigin.x = this.pos.x;
+        this.rayOrigin.y = this.pos.y + this.line.y;
+        this.rayOrigin.z = this.pos.z;
+        this.rayDirection.x = dx;
+        this.rayDirection.y = 0;
+        this.rayDirection.z = dz;
+        VectorTools_1.default.normalize(this.rayDirection, this.rayDirection);
         //设置目标角度z
         this.setRadian(0, ang, 0);
         //设置y
@@ -148,18 +162,18 @@ class InstancePlayer extends InstanceRole_1.default {
     }
     //碰撞检测
     checkHit(tmp) {
-        PhysicsTools_1.default.rayCast(this.ray.origin, this.ray.direction, this.rayHit, 300, BattleConst_1.default.collion_layer_1);
+        PhysicsTools_1.default.rayCast(this.rayOrigin, this.rayDirection, this.rayHit, 300, BattleConst_1.default.collion_layer_1);
         if (!this.line.isActive())
             return;
-        if (this.rayHit.succeeded) {
-            var dx = this.rayHit.point.x - this.pos.x;
-            var dz = this.rayHit.point.z - this.pos.z;
-            this.line.setScale(1, Math.sqrt(dx * dx + dz * dz) - this.shootOffset, 1);
+        if (this.rayHit.hitInfo.succeeded) {
+            var dx = this.rayHit.hitInfo.point.x - this.pos.x;
+            var dz = this.rayHit.hitInfo.point.z - this.pos.z;
+            this.line.setScale(0.1, Math.sqrt(dx * dx + dz * dz) - this.shootOffset, 0.1);
             this.rayNoColl = 0;
         }
         else {
             if (this.rayNoColl >= 3) {
-                this.line.setScale(1, 200, 1);
+                this.line.setScale(0.1, 200, 0.1);
             }
             this.rayNoColl++;
         }
@@ -182,7 +196,7 @@ class InstancePlayer extends InstanceRole_1.default {
         if (this.controller.bulletNum > 0 && !this.controller.battleEnd) {
             this.createBullet([1, 0, 0, this._myView.get3dRotation().y]);
             this.controller.bulletNum--;
-            this.controller.battleUi.refreshBullet();
+            this.controller.battleUi && this.controller.battleUi.refreshBullet();
         }
         else {
             this.controller.bulletArr;

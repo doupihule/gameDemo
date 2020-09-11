@@ -159,7 +159,8 @@ class WindowManager {
         }
     }
     static ShowTip(text, timeout = 1500) {
-        WindowManager.TipComplete({ text: text, timeout: timeout });
+        LogsManager.echo(text, "____showTips");
+        // WindowManager.TipComplete({text: text, timeout: timeout});
     }
     static TipComplete(args) {
         if (this.tipsCount >= 3) {

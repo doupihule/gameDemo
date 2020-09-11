@@ -220,7 +220,7 @@ class BaseViewExpand {
         return this._mouseThrough;
     }
     //获取组件 一定要配置绑定哪个类型
-    getComponent(comp, compExpand = null) {
+    getComponent(comp, compExpand = null, isCreat = false) {
         if (this._compMap[comp]) {
             return this._compMap[comp];
         }
@@ -231,8 +231,15 @@ class BaseViewExpand {
         }
         var cobjcomp = this.__cobject.GetComponent(info.cname);
         if (!cobjcomp) {
-            LogsManager.warn("没有找到组件:", this.name, ",cname:", info.cname);
-            return null;
+            //如果没有组件 就创建
+            if (isCreat) {
+                cobjcomp = this.__cobject.AddComponent(info.ctype);
+                LogsManager.echo("没有组件,创建一个-", this.name, "cname:", info.cname);
+            }
+            else {
+                LogsManager.warn("没有找到组件:", this.name, ",cname:", info.cname);
+                return null;
+            }
         }
         //如果没有传 组件继承. 那么就采用默认的组件
         if (!compExpand) {

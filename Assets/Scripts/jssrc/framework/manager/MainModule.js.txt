@@ -23,6 +23,7 @@ const KariqiShareManager_1 = require("./KariqiShareManager");
 const KariquShareConst_1 = require("../consts/KariquShareConst");
 const ViewTools_1 = require("../components/ViewTools");
 const BattleSceneManager_1 = require("../../game/sys/manager/BattleSceneManager");
+const TouchManager_1 = require("./TouchManager");
 class MainModule {
     constructor() {
         this.timeLock = 0;
@@ -38,7 +39,27 @@ class MainModule {
         Message_1.default.instance.add(MsgCMD_1.default.VIDEO_PLAY, this);
         // WindowManager.OpenUI(WindowCfgs.GameMainUI);
         FuncManager_1.default.init(null, null);
-        BattleSceneManager_1.default.instance.enterBattle({ roleId: 1, levelId: 1 });
+        BattleSceneManager_1.default.instance.enterBattle({ roleId: 1, levelId: 5 });
+        WindowManager_1.default.debugLayer.setSize(ScreenAdapterTools_1.default.stageWidth, ScreenAdapterTools_1.default.stageHeight);
+        TouchManager_1.default.addTouchDown(WindowManager_1.default.debugLayer, this.onMouseDown, this);
+        TouchManager_1.default.addTouchMove(WindowManager_1.default.debugLayer, this.onMouseMove, this);
+        // TouchManager.addTouchUp(WindowManager.debugLayer,this.onMouseEnd,this);
+        TouchManager_1.default.addTouchOut(WindowManager_1.default.debugLayer, this.onMouseEnd, this);
+    }
+    onMouseDown(e) {
+        BattleSceneManager_1.default.instance.battleControler.player.onToucheDown(e.x, e.y);
+    }
+    onMouseMove(e) {
+        if (!BattleSceneManager_1.default.instance.battleControler || !BattleSceneManager_1.default.instance.battleControler.player) {
+            return;
+        }
+        BattleSceneManager_1.default.instance.battleControler.player.onTouchMove(e.x, e.y);
+    }
+    onMouseEnd(e) {
+        if (!BattleSceneManager_1.default.instance.battleControler || !BattleSceneManager_1.default.instance.battleControler.player) {
+            return;
+        }
+        BattleSceneManager_1.default.instance.battleControler.player.onTouchEnd(e.x, e.y);
     }
     delayInitCreat() {
     }

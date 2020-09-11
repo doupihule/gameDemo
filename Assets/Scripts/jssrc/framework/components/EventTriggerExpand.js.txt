@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const BaseCompExpand_1 = require("./BaseCompExpand");
+//用来处理触摸事件
+class EventTriggerExpand extends BaseCompExpand_1.default {
+    constructor(cobj) {
+        super();
+    }
+    //触摸按下
+    addTouchDown(func, thisObj, params = null) {
+    }
+    addTouchMove(func, thisObj, params = null) {
+    }
+    addTouchUp(func, thisObj, params = null) {
+    }
+    addTouchOut(func, thisObj, params = null) {
+    }
+}
+exports.default = EventTriggerExpand;
+//# sourceMappingURL=EventTriggerExpand.js.map
