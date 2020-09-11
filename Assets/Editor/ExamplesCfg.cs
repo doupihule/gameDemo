@@ -14,6 +14,7 @@ using Spine.Unity;
 using Resource;
 using GameUtils;
 using UnityEngine.UI;
+using System.Reflection;
 
 //1、配置类必须打[Configure]标签
 //2、必须放Editor目录
@@ -36,6 +37,7 @@ public class ExamplesCfg
                 typeof(Transform),
                 typeof(RectTransform),
                 typeof(Component),
+                typeof(Renderer),
                 typeof(GameObject),
                 typeof(UnityEngine.Object),
                 typeof(Delegate),
@@ -51,9 +53,14 @@ public class ExamplesCfg
                 typeof(Camera),
                 typeof(Plane),
                 typeof(TrailRenderer),
+                typeof(Input),
+                typeof(Screen),
+
 
                 typeof(Quaternion),
-
+                typeof(UnityEngine.EventSystems.EventTrigger),
+                typeof(UnityEngine.EventSystems.BaseEventData),
+                typeof(UnityEngine.Events.UnityAction<UnityEngine.EventSystems.BaseEventData>),
 
                 typeof(RaycastHit),
                 typeof(Ray),
@@ -63,19 +70,22 @@ public class ExamplesCfg
                 typeof(Rigidbody),
                 typeof(UnityEngine.Physics),
 
+
+                typeof(Animator),
                 typeof(Spine.Animation),
                 typeof(Spine.AnimationState),
                 typeof(Spine.Bone),
                 typeof(SkeletonGraphic),
                 typeof(MeshGeneratorBuffers),
-
-
+                
 
 
                 typeof(ResourceManager),
                 typeof(CommonUtil),
 
                 typeof(ViewExtensionMethods),
+                typeof(ComponentExtension),
+                typeof(PhysicsExtensionMethods),
 
                 typeof(ColliderListenerExpand),
             };
@@ -93,5 +103,13 @@ public class ExamplesCfg
                 //typeof(Vector3),
             };
         }
+    }
+
+    [Filter]
+    private static bool Filter(MemberInfo meb)
+    {
+        string name = meb.Name;
+        return name == "LoadAssetsWay" ||name == "OnRebuildRequested"||name == "IsJoystickPreconfigured" || name == "GetStereoViewMatrices" || name == "SetStereoProjectionMatrices" 
+            || name == "SetStereoViewMatrices"|| name == "ResetFieldOfView" || name == "GetStereoProjectionMatrices";
     }
 }

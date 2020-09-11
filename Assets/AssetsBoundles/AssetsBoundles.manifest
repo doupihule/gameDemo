@@ -1,23 +1,17 @@
 ManifestFileVersion: 0
-CRC: 4224853359
+CRC: 3633961768
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: mainab
-      Dependencies:
-        Dependency_0: uiimage
-    Info_1:
-      Name: animation
+      Name: scriptab
       Dependencies: {}
+    Info_1:
+      Name: uiab
+      Dependencies:
+        Dependency_0: uiimageab
     Info_2:
-      Name: baseab
+      Name: uiimageab
       Dependencies: {}
     Info_3:
-      Name: uiimage
-      Dependencies: {}
-    Info_4:
-      Name: map
-      Dependencies: {}
-    Info_5:
-      Name: scriptab
+      Name: model3dab
       Dependencies: {}

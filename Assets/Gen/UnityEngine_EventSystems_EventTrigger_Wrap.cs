@@ -2,7 +2,7 @@
 
 namespace PuertsStaticWrap
 {
-    public static class GameUtils_ViewExtensionMethods_Wrap
+    public static class UnityEngine_EventSystems_EventTrigger_Wrap
     {
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8ConstructorCallback))]
@@ -11,7 +11,7 @@ namespace PuertsStaticWrap
             try
             {
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to GameUtils.ViewExtensionMethods constructor");
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.EventSystems.EventTrigger constructor");
             }
             catch (Exception e)
             {
@@ -21,153 +21,11 @@ namespace PuertsStaticWrap
         }
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_MouseButtonDown(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        private static void M_OnPointerEnter(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
         {
             try
             {
-                
-                
-                
-                {
-                    
-                    
-                    
-                    
-                    {
-                        
-                        var result = GameUtils.ViewExtensionMethods.MouseButtonDown();
-                        
-                        Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_CameraToRaycastHitObjectClick(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Camera>(false);
-                        var Arg1 = argHelper1.Get<UnityEngine.GameObject>(false);
-                        var Arg2 = argHelper2.Get<System.Action>(false);
-                        var result = GameUtils.ViewExtensionMethods.CameraToRaycastHitObjectClick(Arg0,Arg1,Arg2);
-                        
-                        Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_SetChildrenLayer(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.GameObject>(false);
-                        var Arg1 = argHelper1.GetString(false);
-                        GameUtils.ViewExtensionMethods.SetChildrenLayer(Arg0,Arg1);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_PlaySounds(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    var argHelper3 = new Puerts.ArgumentHelper((int)data, isolate, info, 3);
-                    var argHelper4 = new Puerts.ArgumentHelper((int)data, isolate, info, 4);
-                    var argHelper5 = new Puerts.ArgumentHelper((int)data, isolate, info, 5);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.GameObject>(false);
-                        var Arg1 = argHelper1.GetBoolean(false);
-                        var Arg2 = argHelper2.GetString(false);
-                        var Arg3 = argHelper3.GetString(false);
-                        var Arg4 = argHelper4.GetString(false);
-                        var Arg5 = argHelper5.GetFloat(false);
-                        GameUtils.ViewExtensionMethods.PlaySounds(Arg0,Arg1,Arg2,Arg3,Arg4,Arg5);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_ClearSounds(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
                 
                 
                 {
@@ -178,8 +36,8 @@ namespace PuertsStaticWrap
                     
                     {
                         
-                        var Arg0 = argHelper0.Get<UnityEngine.GameObject>(false);
-                        GameUtils.ViewExtensionMethods.ClearSounds(Arg0);
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.PointerEventData>(false);
+                        obj.OnPointerEnter(Arg0);
                         
                         
                         
@@ -195,383 +53,11 @@ namespace PuertsStaticWrap
         }
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_SetObj2dPos(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        private static void M_OnPointerExit(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
         {
             try
             {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.RectTransform>(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        var Arg2 = argHelper2.GetFloat(false);
-                        GameUtils.ViewExtensionMethods.SetObj2dPos(Arg0,Arg1,Arg2);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_SetObj3dPos(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    var argHelper3 = new Puerts.ArgumentHelper((int)data, isolate, info, 3);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Transform>(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        var Arg2 = argHelper2.GetFloat(false);
-                        var Arg3 = argHelper3.GetFloat(false);
-                        GameUtils.ViewExtensionMethods.SetObj3dPos(Arg0,Arg1,Arg2,Arg3);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_SetObjRotation(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    var argHelper3 = new Puerts.ArgumentHelper((int)data, isolate, info, 3);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Transform>(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        var Arg2 = argHelper2.GetFloat(false);
-                        var Arg3 = argHelper3.GetFloat(false);
-                        GameUtils.ViewExtensionMethods.SetObjRotation(Arg0,Arg1,Arg2,Arg3);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_SetObjScale(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    var argHelper3 = new Puerts.ArgumentHelper((int)data, isolate, info, 3);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Transform>(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        var Arg2 = argHelper2.GetFloat(false);
-                        var Arg3 = argHelper3.GetFloat(false);
-                        GameUtils.ViewExtensionMethods.SetObjScale(Arg0,Arg1,Arg2,Arg3);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_SetLocalScaleSize(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Transform>(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        GameUtils.ViewExtensionMethods.SetLocalScaleSize(Arg0,Arg1);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_SetImageColor(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    var argHelper3 = new Puerts.ArgumentHelper((int)data, isolate, info, 3);
-                    var argHelper4 = new Puerts.ArgumentHelper((int)data, isolate, info, 4);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.UI.Image>(false);
-                        var Arg1 = argHelper1.GetInt32(false);
-                        var Arg2 = argHelper2.GetInt32(false);
-                        var Arg3 = argHelper3.GetInt32(false);
-                        var Arg4 = argHelper4.GetInt32(false);
-                        GameUtils.ViewExtensionMethods.SetImageColor(Arg0,Arg1,Arg2,Arg3,Arg4);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_SetLabelColor(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    var argHelper3 = new Puerts.ArgumentHelper((int)data, isolate, info, 3);
-                    var argHelper4 = new Puerts.ArgumentHelper((int)data, isolate, info, 4);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.UI.Text>(false);
-                        var Arg1 = argHelper1.GetInt32(false);
-                        var Arg2 = argHelper2.GetInt32(false);
-                        var Arg3 = argHelper3.GetInt32(false);
-                        var Arg4 = argHelper4.GetInt32(false);
-                        GameUtils.ViewExtensionMethods.SetLabelColor(Arg0,Arg1,Arg2,Arg3,Arg4);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_initVec3(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.GetFloat(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        var Arg2 = argHelper2.GetFloat(false);
-                        var result = GameUtils.ViewExtensionMethods.initVec3(Arg0,Arg1,Arg2);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_initVec2(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.GetFloat(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        var result = GameUtils.ViewExtensionMethods.initVec2(Arg0,Arg1);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_initColor(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    var argHelper3 = new Puerts.ArgumentHelper((int)data, isolate, info, 3);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.GetInt32(false);
-                        var Arg1 = argHelper1.GetInt32(false);
-                        var Arg2 = argHelper2.GetInt32(false);
-                        var Arg3 = argHelper3.GetInt32(false);
-                        var result = GameUtils.ViewExtensionMethods.initColor(Arg0,Arg1,Arg2,Arg3);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_RemoveAllChild(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
                 
                 
                 {
@@ -582,8 +68,8 @@ namespace PuertsStaticWrap
                     
                     {
                         
-                        var Arg0 = argHelper0.Get<UnityEngine.Transform>(false);
-                        GameUtils.ViewExtensionMethods.RemoveAllChild(Arg0);
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.PointerEventData>(false);
+                        obj.OnPointerExit(Arg0);
                         
                         
                         
@@ -599,27 +85,25 @@ namespace PuertsStaticWrap
         }
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_GetChildByName(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        private static void M_OnDrag(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
         {
             try
             {
-                
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
                 
                 
                 {
                     
                     var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
                     
                     
                     
                     {
                         
-                        var Arg0 = argHelper0.Get<UnityEngine.Transform>(false);
-                        var Arg1 = argHelper1.GetString(false);
-                        var result = GameUtils.ViewExtensionMethods.GetChildByName(Arg0,Arg1);
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.PointerEventData>(false);
+                        obj.OnDrag(Arg0);
                         
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
+                        
                         
                     }
                 }
@@ -633,23 +117,25 @@ namespace PuertsStaticWrap
         }
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_GetRaycastHit(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        private static void M_OnDrop(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
         {
             try
             {
-                
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
                 
                 
                 {
                     
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                     
                     
                     
                     {
                         
-                        var result = GameUtils.ViewExtensionMethods.GetRaycastHit();
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.PointerEventData>(false);
+                        obj.OnDrop(Arg0);
                         
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
+                        
                         
                     }
                 }
@@ -662,6 +148,453 @@ namespace PuertsStaticWrap
             }
         }
         
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnPointerDown(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.PointerEventData>(false);
+                        obj.OnPointerDown(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnPointerUp(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.PointerEventData>(false);
+                        obj.OnPointerUp(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnPointerClick(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.PointerEventData>(false);
+                        obj.OnPointerClick(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnSelect(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.BaseEventData>(false);
+                        obj.OnSelect(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnDeselect(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.BaseEventData>(false);
+                        obj.OnDeselect(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnScroll(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.PointerEventData>(false);
+                        obj.OnScroll(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnMove(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.AxisEventData>(false);
+                        obj.OnMove(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnUpdateSelected(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.BaseEventData>(false);
+                        obj.OnUpdateSelected(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnInitializePotentialDrag(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.PointerEventData>(false);
+                        obj.OnInitializePotentialDrag(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnBeginDrag(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.PointerEventData>(false);
+                        obj.OnBeginDrag(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnEndDrag(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.PointerEventData>(false);
+                        obj.OnEndDrag(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnSubmit(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.BaseEventData>(false);
+                        obj.OnSubmit(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void M_OnCancel(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.EventSystems.BaseEventData>(false);
+                        obj.OnCancel(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void G_triggers(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                UnityEngine.EventSystems.EventTrigger obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                var result = obj.triggers;
+                Puerts.ResultHelper.Set((int)data, isolate, info, result);
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void S_triggers(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                UnityEngine.EventSystems.EventTrigger obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                obj.triggers = argHelper.Get<System.Collections.Generic.List<UnityEngine.EventSystems.EventTrigger.Entry>>(false);
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
         
         
         
@@ -674,28 +607,28 @@ namespace PuertsStaticWrap
                 Constructor = Constructor,
                 Methods = new System.Collections.Generic.Dictionary<Puerts.MethodKey, Puerts.V8FunctionCallback>()
                 {
-                    { new Puerts.MethodKey {Name = "MouseButtonDown", IsStatic = true},  F_MouseButtonDown },
-                    { new Puerts.MethodKey {Name = "CameraToRaycastHitObjectClick", IsStatic = true},  F_CameraToRaycastHitObjectClick },
-                    { new Puerts.MethodKey {Name = "SetChildrenLayer", IsStatic = true},  F_SetChildrenLayer },
-                    { new Puerts.MethodKey {Name = "PlaySounds", IsStatic = true},  F_PlaySounds },
-                    { new Puerts.MethodKey {Name = "ClearSounds", IsStatic = true},  F_ClearSounds },
-                    { new Puerts.MethodKey {Name = "SetObj2dPos", IsStatic = true},  F_SetObj2dPos },
-                    { new Puerts.MethodKey {Name = "SetObj3dPos", IsStatic = true},  F_SetObj3dPos },
-                    { new Puerts.MethodKey {Name = "SetObjRotation", IsStatic = true},  F_SetObjRotation },
-                    { new Puerts.MethodKey {Name = "SetObjScale", IsStatic = true},  F_SetObjScale },
-                    { new Puerts.MethodKey {Name = "SetLocalScaleSize", IsStatic = true},  F_SetLocalScaleSize },
-                    { new Puerts.MethodKey {Name = "SetImageColor", IsStatic = true},  F_SetImageColor },
-                    { new Puerts.MethodKey {Name = "SetLabelColor", IsStatic = true},  F_SetLabelColor },
-                    { new Puerts.MethodKey {Name = "initVec3", IsStatic = true},  F_initVec3 },
-                    { new Puerts.MethodKey {Name = "initVec2", IsStatic = true},  F_initVec2 },
-                    { new Puerts.MethodKey {Name = "initColor", IsStatic = true},  F_initColor },
-                    { new Puerts.MethodKey {Name = "RemoveAllChild", IsStatic = true},  F_RemoveAllChild },
-                    { new Puerts.MethodKey {Name = "GetChildByName", IsStatic = true},  F_GetChildByName },
-                    { new Puerts.MethodKey {Name = "GetRaycastHit", IsStatic = true},  F_GetRaycastHit },
+                    { new Puerts.MethodKey {Name = "OnPointerEnter", IsStatic = false},  M_OnPointerEnter },
+                    { new Puerts.MethodKey {Name = "OnPointerExit", IsStatic = false},  M_OnPointerExit },
+                    { new Puerts.MethodKey {Name = "OnDrag", IsStatic = false},  M_OnDrag },
+                    { new Puerts.MethodKey {Name = "OnDrop", IsStatic = false},  M_OnDrop },
+                    { new Puerts.MethodKey {Name = "OnPointerDown", IsStatic = false},  M_OnPointerDown },
+                    { new Puerts.MethodKey {Name = "OnPointerUp", IsStatic = false},  M_OnPointerUp },
+                    { new Puerts.MethodKey {Name = "OnPointerClick", IsStatic = false},  M_OnPointerClick },
+                    { new Puerts.MethodKey {Name = "OnSelect", IsStatic = false},  M_OnSelect },
+                    { new Puerts.MethodKey {Name = "OnDeselect", IsStatic = false},  M_OnDeselect },
+                    { new Puerts.MethodKey {Name = "OnScroll", IsStatic = false},  M_OnScroll },
+                    { new Puerts.MethodKey {Name = "OnMove", IsStatic = false},  M_OnMove },
+                    { new Puerts.MethodKey {Name = "OnUpdateSelected", IsStatic = false},  M_OnUpdateSelected },
+                    { new Puerts.MethodKey {Name = "OnInitializePotentialDrag", IsStatic = false},  M_OnInitializePotentialDrag },
+                    { new Puerts.MethodKey {Name = "OnBeginDrag", IsStatic = false},  M_OnBeginDrag },
+                    { new Puerts.MethodKey {Name = "OnEndDrag", IsStatic = false},  M_OnEndDrag },
+                    { new Puerts.MethodKey {Name = "OnSubmit", IsStatic = false},  M_OnSubmit },
+                    { new Puerts.MethodKey {Name = "OnCancel", IsStatic = false},  M_OnCancel },
                     
                 },
                 Properties = new System.Collections.Generic.Dictionary<string, Puerts.PropertyRegisterInfo>()
                 {
+                    {"triggers", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_triggers, Setter = S_triggers} },
                     
                 }
             };

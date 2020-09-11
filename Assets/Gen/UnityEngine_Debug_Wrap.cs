@@ -1090,7 +1090,7 @@ namespace PuertsStaticWrap
             try
             {
                 
-                var result = UnityEngine.Debug.logger;
+                var result = UnityEngine.Debug.unityLogger;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)

@@ -1623,164 +1623,6 @@ namespace PuertsStaticWrap
             }
         }
         
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_ResetFieldOfView(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                
-                
-                {
-                    
-                    
-                    
-                    
-                    {
-                        
-                        obj.ResetFieldOfView();
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_SetStereoViewMatrices(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Matrix4x4>(false);
-                        var Arg1 = argHelper1.Get<UnityEngine.Matrix4x4>(false);
-                        obj.SetStereoViewMatrices(Arg0,Arg1);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_SetStereoProjectionMatrices(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Matrix4x4>(false);
-                        var Arg1 = argHelper1.Get<UnityEngine.Matrix4x4>(false);
-                        obj.SetStereoProjectionMatrices(Arg0,Arg1);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_GetStereoViewMatrices(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                
-                
-                {
-                    
-                    
-                    
-                    
-                    {
-                        
-                        var result = obj.GetStereoViewMatrices();
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_GetStereoProjectionMatrices(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                
-                
-                {
-                    
-                    
-                    
-                    
-                    {
-                        
-                        var result = obj.GetStereoProjectionMatrices();
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
         
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
@@ -3411,7 +3253,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.near;
+                var result = obj.nearClipPlane;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)
@@ -3427,7 +3269,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.near = argHelper.GetFloat(false);
+                obj.nearClipPlane = argHelper.GetFloat(false);
             }
             catch (Exception e)
             {
@@ -3442,7 +3284,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.far;
+                var result = obj.farClipPlane;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)
@@ -3458,7 +3300,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.far = argHelper.GetFloat(false);
+                obj.farClipPlane = argHelper.GetFloat(false);
             }
             catch (Exception e)
             {
@@ -3473,7 +3315,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.fov;
+                var result = obj.fieldOfView;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)
@@ -3489,7 +3331,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.fov = argHelper.GetFloat(false);
+                obj.fieldOfView = argHelper.GetFloat(false);
             }
             catch (Exception e)
             {
@@ -3504,7 +3346,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.hdr;
+                var result = obj.allowHDR;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
             catch (Exception e)
@@ -3520,7 +3362,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.hdr = argHelper.GetBoolean(false);
+                obj.allowHDR = argHelper.GetBoolean(false);
             }
             catch (Exception e)
             {
@@ -3675,11 +3517,6 @@ namespace PuertsStaticWrap
                     { new Puerts.MethodKey {Name = "AddCommandBufferAsync", IsStatic = false},  M_AddCommandBufferAsync },
                     { new Puerts.MethodKey {Name = "RemoveCommandBuffer", IsStatic = false},  M_RemoveCommandBuffer },
                     { new Puerts.MethodKey {Name = "GetCommandBuffers", IsStatic = false},  M_GetCommandBuffers },
-                    { new Puerts.MethodKey {Name = "ResetFieldOfView", IsStatic = false},  M_ResetFieldOfView },
-                    { new Puerts.MethodKey {Name = "SetStereoViewMatrices", IsStatic = false},  M_SetStereoViewMatrices },
-                    { new Puerts.MethodKey {Name = "SetStereoProjectionMatrices", IsStatic = false},  M_SetStereoProjectionMatrices },
-                    { new Puerts.MethodKey {Name = "GetStereoViewMatrices", IsStatic = false},  M_GetStereoViewMatrices },
-                    { new Puerts.MethodKey {Name = "GetStereoProjectionMatrices", IsStatic = false},  M_GetStereoProjectionMatrices },
                     
                 },
                 Properties = new System.Collections.Generic.Dictionary<string, Puerts.PropertyRegisterInfo>()

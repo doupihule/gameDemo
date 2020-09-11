@@ -325,7 +325,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
-                var result = obj.numPositions;
+                var result = obj.positionCount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)

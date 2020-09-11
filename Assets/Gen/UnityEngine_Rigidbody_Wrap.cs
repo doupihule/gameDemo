@@ -1926,7 +1926,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var result = obj.solverIterationCount;
+                var result = obj.solverIterations;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)
@@ -1942,7 +1942,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.solverIterationCount = argHelper.GetInt32(false);
+                obj.solverIterations = argHelper.GetInt32(false);
             }
             catch (Exception e)
             {
@@ -1957,7 +1957,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var result = obj.solverVelocityIterationCount;
+                var result = obj.solverVelocityIterations;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
             catch (Exception e)
@@ -1973,7 +1973,7 @@ namespace PuertsStaticWrap
             {
                 UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.solverVelocityIterationCount = argHelper.GetInt32(false);
+                obj.solverVelocityIterations = argHelper.GetInt32(false);
             }
             catch (Exception e)
             {

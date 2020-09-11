@@ -1,5 +1,4 @@
-﻿// @ts-nocheck 
-
+﻿// @ts-nocheck
 declare module 'csharp' {
     interface $Ref<T> {}
     
@@ -72,10 +71,18 @@ declare module 'csharp' {
         class Type extends System.Reflection.MemberInfo {
             
         }
+        class UInt32 extends System.ValueType {
+            
+        }
         class UInt16 extends System.ValueType {
             
         }
-        class UInt32 extends System.ValueType {
+        interface IAsyncResult {
+            
+        }
+        type AsyncCallback = (ar: System.IAsyncResult) => void;
+        var AsyncCallback: {new (func: (ar: System.IAsyncResult) => void): AsyncCallback;}
+        class IntPtr extends System.ValueType {
             
         }
         type Action$2<T1,T2> = (arg1: T1, arg2: T2) => void;
@@ -557,6 +564,61 @@ declare module 'csharp' {
             
         }
         enum SendMessageOptions { RequireReceiver = 0, DontRequireReceiver = 1 }
+        class Renderer extends UnityEngine.Component {
+            public castShadows: boolean;
+            public motionVectors: boolean;
+            public useLightProbes: boolean;
+            public bounds: UnityEngine.Bounds;
+            public enabled: boolean;
+            public isVisible: boolean;
+            public shadowCastingMode: UnityEngine.Rendering.ShadowCastingMode;
+            public receiveShadows: boolean;
+            public motionVectorGenerationMode: UnityEngine.MotionVectorGenerationMode;
+            public lightProbeUsage: UnityEngine.Rendering.LightProbeUsage;
+            public reflectionProbeUsage: UnityEngine.Rendering.ReflectionProbeUsage;
+            public renderingLayerMask: number;
+            public rendererPriority: number;
+            public sortingLayerName: string;
+            public sortingLayerID: number;
+            public sortingOrder: number;
+            public allowOcclusionWhenDynamic: boolean;
+            public isPartOfStaticBatch: boolean;
+            public worldToLocalMatrix: UnityEngine.Matrix4x4;
+            public localToWorldMatrix: UnityEngine.Matrix4x4;
+            public lightProbeProxyVolumeOverride: UnityEngine.GameObject;
+            public probeAnchor: UnityEngine.Transform;
+            public lightmapIndex: number;
+            public realtimeLightmapIndex: number;
+            public lightmapScaleOffset: UnityEngine.Vector4;
+            public realtimeLightmapScaleOffset: UnityEngine.Vector4;
+            public materials: UnityEngine.Material[];
+            public material: UnityEngine.Material;
+            public sharedMaterial: UnityEngine.Material;
+            public sharedMaterials: UnityEngine.Material[];
+            public constructor();
+            public HasPropertyBlock():boolean;
+            public SetPropertyBlock(properties: UnityEngine.MaterialPropertyBlock):void;
+            public SetPropertyBlock(properties: UnityEngine.MaterialPropertyBlock, materialIndex: number):void;
+            public GetPropertyBlock(properties: UnityEngine.MaterialPropertyBlock):void;
+            public GetPropertyBlock(properties: UnityEngine.MaterialPropertyBlock, materialIndex: number):void;
+            public GetMaterials(m: System.Collections.Generic.List$1<UnityEngine.Material>):void;
+            public GetSharedMaterials(m: System.Collections.Generic.List$1<UnityEngine.Material>):void;
+            public GetClosestReflectionProbes(result: System.Collections.Generic.List$1<UnityEngine.Rendering.ReflectionProbeBlendInfo>):void;
+            
+        }
+        class Vector4 extends System.ValueType {
+            
+        }
+        class Bounds extends System.ValueType {
+            
+        }
+        class MaterialPropertyBlock extends System.Object {
+            
+        }
+        enum MotionVectorGenerationMode { Camera = 0, Object = 1, ForceNoMotion = 2 }
+        class Material extends UnityEngine.Object {
+            
+        }
         enum PrimitiveType { Sphere = 0, Capsule = 1, Cylinder = 2, Cube = 3, Plane = 4, Quad = 5 }
         enum HideFlags { None = 0, HideInHierarchy = 1, HideInInspector = 2, DontSaveInEditor = 4, NotEditable = 8, DontSaveInBuild = 16, DontUnloadUnusedAsset = 32, DontSave = 52, HideAndDontSave = 61 }
         class Behaviour extends UnityEngine.Component {
@@ -694,11 +756,6 @@ declare module 'csharp' {
             public AddCommandBufferAsync(evt: UnityEngine.Rendering.CameraEvent, buffer: UnityEngine.Rendering.CommandBuffer, queueType: UnityEngine.Rendering.ComputeQueueType):void;
             public RemoveCommandBuffer(evt: UnityEngine.Rendering.CameraEvent, buffer: UnityEngine.Rendering.CommandBuffer):void;
             public GetCommandBuffers(evt: UnityEngine.Rendering.CameraEvent):UnityEngine.Rendering.CommandBuffer[];
-            public ResetFieldOfView():void;
-            public SetStereoViewMatrices(leftMatrix: UnityEngine.Matrix4x4, rightMatrix: UnityEngine.Matrix4x4):void;
-            public SetStereoProjectionMatrices(leftMatrix: UnityEngine.Matrix4x4, rightMatrix: UnityEngine.Matrix4x4):void;
-            public GetStereoViewMatrices():UnityEngine.Matrix4x4[];
-            public GetStereoProjectionMatrices():UnityEngine.Matrix4x4[];
             
         }
         class MonoBehaviour extends UnityEngine.Behaviour {
@@ -733,16 +790,7 @@ declare module 'csharp' {
             public static Create(texture: UnityEngine.Texture2D, rect: UnityEngine.Rect, pivot: UnityEngine.Vector2):UnityEngine.Sprite;
             
         }
-        class Material extends UnityEngine.Object {
-            
-        }
         class Texture extends UnityEngine.Object {
-            
-        }
-        class Bounds extends System.ValueType {
-            
-        }
-        class Vector4 extends System.ValueType {
             
         }
         class Texture2D extends UnityEngine.Texture {
@@ -812,9 +860,6 @@ declare module 'csharp' {
             public ToString(format: string):string;
             
         }
-        class Renderer extends UnityEngine.Component {
-            
-        }
         class TrailRenderer extends UnityEngine.Renderer {
             public numPositions: number;
             public time: number;
@@ -858,6 +903,102 @@ declare module 'csharp' {
         class Gradient extends System.Object {
             
         }
+        class Input extends System.Object {
+            public static simulateMouseWithTouches: boolean;
+            public static anyKey: boolean;
+            public static anyKeyDown: boolean;
+            public static inputString: string;
+            public static mousePosition: UnityEngine.Vector3;
+            public static mouseScrollDelta: UnityEngine.Vector2;
+            public static imeCompositionMode: UnityEngine.IMECompositionMode;
+            public static compositionString: string;
+            public static imeIsSelected: boolean;
+            public static compositionCursorPos: UnityEngine.Vector2;
+            public static eatKeyPressOnTextFieldFocus: boolean;
+            public static mousePresent: boolean;
+            public static touchCount: number;
+            public static touchPressureSupported: boolean;
+            public static stylusTouchSupported: boolean;
+            public static touchSupported: boolean;
+            public static multiTouchEnabled: boolean;
+            public static isGyroAvailable: boolean;
+            public static deviceOrientation: UnityEngine.DeviceOrientation;
+            public static acceleration: UnityEngine.Vector3;
+            public static compensateSensors: boolean;
+            public static accelerationEventCount: number;
+            public static backButtonLeavesApp: boolean;
+            public static location: UnityEngine.LocationService;
+            public static compass: UnityEngine.Compass;
+            public static gyro: UnityEngine.Gyroscope;
+            public static touches: UnityEngine.Touch[];
+            public static accelerationEvents: UnityEngine.AccelerationEvent[];
+            public constructor();
+            public static GetAxis(axisName: string):number;
+            public static GetAxisRaw(axisName: string):number;
+            public static GetButton(buttonName: string):boolean;
+            public static GetButtonDown(buttonName: string):boolean;
+            public static GetButtonUp(buttonName: string):boolean;
+            public static GetMouseButton(button: number):boolean;
+            public static GetMouseButtonDown(button: number):boolean;
+            public static GetMouseButtonUp(button: number):boolean;
+            public static ResetInputAxes():void;
+            public static GetJoystickNames():string[];
+            public static GetTouch(index: number):UnityEngine.Touch;
+            public static GetAccelerationEvent(index: number):UnityEngine.AccelerationEvent;
+            public static GetKey(key: UnityEngine.KeyCode):boolean;
+            public static GetKey(name: string):boolean;
+            public static GetKeyUp(key: UnityEngine.KeyCode):boolean;
+            public static GetKeyUp(name: string):boolean;
+            public static GetKeyDown(key: UnityEngine.KeyCode):boolean;
+            public static GetKeyDown(name: string):boolean;
+            
+        }
+        class Touch extends System.ValueType {
+            
+        }
+        class AccelerationEvent extends System.ValueType {
+            
+        }
+        enum KeyCode { None = 0, Backspace = 8, Delete = 127, Tab = 9, Clear = 12, Return = 13, Pause = 19, Escape = 27, Space = 32, Keypad0 = 256, Keypad1 = 257, Keypad2 = 258, Keypad3 = 259, Keypad4 = 260, Keypad5 = 261, Keypad6 = 262, Keypad7 = 263, Keypad8 = 264, Keypad9 = 265, KeypadPeriod = 266, KeypadDivide = 267, KeypadMultiply = 268, KeypadMinus = 269, KeypadPlus = 270, KeypadEnter = 271, KeypadEquals = 272, UpArrow = 273, DownArrow = 274, RightArrow = 275, LeftArrow = 276, Insert = 277, Home = 278, End = 279, PageUp = 280, PageDown = 281, F1 = 282, F2 = 283, F3 = 284, F4 = 285, F5 = 286, F6 = 287, F7 = 288, F8 = 289, F9 = 290, F10 = 291, F11 = 292, F12 = 293, F13 = 294, F14 = 295, F15 = 296, Alpha0 = 48, Alpha1 = 49, Alpha2 = 50, Alpha3 = 51, Alpha4 = 52, Alpha5 = 53, Alpha6 = 54, Alpha7 = 55, Alpha8 = 56, Alpha9 = 57, Exclaim = 33, DoubleQuote = 34, Hash = 35, Dollar = 36, Percent = 37, Ampersand = 38, Quote = 39, LeftParen = 40, RightParen = 41, Asterisk = 42, Plus = 43, Comma = 44, Minus = 45, Period = 46, Slash = 47, Colon = 58, Semicolon = 59, Less = 60, Equals = 61, Greater = 62, Question = 63, At = 64, LeftBracket = 91, Backslash = 92, RightBracket = 93, Caret = 94, Underscore = 95, BackQuote = 96, A = 97, B = 98, C = 99, D = 100, E = 101, F = 102, G = 103, H = 104, I = 105, J = 106, K = 107, L = 108, M = 109, N = 110, O = 111, P = 112, Q = 113, R = 114, S = 115, T = 116, U = 117, V = 118, W = 119, X = 120, Y = 121, Z = 122, LeftCurlyBracket = 123, Pipe = 124, RightCurlyBracket = 125, Tilde = 126, Numlock = 300, CapsLock = 301, ScrollLock = 302, RightShift = 303, LeftShift = 304, RightControl = 305, LeftControl = 306, RightAlt = 307, LeftAlt = 308, LeftCommand = 310, LeftApple = 310, LeftWindows = 311, RightCommand = 309, RightApple = 309, RightWindows = 312, AltGr = 313, Help = 315, Print = 316, SysReq = 317, Break = 318, Menu = 319, Mouse0 = 323, Mouse1 = 324, Mouse2 = 325, Mouse3 = 326, Mouse4 = 327, Mouse5 = 328, Mouse6 = 329, JoystickButton0 = 330, JoystickButton1 = 331, JoystickButton2 = 332, JoystickButton3 = 333, JoystickButton4 = 334, JoystickButton5 = 335, JoystickButton6 = 336, JoystickButton7 = 337, JoystickButton8 = 338, JoystickButton9 = 339, JoystickButton10 = 340, JoystickButton11 = 341, JoystickButton12 = 342, JoystickButton13 = 343, JoystickButton14 = 344, JoystickButton15 = 345, JoystickButton16 = 346, JoystickButton17 = 347, JoystickButton18 = 348, JoystickButton19 = 349, Joystick1Button0 = 350, Joystick1Button1 = 351, Joystick1Button2 = 352, Joystick1Button3 = 353, Joystick1Button4 = 354, Joystick1Button5 = 355, Joystick1Button6 = 356, Joystick1Button7 = 357, Joystick1Button8 = 358, Joystick1Button9 = 359, Joystick1Button10 = 360, Joystick1Button11 = 361, Joystick1Button12 = 362, Joystick1Button13 = 363, Joystick1Button14 = 364, Joystick1Button15 = 365, Joystick1Button16 = 366, Joystick1Button17 = 367, Joystick1Button18 = 368, Joystick1Button19 = 369, Joystick2Button0 = 370, Joystick2Button1 = 371, Joystick2Button2 = 372, Joystick2Button3 = 373, Joystick2Button4 = 374, Joystick2Button5 = 375, Joystick2Button6 = 376, Joystick2Button7 = 377, Joystick2Button8 = 378, Joystick2Button9 = 379, Joystick2Button10 = 380, Joystick2Button11 = 381, Joystick2Button12 = 382, Joystick2Button13 = 383, Joystick2Button14 = 384, Joystick2Button15 = 385, Joystick2Button16 = 386, Joystick2Button17 = 387, Joystick2Button18 = 388, Joystick2Button19 = 389, Joystick3Button0 = 390, Joystick3Button1 = 391, Joystick3Button2 = 392, Joystick3Button3 = 393, Joystick3Button4 = 394, Joystick3Button5 = 395, Joystick3Button6 = 396, Joystick3Button7 = 397, Joystick3Button8 = 398, Joystick3Button9 = 399, Joystick3Button10 = 400, Joystick3Button11 = 401, Joystick3Button12 = 402, Joystick3Button13 = 403, Joystick3Button14 = 404, Joystick3Button15 = 405, Joystick3Button16 = 406, Joystick3Button17 = 407, Joystick3Button18 = 408, Joystick3Button19 = 409, Joystick4Button0 = 410, Joystick4Button1 = 411, Joystick4Button2 = 412, Joystick4Button3 = 413, Joystick4Button4 = 414, Joystick4Button5 = 415, Joystick4Button6 = 416, Joystick4Button7 = 417, Joystick4Button8 = 418, Joystick4Button9 = 419, Joystick4Button10 = 420, Joystick4Button11 = 421, Joystick4Button12 = 422, Joystick4Button13 = 423, Joystick4Button14 = 424, Joystick4Button15 = 425, Joystick4Button16 = 426, Joystick4Button17 = 427, Joystick4Button18 = 428, Joystick4Button19 = 429, Joystick5Button0 = 430, Joystick5Button1 = 431, Joystick5Button2 = 432, Joystick5Button3 = 433, Joystick5Button4 = 434, Joystick5Button5 = 435, Joystick5Button6 = 436, Joystick5Button7 = 437, Joystick5Button8 = 438, Joystick5Button9 = 439, Joystick5Button10 = 440, Joystick5Button11 = 441, Joystick5Button12 = 442, Joystick5Button13 = 443, Joystick5Button14 = 444, Joystick5Button15 = 445, Joystick5Button16 = 446, Joystick5Button17 = 447, Joystick5Button18 = 448, Joystick5Button19 = 449, Joystick6Button0 = 450, Joystick6Button1 = 451, Joystick6Button2 = 452, Joystick6Button3 = 453, Joystick6Button4 = 454, Joystick6Button5 = 455, Joystick6Button6 = 456, Joystick6Button7 = 457, Joystick6Button8 = 458, Joystick6Button9 = 459, Joystick6Button10 = 460, Joystick6Button11 = 461, Joystick6Button12 = 462, Joystick6Button13 = 463, Joystick6Button14 = 464, Joystick6Button15 = 465, Joystick6Button16 = 466, Joystick6Button17 = 467, Joystick6Button18 = 468, Joystick6Button19 = 469, Joystick7Button0 = 470, Joystick7Button1 = 471, Joystick7Button2 = 472, Joystick7Button3 = 473, Joystick7Button4 = 474, Joystick7Button5 = 475, Joystick7Button6 = 476, Joystick7Button7 = 477, Joystick7Button8 = 478, Joystick7Button9 = 479, Joystick7Button10 = 480, Joystick7Button11 = 481, Joystick7Button12 = 482, Joystick7Button13 = 483, Joystick7Button14 = 484, Joystick7Button15 = 485, Joystick7Button16 = 486, Joystick7Button17 = 487, Joystick7Button18 = 488, Joystick7Button19 = 489, Joystick8Button0 = 490, Joystick8Button1 = 491, Joystick8Button2 = 492, Joystick8Button3 = 493, Joystick8Button4 = 494, Joystick8Button5 = 495, Joystick8Button6 = 496, Joystick8Button7 = 497, Joystick8Button8 = 498, Joystick8Button9 = 499, Joystick8Button10 = 500, Joystick8Button11 = 501, Joystick8Button12 = 502, Joystick8Button13 = 503, Joystick8Button14 = 504, Joystick8Button15 = 505, Joystick8Button16 = 506, Joystick8Button17 = 507, Joystick8Button18 = 508, Joystick8Button19 = 509 }
+        enum IMECompositionMode { Auto = 0, On = 1, Off = 2 }
+        enum DeviceOrientation { Unknown = 0, Portrait = 1, PortraitUpsideDown = 2, LandscapeLeft = 3, LandscapeRight = 4, FaceUp = 5, FaceDown = 6 }
+        class LocationService extends System.Object {
+            
+        }
+        class Compass extends System.Object {
+            
+        }
+        class Gyroscope extends System.Object {
+            
+        }
+        class Screen extends System.Object {
+            public static width: number;
+            public static height: number;
+            public static dpi: number;
+            public static orientation: UnityEngine.ScreenOrientation;
+            public static sleepTimeout: number;
+            public static autorotateToPortrait: boolean;
+            public static autorotateToPortraitUpsideDown: boolean;
+            public static autorotateToLandscapeLeft: boolean;
+            public static autorotateToLandscapeRight: boolean;
+            public static currentResolution: UnityEngine.Resolution;
+            public static fullScreen: boolean;
+            public static fullScreenMode: UnityEngine.FullScreenMode;
+            public static safeArea: UnityEngine.Rect;
+            public static resolutions: UnityEngine.Resolution[];
+            public static lockCursor: boolean;
+            public constructor();
+            public static SetResolution(width: number, height: number, fullscreenMode: UnityEngine.FullScreenMode, preferredRefreshRate: number):void;
+            public static SetResolution(width: number, height: number, fullscreenMode: UnityEngine.FullScreenMode):void;
+            public static SetResolution(width: number, height: number, fullscreen: boolean, preferredRefreshRate: number):void;
+            public static SetResolution(width: number, height: number, fullscreen: boolean):void;
+            
+        }
+        enum ScreenOrientation { Unknown = 0, Portrait = 1, PortraitUpsideDown = 2, LandscapeLeft = 3, LandscapeRight = 4, AutoRotation = 5, Landscape = 3 }
+        class Resolution extends System.ValueType {
+            
+        }
+        enum FullScreenMode { ExclusiveFullScreen = 0, FullScreenWindow = 1, MaximizedWindow = 2, Windowed = 3 }
         class RaycastHit extends System.ValueType {
             public collider: UnityEngine.Collider;
             public point: UnityEngine.Vector3;
@@ -1167,7 +1308,198 @@ declare module 'csharp' {
         class PhysicsScene extends System.ValueType {
             
         }
+        class Animator extends UnityEngine.Behaviour {
+            public isOptimizable: boolean;
+            public isHuman: boolean;
+            public hasRootMotion: boolean;
+            public humanScale: number;
+            public isInitialized: boolean;
+            public deltaPosition: UnityEngine.Vector3;
+            public deltaRotation: UnityEngine.Quaternion;
+            public velocity: UnityEngine.Vector3;
+            public angularVelocity: UnityEngine.Vector3;
+            public rootPosition: UnityEngine.Vector3;
+            public rootRotation: UnityEngine.Quaternion;
+            public applyRootMotion: boolean;
+            public linearVelocityBlending: boolean;
+            public animatePhysics: boolean;
+            public updateMode: UnityEngine.AnimatorUpdateMode;
+            public hasTransformHierarchy: boolean;
+            public gravityWeight: number;
+            public bodyPosition: UnityEngine.Vector3;
+            public bodyRotation: UnityEngine.Quaternion;
+            public stabilizeFeet: boolean;
+            public layerCount: number;
+            public parameters: UnityEngine.AnimatorControllerParameter[];
+            public parameterCount: number;
+            public feetPivotActive: number;
+            public pivotWeight: number;
+            public pivotPosition: UnityEngine.Vector3;
+            public isMatchingTarget: boolean;
+            public speed: number;
+            public targetPosition: UnityEngine.Vector3;
+            public targetRotation: UnityEngine.Quaternion;
+            public cullingMode: UnityEngine.AnimatorCullingMode;
+            public playbackTime: number;
+            public recorderStartTime: number;
+            public recorderStopTime: number;
+            public recorderMode: UnityEngine.AnimatorRecorderMode;
+            public runtimeAnimatorController: UnityEngine.RuntimeAnimatorController;
+            public hasBoundPlayables: boolean;
+            public avatar: UnityEngine.Avatar;
+            public playableGraph: UnityEngine.Playables.PlayableGraph;
+            public layersAffectMassCenter: boolean;
+            public leftFeetBottomHeight: number;
+            public rightFeetBottomHeight: number;
+            public logWarnings: boolean;
+            public fireEvents: boolean;
+            public keepAnimatorControllerStateOnDisable: boolean;
+            public constructor();
+            public GetFloat(name: string):number;
+            public GetFloat(id: number):number;
+            public SetFloat(name: string, value: number):void;
+            public SetFloat(name: string, value: number, dampTime: number, deltaTime: number):void;
+            public SetFloat(id: number, value: number):void;
+            public SetFloat(id: number, value: number, dampTime: number, deltaTime: number):void;
+            public GetBool(name: string):boolean;
+            public GetBool(id: number):boolean;
+            public SetBool(name: string, value: boolean):void;
+            public SetBool(id: number, value: boolean):void;
+            public GetInteger(name: string):number;
+            public GetInteger(id: number):number;
+            public SetInteger(name: string, value: number):void;
+            public SetInteger(id: number, value: number):void;
+            public SetTrigger(name: string):void;
+            public SetTrigger(id: number):void;
+            public ResetTrigger(name: string):void;
+            public ResetTrigger(id: number):void;
+            public IsParameterControlledByCurve(name: string):boolean;
+            public IsParameterControlledByCurve(id: number):boolean;
+            public GetIKPosition(goal: UnityEngine.AvatarIKGoal):UnityEngine.Vector3;
+            public SetIKPosition(goal: UnityEngine.AvatarIKGoal, goalPosition: UnityEngine.Vector3):void;
+            public GetIKRotation(goal: UnityEngine.AvatarIKGoal):UnityEngine.Quaternion;
+            public SetIKRotation(goal: UnityEngine.AvatarIKGoal, goalRotation: UnityEngine.Quaternion):void;
+            public GetIKPositionWeight(goal: UnityEngine.AvatarIKGoal):number;
+            public SetIKPositionWeight(goal: UnityEngine.AvatarIKGoal, value: number):void;
+            public GetIKRotationWeight(goal: UnityEngine.AvatarIKGoal):number;
+            public SetIKRotationWeight(goal: UnityEngine.AvatarIKGoal, value: number):void;
+            public GetIKHintPosition(hint: UnityEngine.AvatarIKHint):UnityEngine.Vector3;
+            public SetIKHintPosition(hint: UnityEngine.AvatarIKHint, hintPosition: UnityEngine.Vector3):void;
+            public GetIKHintPositionWeight(hint: UnityEngine.AvatarIKHint):number;
+            public SetIKHintPositionWeight(hint: UnityEngine.AvatarIKHint, value: number):void;
+            public SetLookAtPosition(lookAtPosition: UnityEngine.Vector3):void;
+            public SetLookAtWeight(weight: number):void;
+            public SetLookAtWeight(weight: number, bodyWeight: number):void;
+            public SetLookAtWeight(weight: number, bodyWeight: number, headWeight: number):void;
+            public SetLookAtWeight(weight: number, bodyWeight: number, headWeight: number, eyesWeight: number):void;
+            public SetLookAtWeight(weight: number, bodyWeight: number, headWeight: number, eyesWeight: number, clampWeight: number):void;
+            public SetBoneLocalRotation(humanBoneId: UnityEngine.HumanBodyBones, rotation: UnityEngine.Quaternion):void;
+            public GetBehaviours(fullPathHash: number, layerIndex: number):UnityEngine.StateMachineBehaviour[];
+            public GetLayerName(layerIndex: number):string;
+            public GetLayerIndex(layerName: string):number;
+            public GetLayerWeight(layerIndex: number):number;
+            public SetLayerWeight(layerIndex: number, weight: number):void;
+            public GetCurrentAnimatorStateInfo(layerIndex: number):UnityEngine.AnimatorStateInfo;
+            public GetNextAnimatorStateInfo(layerIndex: number):UnityEngine.AnimatorStateInfo;
+            public GetAnimatorTransitionInfo(layerIndex: number):UnityEngine.AnimatorTransitionInfo;
+            public GetCurrentAnimatorClipInfoCount(layerIndex: number):number;
+            public GetNextAnimatorClipInfoCount(layerIndex: number):number;
+            public GetCurrentAnimatorClipInfo(layerIndex: number):UnityEngine.AnimatorClipInfo[];
+            public GetNextAnimatorClipInfo(layerIndex: number):UnityEngine.AnimatorClipInfo[];
+            public GetCurrentAnimatorClipInfo(layerIndex: number, clips: System.Collections.Generic.List$1<UnityEngine.AnimatorClipInfo>):void;
+            public GetNextAnimatorClipInfo(layerIndex: number, clips: System.Collections.Generic.List$1<UnityEngine.AnimatorClipInfo>):void;
+            public IsInTransition(layerIndex: number):boolean;
+            public GetParameter(index: number):UnityEngine.AnimatorControllerParameter;
+            public MatchTarget(matchPosition: UnityEngine.Vector3, matchRotation: UnityEngine.Quaternion, targetBodyPart: UnityEngine.AvatarTarget, weightMask: UnityEngine.MatchTargetWeightMask, startNormalizedTime: number):void;
+            public MatchTarget(matchPosition: UnityEngine.Vector3, matchRotation: UnityEngine.Quaternion, targetBodyPart: UnityEngine.AvatarTarget, weightMask: UnityEngine.MatchTargetWeightMask, startNormalizedTime: number, targetNormalizedTime: number):void;
+            public InterruptMatchTarget():void;
+            public InterruptMatchTarget(completeMatch: boolean):void;
+            public ForceStateNormalizedTime(normalizedTime: number):void;
+            public CrossFadeInFixedTime(stateName: string, fixedTransitionDuration: number):void;
+            public CrossFadeInFixedTime(stateName: string, fixedTransitionDuration: number, layer: number):void;
+            public CrossFadeInFixedTime(stateName: string, fixedTransitionDuration: number, layer: number, fixedTimeOffset: number):void;
+            public CrossFadeInFixedTime(stateName: string, fixedTransitionDuration: number, layer: number, fixedTimeOffset: number, normalizedTransitionTime: number):void;
+            public CrossFadeInFixedTime(stateHashName: number, fixedTransitionDuration: number, layer: number, fixedTimeOffset: number):void;
+            public CrossFadeInFixedTime(stateHashName: number, fixedTransitionDuration: number, layer: number):void;
+            public CrossFadeInFixedTime(stateHashName: number, fixedTransitionDuration: number):void;
+            public CrossFadeInFixedTime(stateHashName: number, fixedTransitionDuration: number, layer: number, fixedTimeOffset: number, normalizedTransitionTime: number):void;
+            public WriteDefaultValues():void;
+            public CrossFade(stateName: string, normalizedTransitionDuration: number, layer: number, normalizedTimeOffset: number):void;
+            public CrossFade(stateName: string, normalizedTransitionDuration: number, layer: number):void;
+            public CrossFade(stateName: string, normalizedTransitionDuration: number):void;
+            public CrossFade(stateName: string, normalizedTransitionDuration: number, layer: number, normalizedTimeOffset: number, normalizedTransitionTime: number):void;
+            public CrossFade(stateHashName: number, normalizedTransitionDuration: number, layer: number, normalizedTimeOffset: number, normalizedTransitionTime: number):void;
+            public CrossFade(stateHashName: number, normalizedTransitionDuration: number, layer: number, normalizedTimeOffset: number):void;
+            public CrossFade(stateHashName: number, normalizedTransitionDuration: number, layer: number):void;
+            public CrossFade(stateHashName: number, normalizedTransitionDuration: number):void;
+            public PlayInFixedTime(stateName: string, layer: number):void;
+            public PlayInFixedTime(stateName: string):void;
+            public PlayInFixedTime(stateName: string, layer: number, fixedTime: number):void;
+            public PlayInFixedTime(stateNameHash: number, layer: number, fixedTime: number):void;
+            public PlayInFixedTime(stateNameHash: number, layer: number):void;
+            public PlayInFixedTime(stateNameHash: number):void;
+            public Play(stateName: string, layer: number):void;
+            public Play(stateName: string):void;
+            public Play(stateName: string, layer: number, normalizedTime: number):void;
+            public Play(stateNameHash: number, layer: number, normalizedTime: number):void;
+            public Play(stateNameHash: number, layer: number):void;
+            public Play(stateNameHash: number):void;
+            public SetTarget(targetIndex: UnityEngine.AvatarTarget, targetNormalizedTime: number):void;
+            public GetBoneTransform(humanBoneId: UnityEngine.HumanBodyBones):UnityEngine.Transform;
+            public StartPlayback():void;
+            public StopPlayback():void;
+            public StartRecording(frameCount: number):void;
+            public StopRecording():void;
+            public HasState(layerIndex: number, stateID: number):boolean;
+            public static StringToHash(name: string):number;
+            public Update(deltaTime: number):void;
+            public Rebind():void;
+            public ApplyBuiltinRootMotion():void;
+            public GetVector(name: string):UnityEngine.Vector3;
+            public GetVector(id: number):UnityEngine.Vector3;
+            public SetVector(name: string, value: UnityEngine.Vector3):void;
+            public SetVector(id: number, value: UnityEngine.Vector3):void;
+            public GetQuaternion(name: string):UnityEngine.Quaternion;
+            public GetQuaternion(id: number):UnityEngine.Quaternion;
+            public SetQuaternion(name: string, value: UnityEngine.Quaternion):void;
+            public SetQuaternion(id: number, value: UnityEngine.Quaternion):void;
+            
+        }
+        class AnimationInfo extends System.ValueType {
+            
+        }
+        enum AnimatorUpdateMode { Normal = 0, AnimatePhysics = 1, UnscaledTime = 2 }
+        enum AvatarIKGoal { LeftFoot = 0, RightFoot = 1, LeftHand = 2, RightHand = 3 }
+        enum AvatarIKHint { LeftKnee = 0, RightKnee = 1, LeftElbow = 2, RightElbow = 3 }
+        enum HumanBodyBones { Hips = 0, LeftUpperLeg = 1, RightUpperLeg = 2, LeftLowerLeg = 3, RightLowerLeg = 4, LeftFoot = 5, RightFoot = 6, Spine = 7, Chest = 8, UpperChest = 54, Neck = 9, Head = 10, LeftShoulder = 11, RightShoulder = 12, LeftUpperArm = 13, RightUpperArm = 14, LeftLowerArm = 15, RightLowerArm = 16, LeftHand = 17, RightHand = 18, LeftToes = 19, RightToes = 20, LeftEye = 21, RightEye = 22, Jaw = 23, LeftThumbProximal = 24, LeftThumbIntermediate = 25, LeftThumbDistal = 26, LeftIndexProximal = 27, LeftIndexIntermediate = 28, LeftIndexDistal = 29, LeftMiddleProximal = 30, LeftMiddleIntermediate = 31, LeftMiddleDistal = 32, LeftRingProximal = 33, LeftRingIntermediate = 34, LeftRingDistal = 35, LeftLittleProximal = 36, LeftLittleIntermediate = 37, LeftLittleDistal = 38, RightThumbProximal = 39, RightThumbIntermediate = 40, RightThumbDistal = 41, RightIndexProximal = 42, RightIndexIntermediate = 43, RightIndexDistal = 44, RightMiddleProximal = 45, RightMiddleIntermediate = 46, RightMiddleDistal = 47, RightRingProximal = 48, RightRingIntermediate = 49, RightRingDistal = 50, RightLittleProximal = 51, RightLittleIntermediate = 52, RightLittleDistal = 53, LastBone = 55 }
         class ScriptableObject extends UnityEngine.Object {
+            
+        }
+        class StateMachineBehaviour extends UnityEngine.ScriptableObject {
+            
+        }
+        class AnimatorStateInfo extends System.ValueType {
+            
+        }
+        class AnimatorTransitionInfo extends System.ValueType {
+            
+        }
+        class AnimatorClipInfo extends System.ValueType {
+            
+        }
+        class AnimatorControllerParameter extends System.Object {
+            
+        }
+        enum AvatarTarget { Root = 0, Body = 1, LeftFoot = 2, RightFoot = 3, LeftHand = 4, RightHand = 5 }
+        class MatchTargetWeightMask extends System.ValueType {
+            
+        }
+        enum AnimatorCullingMode { AlwaysAnimate = 0, CullUpdateTransforms = 1, CullCompletely = 2, BasedOnRenderers = 1 }
+        enum AnimatorRecorderMode { Offline = 0, Playback = 1, Record = 2 }
+        class RuntimeAnimatorController extends UnityEngine.Object {
+            
+        }
+        class Avatar extends UnityEngine.Object {
             
         }
         class Color32 extends System.ValueType {
@@ -1283,6 +1615,21 @@ declare module 'csharp' {
         }
         
     }
+    namespace UnityEngine.Rendering {
+        enum ShadowCastingMode { Off = 0, On = 1, TwoSided = 2, ShadowsOnly = 3 }
+        enum LightProbeUsage { Off = 0, BlendProbes = 1, UseProxyVolume = 2, CustomProvided = 4 }
+        enum ReflectionProbeUsage { Off = 0, BlendProbes = 1, BlendProbesAndSkybox = 2, Simple = 3 }
+        class ReflectionProbeBlendInfo extends System.ValueType {
+            
+        }
+        enum OpaqueSortMode { Default = 0, FrontToBack = 1, NoDistanceSort = 2 }
+        enum CameraEvent { BeforeDepthTexture = 0, AfterDepthTexture = 1, BeforeDepthNormalsTexture = 2, AfterDepthNormalsTexture = 3, BeforeGBuffer = 4, AfterGBuffer = 5, BeforeLighting = 6, AfterLighting = 7, BeforeFinalPass = 8, AfterFinalPass = 9, BeforeForwardOpaque = 10, AfterForwardOpaque = 11, BeforeImageEffectsOpaque = 12, AfterImageEffectsOpaque = 13, BeforeSkybox = 14, AfterSkybox = 15, BeforeForwardAlpha = 16, AfterForwardAlpha = 17, BeforeImageEffects = 18, AfterImageEffects = 19, AfterEverything = 20, BeforeReflections = 21, AfterReflections = 22, BeforeHaloAndLensFlares = 23, AfterHaloAndLensFlares = 24 }
+        class CommandBuffer extends System.Object {
+            
+        }
+        enum ComputeQueueType { Default = 0, Background = 1, Urgent = 2 }
+        
+    }
     namespace UnityEngine.SceneManagement {
         class Scene extends System.ValueType {
             
@@ -1306,11 +1653,45 @@ declare module 'csharp' {
             
         }
         class BaseEventData extends UnityEngine.EventSystems.AbstractEventData {
+            public currentInputModule: UnityEngine.EventSystems.BaseInputModule;
+            public selectedObject: UnityEngine.GameObject;
+            public constructor(eventSystem: UnityEngine.EventSystems.EventSystem);
             
         }
         class PointerEventData extends UnityEngine.EventSystems.BaseEventData {
             
         }
+        class EventTrigger extends UnityEngine.MonoBehaviour {
+            public triggers: System.Collections.Generic.List$1<UnityEngine.EventSystems.EventTrigger.Entry>;
+            public OnPointerEnter(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnPointerExit(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnDrag(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnDrop(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnPointerDown(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnPointerUp(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnPointerClick(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnSelect(eventData: UnityEngine.EventSystems.BaseEventData):void;
+            public OnDeselect(eventData: UnityEngine.EventSystems.BaseEventData):void;
+            public OnScroll(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnMove(eventData: UnityEngine.EventSystems.AxisEventData):void;
+            public OnUpdateSelected(eventData: UnityEngine.EventSystems.BaseEventData):void;
+            public OnInitializePotentialDrag(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnBeginDrag(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnEndDrag(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnSubmit(eventData: UnityEngine.EventSystems.BaseEventData):void;
+            public OnCancel(eventData: UnityEngine.EventSystems.BaseEventData):void;
+            
+        }
+        class AxisEventData extends UnityEngine.EventSystems.BaseEventData {
+            
+        }
+        class BaseInputModule extends UnityEngine.EventSystems.UIBehaviour {
+            
+        }
+        class EventSystem extends UnityEngine.EventSystems.UIBehaviour {
+            
+        }
+        enum EventTriggerType { PointerEnter = 0, PointerExit = 1, PointerDown = 2, PointerUp = 3, PointerClick = 4, Drag = 5, Drop = 6, Scroll = 7, UpdateSelected = 8, Select = 9, Deselect = 10, Move = 11, InitializePotentialDrag = 12, BeginDrag = 13, EndDrag = 14, Submit = 15, Cancel = 16 }
         
     }
     namespace UnityEngine.UI {
@@ -1383,7 +1764,6 @@ declare module 'csharp' {
             public static GetTextAnchorPivot(anchor: UnityEngine.TextAnchor):UnityEngine.Vector2;
             public CalculateLayoutInputHorizontal():void;
             public CalculateLayoutInputVertical():void;
-            public OnRebuildRequested():void;
             
         }
         class Selectable extends UnityEngine.EventSystems.UIBehaviour {
@@ -1433,6 +1813,7 @@ declare module 'csharp' {
         }
         type UnityAction = () => void;
         var UnityAction: {new (func: () => void): UnityAction;}
+        type UnityAction$1<T0> = (arg0: T0) => void;
         
     }
     namespace UnityEngine.UI.Button {
@@ -1453,13 +1834,16 @@ declare module 'csharp' {
         enum StereoscopicEye { Left = 0, Right = 1 }
         
     }
-    namespace UnityEngine.Rendering {
-        enum OpaqueSortMode { Default = 0, FrontToBack = 1, NoDistanceSort = 2 }
-        enum CameraEvent { BeforeDepthTexture = 0, AfterDepthTexture = 1, BeforeDepthNormalsTexture = 2, AfterDepthNormalsTexture = 3, BeforeGBuffer = 4, AfterGBuffer = 5, BeforeLighting = 6, AfterLighting = 7, BeforeFinalPass = 8, AfterFinalPass = 9, BeforeForwardOpaque = 10, AfterForwardOpaque = 11, BeforeImageEffectsOpaque = 12, AfterImageEffectsOpaque = 13, BeforeSkybox = 14, AfterSkybox = 15, BeforeForwardAlpha = 16, AfterForwardAlpha = 17, BeforeImageEffects = 18, AfterImageEffects = 19, AfterEverything = 20, BeforeReflections = 21, AfterReflections = 22, BeforeHaloAndLensFlares = 23, AfterHaloAndLensFlares = 24 }
-        class CommandBuffer extends System.Object {
+    namespace UnityEngine.EventSystems.EventTrigger {
+        class Entry extends System.Object {
             
         }
-        enum ComputeQueueType { Default = 0, Background = 1, Urgent = 2 }
+        
+    }
+    namespace UnityEngine.Playables {
+        class PlayableGraph extends System.ValueType {
+            
+        }
         
     }
     namespace Spine {
@@ -1680,7 +2064,6 @@ declare module 'csharp' {
     namespace GameUtils {
         class CommonUtil extends System.Object {
             public static IsIphoneX: boolean;
-            public static LoadAssetsWay: boolean;
             public constructor();
             public static GetPlatformString():string;
             public static EncodingToMd5(data: string):string;
@@ -1708,6 +2091,19 @@ declare module 'csharp' {
             public static initColor(r: number, g: number, b: number, a: number):UnityEngine.Color;
             public static RemoveAllChild(tran: UnityEngine.Transform):void;
             public static GetChildByName(tran: UnityEngine.Transform, name: string):UnityEngine.GameObject;
+            public static GetRaycastHit():UnityEngine.RaycastHit;
+            
+        }
+        class ComponentExtension extends System.Object {
+            public constructor();
+            public static AddCompListener(obj: UnityEngine.GameObject, eventTriggerType: UnityEngine.EventSystems.EventTriggerType, callback: GameUtils.ComponentEventDelege):void;
+            
+        }
+        type ComponentEventDelege = (eventData: UnityEngine.EventSystems.BaseEventData) => void;
+        var ComponentEventDelege: {new (func: (eventData: UnityEngine.EventSystems.BaseEventData) => void): ComponentEventDelege;}
+        class PhysicsExtensionMethods extends System.Object {
+            public static tempRayCastHit: UnityEngine.RaycastHit;
+            public static rayCastHit(x1: number, y1: number, z1: number, x2: number, y2: number, z2: number, maxDistance: number, maskLayer: number):boolean;
             
         }
         class ColliderListenerExpand extends UnityEngine.MonoBehaviour {

@@ -736,7 +736,7 @@ namespace Puerts.Editor
                 var typingRender = templateGetter("typing.tpl");
                 using (StreamWriter textWriter = new StreamWriter(saveTo + "Typing/csharp/index.d.ts", false, Encoding.UTF8))
                 {
-                    string fileContext = "// @ts-nocheck \n"+ typingRender(ToTypingGenInfo(tsTypes));
+                    string fileContext = "// @ts-nocheck"+ typingRender(ToTypingGenInfo(tsTypes));
                     textWriter.Write(fileContext);
                     textWriter.Flush();
                 }

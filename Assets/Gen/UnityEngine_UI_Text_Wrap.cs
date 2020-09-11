@@ -174,36 +174,6 @@ namespace PuertsStaticWrap
             }
         }
         
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_OnRebuildRequested(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
-                
-                
-                {
-                    
-                    
-                    
-                    
-                    {
-                        
-                        obj.OnRebuildRequested();
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
         
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
@@ -811,7 +781,6 @@ namespace PuertsStaticWrap
                     { new Puerts.MethodKey {Name = "GetTextAnchorPivot", IsStatic = true},  F_GetTextAnchorPivot },
                     { new Puerts.MethodKey {Name = "CalculateLayoutInputHorizontal", IsStatic = false},  M_CalculateLayoutInputHorizontal },
                     { new Puerts.MethodKey {Name = "CalculateLayoutInputVertical", IsStatic = false},  M_CalculateLayoutInputVertical },
-                    { new Puerts.MethodKey {Name = "OnRebuildRequested", IsStatic = false},  M_OnRebuildRequested },
                     
                 },
                 Properties = new System.Collections.Generic.Dictionary<string, Puerts.PropertyRegisterInfo>()

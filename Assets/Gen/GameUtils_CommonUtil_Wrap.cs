@@ -244,37 +244,6 @@ namespace PuertsStaticWrap
         
         
         
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_LoadAssetsWay(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = GameUtils.CommonUtil.LoadAssetsWay;
-                Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_LoadAssetsWay(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                GameUtils.CommonUtil.LoadAssetsWay = argHelper.GetBoolean(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
         
         
         public static Puerts.TypeRegisterInfo GetRegisterInfo()
@@ -296,7 +265,6 @@ namespace PuertsStaticWrap
                 Properties = new System.Collections.Generic.Dictionary<string, Puerts.PropertyRegisterInfo>()
                 {
                     {"IsIphoneX", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_IsIphoneX, Setter = null} },
-                    {"LoadAssetsWay", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_LoadAssetsWay, Setter = S_LoadAssetsWay} },
                     
                 }
             };

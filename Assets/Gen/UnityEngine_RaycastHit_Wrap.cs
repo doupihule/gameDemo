@@ -220,7 +220,7 @@ namespace PuertsStaticWrap
             try
             {
                 UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
-                var result = obj.textureCoord1;
+                var result = obj.textureCoord2;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)

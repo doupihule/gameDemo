@@ -1,0 +1,246 @@
+ManifestFileVersion: 0
+CRC: 4243617400
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0cbda2fa692819c962a759582ec52e71
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 1315d50b981ec5ba780bcd6199e4b7c3
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 81
+  Script: {instanceID: 0}
+- Class: 90
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 92
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 96
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 290c269ff2a508f4a83edd6ae1e94ccd, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 124
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+Assets:
+- Assets/Model3d/Bullet/Res/Materials/zidan.mat
+- Assets/Model3d/Other/Res/Scene/Materials/role_target_01.mat
+- Assets/Model3d/Effect/Prefabs/eff_jizhongbaozha.prefab
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_02.mat
+- Assets/Model3d/Other/Res/Scene/Materials/role_yezi_01.mat
+- Assets/Model3d/Bullet/Res/Materials/zidanyanse.mat
+- Assets/Model3d/Bullet/Res/bullet_01.fbm/zidan.png
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_08.mat
+- Assets/Model3d/Effect/Res/textures/eff_daiji_03.mat
+- Assets/Model3d/Other/Res/Materials/test_plane.mat
+- Assets/Model3d/Effect/Res/eff_danqi_wei.prefab
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_08.png
+- Assets/Model3d/Effect/Res/eff_trail.prefab
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_01.png
+- Assets/Model3d/Effect/Res/eff_huochairen.prefab
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_04.mat
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_02.mat
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_05.mat
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_09.png
+- Assets/Model3d/Effect/Res/textures/eff_jizhongbaozha_01.png
+- Assets/Model3d/Effect/Res/eff_pengzhuang.prefab
+- Assets/Model3d/Other/Res/Scene/Materials/role_ironbox_01.mat
+- Assets/Model3d/Effect/Res/textures/effect_lizi_01.mat
+- Assets/Model3d/Effect/Res/mesh/eff_danqi_mod_01.FBX
+- Assets/Model3d/Effect/Res/textures/eff_qiche_03.png
+- Assets/Model3d/Effect/Res/textures/eff_qiche_04.mat
+- Assets/Model3d/Other/Res/Scene/role_ironbox_01.fbx
+- Assets/Model3d/Other/Res/Scene/role_tree_02.fbx
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_05.mat
+- Assets/Model3d/Effect/Res/textures/eff_daiji_01.mat
+- Assets/Model3d/Effect/Res/textures/eff_jizhongbaozha_01.mat
+- Assets/Model3d/Other/Res/shadow.png
+- Assets/Model3d/Effect/Res/eff_qiangkou.prefab
+- Assets/Model3d/Effect/Res/textures/eff_baozha_02.png
+- Assets/Model3d/Other/Res/Scene/role_woodbox_01.fbx
+- Assets/Model3d/Other/Res/line.prefab
+- Assets/Model3d/Effect/Res/textures/eff_danqi_02.png
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_02.png
+- Assets/Model3d/Other/Res/test_plane.fbm/test_plane.png
+- Assets/Model3d/Other/Res/Scene/Materials/role_basiswall_01.mat
+- Assets/Model3d/Effect/Res/textures/eff_qiche_03.mat
+- Assets/Model3d/Effect/Res/textures/eff_qiche_01.mat
+- Assets/Model3d/Other/Res/Scene/Materials/role_shanshi_01.mat
+- Assets/Model3d/Other/Res/Scene/role_shanshi_01.fbx
+- Assets/Model3d/Other/Res/Scene/role_basiswall_02.FBX
+- Assets/Model3d/Effect/Res/textures/eff_qiche_02.mat
+- Assets/Model3d/Effect/Res/animation/eff_danqi_anim_01.controller
+- Assets/Model3d/Other/Res/Scene/Materials/role_player_01.mat
+- Assets/Model3d/Effect/Res/textures/trailtransparent.png
+- Assets/Model3d/Other/Res/Scene/Materials/role_basiswall_03.mat
+- Assets/Model3d/Effect/Res/eff_penhuo_qi.prefab
+- Assets/Model3d/Bullet/Res/role_bullet.FBX
+- Assets/Model3d/Effect/Res/eff_huochairen_dimian.prefab
+- Assets/Model3d/Effect/Res/textures/eff_baozha_02.mat
+- Assets/Model3d/Effect/Res/mesh/eff_qiangkou_mod_01.FBX
+- Assets/Model3d/Other/Res/Scene/role_woodbox_01.fbm/role_woodbox_01.png
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_04.mat
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_03.png
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_05.png
+- Assets/Model3d/Other/Res/Scene/role_player_01.FBX
+- Assets/Model3d/Other/Res/Scene/Materials/role_gateway_01.mat
+- Assets/Model3d/Effect/Res/eff_saichesiwang_dimianhongguang.prefab
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_05.png
+- Assets/Model3d/Effect/Res/textures/effect_lizi_03.png
+- Assets/Model3d/Other/Res/Scene/Materials/role_tree_01.mat
+- Assets/Model3d/Other/Res/Scene/Materials/role_shanshi_02.mat
+- Assets/Model3d/Effect/Res/textures/eff_danqi_01.mat
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_03.mat
+- Assets/Model3d/Other/Res/Scene/role_tree_03.fbx
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_04.png
+- Assets/Model3d/Effect/Res/mesh/eff_daiji_mod_01.FBX
+- Assets/Model3d/Main/Prefabs/battle_prefab.prefab
+- Assets/Model3d/Other/Res/Scene/Materials/role_tntboxswitch_01.mat
+- Assets/Model3d/Effect/Res/textures/eff_daiji_04.mat
+- Assets/Model3d/Effect/Res/textures/balltrailtarget.mat
+- Assets/Model3d/Effect/Res/eff_daiji.prefab
+- Assets/Model3d/Bullet/Res/bullet_01.max
+- Assets/Model3d/Other/Res/Scene/role_ironbox_01.fbm/role_ironbox_01.png
+- Assets/Model3d/Effect/Res/textures/eff_danqi_02.mat
+- Assets/Model3d/Other/Res/Scene/Materials/role_tntboombox_01.mat
+- Assets/Model3d/Effect/Res/textures/effect_lizi_04.png
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_01.png
+- Assets/Model3d/Other/Res/Scene/role_tree_01.fbx
+- Assets/Model3d/Other/Res/test_plane.FBX
+- Assets/Model3d/Other/Res/Scene/Materials/Brown56.mat
+- Assets/Model3d/Other/Res/Scene/role_yezi.FBX
+- Assets/Model3d/Effect/Res/animation/eff_danqi_anim_01.anim
+- Assets/Model3d/Effect/Res/eff_penhuo_jiasuxian_you.prefab
+- Assets/Model3d/Effect/Res/eff_saichesiwang_xiaohuo.prefab
+- Assets/Model3d/Effect/Res/textures/eff_baozha_01.mat
+- Assets/Model3d/Effect/Res/eff_penhuo_jiasuxian_xia.prefab
+- Assets/Model3d/Effect/Prefabs/eff_qiangkoutexiao.prefab
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_12.mat
+- Assets/Model3d/Effect/Res/textures/eff_qiche_04.png
+- Assets/Model3d/Other/Res/Scene/role_basiswall_01.fbx
+- Assets/Model3d/Other/Res/Scene/Materials/role_qiang.mat
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_10.png
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_07.mat
+- Assets/Model3d/Effect/Res/eff_penhuo_01.prefab
+- Assets/Model3d/Effect/Res/textures/eff_baozha_01.png
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_02.mat
+- Assets/Model3d/Other/Res/Scene/Materials/line.mat
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_03.mat
+- Assets/Model3d/Effect/Res/textures/effect_lizi_04.mat
+- Assets/Model3d/Effect/Res/textures/eff_qiangkou_04.png
+- Assets/Model3d/Effect/Res/eff_baozha.prefab
+- Assets/Model3d/Other/Res/test_plane.png
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_07.png
+- Assets/Model3d/Other/Res/Scene/Materials/default.mat
+- Assets/Model3d/Effect/Res/textures/eff_qiangkou_04.mat
+- Assets/Model3d/Other/Prefabs/shadow.prefab
+- Assets/Model3d/Effect/Prefabs/eff_baozha.prefab
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_01.mat
+- Assets/Model3d/Effect/Res/eff_hechengxinche_3d.prefab
+- Assets/Model3d/Effect/Res/eff_danqi_tou.prefab
+- Assets/Model3d/Other/Res/Scene/role_beijing.fbm/scene_ui_beijing.png
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_06.png
+- Assets/Model3d/Effect/Res/eff_jizhongbaozha.prefab
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_06.png
+- Assets/Model3d/Effect/Res/textures/effect_lizi_03.mat
+- Assets/Model3d/Effect/Res/textures/eff_qiangkou_01.png
+- Assets/Model3d/Other/Res/Scene/Materials/Grey46.mat
+- Assets/Model3d/Other/Res/Scene/role_tntboxswitch_01.fbm/role_tntboxswitch_01.png
+- Assets/Model3d/Effect/Res/eff_saichesiwang_dahuo.prefab
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_09.mat
+- Assets/Model3d/Other/Res/Scene/Materials/role_treeshugan_02.mat
+- Assets/Model3d/Effect/Res/textures/eff_qiche_01.png
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_03.png
+- Assets/Model3d/Effect/Res/textures/eff_qiangkou_01.mat
+- Assets/Model3d/Other/Res/Scene/role_beijing.FBX
+- Assets/Model3d/Other/Res/Scene/role_tntboombox_01.fbm/role_tntboombox_01.png
+- Assets/Model3d/Effect/Res/textures/eff_daiji_01.png
+- Assets/Model3d/Bullet/Res/zidan.png
+- Assets/Model3d/Other/Res/Scene/Materials/role_woodbox_01.mat
+- Assets/Model3d/Other/Res/Scene/Materials/role_beijing.mat
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_10.mat
+- Assets/Model3d/Effect/Res/textures/eff_qiche_02.png
+- Assets/Model3d/Other/Res/Scene/role_gateway_01.fbm/role_gateway_01.png
+- Assets/Model3d/Other/Res/Scene/role_woodbox_01.fbm/role_ironbox_01.png
+- Assets/Model3d/Effect/Res/textures/eff_daiji_02.png
+- Assets/Model3d/Other/Res/testMetrail.mat
+- Assets/Model3d/Effect/Res/textures/eff_daiji_03.png
+- Assets/Model3d/Effect/Res/textures/effect_lizi_02.png
+- Assets/Model3d/Effect/Res/eff_penhuo_02.prefab
+- Assets/Model3d/Effect/Res/eff_chaoche_chetou.prefab
+- Assets/Model3d/Other/Res/Scene/role_basiswall_01.fbm/role_basiswall_01.png
+- Assets/Model3d/Main/Res/battle_prefab_res.prefab
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_11.mat
+- Assets/Model3d/Other/Res/test_plane.mat
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_04.png
+- Assets/Model3d/Bullet/Prefabs/bullet_01.prefab
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_06.mat
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_07.mat
+- Assets/Model3d/Effect/Res/textures/eff_jizhongbaozha_02.png
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_06.mat
+- Assets/Model3d/Effect/Res/mesh/eff_jizhongbaozha_mod_01.FBX
+- Assets/Model3d/Effect/Res/textures/eff_hechengxinche_02.png
+- Assets/Model3d/Effect/Res/textures/eff_daiji_02.mat
+- Assets/Model3d/Effect/Res/eff_saicheluntai.prefab
+- Assets/Model3d/Other/Res/Scene/Materials/Grey31.mat
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_04.mat
+- Assets/Model3d/Effect/Res/textures/eff_danqi_01.png
+- Assets/Model3d/Effect/Res/eff_penhuo_jiasuxian_zuo.prefab
+- Assets/Model3d/Effect/Res/textures/effect_lizi_02.mat
+- Assets/Model3d/Effect/Res/textures/trail_renderer.mat
+- Assets/Model3d/Other/Res/Scene/role_shanshi_02.fbx
+- Assets/Model3d/Effect/Res/textures/eff_jizhongbaozha_02.mat
+- Assets/Model3d/Other/Res/shadow.mat
+- Assets/Model3d/Effect/Res/eff_youtongbaozha.prefab
+- Assets/Model3d/Other/Res/Scene/Materials/role_basiswall_02.mat
+- Assets/Model3d/Effect/Res/textures/effect_lizi_01.png
+- Assets/Model3d/Effect/Prefabs/eff_huochairenpenxue.prefab
+- Assets/Model3d/Bullet/Res/bullet_01.FBX
+- Assets/Model3d/Effect/Res/eff_saichesiwang.prefab
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_05.mat
+- Assets/Model3d/Effect/Res/eff_chaoche_chewei.prefab
+- Assets/Model3d/Other/Res/Scene/role_tntboxswitch_01.FBX
+- Assets/Model3d/Other/Res/Scene/Materials/01 - Default.mat
+- Assets/Model3d/Other/Res/Scene/role_tntboombox_01.FBX
+- Assets/Model3d/Other/Res/Scene/role_gateway_01.FBX
+- Assets/Model3d/Other/Res/Scene/Materials/scene_ui_beijing.mat
+- Assets/Model3d/Effect/Res/textures/eff_danqi_wei_01.mat
+- Assets/Model3d/Effect/Res/textures/eff_huochairen_07.png
+Dependencies: []
