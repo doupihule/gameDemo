@@ -3,35 +3,105 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const csharp_1 = require("csharp");
 const csharp_2 = require("csharp");
 class TouchManager {
+    //判断能否触发move
+    static checkTouchMove(view) {
+        var arr = this._touchMoveMap;
+        var moveInfo = this.getTouchMoveInfo(view);
+        if (!moveInfo) {
+            return false;
+        }
+        if (moveInfo.state == 1) {
+            return true;
+        }
+        return false;
+    }
+    //获取touchmoveInfo
+    static getTouchMoveInfo(view) {
+        var arr = this._touchMoveMap;
+        for (var i = 0; i < arr.length; i++) {
+            var info = arr[i];
+            if (info.view == view) {
+                return info;
+            }
+        }
+        return null;
+    }
+    //移除move
+    static removeMoveInfo(view) {
+        var arr = this._touchMoveMap;
+        for (var i = arr.length - 1; i >= 0; i--) {
+            var info = arr[i];
+            if (info.view == view) {
+                arr.splice(i, 1);
+            }
+        }
+    }
     //所有的触摸事件回调 返回固定 (touchParams,自定义的额外参数)
     //触摸按下
     static addTouchDown(baseView, func, thisObj, params = null) {
         this.registEventTriger(baseView, csharp_2.UnityEngine.EventSystems.EventTriggerType.PointerDown, func, thisObj, params);
     }
     static addTouchMove(baseView, func, thisObj, params = null) {
-        // this.registEventTriger(baseView,UnityEngine.EventSystems.EventTriggerType.MouseMove,func,thisObj,params);
+        this.registEventTriger(baseView, csharp_2.UnityEngine.EventSystems.EventTriggerType.Drag, func, thisObj, params);
+        var moveInfo = this.getTouchMoveInfo(baseView);
+        if (moveInfo) {
+            return;
+        }
+        moveInfo = { state: 0, view: baseView };
     }
     static addTouchUp(baseView, func, thisObj, params = null) {
         this.registEventTriger(baseView, csharp_2.UnityEngine.EventSystems.EventTriggerType.PointerUp, func, thisObj, params);
     }
+    //unity 没有touchout事件
     static addTouchOut(baseView, func, thisObj, params = null) {
-        this.registEventTriger(baseView, csharp_2.UnityEngine.EventSystems.EventTriggerType.PointerUp, func, thisObj, params);
+        // this.registEventTriger(baseView,UnityEngine.EventSystems.EventTriggerType.PointerUp,func,thisObj,params);
     }
     //点击事件
     static addTouchClick(baseView, func, thisObj, params = null) {
         this.registEventTriger(baseView, csharp_2.UnityEngine.EventSystems.EventTriggerType.PointerClick, func, thisObj, params);
     }
+    static setTouchMoveState(view, state) {
+        var touchInfo = this.getTouchMoveInfo(view);
+        if (!touchInfo) {
+            return;
+        }
+        touchInfo.state = state;
+    }
     static registEventTriger(baseView, eventType, func, thisObj, params = null) {
-        var key = "__cacheEvent" + eventType;
-        var __tempMap = baseView[key];
+        //触摸事件存储格式
+        /**
+         * __cacheEvent:{
+         * 		[eventType]:{
+         * 			func
+         * 			thisObj
+         * 			parans
+         * 			delegeFunc
+         * 		}
+         * }
+         *
+         */
+        var cacheMap = baseView["__cacheEvent"];
+        if (!cacheMap) {
+            cacheMap = {};
+            baseView["__cacheEvent"] = cacheMap;
+        }
+        var __tempMap = cacheMap[eventType];
         if (!__tempMap) {
-            baseView[key] = {};
-            __tempMap = baseView[key];
+            __tempMap = {};
+            cacheMap[eventType] = __tempMap;
             var delegeFunc = new csharp_1.GameUtils.ComponentEventDelege((event) => {
                 var mousePos = csharp_2.UnityEngine.Input.mousePosition;
                 TouchManager.touchParams.x = mousePos.x;
                 TouchManager.touchParams.y = mousePos.y;
                 LogsManager.echo("event:", TouchManager.touchParams.x, TouchManager.touchParams.y, "_type:", eventType);
+                var touchMoveInfo;
+                if (eventType == 2) {
+                    TouchManager.setTouchMoveState(baseView, 1);
+                }
+                else if (eventType == 3) {
+                    //鼠标放开 停止移动
+                    TouchManager.setTouchMoveState(baseView, 0);
+                }
                 __tempMap.func && __tempMap.func.call(__tempMap.thisObj, TouchManager.touchParams, params);
             });
             //存着委托对象
@@ -42,8 +112,23 @@ class TouchManager {
         __tempMap.thisObj = thisObj;
         __tempMap.params = params;
     }
+    //移除对象的点击事件
+    static removeViewTouchEvent(view) {
+        this.removeMoveInfo(view);
+        csharp_1.GameUtils.ComponentExtension.RemoveAllCompListener(view.__cobject);
+        delete view["__cacheEvent"];
+    }
 }
 exports.default = TouchManager;
 //触摸事件回调相关参数
 TouchManager.touchParams = { x: 0, y: 0 };
+//注册的触摸移动数组
+/**
+ * {
+ * 	view:
+ * state: 0 是mouseup  1是触发down, 只有触发了down之后 move才会生效
+ * }
+ *
+ */
+TouchManager._touchMoveMap = [];
 //# sourceMappingURL=TouchManager.js.map

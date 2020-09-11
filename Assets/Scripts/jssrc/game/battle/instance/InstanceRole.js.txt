@@ -79,7 +79,7 @@ class InstanceRole extends InstanceMove_1.default {
         super.onSetToCache();
         this._shakeInfo = null;
         if (this.weiqiEff) {
-            this.weiqiEff.getView().active = false;
+            this.weiqiEff.getView().setActive(false);
         }
     }
     explode() {

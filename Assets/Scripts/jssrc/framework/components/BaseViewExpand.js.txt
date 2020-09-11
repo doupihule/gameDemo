@@ -124,11 +124,11 @@ class BaseViewExpand {
     }
     //移除子对象
     removeChild(childView) {
-        childView.__ctransform.SetParent(null);
+        childView.__ctransform.SetParent(null, false);
     }
     //移除自己
     removeSelf() {
-        this.__ctransform.SetParent(null);
+        this.__ctransform.SetParent(null, false);
     }
     get numChildren() {
         return this.__ctransform.childCount;

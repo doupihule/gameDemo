@@ -40,26 +40,53 @@ namespace GameUtils
                 entries = new List<EventTrigger.Entry>();
             }
             //获取对应事件
-            EventTrigger.Entry entry = new EventTrigger.Entry();
-            bool isExist = false;
+            EventTrigger.Entry entry ;
             for (int i = 0; i < entries.Count; i++)
             {
                 if (entries[i].eventID == eventTriggerType)
                 {
                     entry = entries[i];
-                    isExist = true;
+                    return;
                 }
             }
-
+            entry = new EventTrigger.Entry();
 
             UnityAction<BaseEventData> tempFunc = new UnityAction<BaseEventData>(callback);
 
             entry.callback.AddListener(tempFunc);
-            if (!isExist)
+            entry.eventID = eventTriggerType;
+            trigger.triggers.Add(entry);
+        }
+
+        public static void RemoveCompListener(GameObject obj, EventTriggerType eventTriggerType )
+        {
+            EventTrigger trigger = obj.GetComponent<EventTrigger>();
+            List<EventTrigger.Entry> entries = trigger.triggers;
+            if (entries == null)
             {
-                entry.eventID = eventTriggerType;
-                trigger.triggers.Add(entry);
+                return;
             }
+            int count = entries.Count;
+            for(int s = count - 1; s >= 0; s--)
+            {
+                if(entries[s].eventID == eventTriggerType)
+                {
+                    entries.RemoveAt(s);
+                }
+            }
+
+        }
+
+        //移除这个对象注册的所有事件
+        public static void RemoveAllCompListener(GameObject obj)
+        {
+            EventTrigger trigger = obj.GetComponent<EventTrigger>();
+            List<EventTrigger.Entry> entries = trigger.triggers;
+            if (entries == null)
+            {
+                return;
+            }
+            entries.Clear();
         }
 
     }

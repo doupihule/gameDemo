@@ -43,8 +43,8 @@ class MainModule {
         WindowManager_1.default.debugLayer.setSize(ScreenAdapterTools_1.default.stageWidth, ScreenAdapterTools_1.default.stageHeight);
         TouchManager_1.default.addTouchDown(WindowManager_1.default.debugLayer, this.onMouseDown, this);
         TouchManager_1.default.addTouchMove(WindowManager_1.default.debugLayer, this.onMouseMove, this);
-        // TouchManager.addTouchUp(WindowManager.debugLayer,this.onMouseEnd,this);
-        TouchManager_1.default.addTouchOut(WindowManager_1.default.debugLayer, this.onMouseEnd, this);
+        TouchManager_1.default.addTouchUp(WindowManager_1.default.debugLayer, this.onMouseEnd, this);
+        // TouchManager.addTouchOut(WindowManager.debugLayer,this.onMouseEnd,this);
     }
     onMouseDown(e) {
         BattleSceneManager_1.default.instance.battleControler.player.onToucheDown(e.x, e.y);

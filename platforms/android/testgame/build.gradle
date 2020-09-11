@@ -60,10 +60,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('C:/work/unity/gameDemo/platforms/keystore/user.keystore')
-            storePassword ''
+            storeFile file('keystore/user.keystore')
+            storePassword '111111'
             keyAlias 'user'
-            keyPassword ''
+            keyPassword '111111'
         }
     }
 
@@ -71,13 +71,13 @@ android {
         debug {
             minifyEnabled true
             useProguard true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-unity.txt', 'proguard-user.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-unity.txt'
             jniDebuggable true
         }
         release {
             minifyEnabled true
             useProguard true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-unity.txt', 'proguard-user.txt'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-unity.txt'
             signingConfig signingConfigs.release
         }
     }

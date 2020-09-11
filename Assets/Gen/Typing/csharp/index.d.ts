@@ -2097,6 +2097,8 @@ declare module 'csharp' {
         class ComponentExtension extends System.Object {
             public constructor();
             public static AddCompListener(obj: UnityEngine.GameObject, eventTriggerType: UnityEngine.EventSystems.EventTriggerType, callback: GameUtils.ComponentEventDelege):void;
+            public static RemoveCompListener(obj: UnityEngine.GameObject, eventTriggerType: UnityEngine.EventSystems.EventTriggerType):void;
+            public static RemoveAllCompListener(obj: UnityEngine.GameObject):void;
             
         }
         type ComponentEventDelege = (eventData: UnityEngine.EventSystems.BaseEventData) => void;

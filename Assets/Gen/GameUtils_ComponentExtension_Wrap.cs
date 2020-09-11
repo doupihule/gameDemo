@@ -71,6 +71,72 @@ namespace PuertsStaticWrap
             }
         }
         
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void F_RemoveCompListener(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.GameObject>(false);
+                        var Arg1 = (UnityEngine.EventSystems.EventTriggerType)argHelper1.GetInt32(false);
+                        GameUtils.ComponentExtension.RemoveCompListener(Arg0,Arg1);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
+        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
+        private static void F_RemoveAllCompListener(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
+        {
+            try
+            {
+                
+                
+                
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.GameObject>(false);
+                        GameUtils.ComponentExtension.RemoveAllCompListener(Arg0);
+                        
+                        
+                        
+                    }
+                }
+                
+                
+            }
+            catch (Exception e)
+            {
+                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
+            }
+        }
+        
         
         
         
@@ -84,6 +150,8 @@ namespace PuertsStaticWrap
                 Methods = new System.Collections.Generic.Dictionary<Puerts.MethodKey, Puerts.V8FunctionCallback>()
                 {
                     { new Puerts.MethodKey {Name = "AddCompListener", IsStatic = true},  F_AddCompListener },
+                    { new Puerts.MethodKey {Name = "RemoveCompListener", IsStatic = true},  F_RemoveCompListener },
+                    { new Puerts.MethodKey {Name = "RemoveAllCompListener", IsStatic = true},  F_RemoveAllCompListener },
                     
                 },
                 Properties = new System.Collections.Generic.Dictionary<string, Puerts.PropertyRegisterInfo>()

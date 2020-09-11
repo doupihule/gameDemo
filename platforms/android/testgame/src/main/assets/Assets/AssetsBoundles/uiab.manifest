@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 404553340
+CRC: 2426164824
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 117b34d62639a00b668d7193e27ba328
+    Hash: 2532e0809c175a34c8cfc8d7d0b618a8
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 583e4fda8c2b27a37708c3bc03899441
+    Hash: b71025418e4c8bf9e3f0bd369740c493
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -19,6 +19,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 114
   Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 - Class: 114
   Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 - Class: 114
@@ -38,4 +40,4 @@ Assets:
 - Assets/UI/Prefabs/main/GameMainUI.prefab
 - Assets/UI/Prefabs/base/BaseLabel.prefab
 Dependencies:
-- C:/work/unity/gameDemo_lua/Assets/AssetsBoundles/uiimage
+- C:/work/unity/gameDemo/Assets/AssetsBoundles/uiimageab

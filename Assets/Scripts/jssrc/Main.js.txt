@@ -22,7 +22,7 @@ class Main {
         var thisObj = this;
         global.initGame = function (stageRoot, uiRoot) {
             thisObj.initWindowEnv();
-            TimerManager_1.default.instance.setTimeout(thisObj.delayEnterGame, thisObj, 2000, stageRoot, uiRoot);
+            TimerManager_1.default.instance.setTimeout(thisObj.delayEnterGame, thisObj, 10, stageRoot, uiRoot);
         };
         this.showMainModule();
     }
