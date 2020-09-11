@@ -31,6 +31,8 @@ import ViewTools from "../components/ViewTools";
 import Base3dViewExpand from "../components/d3/Base3dViewExpand";
 import ResourceCommonConst from "../consts/ResourceCommonConst";
 import BattleSceneManager from "../../game/sys/manager/BattleSceneManager";
+import TouchManager from "./TouchManager";
+import BattleLogicalControler from "../../game/battle/controler/BattleLogicalControler";
 
 export default class MainModule implements IMessage {
 	//实例
@@ -62,9 +64,35 @@ export default class MainModule implements IMessage {
 		Message.instance.add(MsgCMD.VIDEO_PLAY, this);
 		// WindowManager.OpenUI(WindowCfgs.GameMainUI);
 		FuncManager.init(null,null);
-		BattleSceneManager.instance.enterBattle({ roleId: 1, levelId: 1 })
+		BattleSceneManager.instance.enterBattle({ roleId: 1, levelId: 5 })
+		WindowManager.debugLayer.setSize(ScreenAdapterTools.stageWidth,ScreenAdapterTools.stageHeight);
+		TouchManager.addTouchDown(WindowManager.debugLayer,this.onMouseDown,this);
+        TouchManager.addTouchMove(WindowManager.debugLayer,this.onMouseMove,this);
+        // TouchManager.addTouchUp(WindowManager.debugLayer,this.onMouseEnd,this);
+        TouchManager.addTouchOut(WindowManager.debugLayer,this.onMouseEnd,this);
+
 
 	}
+	private controller:BattleLogicalControler ;
+
+	private onMouseDown(e) {
+
+		BattleSceneManager.instance.battleControler.player.onToucheDown(e.x, e.y);
+    }
+    private onMouseMove(e) {
+        if (!BattleSceneManager.instance.battleControler || !BattleSceneManager.instance.battleControler.player) {
+            return
+        }
+
+		BattleSceneManager.instance.battleControler.player.onTouchMove(e.x, e.y);
+    }
+    private onMouseEnd(e) {
+        if (!BattleSceneManager.instance.battleControler || !BattleSceneManager.instance.battleControler.player) {
+            return
+        }
+		BattleSceneManager.instance.battleControler.player.onTouchEnd(e.x, e.y);
+    }
+
 
 	private  delayInitCreat(){
 

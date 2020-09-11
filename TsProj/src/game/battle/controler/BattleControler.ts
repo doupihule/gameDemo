@@ -121,6 +121,7 @@ export default class BattleControler {
 		if (this._isDisposed) {
 			return;
 		}
+		
 
 		//做更新次数+1
 		this.updateCount++;
@@ -143,6 +144,7 @@ export default class BattleControler {
 				}
 			}
 		}
+
 
 	}
 

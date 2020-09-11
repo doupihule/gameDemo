@@ -159,11 +159,11 @@ export default class BaseViewExpand {
 
 	//移除子对象
 	public  removeChild(childView:BaseViewExpand){
-		childView.__ctransform.SetParent(null);
+		childView.__ctransform.SetParent(null,false);
 	}
 	//移除自己
 	public  removeSelf(){
-		this.__ctransform.SetParent(null);
+		this.__ctransform.SetParent(null,false);
 	}
 
 	public  get numChildren(){
@@ -286,7 +286,7 @@ export default class BaseViewExpand {
 	}
 
 	//获取组件 一定要配置绑定哪个类型
-	public  getComponent(comp:string,compExpand:BaseCompExpand = null):any{
+	public  getComponent(comp:string,compExpand:BaseCompExpand = null,isCreat:boolean =false):any{
 		if(this._compMap[comp]){
 			return this._compMap[comp];
 		}
@@ -297,8 +297,15 @@ export default class BaseViewExpand {
 		}
 		var cobjcomp = this.__cobject.GetComponent(info.cname);
 		if(!cobjcomp){
-			LogsManager.warn("没有找到组件:",this.name,",cname:", info.cname);
-			return null;
+			//如果没有组件 就创建
+			if(isCreat){
+				cobjcomp = this.__cobject.AddComponent(info.ctype);
+				LogsManager.echo("没有组件,创建一个-",this.name,"cname:", info.cname)
+			} else{
+				LogsManager.warn("没有找到组件:",this.name,",cname:", info.cname);
+				return null;
+			}
+			
 		}
 
 		//如果没有传 组件继承. 那么就采用默认的组件
@@ -310,6 +317,8 @@ export default class BaseViewExpand {
 		this._compMap[comp] = compExpand;
 		return compExpand
 	}
+
+
 
 	//获取原生组件类型
 	public  getOriginComponent(comp:string){

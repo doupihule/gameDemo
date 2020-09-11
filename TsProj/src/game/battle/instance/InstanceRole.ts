@@ -87,7 +87,7 @@ export default class InstanceRole extends InstanceMove {
     public setColl(isRigid) {
         if (isRigid) {
             if (!this.colliderCtrl) {
-                this.colliderCtrl = this._myView.getComponent(UICompConst.comp_colliderListener,new  ColliderController());
+                this.colliderCtrl = this._myView.getComponent(UICompConst.comp_colliderListener,new  ColliderController(),true);
                 this.colliderCtrl.instance = this;
                 this.colliderCtrl.controller = this.controller;
             }
@@ -141,7 +141,7 @@ export default class InstanceRole extends InstanceMove {
         super.onSetToCache();
         this._shakeInfo = null;
         if (this.weiqiEff) {
-            this.weiqiEff.getView().active = false;
+            this.weiqiEff.getView().setActive(false);
         }
     }
 

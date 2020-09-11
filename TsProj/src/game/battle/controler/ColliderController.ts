@@ -16,13 +16,9 @@ export default class ColliderController extends BaseCompExpand {
     public instance;
     public controller: BattleLogicalControler;
 
-    public ray ;
-    public rayHit;
 
     constructor() {
         super();
-        this.ray =  PhysicsTools.createRay(VectorTools.createVec3(),VectorTools.createVec3());
-        this.rayHit = PhysicsTools.createHitInfo()
     }
     public  initComponent(targetcomp: GameUtils.ColliderListenerExpand, owner: BaseViewExpand) {
         super.initComponent(targetcomp, owner);

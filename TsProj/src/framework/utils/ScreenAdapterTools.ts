@@ -45,6 +45,10 @@ export default class ScreenAdapterTools {
 	static stageWidth: number;
 	static stageHeight: number;
 
+	//屏幕的宽高. 鼠标点返回的是屏幕坐标 
+	static screenWidth:number = 640;
+	static screenHeight:number = 1136
+
 	//刘海的位置 -1 对应左边或者 竖屏上面, 竖屏游戏一定是上边
 	static toolBarWay: number = -1;
 

@@ -1,5 +1,6 @@
 
-import {UnityEngine, System} from 'csharp'
+import { $typeof } from 'puerts';
+import {UnityEngine, System,GameUtils} from 'csharp'
 import BaseViewExpand from "./BaseViewExpand";
 import UICompConst from "../consts/UICompConst";
 import ButtonExpand from "./ButtonExpand";
@@ -18,27 +19,29 @@ import PhysicsColliderExpand from "./physics/PhysicsColliderExpand";
 import Animation3DExpand from "./d3/Animation3DExpand";
 import Particle3dExpand from "./d3/Particle3dExpand";
 import RigidbodyExpand from "./physics/RigidbodyExpand";
+import TrailRendererExpand from './d3/TrailRendererExpand';
 
 export default class ViewTools {
 
 	static  compClassMap:any = {
-		base:{cl: BaseViewExpand,cname:"GameObject"},
-		btn: {cl:ButtonExpand,cname:"Button"},
-		img: {cl:ImageExpand,cname:"Image"},
+		base:{cl: BaseViewExpand,cname:"GameObject",ctype:UICompConst.ctype_image},
+		btn: {cl:ButtonExpand,cname:"Button",ctype:UICompConst.ctype_image},
+		img: {cl:ImageExpand,cname:"Image",ctype:UICompConst.ctype_image},
 		ctn: {cl:BaseContainer,cname:"GameObject"},
-		label: {cl:LabelExpand,cname:"Label"},
-		input:{cl: LabelExpand,cname:"Label"},
+		label: {cl:LabelExpand,cname:"Label",ctype:UICompConst.ctype_label},
+		input:{cl: LabelExpand,cname:"Label",ctype:UICompConst.ctype_label},
 		list: {cl:ListExpand,cname:"List"},
 		spine: {cl:SpineGraphicExpand,cname:"SpineGraphic"},
 		ui: {cl:UIBaseView,cname:"GameObject"},
 		base3d:{cl:Base3dViewExpand,cname:"GameObject"},
-		camera:{cl:CameraExpand,cname:"Camera"},
+		camera:{cl:CameraExpand,cname:"Camera",ctype:UICompConst.ctype_camera},
 		plane:{cl:PlaneExpand,cname:"Plane"},
-		animator3d:{cl:Animation3DExpand,cname:"Animator"},
+		animator3d:{cl:Animation3DExpand,cname:"Animator",ctype:UICompConst.ctype_animator3d},
 		particle3d:{cl:Particle3dExpand,cname:"Particle"},
-		collider:{cl:PhysicsColliderExpand,cname:"Collider"},
-		rigidbody3d:{cl:RigidbodyExpand,cname:"Rigidbody"},
-		colliderListener:{cname:"ColliderListenerExpand"},
+		collider:{cl:PhysicsColliderExpand,cname:"Collider",ctype:UICompConst.ctype_collider},
+		rigidbody3d:{cl:RigidbodyExpand,cname:"Rigidbody",ctype:UICompConst.ctype_rigidbody3d},
+		colliderListener:{cname:"ColliderListenerExpand",ctype:UICompConst.ctype_colliderListener},
+		trail:{cl:TrailRendererExpand,cname:"TrailRenderer",ctype:UICompConst.ctype_trail}
 
 	}
 
@@ -148,6 +151,7 @@ export default class ViewTools {
 	//创建一个平面
 	static  createPlaneBy3p(v1,v2,v3){
 		var plane = new PlaneExpand();
+		plane.initWith3P(v1,v2,v3);
 		return plane
 	}
 

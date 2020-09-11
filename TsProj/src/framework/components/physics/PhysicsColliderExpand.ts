@@ -12,6 +12,7 @@ export  default  class PhysicsColliderExpand extends  BaseCompExpand{
 		this.__owner.__cobject.layer = value;
 	}
 
+
 	public getBoxSize():{x,y,z}{
 		return (this.__comp as UnityEngine.BoxCollider).size
 	}

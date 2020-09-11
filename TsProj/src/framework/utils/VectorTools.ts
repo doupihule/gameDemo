@@ -1,4 +1,6 @@
+import { GameUtils, UnityEngine } from 'csharp';
 import PlaneExpand from "../components/d3/PlaneExpand";
+
 
 export default class VectorTools {
 
@@ -266,5 +268,9 @@ export default class VectorTools {
 		return Math.abs(num)< 0.00000001
 	}
 
+	//把v3转化为 c#端的vector3
+	public static turnV3ToNativeV3(v3){
+		return GameUtils.ViewExtensionMethods.initVec3(v3.x,v3.y,v3.z);
+	}
 
 }

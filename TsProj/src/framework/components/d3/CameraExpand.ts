@@ -1,6 +1,7 @@
 import Base3dViewExpand from "./Base3dViewExpand";
 import {UnityEngine, System,GameUtils} from 'csharp'
 import BaseCompExpand from "../BaseCompExpand";
+import ScreenAdapterTools from "../../utils/ScreenAdapterTools";
 export default class CameraExpand extends  BaseCompExpand{
 	//c摄像头对象
 	public  __comp:UnityEngine.Camera
@@ -16,10 +17,19 @@ export default class CameraExpand extends  BaseCompExpand{
 		return null;
 	}
 
-	public  viewportPointToRay(v2:{x,y},ray:any){
-		var tempV3 = GameUtils.ViewExtensionMethods.initVec3(v2.x,v2.y,0);
+	public  viewportPointToRay(v2:{x,y},ray:{origin,direction}):{origin,direction}{
+		var tempV3 = GameUtils.ViewExtensionMethods.initVec3(v2.x/ScreenAdapterTools.screenWidth,v2.y/ScreenAdapterTools.screenHeight,0);
 		var cray:UnityEngine.Ray = this.__comp.ViewportPointToRay(tempV3);
-		return cray;
+		var origin = cray.origin;
+		var direction = cray.direction;
+		ray.origin.x = origin.x;
+		ray.origin.y = origin.y;
+		ray.origin.z = origin.z;
+
+		ray.direction.x = direction.x;
+		ray.direction.y = direction.y;
+		ray.direction.z = direction.z;
+		return ray;
 	}
 
 }

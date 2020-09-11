@@ -1,3 +1,7 @@
+import { UnityEngine } from 'csharp';
+
+
+
 
 import ViewTools from "./framework/components/ViewTools";
 
@@ -27,7 +31,7 @@ class Main {
 		var thisObj = this;
 		global.initGame = function(stageRoot,uiRoot){
 			thisObj.initWindowEnv();
-			TimerManager.instance.setTimeout(thisObj.delayEnterGame,thisObj,2000,stageRoot,uiRoot);
+			TimerManager.instance.setTimeout(thisObj.delayEnterGame,thisObj,10,stageRoot,uiRoot);
 		}
 
 
@@ -44,7 +48,10 @@ class Main {
 		ViewTools.init()
 		BaseFunc.setCfgExportType(BaseFunc.exportType_New);
 		var  size = GlobalData.uiRoot.getViewRect();
+		LogsManager.echo("ScreenSize:",UnityEngine.Screen.width,UnityEngine.Screen.height);
 		ScreenAdapterTools.checkScreenFixMode(size.x, size.y)
+		ScreenAdapterTools.screenWidth = UnityEngine.Screen.width;
+		ScreenAdapterTools.screenHeight = UnityEngine.Screen.height;
 		// //初始化全局变量
 
 		FrameWorkHandle.init();
@@ -85,7 +92,7 @@ class Main {
 			window["UserInfo"] = UserInfo;
 		}
 		//赋值timemanager
-		window["TimeManager"] = TimerManager;
+		window["TimerManager"] = TimerManager;
 		window["GlobalData"] = GlobalData;
 
 	}

@@ -214,7 +214,8 @@ export default class WindowManager {
 	}
 
 	public static ShowTip(text, timeout = 1500) {
-		WindowManager.TipComplete({text: text, timeout: timeout});
+		LogsManager.echo(text,"____showTips");
+		// WindowManager.TipComplete({text: text, timeout: timeout});
 
 	}
 

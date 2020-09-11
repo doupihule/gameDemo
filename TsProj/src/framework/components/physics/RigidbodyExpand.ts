@@ -1,5 +1,6 @@
 import BaseCompExpand from "../BaseCompExpand";
 import {UnityEngine, System,GameUtils} from 'csharp'
+import UICompConst from "../../consts/UICompConst";
 //刚体
 export default  class RigidbodyExpand extends  BaseCompExpand{
     public  __comp:UnityEngine.Rigidbody;
@@ -15,7 +16,7 @@ export default  class RigidbodyExpand extends  BaseCompExpand{
     }
     //给与冲量
     public  applyImpulse(vec3:{x,y,z}){
-        this.__comp
+        this.__comp.AddForce(vec3.x,vec3.y,vec3.z,UnityEngine.ForceMode.Impulse);
     }
 
     public  set mass(value:number){

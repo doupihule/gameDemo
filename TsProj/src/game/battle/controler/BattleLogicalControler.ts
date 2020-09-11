@@ -36,6 +36,7 @@ import Animation3DExpand from "../../../framework/components/d3/Animation3DExpan
 import PhysicsColliderExpand from "../../../framework/components/physics/PhysicsColliderExpand";
 import BaseViewExpand from "../../../framework/components/BaseViewExpand";
 import {UnityEngine, System,GameUtils} from 'csharp'
+import BattleSceneManager from "../../sys/manager/BattleSceneManager";
 
 export default class BattleLogicalControler extends BattleControler implements IMessage {
 
@@ -74,7 +75,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 
 	public bulletHeight = 3.6;
 	//枪的原点坐标
-	public originPos3D: {x,y,z} = VectorTools.createVec3(0.3, this.bulletHeight, 2.2);
+	public originPos3D: {x,y,z} = VectorTools.createVec3(0, this.bulletHeight, -2.2);
 
 
 	//怪物所在的z坐标  暂定离枪 距离1米
@@ -270,12 +271,12 @@ export default class BattleLogicalControler extends BattleControler implements I
 		player._myView.getChildByName("collider").setActive(false);
 		var randomInt = RandomUtis.getOneRandomInt(2,-1);
 		var rotation = player._myView.get3dRotation();
-		player._myView.set3dRotation(rotation.x,rotation.y=randomInt * 30,rotation.z);
+		player._myView.set3dRotation(rotation.x,rotation.y+randomInt * 30,rotation.z);
 		if (speed) {
 			player.initMove2Stand(speed.x, speed.y, speed.z);
 			VectorTools.scale(speed, -GlobalParamsFunc.instance.getDataNum("hitPlayerSlowDown") / 1000, player.addSpeed);
 
-			var bloodEffect;
+			var bloodEffect:Base3dViewExpand;
 			if (this.bloodEffectArr.length) {
 				bloodEffect = this.bloodEffectArr.pop();
 			}
@@ -283,8 +284,8 @@ export default class BattleLogicalControler extends BattleControler implements I
 				bloodEffect = this.bloodEffect.clone();
 			}
 			player._myView.addChild(bloodEffect);
-			bloodEffect.active = false;
-			bloodEffect.active = true;
+			bloodEffect.setActive(false);
+			bloodEffect.setActive(true);
 		}
 		var anim = player._myView.getChildByName(player._myView.name).getComponent(UICompConst.comp_animator3d) as Animation3DExpand;
 		anim.play("dead");
@@ -314,7 +315,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 	public destoryBullet(bullet: InstanceBullet) {
 		this.destoryInstance(bullet, PoolCode.POOL_BUTTLE + bullet.dataId, BattleConst.model_bullet, this.bulletArr);
 		if (this.bulletNum <= 0 && this.bulletArr.length <= 0) {
-			this.battleUi.lose();
+			this.battleUi && this.battleUi.lose();
 		}
 		// view.removeSelf();
 	}
@@ -339,7 +340,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		LogsManager.echo("battle", "创建实例:", resName, "model:", model, viewScale);
 		if (instance) {
 
-			instance.getView().active = true;
+			instance.getView().setActive(true);
 			instance.setData(data);
 			view = instance.getView();
 			this.battleCtn.addChild(view);
@@ -412,8 +413,9 @@ export default class BattleLogicalControler extends BattleControler implements I
 		if (!view) {
 			LogsManager.errorTag(LogsErrorCode.CONFIG_ERROR, "这个资源不存在");
 		}
+		var oldName = view.name;
 		view =ViewTools.cloneOneView(view,UICompConst.comp_base3d);
-
+		view.name = oldName;
 		instance.setView(view, info.transform[0], info.transform[1], info.transform[2]);
 		instance.setData(data);
 
@@ -498,7 +500,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 		// var cfgdata = BattleFunc.instance.getBulletData(data.id);
 		// var cacheItem: InstanceBullet = this.createInstance(data, cacheId, BattleConst.model_role, InstanceBullet, "role_car_03", 1);
 
-		var cacheItem: InstanceBullet = this.createInstance(data, cacheId, BattleConst.model_role, InstanceBullet, BattleConst.model_bullet_model, 1);
+		var cacheItem: InstanceBullet = this.createInstance(data, cacheId, BattleConst.model_bullet, InstanceBullet, BattleConst.model_bullet_model, 1);
 		this.bulletArr.push(cacheItem);
 		this._allInstanceArr.push(cacheItem);
 		return cacheItem;
@@ -541,8 +543,8 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this._allInstanceArr.push(cacheItem);
 		this.roleArr.push(cacheItem);
 
-		var y = cacheItem.pos.y;
-		this.gamePlane = ViewTools.createPlaneBy3p(VectorTools.createVec3(-10, y, 10), VectorTools.createVec3(10, y, -10), VectorTools.createVec3(10, y, 10));
+		// var y = cacheItem.pos.y;
+		// this.gamePlane = ViewTools.createPlaneBy3p(VectorTools.createVec3(-10, y, 10), VectorTools.createVec3(10, y, -10), VectorTools.createVec3(10, y, 10));
 
 		return cacheItem;
 	}
@@ -595,6 +597,8 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this.maxBulletNum = this.basicBulletNum + LevelFunc.instance.getLevelInfoByTwoId(this.battleData.levelId, "threeStarPayBulletNub");
 
 		this.bulletNum = this.maxBulletNum;
+		//@xd_test 无限子弹
+		this.bulletNum = 99999
 		this.battleEnd = false;
 
 		Message.instance.send(BattleEvent.BATTLEEVENT_BATTLESTART);
@@ -617,6 +621,10 @@ export default class BattleLogicalControler extends BattleControler implements I
 
 	//初始化一些信息
 	initBattleInfo() {
+	}
+
+
+	public updatePhysics(){
 	}
 
 	//处理事件
@@ -647,8 +655,15 @@ export default class BattleLogicalControler extends BattleControler implements I
 		this.setBattleState(BattleConst.battleState_over);
 
 		this.battleEnd = false;
-		WindowManager.OpenUI(WindowCfgs.BattleResultUI, { levelId: this.battleData.levelId, rank: this.bulletNum >= this.basicBulletNum ? 3 : (this.bulletNum > 1 ? 2 : 1) })
+		// WindowManager.OpenUI(WindowCfgs.BattleResultUI, { levelId: this.battleData.levelId, rank: this.bulletNum >= this.basicBulletNum ? 3 : (this.bulletNum > 1 ? 2 : 1) })
 
+		//直接进入下一关
+		this.nextLevel();
+
+	}
+	private nextLevel() {
+		this.battleData.levelId = this.battleData.levelId + 1;
+		BattleSceneManager.instance.replayBattle();
 	}
 	//退出游戏,这个不是销毁游戏
 	exitBattle() {
@@ -682,7 +697,7 @@ export default class BattleLogicalControler extends BattleControler implements I
 			this.battleEnd = true;
 			WindowManager.ShowTip("失败");
 			TimerManager.instance.setTimeout(() => {
-				this.battleUi.onReplayGame();
+				this.battleUi &&this.battleUi.onReplayGame();
 			}, this, 1000);
 			return;
 		}

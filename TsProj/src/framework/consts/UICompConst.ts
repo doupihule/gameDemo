@@ -1,3 +1,5 @@
+import { $typeof } from 'puerts';
+import {UnityEngine, System,GameUtils} from 'csharp'
 export default class UICompConst {
 	static comp_base = "base";     //基础容器
 	static comp_btn = "btn";
@@ -19,6 +21,22 @@ export default class UICompConst {
 	static  comp_particle3d = "particle3d";	//粒子 3d
 	static  comp_collider = "collider";		//碰撞器
 	static  comp_rigidbody3d = "rigidbody3d";	//3d刚体
+
+	static comp_trail = "trail";		//拖尾;
+
+
+	static ctype_image = $typeof(UnityEngine.UI.Image);
+	static ctype_button = $typeof(UnityEngine.UI.Button);
+	static ctype_label = $typeof(UnityEngine.UI.Text);
+
+	static ctype_camera = $typeof(UnityEngine.Camera);
+	static ctype_animator3d = $typeof(UnityEngine.Animator);
+	static ctype_particle3d = null;		//
+
+	static ctype_collider = $typeof(UnityEngine.Collider);
+	static ctype_rigidbody3d = $typeof(UnityEngine.Rigidbody);
+	static ctype_colliderListener = $typeof(GameUtils.ColliderListenerExpand);
+	static ctype_trail = $typeof(UnityEngine.TrailRenderer);
 
 	//碰撞检测事件侦听. 这个一般自己绑定组件实现.继承BaseCompExpand即可
 	static  comp_colliderListener = "colliderListener";

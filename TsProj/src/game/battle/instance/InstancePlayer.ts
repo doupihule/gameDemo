@@ -10,6 +10,7 @@ import VectorTools from "../../../framework/utils/VectorTools";
 import Base3dViewExpand from "../../../framework/components/d3/Base3dViewExpand";
 import PhysicsTools from "../../../framework/components/physics/PhysicsTools";
 import BattleConst from "../../sys/consts/BattleConst";
+import ViewTools from "../../../framework/components/ViewTools";
 
 //主角类
 export default class InstancePlayer extends InstanceRole {
@@ -53,7 +54,7 @@ export default class InstancePlayer extends InstanceRole {
     //剩余换弹时间
     public leftChangeBulletTime: number = 0
 
-    protected bulletSpeed: number = GlobalParamsFunc.instance.getGlobalCfgDatas("bulletFlySpeed").num / 1000 || 0.5;
+    protected bulletSpeed: number ;
 
     //震屏相关信息参数
     protected shakeParams: any;
@@ -68,8 +69,7 @@ export default class InstancePlayer extends InstanceRole {
     private mainCamera: CameraExpand;
     //触摸点对应的射线 
     public touchRay: { origin, direction };
-    public touchRayOrigin: { x, y, z };
-    public touchRayDirection: { x, y, z };
+    
 
     //连击数 
     public combCount: number = 0;
@@ -88,11 +88,15 @@ export default class InstancePlayer extends InstanceRole {
 
     private line: Base3dViewExpand;
 
+    //检测标识
+    private _testCue:Base3dViewExpand;
 
 
     private ray;
+    public rayOrigin: { x, y, z };
+    public rayDirection: { x, y, z };
 
-    private rayHit;
+    private rayHit:{hitInfo};
 
     private rayNoColl = 0;
 
@@ -101,11 +105,15 @@ export default class InstancePlayer extends InstanceRole {
 
     constructor(controller) {
         super(controller);
-        this.touchRayOrigin = VectorTools.createVec3();
-        this.touchRayDirection = VectorTools.createVec3();
+        this.rayOrigin = VectorTools.createVec3();
+        this.rayDirection = VectorTools.createVec3();
         this.mainCamera = this.controller.battleCamera;
         this.targetShootPos = VectorTools.createVec3();
-
+        this.rayHit = PhysicsTools.createHitInfo();
+        this.touchRay = {origin:{},direction:{}}
+        this.bulletSpeed = GlobalParamsFunc.instance.getGlobalCfgDatas("bulletFlySpeed").num / 1000 || 3;
+        // this.bulletSpeed = 0.5;
+        
     }
 
     //重写设置数据
@@ -125,6 +133,8 @@ export default class InstancePlayer extends InstanceRole {
         // this.controller.player = this;
 
         this.collider.collisionGroup = BattleConst.collion_layer_3;
+        this._testCue = ViewTools.create3DModel("shadow","Other");
+        this.controller.battleCtn.addChild(this._testCue);
     }
 
     //重置一些属性
@@ -220,7 +230,16 @@ export default class InstancePlayer extends InstanceRole {
         var dy = this.targetShootPos.y - this.pos.y;
         var dz = this.targetShootPos.z - this.pos.z;
 
+        this._testCue.set3dPos(this.targetShootPos.x,this.targetShootPos.y,this.targetShootPos.z);
+
         var ang = Math.atan2(-dx, -dz);
+        this.rayOrigin.x = this.pos.x;
+        this.rayOrigin.y = this.pos.y + this.line.y;
+        this.rayOrigin.z = this.pos.z;
+        this.rayDirection.x = dx;
+        this.rayDirection.y = 0;
+        this.rayDirection.z = dz;
+        VectorTools.normalize(this.rayDirection, this.rayDirection)
 
 
         //设置目标角度z
@@ -236,17 +255,17 @@ export default class InstancePlayer extends InstanceRole {
 
     //碰撞检测
     public checkHit(tmp?) {
-        PhysicsTools.rayCast(this.ray.origin, this.ray.direction, this.rayHit, 300, BattleConst.collion_layer_1);
+        PhysicsTools.rayCast(this.rayOrigin, this.rayDirection, this.rayHit, 300, BattleConst.collion_layer_1);
         if (!this.line.isActive()) return;
-        if (this.rayHit.succeeded) {
-            var dx = this.rayHit.point.x - this.pos.x;
-            var dz = this.rayHit.point.z - this.pos.z;
-            this.line.setScale(1, Math.sqrt(dx * dx + dz * dz) - this.shootOffset, 1);
+        if (this.rayHit.hitInfo.succeeded) {
+            var dx = this.rayHit.hitInfo.point.x - this.pos.x;
+            var dz = this.rayHit.hitInfo.point.z - this.pos.z;
+            this.line.setScale(0.1, Math.sqrt(dx * dx + dz * dz) - this.shootOffset, 0.1);
 
             this.rayNoColl = 0;
         } else {
             if (this.rayNoColl >= 3) {
-                this.line.setScale(1, 200, 1);
+                this.line.setScale(0.1, 200, 0.1);
             }
             this.rayNoColl++;
         }
@@ -279,7 +298,7 @@ export default class InstancePlayer extends InstanceRole {
         if (this.controller.bulletNum > 0 && !this.controller.battleEnd) {
             this.createBullet([1, 0, 0, this._myView.get3dRotation().y]);
             this.controller.bulletNum--;
-            this.controller.battleUi.refreshBullet();
+            this.controller.battleUi && this.controller.battleUi.refreshBullet();
         }
         else {
             this.controller.bulletArr;
@@ -321,7 +340,7 @@ export default class InstancePlayer extends InstanceRole {
 
             targetRotation = Math.atan2(dy, dx) + angleOffset;
         }
-
+ 
         var cosa = Math.cos(ang)
         var sina = Math.sin(ang);
 
