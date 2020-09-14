@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Debug constructor");
+                
             }
             catch (Exception e)
             {
@@ -388,7 +388,7 @@ namespace PuertsStaticWrap
                     
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Object), false, false))
                     {
                         
                         var Arg0 = argHelper0.GetString(false);
@@ -410,7 +410,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Object), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Object), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Object>(false);
@@ -498,7 +498,7 @@ namespace PuertsStaticWrap
                     
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Object), false, false))
                     {
                         
                         var Arg0 = argHelper0.GetString(false);
@@ -520,7 +520,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Object), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Object), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Object>(false);
@@ -690,7 +690,7 @@ namespace PuertsStaticWrap
                     
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Object), false, false))
                     {
                         
                         var Arg0 = argHelper0.GetString(false);
@@ -712,7 +712,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Object), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Object), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Object>(false);
@@ -860,7 +860,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.Boolean, null, false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Object), false, false))
                     {
                         
                         var Arg0 = argHelper0.GetBoolean(false);
@@ -885,7 +885,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.Boolean, null, false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Object), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Object), false, false))
                     {
                         
                         var Arg0 = argHelper0.GetBoolean(false);
@@ -974,7 +974,7 @@ namespace PuertsStaticWrap
                     
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Object), false, false))
                     {
                         
                         var Arg0 = argHelper0.GetString(false);
@@ -996,7 +996,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Object), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Object), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Object>(false);
@@ -1084,23 +1084,6 @@ namespace PuertsStaticWrap
         
         
         
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_logger(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = UnityEngine.Debug.unityLogger;
-                Puerts.ResultHelper.Set((int)data, isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        
         
         
         public static Puerts.TypeRegisterInfo GetRegisterInfo()
@@ -1134,7 +1117,6 @@ namespace PuertsStaticWrap
                     {"unityLogger", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_unityLogger, Setter = null} },
                     {"developerConsoleVisible", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_developerConsoleVisible, Setter = S_developerConsoleVisible} },
                     {"isDebugBuild", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_isDebugBuild, Setter = null} },
-                    {"logger", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_logger, Setter = null} },
                     
                 }
             };

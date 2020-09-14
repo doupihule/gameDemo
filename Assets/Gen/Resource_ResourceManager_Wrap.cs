@@ -449,14 +449,15 @@ namespace PuertsStaticWrap
             {
                 var obj = Puerts.Utils.GetSelf((int)data, self) as Resource.ResourceManager;
                 
-                
+                if (paramLen == 2)
                 {
                     
                     var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                     var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
                     
                     
-                    
+                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
+                        && argHelper1.IsMatch(Puerts.JsValueType.Boolean, null, false, false))
                     {
                         
                         var Arg0 = argHelper0.GetString(false);
@@ -464,11 +465,28 @@ namespace PuertsStaticWrap
                         obj.UnloadBundleByName(Arg0,Arg1);
                         
                         
-                        
+                        return;
                     }
                 }
                 
+                if (paramLen == 1)
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false))
+                    {
+                        
+                        var Arg0 = argHelper0.GetString(false);
+                        obj.UnloadBundleByName(Arg0);
+                        
+                        
+                        return;
+                    }
+                }
                 
+                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnloadBundleByName");
             }
             catch (Exception e)
             {
@@ -677,7 +695,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Resource.ResourceManager obj = Puerts.Utils.GetSelf((int)data, self) as Resource.ResourceManager;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Resource.ResourceManager;
                 var result = obj.currentSceneName;
                 Puerts.PuertsDLL.ReturnString(isolate, info, result);
             }
@@ -692,7 +710,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Resource.ResourceManager obj = Puerts.Utils.GetSelf((int)data, self) as Resource.ResourceManager;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Resource.ResourceManager;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.currentSceneName = argHelper.GetString(false);
             }
@@ -801,7 +819,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Resource.ResourceManager obj = Puerts.Utils.GetSelf((int)data, self) as Resource.ResourceManager;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Resource.ResourceManager;
                 var result = obj.spriteRendererMaterialDic;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -816,7 +834,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Resource.ResourceManager obj = Puerts.Utils.GetSelf((int)data, self) as Resource.ResourceManager;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Resource.ResourceManager;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.spriteRendererMaterialDic = argHelper.Get<System.Collections.Generic.Dictionary<string, UnityEngine.Material>>(false);
             }

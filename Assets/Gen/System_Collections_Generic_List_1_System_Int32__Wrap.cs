@@ -308,7 +308,7 @@ namespace PuertsStaticWrap
                     var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                     
                     
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(int[]), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<int[]>(false);
@@ -329,7 +329,7 @@ namespace PuertsStaticWrap
                     
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(int[]), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
@@ -352,7 +352,7 @@ namespace PuertsStaticWrap
                     var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
                     
                     
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(int[]), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
                         
@@ -1323,7 +1323,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                System.Collections.Generic.List<int> obj = Puerts.Utils.GetSelf((int)data, self) as System.Collections.Generic.List<int>;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as System.Collections.Generic.List<int>;
                 var result = obj.Capacity;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1338,7 +1338,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                System.Collections.Generic.List<int> obj = Puerts.Utils.GetSelf((int)data, self) as System.Collections.Generic.List<int>;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as System.Collections.Generic.List<int>;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.Capacity = argHelper.GetInt32(false);
             }
@@ -1354,7 +1354,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                System.Collections.Generic.List<int> obj = Puerts.Utils.GetSelf((int)data, self) as System.Collections.Generic.List<int>;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as System.Collections.Generic.List<int>;
                 var result = obj.Count;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }

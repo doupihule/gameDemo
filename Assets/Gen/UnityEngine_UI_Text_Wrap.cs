@@ -181,7 +181,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.cachedTextGenerator;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -198,7 +198,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.cachedTextGeneratorForLayout;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -215,7 +215,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.mainTexture;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -232,7 +232,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.font;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -247,7 +247,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.font = argHelper.Get<UnityEngine.Font>(false);
             }
@@ -263,7 +263,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.text;
                 Puerts.PuertsDLL.ReturnString(isolate, info, result);
             }
@@ -278,7 +278,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.text = argHelper.GetString(false);
             }
@@ -294,7 +294,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.supportRichText;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -309,7 +309,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.supportRichText = argHelper.GetBoolean(false);
             }
@@ -325,7 +325,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.resizeTextForBestFit;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -340,7 +340,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.resizeTextForBestFit = argHelper.GetBoolean(false);
             }
@@ -356,7 +356,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.resizeTextMinSize;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -371,7 +371,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.resizeTextMinSize = argHelper.GetInt32(false);
             }
@@ -387,7 +387,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.resizeTextMaxSize;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -402,7 +402,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.resizeTextMaxSize = argHelper.GetInt32(false);
             }
@@ -418,7 +418,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.alignment;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -433,7 +433,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.alignment = (UnityEngine.TextAnchor)argHelper.GetInt32(false);
             }
@@ -449,7 +449,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.alignByGeometry;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -464,7 +464,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.alignByGeometry = argHelper.GetBoolean(false);
             }
@@ -480,7 +480,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.fontSize;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -495,7 +495,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.fontSize = argHelper.GetInt32(false);
             }
@@ -511,7 +511,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.horizontalOverflow;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -526,7 +526,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.horizontalOverflow = (UnityEngine.HorizontalWrapMode)argHelper.GetInt32(false);
             }
@@ -542,7 +542,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.verticalOverflow;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -557,7 +557,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.verticalOverflow = (UnityEngine.VerticalWrapMode)argHelper.GetInt32(false);
             }
@@ -573,7 +573,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.lineSpacing;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -588,7 +588,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.lineSpacing = argHelper.GetFloat(false);
             }
@@ -604,7 +604,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.fontStyle;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -619,7 +619,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.fontStyle = (UnityEngine.FontStyle)argHelper.GetInt32(false);
             }
@@ -635,7 +635,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.pixelsPerUnit;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -652,7 +652,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.minWidth;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -669,7 +669,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.preferredWidth;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -686,7 +686,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.flexibleWidth;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -703,7 +703,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.minHeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -720,7 +720,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.preferredHeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -737,7 +737,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.flexibleHeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -754,7 +754,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Text obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Text;
                 var result = obj.layoutPriority;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }

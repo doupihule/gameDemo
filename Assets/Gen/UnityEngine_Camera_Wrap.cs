@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Camera constructor");
+                
             }
             catch (Exception e)
             {
@@ -244,7 +244,7 @@ namespace PuertsStaticWrap
                         
                         return;
                     }
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RenderBuffer[]), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.RenderBuffer), false, false))
                     {
                         
@@ -1630,7 +1630,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.nearClipPlane;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1645,7 +1645,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.nearClipPlane = argHelper.GetFloat(false);
             }
@@ -1661,7 +1661,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.farClipPlane;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1676,7 +1676,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.farClipPlane = argHelper.GetFloat(false);
             }
@@ -1692,7 +1692,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.fieldOfView;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1707,7 +1707,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.fieldOfView = argHelper.GetFloat(false);
             }
@@ -1723,7 +1723,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.renderingPath;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -1738,7 +1738,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.renderingPath = (UnityEngine.RenderingPath)argHelper.GetInt32(false);
             }
@@ -1754,7 +1754,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.actualRenderingPath;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -1771,7 +1771,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.allowHDR;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1786,7 +1786,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.allowHDR = argHelper.GetBoolean(false);
             }
@@ -1802,7 +1802,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.allowMSAA;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1817,7 +1817,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.allowMSAA = argHelper.GetBoolean(false);
             }
@@ -1833,7 +1833,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.allowDynamicResolution;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1848,7 +1848,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.allowDynamicResolution = argHelper.GetBoolean(false);
             }
@@ -1864,7 +1864,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.forceIntoRenderTexture;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1879,7 +1879,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.forceIntoRenderTexture = argHelper.GetBoolean(false);
             }
@@ -1895,7 +1895,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.orthographicSize;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1910,7 +1910,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.orthographicSize = argHelper.GetFloat(false);
             }
@@ -1926,7 +1926,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.orthographic;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1941,7 +1941,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.orthographic = argHelper.GetBoolean(false);
             }
@@ -1957,7 +1957,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.opaqueSortMode;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -1972,7 +1972,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.opaqueSortMode = (UnityEngine.Rendering.OpaqueSortMode)argHelper.GetInt32(false);
             }
@@ -1988,7 +1988,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.transparencySortMode;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -2003,7 +2003,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.transparencySortMode = (UnityEngine.TransparencySortMode)argHelper.GetInt32(false);
             }
@@ -2019,7 +2019,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.transparencySortAxis;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2034,7 +2034,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.transparencySortAxis = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -2050,7 +2050,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.depth;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -2065,7 +2065,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.depth = argHelper.GetFloat(false);
             }
@@ -2081,7 +2081,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.aspect;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -2096,7 +2096,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.aspect = argHelper.GetFloat(false);
             }
@@ -2112,7 +2112,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.velocity;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2129,7 +2129,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.cullingMask;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -2144,7 +2144,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.cullingMask = argHelper.GetInt32(false);
             }
@@ -2160,7 +2160,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.eventMask;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -2175,7 +2175,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.eventMask = argHelper.GetInt32(false);
             }
@@ -2191,7 +2191,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.layerCullSpherical;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -2206,7 +2206,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.layerCullSpherical = argHelper.GetBoolean(false);
             }
@@ -2222,7 +2222,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.cameraType;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -2237,7 +2237,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.cameraType = (UnityEngine.CameraType)argHelper.GetInt32(false);
             }
@@ -2253,7 +2253,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.layerCullDistances;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2268,7 +2268,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.layerCullDistances = argHelper.Get<float[]>(false);
             }
@@ -2284,7 +2284,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.useOcclusionCulling;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -2299,7 +2299,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.useOcclusionCulling = argHelper.GetBoolean(false);
             }
@@ -2315,7 +2315,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.cullingMatrix;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2330,7 +2330,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.cullingMatrix = argHelper.Get<UnityEngine.Matrix4x4>(false);
             }
@@ -2346,7 +2346,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.backgroundColor;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2361,7 +2361,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.backgroundColor = argHelper.Get<UnityEngine.Color>(false);
             }
@@ -2377,7 +2377,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.clearFlags;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -2392,7 +2392,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.clearFlags = (UnityEngine.CameraClearFlags)argHelper.GetInt32(false);
             }
@@ -2408,7 +2408,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.depthTextureMode;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -2423,7 +2423,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.depthTextureMode = (UnityEngine.DepthTextureMode)argHelper.GetInt32(false);
             }
@@ -2439,7 +2439,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.clearStencilAfterLightingPass;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -2454,7 +2454,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.clearStencilAfterLightingPass = argHelper.GetBoolean(false);
             }
@@ -2470,7 +2470,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.usePhysicalProperties;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -2485,7 +2485,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.usePhysicalProperties = argHelper.GetBoolean(false);
             }
@@ -2501,7 +2501,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.sensorSize;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2516,7 +2516,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.sensorSize = argHelper.Get<UnityEngine.Vector2>(false);
             }
@@ -2532,7 +2532,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.lensShift;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2547,7 +2547,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.lensShift = argHelper.Get<UnityEngine.Vector2>(false);
             }
@@ -2563,7 +2563,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.focalLength;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -2578,7 +2578,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.focalLength = argHelper.GetFloat(false);
             }
@@ -2594,7 +2594,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.gateFit;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -2609,7 +2609,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.gateFit = (UnityEngine.Camera.GateFitMode)argHelper.GetInt32(false);
             }
@@ -2625,7 +2625,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.rect;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2640,7 +2640,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.rect = argHelper.Get<UnityEngine.Rect>(false);
             }
@@ -2656,7 +2656,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.pixelRect;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2671,7 +2671,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.pixelRect = argHelper.Get<UnityEngine.Rect>(false);
             }
@@ -2687,7 +2687,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.pixelWidth;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -2704,7 +2704,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.pixelHeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -2721,7 +2721,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.scaledPixelWidth;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -2738,7 +2738,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.scaledPixelHeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -2755,7 +2755,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.targetTexture;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2770,7 +2770,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.targetTexture = argHelper.Get<UnityEngine.RenderTexture>(false);
             }
@@ -2786,7 +2786,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.activeTexture;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2803,7 +2803,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.targetDisplay;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -2818,7 +2818,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.targetDisplay = argHelper.GetInt32(false);
             }
@@ -2834,7 +2834,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.cameraToWorldMatrix;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2851,7 +2851,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.worldToCameraMatrix;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2866,7 +2866,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.worldToCameraMatrix = argHelper.Get<UnityEngine.Matrix4x4>(false);
             }
@@ -2882,7 +2882,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.projectionMatrix;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2897,7 +2897,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.projectionMatrix = argHelper.Get<UnityEngine.Matrix4x4>(false);
             }
@@ -2913,7 +2913,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.nonJitteredProjectionMatrix;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2928,7 +2928,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.nonJitteredProjectionMatrix = argHelper.Get<UnityEngine.Matrix4x4>(false);
             }
@@ -2944,7 +2944,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.useJitteredProjectionMatrixForTransparentRendering;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -2959,7 +2959,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.useJitteredProjectionMatrixForTransparentRendering = argHelper.GetBoolean(false);
             }
@@ -2975,7 +2975,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.previousViewProjectionMatrix;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3026,7 +3026,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.scene;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3041,7 +3041,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.scene = argHelper.Get<UnityEngine.SceneManagement.Scene>(false);
             }
@@ -3057,7 +3057,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.stereoEnabled;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -3074,7 +3074,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.stereoSeparation;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3089,7 +3089,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.stereoSeparation = argHelper.GetFloat(false);
             }
@@ -3105,7 +3105,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.stereoConvergence;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3120,7 +3120,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.stereoConvergence = argHelper.GetFloat(false);
             }
@@ -3136,7 +3136,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.areVRStereoViewMatricesWithinSingleCullTolerance;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -3153,7 +3153,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.stereoTargetEye;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -3168,7 +3168,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.stereoTargetEye = (UnityEngine.StereoTargetEyeMask)argHelper.GetInt32(false);
             }
@@ -3184,7 +3184,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.stereoActiveEye;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -3235,7 +3235,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
                 var result = obj.commandBufferCount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3245,130 +3245,6 @@ namespace PuertsStaticWrap
             }
         }
         
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_near(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.nearClipPlane;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_near(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.nearClipPlane = argHelper.GetFloat(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_far(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.farClipPlane;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_far(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.farClipPlane = argHelper.GetFloat(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_fov(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.fieldOfView;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_fov(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.fieldOfView = argHelper.GetFloat(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_hdr(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var result = obj.allowHDR;
-                Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_hdr(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Camera obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Camera;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.allowHDR = argHelper.GetBoolean(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
         
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
@@ -3581,10 +3457,6 @@ namespace PuertsStaticWrap
                     {"allCamerasCount", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_allCamerasCount, Setter = null} },
                     {"allCameras", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_allCameras, Setter = null} },
                     {"commandBufferCount", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_commandBufferCount, Setter = null} },
-                    {"near", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_near, Setter = S_near} },
-                    {"far", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_far, Setter = S_far} },
-                    {"fov", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_fov, Setter = S_fov} },
-                    {"hdr", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_hdr, Setter = S_hdr} },
                     {"onPreCull", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_onPreCull, Setter = S_onPreCull} },
                     {"onPreRender", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_onPreRender, Setter = S_onPreRender} },
                     {"onPostRender", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_onPostRender, Setter = S_onPostRender} },

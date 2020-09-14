@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to GameUtils.ColliderListenerExpand constructor");
+                
             }
             catch (Exception e)
             {
@@ -72,7 +72,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var result = obj.OnTriggerEnterDelegate;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -87,7 +87,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.OnTriggerEnterDelegate = argHelper.Get<GameUtils.ColliderDelege>(false);
             }
@@ -103,7 +103,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var result = obj.OnTriggerExitDelegate;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -118,7 +118,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.OnTriggerExitDelegate = argHelper.Get<GameUtils.ColliderDelege>(false);
             }
@@ -134,7 +134,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var result = obj.OnTriggerStayDelegate;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -149,7 +149,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.OnTriggerStayDelegate = argHelper.Get<GameUtils.ColliderDelege>(false);
             }
@@ -165,7 +165,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var result = obj.OnCollisionEnterDelegate;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -180,7 +180,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.OnCollisionEnterDelegate = argHelper.Get<GameUtils.CollisionDelege>(false);
             }
@@ -196,7 +196,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var result = obj.OnCollisionExitDelegate;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -211,7 +211,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.OnCollisionExitDelegate = argHelper.Get<GameUtils.CollisionDelege>(false);
             }
@@ -227,7 +227,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var result = obj.OnCollisionStayDelegate;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -242,7 +242,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.OnCollisionStayDelegate = argHelper.Get<GameUtils.CollisionDelege>(false);
             }
@@ -258,7 +258,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var result = obj.OnControllerColliderHitDelegate;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -273,7 +273,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                GameUtils.ColliderListenerExpand obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as GameUtils.ColliderListenerExpand;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.OnControllerColliderHitDelegate = argHelper.Get<GameUtils.ControllerColliderDelege>(false);
             }

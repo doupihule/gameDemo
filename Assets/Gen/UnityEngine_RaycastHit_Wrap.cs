@@ -27,7 +27,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.collider;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -44,7 +44,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.point;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -59,7 +59,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.point = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -75,7 +75,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.normal;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -90,7 +90,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.normal = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -106,7 +106,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.barycentricCoordinate;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -121,7 +121,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.barycentricCoordinate = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -137,7 +137,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.distance;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -152,7 +152,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.distance = argHelper.GetFloat(false);
             }
@@ -168,7 +168,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.triangleIndex;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -185,7 +185,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.textureCoord;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -202,24 +202,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
-                var result = obj.textureCoord2;
-                Puerts.ResultHelper.Set((int)data, isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_textureCoord1(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.textureCoord2;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -236,7 +219,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.transform;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -253,7 +236,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.rigidbody;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -270,7 +253,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.RaycastHit obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.RaycastHit)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.lightmapCoord;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -304,7 +287,6 @@ namespace PuertsStaticWrap
                     {"triangleIndex", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_triangleIndex, Setter = null} },
                     {"textureCoord", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_textureCoord, Setter = null} },
                     {"textureCoord2", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_textureCoord2, Setter = null} },
-                    {"textureCoord1", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_textureCoord1, Setter = null} },
                     {"transform", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_transform, Setter = null} },
                     {"rigidbody", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_rigidbody, Setter = null} },
                     {"lightmapCoord", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_lightmapCoord, Setter = null} },

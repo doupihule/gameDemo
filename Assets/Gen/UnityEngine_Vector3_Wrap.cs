@@ -1171,74 +1171,6 @@ namespace PuertsStaticWrap
             }
         }
         
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_AngleBetween(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
-                        var Arg1 = argHelper1.Get<UnityEngine.Vector3>(false);
-                        var result = UnityEngine.Vector3.AngleBetween(Arg0,Arg1);
-                        
-                        Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_Exclude(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
-                        var Arg1 = argHelper1.Get<UnityEngine.Vector3>(false);
-                        var result = UnityEngine.Vector3.Exclude(Arg0,Arg1);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
         
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
@@ -1246,7 +1178,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector3 obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.normalized;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1263,7 +1195,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector3 obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.magnitude;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1280,7 +1212,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector3 obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.sqrMagnitude;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1463,23 +1395,6 @@ namespace PuertsStaticWrap
         
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_fwd(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = UnityEngine.Vector3.fwd;
-                Puerts.ResultHelper.Set((int)data, isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
         private static void G_kEpsilon(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
         {
             try
@@ -1518,7 +1433,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector3 obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.x;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1533,7 +1448,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector3 obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.x = argHelper.GetFloat(false);
             }
@@ -1549,7 +1464,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector3 obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.y;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1564,7 +1479,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector3 obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.y = argHelper.GetFloat(false);
             }
@@ -1580,7 +1495,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector3 obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.z;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1595,7 +1510,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector3 obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector3)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.z = argHelper.GetFloat(false);
             }
@@ -1923,8 +1838,6 @@ namespace PuertsStaticWrap
                     { new Puerts.MethodKey {Name = "Min", IsStatic = true},  F_Min },
                     { new Puerts.MethodKey {Name = "Max", IsStatic = true},  F_Max },
                     { new Puerts.MethodKey {Name = "ToString", IsStatic = false},  M_ToString },
-                    { new Puerts.MethodKey {Name = "AngleBetween", IsStatic = true},  F_AngleBetween },
-                    { new Puerts.MethodKey {Name = "Exclude", IsStatic = true},  F_Exclude },
                     { new Puerts.MethodKey {Name = "get_Item", IsStatic = false}, GetItem },
                     { new Puerts.MethodKey {Name = "set_Item", IsStatic = false}, SetItem},
                     { new Puerts.MethodKey {Name = "op_Addition", IsStatic = true}, O_op_Addition},
@@ -1951,7 +1864,6 @@ namespace PuertsStaticWrap
                     {"right", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_right, Setter = null} },
                     {"positiveInfinity", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_positiveInfinity, Setter = null} },
                     {"negativeInfinity", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_negativeInfinity, Setter = null} },
-                    {"fwd", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_fwd, Setter = null} },
                     {"kEpsilon", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_kEpsilon, Setter = null} },
                     {"kEpsilonNormalSqrt", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_kEpsilonNormalSqrt, Setter = null} },
                     {"x", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_x, Setter = S_x} },

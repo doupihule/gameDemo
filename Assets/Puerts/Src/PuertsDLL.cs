@@ -50,8 +50,9 @@ namespace Puerts
         Array = 128,
         Function = 256,
         Date = 512,
-        Unknow = 1024,
-        Any = NullOrUndefined | BigInt | Number | String | Boolean | NativeObject | Array | Function | Date,
+        ArrayBuffer = 1024,
+        Unknow = 2048,
+        Any = NullOrUndefined | BigInt | Number | String | Boolean | NativeObject | Array | Function | Date | ArrayBuffer,
     };
 
     public class PuertsDLL
@@ -61,6 +62,9 @@ namespace Puerts
 #else
         const string DLLNAME = "puerts";
 #endif
+
+        [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int GetLibVersion();
 
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr CreateJSEngine();
@@ -75,10 +79,9 @@ namespace Puerts
         {
             if (str != IntPtr.Zero)
             {
-#if XLUA_GENERAL || (UNITY_WSA && !UNITY_EDITOR)
-                int len = strlen.ToInt32();
-                byte[] buffer = new byte[len];
-                Marshal.Copy(str, buffer, 0, len);
+#if PUERTS_GENERAL || (UNITY_WSA && !UNITY_EDITOR)
+                byte[] buffer = new byte[strlen];
+                Marshal.Copy(str, buffer, 0, strlen);
                 return Encoding.UTF8.GetString(buffer);
 #else
                 string ret = Marshal.PtrToStringAnsi(str, strlen);
@@ -118,6 +121,15 @@ namespace Puerts
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr Eval(IntPtr isolate, string code, string path);
 
+        public static IntPtr EvalChecked(IntPtr isolate, string code, string path)
+        {
+            if (code == null)
+            {
+                throw new InvalidProgramException("eval null string");
+            }
+            return Eval(isolate, code, path);
+        }
+
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
         public static extern int RegisterClass(IntPtr isolate, int BaseTypeId, string fullName, V8ConstructorCallback constructor, V8DestructorCallback destructor, long data);
 
@@ -129,7 +141,7 @@ namespace Puerts
         public static extern bool RegisterFunction(IntPtr isolate, int classID, string name, bool isStatic, V8FunctionCallback callback, long data);
 
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern bool RegisterProperty(IntPtr isolate, int classID, string name, bool isStatic, V8FunctionCallback getter, long getterData, V8FunctionCallback setter, long setterData);
+        public static extern bool RegisterProperty(IntPtr isolate, int classID, string name, bool isStatic, V8FunctionCallback getter, long getterData, V8FunctionCallback setter, long setterData, bool dontDelete);
 
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
         public static extern bool RegisterIndexedProperty(IntPtr isolate, int classID, V8IndexedGetterCallback getter, V8IndexedSetterCallback setter, long data);
@@ -187,7 +199,19 @@ namespace Puerts
         public static extern bool GetBooleanFromValue(IntPtr isolate, IntPtr value, bool isByRef);
 
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool ValueIsBigInt(IntPtr isolate, IntPtr value, bool isByRef);
+
+        [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
         public static extern long GetBigIntFromValue(IntPtr isolate, IntPtr value, bool isByRef);
+
+        public static long GetBigIntFromValueChecked(IntPtr isolate, IntPtr value, bool isByRef)
+        {
+            if (!ValueIsBigInt(isolate, value, isByRef))
+            {
+                throw new InvalidOperationException("expect a bigint");
+            }
+            return GetBigIntFromValue(isolate, value, isByRef);
+        }
 
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr GetObjectFromValue(IntPtr isolate, IntPtr value, bool isByRef);
@@ -220,7 +244,13 @@ namespace Puerts
         public static extern void SetNullToOutValue(IntPtr isolate, IntPtr value);
 
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void ThrowException(IntPtr isolate, string message);
+        public static extern void ThrowException(IntPtr isolate, byte[] message);
+
+        public static void ThrowException(IntPtr isolate, string message)
+        {
+            var bytes = Encoding.UTF8.GetBytes(message);
+            ThrowException(isolate, bytes);
+        }
 
         //begin cs call js
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
@@ -284,7 +314,19 @@ namespace Puerts
         public static extern bool GetBooleanFromResult(IntPtr resultInfo);
 
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool ResultIsBigInt(IntPtr resultInfo);
+
+        [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
         public static extern long GetBigIntFromResult(IntPtr resultInfo);
+
+        public static long GetBigIntFromResultCheck(IntPtr resultInfo)
+        {
+            if (!ResultIsBigInt(resultInfo))
+            {
+                throw new InvalidOperationException("expect a bigint");
+            }
+            return GetBigIntFromResult(resultInfo);
+        }
 
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr GetObjectFromResult(IntPtr resultInfo);
@@ -328,10 +370,23 @@ namespace Puerts
         public static extern void DestroyInspector(IntPtr isolate);
 
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
-        public static extern void InspectorTick(IntPtr isolate);
+        public static extern bool InspectorTick(IntPtr isolate);
 
         [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SetLogCallback(LogCallback log, LogCallback logWarning, LogCallback logError);
+
+        [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void ReturnArrayBuffer(IntPtr isolate, IntPtr info, byte[] bytes, int Length);
+        [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void PropertyReturnArrayBuffer(IntPtr isolate, IntPtr info, byte[] bytes, int Length);
+        [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void SetArrayBufferToOutValue(IntPtr isolate, IntPtr value, Byte[] bytes, int length);
+        [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
+        public static extern void PushArrayBufferForJSFunction(IntPtr function, byte[] bytes, int length);
+        [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr GetArrayBufferFromValue(IntPtr isolate, IntPtr value, out int length, bool isOut);
+        [DllImport(DLLNAME, CallingConvention = CallingConvention.Cdecl)]
+        public static extern IntPtr GetArrayBufferFromResult(IntPtr function, out int length);
     }
 }
 

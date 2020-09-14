@@ -387,7 +387,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.bounds;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -404,7 +404,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.rect;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -421,7 +421,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.border;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -438,7 +438,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.texture;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -455,7 +455,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.pixelsPerUnit;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -472,7 +472,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.associatedAlphaSplitTexture;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -489,7 +489,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.pivot;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -506,7 +506,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.packed;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -523,7 +523,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.packingMode;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -540,7 +540,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.packingRotation;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -557,7 +557,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.textureRect;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -574,7 +574,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.textureRectOffset;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -591,7 +591,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.vertices;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -608,7 +608,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.triangles;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -625,7 +625,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Sprite obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Sprite;
                 var result = obj.uv;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }

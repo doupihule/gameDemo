@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Rigidbody constructor");
+                
             }
             catch (Exception e)
             {
@@ -333,38 +333,6 @@ namespace PuertsStaticWrap
                         var result = obj.GetPointVelocity(Arg0);
                         
                         Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_SetMaxAngularVelocity(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.GetFloat(false);
-                        obj.SetMaxAngularVelocity(Arg0);
-                        
-                        
                         
                     }
                 }
@@ -1133,7 +1101,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.velocity;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1148,7 +1116,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.velocity = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1164,7 +1132,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.angularVelocity;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1179,7 +1147,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.angularVelocity = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1195,7 +1163,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.drag;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1210,7 +1178,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.drag = argHelper.GetFloat(false);
             }
@@ -1226,7 +1194,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.angularDrag;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1241,7 +1209,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.angularDrag = argHelper.GetFloat(false);
             }
@@ -1257,7 +1225,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.mass;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1272,7 +1240,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.mass = argHelper.GetFloat(false);
             }
@@ -1288,7 +1256,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.useGravity;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1303,7 +1271,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.useGravity = argHelper.GetBoolean(false);
             }
@@ -1319,7 +1287,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.maxDepenetrationVelocity;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1334,7 +1302,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.maxDepenetrationVelocity = argHelper.GetFloat(false);
             }
@@ -1350,7 +1318,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.isKinematic;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1365,7 +1333,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.isKinematic = argHelper.GetBoolean(false);
             }
@@ -1381,7 +1349,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.freezeRotation;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1396,7 +1364,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.freezeRotation = argHelper.GetBoolean(false);
             }
@@ -1412,7 +1380,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.constraints;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -1427,7 +1395,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.constraints = (UnityEngine.RigidbodyConstraints)argHelper.GetInt32(false);
             }
@@ -1443,7 +1411,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.collisionDetectionMode;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -1458,7 +1426,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.collisionDetectionMode = (UnityEngine.CollisionDetectionMode)argHelper.GetInt32(false);
             }
@@ -1474,7 +1442,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.centerOfMass;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1489,7 +1457,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.centerOfMass = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1505,7 +1473,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.worldCenterOfMass;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1522,7 +1490,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.inertiaTensorRotation;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1537,7 +1505,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.inertiaTensorRotation = argHelper.Get<UnityEngine.Quaternion>(false);
             }
@@ -1553,7 +1521,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.inertiaTensor;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1568,7 +1536,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.inertiaTensor = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1584,7 +1552,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.detectCollisions;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1599,7 +1567,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.detectCollisions = argHelper.GetBoolean(false);
             }
@@ -1615,7 +1583,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.position;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1630,7 +1598,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.position = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1646,7 +1614,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.rotation;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1661,7 +1629,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.rotation = argHelper.Get<UnityEngine.Quaternion>(false);
             }
@@ -1677,7 +1645,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.interpolation;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -1692,7 +1660,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.interpolation = (UnityEngine.RigidbodyInterpolation)argHelper.GetInt32(false);
             }
@@ -1708,7 +1676,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.solverIterations;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1723,7 +1691,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.solverIterations = argHelper.GetInt32(false);
             }
@@ -1739,7 +1707,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.sleepThreshold;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1754,7 +1722,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.sleepThreshold = argHelper.GetFloat(false);
             }
@@ -1770,7 +1738,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.maxAngularVelocity;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1785,7 +1753,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.maxAngularVelocity = argHelper.GetFloat(false);
             }
@@ -1801,7 +1769,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var result = obj.solverVelocityIterations;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1816,162 +1784,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.solverVelocityIterations = argHelper.GetInt32(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_sleepVelocity(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var result = obj.sleepVelocity;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_sleepVelocity(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.sleepVelocity = argHelper.GetFloat(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_sleepAngularVelocity(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var result = obj.sleepAngularVelocity;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_sleepAngularVelocity(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.sleepAngularVelocity = argHelper.GetFloat(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_useConeFriction(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var result = obj.useConeFriction;
-                Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_useConeFriction(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.useConeFriction = argHelper.GetBoolean(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_solverIterationCount(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var result = obj.solverIterations;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_solverIterationCount(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.solverIterations = argHelper.GetInt32(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_solverVelocityIterationCount(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
-                var result = obj.solverVelocityIterations;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_solverVelocityIterationCount(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Rigidbody obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Rigidbody;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.solverVelocityIterations = argHelper.GetInt32(false);
             }
@@ -2002,7 +1815,6 @@ namespace PuertsStaticWrap
                     { new Puerts.MethodKey {Name = "ResetInertiaTensor", IsStatic = false},  M_ResetInertiaTensor },
                     { new Puerts.MethodKey {Name = "GetRelativePointVelocity", IsStatic = false},  M_GetRelativePointVelocity },
                     { new Puerts.MethodKey {Name = "GetPointVelocity", IsStatic = false},  M_GetPointVelocity },
-                    { new Puerts.MethodKey {Name = "SetMaxAngularVelocity", IsStatic = false},  M_SetMaxAngularVelocity },
                     { new Puerts.MethodKey {Name = "AddForce", IsStatic = false},  M_AddForce },
                     { new Puerts.MethodKey {Name = "AddRelativeForce", IsStatic = false},  M_AddRelativeForce },
                     { new Puerts.MethodKey {Name = "AddTorque", IsStatic = false},  M_AddTorque },
@@ -2039,11 +1851,6 @@ namespace PuertsStaticWrap
                     {"sleepThreshold", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_sleepThreshold, Setter = S_sleepThreshold} },
                     {"maxAngularVelocity", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_maxAngularVelocity, Setter = S_maxAngularVelocity} },
                     {"solverVelocityIterations", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_solverVelocityIterations, Setter = S_solverVelocityIterations} },
-                    {"sleepVelocity", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_sleepVelocity, Setter = S_sleepVelocity} },
-                    {"sleepAngularVelocity", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_sleepAngularVelocity, Setter = S_sleepAngularVelocity} },
-                    {"useConeFriction", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_useConeFriction, Setter = S_useConeFriction} },
-                    {"solverIterationCount", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_solverIterationCount, Setter = S_solverIterationCount} },
-                    {"solverVelocityIterationCount", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_solverVelocityIterationCount, Setter = S_solverVelocityIterationCount} },
                     
                 }
             };

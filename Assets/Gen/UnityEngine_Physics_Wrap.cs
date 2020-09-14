@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Physics constructor");
+                
             }
             catch (Exception e)
             {
@@ -1621,7 +1621,7 @@ namespace PuertsStaticWrap
                     
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Ray), false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false))
@@ -1639,7 +1639,7 @@ namespace PuertsStaticWrap
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
@@ -1666,7 +1666,7 @@ namespace PuertsStaticWrap
                     
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Ray), false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
@@ -1682,7 +1682,7 @@ namespace PuertsStaticWrap
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
                         
@@ -1706,7 +1706,7 @@ namespace PuertsStaticWrap
                     
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Ray), false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
                         
@@ -1720,7 +1720,7 @@ namespace PuertsStaticWrap
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
@@ -1741,7 +1741,7 @@ namespace PuertsStaticWrap
                     
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Ray), false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Ray>(false);
@@ -1766,7 +1766,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false))
@@ -2464,7 +2464,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Collider[]), false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
@@ -2492,7 +2492,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Collider[]), false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
                         
@@ -2517,7 +2517,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Collider[]), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
@@ -2646,7 +2646,7 @@ namespace PuertsStaticWrap
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper4.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper4.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper6.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper7.IsMatch(Puerts.JsValueType.Number, null, false, false))
@@ -2683,7 +2683,7 @@ namespace PuertsStaticWrap
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper4.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper4.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper6.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
@@ -2717,7 +2717,7 @@ namespace PuertsStaticWrap
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper4.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper4.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
                         
@@ -2748,7 +2748,7 @@ namespace PuertsStaticWrap
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper4.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper4.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
@@ -2793,7 +2793,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper6.IsMatch(Puerts.JsValueType.Number, null, false, false))
@@ -2827,7 +2827,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
@@ -2845,7 +2845,7 @@ namespace PuertsStaticWrap
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Ray), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false))
@@ -2877,7 +2877,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
                         
@@ -2893,7 +2893,7 @@ namespace PuertsStaticWrap
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Ray), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
@@ -2922,7 +2922,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
@@ -2936,7 +2936,7 @@ namespace PuertsStaticWrap
                     }
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Ray), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
                         
@@ -2961,7 +2961,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Ray), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Ray>(false);
@@ -3321,7 +3321,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Collider[]), false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Quaternion), false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false))
@@ -3352,7 +3352,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Collider[]), false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Quaternion), false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
@@ -3380,7 +3380,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Collider[]), false, false)
                         && argHelper3.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Quaternion), false, false))
                     {
                         
@@ -3405,7 +3405,7 @@ namespace PuertsStaticWrap
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper2.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Collider[]), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
@@ -3449,7 +3449,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Quaternion), false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper6.IsMatch(Puerts.JsValueType.Number, null, false, false)
@@ -3484,7 +3484,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Quaternion), false, false))
                     {
                         
@@ -3514,7 +3514,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Quaternion), false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
@@ -3547,7 +3547,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Quaternion), false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper6.IsMatch(Puerts.JsValueType.Number, null, false, false))
@@ -3579,7 +3579,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.RaycastHit[]), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
@@ -3782,7 +3782,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Collider[]), false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false)
                         && argHelper5.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
@@ -3813,7 +3813,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false)
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Collider[]), false, false)
                         && argHelper4.IsMatch(Puerts.JsValueType.Number, null, false, false))
                     {
                         
@@ -3841,7 +3841,7 @@ namespace PuertsStaticWrap
                     if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
                         && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper3.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper3.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Collider[]), false, false))
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
@@ -4139,192 +4139,6 @@ namespace PuertsStaticWrap
                 
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 UnityEngine.Physics.defaultSolverVelocityIterations = argHelper.GetInt32(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_bounceTreshold(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = UnityEngine.Physics.bounceTreshold;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_bounceTreshold(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                UnityEngine.Physics.bounceTreshold = argHelper.GetFloat(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_sleepVelocity(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = UnityEngine.Physics.sleepVelocity;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_sleepVelocity(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                UnityEngine.Physics.sleepVelocity = argHelper.GetFloat(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_sleepAngularVelocity(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = UnityEngine.Physics.sleepAngularVelocity;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_sleepAngularVelocity(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                UnityEngine.Physics.sleepAngularVelocity = argHelper.GetFloat(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_solverIterationCount(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = UnityEngine.Physics.defaultSolverIterations;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_solverIterationCount(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                UnityEngine.Physics.defaultSolverIterations = argHelper.GetInt32(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_solverVelocityIterationCount(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = UnityEngine.Physics.defaultSolverVelocityIterations;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_solverVelocityIterationCount(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                UnityEngine.Physics.defaultSolverVelocityIterations = argHelper.GetInt32(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_penetrationPenaltyForce(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = UnityEngine.Physics.penetrationPenaltyForce;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_penetrationPenaltyForce(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                UnityEngine.Physics.penetrationPenaltyForce = argHelper.GetFloat(false);
             }
             catch (Exception e)
             {
@@ -4639,12 +4453,6 @@ namespace PuertsStaticWrap
                     {"bounceThreshold", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_bounceThreshold, Setter = S_bounceThreshold} },
                     {"defaultSolverIterations", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_defaultSolverIterations, Setter = S_defaultSolverIterations} },
                     {"defaultSolverVelocityIterations", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_defaultSolverVelocityIterations, Setter = S_defaultSolverVelocityIterations} },
-                    {"bounceTreshold", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_bounceTreshold, Setter = S_bounceTreshold} },
-                    {"sleepVelocity", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_sleepVelocity, Setter = S_sleepVelocity} },
-                    {"sleepAngularVelocity", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_sleepAngularVelocity, Setter = S_sleepAngularVelocity} },
-                    {"solverIterationCount", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_solverIterationCount, Setter = S_solverIterationCount} },
-                    {"solverVelocityIterationCount", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_solverVelocityIterationCount, Setter = S_solverVelocityIterationCount} },
-                    {"penetrationPenaltyForce", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_penetrationPenaltyForce, Setter = S_penetrationPenaltyForce} },
                     {"defaultPhysicsScene", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_defaultPhysicsScene, Setter = null} },
                     {"autoSimulation", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_autoSimulation, Setter = S_autoSimulation} },
                     {"autoSyncTransforms", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_autoSyncTransforms, Setter = S_autoSyncTransforms} },

@@ -440,7 +440,7 @@ namespace PuertsStaticWrap
                     var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                     
                     
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Delegate), false, false))
                     {
                         
                         var Arg0 = argHelper0.GetParams<System.Delegate>(info, 0, paramLen);
@@ -534,7 +534,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                System.Delegate obj = Puerts.Utils.GetSelf((int)data, self) as System.Delegate;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as System.Delegate;
                 var result = obj.Method;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -551,7 +551,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                System.Delegate obj = Puerts.Utils.GetSelf((int)data, self) as System.Delegate;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as System.Delegate;
                 var result = obj.Target;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }

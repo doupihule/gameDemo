@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Object constructor");
+                
             }
             catch (Exception e)
             {
@@ -410,154 +410,6 @@ namespace PuertsStaticWrap
         }
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_DestroyObject(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                if (paramLen == 2)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Object), false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Object>(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        UnityEngine.Object.DestroyObject(Arg0,Arg1);
-                        
-                        
-                        return;
-                    }
-                }
-                
-                if (paramLen == 1)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Object), false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Object>(false);
-                        UnityEngine.Object.DestroyObject(Arg0);
-                        
-                        
-                        return;
-                    }
-                }
-                
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to DestroyObject");
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_FindSceneObjectsOfType(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<System.Type>(false);
-                        var result = UnityEngine.Object.FindSceneObjectsOfType(Arg0);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_FindObjectsOfTypeIncludingAssets(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<System.Type>(false);
-                        var result = UnityEngine.Object.FindObjectsOfTypeIncludingAssets(Arg0);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_FindObjectsOfTypeAll(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<System.Type>(false);
-                        var result = UnityEngine.Object.FindObjectsOfTypeAll(Arg0);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
         private static void F_FindObjectOfType(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
         {
             try
@@ -626,7 +478,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Object obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Object;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Object;
                 var result = obj.name;
                 Puerts.PuertsDLL.ReturnString(isolate, info, result);
             }
@@ -641,7 +493,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Object obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Object;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Object;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.name = argHelper.GetString(false);
             }
@@ -657,7 +509,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Object obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Object;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Object;
                 var result = obj.hideFlags;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -672,7 +524,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Object obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Object;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Object;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.hideFlags = (UnityEngine.HideFlags)argHelper.GetInt32(false);
             }
@@ -795,10 +647,6 @@ namespace PuertsStaticWrap
                     { new Puerts.MethodKey {Name = "DestroyImmediate", IsStatic = true},  F_DestroyImmediate },
                     { new Puerts.MethodKey {Name = "FindObjectsOfType", IsStatic = true},  F_FindObjectsOfType },
                     { new Puerts.MethodKey {Name = "DontDestroyOnLoad", IsStatic = true},  F_DontDestroyOnLoad },
-                    { new Puerts.MethodKey {Name = "DestroyObject", IsStatic = true},  F_DestroyObject },
-                    { new Puerts.MethodKey {Name = "FindSceneObjectsOfType", IsStatic = true},  F_FindSceneObjectsOfType },
-                    { new Puerts.MethodKey {Name = "FindObjectsOfTypeIncludingAssets", IsStatic = true},  F_FindObjectsOfTypeIncludingAssets },
-                    { new Puerts.MethodKey {Name = "FindObjectsOfTypeAll", IsStatic = true},  F_FindObjectsOfTypeAll },
                     { new Puerts.MethodKey {Name = "FindObjectOfType", IsStatic = true},  F_FindObjectOfType },
                     { new Puerts.MethodKey {Name = "ToString", IsStatic = false},  M_ToString },
                     { new Puerts.MethodKey {Name = "op_Implicit", IsStatic = true}, O_op_Implicit},

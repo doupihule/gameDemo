@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.TrailRenderer constructor");
+                
             }
             catch (Exception e)
             {
@@ -152,6 +152,34 @@ namespace PuertsStaticWrap
                         var Arg0 = argHelper0.Get<UnityEngine.Mesh>(false);
                         var Arg1 = argHelper1.GetBoolean(false);
                         obj.BakeMesh(Arg0,Arg1);
+                        
+                        
+                        return;
+                    }
+                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Mesh), false, false)
+                        && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Camera), false, false))
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.Mesh>(false);
+                        var Arg1 = argHelper1.Get<UnityEngine.Camera>(false);
+                        obj.BakeMesh(Arg0,Arg1);
+                        
+                        
+                        return;
+                    }
+                }
+                
+                if (paramLen == 1)
+                {
+                    
+                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
+                    
+                    
+                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(UnityEngine.Mesh), false, false))
+                    {
+                        
+                        var Arg0 = argHelper0.Get<UnityEngine.Mesh>(false);
+                        obj.BakeMesh(Arg0);
                         
                         
                         return;
@@ -320,28 +348,11 @@ namespace PuertsStaticWrap
         
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_numPositions(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
-                var result = obj.positionCount;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
         private static void G_time(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.time;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -356,7 +367,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.time = argHelper.GetFloat(false);
             }
@@ -372,7 +383,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.startWidth;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -387,7 +398,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.startWidth = argHelper.GetFloat(false);
             }
@@ -403,7 +414,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.endWidth;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -418,7 +429,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.endWidth = argHelper.GetFloat(false);
             }
@@ -434,7 +445,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.widthMultiplier;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -449,7 +460,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.widthMultiplier = argHelper.GetFloat(false);
             }
@@ -465,7 +476,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.autodestruct;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -480,7 +491,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.autodestruct = argHelper.GetBoolean(false);
             }
@@ -496,7 +507,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.emitting;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -511,7 +522,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.emitting = argHelper.GetBoolean(false);
             }
@@ -527,7 +538,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.numCornerVertices;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -542,7 +553,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.numCornerVertices = argHelper.GetInt32(false);
             }
@@ -558,7 +569,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.numCapVertices;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -573,7 +584,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.numCapVertices = argHelper.GetInt32(false);
             }
@@ -589,7 +600,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.minVertexDistance;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -604,7 +615,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.minVertexDistance = argHelper.GetFloat(false);
             }
@@ -620,7 +631,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.startColor;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -635,7 +646,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.startColor = argHelper.Get<UnityEngine.Color>(false);
             }
@@ -651,7 +662,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.endColor;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -666,7 +677,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.endColor = argHelper.Get<UnityEngine.Color>(false);
             }
@@ -682,7 +693,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.positionCount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -699,7 +710,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.shadowBias;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -714,7 +725,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.shadowBias = argHelper.GetFloat(false);
             }
@@ -730,7 +741,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.generateLightingData;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -745,7 +756,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.generateLightingData = argHelper.GetBoolean(false);
             }
@@ -761,7 +772,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.textureMode;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -776,7 +787,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.textureMode = (UnityEngine.LineTextureMode)argHelper.GetInt32(false);
             }
@@ -792,7 +803,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.alignment;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -807,7 +818,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.alignment = (UnityEngine.LineAlignment)argHelper.GetInt32(false);
             }
@@ -823,7 +834,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.widthCurve;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -838,7 +849,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.widthCurve = argHelper.Get<UnityEngine.AnimationCurve>(false);
             }
@@ -854,7 +865,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var result = obj.colorGradient;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -869,7 +880,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.TrailRenderer obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.TrailRenderer;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.colorGradient = argHelper.Get<UnityEngine.Gradient>(false);
             }
@@ -902,7 +913,6 @@ namespace PuertsStaticWrap
                 },
                 Properties = new System.Collections.Generic.Dictionary<string, Puerts.PropertyRegisterInfo>()
                 {
-                    {"numPositions", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_numPositions, Setter = null} },
                     {"time", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_time, Setter = S_time} },
                     {"startWidth", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_startWidth, Setter = S_startWidth} },
                     {"endWidth", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_endWidth, Setter = S_endWidth} },

@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Animator constructor");
+                
             }
             catch (Exception e)
             {
@@ -1668,38 +1668,6 @@ namespace PuertsStaticWrap
         }
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_ForceStateNormalizedTime(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.GetFloat(false);
-                        obj.ForceStateNormalizedTime(Arg0);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
         private static void M_CrossFadeInFixedTime(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
         {
             try
@@ -2629,180 +2597,6 @@ namespace PuertsStaticWrap
             }
         }
         
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_GetVector(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
-                
-                if (paramLen == 1)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetString(false);
-                        var result = obj.GetVector(Arg0);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        return;
-                    }
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetInt32(false);
-                        var result = obj.GetVector(Arg0);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        return;
-                    }
-                }
-                
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to GetVector");
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_SetVector(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
-                
-                if (paramLen == 2)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetString(false);
-                        var Arg1 = argHelper1.Get<UnityEngine.Vector3>(false);
-                        obj.SetVector(Arg0,Arg1);
-                        
-                        
-                        return;
-                    }
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetInt32(false);
-                        var Arg1 = argHelper1.Get<UnityEngine.Vector3>(false);
-                        obj.SetVector(Arg0,Arg1);
-                        
-                        
-                        return;
-                    }
-                }
-                
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to SetVector");
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_GetQuaternion(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
-                
-                if (paramLen == 1)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetString(false);
-                        var result = obj.GetQuaternion(Arg0);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        return;
-                    }
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetInt32(false);
-                        var result = obj.GetQuaternion(Arg0);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        return;
-                    }
-                }
-                
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to GetQuaternion");
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_SetQuaternion(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
-                
-                if (paramLen == 2)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Quaternion), false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetString(false);
-                        var Arg1 = argHelper1.Get<UnityEngine.Quaternion>(false);
-                        obj.SetQuaternion(Arg0,Arg1);
-                        
-                        
-                        return;
-                    }
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Quaternion), false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetInt32(false);
-                        var Arg1 = argHelper1.Get<UnityEngine.Quaternion>(false);
-                        obj.SetQuaternion(Arg0,Arg1);
-                        
-                        
-                        return;
-                    }
-                }
-                
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to SetQuaternion");
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
         
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
@@ -2810,7 +2604,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.isOptimizable;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -2827,7 +2621,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.isHuman;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -2844,7 +2638,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.hasRootMotion;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -2861,7 +2655,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.humanScale;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -2878,7 +2672,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.isInitialized;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -2895,7 +2689,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.deltaPosition;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2912,7 +2706,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.deltaRotation;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2929,7 +2723,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.velocity;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2946,7 +2740,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.angularVelocity;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2963,7 +2757,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.rootPosition;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -2978,7 +2772,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.rootPosition = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -2994,7 +2788,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.rootRotation;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3009,7 +2803,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.rootRotation = argHelper.Get<UnityEngine.Quaternion>(false);
             }
@@ -3025,7 +2819,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.applyRootMotion;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -3040,71 +2834,9 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.applyRootMotion = argHelper.GetBoolean(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_linearVelocityBlending(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
-                var result = obj.linearVelocityBlending;
-                Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_linearVelocityBlending(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.linearVelocityBlending = argHelper.GetBoolean(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_animatePhysics(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
-                var result = obj.animatePhysics;
-                Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_animatePhysics(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.animatePhysics = argHelper.GetBoolean(false);
             }
             catch (Exception e)
             {
@@ -3118,7 +2850,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.updateMode;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -3133,7 +2865,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.updateMode = (UnityEngine.AnimatorUpdateMode)argHelper.GetInt32(false);
             }
@@ -3149,7 +2881,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.hasTransformHierarchy;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -3166,7 +2898,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.gravityWeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3183,7 +2915,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.bodyPosition;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3198,7 +2930,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.bodyPosition = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -3214,7 +2946,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.bodyRotation;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3229,7 +2961,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.bodyRotation = argHelper.Get<UnityEngine.Quaternion>(false);
             }
@@ -3245,7 +2977,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.stabilizeFeet;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -3260,7 +2992,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.stabilizeFeet = argHelper.GetBoolean(false);
             }
@@ -3276,7 +3008,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.layerCount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3293,7 +3025,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.parameters;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3310,7 +3042,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.parameterCount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3327,7 +3059,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.feetPivotActive;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3342,7 +3074,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.feetPivotActive = argHelper.GetFloat(false);
             }
@@ -3358,7 +3090,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.pivotWeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3375,7 +3107,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.pivotPosition;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3392,7 +3124,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.isMatchingTarget;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -3409,7 +3141,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.speed;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3424,7 +3156,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.speed = argHelper.GetFloat(false);
             }
@@ -3440,7 +3172,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.targetPosition;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3457,7 +3189,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.targetRotation;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3474,7 +3206,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.cullingMode;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -3489,7 +3221,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.cullingMode = (UnityEngine.AnimatorCullingMode)argHelper.GetInt32(false);
             }
@@ -3505,7 +3237,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.playbackTime;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3520,7 +3252,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.playbackTime = argHelper.GetFloat(false);
             }
@@ -3536,7 +3268,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.recorderStartTime;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3551,7 +3283,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.recorderStartTime = argHelper.GetFloat(false);
             }
@@ -3567,7 +3299,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.recorderStopTime;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3582,7 +3314,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.recorderStopTime = argHelper.GetFloat(false);
             }
@@ -3598,7 +3330,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.recorderMode;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -3615,7 +3347,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.runtimeAnimatorController;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3630,7 +3362,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.runtimeAnimatorController = argHelper.Get<UnityEngine.RuntimeAnimatorController>(false);
             }
@@ -3646,7 +3378,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.hasBoundPlayables;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -3663,7 +3395,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.avatar;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3678,7 +3410,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.avatar = argHelper.Get<UnityEngine.Avatar>(false);
             }
@@ -3694,7 +3426,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.playableGraph;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -3711,7 +3443,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.layersAffectMassCenter;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -3726,7 +3458,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.layersAffectMassCenter = argHelper.GetBoolean(false);
             }
@@ -3742,7 +3474,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.leftFeetBottomHeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3759,7 +3491,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.rightFeetBottomHeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -3776,7 +3508,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.logWarnings;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -3791,7 +3523,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.logWarnings = argHelper.GetBoolean(false);
             }
@@ -3807,7 +3539,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.fireEvents;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -3822,7 +3554,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.fireEvents = argHelper.GetBoolean(false);
             }
@@ -3838,7 +3570,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var result = obj.keepAnimatorControllerStateOnDisable;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -3853,7 +3585,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Animator obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Animator;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.keepAnimatorControllerStateOnDisable = argHelper.GetBoolean(false);
             }
@@ -3914,7 +3646,6 @@ namespace PuertsStaticWrap
                     { new Puerts.MethodKey {Name = "GetParameter", IsStatic = false},  M_GetParameter },
                     { new Puerts.MethodKey {Name = "MatchTarget", IsStatic = false},  M_MatchTarget },
                     { new Puerts.MethodKey {Name = "InterruptMatchTarget", IsStatic = false},  M_InterruptMatchTarget },
-                    { new Puerts.MethodKey {Name = "ForceStateNormalizedTime", IsStatic = false},  M_ForceStateNormalizedTime },
                     { new Puerts.MethodKey {Name = "CrossFadeInFixedTime", IsStatic = false},  M_CrossFadeInFixedTime },
                     { new Puerts.MethodKey {Name = "WriteDefaultValues", IsStatic = false},  M_WriteDefaultValues },
                     { new Puerts.MethodKey {Name = "CrossFade", IsStatic = false},  M_CrossFade },
@@ -3931,10 +3662,6 @@ namespace PuertsStaticWrap
                     { new Puerts.MethodKey {Name = "Update", IsStatic = false},  M_Update },
                     { new Puerts.MethodKey {Name = "Rebind", IsStatic = false},  M_Rebind },
                     { new Puerts.MethodKey {Name = "ApplyBuiltinRootMotion", IsStatic = false},  M_ApplyBuiltinRootMotion },
-                    { new Puerts.MethodKey {Name = "GetVector", IsStatic = false},  M_GetVector },
-                    { new Puerts.MethodKey {Name = "SetVector", IsStatic = false},  M_SetVector },
-                    { new Puerts.MethodKey {Name = "GetQuaternion", IsStatic = false},  M_GetQuaternion },
-                    { new Puerts.MethodKey {Name = "SetQuaternion", IsStatic = false},  M_SetQuaternion },
                     
                 },
                 Properties = new System.Collections.Generic.Dictionary<string, Puerts.PropertyRegisterInfo>()
@@ -3951,8 +3678,6 @@ namespace PuertsStaticWrap
                     {"rootPosition", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_rootPosition, Setter = S_rootPosition} },
                     {"rootRotation", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_rootRotation, Setter = S_rootRotation} },
                     {"applyRootMotion", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_applyRootMotion, Setter = S_applyRootMotion} },
-                    {"linearVelocityBlending", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_linearVelocityBlending, Setter = S_linearVelocityBlending} },
-                    {"animatePhysics", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_animatePhysics, Setter = S_animatePhysics} },
                     {"updateMode", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_updateMode, Setter = S_updateMode} },
                     {"hasTransformHierarchy", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_hasTransformHierarchy, Setter = null} },
                     {"gravityWeight", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_gravityWeight, Setter = null} },

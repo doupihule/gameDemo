@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Screen constructor");
+                
             }
             catch (Exception e)
             {
@@ -479,37 +479,6 @@ namespace PuertsStaticWrap
         
         
         
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_lockCursor(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = UnityEngine.Screen.lockCursor;
-                Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_lockCursor(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                UnityEngine.Screen.lockCursor = argHelper.GetBoolean(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
         
         
         public static Puerts.TypeRegisterInfo GetRegisterInfo()
@@ -539,7 +508,6 @@ namespace PuertsStaticWrap
                     {"fullScreenMode", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_fullScreenMode, Setter = S_fullScreenMode} },
                     {"safeArea", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_safeArea, Setter = null} },
                     {"resolutions", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_resolutions, Setter = null} },
-                    {"lockCursor", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_lockCursor, Setter = S_lockCursor} },
                     
                 }
             };

@@ -30,7 +30,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Ray constructor");
+                
             }
             catch (Exception e)
             {
@@ -125,7 +125,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Ray obj = (UnityEngine.Ray)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Ray)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.origin;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -140,7 +140,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Ray obj = (UnityEngine.Ray)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Ray)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.origin = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -156,7 +156,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Ray obj = (UnityEngine.Ray)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Ray)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.direction;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -171,7 +171,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Ray obj = (UnityEngine.Ray)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Ray)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.direction = argHelper.Get<UnityEngine.Vector3>(false);
             }

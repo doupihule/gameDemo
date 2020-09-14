@@ -365,7 +365,7 @@ namespace PuertsStaticWrap
             {
                 var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 
-                if (paramLen == 3)
+                
                 {
                     
                     var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
@@ -373,9 +373,7 @@ namespace PuertsStaticWrap
                     var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
                     
                     
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false))
+                    
                     {
                         
                         var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
@@ -384,31 +382,11 @@ namespace PuertsStaticWrap
                         obj.RotateAround(Arg0,Arg1,Arg2);
                         
                         
-                        return;
+                        
                     }
                 }
                 
-                if (paramLen == 2)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        obj.RotateAround(Arg0,Arg1);
-                        
-                        
-                        return;
-                    }
-                }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to RotateAround");
             }
             catch (Exception e)
             {
@@ -1035,38 +1013,6 @@ namespace PuertsStaticWrap
         }
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_FindChild(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.GetString(false);
-                        var result = obj.Find(Arg0);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
         private static void M_GetEnumerator(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
         {
             try
@@ -1084,40 +1030,6 @@ namespace PuertsStaticWrap
                         var result = obj.GetEnumerator();
                         
                         Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_RotateAroundLocal(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        obj.RotateAroundLocal(Arg0,Arg1);
-                        
-                        
                         
                     }
                 }
@@ -1162,36 +1074,6 @@ namespace PuertsStaticWrap
             }
         }
         
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_GetChildCount(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
-                
-                
-                {
-                    
-                    
-                    
-                    
-                    {
-                        
-                        var result = obj.childCount;
-                        
-                        Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
         
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
@@ -1199,7 +1081,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.position;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1214,7 +1096,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.position = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1230,7 +1112,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.localPosition;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1245,7 +1127,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.localPosition = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1261,7 +1143,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.eulerAngles;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1276,7 +1158,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.eulerAngles = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1292,7 +1174,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.localEulerAngles;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1307,7 +1189,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.localEulerAngles = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1323,7 +1205,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.right;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1338,7 +1220,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.right = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1354,7 +1236,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.up;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1369,7 +1251,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.up = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1385,7 +1267,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.forward;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1400,7 +1282,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.forward = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1416,7 +1298,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.rotation;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1431,7 +1313,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.rotation = argHelper.Get<UnityEngine.Quaternion>(false);
             }
@@ -1447,7 +1329,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.localRotation;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1462,7 +1344,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.localRotation = argHelper.Get<UnityEngine.Quaternion>(false);
             }
@@ -1478,7 +1360,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.localScale;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1493,7 +1375,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.localScale = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1509,7 +1391,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.parent;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1524,7 +1406,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.parent = argHelper.Get<UnityEngine.Transform>(false);
             }
@@ -1540,7 +1422,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.worldToLocalMatrix;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1557,7 +1439,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.localToWorldMatrix;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1574,7 +1456,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.root;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1591,7 +1473,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.childCount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1608,7 +1490,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.lossyScale;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1625,7 +1507,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.hasChanged;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1640,7 +1522,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.hasChanged = argHelper.GetBoolean(false);
             }
@@ -1656,7 +1538,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.hierarchyCapacity;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1671,7 +1553,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.hierarchyCapacity = argHelper.GetInt32(false);
             }
@@ -1687,7 +1569,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Transform obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Transform;
                 var result = obj.hierarchyCount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1728,11 +1610,8 @@ namespace PuertsStaticWrap
                     { new Puerts.MethodKey {Name = "GetSiblingIndex", IsStatic = false},  M_GetSiblingIndex },
                     { new Puerts.MethodKey {Name = "Find", IsStatic = false},  M_Find },
                     { new Puerts.MethodKey {Name = "IsChildOf", IsStatic = false},  M_IsChildOf },
-                    { new Puerts.MethodKey {Name = "FindChild", IsStatic = false},  M_FindChild },
                     { new Puerts.MethodKey {Name = "GetEnumerator", IsStatic = false},  M_GetEnumerator },
-                    { new Puerts.MethodKey {Name = "RotateAroundLocal", IsStatic = false},  M_RotateAroundLocal },
                     { new Puerts.MethodKey {Name = "GetChild", IsStatic = false},  M_GetChild },
-                    { new Puerts.MethodKey {Name = "GetChildCount", IsStatic = false},  M_GetChildCount },
                     
                 },
                 Properties = new System.Collections.Generic.Dictionary<string, Puerts.PropertyRegisterInfo>()

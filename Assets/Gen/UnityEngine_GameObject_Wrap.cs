@@ -51,7 +51,7 @@ namespace PuertsStaticWrap
                     
                     
                     if (argHelper0.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.String, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Array, null, false, false))
+                        && argHelper1.IsMatch(Puerts.JsValueType.NullOrUndefined | Puerts.JsValueType.NativeObject, typeof(System.Type), false, false))
                     {
                         
                         var Arg0 = argHelper0.GetString(false);
@@ -740,38 +740,6 @@ namespace PuertsStaticWrap
         }
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_SetActiveRecursively(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.GetBoolean(false);
-                        obj.SetActiveRecursively(Arg0);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
         private static void M_CompareTag(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
         {
             try
@@ -906,7 +874,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
                 var result = obj.transform;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -923,7 +891,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
                 var result = obj.layer;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -938,40 +906,9 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.layer = argHelper.GetInt32(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_active(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
-                var result = obj.active;
-                Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_active(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.active = argHelper.GetBoolean(false);
             }
             catch (Exception e)
             {
@@ -985,7 +922,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
                 var result = obj.activeSelf;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1002,7 +939,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
                 var result = obj.activeInHierarchy;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1019,7 +956,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
                 var result = obj.isStatic;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -1034,7 +971,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.isStatic = argHelper.GetBoolean(false);
             }
@@ -1050,7 +987,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
                 var result = obj.tag;
                 Puerts.PuertsDLL.ReturnString(isolate, info, result);
             }
@@ -1065,7 +1002,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.tag = argHelper.GetString(false);
             }
@@ -1081,7 +1018,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
                 var result = obj.scene;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1098,7 +1035,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.GameObject obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.GameObject;
                 var result = obj.gameObject;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1133,7 +1070,6 @@ namespace PuertsStaticWrap
                     { new Puerts.MethodKey {Name = "BroadcastMessage", IsStatic = false},  M_BroadcastMessage },
                     { new Puerts.MethodKey {Name = "AddComponent", IsStatic = false},  M_AddComponent },
                     { new Puerts.MethodKey {Name = "SetActive", IsStatic = false},  M_SetActive },
-                    { new Puerts.MethodKey {Name = "SetActiveRecursively", IsStatic = false},  M_SetActiveRecursively },
                     { new Puerts.MethodKey {Name = "CompareTag", IsStatic = false},  M_CompareTag },
                     { new Puerts.MethodKey {Name = "FindGameObjectWithTag", IsStatic = true},  F_FindGameObjectWithTag },
                     { new Puerts.MethodKey {Name = "FindGameObjectsWithTag", IsStatic = true},  F_FindGameObjectsWithTag },
@@ -1144,7 +1080,6 @@ namespace PuertsStaticWrap
                 {
                     {"transform", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_transform, Setter = null} },
                     {"layer", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_layer, Setter = S_layer} },
-                    {"active", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_active, Setter = S_active} },
                     {"activeSelf", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_activeSelf, Setter = null} },
                     {"activeInHierarchy", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_activeInHierarchy, Setter = null} },
                     {"isStatic", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_isStatic, Setter = S_isStatic} },

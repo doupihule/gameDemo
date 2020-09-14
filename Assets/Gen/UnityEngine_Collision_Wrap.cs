@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Collision constructor");
+                
             }
             catch (Exception e)
             {
@@ -136,7 +136,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collision obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
                 var result = obj.relativeVelocity;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -153,7 +153,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collision obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
                 var result = obj.rigidbody;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -170,7 +170,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collision obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
                 var result = obj.collider;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -187,7 +187,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collision obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
                 var result = obj.transform;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -204,7 +204,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collision obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
                 var result = obj.gameObject;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -221,7 +221,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collision obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
                 var result = obj.contactCount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -238,7 +238,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collision obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
                 var result = obj.contacts;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -255,59 +255,8 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collision obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
                 var result = obj.impulse;
-                Puerts.ResultHelper.Set((int)data, isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_impactForceSum(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Collision obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
-                var result = obj.impactForceSum;
-                Puerts.ResultHelper.Set((int)data, isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_frictionForceSum(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Collision obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
-                var result = obj.frictionForceSum;
-                Puerts.ResultHelper.Set((int)data, isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_other(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.Collision obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collision;
-                var result = obj.other;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
             catch (Exception e)
@@ -343,9 +292,6 @@ namespace PuertsStaticWrap
                     {"contactCount", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_contactCount, Setter = null} },
                     {"contacts", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_contacts, Setter = null} },
                     {"impulse", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_impulse, Setter = null} },
-                    {"impactForceSum", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_impactForceSum, Setter = null} },
-                    {"frictionForceSum", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_frictionForceSum, Setter = null} },
-                    {"other", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_other, Setter = null} },
                     
                 }
             };

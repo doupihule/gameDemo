@@ -571,7 +571,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.EventSystems.EventTrigger obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
                 var result = obj.triggers;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -586,7 +586,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.EventSystems.EventTrigger obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.EventTrigger;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.triggers = argHelper.Get<System.Collections.Generic.List<UnityEngine.EventSystems.EventTrigger.Entry>>(false);
             }

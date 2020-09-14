@@ -91,7 +91,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Button obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Button;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Button;
                 var result = obj.onClick;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -106,7 +106,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Button obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Button;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Button;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.onClick = argHelper.Get<UnityEngine.UI.Button.ButtonClickedEvent>(false);
             }

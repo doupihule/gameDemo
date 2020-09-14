@@ -28,7 +28,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to Spine.AnimationState constructor");
+                
             }
             catch (Exception e)
             {
@@ -477,7 +477,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.AnimationState obj = Puerts.Utils.GetSelf((int)data, self) as Spine.AnimationState;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.AnimationState;
                 var result = obj.Data;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -494,7 +494,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.AnimationState obj = Puerts.Utils.GetSelf((int)data, self) as Spine.AnimationState;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.AnimationState;
                 var result = obj.Tracks;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -511,7 +511,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.AnimationState obj = Puerts.Utils.GetSelf((int)data, self) as Spine.AnimationState;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.AnimationState;
                 var result = obj.TimeScale;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -526,7 +526,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.AnimationState obj = Puerts.Utils.GetSelf((int)data, self) as Spine.AnimationState;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.AnimationState;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.TimeScale = argHelper.GetFloat(false);
             }

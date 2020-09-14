@@ -211,7 +211,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.sprite;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -226,7 +226,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.sprite = argHelper.Get<UnityEngine.Sprite>(false);
             }
@@ -242,7 +242,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.overrideSprite;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -257,7 +257,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.overrideSprite = argHelper.Get<UnityEngine.Sprite>(false);
             }
@@ -273,7 +273,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.type;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -288,7 +288,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.type = (UnityEngine.UI.Image.Type)argHelper.GetInt32(false);
             }
@@ -304,7 +304,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.preserveAspect;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -319,7 +319,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.preserveAspect = argHelper.GetBoolean(false);
             }
@@ -335,7 +335,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.fillCenter;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -350,7 +350,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.fillCenter = argHelper.GetBoolean(false);
             }
@@ -366,7 +366,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.fillMethod;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, (int)result);
             }
@@ -381,7 +381,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.fillMethod = (UnityEngine.UI.Image.FillMethod)argHelper.GetInt32(false);
             }
@@ -397,7 +397,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.fillAmount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -412,7 +412,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.fillAmount = argHelper.GetFloat(false);
             }
@@ -428,7 +428,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.fillClockwise;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -443,7 +443,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.fillClockwise = argHelper.GetBoolean(false);
             }
@@ -459,7 +459,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.fillOrigin;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -474,40 +474,9 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.fillOrigin = argHelper.GetInt32(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_eventAlphaThreshold(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
-                var result = obj.alphaHitTestMinimumThreshold;
-                Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_eventAlphaThreshold(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.alphaHitTestMinimumThreshold = argHelper.GetFloat(false);
             }
             catch (Exception e)
             {
@@ -521,7 +490,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.alphaHitTestMinimumThreshold;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -536,7 +505,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.alphaHitTestMinimumThreshold = argHelper.GetFloat(false);
             }
@@ -552,7 +521,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.useSpriteMesh;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -567,7 +536,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.useSpriteMesh = argHelper.GetBoolean(false);
             }
@@ -600,7 +569,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.mainTexture;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -617,7 +586,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.hasBorder;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -634,7 +603,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.pixelsPerUnit;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -651,7 +620,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.material;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -666,7 +635,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.material = argHelper.Get<UnityEngine.Material>(false);
             }
@@ -682,7 +651,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.minWidth;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -699,7 +668,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.preferredWidth;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -716,7 +685,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.flexibleWidth;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -733,7 +702,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.minHeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -750,7 +719,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.preferredHeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -767,7 +736,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.flexibleHeight;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -784,7 +753,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Image obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Image;
                 var result = obj.layoutPriority;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -825,7 +794,6 @@ namespace PuertsStaticWrap
                     {"fillAmount", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_fillAmount, Setter = S_fillAmount} },
                     {"fillClockwise", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_fillClockwise, Setter = S_fillClockwise} },
                     {"fillOrigin", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_fillOrigin, Setter = S_fillOrigin} },
-                    {"eventAlphaThreshold", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_eventAlphaThreshold, Setter = S_eventAlphaThreshold} },
                     {"alphaHitTestMinimumThreshold", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_alphaHitTestMinimumThreshold, Setter = S_alphaHitTestMinimumThreshold} },
                     {"useSpriteMesh", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_useSpriteMesh, Setter = S_useSpriteMesh} },
                     {"defaultETC1GraphicMaterial", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_defaultETC1GraphicMaterial, Setter = null} },

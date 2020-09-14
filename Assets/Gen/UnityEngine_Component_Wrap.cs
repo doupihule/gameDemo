@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Component constructor");
+                
             }
             catch (Exception e)
             {
@@ -613,7 +613,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Component obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Component;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Component;
                 var result = obj.transform;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -630,7 +630,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Component obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Component;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Component;
                 var result = obj.gameObject;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -647,7 +647,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Component obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Component;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Component;
                 var result = obj.tag;
                 Puerts.PuertsDLL.ReturnString(isolate, info, result);
             }
@@ -662,7 +662,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Component obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Component;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Component;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.tag = argHelper.GetString(false);
             }

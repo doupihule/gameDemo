@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 4233719557
+CRC: 122748942
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: cc7e6e677435ad3d3fa7fdf5c8dcb2f9
+    Hash: eb3a842f22da716d49e61c13289a4283
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5ad585dd02dfb5016c0dad519eab8f49
@@ -257,6 +257,7 @@ Assets:
 - Assets/Scripts/jssrc/game/sys/view/fog/event/FogBoxUI.js.txt
 - Assets/Scripts/jssrc/game/chapter/instance/ChapInstanceBox.js.txt
 - Assets/Scripts/jssrc/framework/components/physics/PhysicsColliderExpand.js.txt
+- Assets/Scripts/jssrc/puerts/timer.js.txt
 - Assets/Scripts/jssrc/framework/common/Message.js.txt
 - Assets/Scripts/jssrc/framework/utils/ScreenAdapterTools.js.txt
 - Assets/Scripts/jssrc/game/sys/view/role/EquipComposeUI.js.txt
@@ -376,6 +377,7 @@ Assets:
 - Assets/Scripts/jssrc/game/fog/controler/FogMistControler.js.txt
 - Assets/Scripts/jssrc/framework/components/UIBaseView.js.txt
 - Assets/Scripts/jssrc/game/sys/event/FogEvent.js.txt
+- Assets/Scripts/jssrc/puerts/polyfill.js.txt
 - Assets/Scripts/jssrc/game/sys/view/loading/ReqLoadingUI.js.txt
 - Assets/Scripts/jssrc/game/battle/controler/BattlePropControler.js.txt
 - Assets/Scripts/jssrc/game/battle/controler/BattleDebugTool.js.txt

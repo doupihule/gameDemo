@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.CanvasGroup constructor");
+                
             }
             catch (Exception e)
             {
@@ -76,7 +76,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.CanvasGroup obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
                 var result = obj.alpha;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -91,7 +91,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.CanvasGroup obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.alpha = argHelper.GetFloat(false);
             }
@@ -107,7 +107,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.CanvasGroup obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
                 var result = obj.interactable;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -122,7 +122,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.CanvasGroup obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.interactable = argHelper.GetBoolean(false);
             }
@@ -138,7 +138,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.CanvasGroup obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
                 var result = obj.blocksRaycasts;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -153,7 +153,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.CanvasGroup obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.blocksRaycasts = argHelper.GetBoolean(false);
             }
@@ -169,7 +169,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.CanvasGroup obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
                 var result = obj.ignoreParentGroups;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -184,7 +184,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.CanvasGroup obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.CanvasGroup;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.ignoreParentGroups = argHelper.GetBoolean(false);
             }

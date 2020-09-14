@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.BoxCollider constructor");
+                
             }
             catch (Exception e)
             {
@@ -42,7 +42,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.BoxCollider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.BoxCollider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.BoxCollider;
                 var result = obj.center;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -57,7 +57,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.BoxCollider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.BoxCollider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.BoxCollider;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.center = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -73,7 +73,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.BoxCollider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.BoxCollider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.BoxCollider;
                 var result = obj.size;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -88,40 +88,9 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.BoxCollider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.BoxCollider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.BoxCollider;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.size = argHelper.Get<UnityEngine.Vector3>(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_extents(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.BoxCollider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.BoxCollider;
-                var result = obj.extents;
-                Puerts.ResultHelper.Set((int)data, isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_extents(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                UnityEngine.BoxCollider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.BoxCollider;
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                obj.extents = argHelper.Get<UnityEngine.Vector3>(false);
             }
             catch (Exception e)
             {
@@ -146,7 +115,6 @@ namespace PuertsStaticWrap
                 {
                     {"center", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_center, Setter = S_center} },
                     {"size", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_size, Setter = S_size} },
-                    {"extents", new Puerts.PropertyRegisterInfo(){ IsStatic = false, Getter = G_extents, Setter = S_extents} },
                     
                 }
             };

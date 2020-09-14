@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.UI.Button.ButtonClickedEvent constructor");
+                
             }
             catch (Exception e)
             {

@@ -59,7 +59,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Shadow obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
                 var result = obj.effectColor;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -74,7 +74,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Shadow obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.effectColor = argHelper.Get<UnityEngine.Color>(false);
             }
@@ -90,7 +90,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Shadow obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
                 var result = obj.effectDistance;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -105,7 +105,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Shadow obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.effectDistance = argHelper.Get<UnityEngine.Vector2>(false);
             }
@@ -121,7 +121,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Shadow obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
                 var result = obj.useGraphicAlpha;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -136,7 +136,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.UI.Shadow obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.UI.Shadow;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.useGraphicAlpha = argHelper.GetBoolean(false);
             }

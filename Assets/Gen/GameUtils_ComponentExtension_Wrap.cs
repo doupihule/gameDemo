@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to GameUtils.ComponentExtension constructor");
+                
             }
             catch (Exception e)
             {

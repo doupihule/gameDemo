@@ -32,7 +32,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to Spine.Animation constructor");
+                
             }
             catch (Exception e)
             {
@@ -94,7 +94,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Animation obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Animation;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Animation;
                 var result = obj.Name;
                 Puerts.PuertsDLL.ReturnString(isolate, info, result);
             }
@@ -111,7 +111,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Animation obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Animation;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Animation;
                 var result = obj.Timelines;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -126,7 +126,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Animation obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Animation;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Animation;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.Timelines = argHelper.Get<Spine.ExposedList<Spine.Timeline>>(false);
             }
@@ -142,7 +142,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Animation obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Animation;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Animation;
                 var result = obj.Duration;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -157,7 +157,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Animation obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Animation;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Animation;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.Duration = argHelper.GetFloat(false);
             }

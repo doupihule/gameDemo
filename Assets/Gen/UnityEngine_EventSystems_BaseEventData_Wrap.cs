@@ -28,7 +28,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.EventSystems.BaseEventData constructor");
+                
             }
             catch (Exception e)
             {
@@ -44,7 +44,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.EventSystems.BaseEventData obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.BaseEventData;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.BaseEventData;
                 var result = obj.currentInputModule;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -61,7 +61,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.EventSystems.BaseEventData obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.BaseEventData;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.BaseEventData;
                 var result = obj.selectedObject;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -76,7 +76,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.EventSystems.BaseEventData obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.BaseEventData;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.EventSystems.BaseEventData;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.selectedObject = argHelper.Get<UnityEngine.GameObject>(false);
             }

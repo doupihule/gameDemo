@@ -459,7 +459,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Plane obj = (UnityEngine.Plane)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Plane)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.normal;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -474,7 +474,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Plane obj = (UnityEngine.Plane)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Plane)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.normal = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -490,7 +490,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Plane obj = (UnityEngine.Plane)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Plane)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.distance;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -505,7 +505,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Plane obj = (UnityEngine.Plane)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Plane)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.distance = argHelper.GetFloat(false);
             }
@@ -521,7 +521,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Plane obj = (UnityEngine.Plane)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Plane)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.flipped;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }

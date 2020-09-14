@@ -30,7 +30,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Vector2 constructor");
+                
             }
             catch (Exception e)
             {
@@ -873,7 +873,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector2 obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.normalized;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -890,7 +890,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector2 obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.magnitude;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -907,7 +907,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector2 obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.sqrMagnitude;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1060,7 +1060,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector2 obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.x;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1075,7 +1075,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector2 obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.x = argHelper.GetFloat(false);
             }
@@ -1091,7 +1091,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector2 obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.y;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1106,7 +1106,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Vector2 obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Vector2)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.y = argHelper.GetFloat(false);
             }

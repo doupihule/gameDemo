@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to Spine.Unity.SkeletonGraphic constructor");
+                
             }
             catch (Exception e)
             {
@@ -341,7 +341,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.SkeletonDataAsset;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -358,7 +358,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.OverrideTexture;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -373,7 +373,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.OverrideTexture = argHelper.Get<UnityEngine.Texture>(false);
             }
@@ -389,7 +389,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.mainTexture;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -406,7 +406,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.Skeleton;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -423,7 +423,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.SkeletonData;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -440,7 +440,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.IsValid;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -457,7 +457,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.AnimationState;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -474,7 +474,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.MeshGenerator;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -491,7 +491,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.skeletonDataAsset;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -506,7 +506,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.skeletonDataAsset = argHelper.Get<Spine.Unity.SkeletonDataAsset>(false);
             }
@@ -522,7 +522,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.initialSkinName;
                 Puerts.PuertsDLL.ReturnString(isolate, info, result);
             }
@@ -537,7 +537,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.initialSkinName = argHelper.GetString(false);
             }
@@ -553,7 +553,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.initialFlipX;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -568,7 +568,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.initialFlipX = argHelper.GetBoolean(false);
             }
@@ -584,7 +584,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.initialFlipY;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -599,7 +599,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.initialFlipY = argHelper.GetBoolean(false);
             }
@@ -615,7 +615,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.startingAnimation;
                 Puerts.PuertsDLL.ReturnString(isolate, info, result);
             }
@@ -630,7 +630,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.startingAnimation = argHelper.GetString(false);
             }
@@ -646,7 +646,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.startingLoop;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -661,7 +661,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.startingLoop = argHelper.GetBoolean(false);
             }
@@ -677,7 +677,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.timeScale;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -692,7 +692,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.timeScale = argHelper.GetFloat(false);
             }
@@ -708,7 +708,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.freeze;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -723,7 +723,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.freeze = argHelper.GetBoolean(false);
             }
@@ -739,7 +739,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var result = obj.unscaledTime;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -754,7 +754,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.SkeletonGraphic obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Unity.SkeletonGraphic;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.unscaledTime = argHelper.GetBoolean(false);
             }

@@ -1,108 +1,14 @@
-﻿// @ts-nocheck
+﻿
 declare module 'csharp' {
     interface $Ref<T> {}
     
     interface $Task<T> {}
     
-    namespace System {
-        class Object {
-            
-        }
-        class ValueType extends System.Object {
-            
-        }
-        class Void extends System.ValueType {
-            
-        }
-        class Single extends System.ValueType {
-            
-        }
-        class Boolean extends System.ValueType {
-            
-        }
-        class String extends System.Object {
-            
-        }
-        class Array extends System.Object {
-            
-        }
-        class Exception extends System.Object {
-            
-        }
-        class Int32 extends System.ValueType {
-            
-        }
-        class Delegate extends System.Object {
-            public Method: System.Reflection.MethodInfo;
-            public Target: any;
-            public static CreateDelegate(type: System.Type, firstArgument: any, method: System.Reflection.MethodInfo, throwOnBindFailure: boolean):Function;
-            public static CreateDelegate(type: System.Type, firstArgument: any, method: System.Reflection.MethodInfo):Function;
-            public static CreateDelegate(type: System.Type, method: System.Reflection.MethodInfo, throwOnBindFailure: boolean):Function;
-            public static CreateDelegate(type: System.Type, method: System.Reflection.MethodInfo):Function;
-            public static CreateDelegate(type: System.Type, target: any, method: string):Function;
-            public static CreateDelegate(type: System.Type, target: System.Type, method: string, ignoreCase: boolean, throwOnBindFailure: boolean):Function;
-            public static CreateDelegate(type: System.Type, target: System.Type, method: string):Function;
-            public static CreateDelegate(type: System.Type, target: System.Type, method: string, ignoreCase: boolean):Function;
-            public static CreateDelegate(type: System.Type, target: any, method: string, ignoreCase: boolean, throwOnBindFailure: boolean):Function;
-            public static CreateDelegate(type: System.Type, target: any, method: string, ignoreCase: boolean):Function;
-            public DynamicInvoke(...args: any[]):any;
-            public Clone():any;
-            public Equals(obj: any):boolean;
-            public GetHashCode():number;
-            public GetObjectData(info: System.Runtime.Serialization.SerializationInfo, context: System.Runtime.Serialization.StreamingContext):void;
-            public GetInvocationList():Function[];
-            public static Combine(a: Function, b: Function):Function;
-            public static Combine(...delegates: Function[]):Function;
-            public static Remove(source: Function, value: Function):Function;
-            public static RemoveAll(source: Function, value: Function):Function;
-            public static op_Equality(d1: Function, d2: Function):boolean;
-            public static op_Inequality(d1: Function, d2: Function):boolean;
-            
-        }
-        type MulticastDelegate = (...args:any[]) => any;
-        var MulticastDelegate: {new (func: (...args:any[]) => any): MulticastDelegate;}
-        type Converter$2<TInput,TOutput> = (input: TInput) => TOutput;
-        type Predicate$1<T> = (obj: T) => boolean;
-        type Action$1<T> = (obj: T) => void;
-        type Comparison$1<T> = (x: T, y: T) => number;
-        class Enum extends System.ValueType {
-            
-        }
-        class Type extends System.Reflection.MemberInfo {
-            
-        }
-        class UInt32 extends System.ValueType {
-            
-        }
-        class UInt16 extends System.ValueType {
-            
-        }
-        interface IAsyncResult {
-            
-        }
-        type AsyncCallback = (ar: System.IAsyncResult) => void;
-        var AsyncCallback: {new (func: (ar: System.IAsyncResult) => void): AsyncCallback;}
-        class IntPtr extends System.ValueType {
-            
-        }
-        type Action$2<T1,T2> = (arg1: T1, arg2: T2) => void;
-        class Int64 extends System.ValueType {
-            
-        }
-        type Action$3<T1,T2,T3> = (arg1: T1, arg2: T2, arg3: T3) => void;
-        class Byte extends System.ValueType {
-            
-        }
-        type Action = () => void;
-        var Action: {new (func: () => void): Action;}
-        
-    }
     namespace UnityEngine {
         class Debug extends System.Object {
             public static unityLogger: UnityEngine.ILogger;
             public static developerConsoleVisible: boolean;
             public static isDebugBuild: boolean;
-            public static logger: UnityEngine.ILogger;
             public constructor();
             public static DrawLine(start: UnityEngine.Vector3, end: UnityEngine.Vector3, color: UnityEngine.Color, duration: number):void;
             public static DrawLine(start: UnityEngine.Vector3, end: UnityEngine.Vector3, color: UnityEngine.Color):void;
@@ -152,7 +58,6 @@ declare module 'csharp' {
             public x: number;
             public y: number;
             public z: number;
-            public Item: number;
             public normalized: UnityEngine.Vector3;
             public magnitude: number;
             public sqrMagnitude: number;
@@ -166,7 +71,6 @@ declare module 'csharp' {
             public static right: UnityEngine.Vector3;
             public static positiveInfinity: UnityEngine.Vector3;
             public static negativeInfinity: UnityEngine.Vector3;
-            public static fwd: UnityEngine.Vector3;
             public constructor(x: number, y: number, z: number);
             public constructor(x: number, y: number);
             public static Slerp(a: UnityEngine.Vector3, b: UnityEngine.Vector3, t: number):UnityEngine.Vector3;
@@ -213,8 +117,6 @@ declare module 'csharp' {
             public static op_Inequality(lhs: UnityEngine.Vector3, rhs: UnityEngine.Vector3):boolean;
             public ToString():string;
             public ToString(format: string):string;
-            public static AngleBetween(from: UnityEngine.Vector3, to: UnityEngine.Vector3):number;
-            public static Exclude(excludeThis: UnityEngine.Vector3, fromThat: UnityEngine.Vector3):UnityEngine.Vector3;
             
         }
         class Color extends System.ValueType {
@@ -239,11 +141,6 @@ declare module 'csharp' {
             public static DestroyImmediate(obj: UnityEngine.Object):void;
             public static FindObjectsOfType(type: System.Type):UnityEngine.Object[];
             public static DontDestroyOnLoad(target: UnityEngine.Object):void;
-            public static DestroyObject(obj: UnityEngine.Object, t: number):void;
-            public static DestroyObject(obj: UnityEngine.Object):void;
-            public static FindSceneObjectsOfType(type: System.Type):UnityEngine.Object[];
-            public static FindObjectsOfTypeIncludingAssets(type: System.Type):UnityEngine.Object[];
-            public static FindObjectsOfTypeAll(type: System.Type):UnityEngine.Object[];
             public static FindObjectOfType(type: System.Type):UnityEngine.Object;
             public ToString():string;
             public static op_Equality(x: UnityEngine.Object, y: UnityEngine.Object):boolean;
@@ -255,7 +152,6 @@ declare module 'csharp' {
             public y: number;
             public static kEpsilon: number;
             public static kEpsilonNormalSqrt: number;
-            public Item: number;
             public normalized: UnityEngine.Vector2;
             public magnitude: number;
             public sqrMagnitude: number;
@@ -332,37 +228,6 @@ declare module 'csharp' {
             public constructor();
             
         }
-        class Component extends UnityEngine.Object {
-            public transform: UnityEngine.Transform;
-            public gameObject: UnityEngine.GameObject;
-            public tag: string;
-            public constructor();
-            public GetComponent(type: System.Type):UnityEngine.Component;
-            public GetComponent(type: string):UnityEngine.Component;
-            public GetComponentInChildren(t: System.Type, includeInactive: boolean):UnityEngine.Component;
-            public GetComponentInChildren(t: System.Type):UnityEngine.Component;
-            public GetComponentsInChildren(t: System.Type, includeInactive: boolean):UnityEngine.Component[];
-            public GetComponentsInChildren(t: System.Type):UnityEngine.Component[];
-            public GetComponentInParent(t: System.Type):UnityEngine.Component;
-            public GetComponentsInParent(t: System.Type, includeInactive: boolean):UnityEngine.Component[];
-            public GetComponentsInParent(t: System.Type):UnityEngine.Component[];
-            public GetComponents(type: System.Type):UnityEngine.Component[];
-            public GetComponents(type: System.Type, results: System.Collections.Generic.List$1<UnityEngine.Component>):void;
-            public CompareTag(tag: string):boolean;
-            public SendMessageUpwards(methodName: string, value: any, options: UnityEngine.SendMessageOptions):void;
-            public SendMessageUpwards(methodName: string, value: any):void;
-            public SendMessageUpwards(methodName: string):void;
-            public SendMessageUpwards(methodName: string, options: UnityEngine.SendMessageOptions):void;
-            public SendMessage(methodName: string, value: any):void;
-            public SendMessage(methodName: string):void;
-            public SendMessage(methodName: string, value: any, options: UnityEngine.SendMessageOptions):void;
-            public SendMessage(methodName: string, options: UnityEngine.SendMessageOptions):void;
-            public BroadcastMessage(methodName: string, parameter: any, options: UnityEngine.SendMessageOptions):void;
-            public BroadcastMessage(methodName: string, parameter: any):void;
-            public BroadcastMessage(methodName: string):void;
-            public BroadcastMessage(methodName: string, options: UnityEngine.SendMessageOptions):void;
-            
-        }
         class Transform extends UnityEngine.Component {
             public position: UnityEngine.Vector3;
             public localPosition: UnityEngine.Vector3;
@@ -422,12 +287,39 @@ declare module 'csharp' {
             public GetSiblingIndex():number;
             public Find(n: string):UnityEngine.Transform;
             public IsChildOf(parent: UnityEngine.Transform):boolean;
-            public FindChild(n: string):UnityEngine.Transform;
             public GetEnumerator():System.Collections.IEnumerator;
-            public RotateAround(axis: UnityEngine.Vector3, angle: number):void;
-            public RotateAroundLocal(axis: UnityEngine.Vector3, angle: number):void;
             public GetChild(index: number):UnityEngine.Transform;
-            public GetChildCount():number;
+            
+        }
+        class Component extends UnityEngine.Object {
+            public transform: UnityEngine.Transform;
+            public gameObject: UnityEngine.GameObject;
+            public tag: string;
+            public constructor();
+            public GetComponent(type: System.Type):UnityEngine.Component;
+            public GetComponent(type: string):UnityEngine.Component;
+            public GetComponentInChildren(t: System.Type, includeInactive: boolean):UnityEngine.Component;
+            public GetComponentInChildren(t: System.Type):UnityEngine.Component;
+            public GetComponentsInChildren(t: System.Type, includeInactive: boolean):UnityEngine.Component[];
+            public GetComponentsInChildren(t: System.Type):UnityEngine.Component[];
+            public GetComponentInParent(t: System.Type):UnityEngine.Component;
+            public GetComponentsInParent(t: System.Type, includeInactive: boolean):UnityEngine.Component[];
+            public GetComponentsInParent(t: System.Type):UnityEngine.Component[];
+            public GetComponents(type: System.Type):UnityEngine.Component[];
+            public GetComponents(type: System.Type, results: System.Collections.Generic.List$1<UnityEngine.Component>):void;
+            public CompareTag(tag: string):boolean;
+            public SendMessageUpwards(methodName: string, value: any, options: UnityEngine.SendMessageOptions):void;
+            public SendMessageUpwards(methodName: string, value: any):void;
+            public SendMessageUpwards(methodName: string):void;
+            public SendMessageUpwards(methodName: string, options: UnityEngine.SendMessageOptions):void;
+            public SendMessage(methodName: string, value: any):void;
+            public SendMessage(methodName: string):void;
+            public SendMessage(methodName: string, value: any, options: UnityEngine.SendMessageOptions):void;
+            public SendMessage(methodName: string, options: UnityEngine.SendMessageOptions):void;
+            public BroadcastMessage(methodName: string, parameter: any, options: UnityEngine.SendMessageOptions):void;
+            public BroadcastMessage(methodName: string, parameter: any):void;
+            public BroadcastMessage(methodName: string):void;
+            public BroadcastMessage(methodName: string, options: UnityEngine.SendMessageOptions):void;
             
         }
         class Quaternion extends System.ValueType {
@@ -436,7 +328,6 @@ declare module 'csharp' {
             public z: number;
             public w: number;
             public static kEpsilon: number;
-            public Item: number;
             public static identity: UnityEngine.Quaternion;
             public eulerAngles: UnityEngine.Vector3;
             public normalized: UnityEngine.Quaternion;
@@ -473,20 +364,6 @@ declare module 'csharp' {
             public Equals(other: UnityEngine.Quaternion):boolean;
             public ToString():string;
             public ToString(format: string):string;
-            public static EulerRotation(x: number, y: number, z: number):UnityEngine.Quaternion;
-            public static EulerRotation(euler: UnityEngine.Vector3):UnityEngine.Quaternion;
-            public SetEulerRotation(x: number, y: number, z: number):void;
-            public SetEulerRotation(euler: UnityEngine.Vector3):void;
-            public ToEuler():UnityEngine.Vector3;
-            public static EulerAngles(x: number, y: number, z: number):UnityEngine.Quaternion;
-            public static EulerAngles(euler: UnityEngine.Vector3):UnityEngine.Quaternion;
-            public ToAxisAngle(axis: $Ref<UnityEngine.Vector3>, angle: $Ref<number>):void;
-            public SetEulerAngles(x: number, y: number, z: number):void;
-            public SetEulerAngles(euler: UnityEngine.Vector3):void;
-            public static ToEulerAngles(rotation: UnityEngine.Quaternion):UnityEngine.Vector3;
-            public ToEulerAngles():UnityEngine.Vector3;
-            public SetAxisAngle(axis: UnityEngine.Vector3, angle: number):void;
-            public static AxisAngle(axis: UnityEngine.Vector3, angle: number):UnityEngine.Quaternion;
             
         }
         class Matrix4x4 extends System.ValueType {
@@ -519,7 +396,6 @@ declare module 'csharp' {
         class GameObject extends UnityEngine.Object {
             public transform: UnityEngine.Transform;
             public layer: number;
-            public active: boolean;
             public activeSelf: boolean;
             public activeInHierarchy: boolean;
             public isStatic: boolean;
@@ -547,7 +423,6 @@ declare module 'csharp' {
             public BroadcastMessage(methodName: string, options: UnityEngine.SendMessageOptions):void;
             public AddComponent(componentType: System.Type):UnityEngine.Component;
             public SetActive(value: boolean):void;
-            public SetActiveRecursively(state: boolean):void;
             public CompareTag(tag: string):boolean;
             public static FindGameObjectWithTag(tag: string):UnityEngine.GameObject;
             public static FindGameObjectsWithTag(tag: string):UnityEngine.GameObject[];
@@ -565,9 +440,6 @@ declare module 'csharp' {
         }
         enum SendMessageOptions { RequireReceiver = 0, DontRequireReceiver = 1 }
         class Renderer extends UnityEngine.Component {
-            public castShadows: boolean;
-            public motionVectors: boolean;
-            public useLightProbes: boolean;
             public bounds: UnityEngine.Bounds;
             public enabled: boolean;
             public isVisible: boolean;
@@ -621,9 +493,6 @@ declare module 'csharp' {
         }
         enum PrimitiveType { Sphere = 0, Capsule = 1, Cylinder = 2, Cube = 3, Plane = 4, Quad = 5 }
         enum HideFlags { None = 0, HideInHierarchy = 1, HideInInspector = 2, DontSaveInEditor = 4, NotEditable = 8, DontSaveInBuild = 16, DontUnloadUnusedAsset = 32, DontSave = 52, HideAndDontSave = 61 }
-        class Behaviour extends UnityEngine.Component {
-            
-        }
         class CanvasGroup extends UnityEngine.Behaviour {
             public alpha: number;
             public interactable: boolean;
@@ -631,6 +500,9 @@ declare module 'csharp' {
             public ignoreParentGroups: boolean;
             public constructor();
             public IsRaycastLocationValid(sp: UnityEngine.Vector2, eventCamera: UnityEngine.Camera):boolean;
+            
+        }
+        class Behaviour extends UnityEngine.Component {
             
         }
         class Camera extends UnityEngine.Behaviour {
@@ -697,10 +569,6 @@ declare module 'csharp' {
             public static allCamerasCount: number;
             public static allCameras: UnityEngine.Camera[];
             public commandBufferCount: number;
-            public near: number;
-            public far: number;
-            public fov: number;
-            public hdr: boolean;
             public constructor();
             public Reset():void;
             public ResetTransparencySortSettings():void;
@@ -728,7 +596,7 @@ declare module 'csharp' {
             public ScreenPointToRay(pos: UnityEngine.Vector3, eye: UnityEngine.Camera.MonoOrStereoscopicEye):UnityEngine.Ray;
             public ScreenPointToRay(pos: UnityEngine.Vector3):UnityEngine.Ray;
             public CalculateFrustumCorners(viewport: UnityEngine.Rect, z: number, eye: UnityEngine.Camera.MonoOrStereoscopicEye, outCorners: UnityEngine.Vector3[]):void;
-            public static CalculateProjectionMatrixFromPhysicalProperties(output: $Ref<UnityEngine.Matrix4x4>, focalLength: number, sensorSize: UnityEngine.Vector2, lensShift: UnityEngine.Vector2, nearClip: number, farClip: number, gateFitParameters: UnityEngine.Camera.GateFitParameters):void;
+            public static CalculateProjectionMatrixFromPhysicalProperties(output: $Ref<UnityEngine.Matrix4x4>, focalLength: number, sensorSize: UnityEngine.Vector2, lensShift: UnityEngine.Vector2, nearClip: number, farClip: number, gateFitParameters?: UnityEngine.Camera.GateFitParameters):void;
             public static FocalLengthToFOV(focalLength: number, sensorSize: number):number;
             public static FOVToFocalLength(fov: number, sensorSize: number):number;
             public GetStereoNonJitteredProjectionMatrix(eye: UnityEngine.Camera.StereoscopicEye):UnityEngine.Matrix4x4;
@@ -861,7 +729,6 @@ declare module 'csharp' {
             
         }
         class TrailRenderer extends UnityEngine.Renderer {
-            public numPositions: number;
             public time: number;
             public startWidth: number;
             public endWidth: number;
@@ -884,8 +751,8 @@ declare module 'csharp' {
             public SetPosition(index: number, position: UnityEngine.Vector3):void;
             public GetPosition(index: number):UnityEngine.Vector3;
             public Clear():void;
-            public BakeMesh(mesh: UnityEngine.Mesh, useTransform: boolean):void;
-            public BakeMesh(mesh: UnityEngine.Mesh, camera: UnityEngine.Camera, useTransform: boolean):void;
+            public BakeMesh(mesh: UnityEngine.Mesh, useTransform?: boolean):void;
+            public BakeMesh(mesh: UnityEngine.Mesh, camera: UnityEngine.Camera, useTransform?: boolean):void;
             public GetPositions(positions: UnityEngine.Vector3[]):number;
             public SetPositions(positions: UnityEngine.Vector3[]):void;
             public AddPosition(position: UnityEngine.Vector3):void;
@@ -914,14 +781,12 @@ declare module 'csharp' {
             public static compositionString: string;
             public static imeIsSelected: boolean;
             public static compositionCursorPos: UnityEngine.Vector2;
-            public static eatKeyPressOnTextFieldFocus: boolean;
             public static mousePresent: boolean;
             public static touchCount: number;
             public static touchPressureSupported: boolean;
             public static stylusTouchSupported: boolean;
             public static touchSupported: boolean;
             public static multiTouchEnabled: boolean;
-            public static isGyroAvailable: boolean;
             public static deviceOrientation: UnityEngine.DeviceOrientation;
             public static acceleration: UnityEngine.Vector3;
             public static compensateSensors: boolean;
@@ -986,7 +851,6 @@ declare module 'csharp' {
             public static fullScreenMode: UnityEngine.FullScreenMode;
             public static safeArea: UnityEngine.Rect;
             public static resolutions: UnityEngine.Resolution[];
-            public static lockCursor: boolean;
             public constructor();
             public static SetResolution(width: number, height: number, fullscreenMode: UnityEngine.FullScreenMode, preferredRefreshRate: number):void;
             public static SetResolution(width: number, height: number, fullscreenMode: UnityEngine.FullScreenMode):void;
@@ -1008,7 +872,6 @@ declare module 'csharp' {
             public triangleIndex: number;
             public textureCoord: UnityEngine.Vector2;
             public textureCoord2: UnityEngine.Vector2;
-            public textureCoord1: UnityEngine.Vector2;
             public transform: UnityEngine.Transform;
             public rigidbody: UnityEngine.Rigidbody;
             public lightmapCoord: UnityEngine.Vector2;
@@ -1052,11 +915,6 @@ declare module 'csharp' {
             public sleepThreshold: number;
             public maxAngularVelocity: number;
             public solverVelocityIterations: number;
-            public sleepVelocity: number;
-            public sleepAngularVelocity: number;
-            public useConeFriction: boolean;
-            public solverIterationCount: number;
-            public solverVelocityIterationCount: number;
             public constructor();
             public SetDensity(density: number):void;
             public MovePosition(position: UnityEngine.Vector3):void;
@@ -1068,7 +926,6 @@ declare module 'csharp' {
             public ResetInertiaTensor():void;
             public GetRelativePointVelocity(relativePoint: UnityEngine.Vector3):UnityEngine.Vector3;
             public GetPointVelocity(worldPoint: UnityEngine.Vector3):UnityEngine.Vector3;
-            public SetMaxAngularVelocity(a: number):void;
             public AddForce(force: UnityEngine.Vector3, mode: UnityEngine.ForceMode):void;
             public AddForce(force: UnityEngine.Vector3):void;
             public AddForce(x: number, y: number, z: number, mode: UnityEngine.ForceMode):void;
@@ -1105,7 +962,6 @@ declare module 'csharp' {
         class BoxCollider extends UnityEngine.Collider {
             public center: UnityEngine.Vector3;
             public size: UnityEngine.Vector3;
-            public extents: UnityEngine.Vector3;
             public constructor();
             
         }
@@ -1118,9 +974,6 @@ declare module 'csharp' {
             public contactCount: number;
             public contacts: UnityEngine.ContactPoint[];
             public impulse: UnityEngine.Vector3;
-            public impactForceSum: UnityEngine.Vector3;
-            public frictionForceSum: UnityEngine.Vector3;
-            public other: UnityEngine.Component;
             public constructor();
             public GetContact(index: number):UnityEngine.ContactPoint;
             public GetContacts(contacts: UnityEngine.ContactPoint[]):number;
@@ -1147,12 +1000,6 @@ declare module 'csharp' {
             public static bounceThreshold: number;
             public static defaultSolverIterations: number;
             public static defaultSolverVelocityIterations: number;
-            public static bounceTreshold: number;
-            public static sleepVelocity: number;
-            public static sleepAngularVelocity: number;
-            public static solverIterationCount: number;
-            public static solverVelocityIterationCount: number;
-            public static penetrationPenaltyForce: number;
             public static defaultPhysicsScene: UnityEngine.PhysicsScene;
             public static autoSimulation: boolean;
             public static autoSyncTransforms: boolean;
@@ -1321,8 +1168,6 @@ declare module 'csharp' {
             public rootPosition: UnityEngine.Vector3;
             public rootRotation: UnityEngine.Quaternion;
             public applyRootMotion: boolean;
-            public linearVelocityBlending: boolean;
-            public animatePhysics: boolean;
             public updateMode: UnityEngine.AnimatorUpdateMode;
             public hasTransformHierarchy: boolean;
             public gravityWeight: number;
@@ -1414,7 +1259,6 @@ declare module 'csharp' {
             public MatchTarget(matchPosition: UnityEngine.Vector3, matchRotation: UnityEngine.Quaternion, targetBodyPart: UnityEngine.AvatarTarget, weightMask: UnityEngine.MatchTargetWeightMask, startNormalizedTime: number, targetNormalizedTime: number):void;
             public InterruptMatchTarget():void;
             public InterruptMatchTarget(completeMatch: boolean):void;
-            public ForceStateNormalizedTime(normalizedTime: number):void;
             public CrossFadeInFixedTime(stateName: string, fixedTransitionDuration: number):void;
             public CrossFadeInFixedTime(stateName: string, fixedTransitionDuration: number, layer: number):void;
             public CrossFadeInFixedTime(stateName: string, fixedTransitionDuration: number, layer: number, fixedTimeOffset: number):void;
@@ -1455,14 +1299,6 @@ declare module 'csharp' {
             public Update(deltaTime: number):void;
             public Rebind():void;
             public ApplyBuiltinRootMotion():void;
-            public GetVector(name: string):UnityEngine.Vector3;
-            public GetVector(id: number):UnityEngine.Vector3;
-            public SetVector(name: string, value: UnityEngine.Vector3):void;
-            public SetVector(id: number, value: UnityEngine.Vector3):void;
-            public GetQuaternion(name: string):UnityEngine.Quaternion;
-            public GetQuaternion(id: number):UnityEngine.Quaternion;
-            public SetQuaternion(name: string, value: UnityEngine.Quaternion):void;
-            public SetQuaternion(id: number, value: UnityEngine.Quaternion):void;
             
         }
         class AnimationInfo extends System.ValueType {
@@ -1472,10 +1308,10 @@ declare module 'csharp' {
         enum AvatarIKGoal { LeftFoot = 0, RightFoot = 1, LeftHand = 2, RightHand = 3 }
         enum AvatarIKHint { LeftKnee = 0, RightKnee = 1, LeftElbow = 2, RightElbow = 3 }
         enum HumanBodyBones { Hips = 0, LeftUpperLeg = 1, RightUpperLeg = 2, LeftLowerLeg = 3, RightLowerLeg = 4, LeftFoot = 5, RightFoot = 6, Spine = 7, Chest = 8, UpperChest = 54, Neck = 9, Head = 10, LeftShoulder = 11, RightShoulder = 12, LeftUpperArm = 13, RightUpperArm = 14, LeftLowerArm = 15, RightLowerArm = 16, LeftHand = 17, RightHand = 18, LeftToes = 19, RightToes = 20, LeftEye = 21, RightEye = 22, Jaw = 23, LeftThumbProximal = 24, LeftThumbIntermediate = 25, LeftThumbDistal = 26, LeftIndexProximal = 27, LeftIndexIntermediate = 28, LeftIndexDistal = 29, LeftMiddleProximal = 30, LeftMiddleIntermediate = 31, LeftMiddleDistal = 32, LeftRingProximal = 33, LeftRingIntermediate = 34, LeftRingDistal = 35, LeftLittleProximal = 36, LeftLittleIntermediate = 37, LeftLittleDistal = 38, RightThumbProximal = 39, RightThumbIntermediate = 40, RightThumbDistal = 41, RightIndexProximal = 42, RightIndexIntermediate = 43, RightIndexDistal = 44, RightMiddleProximal = 45, RightMiddleIntermediate = 46, RightMiddleDistal = 47, RightRingProximal = 48, RightRingIntermediate = 49, RightRingDistal = 50, RightLittleProximal = 51, RightLittleIntermediate = 52, RightLittleDistal = 53, LastBone = 55 }
-        class ScriptableObject extends UnityEngine.Object {
+        class StateMachineBehaviour extends UnityEngine.ScriptableObject {
             
         }
-        class StateMachineBehaviour extends UnityEngine.ScriptableObject {
+        class ScriptableObject extends UnityEngine.Object {
             
         }
         class AnimatorStateInfo extends System.ValueType {
@@ -1505,13 +1341,108 @@ declare module 'csharp' {
         class Color32 extends System.ValueType {
             
         }
+        class ControllerColliderHit extends System.Object {
+            
+        }
+        
+    }
+    namespace System {
+        class Object {
+            
+        }
+        class Void extends System.ValueType {
+            
+        }
+        class ValueType extends System.Object {
+            
+        }
+        class Single extends System.ValueType {
+            
+        }
+        class Boolean extends System.ValueType {
+            
+        }
+        class String extends System.Object {
+            
+        }
+        class Exception extends System.Object {
+            
+        }
+        class Int32 extends System.ValueType {
+            
+        }
+        type Converter$2<TInput,TOutput> = (input: TInput) => TOutput;
+        type MulticastDelegate = (...args:any[]) => any;
+        var MulticastDelegate: {new (func: (...args:any[]) => any): MulticastDelegate;}
+        class Delegate extends System.Object {
+            public Method: System.Reflection.MethodInfo;
+            public Target: any;
+            public static CreateDelegate(type: System.Type, firstArgument: any, method: System.Reflection.MethodInfo, throwOnBindFailure: boolean):Function;
+            public static CreateDelegate(type: System.Type, firstArgument: any, method: System.Reflection.MethodInfo):Function;
+            public static CreateDelegate(type: System.Type, method: System.Reflection.MethodInfo, throwOnBindFailure: boolean):Function;
+            public static CreateDelegate(type: System.Type, method: System.Reflection.MethodInfo):Function;
+            public static CreateDelegate(type: System.Type, target: any, method: string):Function;
+            public static CreateDelegate(type: System.Type, target: System.Type, method: string, ignoreCase: boolean, throwOnBindFailure: boolean):Function;
+            public static CreateDelegate(type: System.Type, target: System.Type, method: string):Function;
+            public static CreateDelegate(type: System.Type, target: System.Type, method: string, ignoreCase: boolean):Function;
+            public static CreateDelegate(type: System.Type, target: any, method: string, ignoreCase: boolean, throwOnBindFailure: boolean):Function;
+            public static CreateDelegate(type: System.Type, target: any, method: string, ignoreCase: boolean):Function;
+            public DynamicInvoke(...args: any[]):any;
+            public Clone():any;
+            public Equals(obj: any):boolean;
+            public GetHashCode():number;
+            public GetObjectData(info: System.Runtime.Serialization.SerializationInfo, context: System.Runtime.Serialization.StreamingContext):void;
+            public GetInvocationList():Function[];
+            public static Combine(a: Function, b: Function):Function;
+            public static Combine(...delegates: Function[]):Function;
+            public static Remove(source: Function, value: Function):Function;
+            public static RemoveAll(source: Function, value: Function):Function;
+            public static op_Equality(d1: Function, d2: Function):boolean;
+            public static op_Inequality(d1: Function, d2: Function):boolean;
+            
+        }
+        type Predicate$1<T> = (obj: T) => boolean;
+        type Action$1<T> = (obj: T) => void;
+        type Comparison$1<T> = (x: T, y: T) => number;
+        class Enum extends System.ValueType {
+            
+        }
+        class Type extends System.Reflection.MemberInfo {
+            
+        }
+        class Array extends System.Object {
+            
+        }
+        class UInt32 extends System.ValueType {
+            
+        }
+        class UInt16 extends System.ValueType {
+            
+        }
+        interface IAsyncResult {
+            
+        }
+        type AsyncCallback = (ar: System.IAsyncResult) => void;
+        var AsyncCallback: {new (func: (ar: System.IAsyncResult) => void): AsyncCallback;}
+        class IntPtr extends System.ValueType {
+            
+        }
+        type Action$2<T1,T2> = (arg1: T1, arg2: T2) => void;
+        type Action$3<T1,T2,T3> = (arg1: T1, arg2: T2, arg3: T3) => void;
+        class Int64 extends System.ValueType {
+            
+        }
+        class Byte extends System.ValueType {
+            
+        }
+        type Action = () => void;
+        var Action: {new (func: () => void): Action;}
         
     }
     namespace System.Collections.Generic {
         class List$1<T> extends System.Object {
             public Capacity: number;
             public Count: number;
-            public Item: T;
             public constructor();
             public constructor(capacity: number);
             public constructor(collection: System.Collections.Generic.IEnumerable$1<T>);
@@ -1607,10 +1538,10 @@ declare module 'csharp' {
         class MemberInfo extends System.Object {
             
         }
-        class MethodBase extends System.Reflection.MemberInfo {
+        class MethodInfo extends System.Reflection.MethodBase {
             
         }
-        class MethodInfo extends System.Reflection.MethodBase {
+        class MethodBase extends System.Reflection.MemberInfo {
             
         }
         
@@ -1619,9 +1550,6 @@ declare module 'csharp' {
         enum ShadowCastingMode { Off = 0, On = 1, TwoSided = 2, ShadowsOnly = 3 }
         enum LightProbeUsage { Off = 0, BlendProbes = 1, UseProxyVolume = 2, CustomProvided = 4 }
         enum ReflectionProbeUsage { Off = 0, BlendProbes = 1, BlendProbesAndSkybox = 2, Simple = 3 }
-        class ReflectionProbeBlendInfo extends System.ValueType {
-            
-        }
         enum OpaqueSortMode { Default = 0, FrontToBack = 1, NoDistanceSort = 2 }
         enum CameraEvent { BeforeDepthTexture = 0, AfterDepthTexture = 1, BeforeDepthNormalsTexture = 2, AfterDepthNormalsTexture = 3, BeforeGBuffer = 4, AfterGBuffer = 5, BeforeLighting = 6, AfterLighting = 7, BeforeFinalPass = 8, AfterFinalPass = 9, BeforeForwardOpaque = 10, AfterForwardOpaque = 11, BeforeImageEffectsOpaque = 12, AfterImageEffectsOpaque = 13, BeforeSkybox = 14, AfterSkybox = 15, BeforeForwardAlpha = 16, AfterForwardAlpha = 17, BeforeImageEffects = 18, AfterImageEffects = 19, AfterEverything = 20, BeforeReflections = 21, AfterReflections = 22, BeforeHaloAndLensFlares = 23, AfterHaloAndLensFlares = 24 }
         class CommandBuffer extends System.Object {
@@ -1645,11 +1573,111 @@ declare module 'csharp' {
         }
         
     }
+    namespace UnityEngine.UI {
+        class Image extends UnityEngine.UI.MaskableGraphic {
+            public sprite: UnityEngine.Sprite;
+            public overrideSprite: UnityEngine.Sprite;
+            public type: UnityEngine.UI.Image.Type;
+            public preserveAspect: boolean;
+            public fillCenter: boolean;
+            public fillMethod: UnityEngine.UI.Image.FillMethod;
+            public fillAmount: number;
+            public fillClockwise: boolean;
+            public fillOrigin: number;
+            public alphaHitTestMinimumThreshold: number;
+            public useSpriteMesh: boolean;
+            public static defaultETC1GraphicMaterial: UnityEngine.Material;
+            public mainTexture: UnityEngine.Texture;
+            public hasBorder: boolean;
+            public pixelsPerUnit: number;
+            public material: UnityEngine.Material;
+            public minWidth: number;
+            public preferredWidth: number;
+            public flexibleWidth: number;
+            public minHeight: number;
+            public preferredHeight: number;
+            public flexibleHeight: number;
+            public layoutPriority: number;
+            public OnBeforeSerialize():void;
+            public OnAfterDeserialize():void;
+            public SetNativeSize():void;
+            public CalculateLayoutInputHorizontal():void;
+            public CalculateLayoutInputVertical():void;
+            public IsRaycastLocationValid(screenPoint: UnityEngine.Vector2, eventCamera: UnityEngine.Camera):boolean;
+            
+        }
+        class MaskableGraphic extends UnityEngine.UI.Graphic {
+            
+        }
+        class Graphic extends UnityEngine.EventSystems.UIBehaviour {
+            
+        }
+        class Text extends UnityEngine.UI.MaskableGraphic {
+            public cachedTextGenerator: UnityEngine.TextGenerator;
+            public cachedTextGeneratorForLayout: UnityEngine.TextGenerator;
+            public mainTexture: UnityEngine.Texture;
+            public font: UnityEngine.Font;
+            public text: string;
+            public supportRichText: boolean;
+            public resizeTextForBestFit: boolean;
+            public resizeTextMinSize: number;
+            public resizeTextMaxSize: number;
+            public alignment: UnityEngine.TextAnchor;
+            public alignByGeometry: boolean;
+            public fontSize: number;
+            public horizontalOverflow: UnityEngine.HorizontalWrapMode;
+            public verticalOverflow: UnityEngine.VerticalWrapMode;
+            public lineSpacing: number;
+            public fontStyle: UnityEngine.FontStyle;
+            public pixelsPerUnit: number;
+            public minWidth: number;
+            public preferredWidth: number;
+            public flexibleWidth: number;
+            public minHeight: number;
+            public preferredHeight: number;
+            public flexibleHeight: number;
+            public layoutPriority: number;
+            public FontTextureChanged():void;
+            public GetGenerationSettings(extents: UnityEngine.Vector2):UnityEngine.TextGenerationSettings;
+            public static GetTextAnchorPivot(anchor: UnityEngine.TextAnchor):UnityEngine.Vector2;
+            public CalculateLayoutInputHorizontal():void;
+            public CalculateLayoutInputVertical():void;
+            
+        }
+        class Button extends UnityEngine.UI.Selectable {
+            public onClick: UnityEngine.UI.Button.ButtonClickedEvent;
+            public OnPointerClick(eventData: UnityEngine.EventSystems.PointerEventData):void;
+            public OnSubmit(eventData: UnityEngine.EventSystems.BaseEventData):void;
+            
+        }
+        class Selectable extends UnityEngine.EventSystems.UIBehaviour {
+            
+        }
+        class Outline extends UnityEngine.UI.Shadow {
+            public ModifyMesh(vh: UnityEngine.UI.VertexHelper):void;
+            
+        }
+        class Shadow extends UnityEngine.UI.BaseMeshEffect {
+            public effectColor: UnityEngine.Color;
+            public effectDistance: UnityEngine.Vector2;
+            public useGraphicAlpha: boolean;
+            public ModifyMesh(vh: UnityEngine.UI.VertexHelper):void;
+            
+        }
+        class BaseMeshEffect extends UnityEngine.EventSystems.UIBehaviour {
+            
+        }
+        class VertexHelper extends System.Object {
+            
+        }
+        enum CanvasUpdate { Prelayout = 0, Layout = 1, PostLayout = 2, PreRender = 3, LatePreRender = 4, MaxUpdateValue = 5 }
+        
+    }
     namespace UnityEngine.EventSystems {
         class UIBehaviour extends UnityEngine.MonoBehaviour {
             
         }
-        class AbstractEventData extends System.Object {
+        class PointerEventData extends UnityEngine.EventSystems.BaseEventData {
             
         }
         class BaseEventData extends UnityEngine.EventSystems.AbstractEventData {
@@ -1658,7 +1686,7 @@ declare module 'csharp' {
             public constructor(eventSystem: UnityEngine.EventSystems.EventSystem);
             
         }
-        class PointerEventData extends UnityEngine.EventSystems.BaseEventData {
+        class AbstractEventData extends System.Object {
             
         }
         class EventTrigger extends UnityEngine.MonoBehaviour {
@@ -1694,126 +1722,9 @@ declare module 'csharp' {
         enum EventTriggerType { PointerEnter = 0, PointerExit = 1, PointerDown = 2, PointerUp = 3, PointerClick = 4, Drag = 5, Drop = 6, Scroll = 7, UpdateSelected = 8, Select = 9, Deselect = 10, Move = 11, InitializePotentialDrag = 12, BeginDrag = 13, EndDrag = 14, Submit = 15, Cancel = 16 }
         
     }
-    namespace UnityEngine.UI {
-        class Graphic extends UnityEngine.EventSystems.UIBehaviour {
-            
-        }
-        class MaskableGraphic extends UnityEngine.UI.Graphic {
-            
-        }
-        class Image extends UnityEngine.UI.MaskableGraphic {
-            public sprite: UnityEngine.Sprite;
-            public overrideSprite: UnityEngine.Sprite;
-            public type: UnityEngine.UI.Image.Type;
-            public preserveAspect: boolean;
-            public fillCenter: boolean;
-            public fillMethod: UnityEngine.UI.Image.FillMethod;
-            public fillAmount: number;
-            public fillClockwise: boolean;
-            public fillOrigin: number;
-            public eventAlphaThreshold: number;
-            public alphaHitTestMinimumThreshold: number;
-            public useSpriteMesh: boolean;
-            public static defaultETC1GraphicMaterial: UnityEngine.Material;
-            public mainTexture: UnityEngine.Texture;
-            public hasBorder: boolean;
-            public pixelsPerUnit: number;
-            public material: UnityEngine.Material;
-            public minWidth: number;
-            public preferredWidth: number;
-            public flexibleWidth: number;
-            public minHeight: number;
-            public preferredHeight: number;
-            public flexibleHeight: number;
-            public layoutPriority: number;
-            public OnBeforeSerialize():void;
-            public OnAfterDeserialize():void;
-            public SetNativeSize():void;
-            public CalculateLayoutInputHorizontal():void;
-            public CalculateLayoutInputVertical():void;
-            public IsRaycastLocationValid(screenPoint: UnityEngine.Vector2, eventCamera: UnityEngine.Camera):boolean;
-            
-        }
-        class Text extends UnityEngine.UI.MaskableGraphic {
-            public cachedTextGenerator: UnityEngine.TextGenerator;
-            public cachedTextGeneratorForLayout: UnityEngine.TextGenerator;
-            public mainTexture: UnityEngine.Texture;
-            public font: UnityEngine.Font;
-            public text: string;
-            public supportRichText: boolean;
-            public resizeTextForBestFit: boolean;
-            public resizeTextMinSize: number;
-            public resizeTextMaxSize: number;
-            public alignment: UnityEngine.TextAnchor;
-            public alignByGeometry: boolean;
-            public fontSize: number;
-            public horizontalOverflow: UnityEngine.HorizontalWrapMode;
-            public verticalOverflow: UnityEngine.VerticalWrapMode;
-            public lineSpacing: number;
-            public fontStyle: UnityEngine.FontStyle;
-            public pixelsPerUnit: number;
-            public minWidth: number;
-            public preferredWidth: number;
-            public flexibleWidth: number;
-            public minHeight: number;
-            public preferredHeight: number;
-            public flexibleHeight: number;
-            public layoutPriority: number;
-            public FontTextureChanged():void;
-            public GetGenerationSettings(extents: UnityEngine.Vector2):UnityEngine.TextGenerationSettings;
-            public static GetTextAnchorPivot(anchor: UnityEngine.TextAnchor):UnityEngine.Vector2;
-            public CalculateLayoutInputHorizontal():void;
-            public CalculateLayoutInputVertical():void;
-            
-        }
-        class Selectable extends UnityEngine.EventSystems.UIBehaviour {
-            
-        }
-        class Button extends UnityEngine.UI.Selectable {
-            public onClick: UnityEngine.UI.Button.ButtonClickedEvent;
-            public OnPointerClick(eventData: UnityEngine.EventSystems.PointerEventData):void;
-            public OnSubmit(eventData: UnityEngine.EventSystems.BaseEventData):void;
-            
-        }
-        class BaseMeshEffect extends UnityEngine.EventSystems.UIBehaviour {
-            
-        }
-        class Shadow extends UnityEngine.UI.BaseMeshEffect {
-            public effectColor: UnityEngine.Color;
-            public effectDistance: UnityEngine.Vector2;
-            public useGraphicAlpha: boolean;
-            public ModifyMesh(vh: UnityEngine.UI.VertexHelper):void;
-            
-        }
-        class Outline extends UnityEngine.UI.Shadow {
-            public ModifyMesh(vh: UnityEngine.UI.VertexHelper):void;
-            
-        }
-        class VertexHelper extends System.Object {
-            
-        }
-        enum CanvasUpdate { Prelayout = 0, Layout = 1, PostLayout = 2, PreRender = 3, LatePreRender = 4, MaxUpdateValue = 5 }
-        
-    }
     namespace UnityEngine.UI.Image {
         enum Type { Simple = 0, Sliced = 1, Tiled = 2, Filled = 3 }
         enum FillMethod { Horizontal = 0, Vertical = 1, Radial90 = 2, Radial180 = 3, Radial360 = 4 }
-        
-    }
-    namespace UnityEngine.Events {
-        class UnityEventBase extends System.Object {
-            
-        }
-        class UnityEvent extends UnityEngine.Events.UnityEventBase {
-            public constructor();
-            public AddListener(call: UnityEngine.Events.UnityAction):void;
-            public RemoveListener(call: UnityEngine.Events.UnityAction):void;
-            public Invoke():void;
-            
-        }
-        type UnityAction = () => void;
-        var UnityAction: {new (func: () => void): UnityAction;}
-        type UnityAction$1<T0> = (arg0: T0) => void;
         
     }
     namespace UnityEngine.UI.Button {
@@ -1821,6 +1732,22 @@ declare module 'csharp' {
             public constructor();
             
         }
+        
+    }
+    namespace UnityEngine.Events {
+        class UnityEvent extends UnityEngine.Events.UnityEventBase {
+            public constructor();
+            public AddListener(call: UnityEngine.Events.UnityAction):void;
+            public RemoveListener(call: UnityEngine.Events.UnityAction):void;
+            public Invoke():void;
+            
+        }
+        class UnityEventBase extends System.Object {
+            
+        }
+        type UnityAction = () => void;
+        var UnityAction: {new (func: () => void): UnityAction;}
+        type UnityAction$1<T0> = (arg0: T0) => void;
         
     }
     namespace UnityEngine.Camera {
@@ -1832,12 +1759,6 @@ declare module 'csharp' {
             
         }
         enum StereoscopicEye { Left = 0, Right = 1 }
-        
-    }
-    namespace UnityEngine.EventSystems.EventTrigger {
-        class Entry extends System.Object {
-            
-        }
         
     }
     namespace UnityEngine.Playables {
@@ -1855,16 +1776,13 @@ declare module 'csharp' {
             public Apply(skeleton: Spine.Skeleton, lastTime: number, time: number, loop: boolean, events: Spine.ExposedList$1<Spine.Event>, alpha: number, pose: Spine.MixPose, direction: Spine.MixDirection):void;
             
         }
-        interface Timeline {
-            
-        }
         class ExposedList$1<T> extends System.Object {
             
         }
-        class Skeleton extends System.Object {
+        interface Timeline {
             
         }
-        class Event extends System.Object {
+        class Skeleton extends System.Object {
             
         }
         enum MixPose { Setup = 0, Current = 1, CurrentLayered = 2 }
@@ -1906,6 +1824,9 @@ declare module 'csharp' {
             
         }
         class TrackEntry extends System.Object {
+            
+        }
+        class Event extends System.Object {
             
         }
         class Bone extends System.Object {
@@ -2016,6 +1937,9 @@ declare module 'csharp' {
         }
         type UpdateBonesDelegate = (animated: Spine.Unity.ISkeletonAnimation) => void;
         var UpdateBonesDelegate: {new (func: (animated: Spine.Unity.ISkeletonAnimation) => void): UpdateBonesDelegate;}
+        interface ISkeletonAnimation {
+            
+        }
         type MeshGeneratorDelegate = (buffers: Spine.Unity.MeshGeneratorBuffers) => void;
         var MeshGeneratorDelegate: {new (func: (buffers: Spine.Unity.MeshGeneratorBuffers) => void): MeshGeneratorDelegate;}
         class MeshGeneratorBuffers extends System.ValueType {
@@ -2049,12 +1973,12 @@ declare module 'csharp' {
             public UncompressResources(uncompressCallback: System.Action$2<number, number>):void;
             public RemoveDonwloadObject():void;
             public InitLoadManager():void;
-            public luaLoadAsset(assetName: string, path: string, bundleName: string):UnityEngine.GameObject;
-            public luaLoadSpriteAsset(assetName: string, path: string, bundleName: string):UnityEngine.Sprite;
-            public FindInBundle(shaderName: string, bundleName: string):UnityEngine.Shader;
+            public luaLoadAsset(assetName: string, path?: string, bundleName?: string):UnityEngine.GameObject;
+            public luaLoadSpriteAsset(assetName: string, path?: string, bundleName?: string):UnityEngine.Sprite;
+            public FindInBundle(shaderName: string, bundleName?: string):UnityEngine.Shader;
             public GetCustomSpriteRendererMaterial(alphaTexture2d: UnityEngine.Texture2D):UnityEngine.Material;
             public ReleaseAsset(bundleName: string, assetName: string):void;
-            public UnloadBundleByName(bundleName: string, unloadAllLoadedObjects: boolean):void;
+            public UnloadBundleByName(bundleName: string, unloadAllLoadedObjects?: boolean):void;
             public GetBundleInfo(name: string):string[];
             public GetString(id: string):string;
             

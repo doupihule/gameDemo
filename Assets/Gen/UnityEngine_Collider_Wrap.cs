@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Collider constructor");
+                
             }
             catch (Exception e)
             {
@@ -143,7 +143,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var result = obj.enabled;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -158,7 +158,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.enabled = argHelper.GetBoolean(false);
             }
@@ -174,7 +174,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var result = obj.attachedRigidbody;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -191,7 +191,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var result = obj.isTrigger;
                 Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
             }
@@ -206,7 +206,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.isTrigger = argHelper.GetBoolean(false);
             }
@@ -222,7 +222,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var result = obj.contactOffset;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -237,7 +237,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.contactOffset = argHelper.GetFloat(false);
             }
@@ -253,7 +253,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var result = obj.bounds;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -270,7 +270,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var result = obj.sharedMaterial;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -285,7 +285,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.sharedMaterial = argHelper.Get<UnityEngine.PhysicMaterial>(false);
             }
@@ -301,7 +301,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var result = obj.material;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -316,7 +316,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Collider obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as UnityEngine.Collider;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.material = argHelper.Get<UnityEngine.PhysicMaterial>(false);
             }

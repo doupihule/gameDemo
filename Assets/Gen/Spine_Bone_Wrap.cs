@@ -32,7 +32,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to Spine.Bone constructor");
+                
             }
             catch (Exception e)
             {
@@ -379,7 +379,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.Data;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -396,7 +396,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.Skeleton;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -413,7 +413,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.Parent;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -430,7 +430,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.Children;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -447,7 +447,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.X;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -462,7 +462,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.X = argHelper.GetFloat(false);
             }
@@ -478,7 +478,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.Y;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -493,7 +493,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.Y = argHelper.GetFloat(false);
             }
@@ -509,7 +509,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.Rotation;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -524,7 +524,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.Rotation = argHelper.GetFloat(false);
             }
@@ -540,7 +540,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.ScaleX;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -555,7 +555,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.ScaleX = argHelper.GetFloat(false);
             }
@@ -571,7 +571,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.ScaleY;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -586,7 +586,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.ScaleY = argHelper.GetFloat(false);
             }
@@ -602,7 +602,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.ShearX;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -617,7 +617,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.ShearX = argHelper.GetFloat(false);
             }
@@ -633,7 +633,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.ShearY;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -648,7 +648,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.ShearY = argHelper.GetFloat(false);
             }
@@ -664,7 +664,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.AppliedRotation;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -679,7 +679,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.AppliedRotation = argHelper.GetFloat(false);
             }
@@ -695,7 +695,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.AX;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -710,7 +710,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.AX = argHelper.GetFloat(false);
             }
@@ -726,7 +726,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.AY;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -741,7 +741,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.AY = argHelper.GetFloat(false);
             }
@@ -757,7 +757,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.AScaleX;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -772,7 +772,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.AScaleX = argHelper.GetFloat(false);
             }
@@ -788,7 +788,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.AScaleY;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -803,7 +803,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.AScaleY = argHelper.GetFloat(false);
             }
@@ -819,7 +819,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.AShearX;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -834,7 +834,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.AShearX = argHelper.GetFloat(false);
             }
@@ -850,7 +850,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.AShearY;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -865,7 +865,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.AShearY = argHelper.GetFloat(false);
             }
@@ -881,7 +881,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.A;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -898,7 +898,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.B;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -915,7 +915,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.C;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -932,7 +932,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.D;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -949,7 +949,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.WorldX;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -966,7 +966,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.WorldY;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -983,7 +983,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.WorldRotationX;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1000,7 +1000,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.WorldRotationY;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1017,7 +1017,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.WorldScaleX;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1034,7 +1034,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.WorldScaleY;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1051,7 +1051,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.WorldToLocalRotationX;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1068,7 +1068,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Bone obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
+                var obj = Puerts.Utils.GetSelf((int)data, self) as Spine.Bone;
                 var result = obj.WorldToLocalRotationY;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }

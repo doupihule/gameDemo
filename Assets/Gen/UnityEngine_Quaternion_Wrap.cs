@@ -34,7 +34,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Quaternion constructor");
+                
             }
             catch (Exception e)
             {
@@ -838,422 +838,6 @@ namespace PuertsStaticWrap
             }
         }
         
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_EulerRotation(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                if (paramLen == 3)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetFloat(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        var Arg2 = argHelper2.GetFloat(false);
-                        var result = UnityEngine.Quaternion.EulerRotation(Arg0,Arg1,Arg2);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        return;
-                    }
-                }
-                
-                if (paramLen == 1)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
-                        var result = UnityEngine.Quaternion.EulerRotation(Arg0);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        return;
-                    }
-                }
-                
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to EulerRotation");
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_SetEulerRotation(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
-                
-                if (paramLen == 3)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetFloat(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        var Arg2 = argHelper2.GetFloat(false);
-                        obj.SetEulerRotation(Arg0,Arg1,Arg2);
-                        
-                        
-                        return;
-                    }
-                }
-                
-                if (paramLen == 1)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
-                        obj.SetEulerRotation(Arg0);
-                        
-                        
-                        return;
-                    }
-                }
-                
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to SetEulerRotation");
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_ToEuler(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
-                
-                
-                {
-                    
-                    
-                    
-                    
-                    {
-                        
-                        var result = obj.ToEuler();
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_EulerAngles(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                if (paramLen == 3)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetFloat(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        var Arg2 = argHelper2.GetFloat(false);
-                        var result = UnityEngine.Quaternion.EulerAngles(Arg0,Arg1,Arg2);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        return;
-                    }
-                }
-                
-                if (paramLen == 1)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
-                        var result = UnityEngine.Quaternion.EulerAngles(Arg0);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        return;
-                    }
-                }
-                
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to EulerAngles");
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_ToAxisAngle(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Vector3>(true);
-                        var Arg1 = argHelper1.GetFloat(true);
-                        obj.ToAxisAngle(out Arg0,out Arg1);
-                        
-                        argHelper0.SetByRefValue(Arg0);
-                        argHelper1.SetByRefValue(Arg1);
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_SetEulerAngles(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
-                
-                if (paramLen == 3)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    var argHelper2 = new Puerts.ArgumentHelper((int)data, isolate, info, 2);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper1.IsMatch(Puerts.JsValueType.Number, null, false, false)
-                        && argHelper2.IsMatch(Puerts.JsValueType.Number, null, false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.GetFloat(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        var Arg2 = argHelper2.GetFloat(false);
-                        obj.SetEulerAngles(Arg0,Arg1,Arg2);
-                        
-                        
-                        return;
-                    }
-                }
-                
-                if (paramLen == 1)
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    if (argHelper0.IsMatch(Puerts.JsValueType.NativeObject, typeof(UnityEngine.Vector3), false, false))
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
-                        obj.SetEulerAngles(Arg0);
-                        
-                        
-                        return;
-                    }
-                }
-                
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to SetEulerAngles");
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_ToEulerAngles(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Quaternion>(false);
-                        var result = UnityEngine.Quaternion.ToEulerAngles(Arg0);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_ToEulerAngles(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
-                
-                
-                {
-                    
-                    
-                    
-                    
-                    {
-                        
-                        var result = obj.ToEulerAngles();
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void M_SetAxisAngle(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        obj.SetAxisAngle(Arg0,Arg1);
-                        
-                        
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void F_AxisAngle(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                
-                
-                {
-                    
-                    var argHelper0 = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                    var argHelper1 = new Puerts.ArgumentHelper((int)data, isolate, info, 1);
-                    
-                    
-                    
-                    {
-                        
-                        var Arg0 = argHelper0.Get<UnityEngine.Vector3>(false);
-                        var Arg1 = argHelper1.GetFloat(false);
-                        var result = UnityEngine.Quaternion.AxisAngle(Arg0,Arg1);
-                        
-                        Puerts.ResultHelper.Set((int)data, isolate, info, result);
-                        
-                    }
-                }
-                
-                
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
         
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
@@ -1278,7 +862,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Quaternion obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.eulerAngles;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1293,7 +877,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Quaternion obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.eulerAngles = argHelper.Get<UnityEngine.Vector3>(false);
             }
@@ -1309,7 +893,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Quaternion obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.normalized;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -1326,7 +910,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Quaternion obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.x;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1341,7 +925,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Quaternion obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.x = argHelper.GetFloat(false);
             }
@@ -1357,7 +941,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Quaternion obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.y;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1372,7 +956,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Quaternion obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.y = argHelper.GetFloat(false);
             }
@@ -1388,7 +972,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Quaternion obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.z;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1403,7 +987,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Quaternion obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.z = argHelper.GetFloat(false);
             }
@@ -1419,7 +1003,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Quaternion obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.w;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -1434,7 +1018,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                UnityEngine.Quaternion obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (UnityEngine.Quaternion)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.w = argHelper.GetFloat(false);
             }
@@ -1645,16 +1229,6 @@ namespace PuertsStaticWrap
                     { new Puerts.MethodKey {Name = "GetHashCode", IsStatic = false},  M_GetHashCode },
                     { new Puerts.MethodKey {Name = "Equals", IsStatic = false},  M_Equals },
                     { new Puerts.MethodKey {Name = "ToString", IsStatic = false},  M_ToString },
-                    { new Puerts.MethodKey {Name = "EulerRotation", IsStatic = true},  F_EulerRotation },
-                    { new Puerts.MethodKey {Name = "SetEulerRotation", IsStatic = false},  M_SetEulerRotation },
-                    { new Puerts.MethodKey {Name = "ToEuler", IsStatic = false},  M_ToEuler },
-                    { new Puerts.MethodKey {Name = "EulerAngles", IsStatic = true},  F_EulerAngles },
-                    { new Puerts.MethodKey {Name = "ToAxisAngle", IsStatic = false},  M_ToAxisAngle },
-                    { new Puerts.MethodKey {Name = "SetEulerAngles", IsStatic = false},  M_SetEulerAngles },
-                    { new Puerts.MethodKey {Name = "ToEulerAngles", IsStatic = true},  F_ToEulerAngles },
-                    { new Puerts.MethodKey {Name = "ToEulerAngles", IsStatic = false},  M_ToEulerAngles },
-                    { new Puerts.MethodKey {Name = "SetAxisAngle", IsStatic = false},  M_SetAxisAngle },
-                    { new Puerts.MethodKey {Name = "AxisAngle", IsStatic = true},  F_AxisAngle },
                     { new Puerts.MethodKey {Name = "get_Item", IsStatic = false}, GetItem },
                     { new Puerts.MethodKey {Name = "set_Item", IsStatic = false}, SetItem},
                     { new Puerts.MethodKey {Name = "op_Multiply", IsStatic = true}, O_op_Multiply},

@@ -60,10 +60,10 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('keystore/user.keystore')
-            storePassword '111111'
+            storeFile file('C:/work/unity/gameDemo/platforms/keystore/user.keystore')
+            storePassword ''
             keyAlias 'user'
-            keyPassword '111111'
+            keyPassword ''
         }
     }
 

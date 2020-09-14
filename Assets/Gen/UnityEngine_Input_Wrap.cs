@@ -26,7 +26,7 @@ namespace PuertsStaticWrap
                     }
                 }
                 
-                Puerts.PuertsDLL.ThrowException(isolate, "invalid arguments to UnityEngine.Input constructor");
+                
             }
             catch (Exception e)
             {
@@ -753,37 +753,6 @@ namespace PuertsStaticWrap
         
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_eatKeyPressOnTextFieldFocus(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = UnityEngine.Input.eatKeyPressOnTextFieldFocus;
-                Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void S_eatKeyPressOnTextFieldFocus(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
-                UnityEngine.Input.eatKeyPressOnTextFieldFocus = argHelper.GetBoolean(false);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
         private static void G_mousePresent(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
         {
             try
@@ -897,23 +866,6 @@ namespace PuertsStaticWrap
                 Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
             }
         }
-        
-        
-        [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
-        private static void G_isGyroAvailable(IntPtr isolate, IntPtr info, IntPtr self, int paramLen, long data)
-        {
-            try
-            {
-                
-                var result = UnityEngine.Input.isGyroAvailable;
-                Puerts.PuertsDLL.ReturnBoolean(isolate, info, result);
-            }
-            catch (Exception e)
-            {
-                Puerts.PuertsDLL.ThrowException(isolate, "c# exception:" + e.Message + ",stack:" + e.StackTrace);
-            }
-        }
-        
         
         
         [Puerts.MonoPInvokeCallback(typeof(Puerts.V8FunctionCallback))]
@@ -1153,14 +1105,12 @@ namespace PuertsStaticWrap
                     {"compositionString", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_compositionString, Setter = null} },
                     {"imeIsSelected", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_imeIsSelected, Setter = null} },
                     {"compositionCursorPos", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_compositionCursorPos, Setter = S_compositionCursorPos} },
-                    {"eatKeyPressOnTextFieldFocus", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_eatKeyPressOnTextFieldFocus, Setter = S_eatKeyPressOnTextFieldFocus} },
                     {"mousePresent", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_mousePresent, Setter = null} },
                     {"touchCount", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_touchCount, Setter = null} },
                     {"touchPressureSupported", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_touchPressureSupported, Setter = null} },
                     {"stylusTouchSupported", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_stylusTouchSupported, Setter = null} },
                     {"touchSupported", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_touchSupported, Setter = null} },
                     {"multiTouchEnabled", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_multiTouchEnabled, Setter = S_multiTouchEnabled} },
-                    {"isGyroAvailable", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_isGyroAvailable, Setter = null} },
                     {"deviceOrientation", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_deviceOrientation, Setter = null} },
                     {"acceleration", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_acceleration, Setter = null} },
                     {"compensateSensors", new Puerts.PropertyRegisterInfo(){ IsStatic = true, Getter = G_compensateSensors, Setter = S_compensateSensors} },

@@ -27,7 +27,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.MeshGeneratorBuffers obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.vertexCount;
                 Puerts.PuertsDLL.ReturnNumber(isolate, info, result);
             }
@@ -42,7 +42,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.MeshGeneratorBuffers obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.vertexCount = argHelper.GetInt32(false);
             }
@@ -58,7 +58,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.MeshGeneratorBuffers obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.vertexBuffer;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -73,7 +73,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.MeshGeneratorBuffers obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.vertexBuffer = argHelper.Get<UnityEngine.Vector3[]>(false);
             }
@@ -89,7 +89,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.MeshGeneratorBuffers obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.uvBuffer;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -104,7 +104,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.MeshGeneratorBuffers obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.uvBuffer = argHelper.Get<UnityEngine.Vector2[]>(false);
             }
@@ -120,7 +120,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.MeshGeneratorBuffers obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.colorBuffer;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -135,7 +135,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.MeshGeneratorBuffers obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.colorBuffer = argHelper.Get<UnityEngine.Color32[]>(false);
             }
@@ -151,7 +151,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.MeshGeneratorBuffers obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
                 var result = obj.meshGenerator;
                 Puerts.ResultHelper.Set((int)data, isolate, info, result);
             }
@@ -166,7 +166,7 @@ namespace PuertsStaticWrap
         {
             try
             {
-                Spine.Unity.MeshGeneratorBuffers obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
+                var obj = (Spine.Unity.MeshGeneratorBuffers)Puerts.Utils.GetSelf((int)data, self);
                 var argHelper = new Puerts.ArgumentHelper((int)data, isolate, info, 0);
                 obj.meshGenerator = argHelper.Get<Spine.Unity.MeshGenerator>(false);
             }
